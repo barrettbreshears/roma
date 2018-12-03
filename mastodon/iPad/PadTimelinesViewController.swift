@@ -812,7 +812,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                         print("008")
                         
                         let content = UNMutableNotificationContent()
-                        content.title = "\(x.account.displayName) boosted your toot"
+                        content.title = "\(x.account.displayName) reposted your status"
                         content.body = x.status!.content.stripHTML()
                         let request = UNNotificationRequest(
                             identifier: UUID().uuidString,
@@ -826,7 +826,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                         print("009")
                         
                         let content = UNMutableNotificationContent()
-                        content.title = "\(x.account.displayName) liked your toot"
+                        content.title = "\(x.account.displayName) liked your status"
                         content.body = x.status!.content.stripHTML()
                         let request = UNNotificationRequest(
                             identifier: UUID().uuidString,
@@ -2137,7 +2137,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                                         statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Unpinned".localized
                                         statusAlert.contentColor = Colours.grayDark
-                                        statusAlert.message = "This Toot"
+                                        statusAlert.message = "This Status"
                                         statusAlert.show()
                                     }
                                 }
@@ -2154,7 +2154,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                                         statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Pinned".localized
                                         statusAlert.contentColor = Colours.grayDark
-                                        statusAlert.message = "This Toot"
+                                        statusAlert.message = "This Status"
                                         statusAlert.show()
                                     }
                                 }
@@ -2188,7 +2188,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Deleted".localized
                                     statusAlert.contentColor = Colours.grayDark
-                                    statusAlert.message = "Your Toot"
+                                    statusAlert.message = "Your Status"
                                     statusAlert.show()
                                     //sto.remove(at: indexPath.row)
                                     //self.tableView.reloadData()

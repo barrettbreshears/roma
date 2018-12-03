@@ -200,7 +200,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let title = UILabel()
         title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
         if self.currentTags.count == 0 {
-            title.text = "No Pinned Toots"
+            title.text = "No Pinned Statuses"
         } else {
             title.text = "Pinned"
         }
@@ -752,7 +752,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                         statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Unpinned".localized
                                         statusAlert.contentColor = Colours.grayDark
-                                        statusAlert.message = "This Toot"
+                                        statusAlert.message = "This Status"
                                         statusAlert.show()
                                     }
                                 }
@@ -769,7 +769,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                         statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Pinned".localized
                                         statusAlert.contentColor = Colours.grayDark
-                                        statusAlert.message = "This Toot"
+                                        statusAlert.message = "This Status"
                                         statusAlert.show()
                                     }
                                 }
@@ -801,7 +801,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Deleted".localized
                                     statusAlert.contentColor = Colours.grayDark
-                                    statusAlert.message = "Your Toot"
+                                    statusAlert.message = "Your Status"
                                     statusAlert.show()
                                     //sto.remove(at: indexPath.row)
                                     //self.tableView.reloadData()

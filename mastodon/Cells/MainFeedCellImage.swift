@@ -205,9 +205,9 @@ class MainFeedCellImage: SwipeTableViewCell {
             
             
             if status.emojis.isEmpty {
-                toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) boosted"
+                toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
             } else {
-                let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) boosted")
+                let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted")
                 for y in status.reblog?.emojis ?? status.emojis {
                     let textAttachment = NSTextAttachment()
                     textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
@@ -338,7 +338,7 @@ class MainFeedCellImage: SwipeTableViewCell {
                 if z == "" {} else {
                     zz = z
                 }
-                warningB.setTitle("\(zz)\n\nTap to show toot", for: .normal)
+                warningB.setTitle("\(zz)\n\nTap to show status", for: .normal)
                 warningB.setTitleColor(Colours.black.withAlphaComponent(0.4), for: .normal)
                 warningB.addTarget(self, action: #selector(self.didTouchWarning), for: .touchUpInside)
                 warningB.alpha = 1

@@ -797,7 +797,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                                         statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Unpinned".localized
                                         statusAlert.contentColor = Colours.grayDark
-                                        statusAlert.message = "This Toot"
+                                        statusAlert.message = "This Status"
                                         statusAlert.show()
                                     }
                                 }
@@ -814,7 +814,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                                         statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Pinned".localized
                                         statusAlert.contentColor = Colours.grayDark
-                                        statusAlert.message = "This Toot"
+                                        statusAlert.message = "This Status"
                                         statusAlert.show()
                                     }
                                 }
@@ -846,7 +846,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Deleted".localized
                                     statusAlert.contentColor = Colours.grayDark
-                                    statusAlert.message = "Your Toot"
+                                    statusAlert.message = "Your Status"
                                     statusAlert.show()
                                     //sto.remove(at: indexPath.row)
                                     //self.tableView.reloadData()

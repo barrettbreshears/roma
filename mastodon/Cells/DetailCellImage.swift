@@ -154,15 +154,15 @@ class DetailCellImage: UITableViewCell {
         }
         date.text = status.reblog?.createdAt.toStringWithRelativeTime() ?? status.createdAt.toStringWithRelativeTime()
         if status.reblog?.content.stripHTML() != nil {
-//            toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.username) boosted"
+//            toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.username) reposted"
             
             
             
             
             if status.emojis.isEmpty {
-                toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) boosted"
+                toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
             } else {
-                let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) boosted")
+                let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted")
                 for y in status.reblog?.emojis ?? status.emojis {
                     let textAttachment = NSTextAttachment()
                     textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
@@ -228,9 +228,9 @@ class DetailCellImage: UITableViewCell {
         if formattedNumber == "1" {
             likeText = "like"
         }
-        var boostText = "boosts"
+        var boostText = "reposts"
         if formattedNumber2 == "1" {
-            boostText = "boost"
+            boostText = "repost"
         }
         
         faves.setTitle("\(formattedNumber ?? "0") \(likeText) and \(formattedNumber2 ?? "0") \(boostText)", for: .normal)

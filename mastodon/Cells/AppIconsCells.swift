@@ -55,9 +55,10 @@ class AppIconsCells: UITableViewCell, UICollectionViewDelegate, UICollectionView
     }
     
     
-    var appArrayIcons = ["icon1", "icon2", "icon3", "icon4", "icon5", "icon6", "icon7", "icon8", "icon9", "icon10", "icon11", "icon12", "icon13", "icon14", "icon15", "icon16", "icon17", "icon18", "icon19", "icon20"]
+    var appArrayIcons = ["icon1", "icon2", "icon3", "icon4", "icon5", "icon6", "icon7", "icon8", "icon9", "icon10", "icon11", "icon12", "icon13", "icon14", "icon15", "icon16", "icon17"]
+    
     var appArrayIconsIPAD = ["icon1~ipad", "icon2~ipad", "icon3~ipad", "icon4~ipad", "icon5~ipad", "icon6~ipad", "icon7~ipad", "icon8~ipad", "icon9~ipad", "icon10~ipad", "icon11~ipad", "icon12~ipad", "icon13~ipad", "icon14~ipad", "icon15~ipad", "icon16~ipad", "icon17~ipad", "icon18~ipad", "icon19~ipad", "icon20~ipad"]
-    var appArray = ["AppIcon-1", "AppIcon-2", "AppIcon-3", "AppIcon-4", "AppIcon-5", "AppIcon-6", "AppIcon-7", "AppIcon-8", "AppIcon-9", "AppIcon-10", "AppIcon-11", "AppIcon-12", "AppIcon-13", "AppIcon-14", "AppIcon-15", "AppIcon-16", "AppIcon-17", "AppIcon-18", "AppIcon-19", "AppIcon-20"]
+    var appArray = ["AppIcon-1", "AppIcon-2", "AppIcon-3", "AppIcon-4", "AppIcon-5", "AppIcon-6", "AppIcon-7", "AppIcon-8", "AppIcon-9", "AppIcon-10", "AppIcon-11", "AppIcon-12", "AppIcon-13", "AppIcon-14", "AppIcon-15", "AppIcon-16", "AppIcon-17"]
     
     
     func configure() {

@@ -32,16 +32,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //    }
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
-        if userActivity.activityType == "com.shi.Mast.confetti" {
+        if userActivity.activityType == "com.vm.roma.confetti" {
             let viewController = window?.rootViewController as! ViewController
             viewController.siriConfetti()
-        } else if userActivity.activityType == "com.shi.Mast.light" {
+        } else if userActivity.activityType == "com.vm.roma.light" {
             let viewController = window?.rootViewController as! ViewController
             viewController.siriLight()
-        } else if userActivity.activityType == "com.shi.Mast.dark" {
+        } else if userActivity.activityType == "com.vm.roma.dark" {
             let viewController = window?.rootViewController as! ViewController
             viewController.siriDark()
-        } else if userActivity.activityType == "com.shi.Mast.dark2" {
+        } else if userActivity.activityType == "com.vm.roma.dark2" {
             let viewController = window?.rootViewController as! ViewController
             viewController.siriDark2()
         } else {
@@ -75,13 +75,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
-        if shortcutItem.type == "com.shi.Mast.feed" {
+        if shortcutItem.type == "com.vm.roma.feed" {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "switch11"), object: self)
             completionHandler(true)
-        } else if shortcutItem.type == "com.shi.Mast.notifications" {
+        } else if shortcutItem.type == "com.vm.roma.notifications" {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "switch22"), object: self)
             completionHandler(true)
-        } else if shortcutItem.type == "com.shi.Mast.profile" {
+        } else if shortcutItem.type == "com.vm.roma.profile" {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "switch33"), object: self)
             completionHandler(true)
         } else {

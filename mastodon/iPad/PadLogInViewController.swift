@@ -56,7 +56,7 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
 //        window.addSubview(self.loginLogo)
         
         self.loginLabel.frame = CGRect(x: 50, y: self.view.bounds.height/2 - 57.5, width: self.view.bounds.width - 80, height: 35)
-        self.loginLabel.text = "Mastodon instance:".localized
+        self.loginLabel.text = "Pelorma instance:".localized
         self.loginLabel.textColor = UIColor.white.withAlphaComponent(0.6)
         self.loginLabel.font = UIFont.systemFont(ofSize: 14)
                 self.view.addSubview(self.loginLabel)
@@ -173,7 +173,7 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
                 StoreStruct.client = Client(baseURL: "https://\(returnedText)")
                 let request = Clients.register(
                     clientName: "Mast",
-                    redirectURI: "com.shi.mastodon://success",
+                    redirectURI: "com.vm.roma://success",
                     scopes: [.read, .write, .follow],
                     website: "https://twitter.com/jpeguin"
                 )
@@ -198,7 +198,7 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
                         StoreStruct.returnedText = returnedText
                         
                         DispatchQueue.main.async {
-                            StoreStruct.redirect = "com.shi.mastodon://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+                            StoreStruct.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
                             let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.redirect!)&scope=read%20write%20follow&client_id=\(application.clientID)")!
                             self.safariVC = SFSafariViewController(url: queryURL)
                             self.present(self.safariVC!, animated: true, completion: nil)

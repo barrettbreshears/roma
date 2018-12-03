@@ -142,7 +142,7 @@ class NotificationCell: SwipeTableViewCell {
         }
         if status.type == .reblog {
             profileImageView.isUserInteractionEnabled = true
-            userName.text = "\(status.account.displayName) boosted"
+            userName.text = "\(status.account.displayName) reposted"
             typeImage.setImage(UIImage(named: "boost3"), for: .normal)
             if (UserDefaults.standard.object(forKey: "subtleToggle") == nil) || (UserDefaults.standard.object(forKey: "subtleToggle") as! Int == 0) {
                 toot.textColor = Colours.black
@@ -273,7 +273,7 @@ class NotificationCell: SwipeTableViewCell {
                 if z == "" {} else {
                     zz = z
                 }
-                warningB.setTitle("\(zz)\n\nTap to show toot", for: .normal)
+                warningB.setTitle("\(zz)\n\nTap to show status", for: .normal)
                 warningB.setTitleColor(Colours.black.withAlphaComponent(0.4), for: .normal)
                 warningB.addTarget(self, action: #selector(self.didTouchWarning), for: .touchUpInside)
                 warningB.alpha = 1

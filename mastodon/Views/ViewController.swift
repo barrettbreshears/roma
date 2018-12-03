@@ -152,13 +152,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     }
     
     func setupSiri() {
-            let activity1 = NSUserActivity(activityType: "com.shi.Mast.light")
+            let activity1 = NSUserActivity(activityType: "com.vm.roma.light")
             activity1.title = "Switch to light mode".localized
             activity1.userInfo = ["state" : "light"]
             activity1.isEligibleForSearch = true
             if #available(iOS 12.0, *) {
                 activity1.isEligibleForPrediction = true
-                activity1.persistentIdentifier = "com.shi.Mast.light"
+                activity1.persistentIdentifier = "com.vm.roma.light"
             } else {
                 // Fallback on earlier versions
             }
@@ -166,13 +166,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             activity1.becomeCurrent()
         
         delay(1.5) {
-            let activity2 = NSUserActivity(activityType: "com.shi.Mast.dark")
+            let activity2 = NSUserActivity(activityType: "com.vm.roma.dark")
             activity2.title = "Switch to dark mode".localized
             activity2.userInfo = ["state" : "dark"]
             activity2.isEligibleForSearch = true
             if #available(iOS 12.0, *) {
                 activity2.isEligibleForPrediction = true
-                activity2.persistentIdentifier = "com.shi.Mast.dark"
+                activity2.persistentIdentifier = "com.vm.roma.dark"
             } else {
                 // Fallback on earlier versions
             }
@@ -181,13 +181,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         }
         
         delay(1.5) {
-            let activity21 = NSUserActivity(activityType: "com.shi.Mast.dark2")
+            let activity21 = NSUserActivity(activityType: "com.vm.roma.dark2")
             activity21.title = "Switch to extra dark mode".localized
             activity21.userInfo = ["state" : "dark2"]
             activity21.isEligibleForSearch = true
             if #available(iOS 12.0, *) {
                 activity21.isEligibleForPrediction = true
-                activity21.persistentIdentifier = "com.shi.Mast.dark2"
+                activity21.persistentIdentifier = "com.vm.roma.dark2"
             } else {
                 // Fallback on earlier versions
             }
@@ -196,13 +196,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         }
         
         delay(3) {
-            let activity3 = NSUserActivity(activityType: "com.shi.Mast.oled")
+            let activity3 = NSUserActivity(activityType: "com.vm.roma.oled")
             activity3.title = "Switch to true black dark mode".localized
             activity3.userInfo = ["state" : "oled"]
             activity3.isEligibleForSearch = true
             if #available(iOS 12.0, *) {
                 activity3.isEligibleForPrediction = true
-                activity3.persistentIdentifier = "com.shi.Mast.oled"
+                activity3.persistentIdentifier = "com.vm.roma.oled"
             } else {
                 // Fallback on earlier versions
             }
@@ -211,13 +211,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         }
         
         delay(4.5) {
-            let activity3 = NSUserActivity(activityType: "com.shi.Mast.confetti")
+            let activity3 = NSUserActivity(activityType: "com.vm.roma.confetti")
             activity3.title = "Confetti time".localized
             activity3.userInfo = ["state" : "confetti"]
             activity3.isEligibleForSearch = true
             if #available(iOS 12.0, *) {
                 activity3.isEligibleForPrediction = true
-                activity3.persistentIdentifier = "com.shi.Mast.confetti"
+                activity3.persistentIdentifier = "com.vm.roma.confetti"
             } else {
                 // Fallback on earlier versions
             }
@@ -337,7 +337,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         let page = PageBulletinItem(title: "Notifications")
         page.image = UIImage(named: "notib")
         page.shouldCompactDescriptionText = true
-        page.descriptionText = "Mast can send you realtime push notifications for toots you're mentioned in, boosted toots, liked toots, as well as for new followers."
+        page.descriptionText = "Roma can send you realtime push notifications for statuses you're mentioned in, reposted statuses, liked statuses, as well as for new followers."
         page.actionButtonTitle = "Subscribe"
         page.alternativeButtonTitle = "No thanks"
         page.nextItem = makeSiriPage()
@@ -383,7 +383,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         let page = PageBulletinItem(title: "Setup Complete")
         page.image = UIImage(named: "doneb")
         page.shouldCompactDescriptionText = true
-        page.descriptionText = "You're all ready to go.\nHappy tooting!"
+        page.descriptionText = "You're all ready to go.\nHappy posting!"
         page.actionButtonTitle = "Get Started"
         //page.isDismissable = true
         
@@ -654,7 +654,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.view0pinch.frame = self.view.frame
         self.view1pinch.frame = self.view.frame
         self.screenshotLabel.frame = (CGRect(x: 40, y: 70, width: self.view.bounds.width - 80, height: 50))
-        self.screenshotLabel.text = "Let go to toot screenshot"
+        self.screenshotLabel.text = "Let go to status screenshot"
         self.screenshotLabel.textColor = UIColor.white
         self.screenshotLabel.textAlignment = .center
         self.screenshotLabel.font = UIFont.boldSystemFont(ofSize: CGFloat(Colours.fontSize1))
@@ -1673,7 +1673,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.view.addSubview(self.loginLogo)
         
         self.loginLabel.frame = CGRect(x: 50, y: self.view.bounds.height/2 - 57.5, width: self.view.bounds.width - 80, height: 35)
-        self.loginLabel.text = "Mastodon instance:".localized
+        self.loginLabel.text = "Pleroma or mastodon instance:".localized
         self.loginLabel.textColor = UIColor.white.withAlphaComponent(0.6)
         self.loginLabel.font = UIFont.systemFont(ofSize: 14)
         self.view.addSubview(self.loginLabel)
@@ -1788,7 +1788,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             StoreStruct.client = Client(baseURL: "https://\(returnedText)")
             let request = Clients.register(
                 clientName: "Mast",
-                redirectURI: "com.shi.mastodon://success",
+                redirectURI: "com.vm.roma://success",
                 scopes: [.read, .write, .follow],
                 website: "https://twitter.com/jpeguin"
             )
@@ -1813,7 +1813,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 StoreStruct.returnedText = returnedText
                 
                 DispatchQueue.main.async {
-                    StoreStruct.redirect = "com.shi.mastodon://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
+                    StoreStruct.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
                     let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.redirect!)&scope=read%20write%20follow&client_id=\(application.clientID)")!
                     self.safariVC = SFSafariViewController(url: queryURL)
                     self.present(self.safariVC!, animated: true, completion: nil)
@@ -1860,7 +1860,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             UIApplication.shared.statusBarStyle = .lightContent
         }
         
-        if let userDefaults = UserDefaults(suiteName: "group.com.shi.Mast.wormhole") {
+        if let userDefaults = UserDefaults(suiteName: "group.com.vm.roma.wormhole") {
             userDefaults.set(StoreStruct.client.accessToken ?? "", forKey: "key1")
             userDefaults.set(StoreStruct.returnedText, forKey: "key2")
             userDefaults.synchronize()

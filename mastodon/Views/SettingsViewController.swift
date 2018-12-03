@@ -23,10 +23,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     var tableView = UITableView()
     var currentIndex = 0
     
-    public static let tipCalf = "com.shi.Mast.calf"
-    public static let tipElephant = "com.shi.Mast.elephant"
-    public static let tipMammoth = "com.shi.Mast.mammoth"
-    public static let tipMastodon = "com.shi.Mast.mastodon"
+    public static let tipCalf = "com.vm.roma.calf"
+    public static let tipElephant = "com.vm.roma.elephant"
+    public static let tipMammoth = "com.vm.roma.mammoth"
+    public static let tipMastodon = "com.vm.roma.mastodon"
     var productID = ""
     var productsRequest = SKProductsRequest()
     var iapProducts = [SKProduct]()
@@ -148,7 +148,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func fetchAvailableProducts()  {
         
-        let productIdentifiers = NSSet(objects: "com.shi.Mast.calf", "com.shi.Mast.elephant", "com.shi.Mast.mammoth", "com.shi.Mast.mastodon")
+        let productIdentifiers = NSSet(objects: "com.vm.roma.calf", "com.vm.roma.elephant", "com.vm.roma.mammoth", "com.vm.roma.mastodon")
         
         productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers as! Set<String>)
         productsRequest.delegate = self
@@ -312,12 +312,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         return vw
     }
     
-    var generalArray = ["Realtime Updates", "Notifications", "Haptic Feedback", "Always Display Sensitive Content", "Default Toot Privacy", "Default Keyboard Style", "Long-Hold Anywhere Action", "Image Upload Quality", "Toot Load Order", "Toot Load Position", "Default Video Container"]
-    var generalArrayDesc = ["No need to refresh manually, you'll get the latest toots and notifications pushed to you.", "Realtime push notifications for mentions/follows/boosts/likes.", "Get a responsive little vibration when tapping buttons and other on-screen elements.", "Sensitive content will always be displayed without a content warning overlay.", "Select a default privacy state for you toots, from public (everyone can see), unlisted (local timelines can see), private (followers can see), and direct (only to the mentioned user).", "Choose from a convenient social keyboard that puts the @ and # keys front and centre, or the default keyboard with a return key.", "Select what happens when you long-hold anywhere in the app.", "Pick the quality of images uploaded when composing toots. A higher quality image may take longer to upload.", "Pick whether toots load the latest toot (plus roughly 20) when reloading, or whether the reloaded toots follow on immediately from the top toot in the timeline.", "Choose whether to retain the timeline scroll position when streaming and pulling to refresh, or to scroll to the top.", "Choose whether to show videos and GIFs in a custom Picture-in-Picture container which can be swiped down to keep the view around, or in the stock media player, where swiping down dismisses the content."]
+    var generalArray = ["Realtime Updates", "Notifications", "Haptic Feedback", "Always Display Sensitive Content", "Default Status Privacy", "Default Keyboard Style", "Long-Hold Anywhere Action", "Image Upload Quality", "Status Load Order", "Status Load Position", "Default Video Container"]
+    var generalArrayDesc = ["No need to refresh manually, you'll get the latest statuses and notifications pushed to you.", "Realtime push notifications for mentions/follows/boosts/likes.", "Get a responsive little vibration when tapping buttons and other on-screen elements.", "Sensitive content will always be displayed without a content warning overlay.", "Select a default privacy state for you statuses, from public (everyone can see), unlisted (local timelines can see), private (followers can see), and direct (only to the mentioned user).", "Choose from a convenient social keyboard that puts the @ and # keys front and centre, or the default keyboard with a return key.", "Select what happens when you long-hold anywhere in the app.", "Pick the quality of images uploaded when composing statuses. A higher quality image may take longer to upload.", "Pick whether statuses load the latest status (plus roughly 20) when reloading, or whether the reloaded statuses follow on immediately from the top status in the timeline.", "Choose whether to retain the timeline scroll position when streaming and pulling to refresh, or to scroll to the top.", "Choose whether to show videos and GIFs in a custom Picture-in-Picture container which can be swiped down to keep the view around, or in the stock media player, where swiping down dismisses the content."]
     var generalArrayIm = ["setreal", "notifs", "sethap", "setsensitivec", "priv", "keybse", "holdse", "comse", "orderse", "posse", "setvid"]
     
-    var appearanceArray = ["", "Theme", "Text Size", "Profiles Corner Radius", "Images Corner Radius", "Hide Images in Timelines", "Full Usernames", "Confetti", "Gallery Grid Size", "Time Style", "Profile Header Background", "Segments Size", "Segments Transition Style", "Subtle Activity Notifications", "Profile Display Picture Border", "Pinch Background Theme", "Media Captions", "Toot Progress Indicator", "Highlight Direct Messages"]
-    var appearanceArrayDesc = ["", "Select from a white day theme, a dark dusk theme, an even darker night theme, or a truly black OLED-friendly theme.", "Always be able to read posts with adjustable text sizing.", "Circle or square, your choice.", "Rounded or not, your choice.", "Timelines with some plain old text, for a distraction-free browsing experience.", "Display the user's full username, with the instance, in toots.", "Add some fun to posting toots, following users, boosting toots, and liking toots.", "Set the amount of columns in the toot composition section's photo picker gallery.", "Pick between absolute or relative time to display in timelines.", "Change the style of the profile header background.", "Choose from larger home and notification screen segments, or tinier ones.", "Pick between a static and linear transition, or a playful liquid one.", "Dims activity notifications, while keeping mentions untouched.", "Select a size for the border around profile view display pictures.", "Select a theme for the background when pinching to toot a screenshot.", "Pick whether to display the toot text or the image's alt text in media captions.", "Choose whether to show the toot progress indicator or not.", "Highlight direct messages in timelines with a subtle background."]
+    var appearanceArray = ["", "Theme", "Text Size", "Profiles Corner Radius", "Images Corner Radius", "Hide Images in Timelines", "Full Usernames", "Confetti", "Gallery Grid Size", "Time Style", "Profile Header Background", "Segments Size", "Segments Transition Style", "Subtle Activity Notifications", "Profile Display Picture Border", "Pinch Background Theme", "Media Captions", "Status Progress Indicator", "Highlight Direct Messages"]
+    var appearanceArrayDesc = ["", "Select from a white day theme, a dark dusk theme, an even darker night theme, or a truly black OLED-friendly theme.", "Always be able to read posts with adjustable text sizing.", "Circle or square, your choice.", "Rounded or not, your choice.", "Timelines with some plain old text, for a distraction-free browsing experience.", "Display the user's full username, with the instance, in statuses.", "Add some fun to posting statuses, following users, reposting statuses, and liking statuses.", "Set the amount of columns in the status composition section's photo picker gallery.", "Pick between absolute or relative time to display in timelines.", "Change the style of the profile header background.", "Choose from larger home and notification screen segments, or tinier ones.", "Pick between a static and linear transition, or a playful liquid one.", "Dims activity notifications, while keeping mentions untouched.", "Select a size for the border around profile view display pictures.", "Select a theme for the background when pinching to status a screenshot.", "Pick whether to display the status text or the image's alt text in media captions.", "Choose whether to show the status progress indicator or not.", "Highlight direct messages in timelines with a subtle background."]
     var appearanceArrayIm = ["", "setnight", "settext", "setpro", "setima", "setima2", "userat", "confett", "gridse", "timese", "headbgse", "segse", "segse2", "subtleno" , "bordset", "pinchset", "heavyse", "indic", "direct2"]
     
     var bioArray = ["Lock App", "Lock Notifications"]
@@ -1751,7 +1751,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
-                    .action(.default("Toot Text".localized), image: filledSet1) { (action, ind) in
+                    .action(.default("Status Text".localized), image: filledSet1) { (action, ind) in
                         print(action, ind)
                         UserDefaults.standard.set(0, forKey: "captionset")
                     }

@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Roma</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIcons</key>
@@ -281,18 +283,18 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.4</string>
+	<string>1.0.0</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.shi.mastodon</string>
+				<string>com.vm.roma</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.0.1</string>
+	<string>2</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>twitter</string>
@@ -307,21 +309,21 @@
 	<key>NSAppleMusicUsageDescription</key>
 	<string>Allow Mast to access your media to determine what song is currently playing.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow Mast to access your camera to capture pictures and videos for posting within toots.</string>
+	<string>Allow Mast to access your camera to capture pictures and videos for posting within statuses.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Mast requires biometrics permission to authenticate with biometrics.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow Mast to access your microphone to capture sound in videos for posting within toots.</string>
+	<string>Allow Mast to access your microphone to capture sound in videos for posting within statuses.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Allow Mast to save images to your photo library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow Mast to access your photo library to display your recent pictures and videos for posting within toots.</string>
+	<string>Allow Mast to access your photo library to display your recent pictures and videos for posting within statuses.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
-		<string>com.shi.Mast.oled</string>
-		<string>com.shi.Mast.light</string>
-		<string>com.shi.Mast.dark</string>
-		<string>com.shi.Mast.confetti</string>
+		<string>com.vm.roma.oled</string>
+		<string>com.vm.roma.light</string>
+		<string>com.vm.roma.dark</string>
+		<string>com.vm.roma.confetti</string>
 	</array>
 	<key>UIApplicationShortcutItems</key>
 	<array>
@@ -333,7 +335,7 @@
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Compose</string>
 			<key>UIApplicationShortcutItemType</key>
-			<string>com.shi.Mast.compose</string>
+			<string>com.vm.roma.compose</string>
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
@@ -343,7 +345,7 @@
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Profile</string>
 			<key>UIApplicationShortcutItemType</key>
-			<string>com.shi.Mast.profile</string>
+			<string>com.vm.roma.profile</string>
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
@@ -353,7 +355,7 @@
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Notifications</string>
 			<key>UIApplicationShortcutItemType</key>
-			<string>com.shi.Mast.notifications</string>
+			<string>com.vm.roma.notifications</string>
 		</dict>
 		<dict>
 			<key>UIApplicationShortcutItemIconFile</key>
@@ -363,7 +365,7 @@
 			<key>UIApplicationShortcutItemTitle</key>
 			<string>Timeline</string>
 			<key>UIApplicationShortcutItemType</key>
-			<string>com.shi.Mast.feed</string>
+			<string>com.vm.roma.feed</string>
 		</dict>
 	</array>
 	<key>UIBackgroundModes</key>

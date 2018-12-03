@@ -186,8 +186,8 @@ class NewInstanceViewController: UIViewController, UITextViewDelegate {
         
         StoreStruct.client = Client(baseURL: "https://\(self.textView.text!)")
         let request = Clients.register(
-            clientName: "Mast",
-            redirectURI: "com.shi.mastodon://success",
+            clientName: "Roma",
+            redirectURI: "com.vm.roma://success",
             scopes: [.read, .write, .follow],
             website: "https://twitter.com/jpeguin"
         )

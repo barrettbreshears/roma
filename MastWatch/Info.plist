@@ -17,16 +17,16 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.4</string>
+	<string>1.0.0</string>
 	<key>CFBundleVersion</key>
-	<string>1.0.1</string>
+	<string>2</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
 	<key>WKCompanionAppBundleIdentifier</key>
-	<string>com.shi.Mast</string>
+	<string>com.vm.roma</string>
 	<key>WKWatchKitApp</key>
 	<true/>
 </dict>

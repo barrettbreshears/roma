@@ -916,17 +916,17 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             if self.profileStatuses.count > 0 {
                 let c = self.profileStatuses[0].account.statusesCount
                 if self.profileStatuses.count == 1 {
-                    title.text = "1 Toot"
+                    title.text = "1 Status"
                 } else {
                     
                     let numberFormatter2 = NumberFormatter()
                     numberFormatter2.numberStyle = NumberFormatter.Style.decimal
                     let formattedNumber2 = numberFormatter2.string(from: NSNumber(value: c))
                     
-                    title.text = "\(formattedNumber2 ?? "No") Toots"
+                    title.text = "\(formattedNumber2 ?? "No") Statuses"
                 }
             } else {
-                title.text = "No Toots"
+                title.text = "No Statuses"
             }
         }
         title.textColor = Colours.grayDark2
@@ -2777,7 +2777,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                             statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                             statusAlert.title = "Unpinned".localized
                                             statusAlert.contentColor = Colours.grayDark
-                                            statusAlert.message = "This Toot"
+                                            statusAlert.message = "This Status"
                                             statusAlert.show()
                                         }
                                     }
@@ -2794,7 +2794,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                             statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                             statusAlert.title = "Pinned".localized
                                             statusAlert.contentColor = Colours.grayDark
-                                            statusAlert.message = "This Toot"
+                                            statusAlert.message = "This Status"
                                             statusAlert.show()
                                         }
                                     }
@@ -2826,7 +2826,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Deleted".localized
                                         statusAlert.contentColor = Colours.grayDark
-                                        statusAlert.message = "Your Toot"
+                                        statusAlert.message = "Your Status"
                                         statusAlert.show()
                                         //sto.remove(at: indexPath.row)
                                         //self.tableView.reloadData()

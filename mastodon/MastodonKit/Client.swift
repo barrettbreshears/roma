@@ -12,7 +12,7 @@ public struct Client: ClientType {
     let baseURL: String
     let session: URLSession
 //    enum Constant: String {
-//        case sessionID = "com.shi.Mast.bgSession"
+//        case sessionID = "com.vm.roma.bgSession"
 //    }
 //    var session: URLSession = {
 //        let config = URLSessionConfiguration.background(withIdentifier: Constant.sessionID.rawValue)

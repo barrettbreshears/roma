@@ -299,7 +299,7 @@ class MainFeedCell: SwipeTableViewCell {
                 if z == "" {} else {
                     zz = z
                 }
-                warningB.setTitle("\(zz)\n\nTap to show toot", for: .normal)
+                warningB.setTitle("\(zz)\n\nTap to show status", for: .normal)
                 warningB.setTitleColor(Colours.black.withAlphaComponent(0.4), for: .normal)
                 warningB.addTarget(self, action: #selector(self.didTouchWarning), for: .touchUpInside)
                 warningB.alpha = 1

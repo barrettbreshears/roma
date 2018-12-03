@@ -10,7 +10,11 @@ import Foundation
 import UIKit
 
 struct StoreStruct {
-    static var colArray = [UIColor(red: 107/255.0, green: 122/255.0, blue: 214/255.0, alpha: 1.0),
+    
+    // UIColor(red: 156/255.0, green: 203/255.0, blue: 88/255.0, alpha: 1.0)
+    
+    // UIColor(red: 107/255.0, green: 122/255.0, blue: 214/255.0, alpha: 1.0)
+    static var colArray = [UIColor(red: 156/255.0, green: 203/255.0, blue: 88/255.0, alpha: 1.0),
                            UIColor(red: 79/255.0, green: 121/255.0, blue: 251/255.0, alpha: 1.0),
                            UIColor(red: 83/255.0, green: 153/255.0, blue: 244/255.0, alpha: 1.0),
                            UIColor(red: 149/255.0, green: 192/255.0, blue: 248/255.0, alpha: 1.0),

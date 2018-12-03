@@ -23,7 +23,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
         }
         
         var client = Client(baseURL: "")
-        if let userDefaults = UserDefaults(suiteName: "group.com.shi.Mast.wormhole") {
+        if let userDefaults = UserDefaults(suiteName: "group.com.vm.roma.wormhole") {
             let value1 = userDefaults.string(forKey: "key1")
             let value2 = userDefaults.string(forKey: "key2")
             client = Client(
@@ -71,7 +71,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
         super.viewDidAppear(true)
         
         var client = Client(baseURL: "")
-        if let userDefaults = UserDefaults(suiteName: "group.com.shi.Mast.wormhole") {
+        if let userDefaults = UserDefaults(suiteName: "group.com.vm.roma.wormhole") {
             let value1 = userDefaults.string(forKey: "key1")
             let value2 = userDefaults.string(forKey: "key2")
             client = Client(

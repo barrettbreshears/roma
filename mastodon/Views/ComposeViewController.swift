@@ -1315,7 +1315,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         countLabel.textAlignment = .center
         self.view.addSubview(countLabel)
         
-        tootLabel.setTitle("Toot", for: .normal)
+        tootLabel.setTitle("Post", for: .normal)
         tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
         tootLabel.contentHorizontalAlignment = .right
@@ -2255,7 +2255,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 DispatchQueue.main.async {
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
-                                    statusAlert.title = "Could not Toot".localized
+                                    statusAlert.title = "Could not Post".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Saved to drafts"
                                     statusAlert.show()
@@ -2271,7 +2271,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 }
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
-                                statusAlert.title = "Toot Toot!".localized
+                                statusAlert.title = "Status Posted!".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = "Successfully posted"
                                 statusAlert.show()
@@ -2360,7 +2360,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                         DispatchQueue.main.async {
                                                             let statusAlert = StatusAlert()
                                                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
-                                                            statusAlert.title = "Could not Toot".localized
+                                                            statusAlert.title = "Could not Post".localized
                                                             statusAlert.contentColor = Colours.grayDark
                                                             statusAlert.message = "Saved to drafts"
                                                             statusAlert.show()
@@ -2376,7 +2376,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                         }
                                                         let statusAlert = StatusAlert()
                                                         statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
-                                                        statusAlert.title = "Toot Toot!".localized
+                                                        statusAlert.title = "Status Posted!".localized
                                                         statusAlert.contentColor = Colours.grayDark
                                                         statusAlert.message = "Successfully posted"
                                                         statusAlert.show()
@@ -2453,7 +2453,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                 DispatchQueue.main.async {
                                                     let statusAlert = StatusAlert()
                                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
-                                                    statusAlert.title = "Could not Toot".localized
+                                                    statusAlert.title = "Could not Post".localized
                                                     statusAlert.contentColor = Colours.grayDark
                                                     statusAlert.message = "Saved to drafts"
                                                     statusAlert.show()
@@ -2468,7 +2468,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                 }
                                             let statusAlert = StatusAlert()
                                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
-                                            statusAlert.title = "Toot Toot!".localized
+                                            statusAlert.title = "Status Posted!".localized
                                             statusAlert.contentColor = Colours.grayDark
                                             statusAlert.message = "Successfully posted"
                                             statusAlert.show()
@@ -2532,7 +2532,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                         DispatchQueue.main.async {
                                             let statusAlert = StatusAlert()
                                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
-                                            statusAlert.title = "Could not Toot".localized
+                                            statusAlert.title = "Could not Post".localized
                                             statusAlert.contentColor = Colours.grayDark
                                             statusAlert.message = "Saved to drafts"
                                             statusAlert.show()
@@ -2547,7 +2547,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                         }
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
-                                    statusAlert.title = "Toot Toot!".localized
+                                    statusAlert.title = "Status Posted".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Successfully posted"
                                     statusAlert.show()
@@ -2610,7 +2610,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 }
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
-                            statusAlert.title = "Toot Toot!".localized
+                            statusAlert.title = "Status Posted".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Successfully posted"
                             statusAlert.show()
@@ -2645,7 +2645,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         DispatchQueue.main.async {
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
-                            statusAlert.title = "Could not Toot".localized
+                            statusAlert.title = "Could not Post".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Saved to drafts"
                             statusAlert.show()
@@ -2660,7 +2660,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         }
                     let statusAlert = StatusAlert()
                     statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
-                    statusAlert.title = "Toot Toot!".localized
+                    statusAlert.title = "Status Posted".localized
                     statusAlert.contentColor = Colours.grayDark
                     statusAlert.message = "Successfully posted"
                     statusAlert.show()
