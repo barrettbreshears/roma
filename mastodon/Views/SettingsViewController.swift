@@ -265,7 +265,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     // Table stuff
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 6
+        return 4
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -299,10 +299,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             title.text = "Appearance".localized
         } else if section == 3 {
             title.text = "Biometric Lock".localized
-        } else if section == 4 {
-            title.text = "About".localized
-        } else {
-            title.text = "Tip Mast".localized
         }
         title.textColor = Colours.grayDark2
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
@@ -337,10 +333,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             return self.appearanceArray.count
         } else if section == 3 {
             return self.bioArray.count
-        } else if section == 4 {
-            return self.aboutArray.count
         } else {
-            return 4
+            return 0
         }
     }
     
@@ -724,24 +718,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             
             return cell
             
-        } else if indexPath.section == 5 {
-            
-            
-            var tipArray = ["Calf Tip", "Elephant Tip", "Mammoth Tip", "Mastodon Tip"]
-            var tipArrayDesc = ["\(self.price1) - Every little helps!", "\(self.price2) - Your support is appreciated!", "\(self.price3) - Your generosity is appreciated!", "\(self.price4) - Thank you for the incredible generosity!"]
-            var tipArrayIm = ["heart1", "heart2", "heart3", "heart4"]
-            
-            
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
-            cell.configure(status: tipArray[indexPath.row], status2: tipArrayDesc[indexPath.row], image: tipArrayIm[indexPath.row])
-            cell.backgroundColor = Colours.white
-            cell.userName.textColor = Colours.black
-            cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
-            cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
-            let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
-            cell.selectedBackgroundView = bgColorView
-            return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
             cell.configure(status: self.aboutArray[indexPath.row], status2: self.aboutArrayDesc[indexPath.row], image: self.aboutArrayIm[indexPath.row])
@@ -1806,112 +1782,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
         }
         
-        if indexPath.section == 4 {
-            if indexPath.row == 0 {
-                // about
-                Alertift.actionSheet(title: "Mast \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "")", message: "A beautiful Mastodon client\nMade with the intention to be reliant\nIt's fast, it's fluid, it's fun\nBut most of all, it's built with love for everyone\n\nMade independantly by @JPEG@mastodon.technology\nA Swift backend software developer by day, and an iOS frontend developer by night".localized)
-                    .backgroundColor(Colours.white)
-                    .titleTextColor(Colours.grayDark)
-                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
-                    .messageTextAlignment(.left)
-                    .titleTextAlignment(.left)
-                    .action(.cancel("Dismiss"))
-                    .finally { action, index in
-                        if action.style == .cancel {
-                            return
-                        }
-                    }
-                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 4))?.contentView ?? self.view)
-                    .show(on: self)
-            }
-            if indexPath.row == 1 {
-                // follow
-                Alertift.actionSheet(title: title, message: nil)
-                    .backgroundColor(Colours.white)
-                    .titleTextColor(Colours.grayDark)
-                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
-                    .messageTextAlignment(.left)
-                    .titleTextAlignment(.left)
-                    .action(.default("Mastodon".localized)) { (action, ind) in
-                        print(action, ind)
-                        
-                        
-                        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                            let notification = UINotificationFeedbackGenerator()
-                            notification.notificationOccurred(.success)
-                        }
-                        let statusAlert = StatusAlert()
-                        statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
-                        statusAlert.title = "Followed".localized
-                        statusAlert.contentColor = Colours.grayDark
-                        statusAlert.message = "Mastodon Developer"
-                        statusAlert.show()
-                        
-                        if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
-                        }
-                        
-                        let request = Accounts.follow(id: "100802707057696937")
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let _ = (statuses.value) {
-                                print("followed")
-                            }
-                        }
-                    }
-                    .action(.default("Developer Twitter".localized)) { (action, ind) in
-                        print(action, ind)
-                        let twUrl = URL(string: "twitter://user?screen_name=JPEGuin")!
-                        let twUrlWeb = URL(string: "https://www.twitter.com/JPEGuin")!
-                        if UIApplication.shared.canOpenURL(twUrl) {
-                            UIApplication.shared.open(twUrl, options: [:], completionHandler: nil)
-                        } else {
-                            self.safariVC = SFSafariViewController(url: twUrlWeb)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
-                        }
-                    }
-                    .action(.default("Mast Twitter".localized)) { (action, ind) in
-                        print(action, ind)
-                        let twUrl = URL(string: "twitter://user?screen_name=TheMastApp")!
-                        let twUrlWeb = URL(string: "https://www.twitter.com/TheMastApp")!
-                        if UIApplication.shared.canOpenURL(twUrl) {
-                            UIApplication.shared.open(twUrl, options: [:], completionHandler: nil)
-                        } else {
-                            self.safariVC = SFSafariViewController(url: twUrlWeb)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
-                        }
-                    }
-                    .action(.cancel("Dismiss"))
-                    .finally { action, index in
-                        if action.style == .cancel {
-                            return
-                        }
-                    }
-                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 4))?.contentView ?? self.view)
-                    .show(on: self)
-            }
-        }
         
-        
-        //tjar
-        
-        if indexPath.section == 5 {
-            if indexPath.row == 0 {
-                purchaseMyProduct(product: iapProducts[0])
-            }
-            if indexPath.row == 1 {
-                purchaseMyProduct(product: iapProducts[1])
-            }
-            if indexPath.row == 2 {
-                purchaseMyProduct(product: iapProducts[2])
-            }
-            if indexPath.row == 3 {
-                purchaseMyProduct(product: iapProducts[3])
-            }
-        }
+       
         
         
     }
