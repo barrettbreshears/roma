@@ -1534,7 +1534,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             
             
-            if StoreStruct.statusesHome.count == 0 {
+            if StoreStruct.statusesHome.count == 0 || indexPath.row >= StoreStruct.statusesHome.count {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MainFeedCell
                 cell.backgroundColor = Colours.white
                 let bgColorView = UIView()
@@ -1547,6 +1547,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 if indexPath.row == StoreStruct.statusesHome.count - 14 {
                     self.fetchMoreHome()
                 }
+                print(indexPath.row)
+                print(StoreStruct.statusesHome.count)
                 if StoreStruct.statusesHome[indexPath.row].reblog?.mediaAttachments.isEmpty ?? StoreStruct.statusesHome[indexPath.row].mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MainFeedCell
                     cell.delegate = self
@@ -1732,7 +1734,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             
             
-            if StoreStruct.statusesLocal.count == 0 {
+            if StoreStruct.statusesLocal.count == 0 || indexPath.row >= StoreStruct.statusesLocal.count  {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "celll", for: indexPath) as! MainFeedCell
                 cell.backgroundColor = Colours.white
                 let bgColorView = UIView()
@@ -1925,7 +1927,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         } else {
             
             
-            if StoreStruct.statusesFederated.count == 0 {
+            if StoreStruct.statusesFederated.count == 0 || indexPath.row >= StoreStruct.statusesFederated.count  {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellf", for: indexPath) as! MainFeedCell
                 cell.backgroundColor = Colours.white
                 let bgColorView = UIView()
@@ -2186,7 +2188,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                     var images = [SKPhoto]()
                     for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: sender.currentImage)
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
@@ -2211,7 +2213,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     let cell = tableViewL.cellForRow(at: indexPath) as! MainFeedCellImage
                     var images = [SKPhoto]()
                     for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: sender.currentImage)
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
@@ -2236,7 +2238,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     let cell = tableViewF.cellForRow(at: indexPath) as! MainFeedCellImage
                     var images = [SKPhoto]()
                     for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: sender.currentImage)
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
@@ -2468,7 +2470,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 }
                 
                 let controller = ComposeViewController()
-                controller.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
+                StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                 controller.inReply = [sto[indexPath.row].reblog ?? sto[indexPath.row]]
                 controller.prevTextReply = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
                 controller.inReplyText = sto[indexPath.row].reblog?.account.username ?? sto[indexPath.row].account.username
@@ -2597,7 +2599,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             print(action, ind)
                             
                             let controller = ComposeViewController()
-                            controller.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
+                            StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                             controller.idToDel = sto[indexPath.row].id
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
                             self.present(controller, animated: true, completion: nil)
@@ -3140,7 +3142,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 UIView.setAnimationsEnabled(false)
                                 self.tableView.reloadData()
                                 self.refreshControl.endRefreshing()
-//                                self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
                                 UIView.setAnimationsEnabled(true)
                             } else {
                                 self.tableView.reloadData()
@@ -3149,7 +3151,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             
                             do {
-                                self.restoreScroll()
+//                                self.restoreScroll()
                                 try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
                                 try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
                                 try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
@@ -3187,7 +3189,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 UIView.setAnimationsEnabled(false)
                                 self.tableViewL.reloadData()
                                 self.refreshControl.endRefreshing()
-//                                self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
                                 UIView.setAnimationsEnabled(true)
                             } else {
                                 
@@ -3198,7 +3200,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             
                             do {
-                                self.restoreScroll()
+//                                self.restoreScroll()
                                 try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
                                 try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
                                 try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
@@ -3236,7 +3238,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 UIView.setAnimationsEnabled(false)
                                 self.tableViewF.reloadData()
                                 self.refreshControl.endRefreshing()
-//                                self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
                                 UIView.setAnimationsEnabled(true)
                                 
                             } else {
@@ -3248,7 +3250,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             
                             do {
-                                self.restoreScroll()
+//                                self.restoreScroll()
                                 try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
                                 try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
                                 try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")

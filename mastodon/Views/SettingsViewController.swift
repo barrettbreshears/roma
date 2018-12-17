@@ -237,7 +237,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         tap.delegate = self
         self.view.window?.addGestureRecognizer(tap)
         
-        StoreStruct.currentPage = 0
+        StoreStruct.currentPage = 90
     }
     
     internal func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -276,7 +276,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             return 40
         case .pad:
             if section == 0 {
-                return 0
+                return 40
             } else {
                 return 40
             }
@@ -346,7 +346,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             case .phone:
                 return 130
             case .pad:
-                return 0
+                return 130
             default:
                 return 130
             }
@@ -499,6 +499,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.configure()
             case .pad:
                 print("nothing")
+                cell.configure()
             default:
                 cell.configure()
             }

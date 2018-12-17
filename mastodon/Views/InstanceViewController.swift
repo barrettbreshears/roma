@@ -200,7 +200,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
 //        self.navigationController?.navigationBar.barTintColor = Colours.tabUnselected
         self.navigationController?.navigationItem.backBarButtonItem?.tintColor = Colours.tabUnselected
         
-        StoreStruct.currentPage = 0
+        StoreStruct.currentPage = 90
         
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
@@ -504,7 +504,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
             let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
             var images = [SKPhoto]()
             for y in sto[indexPath.row].mediaAttachments {
-                let photo = SKPhoto.photoWithImageURL(y.url, holder: sender.currentImage)
+                let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                 photo.shouldCachePhotoURLImage = true
                 if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                     photo.caption = sto[indexPath.row].content.stripHTML()
@@ -540,7 +540,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     impact.impactOccurred()
                 }
                 let controller = ComposeViewController()
-                controller.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
+                StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                 controller.inReply = [sto[indexPath.row]]
                 controller.inReplyText = sto[indexPath.row].account.username
                 print(sto[indexPath.row].account.username)
@@ -669,7 +669,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                             print(action, ind)
                             
                             let controller = ComposeViewController()
-                            controller.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
+                            StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                             controller.idToDel = sto[indexPath.row].id
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
                             self.present(controller, animated: true, completion: nil)

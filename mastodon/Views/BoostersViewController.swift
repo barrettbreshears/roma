@@ -133,6 +133,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             }
         }
         
+        StoreStruct.currentPage = 90
     }
     
     

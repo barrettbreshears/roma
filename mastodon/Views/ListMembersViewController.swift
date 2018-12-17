@@ -145,7 +145,7 @@ class ListMembersViewController: UIViewController, UITableViewDelegate, UITableV
 //        self.navigationController?.navigationBar.barTintColor = Colours.tabUnselected
         self.navigationController?.navigationItem.backBarButtonItem?.tintColor = Colours.tabUnselected
         
-        StoreStruct.currentPage = 0
+        StoreStruct.currentPage = 90
     }
     
     

@@ -135,6 +135,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                 }
             }
         }
+        StoreStruct.currentPage = 90
     }
     
     

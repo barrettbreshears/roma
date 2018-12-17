@@ -69,9 +69,9 @@ class NewCaptionViewController: UIViewController, UITextViewDelegate {
         
         tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(closeB), width: CGFloat(150), height: CGFloat(36))
         if self.editListName == "" {
-            tootLabel.setTitle("Go", for: .normal)
+            tootLabel.setTitle("Add", for: .normal)
         } else {
-            tootLabel.setTitle("Go", for: .normal)
+            tootLabel.setTitle("Add", for: .normal)
         }
         tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)

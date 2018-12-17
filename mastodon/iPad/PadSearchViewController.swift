@@ -25,8 +25,7 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
         
         
         self.tableView.register(FollowersCell.self, forCellReuseIdentifier: "cellfs")
-        self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell00")
-        self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell002")
+        self.tableView.register(SearchFeedCell.self, forCellReuseIdentifier: "cell00")
         
     }
     
@@ -35,6 +34,7 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
         self.tSearch()
         
         NotificationCenter.default.post(name: Notification.Name(rawValue: "becomeFirst"), object: self)
+        self.searchTextField.becomeFirstResponder()
     }
     
     
@@ -45,7 +45,7 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
             imp.impactOccurred()
         }
         
-        self.typeOfSearch = 0
+        StoreStruct.typeOfSearch = 0
         
         var fromTop = 45
         if UIDevice().userInterfaceIdiom == .phone {
@@ -153,7 +153,7 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, didChangeFromSegmentAtIndex fromIndex: Int, toSegmentAtIndex toIndex: Int) {
         
         if toIndex == 0 {
-            self.typeOfSearch = 0
+            StoreStruct.typeOfSearch = 0
             let request = Timelines.tag(self.newestText)
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
@@ -166,7 +166,7 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
             //self.tableView.reloadData()
         }
         if toIndex == 1 {
-            self.typeOfSearch = 1
+            StoreStruct.typeOfSearch = 1
             let request = Search.search(query: self.newestText)
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
@@ -179,7 +179,7 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
             //self.tableView.reloadData()
         }
         if toIndex == 2 {
-            self.typeOfSearch = 2
+            StoreStruct.typeOfSearch = 2
             let request = Accounts.search(query: self.newestText)
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
@@ -215,7 +215,7 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
         
         let wid = self.view.bounds.width - 20
         self.newestText = textField.text ?? ""
-        if self.typeOfSearch == 0 {
+        if StoreStruct.typeOfSearch == 0 {
             let theText = textField.text?.replacingOccurrences(of: "#", with: "")
             let request = Timelines.tag(theText ?? "")
             StoreStruct.client.run(request) { (statuses) in
@@ -227,7 +227,7 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
                 }
             }
         }
-        if self.typeOfSearch == 1 {
+        if StoreStruct.typeOfSearch == 1 {
             let request = Search.search(query: textField.text ?? "")
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
@@ -238,7 +238,7 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
                 }
             }
         }
-        if self.typeOfSearch == 2 {
+        if StoreStruct.typeOfSearch == 2 {
             
             let request = Accounts.search(query: self.newestText)
             StoreStruct.client.run(request) { (statuses) in
@@ -292,7 +292,7 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            if self.typeOfSearch == 2 {
+            if StoreStruct.typeOfSearch == 2 {
                 return StoreStruct.statusSearchUser.count
             } else {
                 return StoreStruct.statusSearch.count
@@ -306,7 +306,7 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             
-            if self.typeOfSearch == 2 {
+            if StoreStruct.typeOfSearch == 2 {
                 print("oomp")
                 if StoreStruct.statusSearchUser.count > 0 {
                     print("oomp1")
@@ -323,7 +323,7 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
                     cell.selectedBackgroundView = bgColorView
                     return cell
                 } else {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! MainFeedCell
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! SearchFeedCell
                     cell.profileImageView.tag = indexPath.row
                     cell.backgroundColor = Colours.grayDark3
                     cell.userName.textColor = UIColor.white
@@ -338,7 +338,7 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
             } else {
                 
                 if StoreStruct.statusSearch.count > 0 {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! MainFeedCell
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! SearchFeedCell
                     cell.configure(StoreStruct.statusSearch[indexPath.row])
                     cell.profileImageView.tag = indexPath.row
                     cell.backgroundColor = Colours.grayDark3
@@ -351,7 +351,7 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
                     cell.selectedBackgroundView = bgColorView
                     return cell
                 } else {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! MainFeedCell
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! SearchFeedCell
                     cell.profileImageView.tag = indexPath.row
                     cell.backgroundColor = Colours.grayDark3
                     cell.userName.textColor = UIColor.white
@@ -374,11 +374,15 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath)
         StoreStruct.searchIndex = indexPath.row
-        if self.typeOfSearch == 2 {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "setVC2"), object: nil)
-        } else {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "setVC"), object: nil)
-        }
+//        if StoreStruct.typeOfSearch == 2 {
+//            NotificationCenter.default.post(name: Notification.Name(rawValue: "setVC2"), object: nil)
+//        } else {
+//            NotificationCenter.default.post(name: Notification.Name(rawValue: "setVC"), object: nil)
+//        }
+        
+        
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "hideP"), object: nil)
+        
         
         
     }

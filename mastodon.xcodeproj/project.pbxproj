@@ -78,6 +78,7 @@
 		5314E329216D1502007F9651 /* waitIndicatorGraphic-2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314E309216D1502007F9651 /* waitIndicatorGraphic-2@2x.png */; };
 		5314E32A216D1502007F9651 /* waitIndicatorGraphic-16@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314E30A216D1502007F9651 /* waitIndicatorGraphic-16@2x.png */; };
 		5314E32B216D1502007F9651 /* waitIndicatorGraphic-20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314E30B216D1502007F9651 /* waitIndicatorGraphic-20@2x.png */; };
+		5315308621B95223007E5C00 /* SearchFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315308521B95223007E5C00 /* SearchFeedCell.swift */; };
 		5316C88E219D94A00003AB97 /* GiphyImageSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5316C87E219D949F0003AB97 /* GiphyImageSet.swift */; };
 		5316C88F219D94A00003AB97 /* GiphyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5316C87F219D949F0003AB97 /* GiphyUser.swift */; };
 		5316C890219D94A00003AB97 /* GiphyMeta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5316C880219D949F0003AB97 /* GiphyMeta.swift */; };
@@ -96,8 +97,6 @@
 		5316C89D219D94A00003AB97 /* SwiftyGiphyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5316C88D219D94A00003AB97 /* SwiftyGiphyViewController.swift */; };
 		53170E80218361A4005F972B /* PadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53170E7F218361A4005F972B /* PadViewController.swift */; };
 		53170E8421836761005F972B /* PadTimelinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53170E8321836761005F972B /* PadTimelinesViewController.swift */; };
-		53170E8621837573005F972B /* PadLocalTimelinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53170E8521837573005F972B /* PadLocalTimelinesViewController.swift */; };
-		53170E8821837589005F972B /* PadFedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53170E8721837589005F972B /* PadFedViewController.swift */; };
 		5318F56221877F8A00418159 /* PadLogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318F56121877F8A00418159 /* PadLogInViewController.swift */; };
 		531B04B9217111A100D31715 /* Stickers.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 531B04B8217111A100D31715 /* Stickers.xcassets */; };
 		531B04BD217111A100D31715 /* MastStickers.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 531B04B62171119D00D31715 /* MastStickers.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -184,7 +183,6 @@
 		5322D7E12167659900B952F5 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 5322D7DA2167659900B952F5 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		532429AE21923130002EEEAA /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 532429AD21923130002EEEAA /* StoreKit.framework */; };
 		532533BD2185194100A8A65B /* PadMentionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532533BC2185194100A8A65B /* PadMentionsViewController.swift */; };
-		532533BF2185195800A8A65B /* PadActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532533BE2185195800A8A65B /* PadActivityViewController.swift */; };
 		5329F3842174B21F00C4A23C /* NewInstanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5329F3832174B21F00C4A23C /* NewInstanceViewController.swift */; };
 		5329F3862174B31400C4A23C /* InstanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5329F3852174B31400C4A23C /* InstanceViewController.swift */; };
 		5329F3882174D0B900C4A23C /* ColourCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5329F3872174D0B900C4A23C /* ColourCells.swift */; };
@@ -654,13 +652,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		531B04BB217111A100D31715 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5373C9CC215173EE00676F3D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 531B04B52171119D00D31715;
-			remoteInfo = MastStickers;
-		};
 		5322D7DF2167659900B952F5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5373C9CC215173EE00676F3D /* Project object */;
@@ -688,13 +679,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 536A4FCC216B843A00A3D483;
 			remoteInfo = "MastWatch Extension";
-		};
-		536A4FDC216B843A00A3D483 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5373C9CC215173EE00676F3D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 536A4FC0216B843700A3D483;
-			remoteInfo = MastWatch;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -811,6 +795,7 @@
 		5314E309216D1502007F9651 /* waitIndicatorGraphic-2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "waitIndicatorGraphic-2@2x.png"; sourceTree = "<group>"; };
 		5314E30A216D1502007F9651 /* waitIndicatorGraphic-16@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "waitIndicatorGraphic-16@2x.png"; sourceTree = "<group>"; };
 		5314E30B216D1502007F9651 /* waitIndicatorGraphic-20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "waitIndicatorGraphic-20@2x.png"; sourceTree = "<group>"; };
+		5315308521B95223007E5C00 /* SearchFeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFeedCell.swift; sourceTree = "<group>"; };
 		5316C87E219D949F0003AB97 /* GiphyImageSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyImageSet.swift; sourceTree = "<group>"; };
 		5316C87F219D949F0003AB97 /* GiphyUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyUser.swift; sourceTree = "<group>"; };
 		5316C880219D949F0003AB97 /* GiphyMeta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyMeta.swift; sourceTree = "<group>"; };
@@ -829,8 +814,6 @@
 		5316C88D219D94A00003AB97 /* SwiftyGiphyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyGiphyViewController.swift; sourceTree = "<group>"; };
 		53170E7F218361A4005F972B /* PadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadViewController.swift; sourceTree = "<group>"; };
 		53170E8321836761005F972B /* PadTimelinesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadTimelinesViewController.swift; sourceTree = "<group>"; };
-		53170E8521837573005F972B /* PadLocalTimelinesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadLocalTimelinesViewController.swift; sourceTree = "<group>"; };
-		53170E8721837589005F972B /* PadFedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadFedViewController.swift; sourceTree = "<group>"; };
 		5318F56121877F8A00418159 /* PadLogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadLogInViewController.swift; sourceTree = "<group>"; };
 		531B04B62171119D00D31715 /* MastStickers.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MastStickers.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		531B04B8217111A100D31715 /* Stickers.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Stickers.xcassets; sourceTree = "<group>"; };
@@ -920,7 +903,6 @@
 		5322D7DE2167659900B952F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		532429AD21923130002EEEAA /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		532533BC2185194100A8A65B /* PadMentionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadMentionsViewController.swift; sourceTree = "<group>"; };
-		532533BE2185195800A8A65B /* PadActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadActivityViewController.swift; sourceTree = "<group>"; };
 		5329F3832174B21F00C4A23C /* NewInstanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewInstanceViewController.swift; sourceTree = "<group>"; };
 		5329F3852174B31400C4A23C /* InstanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceViewController.swift; sourceTree = "<group>"; };
 		5329F3872174D0B900C4A23C /* ColourCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColourCells.swift; sourceTree = "<group>"; };
@@ -1595,10 +1577,7 @@
 				53170E7F218361A4005F972B /* PadViewController.swift */,
 				5318F56121877F8A00418159 /* PadLogInViewController.swift */,
 				53170E8321836761005F972B /* PadTimelinesViewController.swift */,
-				53170E8521837573005F972B /* PadLocalTimelinesViewController.swift */,
-				53170E8721837589005F972B /* PadFedViewController.swift */,
 				532533BC2185194100A8A65B /* PadMentionsViewController.swift */,
-				532533BE2185195800A8A65B /* PadActivityViewController.swift */,
 				531BD18B2188672700E12278 /* TNFloatingPanel.swift */,
 				531BD18D218867EF00E12278 /* PadSearchViewController.swift */,
 				531BD18F2188762500E12278 /* PadDetailViewController.swift */,
@@ -2502,6 +2481,7 @@
 			children = (
 				5373C9F521519EF800676F3D /* MainFeedCell.swift */,
 				5373CB1C21540F5D00676F3D /* MainFeedCellImage.swift */,
+				5315308521B95223007E5C00 /* SearchFeedCell.swift */,
 				5373CB3B2154E93500676F3D /* NotificationCell.swift */,
 				5373CB3D2154E97500676F3D /* NotificationCellImage.swift */,
 				5373CB3F2155049900676F3D /* ProfileHeaderCell.swift */,
@@ -2849,8 +2829,6 @@
 				5354BA222163F89E0094C545 /* PBXTargetDependency */,
 				5354BAFC21668D5A0094C545 /* PBXTargetDependency */,
 				5322D7E02167659900B952F5 /* PBXTargetDependency */,
-				536A4FDD216B843A00A3D483 /* PBXTargetDependency */,
-				531B04BC217111A100D31715 /* PBXTargetDependency */,
 			);
 			name = mastodon;
 			productName = mastodon;
@@ -3468,6 +3446,7 @@
 				53ADB308217E4F6C00A7C431 /* NewCaptionViewController.swift in Sources */,
 				5373CB4421550EAC00676F3D /* ColumnFlowLayout.swift in Sources */,
 				531E0F90216E2BA2003E8890 /* NVActivityIndicatorAnimationBallClipRotate.swift in Sources */,
+				5315308621B95223007E5C00 /* SearchFeedCell.swift in Sources */,
 				5373CAC42152C68000676F3D /* Request.swift in Sources */,
 				5354BACF216577FD0094C545 /* FastArrowLayer.swift in Sources */,
 				531E0FAB216E2BA2003E8890 /* NVActivityIndicatorAnimationLineScaleParty.swift in Sources */,
@@ -3591,7 +3570,6 @@
 				5354BAC8216577FD0094C545 /* RamotionAnimator.swift in Sources */,
 				531E0F98216E2BA2003E8890 /* NVActivityIndicatorAnimationBallBeat.swift in Sources */,
 				5373CB3321541A0300676F3D /* SKCaptionView.swift in Sources */,
-				53170E8821837589005F972B /* PadFedViewController.swift in Sources */,
 				53205811215D287700ED0C36 /* DKGroupDataManager.swift in Sources */,
 				536A4FBC216B73D600A3D483 /* HighlightButton.swift in Sources */,
 				5373CB4821565FFC00676F3D /* DetailViewController.swift in Sources */,
@@ -3726,11 +3704,9 @@
 				535B33B2215C0EC6001A2A7F /* Utils.swift in Sources */,
 				531E0F8B216E2BA2003E8890 /* NVActivityIndicatorViewable.swift in Sources */,
 				5354BACE216577FD0094C545 /* FastLayer.swift in Sources */,
-				53170E8621837573005F972B /* PadLocalTimelinesViewController.swift in Sources */,
 				5329F3922174DBDF00C4A23C /* SSLClientCertificate.swift in Sources */,
 				5373CB622159553600676F3D /* FollowersViewController.swift in Sources */,
 				5373CAD42152C68000676F3D /* Statuses.swift in Sources */,
-				532533BF2185195800A8A65B /* PadActivityViewController.swift in Sources */,
 				535B33CA215C31E3001A2A7F /* ActiveBuilder.swift in Sources */,
 				5373C9D8215173EE00676F3D /* AppDelegate.swift in Sources */,
 				535B33B0215C0EC6001A2A7F /* XPlayerViewController+State.swift in Sources */,
@@ -3780,11 +3756,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		531B04BC217111A100D31715 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 531B04B52171119D00D31715 /* MastStickers */;
-			targetProxy = 531B04BB217111A100D31715 /* PBXContainerItemProxy */;
-		};
 		5322D7E02167659900B952F5 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 5322D7D92167659900B952F5 /* OneSignalNotificationServiceExtension */;
@@ -3804,11 +3775,6 @@
 			isa = PBXTargetDependency;
 			target = 536A4FCC216B843A00A3D483 /* MastWatch Extension */;
 			targetProxy = 536A4FCF216B843A00A3D483 /* PBXContainerItemProxy */;
-		};
-		536A4FDD216B843A00A3D483 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 536A4FC0216B843700A3D483 /* MastWatch */;
-			targetProxy = 536A4FDC216B843A00A3D483 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

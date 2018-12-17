@@ -65,8 +65,6 @@ class ShareViewController: SLComposeServiceViewController {
                             }
                             
                             
-                            
-                            
                             let request = Media.upload(media: .jpeg(imageData))
                             client.run(request) { (statuses) in
                                 if let stat = (statuses.value) {
@@ -84,10 +82,30 @@ class ShareViewController: SLComposeServiceViewController {
                                 }
                             }
                             
-                            
-                            
-                            
+                        } else {
+                            let z = url as! UIImage
+                            let request = Media.upload(media: .jpeg(z.pngData()))
+                            client.run(request) { (statuses) in
+                                if let stat = (statuses.value) {
+                                    print(stat.id)
+                                    var mediaIDs: [String] = []
+                                    mediaIDs.append(stat.id)
+                                    
+                                    let request0 = Statuses.create(status: self.contentText!, replyToID: nil, mediaIDs: mediaIDs, sensitive: false, spoilerText: nil, visibility: .public)
+                                    DispatchQueue.global(qos: .background).async {
+                                        client.run(request0) { (statuses) in
+                                            print("posted")
+                                            self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+                                        }
+                                    }
+                                }
+                            }
                         }
+                        
+                        
+                        
+                        
+                        
                     })
                     
                 }

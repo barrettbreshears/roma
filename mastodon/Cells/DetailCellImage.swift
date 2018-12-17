@@ -58,6 +58,9 @@ class DetailCellImage: UITableViewCell {
         mainImageViewBG.layer.shadowRadius = 12
         mainImageViewBG.layer.shadowOpacity = 0.22
         mainImageViewBG.layer.masksToBounds = false
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            mainImageViewBG.alpha = 0
+        }
         
         userName.numberOfLines = 0
         userTag.numberOfLines = 0
@@ -120,6 +123,23 @@ class DetailCellImage: UITableViewCell {
             "countTag" : imageCountTag,
             ]
         
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-120-[image(40)]-13-[name]-(>=5)-[date]-120-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-120-[image(40)]-13-[artist]-(>=105)-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-120-[image(40)]-13-[episodes]-120-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-120-[image(40)]-13-[from]-120-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-120-[image(40)]-13-[faves]-(>=120)-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[mainImage]-0-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[mainImageBG]-0-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-15-[episodes]-15-[mainImage(500)]-10-[faves]-10-[from]-12-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-15-[episodes]-15-[mainImageBG(500)]-10-[faves]-10-[from]-12-|", options: [], metrics: nil, views: viewsDict))
+            
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+        } else {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[name]-(>=5)-[date]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[artist]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
@@ -134,6 +154,7 @@ class DetailCellImage: UITableViewCell {
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -259,10 +280,11 @@ class DetailCellImage: UITableViewCell {
         faves.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         
         
+        mainImageView.contentMode = .scaleAspectFill
         mainImageView.imageView?.contentMode = .scaleAspectFill
         self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
         mainImageView.pin_updateWithProgress = true
-        mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].previewURL ?? status.mediaAttachments[0].previewURL)"))
+        mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].url ?? status.mediaAttachments[0].url)"))
         mainImageView.layer.masksToBounds = true
         
         

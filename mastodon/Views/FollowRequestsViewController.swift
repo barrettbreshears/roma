@@ -145,7 +145,7 @@ class FollowRequestsViewController: UIViewController, UITableViewDelegate, UITab
             print("nothing")
         }
         
-        StoreStruct.currentPage = 0
+        StoreStruct.currentPage = 90
     }
     
     

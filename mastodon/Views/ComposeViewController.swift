@@ -517,7 +517,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     var idToDel = ""
     var mediaIDs: [Media] = []
     var isSensitive = false
-    var spoilerText: String!
     var visibility: Visibility = .public
     var tableView = UITableView()
     var tableViewASCII = UITableView()
@@ -562,7 +561,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     
     
     @objc func tappedImageView1(_ sender: AnyObject) {
-        
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
         
         Alertift.actionSheet(title: nil, message: nil)
             .backgroundColor(Colours.white)
@@ -604,6 +606,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
     }
     @objc func tappedImageView2(_ sender: AnyObject) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
         
         Alertift.actionSheet(title: nil, message: nil)
             .backgroundColor(Colours.white)
@@ -644,6 +650,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
     }
     @objc func tappedImageView3(_ sender: AnyObject) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
         
         Alertift.actionSheet(title: nil, message: nil)
             .backgroundColor(Colours.white)
@@ -681,6 +691,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             .show(on: self)
     }
     @objc func tappedImageView4(_ sender: AnyObject) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
         
         Alertift.actionSheet(title: nil, message: nil)
             .backgroundColor(Colours.white)
@@ -903,7 +917,11 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     }
     
     
-    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(true)
+        
+        StoreStruct.spoilerText = self.textField.text ?? ""
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
@@ -912,7 +930,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         textView.becomeFirstResponder()
         
         
-        self.textField.text = self.spoilerText
+        self.textField.text = StoreStruct.spoilerText
         
         
         
@@ -1069,6 +1087,8 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        StoreStruct.spoilerText = ""
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.actOnSpecialNotificationAuto), name: NSNotification.Name(rawValue: "cpick"), object: nil)
         
         self.view.backgroundColor = Colours.white
@@ -1186,18 +1206,19 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.visibilityButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 60, y: 0, width: 80, height: 50)))
         
         if inReply.count > 0 {
+            self.textField.text = inReply[0].spoilerText
             if inReply[0].visibility == .direct {
                 self.visibility = .direct
                 self.visibilityButton.setImage(UIImage(named: "direct")?.maskWithColor(color: UIColor.white), for: .normal)
             } else {
                 
-                if (UserDefaults.standard.object(forKey: "privToot") == nil) || (UserDefaults.standard.object(forKey: "privToot") as! Int == 0) {
+                if (UserDefaults.standard.object(forKey: "privToot") == nil) || (UserDefaults.standard.object(forKey: "privToot") as! Int == 0) || inReply[0].visibility == .public {
                     self.visibility = .public
                     self.visibilityButton.setImage(UIImage(named: "eye")?.maskWithColor(color: UIColor.white), for: .normal)
-                } else if (UserDefaults.standard.object(forKey: "privToot") as! Int == 1) {
+                } else if (UserDefaults.standard.object(forKey: "privToot") as! Int == 1) || inReply[0].visibility == .unlisted {
                     self.visibility = .unlisted
                     self.visibilityButton.setImage(UIImage(named: "unlisted")?.maskWithColor(color: UIColor.white), for: .normal)
-                } else if (UserDefaults.standard.object(forKey: "privToot") as! Int == 2) {
+                } else if (UserDefaults.standard.object(forKey: "privToot") as! Int == 2) || inReply[0].visibility == .private {
                     self.visibility = .private
                     self.visibilityButton.setImage(UIImage(named: "private")?.maskWithColor(color: UIColor.white), for: .normal)
                 } else if (UserDefaults.standard.object(forKey: "privToot") as! Int == 3) {
@@ -2210,7 +2231,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         }
         
         if self.textField.text != "" {
-            self.spoilerText = self.textField.text ?? ""
+            StoreStruct.spoilerText = self.textField.text ?? ""
             self.isSensitive = true
         }
         
@@ -2233,6 +2254,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         }
         
         
+        StoreStruct.drafts.append(self.textView.text!)
+        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+        
+        
         if self.gifVidData != nil {
             print("gifvidnotnil")
             
@@ -2242,7 +2267,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     print(stat.id)
                     mediaIDs.append(stat.id)
                     
-                    let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: self.spoilerText, visibility: self.visibility)
+                    let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, visibility: self.visibility)
                     DispatchQueue.global(qos: .userInitiated).async {
                         StoreStruct.client.run(request0) { (statuses) in
                             print(statuses)
@@ -2259,10 +2284,11 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Saved to drafts"
                                     statusAlert.show()
-                                    StoreStruct.drafts.append(self.textView.text!)
-                                    UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                                 }
                             } else {
+                                
+                                StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
+                                UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                             
                             DispatchQueue.main.async {
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -2348,7 +2374,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             }
                                             
                                             
-                                            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: self.spoilerText, visibility: self.visibility)
+                                            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, visibility: self.visibility)
                                             DispatchQueue.global(qos: .userInitiated).async {
                                                 StoreStruct.client.run(request0) { (statuses) in
                                                     print(statuses)
@@ -2364,10 +2390,11 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                             statusAlert.contentColor = Colours.grayDark
                                                             statusAlert.message = "Saved to drafts"
                                                             statusAlert.show()
-                                                            StoreStruct.drafts.append(self.textView.text!)
-                                                            UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                                                         }
                                                     } else {
+                                                        
+                                                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
+                                                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                                                         
                                                     DispatchQueue.main.async {
                                                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -2441,7 +2468,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     }
                                     
                                     
-                                    let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: self.spoilerText, visibility: self.visibility)
+                                    let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, visibility: self.visibility)
                                     DispatchQueue.global(qos: .userInitiated).async {
                                         StoreStruct.client.run(request0) { (statuses) in
                                             print(statuses)
@@ -2457,10 +2484,12 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                     statusAlert.contentColor = Colours.grayDark
                                                     statusAlert.message = "Saved to drafts"
                                                     statusAlert.show()
-                                                    StoreStruct.drafts.append(self.textView.text!)
-                                                    UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                                                 }
                                             } else {
+                                                
+                                                StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
+                                                UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+                                                
                                             DispatchQueue.main.async {
                                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                                     let notification = UINotificationFeedbackGenerator()
@@ -2519,7 +2548,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 print(statuses)
                             }
                             
-                            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: self.spoilerText, visibility: self.visibility)
+                            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, visibility: self.visibility)
                             DispatchQueue.global(qos: .userInitiated).async {
                                 StoreStruct.client.run(request0) { (statuses) in
                                     print(statuses)
@@ -2536,10 +2565,12 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             statusAlert.contentColor = Colours.grayDark
                                             statusAlert.message = "Saved to drafts"
                                             statusAlert.show()
-                                            StoreStruct.drafts.append(self.textView.text!)
-                                            UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                                         }
                                     } else {
+                                        
+                                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
+                                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+                                        
                                     DispatchQueue.main.async {
                                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                             let notification = UINotificationFeedbackGenerator()
@@ -2583,7 +2614,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         print(statuses)
                     }
                     
-                    let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: self.spoilerText, visibility: self.visibility)
+                    let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, visibility: self.visibility)
                     DispatchQueue.global(qos: .userInitiated).async {
                         StoreStruct.client.run(request0) { (statuses) in
                             print(statuses)
@@ -2599,10 +2630,12 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Saved to drafts"
                                     statusAlert.show()
-                                    StoreStruct.drafts.append(self.textView.text!)
-                                    UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                                 }
                             } else {
+                                
+                                StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
+                                UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+                                
                             DispatchQueue.main.async {
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
@@ -2632,7 +2665,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 }
             }
         } else if self.selectedImage1.image == nil {
-            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: self.spoilerText, visibility: self.visibility)
+            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, visibility: self.visibility)
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request0) { (statuses) in
                     print(statuses)
@@ -2649,10 +2682,12 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Saved to drafts"
                             statusAlert.show()
-                            StoreStruct.drafts.append(self.textView.text!)
-                            UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                         }
                     } else {
+                        
+                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
+                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+                        
                     DispatchQueue.main.async {
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let notification = UINotificationFeedbackGenerator()

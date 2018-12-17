@@ -492,6 +492,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         
         
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            
+        } else {
         
         var settingsButton = MNGExpandedTouchAreaButton()
         settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 36, height: 36)))
@@ -505,6 +508,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.navigationItem.setLeftBarButton(done, animated: false)
         }
         
+        }
         
         
         
@@ -1874,7 +1878,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 } else {
                     
                     
-                    if self.chosenUser.fields.count > 0 {
+                    if self.chosenUser != nil || self.chosenUser.fields.count > 0 {
                     
                     
                     let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileHeaderCellOwn", for: indexPath) as! ProfileHeaderCellOwn
@@ -2370,7 +2374,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let cell = tableView.cellForRow(at: indexPath) as! ProfileHeaderCell
             var images = [SKPhoto]()
             
-            let photo = SKPhoto.photoWithImageURL(sto[0].reblog?.account.headerStatic ?? sto[0].account.headerStatic, holder: sender.currentImage)
+            let photo = SKPhoto.photoWithImageURL(sto[0].reblog?.account.headerStatic ?? sto[0].account.headerStatic, holder: nil)
             photo.shouldCachePhotoURLImage = true
             images.append(photo)
             
@@ -2389,7 +2393,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let cell = tableView.cellForRow(at: indexPath) as! ProfileHeaderCellOwn
         var images = [SKPhoto]()
         
-        let photo = SKPhoto.photoWithImageURL(sto[0].reblog?.account.headerStatic ?? sto[0].account.headerStatic, holder: sender.currentImage)
+        let photo = SKPhoto.photoWithImageURL(sto[0].reblog?.account.headerStatic ?? sto[0].account.headerStatic, holder: nil)
         photo.shouldCachePhotoURLImage = true
         images.append(photo)
         
@@ -2419,7 +2423,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if let cell = tableView.cellForRow(at: indexPath) as? ProfileHeaderCell {
             var images = [SKPhoto]()
             
-            let photo = SKPhoto.photoWithImageURL(self.chosenUser.avatarStatic, holder: sender.currentImage)
+            let photo = SKPhoto.photoWithImageURL(self.chosenUser.avatarStatic, holder: nil)
             photo.shouldCachePhotoURLImage = true
             images.append(photo)
             
@@ -2437,7 +2441,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let cell = tableView.cellForRow(at: indexPath) as! ProfileHeaderCellOwn
             var images = [SKPhoto]()
             
-            let photo = SKPhoto.photoWithImageURL(self.chosenUser.avatarStatic, holder: sender.currentImage)
+            let photo = SKPhoto.photoWithImageURL(self.chosenUser.avatarStatic, holder: nil)
             photo.shouldCachePhotoURLImage = true
             images.append(photo)
             
@@ -2483,7 +2487,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
             var images = [SKPhoto]()
             for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
-                let photo = SKPhoto.photoWithImageURL(y.url, holder: sender.currentImage)
+                let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                 photo.shouldCachePhotoURLImage = true
                 if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                     photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
@@ -2688,7 +2692,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         impact.impactOccurred()
                     }
                     let controller = ComposeViewController()
-                    controller.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
+                    StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                     controller.inReply = [sto[indexPath.row].reblog ?? sto[indexPath.row]]
                     controller.inReplyText = sto[indexPath.row].reblog?.account.username ?? sto[indexPath.row].account.username
                     controller.prevTextReply = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
@@ -2804,7 +2808,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 print(action, ind)
                                 
                                 let controller = ComposeViewController()
-                                controller.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
+                                StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                                 controller.idToDel = sto[indexPath.row].id
                                 controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
                                 self.present(controller, animated: true, completion: nil)

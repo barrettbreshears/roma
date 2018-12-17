@@ -1266,7 +1266,7 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
             impact.impactOccurred()
         }
         let controller = ComposeViewController()
-        controller.spoilerText = self.mainStatus[sender.tag].reblog?.spoilerText ?? self.mainStatus[sender.tag].spoilerText
+        StoreStruct.spoilerText = self.mainStatus[sender.tag].reblog?.spoilerText ?? self.mainStatus[sender.tag].spoilerText
         controller.inReply = [self.mainStatus[sender.tag].reblog ?? self.mainStatus[sender.tag]]
         controller.inReplyText = self.mainStatus[sender.tag].reblog?.account.username ?? self.mainStatus[sender.tag].account.username
         print(self.mainStatus[sender.tag].reblog?.account.username ?? self.mainStatus[sender.tag].account.username)
@@ -1460,7 +1460,7 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
                     print(action, ind)
                     
                     let controller = ComposeViewController()
-                    controller.spoilerText = self.mainStatus[0].reblog?.spoilerText ?? self.mainStatus[0].spoilerText
+                    StoreStruct.spoilerText = self.mainStatus[0].reblog?.spoilerText ?? self.mainStatus[0].spoilerText
                     controller.idToDel = self.mainStatus[0].id
                     controller.filledTextFieldText = self.mainStatus[0].content.stripHTML()
                     self.present(controller, animated: true, completion: nil)
@@ -2202,7 +2202,7 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
                 }
                 
                 let controller = ComposeViewController()
-                controller.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
+                StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                 controller.inReply = [sto[indexPath.row]]
                 controller.inReplyText = sto[indexPath.row].account.username
                 controller.prevTextReply = sto[indexPath.row].content.stripHTML()
@@ -2317,7 +2317,7 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
                             print(action, ind)
                             
                             let controller = ComposeViewController()
-                            controller.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
+                            StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                             controller.idToDel = sto[indexPath.row].id
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
                             self.present(controller, animated: true, completion: nil)

@@ -1229,7 +1229,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let cell = tableView.cellForRow(at: indexPath) as! DetailCellImage
         var images = [SKPhoto]()
         for y in sto[0].reblog?.mediaAttachments ?? sto[0].mediaAttachments {
-            let photo = SKPhoto.photoWithImageURL(y.url, holder: sender.currentImage)
+            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
             photo.shouldCachePhotoURLImage = true
             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                 photo.caption = sto[0].reblog?.content.stripHTML() ?? sto[0].content.stripHTML()
@@ -1281,7 +1281,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         impact.impactOccurred()
         }
         let controller = ComposeViewController()
-        controller.spoilerText = self.mainStatus[sender.tag].reblog?.spoilerText ?? self.mainStatus[sender.tag].spoilerText
+        StoreStruct.spoilerText = self.mainStatus[sender.tag].reblog?.spoilerText ?? self.mainStatus[sender.tag].spoilerText
         controller.inReply = [self.mainStatus[sender.tag].reblog ?? self.mainStatus[sender.tag]]
         controller.inReplyText = self.mainStatus[sender.tag].reblog?.account.username ?? self.mainStatus[sender.tag].account.username
         print(self.mainStatus[sender.tag].reblog?.account.username ?? self.mainStatus[sender.tag].account.username)
@@ -1476,7 +1476,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     print(action, ind)
                     
                     let controller = ComposeViewController()
-                    controller.spoilerText = self.mainStatus[0].reblog?.spoilerText ?? self.mainStatus[0].spoilerText
+                    StoreStruct.spoilerText = self.mainStatus[0].reblog?.spoilerText ?? self.mainStatus[0].spoilerText
                     controller.idToDel = self.mainStatus[0].id
                     controller.filledTextFieldText = self.mainStatus[0].content.stripHTML()
                     self.present(controller, animated: true, completion: nil)
@@ -1933,7 +1933,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                 var images = [SKPhoto]()
                 for y in sto[indexPath.row].mediaAttachments {
-                    let photo = SKPhoto.photoWithImageURL(y.url, holder: sender.currentImage)
+                    let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                         photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
@@ -1957,7 +1957,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                 var images = [SKPhoto]()
                 for y in sto[indexPath.row].mediaAttachments {
-                    let photo = SKPhoto.photoWithImageURL(y.url, holder: sender.currentImage)
+                    let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                         photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
@@ -2004,7 +2004,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
             var images = [SKPhoto]()
             for y in sto[indexPath.row].mediaAttachments {
-                let photo = SKPhoto.photoWithImageURL(y.url, holder: sender.currentImage)
+                let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                 photo.shouldCachePhotoURLImage = true
                 if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                     photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
@@ -2028,7 +2028,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let cell = tableView.cellForRow(at: indexPath) as! RepliesCellImage
         var images = [SKPhoto]()
         for y in sto[indexPath.row].mediaAttachments {
-            let photo = SKPhoto.photoWithImageURL(y.url, holder: sender.currentImage)
+            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
             photo.shouldCachePhotoURLImage = true
             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                 photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
@@ -2205,7 +2205,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
                 
                 let controller = ComposeViewController()
-                controller.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
+                StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                 controller.inReply = [sto[indexPath.row]]
                 controller.inReplyText = sto[indexPath.row].account.username
                 controller.prevTextReply = sto[indexPath.row].content.stripHTML()
@@ -2320,7 +2320,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             print(action, ind)
                             
                             let controller = ComposeViewController()
-                            controller.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
+                            StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                             controller.idToDel = sto[indexPath.row].id
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
                             self.present(controller, animated: true, completion: nil)

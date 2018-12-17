@@ -45,6 +45,7 @@ class AppIconsCells: UITableViewCell, UICollectionViewDelegate, UICollectionView
             contentView.addSubview(collectionView)
         case .pad:
             print("nothing")
+            contentView.addSubview(collectionView)
         default:
             contentView.addSubview(collectionView)
         }
@@ -53,7 +54,6 @@ class AppIconsCells: UITableViewCell, UICollectionViewDelegate, UICollectionView
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     
     var appArrayIcons = ["icon1", "icon2", "icon3", "icon4", "icon5", "icon6", "icon7", "icon8", "icon9", "icon10", "icon11", "icon12", "icon13", "icon14", "icon15", "icon16", "icon17"]
     
@@ -86,7 +86,7 @@ class AppIconsCells: UITableViewCell, UICollectionViewDelegate, UICollectionView
         case .phone:
             cell.image.image = UIImage(named: self.appArrayIcons[indexPath.row])
         case .pad:
-            cell.image.image = UIImage(named: self.appArrayIconsIPAD[indexPath.row])
+            cell.image.image = UIImage(named: self.appArrayIcons[indexPath.row])
         default:
             cell.image.image = UIImage(named: self.appArrayIcons[indexPath.row])
         }

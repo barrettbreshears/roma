@@ -81,14 +81,10 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
     let splitViewController2 =  UISplitViewController()
     let rootNavigationController2 = UINavigationController(rootViewController: PadTimelinesViewController())
     let rootNavigationController22 = UINavigationController(rootViewController: PadTimelinesViewController())
-    let splitViewController3 =  UISplitViewController()
     let splitViewController31 =  UISplitViewController()
-    let rootNavigationController3 = UINavigationController(rootViewController: PadLocalTimelinesViewController())
-    let detailNavigationController3 = UINavigationController(rootViewController: PadFedViewController())
     
     let splitViewController21 =  UISplitViewController()
     let rootNavigationController21 = UINavigationController(rootViewController: PadMentionsViewController())
-    let detailNavigationController21 = UINavigationController(rootViewController: PadActivityViewController())
     
     let splitViewController5 =  UISplitViewController()
     let rootNavigationController5 = UINavigationController(rootViewController: ThirdViewController())
@@ -103,25 +99,23 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         
         statusBarView.frame = UIApplication.shared.statusBarFrame
         
-        splitViewController3.preferredPrimaryColumnWidthFraction = 0.66
-        splitViewController3.minimumPrimaryColumnWidth = ((self.window?.bounds.width ?? 90 - 80)/3)*2
-        splitViewController2.preferredPrimaryColumnWidthFraction = 0.33
-        splitViewController2.minimumPrimaryColumnWidth = (self.window?.bounds.width ?? 90 - 80)/3
-        splitViewController21.preferredPrimaryColumnWidthFraction = 0.66
-        splitViewController21.minimumPrimaryColumnWidth = ((self.window?.bounds.width ?? 90 - 80)/3)*2
-        splitViewController31.preferredPrimaryColumnWidthFraction = 0.33
-        splitViewController31.minimumPrimaryColumnWidth = (self.window?.bounds.width ?? 90 - 80)/3
-        splitViewController6.preferredPrimaryColumnWidthFraction = 0.66
-        splitViewController6.minimumPrimaryColumnWidth = ((self.window?.bounds.width ?? 90 - 80)/3)*2
-        splitViewController5.preferredPrimaryColumnWidthFraction = 0.33
-        splitViewController5.minimumPrimaryColumnWidth = (self.window?.bounds.width ?? 90 - 80)/3
+        rootNavigationController2.preferredContentSize = CGSize(width: self.view.bounds.width, height: self.view.bounds.height)
+        
+//        splitViewController2.preferredPrimaryColumnWidthFraction = 1
+//        splitViewController2.minimumPrimaryColumnWidth = (self.window?.bounds.width ?? CGFloat(0))
+//        splitViewController21.preferredPrimaryColumnWidthFraction = 0.66
+//        splitViewController21.minimumPrimaryColumnWidth = ((self.window?.bounds.width ?? 90 - 80)/3)*2
+//        splitViewController31.preferredPrimaryColumnWidthFraction = 0.33
+//        splitViewController31.minimumPrimaryColumnWidth = (self.window?.bounds.width ?? 90 - 80)/3
+//        splitViewController6.preferredPrimaryColumnWidthFraction = 0.66
+//        splitViewController6.minimumPrimaryColumnWidth = ((self.window?.bounds.width ?? 90 - 80)/3)*2
+//        splitViewController5.preferredPrimaryColumnWidthFraction = 0.33
+//        splitViewController5.minimumPrimaryColumnWidth = (self.window?.bounds.width ?? 90 - 80)/3
         
         if UIDevice.current.orientation.isPortrait {
-            self.splitViewController3.preferredDisplayMode = .primaryHidden
             self.splitViewController21.preferredDisplayMode = .primaryHidden
             self.splitViewController6.preferredDisplayMode = .primaryHidden
         } else {
-            self.splitViewController3.preferredDisplayMode = .allVisible
             self.splitViewController21.preferredDisplayMode = .allVisible
             self.splitViewController6.preferredDisplayMode = .allVisible
         }
@@ -189,21 +183,7 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         self.curr = 0
         self.tappedB = 0
         
-        splitViewController3.viewControllers = [rootNavigationController3, detailNavigationController3]
-        splitViewController3.preferredPrimaryColumnWidthFraction = 0.66
-        splitViewController3.minimumPrimaryColumnWidth = ((self.window?.bounds.width ?? 90 - 80)/3)*2
-        if UIDevice.current.orientation.isPortrait {
-            splitViewController3.preferredDisplayMode = .primaryHidden
-        } else {
-            splitViewController3.preferredDisplayMode = .allVisible
-        }
-        
-        splitViewController2.viewControllers = [rootNavigationController2, splitViewController3]
-        splitViewController2.preferredPrimaryColumnWidthFraction = 0.33
-        splitViewController2.minimumPrimaryColumnWidth = (self.window?.bounds.width ?? 90 - 80)/3
-        splitViewController2.preferredDisplayMode = .allVisible
-        
-        self.splitViewController?.viewControllers[1] = splitViewController2
+        self.splitViewController?.viewControllers[1] = rootNavigationController2
         
         self.button1.setImage(UIImage(named: "feed")?.maskWithColor(color: Colours.tabSelected), for: .normal)
         self.button2.setImage(UIImage(named: "notifications")?.maskWithColor(color: self.unselectCol), for: .normal)
@@ -221,22 +201,7 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         self.curr = 1
         self.tappedB = 1
         
-        splitViewController21.viewControllers = [rootNavigationController21, detailNavigationController21]
-        splitViewController21.preferredPrimaryColumnWidthFraction = 0.66
-        splitViewController21.minimumPrimaryColumnWidth = ((self.window?.bounds.width ?? 90 - 80)/3)*2
-        if UIDevice.current.orientation.isPortrait {
-            splitViewController21.preferredDisplayMode = .primaryHidden
-        } else {
-            splitViewController21.preferredDisplayMode = .allVisible
-        }
-        
-        splitViewController31.viewControllers = [rootNavigationController22, splitViewController21]
-        splitViewController31.preferredPrimaryColumnWidthFraction = 0.33
-        splitViewController31.minimumPrimaryColumnWidth = (self.window?.bounds.width ?? 90 - 80)/3
-        splitViewController31.preferredDisplayMode = .allVisible
-        
-        
-        self.splitViewController?.viewControllers[1] = splitViewController31
+        self.splitViewController?.viewControllers[1] = rootNavigationController21
         
         self.button1.setImage(UIImage(named: "feed")?.maskWithColor(color: self.unselectCol), for: .normal)
         self.button2.setImage(UIImage(named: "notifications")?.maskWithColor(color: Colours.tabSelected), for: .normal)
@@ -254,21 +219,8 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         self.curr = 2
         self.tappedB = 2
         
-        splitViewController6.viewControllers = [rootNavigationController6, detailNavigationController6]
-        splitViewController6.preferredPrimaryColumnWidthFraction = 0.66
-        splitViewController6.minimumPrimaryColumnWidth = ((self.window?.bounds.width ?? 90 - 80)/3)*2
-        if UIDevice.current.orientation.isPortrait {
-            splitViewController6.preferredDisplayMode = .primaryHidden
-        } else {
-            splitViewController6.preferredDisplayMode = .allVisible
-        }
         
-        splitViewController5.viewControllers = [rootNavigationController5, splitViewController6]
-        splitViewController5.preferredPrimaryColumnWidthFraction = 0.33
-        splitViewController5.minimumPrimaryColumnWidth = (self.window?.bounds.width ?? 90 - 80)/3
-        splitViewController5.preferredDisplayMode = .allVisible
-        
-        self.splitViewController?.viewControllers[1] = splitViewController5
+        self.splitViewController?.viewControllers[1] = rootNavigationController5
         
         self.button1.setImage(UIImage(named: "feed")?.maskWithColor(color: self.unselectCol), for: .normal)
         self.button2.setImage(UIImage(named: "notifications")?.maskWithColor(color: self.unselectCol), for: .normal)
@@ -297,27 +249,63 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
     
     let panelController = FloatingPanelController()
     
+    
+    @objc func searchThing() {
+        
+        panelController.removeFromParent()
+        panelController.hidePanel(animated: false, inCornerAlongXAxis: true, inCornerAlongYAxis: false)
+        self.isSearching = false
+        
+        if StoreStruct.typeOfSearch == 2 {
+            if StoreStruct.currentPage == 0 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "searchUser"), object: self)
+            } else if StoreStruct.currentPage == 1 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "searchUser2"), object: self)
+            } else {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "searchUser3"), object: self)
+            }
+        } else {
+            if StoreStruct.currentPage == 0 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "search"), object: self)
+            } else if StoreStruct.currentPage == 1 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "search2"), object: self)
+            } else {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "search3"), object: self)
+            }
+        }
+    }
+    
+    
+    let bgbg = UIButton()
     @objc func b4Touched() {
         
         if self.isSearching {
             
+            self.bgbg.removeFromSuperview()
+            panelController.removeFromParent()
             panelController.hidePanel(animated: false, inCornerAlongXAxis: true, inCornerAlongYAxis: false)
             self.isSearching = false
             
         } else {
+            
+            self.bgbg.frame = UIScreen.main.bounds
+            self.bgbg.backgroundColor = UIColor.black.withAlphaComponent(0.3)
+            self.bgbg.addTarget(self, action: #selector(self.b4Touched), for: .touchUpInside)
+            let wind = UIApplication.shared.keyWindow!
+            wind.addSubview(self.bgbg)
         
             if self.tappedB == 0 {
-                panelController.addTo(parent: self.detailNavigationController3)
+                panelController.addTo(parent: self.rootNavigationController2)
             } else if self.tappedB == 1 {
-                panelController.addTo(parent: self.detailNavigationController21)
+                panelController.addTo(parent: self.rootNavigationController21)
             } else {
-                panelController.addTo(parent: self.detailNavigationController6)
+                panelController.addTo(parent: self.rootNavigationController5)
             }
             
-        panelController.resizeTo(CGSize(width:  400,
-                                        height: 500))
+        panelController.resizeTo(CGSize(width:  440,
+                                        height: 540))
         panelController.pinTo(position: .topLeading,
-                              margins: UIEdgeInsets(top:    17, left:  18,
+                              margins: UIEdgeInsets(top:    6, left:  18,
                                                     bottom: 42, right: 18))
         let yourContentVC = PadSearchViewController()
         panelController.set(viewController: yourContentVC)
@@ -438,6 +426,8 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         NotificationCenter.default.addObserver(self, selector: #selector(self.setVC2), name: NSNotification.Name(rawValue: "setVC2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.becomeFirst), name: NSNotification.Name(rawValue: "becomeFirst"), object: nil)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.searchThing), name: NSNotification.Name(rawValue: "hideP"), object: nil)
+        
         statusBarView.frame = UIApplication.shared.statusBarFrame
         statusBarView.backgroundColor = Colours.white
         view.addSubview(statusBarView)
@@ -447,21 +437,7 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         self.load2()
         self.curr = 0
         
-        splitViewController3.viewControllers = [rootNavigationController3, detailNavigationController3]
-        splitViewController3.preferredPrimaryColumnWidthFraction = 0.66
-        splitViewController3.minimumPrimaryColumnWidth = ((self.window?.bounds.width ?? 90 - 80)/3)*2
-        if UIDevice.current.orientation.isPortrait {
-            splitViewController3.preferredDisplayMode = .primaryHidden
-        } else {
-            splitViewController3.preferredDisplayMode = .allVisible
-        }
-        
-        splitViewController2.viewControllers = [rootNavigationController2, splitViewController3]
-        splitViewController2.preferredPrimaryColumnWidthFraction = 0.33
-        splitViewController2.minimumPrimaryColumnWidth = (self.window?.bounds.width ?? 90 - 80)/3
-        splitViewController2.preferredDisplayMode = .allVisible
-        
-        self.splitViewController?.viewControllers[1] = splitViewController2
+        self.splitViewController?.viewControllers[1] = rootNavigationController2
         
         self.button1.setImage(UIImage(named: "feed")?.maskWithColor(color: Colours.tabSelected), for: .normal)
         self.button2.setImage(UIImage(named: "notifications")?.maskWithColor(color: self.unselectCol), for: .normal)
@@ -628,27 +604,20 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
                 DispatchQueue.main.async {
 
                     (self.rootNavigationController2.viewControllers[0] as! PadTimelinesViewController).loadLoadLoad()
-                    (self.rootNavigationController3.viewControllers[0] as! PadLocalTimelinesViewController).loadLoadLoad()
-                    (self.detailNavigationController3.viewControllers[0] as! PadFedViewController).loadLoadLoad()
                     (self.rootNavigationController21.viewControllers[0] as! PadMentionsViewController).loadLoadLoad()
-                    (self.detailNavigationController21.viewControllers[0] as! PadActivityViewController).loadLoadLoad()
                     (self.rootNavigationController5.viewControllers[0] as! ThirdViewController).loadLoadLoad()
                     (self.rootNavigationController6.viewControllers[0] as! PinnedViewController).loadLoadLoad()
                     (self.detailNavigationController6.viewControllers[0] as! LikedViewController).loadLoadLoad()
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     
                     self.splitViewController2.view.backgroundColor = Colours.white
-                    self.splitViewController3.view.backgroundColor = Colours.white
                     self.splitViewController31.view.backgroundColor = Colours.white
                     self.rootNavigationController22.view.backgroundColor = Colours.white
                     self.splitViewController21.view.backgroundColor = Colours.white
                     self.splitViewController5.view.backgroundColor = Colours.white
                     self.splitViewController6.view.backgroundColor = Colours.white
                     self.rootNavigationController2.view.backgroundColor = Colours.white
-                    self.rootNavigationController3.view.backgroundColor = Colours.white
-                    self.detailNavigationController3.view.backgroundColor = Colours.white
                     self.rootNavigationController21.view.backgroundColor = Colours.white
-                    self.detailNavigationController21.view.backgroundColor = Colours.white
                     self.rootNavigationController5.view.backgroundColor = Colours.white
                     self.rootNavigationController6.view.backgroundColor = Colours.white
                     self.detailNavigationController6.view.backgroundColor = Colours.white
@@ -734,27 +703,20 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         DispatchQueue.main.async {
 
             (self.rootNavigationController2.viewControllers[0] as! PadTimelinesViewController).loadLoadLoad()
-            (self.rootNavigationController3.viewControllers[0] as! PadLocalTimelinesViewController).loadLoadLoad()
-            (self.detailNavigationController3.viewControllers[0] as! PadFedViewController).loadLoadLoad()
             (self.rootNavigationController21.viewControllers[0] as! PadMentionsViewController).loadLoadLoad()
-            (self.detailNavigationController21.viewControllers[0] as! PadActivityViewController).loadLoadLoad()
             (self.rootNavigationController5.viewControllers[0] as! ThirdViewController).loadLoadLoad()
             (self.rootNavigationController6.viewControllers[0] as! PinnedViewController).loadLoadLoad()
             (self.detailNavigationController6.viewControllers[0] as! LikedViewController).loadLoadLoad()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
 
             self.splitViewController2.view.backgroundColor = Colours.white
-            self.splitViewController3.view.backgroundColor = Colours.white
             self.splitViewController31.view.backgroundColor = Colours.white
             self.rootNavigationController22.view.backgroundColor = Colours.white
             self.splitViewController21.view.backgroundColor = Colours.white
             self.splitViewController5.view.backgroundColor = Colours.white
             self.splitViewController6.view.backgroundColor = Colours.white
             self.rootNavigationController2.view.backgroundColor = Colours.white
-            self.rootNavigationController3.view.backgroundColor = Colours.white
-            self.detailNavigationController3.view.backgroundColor = Colours.white
             self.rootNavigationController21.view.backgroundColor = Colours.white
-            self.detailNavigationController21.view.backgroundColor = Colours.white
             self.rootNavigationController5.view.backgroundColor = Colours.white
             self.rootNavigationController6.view.backgroundColor = Colours.white
             self.detailNavigationController6.view.backgroundColor = Colours.white
@@ -799,27 +761,20 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         DispatchQueue.main.async {
 
             (self.rootNavigationController2.viewControllers[0] as! PadTimelinesViewController).loadLoadLoad()
-            (self.rootNavigationController3.viewControllers[0] as! PadLocalTimelinesViewController).loadLoadLoad()
-            (self.detailNavigationController3.viewControllers[0] as! PadFedViewController).loadLoadLoad()
             (self.rootNavigationController21.viewControllers[0] as! PadMentionsViewController).loadLoadLoad()
-            (self.detailNavigationController21.viewControllers[0] as! PadActivityViewController).loadLoadLoad()
             (self.rootNavigationController5.viewControllers[0] as! ThirdViewController).loadLoadLoad()
             (self.rootNavigationController6.viewControllers[0] as! PinnedViewController).loadLoadLoad()
             (self.detailNavigationController6.viewControllers[0] as! LikedViewController).loadLoadLoad()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
 
             self.splitViewController2.view.backgroundColor = Colours.white
-            self.splitViewController3.view.backgroundColor = Colours.white
             self.splitViewController31.view.backgroundColor = Colours.white
             self.rootNavigationController22.view.backgroundColor = Colours.white
             self.splitViewController21.view.backgroundColor = Colours.white
             self.splitViewController5.view.backgroundColor = Colours.white
             self.splitViewController6.view.backgroundColor = Colours.white
             self.rootNavigationController2.view.backgroundColor = Colours.white
-            self.rootNavigationController3.view.backgroundColor = Colours.white
-            self.detailNavigationController3.view.backgroundColor = Colours.white
             self.rootNavigationController21.view.backgroundColor = Colours.white
-            self.detailNavigationController21.view.backgroundColor = Colours.white
             self.rootNavigationController5.view.backgroundColor = Colours.white
             self.rootNavigationController6.view.backgroundColor = Colours.white
             self.detailNavigationController6.view.backgroundColor = Colours.white
@@ -865,27 +820,20 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         DispatchQueue.main.async {
 
             (self.rootNavigationController2.viewControllers[0] as! PadTimelinesViewController).loadLoadLoad()
-            (self.rootNavigationController3.viewControllers[0] as! PadLocalTimelinesViewController).loadLoadLoad()
-            (self.detailNavigationController3.viewControllers[0] as! PadFedViewController).loadLoadLoad()
             (self.rootNavigationController21.viewControllers[0] as! PadMentionsViewController).loadLoadLoad()
-            (self.detailNavigationController21.viewControllers[0] as! PadActivityViewController).loadLoadLoad()
             (self.rootNavigationController5.viewControllers[0] as! ThirdViewController).loadLoadLoad()
             (self.rootNavigationController6.viewControllers[0] as! PinnedViewController).loadLoadLoad()
             (self.detailNavigationController6.viewControllers[0] as! LikedViewController).loadLoadLoad()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
 
             self.splitViewController2.view.backgroundColor = Colours.white
-            self.splitViewController3.view.backgroundColor = Colours.white
             self.splitViewController31.view.backgroundColor = Colours.white
             self.rootNavigationController22.view.backgroundColor = Colours.white
             self.splitViewController21.view.backgroundColor = Colours.white
             self.splitViewController5.view.backgroundColor = Colours.white
             self.splitViewController6.view.backgroundColor = Colours.white
             self.rootNavigationController2.view.backgroundColor = Colours.white
-            self.rootNavigationController3.view.backgroundColor = Colours.white
-            self.detailNavigationController3.view.backgroundColor = Colours.white
             self.rootNavigationController21.view.backgroundColor = Colours.white
-            self.detailNavigationController21.view.backgroundColor = Colours.white
             self.rootNavigationController5.view.backgroundColor = Colours.white
             self.rootNavigationController6.view.backgroundColor = Colours.white
             self.detailNavigationController6.view.backgroundColor = Colours.white
@@ -931,27 +879,20 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         DispatchQueue.main.async {
 
             (self.rootNavigationController2.viewControllers[0] as! PadTimelinesViewController).loadLoadLoad()
-            (self.rootNavigationController3.viewControllers[0] as! PadLocalTimelinesViewController).loadLoadLoad()
-            (self.detailNavigationController3.viewControllers[0] as! PadFedViewController).loadLoadLoad()
             (self.rootNavigationController21.viewControllers[0] as! PadMentionsViewController).loadLoadLoad()
-            (self.detailNavigationController21.viewControllers[0] as! PadActivityViewController).loadLoadLoad()
             (self.rootNavigationController5.viewControllers[0] as! ThirdViewController).loadLoadLoad()
             (self.rootNavigationController6.viewControllers[0] as! PinnedViewController).loadLoadLoad()
             (self.detailNavigationController6.viewControllers[0] as! LikedViewController).loadLoadLoad()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
 
             self.splitViewController2.view.backgroundColor = Colours.white
-            self.splitViewController3.view.backgroundColor = Colours.white
             self.splitViewController31.view.backgroundColor = Colours.white
             self.rootNavigationController22.view.backgroundColor = Colours.white
             self.splitViewController21.view.backgroundColor = Colours.white
             self.splitViewController5.view.backgroundColor = Colours.white
             self.splitViewController6.view.backgroundColor = Colours.white
             self.rootNavigationController2.view.backgroundColor = Colours.white
-            self.rootNavigationController3.view.backgroundColor = Colours.white
-            self.detailNavigationController3.view.backgroundColor = Colours.white
             self.rootNavigationController21.view.backgroundColor = Colours.white
-            self.detailNavigationController21.view.backgroundColor = Colours.white
             self.rootNavigationController5.view.backgroundColor = Colours.white
             self.rootNavigationController6.view.backgroundColor = Colours.white
             self.detailNavigationController6.view.backgroundColor = Colours.white

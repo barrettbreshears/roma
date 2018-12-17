@@ -874,6 +874,18 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     springWithCompletion(duration: 0.2, animations: {
                         self.view0pinch.frame = self.view.frame
                         self.view1pinch.frame = self.view.frame
+                        if UIDevice().userInterfaceIdiom == .phone {
+                            switch UIScreen.main.nativeBounds.height {
+                            case 2688:
+                                print("iPhone Xs Max")
+                                self.view1pinch.layer.cornerRadius = 42
+                            case 2436, 1792:
+                                print("iPhone X")
+                                self.view1pinch.layer.cornerRadius = 42
+                            default:
+                                self.view1pinch.layer.cornerRadius = 0
+                            }
+                        }
                     }, completion: { finished in
                         
                         self.view0pinch.removeFromSuperview()

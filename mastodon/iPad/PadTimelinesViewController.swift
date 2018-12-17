@@ -1,14 +1,14 @@
 //
-//  TimelinesViewController.swift
+//  FirstViewController.swift
 //  mastodon
 //
-//  Created by Shihab Mehboob on 26/10/2018.
+//  Created by Shihab Mehboob on 18/09/2018.
 //  Copyright © 2018 Shihab Mehboob. All rights reserved.
 //
 
-
 import Foundation
 import UIKit
+import SJFluidSegmentedControl
 import ReactiveSSE
 import ReactiveSwift
 import SafariServices
@@ -16,8 +16,10 @@ import StatusAlert
 import UserNotifications
 import SAConfettiView
 import Disk
+import AVKit
+import AVFoundation
 
-class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, URLSessionDataDelegate, UIViewControllerPreviewingDelegate {
+class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, URLSessionDataDelegate, UIViewControllerPreviewingDelegate {
     
     var socket: WebSocket!
     var lsocket: WebSocket!
@@ -27,12 +29,15 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
     var lMod: [Status] = []
     var fMod: [Status] = []
     var newUpdatesB1 = UIButton()
+    var newUpdatesB2 = UIButton()
+    var newUpdatesB3 = UIButton()
     var countcount1 = 0
     var countcount2 = 0
     var countcount3 = 0
     
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .circleStrokeSpin, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
+    var segmentedControl: SJFluidSegmentedControl!
     var tableView = UITableView()
     var tableViewL = UITableView()
     var tableViewF = UITableView()
@@ -317,21 +322,41 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
             if self.tableViewL.indexPathsForVisibleRows?.contains(indexPath1) ?? false {
                 if self.countcount2 == 0 {
                     springWithDelay(duration: 0.4, delay: 0, animations: {
-                        
+                        self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                        //                        self.newUpdatesB2.transform = CGAffineTransform(translationX: 0, y: 0)
+                        springWithDelay(duration: 0.5, delay: 0, animations: {
+                            self.newUpdatesB2.alpha = 0
+                            self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                            //                            self.newUpdatesB2.transform = CGAffineTransform(translationX: 120, y: 0)
+                        })
                         self.countcount2 = 0
                     })
                 } else {
                     self.countcount2 = self.countcount2 - 1
                     if self.countcount2 == 0 {
                         springWithDelay(duration: 0.4, delay: 0, animations: {
-                            
+                            self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                            //                            self.newUpdatesB2.transform = CGAffineTransform(translationX: 0, y: 0)
+                            springWithDelay(duration: 0.5, delay: 0, animations: {
+                                self.newUpdatesB2.alpha = 0
+                                self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                //                                self.newUpdatesB2.transform = CGAffineTransform(translationX: 120, y: 0)
+                            })
                             self.countcount2 = 0
                         })
                     }
                 }
+                self.newUpdatesB2.setTitle("\(self.countcount2)  ", for: .normal)
             }
             if (scrollView.contentOffset.y == 0) {
                 springWithDelay(duration: 0.4, delay: 0, animations: {
+                    self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                    //                    self.newUpdatesB2.transform = CGAffineTransform(translationX: 0, y: 0)
+                    springWithDelay(duration: 0.5, delay: 0, animations: {
+                        self.newUpdatesB2.alpha = 0
+                        self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                        //                        self.newUpdatesB2.transform = CGAffineTransform(translationX: 120, y: 0)
+                    })
                     self.countcount2 = 0
                 })
             }
@@ -342,19 +367,41 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
             if self.tableViewF.indexPathsForVisibleRows?.contains(indexPath1) ?? false {
                 if self.countcount3 == 0 {
                     springWithDelay(duration: 0.4, delay: 0, animations: {
+                        self.newUpdatesB3.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                        //                    self.newUpdatesB3.transform = CGAffineTransform(translationX: 0, y: 0)
+                        springWithDelay(duration: 0.5, delay: 0, animations: {
+                            self.newUpdatesB3.alpha = 0
+                            self.newUpdatesB3.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                            //                        self.newUpdatesB3.transform = CGAffineTransform(translationX: 120, y: 0)
+                        })
                         self.countcount3 = 0
                     })
                 } else {
                     self.countcount3 = self.countcount3 - 1
                     if self.countcount3 == 0 {
                         springWithDelay(duration: 0.4, delay: 0, animations: {
+                            self.newUpdatesB3.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                            //                        self.newUpdatesB3.transform = CGAffineTransform(translationX: 0, y: 0)
+                            springWithDelay(duration: 0.5, delay: 0, animations: {
+                                self.newUpdatesB3.alpha = 0
+                                self.newUpdatesB3.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                //                            self.newUpdatesB3.transform = CGAffineTransform(translationX: 120, y: 0)
+                            })
                             self.countcount3 = 0
                         })
                     }
                 }
+                self.newUpdatesB3.setTitle("\(self.countcount3)  ", for: .normal)
             }
             if (scrollView.contentOffset.y == 0) {
                 springWithDelay(duration: 0.4, delay: 0, animations: {
+                    self.newUpdatesB3.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                    //                self.newUpdatesB3.transform = CGAffineTransform(translationX: 0, y: 0)
+                    springWithDelay(duration: 0.5, delay: 0, animations: {
+                        self.newUpdatesB3.alpha = 0
+                        self.newUpdatesB3.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                        //                    self.newUpdatesB3.transform = CGAffineTransform(translationX: 120, y: 0)
+                    })
                     self.countcount3 = 0
                 })
             }
@@ -373,7 +420,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
     //            switch UIScreen.main.nativeBounds.height {
     //            case 2688:
     //                offset = 88
-    //            case 2436:
+    //            case 2436, 1792:
     //                offset = 88
     //            default:
     //                offset = 64
@@ -408,7 +455,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
             case 2688:
                 offset = 88
                 newoff = 45
-            case 2436:
+            case 2436, 1792:
                 offset = 88
                 newoff = 45
             default:
@@ -417,14 +464,28 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                 tabHeight = Int(UITabBarController().tabBar.frame.size.height)
             }
         }
+        segmentedControl.removeFromSuperview()
         tableView.removeFromSuperview()
         tableViewL.removeFromSuperview()
         tableViewF.removeFromSuperview()
-        
+        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
+            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(30), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
+            segmentedControl.dataSource = self
+            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
+                segmentedControl.shapeStyle = .roundedRect
+            } else {
+                segmentedControl.shapeStyle = .liquid
+            }
+            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.cornerRadius = 12
+            segmentedControl.shadowsEnabled = false
+            segmentedControl.transitionStyle = .slide
+            segmentedControl.delegate = self
+            self.navigationController?.view.addSubview(segmentedControl)
             
             self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
             self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
-            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
+            self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
             self.tableView.alpha = 1
             self.tableView.delegate = self
             self.tableView.dataSource = self
@@ -435,8 +496,93 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
             self.tableView.estimatedRowHeight = 89
             self.tableView.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView)
-        
+            
+            self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
+            self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
+            self.tableViewL.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
+            self.tableViewL.alpha = 0
+            self.tableViewL.delegate = self
+            self.tableViewL.dataSource = self
+            self.tableViewL.separatorStyle = .singleLine
+            self.tableViewL.backgroundColor = Colours.white
+            self.tableViewL.separatorColor = Colours.cellQuote
+            self.tableViewL.layer.masksToBounds = true
+            self.tableViewL.estimatedRowHeight = 89
+            self.tableViewL.rowHeight = UITableView.automaticDimension
+            self.view.addSubview(self.tableViewL)
+            
+            self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
+            self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
+            self.tableViewF.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
+            self.tableViewF.alpha = 0
+            self.tableViewF.delegate = self
+            self.tableViewF.dataSource = self
+            self.tableViewF.separatorStyle = .singleLine
+            self.tableViewF.backgroundColor = Colours.white
+            self.tableViewF.separatorColor = Colours.cellQuote
+            self.tableViewF.layer.masksToBounds = true
+            self.tableViewF.estimatedRowHeight = 89
+            self.tableViewF.rowHeight = UITableView.automaticDimension
+            self.view.addSubview(self.tableViewF)
             self.loadLoadLoad()
+        } else {
+            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+            segmentedControl.dataSource = self
+            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
+                segmentedControl.shapeStyle = .roundedRect
+            } else {
+                segmentedControl.shapeStyle = .liquid
+            }
+            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.cornerRadius = 12
+            segmentedControl.shadowsEnabled = false
+            segmentedControl.transitionStyle = .slide
+            segmentedControl.delegate = self
+            self.navigationController?.view.addSubview(segmentedControl)
+            
+            self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
+            self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
+            self.tableView.alpha = 1
+            self.tableView.delegate = self
+            self.tableView.dataSource = self
+            self.tableView.separatorStyle = .singleLine
+            self.tableView.backgroundColor = Colours.white
+            self.tableView.separatorColor = Colours.cellQuote
+            self.tableView.layer.masksToBounds = true
+            self.tableView.estimatedRowHeight = 89
+            self.tableView.rowHeight = UITableView.automaticDimension
+            self.view.addSubview(self.tableView)
+            
+            self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
+            self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableViewL.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
+            self.tableViewL.alpha = 0
+            self.tableViewL.delegate = self
+            self.tableViewL.dataSource = self
+            self.tableViewL.separatorStyle = .singleLine
+            self.tableViewL.backgroundColor = Colours.white
+            self.tableViewL.separatorColor = Colours.cellQuote
+            self.tableViewL.layer.masksToBounds = true
+            self.tableViewL.estimatedRowHeight = 89
+            self.tableViewL.rowHeight = UITableView.automaticDimension
+            self.view.addSubview(self.tableViewL)
+            
+            self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
+            self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableViewF.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
+            self.tableViewF.alpha = 0
+            self.tableViewF.delegate = self
+            self.tableViewF.dataSource = self
+            self.tableViewF.separatorStyle = .singleLine
+            self.tableViewF.backgroundColor = Colours.white
+            self.tableViewF.separatorColor = Colours.cellQuote
+            self.tableViewF.layer.masksToBounds = true
+            self.tableViewF.estimatedRowHeight = 89
+            self.tableViewF.rowHeight = UITableView.automaticDimension
+            self.view.addSubview(self.tableViewF)
+            self.loadLoadLoad()
+        }
     }
     
     
@@ -444,12 +590,25 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
         NotificationCenter.default.post(name: Notification.Name(rawValue: "touchList"), object: nil)
     }
     
-    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        print("newsize")
-        print(size)
-        
-        self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(size.width), height: Int(size.height))
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
     }
+    
+    
+    
+    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        
+        self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.height) - 80, height: Int(self.view.bounds.width))
+        self.tableViewL.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.height) - 80, height: Int(self.view.bounds.width))
+        self.tableViewF.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.height) - 80, height: Int(self.view.bounds.width))
+        self.tableView.reloadData()
+        self.tableViewL.reloadData()
+        self.tableViewF.reloadData()
+        
+    }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -466,17 +625,28 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
         NotificationCenter.default.addObserver(self, selector: #selector(self.createNoti), name: NSNotification.Name(rawValue: "createNoti"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.fetchAllNewest), name: NSNotification.Name(rawValue: "fetchAllNewest"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeSeg), name: NSNotification.Name(rawValue: "changeSeg"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.segTheme), name: NSNotification.Name(rawValue: "segTheme"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.loadagain), name: NSNotification.Name(rawValue: "light"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.loadagain), name: NSNotification.Name(rawValue: "night"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.loadagain), name: NSNotification.Name(rawValue: "night2"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.loadagain), name: NSNotification.Name(rawValue: "black"), object: nil)
         
         self.view.backgroundColor = Colours.white
-        self.title = "Home"
-        splitViewController?.view.backgroundColor = Colours.white
         
-        UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-        UINavigationBar.appearance().backgroundColor = Colours.white
-        UINavigationBar.appearance().barTintColor = Colours.black
-        UINavigationBar.appearance().tintColor = Colours.black
-        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
+        
+        
+//        var settingsButton = MNGExpandedTouchAreaButton()
+//        settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 32, height: 32)))
+//        settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+//        settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+//        settingsButton.adjustsImageWhenHighlighted = false
+//        settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
+//
+//        let done = UIBarButtonItem.init(customView: settingsButton)
+//        self.navigationItem.setLeftBarButton(done, animated: false)
+        
+        
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -486,7 +656,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
             case 2688:
                 offset = 88
                 newoff = 45
-            case 2436:
+            case 2436, 1792:
                 offset = 88
                 newoff = 45
             default:
@@ -497,12 +667,24 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
         }
         
         
-        
-        
+        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
+            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(30), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
+            segmentedControl.dataSource = self
+            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
+                segmentedControl.shapeStyle = .roundedRect
+            } else {
+                segmentedControl.shapeStyle = .liquid
+            }
+            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.cornerRadius = 12
+            segmentedControl.shadowsEnabled = false
+            segmentedControl.transitionStyle = .slide
+            segmentedControl.delegate = self
+            self.navigationController?.view.addSubview(segmentedControl)
             
             self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
             self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
-        self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.frame.width), height: Int(self.view.frame.height))
+            self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 80), height: Int(self.view.bounds.height) - 80)
             self.tableView.alpha = 1
             self.tableView.delegate = self
             self.tableView.dataSource = self
@@ -513,7 +695,91 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
             self.tableView.estimatedRowHeight = 89
             self.tableView.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView)
-        
+            
+            self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
+            self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
+            self.tableViewL.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 80), height: Int(self.view.bounds.height) - 80)
+            self.tableViewL.alpha = 0
+            self.tableViewL.delegate = self
+            self.tableViewL.dataSource = self
+            self.tableViewL.separatorStyle = .singleLine
+            self.tableViewL.backgroundColor = Colours.white
+            self.tableViewL.separatorColor = Colours.cellQuote
+            self.tableViewL.layer.masksToBounds = true
+            self.tableViewL.estimatedRowHeight = 89
+            self.tableViewL.rowHeight = UITableView.automaticDimension
+            self.view.addSubview(self.tableViewL)
+            
+            self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
+            self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
+            self.tableViewF.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 80), height: Int(self.view.bounds.height) - 80)
+            self.tableViewF.alpha = 0
+            self.tableViewF.delegate = self
+            self.tableViewF.dataSource = self
+            self.tableViewF.separatorStyle = .singleLine
+            self.tableViewF.backgroundColor = Colours.white
+            self.tableViewF.separatorColor = Colours.cellQuote
+            self.tableViewF.layer.masksToBounds = true
+            self.tableViewF.estimatedRowHeight = 89
+            self.tableViewF.rowHeight = UITableView.automaticDimension
+            self.view.addSubview(self.tableViewF)
+        } else {
+            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+            segmentedControl.dataSource = self
+            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
+                segmentedControl.shapeStyle = .roundedRect
+            } else {
+                segmentedControl.shapeStyle = .liquid
+            }
+            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.cornerRadius = 12
+            segmentedControl.shadowsEnabled = false
+            segmentedControl.transitionStyle = .slide
+            segmentedControl.delegate = self
+            self.navigationController?.view.addSubview(segmentedControl)
+            
+            self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
+            self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 80), height: Int(self.view.bounds.height) - 80)
+            self.tableView.alpha = 1
+            self.tableView.delegate = self
+            self.tableView.dataSource = self
+            self.tableView.separatorStyle = .singleLine
+            self.tableView.backgroundColor = Colours.white
+            self.tableView.separatorColor = Colours.cellQuote
+            self.tableView.layer.masksToBounds = true
+            self.tableView.estimatedRowHeight = 89
+            self.tableView.rowHeight = UITableView.automaticDimension
+            self.view.addSubview(self.tableView)
+            
+            self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
+            self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
+            self.tableViewL.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 80), height: Int(self.view.bounds.height) - 80)
+            self.tableViewL.alpha = 0
+            self.tableViewL.delegate = self
+            self.tableViewL.dataSource = self
+            self.tableViewL.separatorStyle = .singleLine
+            self.tableViewL.backgroundColor = Colours.white
+            self.tableViewL.separatorColor = Colours.cellQuote
+            self.tableViewL.layer.masksToBounds = true
+            self.tableViewL.estimatedRowHeight = 89
+            self.tableViewL.rowHeight = UITableView.automaticDimension
+            self.view.addSubview(self.tableViewL)
+            
+            self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
+            self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
+            self.tableViewF.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 80), height: Int(self.view.bounds.height) - 80)
+            self.tableViewF.alpha = 0
+            self.tableViewF.delegate = self
+            self.tableViewF.dataSource = self
+            self.tableViewF.separatorStyle = .singleLine
+            self.tableViewF.backgroundColor = Colours.white
+            self.tableViewF.separatorColor = Colours.cellQuote
+            self.tableViewF.layer.masksToBounds = true
+            self.tableViewF.estimatedRowHeight = 89
+            self.tableViewF.rowHeight = UITableView.automaticDimension
+            self.view.addSubview(self.tableViewF)
+        }
         
         refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
         //self.tableView.addSubview(refreshControl)
@@ -580,78 +846,83 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
         
         //
         //        if self.currentIndex == 0 {
-        //            if (UserDefaults.standard.object(forKey: "savedRowHome10") == nil) {} else {
-        //                self.tableView.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowHome10") as! CGFloat), animated: false)
+        //            if (UserDefaults.standard.object(forKey: "savedRowHome1") == nil) {} else {
+        //                self.tableView.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowHome1") as! CGFloat), animated: false)
         //            }
         //        } else if self.currentIndex == 1 {
-        //            if (UserDefaults.standard.object(forKey: "savedRowLocal10") == nil) {} else {
-        //                self.tableViewL.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowLocal10") as! CGFloat), animated: false)
+        //            if (UserDefaults.standard.object(forKey: "savedRowLocal1") == nil) {} else {
+        //                self.tableViewL.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowLocal1") as! CGFloat), animated: false)
         //            }
         //        } else {
-        //            if (UserDefaults.standard.object(forKey: "savedRowFed10") == nil) {} else {
-        //                self.tableViewF.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowFed10") as! CGFloat), animated: false)
+        //            if (UserDefaults.standard.object(forKey: "savedRowFed1") == nil) {} else {
+        //                self.tableViewF.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowFed1") as! CGFloat), animated: false)
         //            }
         //        }
         
+        self.restoreScroll()
+        
+    }
+    
+    
+    
+    func restoreScroll() {
         DispatchQueue.main.async {
             self.tableView.reloadData()
-            if (UserDefaults.standard.object(forKey: "savedRowHome10") == nil) {} else {
+            if (UserDefaults.standard.object(forKey: "savedRowHome1") == nil) {} else {
                 if StoreStruct.statusesHome.count > 5 {
-                    self.tableView.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowHome10") as! CGFloat), animated: false)
+                    self.tableView.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowHome1") as! CGFloat), animated: false)
                 }
             }
         }
         DispatchQueue.main.async {
             self.tableViewL.reloadData()
-            if (UserDefaults.standard.object(forKey: "savedRowLocal10") == nil) {} else {
+            if (UserDefaults.standard.object(forKey: "savedRowLocal1") == nil) {} else {
                 if StoreStruct.statusesLocal.count > 5 {
-                    self.tableViewL.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowLocal10") as! CGFloat), animated: false)
+                    self.tableViewL.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowLocal1") as! CGFloat), animated: false)
                 }
             }
         }
         DispatchQueue.main.async {
             self.tableViewF.reloadData()
-            if (UserDefaults.standard.object(forKey: "savedRowFed10") == nil) {} else {
+            if (UserDefaults.standard.object(forKey: "savedRowFed1") == nil) {} else {
                 if StoreStruct.statusesFederated.count > 5 {
-                    self.tableViewF.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowFed10") as! CGFloat), animated: false)
+                    self.tableViewF.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowFed1") as! CGFloat), animated: false)
                 }
             }
         }
-        
-        
-        
-        
-        
-        
     }
+    
+    
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if self.currentIndex == 0 {
-            UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowHome10")
+            UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowHome1")
         } else if self.currentIndex == 1 {
-            UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowLocal10")
+            UserDefaults.standard.set(self.tableViewL.contentOffset.y, forKey: "savedRowLocal1")
         } else {
-            UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowFed10")
+            UserDefaults.standard.set(self.tableViewF.contentOffset.y, forKey: "savedRowFed1")
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         
-        UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowHome10")
-        UserDefaults.standard.set(self.tableViewL.contentOffset.y, forKey: "savedRowLocal10")
-        UserDefaults.standard.set(self.tableViewF.contentOffset.y, forKey: "savedRowFed10")
+//        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {} else {
+            springWithDelay(duration: 0.4, delay: 0, animations: {
+                self.segmentedControl.alpha = 0
+                //            self.tableView.alpha = 0
+            })
+//        }
         
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "becomeFirst"), object: self)
+        UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowHome1")
+        UserDefaults.standard.set(self.tableViewL.contentOffset.y, forKey: "savedRowLocal1")
+        UserDefaults.standard.set(self.tableViewF.contentOffset.y, forKey: "savedRowFed1")
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "becomeFirst"), object: self)
-        self.navigationController?.view.backgroundColor = Colours.white
-        
-        self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.frame.width), height: Int(self.view.frame.height))
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
         var newoff = 45
@@ -660,7 +931,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
             case 2688:
                 offset = 88
                 newoff = 45
-            case 2436:
+            case 2436, 1792:
                 offset = 88
                 newoff = 45
             default:
@@ -671,7 +942,12 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
         }
         
         //bh4
-        var newSize = offset
+        var newSize = offset + 65
+        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
+            newSize = offset + 65
+        } else {
+            newSize = offset + 15
+        }
         
         self.newUpdatesB1.frame = CGRect(x: CGFloat(self.view.bounds.width - 42), y: CGFloat(newSize), width: CGFloat(56), height: CGFloat(30))
         self.newUpdatesB1.backgroundColor = Colours.grayLight19
@@ -681,76 +957,55 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
         self.newUpdatesB1.alpha = 0
         self.view.addSubview(self.newUpdatesB1)
         
+        self.newUpdatesB2.frame = CGRect(x: CGFloat(self.view.bounds.width - 42), y: CGFloat(newSize), width: CGFloat(56), height: CGFloat(30))
+        self.newUpdatesB2.backgroundColor = Colours.grayLight19
+        self.newUpdatesB2.layer.cornerRadius = 10
+        self.newUpdatesB2.setTitleColor(UIColor.white, for: .normal)
+        self.newUpdatesB2.setTitle("", for: .normal)
+        self.newUpdatesB2.alpha = 0
+        self.view.addSubview(self.newUpdatesB2)
+        
+        self.newUpdatesB3.frame = CGRect(x: CGFloat(self.view.bounds.width - 42), y: CGFloat(newSize), width: CGFloat(56), height: CGFloat(30))
+        self.newUpdatesB3.backgroundColor = Colours.grayLight19
+        self.newUpdatesB3.layer.cornerRadius = 10
+        self.newUpdatesB3.setTitleColor(UIColor.white, for: .normal)
+        self.newUpdatesB3.setTitle("", for: .normal)
+        self.newUpdatesB3.alpha = 0
+        self.view.addSubview(self.newUpdatesB3)
+        
+        
         
         springWithDelay(duration: 0.4, delay: 0, animations: {
+            self.segmentedControl.alpha = 1
             self.tableView.alpha = 1
         })
         
-//        self.navigationController?.navigationBar.tintColor = Colours.tabUnselected
-//        self.navigationController?.navigationBar.barTintColor = Colours.tabUnselected
+        //        self.navigationController?.navigationBar.tintColor = Colours.tabUnselected
+        //        self.navigationController?.navigationBar.barTintColor = Colours.tabUnselected
         self.navigationController?.navigationItem.backBarButtonItem?.tintColor = Colours.tabUnselected
         
         StoreStruct.currentPage = 0
         
-        
-        if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
-            if self.hStream == false {
-                self.streamDataHome()
-                
-            }
-        }
-        
-        
-        if StoreStruct.currentUser == nil {
-            let request2 = Accounts.currentUser()
-            StoreStruct.client.run(request2) { (statuses) in
-                if let stat = (statuses.value) {
-                    StoreStruct.currentUser = stat
-                    
-                    
-                    let request8 = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: nil, pinnedOnly: true, excludeReplies: nil, range: .min(id: "", limit: 5000))
-                    StoreStruct.client.run(request8) { (statuses) in
-                        if let stat = (statuses.value) {
-                            print("pinneddone")
-                            StoreStruct.tempPinned = stat
-                        }
-                    }
-                    let request9 = Favourites.all()
-                    StoreStruct.client.run(request9) { (statuses) in
-                        if let stat = (statuses.value) {
-                            print("likeddone")
-                            StoreStruct.tempLiked = stat
-                        }
-                    }
-                    
-                    
-                }
-            }
-        }
-        
-        
-        
-        
         let applicationContext = [StoreStruct.client.accessToken ?? "": StoreStruct.returnedText]
         WatchSessionManager.sharedManager.transferUserInfo(userInfo: applicationContext as [String: AnyObject])
         
-//        let request = Notifications.all(range: .default)
-//        StoreStruct.client.run(request) { (statuses) in
-//            if let stat = (statuses.value) {
-//                StoreStruct.notifications = stat
-//                
-//                for x in StoreStruct.notifications {
-//                    if x.type == .mention {
-//                        StoreStruct.notificationsMentions.append(x)
-//                        DispatchQueue.main.async {
-//                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
-//                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-//                        }
-//                    }
-//                }
-//                
-//            }
-//        }
+        let request = Notifications.all(range: .default)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                StoreStruct.notifications = stat
+                
+                for x in StoreStruct.notifications {
+                    if x.type == .mention {
+                        StoreStruct.notificationsMentions.append(x)
+                        DispatchQueue.main.async {
+                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
+                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
+                        }
+                    }
+                }
+                
+            }
+        }
         
         
     }
@@ -900,7 +1155,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                                     UIView.setAnimationsEnabled(false)
                                     self.tableView.reloadData()
                                     self.refreshControl.endRefreshing()
-                                    self.tableView.scrollToRow(at: IndexPath(row: self.hMod.count, section: 0), at: .top, animated: false)
+                                    self.tableView.scrollToRow(at: IndexPath(row: self.hMod.count - 1, section: 0), at: .top, animated: false)
                                     UIView.setAnimationsEnabled(true)
                                 } else {
                                     
@@ -966,13 +1221,20 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                                 
                                 
                                 if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
-                                    
+                                    self.newUpdatesB2.setTitle("\(self.lMod.count)  ", for: .normal)
+                                    //                                self.newUpdatesB2.transform = CGAffineTransform(translationX: 120, y: 0)
+                                    self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                    springWithDelay(duration: 0.5, delay: 0, animations: {
+                                        self.newUpdatesB2.alpha = 1
+                                        self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                        //                                    self.newUpdatesB2.transform = CGAffineTransform(translationX: 0, y: 0)
+                                    })
                                     self.countcount2 = self.lMod.count
                                     
                                     UIView.setAnimationsEnabled(false)
                                     self.tableViewL.reloadData()
                                     self.refreshControl.endRefreshing()
-                                    self.tableViewL.scrollToRow(at: IndexPath(row: self.lMod.count, section: 0), at: .top, animated: false)
+                                    self.tableViewL.scrollToRow(at: IndexPath(row: self.lMod.count - 1, section: 0), at: .top, animated: false)
                                     UIView.setAnimationsEnabled(true)
                                 } else {
                                     
@@ -1041,12 +1303,20 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                                 
                                 if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                     
+                                    self.newUpdatesB3.setTitle("\(self.fMod.count)  ", for: .normal)
+                                    //                                            self.newUpdatesB3.transform = CGAffineTransform(translationX: 120, y: 0)
+                                    self.newUpdatesB3.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                    springWithDelay(duration: 0.5, delay: 0, animations: {
+                                        self.newUpdatesB3.alpha = 1
+                                        self.newUpdatesB3.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                        //                                                self.newUpdatesB3.transform = CGAffineTransform(translationX: 0, y: 0)
+                                    })
                                     self.countcount3 = self.fMod.count
                                     
                                     UIView.setAnimationsEnabled(false)
                                     self.tableViewF.reloadData()
                                     self.refreshControl.endRefreshing()
-                                    self.tableViewF.scrollToRow(at: IndexPath(row: self.fMod.count, section: 0), at: .top, animated: false)
+                                    self.tableViewF.scrollToRow(at: IndexPath(row: self.fMod.count - 1, section: 0), at: .top, animated: false)
                                     UIView.setAnimationsEnabled(true)
                                     
                                 } else {
@@ -1111,6 +1381,153 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
         return tableView(tableView, heightForRowAt: IndexPath(row: 0, section: 0))
     }
     
+    func numberOfSegmentsInSegmentedControl(_ segmentedControl: SJFluidSegmentedControl) -> Int {
+        return 3
+    }
+    
+    func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, titleForSegmentAtIndex index: Int) -> String? {
+        if index == 0 {
+            return "Home".localized
+        } else if index == 1 {
+            return "Local".localized
+        } else {
+            if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
+                return "Federated".localized
+            } else {
+                return "Fed".localized
+            }
+        }
+    }
+    
+    func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForSelectedSegmentAtIndex index: Int) -> [UIColor] {
+        return [Colours.tabSelected, Colours.tabSelected]
+    }
+    
+    func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForBounce bounce: SJFluidSegmentedControlBounce) -> [UIColor] {
+        return [Colours.tabSelected, Colours.tabSelected]
+    }
+    //backh2
+    func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, didChangeFromSegmentAtIndex fromIndex: Int, toSegmentAtIndex toIndex: Int) {
+        
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        
+        
+        if toIndex == 0 {
+            
+            if self.countcount1 == 0 {
+                self.newUpdatesB1.alpha = 0
+                self.newUpdatesB2.alpha = 0
+                self.newUpdatesB3.alpha = 0
+            } else {
+                self.newUpdatesB1.alpha = 1
+                self.newUpdatesB2.alpha = 0
+                self.newUpdatesB3.alpha = 0
+            }
+            
+            self.currentIndex = 0
+            self.tableView.reloadData()
+            self.tableView.alpha = 1
+            self.tableViewL.alpha = 0
+            self.tableViewF.alpha = 0
+            if (UserDefaults.standard.object(forKey: "savedRowHome1") == nil) {} else {
+                
+            }
+            
+            // stream
+            if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
+                if self.hStream == false {
+                    self.streamDataHome()
+                    
+                }
+            }
+        }
+        if toIndex == 1 {
+            
+            if self.countcount2 == 0 {
+                self.newUpdatesB1.alpha = 0
+                self.newUpdatesB2.alpha = 0
+                self.newUpdatesB3.alpha = 0
+            } else {
+                self.newUpdatesB1.alpha = 0
+                self.newUpdatesB2.alpha = 1
+                self.newUpdatesB3.alpha = 0
+            }
+            
+            self.currentIndex = 1
+            self.tableView.alpha = 0
+            self.tableViewL.alpha = 1
+            self.tableViewF.alpha = 0
+            
+            if StoreStruct.statusesLocal.isEmpty {
+                let request = Timelines.public(local: true, range: .default)
+                StoreStruct.client.run(request) { (statuses) in
+                    if let stat = (statuses.value) {
+                        StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
+                        DispatchQueue.main.async {
+                            StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                            self.tableViewL.reloadData()
+                            
+                        }
+                    }
+                }
+            } else {
+                //bbbhere
+                self.tableViewL.reloadData()
+            }
+            
+            // stream
+            if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
+                if self.lStream == false {
+                    self.streamDataLocal()
+                }
+            }
+        }
+        if toIndex == 2 {
+            
+            if self.countcount3 == 0 {
+                self.newUpdatesB1.alpha = 0
+                self.newUpdatesB2.alpha = 0
+                self.newUpdatesB3.alpha = 0
+            } else {
+                self.newUpdatesB1.alpha = 0
+                self.newUpdatesB2.alpha = 0
+                self.newUpdatesB3.alpha = 1
+            }
+            
+            self.currentIndex = 2
+            self.tableView.alpha = 0
+            self.tableViewL.alpha = 0
+            self.tableViewF.alpha = 1
+            
+            if StoreStruct.statusesFederated.isEmpty {
+                let request = Timelines.public(local: false, range: .default)
+                StoreStruct.client.run(request) { (statuses) in
+                    if let stat = (statuses.value) {
+                        StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
+                        DispatchQueue.main.async {
+                            StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                            self.tableViewF.reloadData()
+                            
+                        }
+                    }
+                }
+            } else {
+                ///bbhere
+                self.tableViewF.reloadData()
+            }
+            // stream
+            if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
+                if self.fStream == false {
+                    self.streamDataFed()
+                }
+            }
+            
+        }
+    }
     
     
     // Table stuff
@@ -1137,7 +1554,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
             
             
             
-            if StoreStruct.statusesHome.count == 0 {
+            if StoreStruct.statusesHome.count == 0 || indexPath.row >= StoreStruct.statusesHome.count {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MainFeedCell
                 cell.backgroundColor = Colours.white
                 let bgColorView = UIView()
@@ -1150,6 +1567,8 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                 if indexPath.row == StoreStruct.statusesHome.count - 14 {
                     self.fetchMoreHome()
                 }
+                print(indexPath.row)
+                print(StoreStruct.statusesHome.count)
                 if StoreStruct.statusesHome[indexPath.row].reblog?.mediaAttachments.isEmpty ?? StoreStruct.statusesHome[indexPath.row].mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MainFeedCell
                     cell.delegate = self
@@ -1252,6 +1671,9 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                     cell.toot.textColor = Colours.black
                     cell.mainImageView.backgroundColor = Colours.white
                     cell.mainImageViewBG.backgroundColor = Colours.white
+                    cell.mainImageView.contentMode = .scaleAspectFill
+                    cell.mainImageView.imageView?.contentMode = .scaleAspectFill
+                    cell.mainImageView.layer.masksToBounds = true
                     
                     cell.toot.handleMentionTap { (string) in
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -1335,7 +1757,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
             
             
             
-            if StoreStruct.statusesLocal.count == 0 {
+            if StoreStruct.statusesLocal.count == 0 || indexPath.row >= StoreStruct.statusesLocal.count  {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "celll", for: indexPath) as! MainFeedCell
                 cell.backgroundColor = Colours.white
                 let bgColorView = UIView()
@@ -1343,6 +1765,9 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                 cell.selectedBackgroundView = bgColorView
                 return cell
             } else {
+                
+                
+                
                 
                 if indexPath.row == StoreStruct.statusesLocal.count - 14 {
                     self.fetchMoreLocal()
@@ -1446,6 +1871,10 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                     cell.toot.textColor = Colours.black
                     cell.mainImageView.backgroundColor = Colours.white
                     cell.mainImageViewBG.backgroundColor = Colours.white
+                    cell.mainImageView.contentMode = .scaleAspectFill
+                    cell.mainImageView.imageView?.contentMode = .scaleAspectFill
+                    cell.mainImageView.layer.masksToBounds = true
+                    
                     cell.toot.handleMentionTap { (string) in
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let selection = UISelectionFeedbackGenerator()
@@ -1520,11 +1949,12 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                     cell.selectedBackgroundView = bgColorView
                     return cell
                 }
+                
             }
         } else {
             
             
-            if StoreStruct.statusesFederated.count == 0 {
+            if StoreStruct.statusesFederated.count == 0 || indexPath.row >= StoreStruct.statusesFederated.count  {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellf", for: indexPath) as! MainFeedCell
                 cell.backgroundColor = Colours.white
                 let bgColorView = UIView()
@@ -1635,6 +2065,10 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                     cell.toot.textColor = Colours.black
                     cell.mainImageView.backgroundColor = Colours.white
                     cell.mainImageViewBG.backgroundColor = Colours.white
+                    cell.mainImageView.contentMode = .scaleAspectFill
+                    cell.mainImageView.imageView?.contentMode = .scaleAspectFill
+                    cell.mainImageView.layer.masksToBounds = true
+                    
                     cell.toot.handleMentionTap { (string) in
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let selection = UISelectionFeedbackGenerator()
@@ -1765,7 +2199,16 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
                 
                 let videoURL = URL(string: sto[sender.tag].reblog?.mediaAttachments[0].url ?? sto[sender.tag].mediaAttachments[0].url)!
-                XPlayer.play(videoURL)
+                if (UserDefaults.standard.object(forKey: "vidgif") == nil) || (UserDefaults.standard.object(forKey: "vidgif") as! Int == 0) {
+                    XPlayer.play(videoURL)
+                } else {
+                    let player = AVPlayer(url: videoURL)
+                    let playerViewController = AVPlayerViewController()
+                    playerViewController.player = player
+                    self.present(playerViewController, animated: true) {
+                        playerViewController.player!.play()
+                    }
+                }
                 
             } else {
                 
@@ -2034,7 +2477,19 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                     cell.hideSwipe(animated: true)
                 }
             }
-            like.backgroundColor = Colours.white
+            
+            
+            if (UserDefaults.standard.object(forKey: "dmTog") == nil) || (UserDefaults.standard.object(forKey: "dmTog") as! Int == 0) {
+                like.backgroundColor = Colours.white
+            } else {
+                if sto[indexPath.row].visibility == .direct {
+                    like.backgroundColor = Colours.cellQuote
+                } else {
+                    like.backgroundColor = Colours.white
+                }
+            }
+            
+            
             like.image = UIImage(named: "like")
             like.transitionDelegate = ScaleTransition.default
             like.textColor = Colours.tabUnselected
@@ -2046,7 +2501,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                 }
                 
                 let controller = ComposeViewController()
-                controller.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
+                StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                 controller.inReply = [sto[indexPath.row].reblog ?? sto[indexPath.row]]
                 controller.prevTextReply = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
                 controller.inReplyText = sto[indexPath.row].reblog?.account.username ?? sto[indexPath.row].account.username
@@ -2060,7 +2515,18 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                     cell.hideSwipe(animated: true)
                 }
             }
-            reply.backgroundColor = Colours.white
+            
+            if (UserDefaults.standard.object(forKey: "dmTog") == nil) || (UserDefaults.standard.object(forKey: "dmTog") as! Int == 0) {
+                reply.backgroundColor = Colours.white
+            } else {
+                if sto[indexPath.row].visibility == .direct {
+                    reply.backgroundColor = Colours.cellQuote
+                } else {
+                    reply.backgroundColor = Colours.white
+                }
+            }
+            
+            
             reply.transitionDelegate = ScaleTransition.default
             reply.textColor = Colours.tabUnselected
             
@@ -2164,7 +2630,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                             print(action, ind)
                             
                             let controller = ComposeViewController()
-                            controller.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
+                            StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                             controller.idToDel = sto[indexPath.row].id
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
                             self.present(controller, animated: true, completion: nil)
@@ -2241,7 +2707,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                                         return
                                     }
                                 }
-                                .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
+                                .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
                                 .show(on: self)
                             
                             
@@ -2254,7 +2720,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                                 return
                             }
                         }
-                        .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
+                        .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
                         .show(on: self)
                     
                     
@@ -2444,7 +2910,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                                         return
                                     }
                                 }
-                                .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
+                                .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
                                 .show(on: self)
                             
                             
@@ -2455,12 +2921,15 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                             let unreserved = "-._~/?"
                             let allowed = NSMutableCharacterSet.alphanumeric()
                             allowed.addCharacters(in: unreserved)
-                            var bodyText = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                            bodyText = bodyText.replacingOccurrences(of: ".", with: " ")
-                            bodyText = bodyText.replacingOccurrences(of: "!", with: " ")
-                            bodyText = bodyText.replacingOccurrences(of: "?", with: " ")
-                            bodyText = bodyText.replacingOccurrences(of: "~", with: " ")
-                            let trans = bodyText.addingPercentEncoding(withAllowedCharacters: allowed as CharacterSet)
+                            let bodyText = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            print("0001")
+                            print(bodyText)
+                            let unreservedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~"
+                            let unreservedCharset = NSCharacterSet(charactersIn: unreservedChars)
+                            var trans = bodyText.addingPercentEncoding(withAllowedCharacters: unreservedCharset as CharacterSet)
+                            trans = trans!.replacingOccurrences(of: "\n\n", with: "%20")
+                            print("0002")
+                            print(trans)
                             let langStr = Locale.current.languageCode
                             let urlString = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=\(langStr ?? "en")&dt=t&q=\(trans!)&ie=UTF-8&oe=UTF-8"
                             guard let requestUrl = URL(string:urlString) else {
@@ -2472,7 +2941,11 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                                 if error == nil, let usableData = data {
                                     do {
                                         let json = try JSONSerialization.jsonObject(with: usableData, options: .mutableContainers) as! [Any]
-                                        let translatedText = ((((json[0] as! [Any])[0]) as! [Any])[0])
+                                        
+                                        var translatedText = ""
+                                        for i in (json[0] as! [Any]) {
+                                            translatedText = translatedText + ((i as! [Any])[0] as? String ?? "")
+                                        }
                                         
                                         Alertift.actionSheet(title: nil, message: translatedText as? String ?? "Could not translate tweet")
                                             .backgroundColor(Colours.white)
@@ -2486,7 +2959,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                                                     return
                                                 }
                                             }
-                                            .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
+                                            .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
                                             .show(on: self)
                                     } catch let error as NSError {
                                         print(error)
@@ -2542,7 +3015,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                                         return
                                     }
                                 }
-                                .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
+                                .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
                                 .show(on: self)
                             
                             
@@ -2555,7 +3028,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                                 return
                             }
                         }
-                        .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
+                        .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
                         .show(on: self)
                     
                 }
@@ -2568,7 +3041,17 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                     cell.hideSwipe(animated: true)
                 }
             }
-            more.backgroundColor = Colours.white
+            
+            if (UserDefaults.standard.object(forKey: "dmTog") == nil) || (UserDefaults.standard.object(forKey: "dmTog") as! Int == 0) {
+                more.backgroundColor = Colours.white
+            } else {
+                if sto[indexPath.row].visibility == .direct {
+                    more.backgroundColor = Colours.cellQuote
+                } else {
+                    more.backgroundColor = Colours.white
+                }
+            }
+            
             more.image = UIImage(named: "more2")
             more.transitionDelegate = ScaleTransition.default
             more.textColor = Colours.tabUnselected
@@ -2601,11 +3084,11 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
         
         
         if self.currentIndex == 0 {
-            UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowHome10")
+            UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowHome1")
         } else if self.currentIndex == 1 {
-            UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowLocal10")
+            UserDefaults.standard.set(self.tableViewL.contentOffset.y, forKey: "savedRowLocal1")
         } else {
-            UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowFed10")
+            UserDefaults.standard.set(self.tableViewF.contentOffset.y, forKey: "savedRowFed1")
         }
         
         let controller = DetailViewController()
@@ -2617,6 +3100,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
             controller.mainStatus.append(StoreStruct.statusesFederated[indexPath.row])
         }
         self.navigationController?.pushViewController(controller, animated: true)
+        
     }
     
     var lastThing = ""
@@ -2721,6 +3205,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                             
                             
                             do {
+                                self.restoreScroll()
                                 try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
                                 try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
                                 try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
@@ -2745,7 +3230,14 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                             newestC = StoreStruct.statusesLocal.count - newestC
                             
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
-                                
+                                self.newUpdatesB2.setTitle("\(newestC)  ", for: .normal)
+                                //                            self.newUpdatesB2.transform = CGAffineTransform(translationX: 120, y: 0)
+                                self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                springWithDelay(duration: 0.5, delay: 0, animations: {
+                                    self.newUpdatesB2.alpha = 1
+                                    self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                    //                                self.newUpdatesB2.transform = CGAffineTransform(translationX: 0, y: 0)
+                                })
                                 self.countcount2 = newestC
                                 
                                 UIView.setAnimationsEnabled(false)
@@ -2762,6 +3254,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                             
                             
                             do {
+                                self.restoreScroll()
                                 try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
                                 try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
                                 try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
@@ -2786,17 +3279,19 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                             newestC = StoreStruct.statusesFederated.count - newestC
                             
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
-                                
+                                self.newUpdatesB3.setTitle("\(newestC)  ", for: .normal)
+                                //                            self.newUpdatesB3.transform = CGAffineTransform(translationX: 120, y: 0)
+                                self.newUpdatesB3.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                springWithDelay(duration: 0.5, delay: 0, animations: {
+                                    self.newUpdatesB3.alpha = 1
+                                    self.newUpdatesB3.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                    //                                self.newUpdatesB3.transform = CGAffineTransform(translationX: 0, y: 0)
+                                })
                                 self.countcount3 = newestC
                                 
                                 UIView.setAnimationsEnabled(false)
                                 self.tableViewF.reloadData()
                                 self.refreshControl.endRefreshing()
-                                
-                                print("checkindexes")
-                                print(stat.count)
-                                print(newestC)
-                                
                                 self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
                                 UIView.setAnimationsEnabled(true)
                                 
@@ -2809,6 +3304,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
                             
                             
                             do {
+                                self.restoreScroll()
                                 try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
                                 try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
                                 try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
@@ -2826,7 +3322,13 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
         
     }
     
-    
+    @objc func loadagain() {
+        self.navigationController?.view.backgroundColor = Colours.white
+        
+        self.view.backgroundColor = Colours.white
+        self.navigationController?.navigationBar.backgroundColor = Colours.white
+        self.navigationController?.navigationBar.tintColor = Colours.black
+    }
     
     func loadLoadLoad() {
         if (UserDefaults.standard.object(forKey: "theme") == nil || UserDefaults.standard.object(forKey: "theme") as! Int == 0) {
@@ -2860,7 +3362,7 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
             Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white
-            Colours.cellQuote = UIColor(red: 33/255.0, green: 33/255.0, blue: 43/255.0, alpha: 1.0)
+            Colours.cellQuote = UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)
             Colours.cellSelected = UIColor(red: 34/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
             Colours.tabUnselected = UIColor(red: 80/255.0, green: 80/255.0, blue: 90/255.0, alpha: 1.0)
             Colours.blackUsual = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)
@@ -2935,13 +3437,10 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
         }
         
         
+        
         //        UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedOffsetHome")
         //        print("676767")
         //        print((UserDefaults.standard.object(forKey: "savedOffsetHome") as! CGFloat))
-        
-        UINavigationBar.appearance().barTintColor = Colours.black
-        UINavigationBar.appearance().tintColor = Colours.black
-        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
         
         self.ai.alpha = 0
         self.ai.removeFromSuperview()
@@ -2961,11 +3460,10 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
         self.tableViewF.reloadData()
         self.tableViewF.reloadInputViews()
         
+        
+        self.navigationController?.view.backgroundColor = Colours.white
         self.navigationController?.navigationBar.backgroundColor = Colours.white
         self.navigationController?.navigationBar.tintColor = Colours.black
-        self.navigationController?.navigationBar.barTintColor = Colours.black
-        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
-        self.splitViewController?.view.backgroundColor = Colours.cellQuote
         
         //        if (UserDefaults.standard.object(forKey: "savedOffsetHome") == nil) {} else {
         //            print("787878")
@@ -2988,6 +3486,56 @@ class PadTimelinesViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     
+    @objc func segTheme() {
+        var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
+        var offset = 88
+        var newoff = 45
+        if UIDevice().userInterfaceIdiom == .phone {
+            switch UIScreen.main.nativeBounds.height {
+            case 2688:
+                offset = 88
+                newoff = 45
+            case 2436, 1792:
+                offset = 88
+                newoff = 45
+            default:
+                offset = 64
+                newoff = 24
+                tabHeight = Int(UITabBarController().tabBar.frame.size.height)
+            }
+        }
+        segmentedControl.removeFromSuperview()
+        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
+            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(30), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
+            segmentedControl.dataSource = self
+            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
+                segmentedControl.shapeStyle = .roundedRect
+            } else {
+                segmentedControl.shapeStyle = .liquid
+            }
+            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.cornerRadius = 12
+            segmentedControl.shadowsEnabled = false
+            segmentedControl.transitionStyle = .slide
+            segmentedControl.delegate = self
+            self.navigationController?.view.addSubview(segmentedControl)
+        } else {
+            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+            segmentedControl.dataSource = self
+            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
+                segmentedControl.shapeStyle = .roundedRect
+            } else {
+                segmentedControl.shapeStyle = .liquid
+            }
+            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.cornerRadius = 12
+            segmentedControl.shadowsEnabled = false
+            segmentedControl.transitionStyle = .slide
+            segmentedControl.delegate = self
+            self.navigationController?.view.addSubview(segmentedControl)
+        }
+        
+    }
     
     
 }

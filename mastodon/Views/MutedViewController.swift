@@ -146,7 +146,7 @@ class MutedViewController: UIViewController, UITableViewDelegate, UITableViewDat
             print("nothing")
         }
         
-        StoreStruct.currentPage = 0
+        StoreStruct.currentPage = 90
     }
     
     

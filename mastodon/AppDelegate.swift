@@ -120,21 +120,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let rootViewController2 = PadTimelinesViewController()
             let rootNavigationController2 = UINavigationController(rootViewController: rootViewController2)
             
-            let splitViewController3 =  UISplitViewController()
-            let rootViewController3 = PadLocalTimelinesViewController()
-            let detailViewController3 = PadFedViewController()
-            let rootNavigationController3 = UINavigationController(rootViewController: rootViewController3)
-            let detailNavigationController3 = UINavigationController(rootViewController: detailViewController3)
             
-            splitViewController3.viewControllers = [rootNavigationController3, detailNavigationController3]
-            splitViewController3.preferredPrimaryColumnWidthFraction = 0.5
-            if UIDevice.current.orientation.isPortrait {
-                splitViewController3.preferredDisplayMode = .allVisible
-            } else {
-                splitViewController3.preferredDisplayMode = .primaryHidden
-            }
-            
-            splitViewController2.viewControllers = [rootNavigationController2, splitViewController3]
+            splitViewController2.viewControllers = [rootNavigationController2]
             splitViewController2.preferredPrimaryColumnWidthFraction = 0.5
             splitViewController2.preferredDisplayMode = .allVisible
             
@@ -145,10 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             
             splitViewController.view.backgroundColor = Colours.white
             splitViewController2.view.backgroundColor = Colours.white
-            splitViewController3.view.backgroundColor = Colours.white
             rootNavigationController2.view.backgroundColor = Colours.white
-            rootNavigationController3.view.backgroundColor = Colours.white
-            detailNavigationController3.view.backgroundColor = Colours.white
             self.window!.rootViewController = splitViewController
             self.window!.makeKeyAndVisible()
             
