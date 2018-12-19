@@ -316,7 +316,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     
     lazy var bulletinManager: BulletinManager = {
         
-        let page = PageBulletinItem(title: "Welcome to Mast")
+        let page = PageBulletinItem(title: "Welcome to Roma")
         page.image = UIImage(named: "iconb")
         page.shouldCompactDescriptionText = true
         page.descriptionText = "You're almost ready to go.\nLet's configure some things first."

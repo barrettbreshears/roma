@@ -99,7 +99,6 @@
 		53170E8421836761005F972B /* PadTimelinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53170E8321836761005F972B /* PadTimelinesViewController.swift */; };
 		5318F56221877F8A00418159 /* PadLogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318F56121877F8A00418159 /* PadLogInViewController.swift */; };
 		531B04B9217111A100D31715 /* Stickers.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 531B04B8217111A100D31715 /* Stickers.xcassets */; };
-		531B04BD217111A100D31715 /* MastStickers.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 531B04B62171119D00D31715 /* MastStickers.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		531BD18C2188672700E12278 /* TNFloatingPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531BD18B2188672700E12278 /* TNFloatingPanel.swift */; };
 		531BD18E218867EF00E12278 /* PadSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531BD18D218867EF00E12278 /* PadSearchViewController.swift */; };
 		531BD1902188762500E12278 /* PadDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531BD18F2188762500E12278 /* PadDetailViewController.swift */; };
@@ -180,7 +179,6 @@
 		5320582F215D287700ED0C36 /* DKAssetGroupListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320580B215D287600ED0C36 /* DKAssetGroupListVC.swift */; };
 		53205831215D317900ED0C36 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53205830215D317800ED0C36 /* CameraViewController.swift */; };
 		5322D7DD2167659900B952F5 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5322D7DC2167659900B952F5 /* NotificationService.swift */; };
-		5322D7E12167659900B952F5 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 5322D7DA2167659900B952F5 /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		532429AE21923130002EEEAA /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 532429AD21923130002EEEAA /* StoreKit.framework */; };
 		532533BD2185194100A8A65B /* PadMentionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532533BC2185194100A8A65B /* PadMentionsViewController.swift */; };
 		5329F3842174B21F00C4A23C /* NewInstanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5329F3832174B21F00C4A23C /* NewInstanceViewController.swift */; };
@@ -232,7 +230,6 @@
 		5352D0CA215E74B400901B60 /* icon9@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5352D0C7215E74B400901B60 /* icon9@2x.png */; };
 		5354BA1C2163F89E0094C545 /* ShareViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5354BA1B2163F89E0094C545 /* ShareViewController.swift */; };
 		5354BA1F2163F89E0094C545 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5354BA1D2163F89E0094C545 /* MainInterface.storyboard */; };
-		5354BA232163F89E0094C545 /* MastShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 5354BA192163F89E0094C545 /* MastShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5354BA692163F9B60094C545 /* PaginationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5354BA2A2163F9B60094C545 /* PaginationItem.swift */; };
 		5354BA6A2163F9B60094C545 /* ClientType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5354BA2B2163F9B60094C545 /* ClientType.swift */; };
 		5354BA6B2163F9B60094C545 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5354BA2C2163F9B60094C545 /* Parameter.swift */; };
@@ -320,7 +317,6 @@
 		5354BAF321668D5A0094C545 /* NotificationCenter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5354BAF221668D5A0094C545 /* NotificationCenter.framework */; };
 		5354BAF621668D5A0094C545 /* TodayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5354BAF521668D5A0094C545 /* TodayViewController.swift */; };
 		5354BAF921668D5A0094C545 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5354BAF721668D5A0094C545 /* MainInterface.storyboard */; };
-		5354BAFD21668D5A0094C545 /* MastExtension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 5354BAF121668D5A0094C545 /* MastExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		5354BB4121668D8B0094C545 /* PaginationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5354BB0221668D8B0094C545 /* PaginationItem.swift */; };
 		5354BB4221668D8B0094C545 /* ClientType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5354BB0321668D8B0094C545 /* ClientType.swift */; };
 		5354BB4321668D8B0094C545 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5354BB0421668D8B0094C545 /* Parameter.swift */; };
@@ -428,7 +424,6 @@
 		536A4FD5216B843A00A3D483 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536A4FD4216B843A00A3D483 /* ExtensionDelegate.swift */; };
 		536A4FD7216B843A00A3D483 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536A4FD6216B843A00A3D483 /* NotificationController.swift */; };
 		536A4FD9216B843A00A3D483 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 536A4FD8216B843A00A3D483 /* Assets.xcassets */; };
-		536A4FDE216B843A00A3D483 /* MastWatch.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 536A4FC1216B843700A3D483 /* MastWatch.app */; };
 		536A5029216B851300A3D483 /* PaginationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536A4FEA216B851300A3D483 /* PaginationItem.swift */; };
 		536A502A216B851300A3D483 /* ClientType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536A4FEB216B851300A3D483 /* ClientType.swift */; };
 		536A502B216B851300A3D483 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536A4FEC216B851300A3D483 /* Parameter.swift */; };
@@ -689,10 +684,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				5322D7E12167659900B952F5 /* OneSignalNotificationServiceExtension.appex in Embed App Extensions */,
-				5354BA232163F89E0094C545 /* MastShare.appex in Embed App Extensions */,
-				5354BAFD21668D5A0094C545 /* MastExtension.appex in Embed App Extensions */,
-				531B04BD217111A100D31715 /* MastStickers.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -714,7 +705,6 @@
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				536A4FDE216B843A00A3D483 /* MastWatch.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;

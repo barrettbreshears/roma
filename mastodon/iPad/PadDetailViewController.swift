@@ -1336,7 +1336,7 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             let statusAlert = StatusAlert()
             statusAlert.image = UIImage(named: "boostlarge")?.maskWithColor(color: Colours.grayDark)
-            statusAlert.title = "Unboosted".localized
+            statusAlert.title = "Un-reposted".localized
             statusAlert.contentColor = Colours.grayDark
             statusAlert.message = "Status"
             statusAlert.show()
@@ -1353,7 +1353,7 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             let statusAlert = StatusAlert()
             statusAlert.image = UIImage(named: "boostlarge")?.maskWithColor(color: Colours.grayDark)
-            statusAlert.title = "Boosted".localized
+            statusAlert.title = "Reposted".localized
             statusAlert.contentColor = Colours.grayDark
             statusAlert.message = "Status"
             statusAlert.show()

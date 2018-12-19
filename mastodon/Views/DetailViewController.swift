@@ -1352,7 +1352,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             let statusAlert = StatusAlert()
             statusAlert.image = UIImage(named: "boostlarge")?.maskWithColor(color: Colours.grayDark)
-            statusAlert.title = "Unboosted".localized
+            statusAlert.title = "Unreposted".localized
             statusAlert.contentColor = Colours.grayDark
             statusAlert.message = "Status"
             statusAlert.show()
@@ -1369,7 +1369,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             let statusAlert = StatusAlert()
             statusAlert.image = UIImage(named: "boostlarge")?.maskWithColor(color: Colours.grayDark)
-            statusAlert.title = "Boosted".localized
+            statusAlert.title = "Reposted".localized
             statusAlert.contentColor = Colours.grayDark
             statusAlert.message = "Status"
             statusAlert.show()
