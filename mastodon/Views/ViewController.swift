@@ -39,7 +39,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     }
     
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .circleStrokeSpin, color: Colours.tabSelected)
-    
+    var loadingAdditionalInstance = false
     var screenshotLabel = UILabel()
     var screenshot = UIImage()
     var identity = CGAffineTransform.identity
@@ -48,7 +48,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     var doOnce = true
     var doOncePinch = true
     var doOnceScreen = true
-    
+    var newInstance = false
     var segmentedControl: SJFluidSegmentedControl!
     var typeOfSearch = 0
     var newestText = ""
@@ -232,15 +232,15 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.loginLogo.removeFromSuperview()
         self.loginLabel.removeFromSuperview()
         self.textField.removeFromSuperview()
-        self.safariVC!.dismiss(animated: true, completion: nil)
+        self.safariVC?.dismiss(animated: true, completion: nil)
         
-        var request = URLRequest(url: URL(string: "https://\(StoreStruct.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.authCode)&redirect_uri=\(StoreStruct.redirect!)&client_id=\(StoreStruct.clientID)&client_secret=\(StoreStruct.clientSecret)")!)
+        var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.currentInstance.authCode)&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&client_id=\(StoreStruct.shared.currentInstance.clientID)&client_secret=\(StoreStruct.shared.currentInstance.clientSecret)")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
         let task = URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-            guard error == nil else { return }
+            guard error == nil else { print(error);return }
             guard let data = data else { return }
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
@@ -255,17 +255,16 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         //self.volumeBar.start()
                         //self.volumeBar.showInitial()
                     }
+                    StoreStruct.shared.currentInstance.accessToken = (json["access_token"] as! String)
+                    StoreStruct.client.accessToken = StoreStruct.shared.currentInstance.accessToken
                     
+                   
+                    let currentInstance = InstanceData(clientID: StoreStruct.shared.currentInstance.clientID, clientSecret: StoreStruct.shared.currentInstance.clientSecret, authCode: StoreStruct.shared.currentInstance.authCode, accessToken: StoreStruct.shared.currentInstance.accessToken, returnedText: StoreStruct.shared.currentInstance.returnedText, redirect:StoreStruct.shared.currentInstance.redirect)
                     
-                    StoreStruct.accessToken = (json["access_token"] as! String)
-                    StoreStruct.client.accessToken = StoreStruct.accessToken
-                    
-                    UserDefaults.standard.set(StoreStruct.clientID, forKey: "clientID")
-                    UserDefaults.standard.set(StoreStruct.clientSecret, forKey: "clientSecret")
-                    UserDefaults.standard.set(StoreStruct.authCode, forKey: "authCode")
-                    UserDefaults.standard.set(StoreStruct.accessToken, forKey: "accessToken")
-                    UserDefaults.standard.set(StoreStruct.returnedText, forKey: "returnedText")
-                    
+                    var instances = InstanceData.getAllInstances()
+                    instances.append(currentInstance)
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
+                    InstanceData.setCurrentInstance(instance: currentInstance)
                     let request = Timelines.home()
                     StoreStruct.client.run(request) { (statuses) in
                         if let stat = (statuses.value) {
@@ -280,7 +279,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     StoreStruct.client.run(request2) { (statuses) in
                         if let stat = (statuses.value) {
                             StoreStruct.currentUser = stat
-                            
+                            Account.addAccountToList(account: stat)
                             DispatchQueue.main.async {
                                 NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
                             }
@@ -292,11 +291,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     
                     // onboarding
                     if (UserDefaults.standard.object(forKey: "onb") == nil) || (UserDefaults.standard.object(forKey: "onb") as! Int == 0) {
-                    DispatchQueue.main.async {
-                        self.bulletinManager.prepare()
-                        self.bulletinManager.presentBulletin(above: self, animated: true, completion: nil)
+                        DispatchQueue.main.async {
+                            self.bulletinManager.prepare()
+                            self.bulletinManager.presentBulletin(above: self, animated: true, completion: nil)
+                        }
                     }
-                    }
+                    
                     
                     
                 }
@@ -309,7 +309,82 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     }
     
     
-    
+    @objc func newInstanceLogged(){
+        
+        var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.newInstance!.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.newInstance!.authCode)&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&client_id=\(StoreStruct.shared.newInstance!.clientID)&client_secret=\(StoreStruct.shared.newInstance!.clientSecret)")!)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
+            guard error == nil else { print(error);return }
+            guard let data = data else { return }
+            guard let newInsatnce = StoreStruct.shared.newInstance else {
+                return
+            }
+            do {
+                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                    print(json)
+                    
+                    
+                    newInsatnce.accessToken = (json["access_token"] as! String)
+                    
+                    InstanceData.setCurrentInstance(instance: newInsatnce)
+                    var instances = InstanceData.getAllInstances()
+                    instances.append(newInsatnce)
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
+                    
+                    
+                    let request = Timelines.home()
+                    StoreStruct.shared.newClient.run(request) { (statuses) in
+                        if let stat = (statuses.value) {
+                            StoreStruct.statusesHome = stat
+                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
+                        }
+                    }
+                    
+                    
+                    let request2 = Accounts.currentUser()
+                    StoreStruct.shared.newClient.run(request2) { (statuses) in
+                        print("THIS IS THE STATUS \(statuses)")
+                        if let stat = (statuses.value) {
+                            StoreStruct.currentUser = stat
+                            Account.addAccountToList(account: stat)
+                            DispatchQueue.main.async {
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
+                            }
+                        }
+                    }
+                    
+                    
+                    
+                    
+                    // onboarding
+                    if (UserDefaults.standard.object(forKey: "onb") == nil) || (UserDefaults.standard.object(forKey: "onb") as! Int == 0) {
+                        DispatchQueue.main.async {
+                            self.bulletinManager.prepare()
+                            self.bulletinManager.presentBulletin(above: self, animated: true, completion: nil)
+                        }
+                    }
+                    
+                    
+                    DispatchQueue.main.async {
+                        
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        appDelegate.reloadApplication()
+                        
+                    }
+                    
+                    
+                }
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        })
+        task.resume()
+        
+    }
     
     
     
@@ -417,7 +492,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         if let playerId = stateChanges.to.userId {
             print("Current playerId \(playerId)")
             let x00 = StoreStruct.client.baseURL
-            let x11 = StoreStruct.accessToken
+            let x11 = StoreStruct.shared.currentInstance.accessToken
             let player = playerId
             StoreStruct.playerID = playerId
             
@@ -569,6 +644,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.logged), name: NSNotification.Name(rawValue: "logged"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.newInstanceLogged), name: NSNotification.Name(rawValue: "newInstancelogged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.switch11), name: NSNotification.Name(rawValue: "switch11"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.switch22), name: NSNotification.Name(rawValue: "switch22"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.switch33), name: NSNotification.Name(rawValue: "switch33"), object: nil)
@@ -669,16 +745,16 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         
         
         if UserDefaults.standard.object(forKey: "clientID") == nil {} else {
-            StoreStruct.clientID = UserDefaults.standard.object(forKey: "clientID") as! String
+            StoreStruct.shared.currentInstance.clientID = UserDefaults.standard.object(forKey: "clientID") as! String
         }
         if UserDefaults.standard.object(forKey: "clientSecret") == nil {} else {
-            StoreStruct.clientSecret = UserDefaults.standard.object(forKey: "clientSecret") as! String
+            StoreStruct.shared.currentInstance.clientSecret = UserDefaults.standard.object(forKey: "clientSecret") as! String
         }
         if UserDefaults.standard.object(forKey: "authCode") == nil {} else {
-            StoreStruct.authCode = UserDefaults.standard.object(forKey: "authCode") as! String
+            StoreStruct.shared.currentInstance.authCode = UserDefaults.standard.object(forKey: "authCode") as! String
         }
         if UserDefaults.standard.object(forKey: "returnedText") == nil {} else {
-            StoreStruct.returnedText = UserDefaults.standard.object(forKey: "returnedText") as! String
+            StoreStruct.shared.currentInstance.returnedText = UserDefaults.standard.object(forKey: "returnedText") as! String
         }
         if UserDefaults.standard.object(forKey: "accessToken") == nil {
             self.createLoginView()
@@ -692,10 +768,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             
             
             
-            StoreStruct.accessToken = UserDefaults.standard.object(forKey: "accessToken") as! String
+            StoreStruct.shared.currentInstance.accessToken = UserDefaults.standard.object(forKey: "accessToken") as! String
             StoreStruct.client = Client(
-                baseURL: "https://\(StoreStruct.returnedText)",
-                accessToken: StoreStruct.accessToken
+                baseURL: "https://\(StoreStruct.shared.currentInstance.returnedText)",
+                accessToken: StoreStruct.shared.currentInstance.accessToken
             )
             
             
@@ -715,6 +791,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             let request2 = Accounts.currentUser()
             StoreStruct.client.run(request2) { (statuses) in
                 if let stat = (statuses.value) {
+                    Account.addAccountToList(account: stat)
                     StoreStruct.currentUser = stat
                 }
             }
@@ -932,7 +1009,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             }
         } else {
             if section == 0 {
-                return StoreStruct.allLists.count + 2
+                return InstanceData.getAllInstances().count + 1
             } else {
                 return StoreStruct.instanceLocalToAdd.count
             }
@@ -1009,26 +1086,19 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             if indexPath.section == 0 {
             if indexPath.row == 0 {
                 let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as! ListCell
-                cell.userName.text = "View Other Instance's Timeline"
+                cell.userName.text = "Your instances"
                 cell.backgroundColor = Colours.grayDark3
                 cell.userName.textColor = Colours.tabSelected
                 let bgColorView = UIView()
                 bgColorView.backgroundColor = Colours.grayDark3
                 cell.selectedBackgroundView = bgColorView
                 return cell
-            } else if indexPath.row == 1 {
-                    let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as! ListCell
-                    cell.userName.text = "Create New List +"
-                    cell.backgroundColor = Colours.grayDark3
-                    cell.userName.textColor = Colours.tabSelected
-                    let bgColorView = UIView()
-                    bgColorView.backgroundColor = Colours.grayDark3
-                    cell.selectedBackgroundView = bgColorView
-                    return cell
-            } else {
+            }  else {
                 let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as! ListCell
                 cell.delegate = self
-                cell.configure(StoreStruct.allLists[indexPath.row - 2])
+                let instance = InstanceData.getAllInstances()[indexPath.row - 1]
+                let account = Account.getAccounts()[indexPath.row - 1]
+                cell.configureInstance(instanceName: "\(account.username)@\(instance.returnedText)")
                 cell.backgroundColor = Colours.grayDark3
                 cell.userName.textColor = UIColor.white
                 let bgColorView = UIView()
@@ -1245,42 +1315,16 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             if indexPath.section == 0 {
             
             if indexPath.row == 0 {
-                // other instance
-                let controller = NewInstanceViewController()
-                controller.editListName = ""
-                self.present(controller, animated: true, completion: nil)
-            } else if indexPath.row == 1 {
-                // create new list
-                let controller = NewListViewController()
-                self.present(controller, animated: true, completion: nil)
-            } else {
-                // go to list
-                StoreStruct.currentList = []
-                let request = Lists.accounts(id: StoreStruct.allLists[indexPath.row - 2].id)
-                //let request = Lists.list(id: StoreStruct.allLists[indexPath.row - 2].id)
-                StoreStruct.client.run(request) { (statuses) in
-                    if let stat = (statuses.value) {
-                        for z in stat {
-                            
-                            let request1 = Accounts.statuses(id: z.id)
-                            StoreStruct.client.run(request1) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    StoreStruct.currentList = StoreStruct.currentList + stat
-                                    StoreStruct.currentList = StoreStruct.currentList.sorted(by: { $0.createdAt > $1.createdAt })
-                                    StoreStruct.currentListTitle = StoreStruct.allLists[indexPath.row - 2].title
-                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
-                                }
-                                
-                            }
-                        }
-                        if StoreStruct.currentPage == 0 {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists"), object: self)
-                        } else if StoreStruct.currentPage == 1 {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists2"), object: self)
-                        } else {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists3"), object: self)
-                        }
-                    }
+                
+            }  else {
+                let instance = InstanceData.getAllInstances()[indexPath.row - 1]
+                InstanceData.setCurrentInstance(instance: instance)
+                
+                DispatchQueue.main.async {
+                    
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    appDelegate.reloadApplication()
+                    
                 }
             }
             
@@ -1288,7 +1332,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             } else {
                 
                 
-                StoreStruct.instanceText = StoreStruct.instanceLocalToAdd[indexPath.row]
+                StoreStruct.shared.currentInstance.instanceText = StoreStruct.instanceLocalToAdd[indexPath.row]
                 
                 if StoreStruct.currentPage == 0 {
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance"), object: self)
@@ -1603,6 +1647,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         
         UserDefaults.standard.set(nil, forKey: "accessToken")
         
+        
+        
         do {
             try Disk.clear(.documents)
         } catch {
@@ -1613,12 +1659,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.textField.text = ""
         
         StoreStruct.client = Client(baseURL: "")
-        StoreStruct.redirect = ""
-        StoreStruct.returnedText = ""
-        StoreStruct.clientID = ""
-        StoreStruct.clientSecret = ""
-        StoreStruct.authCode = ""
-        StoreStruct.accessToken = ""
+        StoreStruct.shared.currentInstance.redirect = ""
+        StoreStruct.shared.currentInstance.returnedText = ""
+        StoreStruct.shared.currentInstance.clientID = ""
+        StoreStruct.shared.currentInstance.clientSecret = ""
+        StoreStruct.shared.currentInstance.authCode = ""
+        StoreStruct.shared.currentInstance.accessToken = ""
         StoreStruct.currentPage = 0
         StoreStruct.playerID = ""
         
@@ -1651,7 +1697,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         StoreStruct.tappedTag = ""
         StoreStruct.currentUser = nil
         StoreStruct.newInstanceTags = []
-        StoreStruct.instanceText = ""
         
         StoreStruct.allLists = []
         StoreStruct.allListRelID = ""
@@ -1664,6 +1709,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         StoreStruct.allPins = []
         StoreStruct.photoNew = UIImage()
         
+        InstanceData.clearInstances()
+        Account.clearAccounts()
         self.createLoginView()
         
         
@@ -1673,7 +1720,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     
     
     
-    func createLoginView() {
+    func createLoginView(newInstance:Bool = false) {
+        self.newInstance = newInstance
         self.loginBG.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         self.loginBG.backgroundColor = Colours.tabSelected
         self.view.addSubview(self.loginBG)
@@ -1751,8 +1799,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         
         if textField == self.searchTextField {
             
-            
-            
             var fromTop = 45
             if UIDevice().userInterfaceIdiom == .phone {
                 switch UIScreen.main.nativeBounds.height {
@@ -1796,46 +1842,98 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 self.textField.resignFirstResponder()
             }
             
+            
             // Send off returnedText to client
-            StoreStruct.client = Client(baseURL: "https://\(returnedText)")
-            let request = Clients.register(
-                clientName: "Mast",
-                redirectURI: "com.vm.roma://success",
-                scopes: [.read, .write, .follow],
-                website: "https://twitter.com/jpeguin"
-            )
-            StoreStruct.client.run(request) { (application) in
+            if newInstance {
                 
-                if application.value == nil {
+                StoreStruct.shared.newInstance = InstanceData()
+                StoreStruct.shared.newClient = Client(baseURL: "https://\(returnedText)")
+                let request = Clients.register(
+                    clientName: "Roma",
+                    redirectURI: "com.vm.roma://success",
+                    scopes: [.read, .write, .follow],
+                    website: "https://pleroma.com"
+                )
+                StoreStruct.shared.newClient.run(request) { (application) in
                     
-                    DispatchQueue.main.async {
-                        let statusAlert = StatusAlert()
-                        statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
-                        statusAlert.title = "Not a valid Instance".localized
-                        statusAlert.contentColor = Colours.grayDark
-                        statusAlert.message = "  an Instance name like mastodon.technology"
-                        statusAlert.show()
+                    if application.value == nil {
+                        
+                        DispatchQueue.main.async {
+                            let statusAlert = StatusAlert()
+                            statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
+                            statusAlert.title = "Not a valid Instance".localized
+                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.message = "  an Instance name like mastodon.technology"
+                            statusAlert.show()
+                        }
+                        
+                    } else {
+                        let application = application.value!
+                        
+                        StoreStruct.shared.newInstance?.clientID = application.clientID
+                        StoreStruct.shared.newInstance?.clientSecret = application.clientSecret
+                        StoreStruct.shared.newInstance?.returnedText = returnedText
+                        StoreStruct.shared.newInstance?.redirect = "com.vm.roma://addNewInstance".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                        let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&scope=read%20write%20follow&client_id=\(application.clientID)")!
+                        DispatchQueue.main.async {
+                           
+                            self.safariVC = SFSafariViewController(url: queryURL)
+                            self.present(self.safariVC!, animated: true, completion: nil)
+                        }
                     }
-                    
-                } else {
-                let application = application.value!
-                
-                StoreStruct.clientID = application.clientID
-                StoreStruct.clientSecret = application.clientSecret
-                StoreStruct.returnedText = returnedText
-                
-                DispatchQueue.main.async {
-                    StoreStruct.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
-                    let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.redirect!)&scope=read%20write%20follow&client_id=\(application.clientID)")!
-                    self.safariVC = SFSafariViewController(url: queryURL)
-                    self.present(self.safariVC!, animated: true, completion: nil)
                 }
+            } else {
+                StoreStruct.client = Client(baseURL: "https://\(returnedText)")
+                let request = Clients.register(
+                    clientName: "Roma",
+                    redirectURI: "com.vm.roma://success",
+                    scopes: [.read, .write, .follow],
+                    website: "https://pleroma.com"
+                )
+                StoreStruct.client.run(request) { (application) in
+                    
+                    if application.value == nil {
+                        
+                        DispatchQueue.main.async {
+                            let statusAlert = StatusAlert()
+                            statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
+                            statusAlert.title = "Not a valid Instance".localized
+                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.message = "  an Instance name like mastodon.technology"
+                            statusAlert.show()
+                        }
+                        
+                    } else {
+                        let application = application.value!
+                        
+                        StoreStruct.shared.currentInstance.clientID = application.clientID
+                        StoreStruct.shared.currentInstance.clientSecret = application.clientSecret
+                        StoreStruct.shared.currentInstance.returnedText = returnedText
+                        
+                        DispatchQueue.main.async {
+                            StoreStruct.shared.currentInstance.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                            let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&scope=read%20write%20follow&client_id=\(application.clientID)")!
+                            self.safariVC = SFSafariViewController(url: queryURL)
+                            self.present(self.safariVC!, animated: true, completion: nil)
+                        }
+                    }
                 }
             }
+            
+            
+            
         }
         return true
             
         }
+    }
+    
+    func runCurrentClient(){
+        
+    }
+    
+    func runNewCleint(){
+       
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -1859,6 +1957,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             let request2 = Accounts.currentUser()
             StoreStruct.client.run(request2) { (statuses) in
                 if let stat = (statuses.value) {
+                    Account.addAccountToList(account: stat)
                     StoreStruct.currentUser = stat
                 }
             }
@@ -1873,8 +1972,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         }
         
         if let userDefaults = UserDefaults(suiteName: "group.com.vm.roma.wormhole") {
-            userDefaults.set(StoreStruct.client.accessToken ?? "", forKey: "key1")
-            userDefaults.set(StoreStruct.returnedText, forKey: "key2")
+            userDefaults.set(StoreStruct.shared.currentInstance.accessToken ?? "", forKey: "key1")
+            userDefaults.set(StoreStruct.shared.currentInstance.returnedText, forKey: "key2")
             userDefaults.synchronize()
         }
         

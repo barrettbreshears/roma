@@ -11,6 +11,10 @@ import UIKit
 
 struct StoreStruct {
     
+    init(){ }
+    
+    static var shared = StoreStruct()
+    
     // UIColor(red: 156/255.0, green: 203/255.0, blue: 88/255.0, alpha: 1.0)
     
     // UIColor(red: 107/255.0, green: 122/255.0, blue: 214/255.0, alpha: 1.0)
@@ -35,14 +39,11 @@ struct StoreStruct {
                            UIColor(red: 100/255.0, green: 100/255.0, blue: 110/255.0, alpha: 1.0),
                            UIColor(red: 58/255.0, green: 58/255.0, blue: 65/255.0, alpha: 1.0)]
     
-    static var client = Client(baseURL: "")
-    static var redirect: String?
-    static var returnedText = ""
-    static var clientID = ""
-    static var clientSecret = ""
-    static var authCode = ""
-    static var accessToken = ""
-    
+    static var client = Client(baseURL: StoreStruct.shared.currentInstance.returnedText, accessToken:StoreStruct.shared.currentInstance.accessToken)
+    var currentInstance:InstanceData = InstanceData.getCurrentInstance() ?? InstanceData()
+    var allInstances:[InstanceData] = InstanceData.getAllInstances()
+    var newClient = Client(baseURL: "")
+    var newInstance:InstanceData?
     static var currentPage = 0
     static var playerID = ""
     
@@ -77,8 +78,8 @@ struct StoreStruct {
     
     static var tappedTag = ""
     static var currentUser: Account!
+    static var userAccounts: [Account]!
     static var newInstanceTags: [Status] = []
-    static var instanceText = ""
     
     static var allLists: [List] = []
     static var allListRelID: String = ""

@@ -89,8 +89,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @objc func goInstance() {
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: 5000))
         let testClient = Client(
-            baseURL: "https://\(StoreStruct.instanceText)",
-            accessToken: StoreStruct.client.accessToken ?? ""
+            baseURL: "https://\(StoreStruct.shared.currentInstance.instanceText)",
+            accessToken: StoreStruct.shared.currentInstance.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in
             if let stat = (statuses.value) {

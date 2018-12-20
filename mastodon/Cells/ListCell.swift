@@ -41,6 +41,10 @@ class ListCell: SwipeTableViewCell {
         
     }
     
+    func configureInstance(instanceName:String){
+        userName.text = instanceName
+    }
+    
 }
 
 

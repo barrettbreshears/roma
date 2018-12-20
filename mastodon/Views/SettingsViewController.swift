@@ -22,11 +22,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     var segmentedControl: SJFluidSegmentedControl!
     var tableView = UITableView()
     var currentIndex = 0
+    var vc: ViewController?
     
-    public static let tipCalf = "com.vm.roma.calf"
-    public static let tipElephant = "com.vm.roma.elephant"
-    public static let tipMammoth = "com.vm.roma.mammoth"
-    public static let tipMastodon = "com.vm.roma.mastodon"
     var productID = ""
     var productsRequest = SKProductsRequest()
     var iapProducts = [SKProduct]()
@@ -197,6 +194,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse22")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse23")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse231")
+        self.tableView.register(AddInstanceCell.self, forCellReuseIdentifier: "addInstanceCell")
         self.tableView.alpha = 1
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -265,7 +263,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     // Table stuff
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 5
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -299,6 +297,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             title.text = "Appearance".localized
         } else if section == 3 {
             title.text = "Biometric Lock".localized
+        } else {
+            title.text = "Instances"
         }
         title.textColor = Colours.grayDark2
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
@@ -334,7 +334,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         } else if section == 3 {
             return self.bioArray.count
         } else {
-            return 0
+            return InstanceData.getAllInstances().count + 1
         }
     }
     
@@ -524,7 +524,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 bgColorView.backgroundColor = Colours.white
                 cell.selectedBackgroundView = bgColorView
                 return cell
-            } else {
+            }  else {
                 
                 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellse25", for: indexPath) as! SettingsCellToggle
@@ -719,6 +719,29 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             
             return cell
             
+
+        } else if indexPath.section == 4 {
+            
+            if indexPath.row == InstanceData.getAllInstances().count  {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "addInstanceCell") as! AddInstanceCell
+                cell.configure()
+                return cell
+            } else {
+                let instance = InstanceData.getAllInstances()[indexPath.row]
+                let account = Account.getAccounts()[indexPath.row]
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
+                let instanceAndAccount = "@\(instance.returnedText) "
+                cell.configure(status: account.username, status2:instanceAndAccount, image: "", imageURL:account.avatarStatic )
+                cell.backgroundColor = Colours.white
+                cell.userName.textColor = Colours.black
+                cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                let bgColorView = UIView()
+                bgColorView.backgroundColor = Colours.white
+                cell.selectedBackgroundView = bgColorView
+                return cell
+            }
+            
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
             cell.configure(status: self.aboutArray[indexPath.row], status2: self.aboutArrayDesc[indexPath.row], image: self.aboutArrayIm[indexPath.row])
@@ -730,7 +753,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             bgColorView.backgroundColor = Colours.white
             cell.selectedBackgroundView = bgColorView
             return cell
-        }
+        } 
         
     }
     
@@ -1786,6 +1809,27 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         
        
         
+        if indexPath.section == 4 {
+            let instances = InstanceData.getAllInstances()
+            if indexPath.row == instances.count {
+                // launch the sign in
+                let loginController = ViewController()
+                vc = loginController
+                loginController.loadingAdditionalInstance = true
+                loginController.createLoginView(newInstance: true)
+                self.navigationController?.pushViewController(loginController, animated: true)
+            } else {
+                
+                InstanceData.setCurrentInstance(instance: instances[indexPath.row])
+                
+                DispatchQueue.main.async {
+                    
+                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                    appDelegate.reloadApplication()
+                    
+                }
+            }
+        }
         
     }
     

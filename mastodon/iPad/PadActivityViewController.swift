@@ -8,23 +8,19 @@
 
 import Foundation
 import UIKit
-import SJFluidSegmentedControl
 import SafariServices
 import StatusAlert
 import SAConfettiView
 import ReactiveSSE
 import ReactiveSwift
 import OneSignal
-import AVKit
-import AVFoundation
 
-class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, OSSubscriptionObserver {
+class PadActivityViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, OSSubscriptionObserver {
     
     func onOSSubscriptionChanged(_ stateChanges: OSSubscriptionStateChanges!) {
         print("state changed")
     }
     
-    var newUpdatesB1 = UIButton()
     var newUpdatesB2 = UIButton()
     var countcount1 = 0
     var countcount2 = 0
@@ -37,11 +33,9 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
     var nsocket: WebSocket!
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .circleStrokeSpin, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
-    var segmentedControl: SJFluidSegmentedControl!
     var tableView = UITableView()
-    var tableView2 = UITableView()
     var refreshControl = UIRefreshControl()
-    var currentIndex = 1
+    var currentIndex = 0
     var doOnce = false
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
@@ -78,8 +72,8 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
             
         } else {
             
-            guard let indexPath = self.tableView2.indexPathForRow(at: location) else { return nil }
-            guard let cell = self.tableView2.cellForRow(at: indexPath) else { return nil }
+            guard let indexPath = self.tableView.indexPathForRow(at: location) else { return nil }
+            guard let cell = self.tableView.cellForRow(at: indexPath) else { return nil }
             let detailVC = DetailViewController()
             if self.currentIndex == 0 {
                 if indexPath.section == 0 {
@@ -130,7 +124,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
             DispatchQueue.main.async {
                 if StoreStruct.notifications.count > 0 {
                     let indexPath = IndexPath(row: 0, section: 0)
-                    self.tableView2.scrollToRow(at: indexPath, at: .top, animated: true)
+                    self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
                 }
             }
             
@@ -152,9 +146,9 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                 }
             }
         } else {
-            if self.tableView2.contentOffset.y == 0 {
+            if self.tableView.contentOffset.y == 0 {
                 DispatchQueue.main.async {
-                    self.tableView2.reloadData()
+                    self.tableView.reloadData()
                 }
             }
         }
@@ -186,7 +180,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: 5000))
         let testClient = Client(
             baseURL: "https://\(StoreStruct.shared.currentInstance.instanceText)",
-            accessToken: StoreStruct.shared.currentInstance.accessToken ?? ""
+            accessToken: StoreStruct.client.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in
             if let stat = (statuses.value) {
@@ -270,7 +264,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
             case 2688:
                 offset = 88
                 newoff = 45
-            case 2436, 1792:
+            case 2436:
                 offset = 88
                 newoff = 45
             default:
@@ -279,100 +273,40 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                 tabHeight = Int(UITabBarController().tabBar.frame.size.height)
             }
         }
-        segmentedControl.removeFromSuperview()
+        
         tableView.removeFromSuperview()
-        tableView2.removeFromSuperview()
-        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
-            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(30), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
-            segmentedControl.dataSource = self
-            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
-                segmentedControl.shapeStyle = .roundedRect
-            } else {
-                segmentedControl.shapeStyle = .liquid
-            }
-            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
-            segmentedControl.cornerRadius = 12
-            segmentedControl.shadowsEnabled = false
-            segmentedControl.transitionStyle = .slide
-            segmentedControl.delegate = self
-            self.navigationController?.view.addSubview(segmentedControl)
-            
-            self.tableView.register(GraphCell.self, forCellReuseIdentifier: "cellG")
-            self.tableView.register(NotificationCell.self, forCellReuseIdentifier: "cell3")
-            self.tableView.register(NotificationCellImage.self, forCellReuseIdentifier: "cell4")
-            self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
-            self.tableView.alpha = 1
-            self.tableView.delegate = self
-            self.tableView.dataSource = self
-            self.tableView.separatorStyle = .singleLine
-            self.tableView.backgroundColor = Colours.white
-            self.tableView.separatorColor = Colours.cellQuote
-            self.tableView.layer.masksToBounds = true
-            self.tableView.estimatedRowHeight = 89
-            self.tableView.rowHeight = UITableView.automaticDimension
-            self.view.addSubview(self.tableView)
-            
-            self.tableView2.register(GraphCell.self, forCellReuseIdentifier: "cellG02")
-            self.tableView2.register(NotificationCell.self, forCellReuseIdentifier: "cell302")
-            self.tableView2.register(NotificationCellImage.self, forCellReuseIdentifier: "cell402")
-            self.tableView2.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
-            self.tableView2.alpha = 0
-            self.tableView2.delegate = self
-            self.tableView2.dataSource = self
-            self.tableView2.separatorStyle = .singleLine
-            self.tableView2.backgroundColor = Colours.white
-            self.tableView2.separatorColor = Colours.cellQuote
-            self.tableView2.layer.masksToBounds = true
-            self.tableView2.estimatedRowHeight = 89
-            self.tableView2.rowHeight = UITableView.automaticDimension
-            self.view.addSubview(self.tableView2)
-            self.loadLoadLoad()
-        } else {
-            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
-            segmentedControl.dataSource = self
-            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
-                segmentedControl.shapeStyle = .roundedRect
-            } else {
-                segmentedControl.shapeStyle = .liquid
-            }
-            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
-            segmentedControl.cornerRadius = 12
-            segmentedControl.shadowsEnabled = false
-            segmentedControl.transitionStyle = .slide
-            segmentedControl.delegate = self
-            self.navigationController?.view.addSubview(segmentedControl)
-            
-            self.tableView.register(GraphCell.self, forCellReuseIdentifier: "cellG")
-            self.tableView.register(NotificationCell.self, forCellReuseIdentifier: "cell3")
-            self.tableView.register(NotificationCellImage.self, forCellReuseIdentifier: "cell4")
-            self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
-            self.tableView.alpha = 1
-            self.tableView.delegate = self
-            self.tableView.dataSource = self
-            self.tableView.separatorStyle = .singleLine
-            self.tableView.backgroundColor = Colours.white
-            self.tableView.separatorColor = Colours.cellQuote
-            self.tableView.layer.masksToBounds = true
-            self.tableView.estimatedRowHeight = 89
-            self.tableView.rowHeight = UITableView.automaticDimension
-            self.view.addSubview(self.tableView)
-            
-            self.tableView2.register(GraphCell.self, forCellReuseIdentifier: "cellG02")
-            self.tableView2.register(NotificationCell.self, forCellReuseIdentifier: "cell302")
-            self.tableView2.register(NotificationCellImage.self, forCellReuseIdentifier: "cell402")
-            self.tableView2.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
-            self.tableView2.alpha = 0
-            self.tableView2.delegate = self
-            self.tableView2.dataSource = self
-            self.tableView2.separatorStyle = .singleLine
-            self.tableView2.backgroundColor = Colours.white
-            self.tableView2.separatorColor = Colours.cellQuote
-            self.tableView2.layer.masksToBounds = true
-            self.tableView2.estimatedRowHeight = 89
-            self.tableView2.rowHeight = UITableView.automaticDimension
-            self.view.addSubview(self.tableView2)
-            self.loadLoadLoad()
-        }
+        tableView.removeFromSuperview()
+        
+        self.tableView.register(GraphCell.self, forCellReuseIdentifier: "cellG")
+        self.tableView.register(NotificationCell.self, forCellReuseIdentifier: "cell3")
+        self.tableView.register(NotificationCellImage.self, forCellReuseIdentifier: "cell4")
+        self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
+        self.tableView.alpha = 1
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.separatorStyle = .singleLine
+        self.tableView.backgroundColor = Colours.white
+        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.layer.masksToBounds = true
+        self.tableView.estimatedRowHeight = 89
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.view.addSubview(self.tableView)
+        
+        self.tableView.register(GraphCell.self, forCellReuseIdentifier: "cellG02")
+        self.tableView.register(NotificationCell.self, forCellReuseIdentifier: "cell302")
+        self.tableView.register(NotificationCellImage.self, forCellReuseIdentifier: "cell402")
+        self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
+        self.tableView.alpha = 0
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.separatorStyle = .singleLine
+        self.tableView.backgroundColor = Colours.white
+        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.layer.masksToBounds = true
+        self.tableView.estimatedRowHeight = 89
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.view.addSubview(self.tableView)
+        self.loadLoadLoad()
     }
     
     
@@ -435,19 +369,6 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
         NotificationCenter.default.post(name: Notification.Name(rawValue: "touchList"), object: nil)
     }
     
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if self.currentIndex == 0 {
-            UserDefaults.standard.set(self.tableView2.contentOffset.y, forKey: "savedRowNotif")
-        } else {
-            UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowMent")
-        }
-    }
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -460,21 +381,19 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
         NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTop2), name: NSNotification.Name(rawValue: "scrollTop2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.loadNewest), name: NSNotification.Name(rawValue: "loadNewest"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeSeg), name: NSNotification.Name(rawValue: "changeSeg"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.segTheme), name: NSNotification.Name(rawValue: "segTheme"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.startStream), name: NSNotification.Name(rawValue: "startStream"), object: nil)
         
         self.view.backgroundColor = Colours.white
+        self.title = "Activity"
+        splitViewController?.view.backgroundColor = Colours.cellQuote
         
         
-//        var settingsButton = MNGExpandedTouchAreaButton()
-//        settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 32, height: 32)))
-//        settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
-//        settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-//        settingsButton.adjustsImageWhenHighlighted = false
-//        settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
-//
-//        let done = UIBarButtonItem.init(customView: settingsButton)
-//        self.navigationItem.setLeftBarButton(done, animated: false)
+        //        UINavigationBar.appearance().shadowImage = UIImage()
+        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        //        UINavigationBar.appearance().backgroundColor = Colours.white
+        UINavigationBar.appearance().barTintColor = Colours.black
+        UINavigationBar.appearance().tintColor = Colours.black
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
         
         
         
@@ -486,7 +405,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
             case 2688:
                 offset = 88
                 newoff = 45
-            case 2436, 1792:
+            case 2436:
                 offset = 88
                 newoff = 45
             default:
@@ -497,120 +416,41 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
         }
         
         
-        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
-            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(30), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
-            segmentedControl.dataSource = self
-            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
-                segmentedControl.shapeStyle = .roundedRect
-            } else {
-                segmentedControl.shapeStyle = .liquid
-            }
-            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
-            segmentedControl.cornerRadius = 12
-            segmentedControl.shadowsEnabled = false
-            segmentedControl.transitionStyle = .slide
-            segmentedControl.delegate = self
-            self.navigationController?.view.addSubview(segmentedControl)
-            
-            self.tableView.register(GraphCell.self, forCellReuseIdentifier: "cellG")
-            self.tableView.register(NotificationCell.self, forCellReuseIdentifier: "cell3")
-            self.tableView.register(NotificationCellImage.self, forCellReuseIdentifier: "cell4")
-            self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
-            self.tableView.alpha = 1
-            self.tableView.delegate = self
-            self.tableView.dataSource = self
-            self.tableView.separatorStyle = .singleLine
-            self.tableView.backgroundColor = Colours.white
-            self.tableView.separatorColor = Colours.cellQuote
-            self.tableView.layer.masksToBounds = true
-            self.tableView.estimatedRowHeight = 89
-            self.tableView.rowHeight = UITableView.automaticDimension
-            self.view.addSubview(self.tableView)
-            
-            self.tableView2.register(GraphCell.self, forCellReuseIdentifier: "cellG02")
-            self.tableView2.register(NotificationCell.self, forCellReuseIdentifier: "cell302")
-            self.tableView2.register(NotificationCellImage.self, forCellReuseIdentifier: "cell402")
-            self.tableView2.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
-            self.tableView2.alpha = 0
-            self.tableView2.delegate = self
-            self.tableView2.dataSource = self
-            self.tableView2.separatorStyle = .singleLine
-            self.tableView2.backgroundColor = Colours.white
-            self.tableView2.separatorColor = Colours.cellQuote
-            self.tableView2.layer.masksToBounds = true
-            self.tableView2.estimatedRowHeight = 89
-            self.tableView2.rowHeight = UITableView.automaticDimension
-            self.view.addSubview(self.tableView2)
-        } else {
-            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
-            segmentedControl.dataSource = self
-            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
-                segmentedControl.shapeStyle = .roundedRect
-            } else {
-                segmentedControl.shapeStyle = .liquid
-            }
-            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
-            segmentedControl.cornerRadius = 12
-            segmentedControl.shadowsEnabled = false
-            segmentedControl.transitionStyle = .slide
-            segmentedControl.delegate = self
-            self.navigationController?.view.addSubview(segmentedControl)
-            
-            self.tableView.register(GraphCell.self, forCellReuseIdentifier: "cellG")
-            self.tableView.register(NotificationCell.self, forCellReuseIdentifier: "cell3")
-            self.tableView.register(NotificationCellImage.self, forCellReuseIdentifier: "cell4")
-            self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
-            self.tableView.alpha = 1
-            self.tableView.delegate = self
-            self.tableView.dataSource = self
-            self.tableView.separatorStyle = .singleLine
-            self.tableView.backgroundColor = Colours.white
-            self.tableView.separatorColor = Colours.cellQuote
-            self.tableView.layer.masksToBounds = true
-            self.tableView.estimatedRowHeight = 89
-            self.tableView.rowHeight = UITableView.automaticDimension
-            self.view.addSubview(self.tableView)
-            
-            self.tableView2.register(GraphCell.self, forCellReuseIdentifier: "cellG02")
-            self.tableView2.register(NotificationCell.self, forCellReuseIdentifier: "cell302")
-            self.tableView2.register(NotificationCellImage.self, forCellReuseIdentifier: "cell402")
-            self.tableView2.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
-            self.tableView2.alpha = 0
-            self.tableView2.delegate = self
-            self.tableView2.dataSource = self
-            self.tableView2.separatorStyle = .singleLine
-            self.tableView2.backgroundColor = Colours.white
-            self.tableView2.separatorColor = Colours.cellQuote
-            self.tableView2.layer.masksToBounds = true
-            self.tableView2.estimatedRowHeight = 89
-            self.tableView2.rowHeight = UITableView.automaticDimension
-            self.view.addSubview(self.tableView2)
-        }
+        self.tableView.register(GraphCell.self, forCellReuseIdentifier: "cellG")
+        self.tableView.register(NotificationCell.self, forCellReuseIdentifier: "cell3")
+        self.tableView.register(NotificationCellImage.self, forCellReuseIdentifier: "cell4")
+        self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
+        self.tableView.alpha = 0
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.separatorStyle = .singleLine
+        self.tableView.backgroundColor = Colours.white
+        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.layer.masksToBounds = true
+        self.tableView.estimatedRowHeight = 89
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.view.addSubview(self.tableView)
+        
+        self.tableView.register(GraphCell.self, forCellReuseIdentifier: "cellG02")
+        self.tableView.register(NotificationCell.self, forCellReuseIdentifier: "cell302")
+        self.tableView.register(NotificationCellImage.self, forCellReuseIdentifier: "cell402")
+        self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
+        self.tableView.alpha = 1
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.separatorStyle = .singleLine
+        self.tableView.backgroundColor = Colours.white
+        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.layer.masksToBounds = true
+        self.tableView.estimatedRowHeight = 89
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.view.addSubview(self.tableView)
+        
         
         
         refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
         //self.tableView.addSubview(refreshControl)
         
-        tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
-            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                let selection = UISelectionFeedbackGenerator()
-                selection.selectionChanged()
-            }
-            self?.refreshCont()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                self?.tableView.cr.endHeaderRefresh()
-            })
-        }
-        tableView2.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
-            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                let selection = UISelectionFeedbackGenerator()
-                selection.selectionChanged()
-            }
-            self?.refreshCont()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                self?.tableView2.cr.endHeaderRefresh()
-            })
-        }
         //tableView.cr.beginHeaderRefresh()
         
         
@@ -625,22 +465,22 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                 if let stat = (statuses.value) {
                     StoreStruct.notifications = stat
                     
-                    StoreStruct.notificationsMentions = []
+//                    StoreStruct.notificationsMentions = []
                     
-                    StoreStruct.notificationsMentions = StoreStruct.notifications.filter({ (test) -> Bool in
-                        test.type == .mention
-                    })
+//                    StoreStruct.notificationsMentions = StoreStruct.notifications.filter({ (test) -> Bool in
+//                        test.type == .mention
+//                    })
                     
                     
                     DispatchQueue.main.async {
-                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
-                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
+//                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
+//                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
                         
                         self.ai.alpha = 0
                         self.ai.removeFromSuperview()
                         
                         self.tableView.reloadData()
-                        self.tableView2.reloadData()
+                        self.tableView.reloadData()
                         
                     }
                     
@@ -655,7 +495,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                     //                                self.ai.removeFromSuperview()
                     //
                     //                                self.tableView.reloadData()
-                    //                                self.tableView2.reloadData()
+                    //                                self.tableView.reloadData()
                     //
                     //                            }
                     //                        }
@@ -680,7 +520,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                 self.ai.removeFromSuperview()
                 
                 self.tableView.reloadData()
-                self.tableView2.reloadData()
+                self.tableView.reloadData()
                 
             }
             
@@ -696,7 +536,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
             //                        self.ai.removeFromSuperview()
             //
             //                        self.tableView.reloadData()
-            //                        self.tableView2.reloadData()
+            //                        self.tableView.reloadData()
             //
             //                    }
             //                }
@@ -706,22 +546,50 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
         
         if (traitCollection.forceTouchCapability == .available) {
             registerForPreviewing(with: self, sourceView: self.tableView)
-            registerForPreviewing(with: self, sourceView: self.tableView2)
+            registerForPreviewing(with: self, sourceView: self.tableView)
         }
+    }
+    
+    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        print("newsize")
+        print(size)
+        
+        self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(size.width), height: Int(size.height))
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "becomeFirst"), object: self)
+        self.navigationController?.view.backgroundColor = Colours.white
+        
         StoreStruct.currentPage = 1
         //        self.tableView.reloadData()
-        //        self.tableView2.reloadData()
+        //        self.tableView.reloadData()
         
-        springWithDelay(duration: 0.4, delay: 0, animations: {
-            self.segmentedControl.alpha = 1
-            //            self.tableView.alpha = 1
-        })
+        self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.frame.width), height: Int(self.view.frame.height))
+        self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.frame.width), height: Int(self.view.frame.height))
         
+        tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                let selection = UISelectionFeedbackGenerator()
+                selection.selectionChanged()
+            }
+            self?.refreshCont()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                self?.tableView.cr.endHeaderRefresh()
+            })
+        }
+        tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                let selection = UISelectionFeedbackGenerator()
+                selection.selectionChanged()
+            }
+            self?.refreshCont()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                self?.tableView.cr.endHeaderRefresh()
+            })
+        }
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -731,7 +599,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
             case 2688:
                 offset = 88
                 newoff = 45
-            case 2436, 1792:
+            case 2436:
                 offset = 88
                 newoff = 45
             default:
@@ -742,20 +610,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
         }
         
         //bh4
-        var newSize = offset + 65
-        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
-            newSize = offset + 65
-        } else {
-            newSize = offset + 15
-        }
-        
-        self.newUpdatesB1.frame = CGRect(x: CGFloat(self.view.bounds.width - 42), y: CGFloat(newSize), width: CGFloat(56), height: CGFloat(30))
-        self.newUpdatesB1.backgroundColor = Colours.grayLight19
-        self.newUpdatesB1.layer.cornerRadius = 10
-        self.newUpdatesB1.setTitleColor(UIColor.white, for: .normal)
-        self.newUpdatesB1.setTitle("", for: .normal)
-        self.newUpdatesB1.alpha = 0
-        self.view.addSubview(self.newUpdatesB1)
+        var newSize = offset
         
         self.newUpdatesB2.frame = CGRect(x: CGFloat(self.view.bounds.width - 42), y: CGFloat(newSize), width: CGFloat(56), height: CGFloat(30))
         self.newUpdatesB2.backgroundColor = Colours.grayLight19
@@ -768,7 +623,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
         
         
         if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
-            self.streamDataNoti()
+        self.streamDataNoti()
         }
         
         OneSignal.add(self as OSSubscriptionObserver)
@@ -791,41 +646,19 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
             if self.tableView.indexPathsForVisibleRows?.contains(indexPath1) ?? false {
                 if self.countcount1 == 0 {
                     springWithDelay(duration: 0.4, delay: 0, animations: {
-                        self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
-                        //                        self.newUpdatesB1.transform = CGAffineTransform(translationX: 0, y: 0)
-                        springWithDelay(duration: 0.5, delay: 0, animations: {
-                            self.newUpdatesB1.alpha = 0
-                            self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
-                            //                            self.newUpdatesB1.transform = CGAffineTransform(translationX: 120, y: 0)
-                        })
                         self.countcount1 = 0
                     })
                 } else {
                     self.countcount1 = self.countcount1 - 1
                     if self.countcount1 == 0 {
                         springWithDelay(duration: 0.4, delay: 0, animations: {
-                            self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
-                            //                            self.newUpdatesB1.transform = CGAffineTransform(translationX: 0, y: 0)
-                            springWithDelay(duration: 0.5, delay: 0, animations: {
-                                self.newUpdatesB1.alpha = 0
-                                self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
-                                //                                self.newUpdatesB1.transform = CGAffineTransform(translationX: 120, y: 0)
-                            })
                             self.countcount1 = 0
                         })
                     }
                 }
-                self.newUpdatesB1.setTitle("\(self.countcount1)  ", for: .normal)
             }
             if (scrollView.contentOffset.y == 0) {
                 springWithDelay(duration: 0.4, delay: 0, animations: {
-                    self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
-                    //                    self.newUpdatesB1.transform = CGAffineTransform(translationX: 0, y: 0)
-                    springWithDelay(duration: 0.5, delay: 0, animations: {
-                        self.newUpdatesB1.alpha = 0
-                        self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
-                        //                        self.newUpdatesB1.transform = CGAffineTransform(translationX: 120, y: 0)
-                    })
                     self.countcount1 = 0
                 })
             }
@@ -835,7 +668,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
             
             
             let indexPath1 = IndexPath(row: self.countcount2 - 1, section: 1)
-            if self.tableView2.indexPathsForVisibleRows?.contains(indexPath1) ?? false {
+            if self.tableView.indexPathsForVisibleRows?.contains(indexPath1) ?? false {
                 if self.countcount2 == 0 {
                     springWithDelay(duration: 0.4, delay: 0, animations: {
                         self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
@@ -894,10 +727,10 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
     //                //                }
     //            } else {
     //
-    //                if self.tableView2.contentOffset.y == 0 {
+    //                if self.tableView.contentOffset.y == 0 {
     //                    StoreStruct.notifications = self.hMod.reversed() + StoreStruct.notifications
     //                    StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
-    //                    self.tableView2.reloadData()
+    //                    self.tableView.reloadData()
     //                    self.hMod = []
     //                }
     //            }
@@ -945,7 +778,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                         DispatchQueue.main.async {
                             //self.tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .none)
                             if self.currentIndex == 0 {
-                                if self.tableView2.contentOffset.y == 0 {
+                                if self.tableView.contentOffset.y == 0 {
                                     
                                     if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                         self.newUpdatesB2.setTitle("\(self.hMod.count)  ", for: .normal)
@@ -959,14 +792,14 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                                         self.countcount2 = self.hMod.count
                                         
                                         UIView.setAnimationsEnabled(false)
-                                        self.tableView2.reloadData()
+                                        self.tableView.reloadData()
                                         self.refreshControl.endRefreshing()
-                                        self.tableView2.scrollToRow(at: IndexPath(row: self.hMod.count, section: 1), at: .top, animated: false)
+                                        self.tableView.scrollToRow(at: IndexPath(row: self.hMod.count, section: 1), at: .top, animated: false)
                                         UIView.setAnimationsEnabled(true)
                                         
                                     } else {
                                         
-                                        self.tableView2.reloadData()
+                                        self.tableView.reloadData()
                                         self.refreshControl.endRefreshing()
                                     }
                                     
@@ -985,14 +818,6 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                                         StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
                                         
                                         if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
-                                            self.newUpdatesB1.setTitle("\(self.fMod.count)  ", for: .normal)
-                                            //                                        self.newUpdatesB1.transform = CGAffineTransform(translationX: 120, y: 0)
-                                            self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
-                                            springWithDelay(duration: 0.5, delay: 0, animations: {
-                                                self.newUpdatesB1.alpha = 1
-                                                //                                            self.newUpdatesB1.transform = CGAffineTransform(translationX: 0, y: 0)
-                                                self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
-                                            })
                                             self.countcount1 = self.fMod.count
                                             
                                             UIView.setAnimationsEnabled(false)
@@ -1034,152 +859,8 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
             self.ai.alpha = 0
             self.ai.removeFromSuperview()
         }
-//        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {} else {
-            springWithDelay(duration: 0.4, delay: 0, animations: {
-                self.segmentedControl.alpha = 0
-                //            self.tableView.alpha = 0
-            })
-//        }
-        if self.currentIndex == 0 {
-            UserDefaults.standard.set(self.tableView2.contentOffset.y, forKey: "savedRowNotif")
-        } else {
-            UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowMent")
-        }
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "becomeFirst"), object: self)
     }
-    
-    func numberOfSegmentsInSegmentedControl(_ segmentedControl: SJFluidSegmentedControl) -> Int {
-        return 2
-    }
-    
-    func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, titleForSegmentAtIndex index: Int) -> String? {
-        if index == 0 {
-            return "Mentions".localized
-        } else {
-            return "Activity".localized
-        }
-    }
-    
-    func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForSelectedSegmentAtIndex index: Int) -> [UIColor] {
-        return [Colours.tabSelected, Colours.tabSelected]
-    }
-    
-    func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForBounce bounce: SJFluidSegmentedControlBounce) -> [UIColor] {
-        return [Colours.tabSelected, Colours.tabSelected]
-    }
-    
-    func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, didChangeFromSegmentAtIndex fromIndex: Int, toSegmentAtIndex toIndex: Int) {
-        //backh2
-        DispatchQueue.main.async {
-            self.ai.alpha = 0
-            self.ai.removeFromSuperview()
-        }
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
-        if toIndex == 0 {
-            
-            if self.countcount1 == 0 {
-                self.newUpdatesB1.alpha = 0
-                self.newUpdatesB2.alpha = 0
-            } else {
-                self.newUpdatesB1.alpha = 1
-                self.newUpdatesB2.alpha = 0
-            }
-            
-            self.currentIndex = 1
-            //self.tableView.reloadData()
-            self.tableView.alpha = 1
-            self.tableView2.alpha = 0
-            
-            
-            self.tableView.reloadData()
-            if StoreStruct.notifications.isEmpty {
-                let request = Notifications.all(range: .default)
-                StoreStruct.client.run(request) { (statuses) in
-                    if let stat = (statuses.value) {
-                        StoreStruct.notifications = stat
-                        
-                        StoreStruct.notificationsMentions = []
-                        
-                        
-                        StoreStruct.notificationsMentions = StoreStruct.notifications.filter({ (test) -> Bool in
-                            test.type == .mention
-                        })
-                        
-                        
-                        DispatchQueue.main.async {
-                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
-                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-                            
-                            self.ai.alpha = 0
-                            self.ai.removeFromSuperview()
-                            
-                            self.tableView.reloadData()
-                            self.tableView2.reloadData()
-                            
-                        }
-                        
-                        
-                        
-                        //                        for x in stat {
-                        //                            if x.type == .mention {
-                        //                                StoreStruct.notificationsMentions.append(x)
-                        //                                DispatchQueue.main.async {
-                        //                                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
-                        //                                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-                        //
-                        //                                    self.ai.alpha = 0
-                        //                                    self.ai.removeFromSuperview()
-                        //
-                        //                                    self.tableView.reloadData()
-                        //                                }
-                        //                            }
-                        //                        }
-                        
-                    }
-                }
-            } else {
-                
-            }
-            
-            
-        }
-        if toIndex == 1 {
-            
-            if self.countcount2 == 0 {
-                self.newUpdatesB1.alpha = 0
-                self.newUpdatesB2.alpha = 0
-            } else {
-                self.newUpdatesB1.alpha = 0
-                self.newUpdatesB2.alpha = 1
-            }
-            
-            self.currentIndex = 0
-            //self.tableView2.reloadData()
-            self.tableView.alpha = 0
-            self.tableView2.alpha = 1
-            
-            
-            if StoreStruct.notifications.isEmpty {
-                let request = Notifications.all(range: .default)
-                StoreStruct.client.run(request) { (statuses) in
-                    if let stat = (statuses.value) {
-                        StoreStruct.notifications = stat
-                        self.tableView2.reloadData()
-                        
-                    }
-                }
-            } else {
-                self.tableView2.reloadData()
-            }
-            
-            
-        }
-    }
-    
-    
-    
     
     
     
@@ -1217,13 +898,12 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if tableView == self.tableView2 {
             
             if indexPath.section == 0 {
                 
                 // make graph in cell
                 
-                let cell = tableView2.dequeueReusableCell(withIdentifier: "cellG02", for: indexPath) as! GraphCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellG02", for: indexPath) as! GraphCell
                 //                let data: [Double] = [Double(20), Double(50), Double(12), Double(25), Double(15), Double(5), Double(21)]
                 //                let labels = ["S", "M", "T", "W", "T", "F", "S"]
                 //                cell.configure(data: data, labels: labels)
@@ -1241,12 +921,12 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                 
                 
                 
-                if StoreStruct.notifications.count == 0 || indexPath.row >= StoreStruct.notifications.count {
+                if StoreStruct.notifications.count == 0 {
                     
                     self.ai.stopAnimating()
                     self.ai.removeFromSuperview()
                     
-                    let cell = tableView2.dequeueReusableCell(withIdentifier: "cell302", for: indexPath) as! NotificationCell
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell302", for: indexPath) as! NotificationCell
                     cell.backgroundColor = Colours.white
                     let bgColorView = UIView()
                     bgColorView.backgroundColor = Colours.white
@@ -1259,11 +939,10 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                         self.fetchMoreNotifications()
                     }
                     
-                    
                     if let hasStatus = StoreStruct.notifications[indexPath.row].status {
                         
                         if hasStatus.mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
-                            let cell = tableView2.dequeueReusableCell(withIdentifier: "cell302", for: indexPath) as! NotificationCell
+                            let cell = tableView.dequeueReusableCell(withIdentifier: "cell302", for: indexPath) as! NotificationCell
                             cell.delegate = self
                             cell.configure(StoreStruct.notifications[indexPath.row])
                             cell.profileImageView.tag = indexPath.row
@@ -1346,7 +1025,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                             cell.selectedBackgroundView = bgColorView
                             return cell
                         } else {
-                            let cell = tableView2.dequeueReusableCell(withIdentifier: "cell402", for: indexPath) as! NotificationCellImage
+                            let cell = tableView.dequeueReusableCell(withIdentifier: "cell402", for: indexPath) as! NotificationCellImage
                             cell.delegate = self
                             cell.configure(StoreStruct.notifications[indexPath.row])
                             cell.profileImageView.tag = indexPath.row
@@ -1438,7 +1117,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                         
                     } else {
                         
-                        let cell = tableView2.dequeueReusableCell(withIdentifier: "cell302", for: indexPath) as! NotificationCell
+                        let cell = tableView.dequeueReusableCell(withIdentifier: "cell302", for: indexPath) as! NotificationCell
                         cell.delegate = self
                         cell.configure(StoreStruct.notifications[indexPath.row])
                         cell.backgroundColor = Colours.white
@@ -1523,294 +1202,6 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                 
             }
             
-        } else {
-            
-            
-            
-            
-            if StoreStruct.notificationsMentions.count == 0 || indexPath.row >= StoreStruct.notificationsMentions.count {
-                
-                self.ai.stopAnimating()
-                self.ai.removeFromSuperview()
-                
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell3", for: indexPath) as! NotificationCell
-                cell.backgroundColor = Colours.white
-                let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
-                cell.selectedBackgroundView = bgColorView
-                return cell
-            } else {
-                
-                
-                if indexPath.row == StoreStruct.notificationsMentions.count - 14 {
-                    self.fetchMoreNotifications()
-                }
-                if indexPath.row < 7 && self.doOnce == false {
-                    self.doOnce = true
-                    self.fetchMoreNotifications()
-                }
-                
-                if let hasStatus = StoreStruct.notificationsMentions[indexPath.row].status {
-                    
-                    if hasStatus.mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
-                        let cell = tableView.dequeueReusableCell(withIdentifier: "cell3", for: indexPath) as! NotificationCell
-                        cell.delegate = self
-                        cell.configure(StoreStruct.notificationsMentions[indexPath.row])
-                        cell.profileImageView.tag = indexPath.row
-                        cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
-                        cell.backgroundColor = Colours.white
-                        //cell.userName.textColor = Colours.black
-                        //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.date.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.toot.textColor = Colours.black
-                        cell.typeImage.backgroundColor = Colours.white
-                        cell.toot.handleMentionTap { (string) in
-                            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                                let selection = UISelectionFeedbackGenerator()
-                                selection.selectionChanged()
-                            }
-                            
-                            var newString = string
-                            for z2 in StoreStruct.notificationsMentions[indexPath.row].status!.mentions {
-                                if z2.acct.contains(string) {
-                                    newString = z2.acct
-                                }
-                            }
-                            
-                            
-                            let controller = ThirdViewController()
-                            if newString == StoreStruct.currentUser.username {} else {
-                                controller.fromOtherUser = true
-                            }
-                            let request = Accounts.search(query: newString)
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    if stat.count > 0 {
-                                        controller.userIDtoUse = stat[0].id
-                                        DispatchQueue.main.async {
-                                            self.navigationController?.pushViewController(controller, animated: true)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        cell.toot.handleURLTap { (url) in
-                            // safari
-                            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                                let selection = UISelectionFeedbackGenerator()
-                                selection.selectionChanged()
-                            }
-                            if url.absoluteString.hasPrefix(".") {
-                                let z = URL(string: String(url.absoluteString.dropFirst()))!
-                                self.safariVC = SFSafariViewController(url: z)
-                                self.safariVC?.preferredBarTintColor = Colours.white
-                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                self.present(self.safariVC!, animated: true, completion: nil)
-                            } else {
-                                self.safariVC = SFSafariViewController(url: url)
-                                self.safariVC?.preferredBarTintColor = Colours.white
-                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                self.present(self.safariVC!, animated: true, completion: nil)
-                            }
-                        }
-                        cell.toot.handleHashtagTap { (string) in
-                            // hash
-                            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                                let selection = UISelectionFeedbackGenerator()
-                                selection.selectionChanged()
-                            }
-                            let controller = HashtagViewController()
-                            controller.currentTagTitle = string
-                            let request = Timelines.tag(string)
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    controller.currentTags = stat
-                                    DispatchQueue.main.async {
-                                        self.navigationController?.pushViewController(controller, animated: true)
-                                    }
-                                }
-                            }
-                        }
-                        let bgColorView = UIView()
-                        bgColorView.backgroundColor = Colours.white
-                        cell.selectedBackgroundView = bgColorView
-                        return cell
-                    } else {
-                        let cell = tableView.dequeueReusableCell(withIdentifier: "cell4", for: indexPath) as! NotificationCellImage
-                        cell.delegate = self
-                        cell.configure(StoreStruct.notificationsMentions[indexPath.row])
-                        cell.profileImageView.tag = indexPath.row
-                        cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
-                        cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
-                        cell.mainImageView.tag = indexPath.row
-                        cell.backgroundColor = Colours.white
-                        //cell.userName.textColor = Colours.black
-                        //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.date.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.toot.textColor = Colours.black
-                        cell.typeImage.backgroundColor = Colours.white
-                        cell.mainImageView.backgroundColor = Colours.white
-                        cell.mainImageViewBG.backgroundColor = Colours.white
-                        cell.toot.handleMentionTap { (string) in
-                            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                                let selection = UISelectionFeedbackGenerator()
-                                selection.selectionChanged()
-                            }
-                            
-                            var newString = string
-                            for z2 in StoreStruct.notificationsMentions[indexPath.row].status!.mentions {
-                                if z2.acct.contains(string) {
-                                    newString = z2.acct
-                                }
-                            }
-                            
-                            
-                            let controller = ThirdViewController()
-                            if newString == StoreStruct.currentUser.username {} else {
-                                controller.fromOtherUser = true
-                            }
-                            let request = Accounts.search(query: newString)
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    if stat.count > 0 {
-                                        controller.userIDtoUse = stat[0].id
-                                        DispatchQueue.main.async {
-                                            self.navigationController?.pushViewController(controller, animated: true)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        cell.toot.handleURLTap { (url) in
-                            // safari
-                            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                                let selection = UISelectionFeedbackGenerator()
-                                selection.selectionChanged()
-                            }
-                            if url.absoluteString.hasPrefix(".") {
-                                let z = URL(string: String(url.absoluteString.dropFirst()))!
-                                self.safariVC = SFSafariViewController(url: z)
-                                self.safariVC?.preferredBarTintColor = Colours.white
-                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                self.present(self.safariVC!, animated: true, completion: nil)
-                            } else {
-                                self.safariVC = SFSafariViewController(url: url)
-                                self.safariVC?.preferredBarTintColor = Colours.white
-                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                self.present(self.safariVC!, animated: true, completion: nil)
-                            }
-                        }
-                        cell.toot.handleHashtagTap { (string) in
-                            // hash
-                            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                                let selection = UISelectionFeedbackGenerator()
-                                selection.selectionChanged()
-                            }
-                            let controller = HashtagViewController()
-                            controller.currentTagTitle = string
-                            let request = Timelines.tag(string)
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    controller.currentTags = stat
-                                    DispatchQueue.main.async {
-                                        self.navigationController?.pushViewController(controller, animated: true)
-                                    }
-                                }
-                            }
-                        }
-                        let bgColorView = UIView()
-                        bgColorView.backgroundColor = Colours.white
-                        cell.selectedBackgroundView = bgColorView
-                        return cell
-                    }
-                    
-                } else {
-                    
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell3", for: indexPath) as! NotificationCell
-                    cell.delegate = self
-                    cell.configure(StoreStruct.notificationsMentions[indexPath.row])
-                    cell.backgroundColor = Colours.white
-                    //cell.userName.textColor = Colours.black
-                    //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
-                    //cell.date.textColor = Colours.black.withAlphaComponent(0.6)
-                    //cell.toot.textColor = Colours.black
-                    cell.typeImage.backgroundColor = Colours.white
-                    cell.toot.handleMentionTap { (string) in
-                        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                            let selection = UISelectionFeedbackGenerator()
-                            selection.selectionChanged()
-                        }
-                        
-                        var newString = string
-                        for z2 in StoreStruct.notificationsMentions[indexPath.row].status!.mentions {
-                            if z2.acct.contains(string) {
-                                newString = z2.acct
-                            }
-                        }
-                        
-                        
-                        let controller = ThirdViewController()
-                        if newString == StoreStruct.currentUser.username {} else {
-                            controller.fromOtherUser = true
-                        }
-                        let request = Accounts.search(query: newString)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                if stat.count > 0 {
-                                    controller.userIDtoUse = stat[0].id
-                                    DispatchQueue.main.async {
-                                        self.navigationController?.pushViewController(controller, animated: true)
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    cell.toot.handleURLTap { (url) in
-                        // safari
-                        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                            let selection = UISelectionFeedbackGenerator()
-                            selection.selectionChanged()
-                        }
-                        if url.absoluteString.hasPrefix(".") {
-                            let z = URL(string: String(url.absoluteString.dropFirst()))!
-                            self.safariVC = SFSafariViewController(url: z)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
-                        } else {
-                            self.safariVC = SFSafariViewController(url: url)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
-                        }
-                    }
-                    cell.toot.handleHashtagTap { (string) in
-                        // hash
-                        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                            let selection = UISelectionFeedbackGenerator()
-                            selection.selectionChanged()
-                        }
-                        let controller = HashtagViewController()
-                        controller.currentTagTitle = string
-                        let request = Timelines.tag(string)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                controller.currentTags = stat
-                                DispatchQueue.main.async {
-                                    self.navigationController?.pushViewController(controller, animated: true)
-                                }
-                            }
-                        }
-                    }
-                    let bgColorView = UIView()
-                    bgColorView.backgroundColor = Colours.white
-                    cell.selectedBackgroundView = bgColorView
-                    return cell
-                    
-                }
-            }
-            
-        }
         
         
     }
@@ -1831,10 +1222,6 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
             sto = StoreStruct.notificationsMentions
         }
         
-        print(sender.tag)
-        print(sto[sender.tag].account.username)
-        print(sto[0].account.username)
-        print("test")
         
         let controller = ThirdViewController()
         if sto[sender.tag].account.username == StoreStruct.currentUser.username {} else {
@@ -1861,17 +1248,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
         if sto[sender.tag].status?.mediaAttachments[0].type == .video || sto[sender.tag].status?.mediaAttachments[0].type == .gifv {
             
             let videoURL = URL(string: sto[sender.tag].status!.mediaAttachments[0].url)!
-            if (UserDefaults.standard.object(forKey: "vidgif") == nil) || (UserDefaults.standard.object(forKey: "vidgif") as! Int == 0) {
-                XPlayer.play(videoURL)
-            } else {
-                let player = AVPlayer(url: videoURL)
-                let playerViewController = AVPlayerViewController()
-                playerViewController.player = player
-                self.present(playerViewController, animated: true) {
-                    playerViewController.player!.play()
-                }
-            }
-            
+            XPlayer.play(videoURL)
             
         } else {
             
@@ -1904,7 +1281,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                 }
             } else {
                 
-                let cell = tableView2.cellForRow(at: indexPath) as! NotificationCellImage
+                let cell = tableView.cellForRow(at: indexPath) as! NotificationCellImage
                 var images = [SKPhoto]()
                 for y in sto[indexPath.row].status!.mediaAttachments {
                     let photo = SKPhoto.photoWithImageURL(y.url, holder: sender.currentImage)
@@ -1936,7 +1313,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
         var sto = StoreStruct.notifications
         if self.currentIndex == 0 {
             sto = StoreStruct.notifications
-            theTable = self.tableView2
+            theTable = self.tableView
         } else if self.currentIndex == 1 {
             sto = StoreStruct.notificationsMentions
             theTable = self.tableView
@@ -2367,6 +1744,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                                         return
                                     }
                                 }
+                                .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
                                 .show(on: self)
                             
                             
@@ -2377,11 +1755,12 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                             let unreserved = "-._~/?"
                             let allowed = NSMutableCharacterSet.alphanumeric()
                             allowed.addCharacters(in: unreserved)
-                            let bodyText = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                            let unreservedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~"
-                            let unreservedCharset = NSCharacterSet(charactersIn: unreservedChars)
-                            var trans = bodyText.addingPercentEncoding(withAllowedCharacters: unreservedCharset as CharacterSet)
-                            trans = trans!.replacingOccurrences(of: "\n", with: "%20")
+                            var bodyText = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                            bodyText = bodyText.replacingOccurrences(of: ".", with: " ")
+                            bodyText = bodyText.replacingOccurrences(of: "!", with: " ")
+                            bodyText = bodyText.replacingOccurrences(of: "?", with: " ")
+                            bodyText = bodyText.replacingOccurrences(of: "~", with: " ")
+                            let trans = bodyText.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
                             let langStr = Locale.current.languageCode
                             let urlString = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=\(langStr ?? "en")&dt=t&q=\(trans!)&ie=UTF-8&oe=UTF-8"
                             guard let requestUrl = URL(string:urlString) else {
@@ -2393,11 +1772,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                                 if error == nil, let usableData = data {
                                     do {
                                         let json = try JSONSerialization.jsonObject(with: usableData, options: .mutableContainers) as! [Any]
-                                        
-                                        var translatedText = ""
-                                        for i in (json[0] as! [Any]) {
-                                            translatedText = translatedText + ((i as! [Any])[0] as? String ?? "")
-                                        }
+                                        let translatedText = ((((json[0] as! [Any])[0]) as! [Any])[0])
                                         
                                         Alertift.actionSheet(title: nil, message: translatedText as? String ?? "Could not translate tweet")
                                             .backgroundColor(Colours.white)
@@ -2411,6 +1786,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                                                     return
                                                 }
                                             }
+                                            .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
                                             .show(on: self)
                                     } catch let error as NSError {
                                         print(error)
@@ -2437,9 +1813,13 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                                     
                                     if let myWebsite = sto[indexPath.row].status?.url {
                                         let objectsToShare = [myWebsite]
-                                        let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-                                        vc.previewNumberOfLines = 5
-                                        vc.previewFont = UIFont.systemFont(ofSize: 14)
+                                        let vc = UIActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                                        vc.popoverPresentationController?.sourceView = self.view
+                                        vc.popoverPresentationController?.sourceRect = CGRect(x: (self.view.bounds.midX), y: (self.view.bounds.midY), width: 0, height: 0)
+                                        vc.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.init(rawValue: 0)
+//                                        let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+//                                        vc.previewNumberOfLines = 5
+//                                        vc.previewFont = UIFont.systemFont(ofSize: 14)
                                         self.present(vc, animated: true, completion: nil)
                                     }
                                 }
@@ -2447,9 +1827,13 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                                     print(action, ind)
                                     
                                     let bodyText = sto[indexPath.row].status?.content.stripHTML()
-                                    let vc = VisualActivityViewController(text: bodyText ?? "")
-                                    vc.previewNumberOfLines = 5
-                                    vc.previewFont = UIFont.systemFont(ofSize: 14)
+                                    let vc = UIActivityViewController(activityItems: [bodyText ?? ""], applicationActivities: nil)
+                                    vc.popoverPresentationController?.sourceView = self.view
+                                    vc.popoverPresentationController?.sourceRect = CGRect(x: (self.view.bounds.midX), y: (self.view.bounds.midY), width: 0, height: 0)
+                                    vc.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.init(rawValue: 0)
+//                                    let vc = VisualActivityViewController(text: bodyText ?? "")
+//                                    vc.previewNumberOfLines = 5
+//                                    vc.previewFont = UIFont.systemFont(ofSize: 14)
                                     self.present(vc, animated: true, completion: nil)
                                     
                                 }
@@ -2459,6 +1843,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                                         return
                                     }
                                 }
+                                .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
                                 .show(on: self)
                             
                             
@@ -2471,6 +1856,7 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                                 return
                             }
                         }
+                        .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
                         .show(on: self)
                     
                     
@@ -2505,39 +1891,10 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
         return options
     }
     
-    
-    
-    func restoreScroll() {
-        DispatchQueue.main.async {
-            self.tableView2.reloadData()
-            if (UserDefaults.standard.object(forKey: "savedRowNotif") == nil) {} else {
-                if StoreStruct.notifications.count > 5 {
-                    self.tableView2.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowNotif") as! CGFloat), animated: false)
-                }
-            }
-        }
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            if (UserDefaults.standard.object(forKey: "savedRowMent") == nil) {} else {
-                if StoreStruct.notificationsMentions.count > 5 {
-                    self.tableView.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowMent") as! CGFloat), animated: false)
-                }
-            }
-        }
-    }
-    
-    
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath)
         self.tableView.deselectRow(at: indexPath, animated: true)
-        self.tableView2.deselectRow(at: indexPath, animated: true)
-        
-        if self.currentIndex == 0 {
-            UserDefaults.standard.set(self.tableView2.contentOffset.y, forKey: "savedRowNotif")
-        } else {
-            UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowMent")
-        }
+        self.tableView.deselectRow(at: indexPath, animated: true)
         
         if self.currentIndex == 0 {
             if indexPath.section == 1 {
@@ -2575,21 +1932,21 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                     self.lastThing = stat.first?.id ?? ""
                     StoreStruct.notifications = StoreStruct.notifications + stat
                     
-                    for x in stat {
-                        if x.type == .mention {
-                            StoreStruct.notificationsMentions.append(x)
-                        }
-                    }
+//                    for x in stat {
+//                        if x.type == .mention {
+//                            StoreStruct.notificationsMentions.append(x)
+//                        }
+//                    }
                     
                     DispatchQueue.main.async {
-                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
+//                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
                         StoreStruct.notifications = StoreStruct.notifications.sorted(by: { $0.createdAt > $1.createdAt })
                         
                         StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
-                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
+//                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
                         
                         self.tableView.reloadData()
-                        self.tableView2.reloadData()
+                        self.tableView.reloadData()
                         
                     }
                     
@@ -2604,27 +1961,27 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
                     var newestC = StoreStruct.notifications.count
-                    var newestC2 = StoreStruct.notificationsMentions.count
+//                    var newestC2 = StoreStruct.notificationsMentions.count
                     
                     StoreStruct.notifications = stat + StoreStruct.notifications
                     var co = 0
-                    for x in stat {
-                        if x.type == .mention {
-                            StoreStruct.notificationsMentions = [x] + StoreStruct.notificationsMentions
-                            co = co + 1
-                        }
-                    }
+//                    for x in stat {
+//                        if x.type == .mention {
+//                            StoreStruct.notificationsMentions = [x] + StoreStruct.notificationsMentions
+//                            co = co + 1
+//                        }
+//                    }
                     
                     DispatchQueue.main.async {
-                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
+//                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
                         StoreStruct.notifications = StoreStruct.notifications.sorted(by: { $0.createdAt > $1.createdAt })
                         StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
-                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
+//                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
                         
                         newestC = StoreStruct.notifications.count - newestC
-                        newestC2 = StoreStruct.notificationsMentions.count - newestC2
+//                        newestC2 = StoreStruct.notificationsMentions.count - newestC2
                         //                        self.tableView.reloadData()
-                        //                        self.tableView2.reloadData()
+                        //                        self.tableView.reloadData()
                         //
                         //                        self.refreshControl.endRefreshing()
                         
@@ -2633,18 +1990,18 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                         if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                             
                             
-                            if self.currentIndex == 1 {
-                                self.newUpdatesB1.setTitle("\(newestC2)  ", for: .normal)
-                                //                        self.newUpdatesB1.transform = CGAffineTransform(translationX: 120, y: 0)
-                                self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width + 78)
-                                springWithDelay(duration: 0.5, delay: 0, animations: {
-                                    self.newUpdatesB1.alpha = 1
-                                    //                            self.newUpdatesB1.transform = CGAffineTransform(translationX: 0, y: 0)
-                                    self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
-                                })
-                                self.countcount1 = co
-                            } else {
-                                
+//                            if self.currentIndex == 1 {
+//                                self.newUpdatesB1.setTitle("\(newestC2)  ", for: .normal)
+//                                //                        self.newUpdatesB1.transform = CGAffineTransform(translationX: 120, y: 0)
+//                                self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+//                                springWithDelay(duration: 0.5, delay: 0, animations: {
+//                                    self.newUpdatesB1.alpha = 1
+//                                    //                            self.newUpdatesB1.transform = CGAffineTransform(translationX: 0, y: 0)
+//                                    self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+//                                })
+//                                self.countcount1 = co
+//                            } else {
+                            
                                 self.newUpdatesB2.setTitle("\(newestC)  ", for: .normal)
                                 //                            self.newUpdatesB2.transform = CGAffineTransform(translationX: 120, y: 0)
                                 self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width + 78)
@@ -2656,27 +2013,26 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
                                 self.countcount2 = newestC
                                 
                                 
-                            }
+//                            }
                             
                             UIView.setAnimationsEnabled(false)
                             self.tableView.reloadData()
-                            self.tableView2.reloadData()
+                            self.tableView.reloadData()
                             self.refreshControl.endRefreshing()
-                            if self.currentIndex == 1 {
-                                if StoreStruct.notificationsMentions.count > newestC2 {
-                                    self.tableView.scrollToRow(at: IndexPath(row: newestC2, section: 0), at: .top, animated: false)
-                                }
-                            } else {
+//                            if self.currentIndex == 1 {
+//                                if StoreStruct.notificationsMentions.count > newestC2 {
+//                                    self.tableView.scrollToRow(at: IndexPath(row: newestC2, section: 0), at: .top, animated: false)
+//                                }
+//                            } else {
                                 if StoreStruct.notifications.count > newestC {
-                                    self.tableView2.scrollToRow(at: IndexPath(row: newestC, section: 1), at: .top, animated: false)
+                                    self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 1), at: .top, animated: false)
                                 }
-                            }
-                            self.restoreScroll()
+//                            }
                             UIView.setAnimationsEnabled(true)
                             
                         } else {
                             self.tableView.reloadData()
-                            self.tableView2.reloadData()
+                            self.tableView.reloadData()
                             self.refreshControl.endRefreshing()
                         }
                         
@@ -2798,16 +2154,16 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
         self.tableView.reloadData()
         self.tableView.reloadInputViews()
         
-        self.tableView2.backgroundColor = Colours.white
-        self.tableView2.separatorColor = Colours.cellQuote
-        self.tableView2.reloadData()
-        self.tableView2.reloadInputViews()
+        self.tableView.backgroundColor = Colours.white
+        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.reloadData()
+        self.tableView.reloadInputViews()
         
-        
-        self.navigationController?.view.backgroundColor = Colours.white
         self.navigationController?.navigationBar.backgroundColor = Colours.white
         self.navigationController?.navigationBar.tintColor = Colours.black
-        
+        self.navigationController?.navigationBar.barTintColor = Colours.black
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
+        self.splitViewController?.view.backgroundColor = Colours.cellQuote
         
         //        var customStyle = VolumeBarStyle.likeInstagram
         //        customStyle.trackTintColor = Colours.cellQuote
@@ -2821,57 +2177,6 @@ class PadMentionsViewController: UIViewController, SJFluidSegmentedControlDataSo
         //        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.grayDark]
         //        self.collectionView.backgroundColor = Colours.white
         //        self.removeTabbarItemsText()
-    }
-    
-    @objc func segTheme() {
-        var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
-        var offset = 88
-        var newoff = 45
-        if UIDevice().userInterfaceIdiom == .phone {
-            switch UIScreen.main.nativeBounds.height {
-            case 2688:
-                offset = 88
-                newoff = 45
-            case 2436, 1792:
-                offset = 88
-                newoff = 45
-            default:
-                offset = 64
-                newoff = 24
-                tabHeight = Int(UITabBarController().tabBar.frame.size.height)
-            }
-        }
-        segmentedControl.removeFromSuperview()
-        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
-            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(30), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
-            segmentedControl.dataSource = self
-            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
-                segmentedControl.shapeStyle = .roundedRect
-            } else {
-                segmentedControl.shapeStyle = .liquid
-            }
-            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
-            segmentedControl.cornerRadius = 12
-            segmentedControl.shadowsEnabled = false
-            segmentedControl.transitionStyle = .slide
-            segmentedControl.delegate = self
-            self.navigationController?.view.addSubview(segmentedControl)
-        } else {
-            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
-            segmentedControl.dataSource = self
-            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
-                segmentedControl.shapeStyle = .roundedRect
-            } else {
-                segmentedControl.shapeStyle = .liquid
-            }
-            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
-            segmentedControl.cornerRadius = 12
-            segmentedControl.shadowsEnabled = false
-            segmentedControl.transitionStyle = .slide
-            segmentedControl.delegate = self
-            self.navigationController?.view.addSubview(segmentedControl)
-        }
-        
     }
     
 }

@@ -64,10 +64,14 @@ class SettingsCell: SwipeTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(status: String, status2: String, image: String) {
+    func configure(status: String, status2: String, image: String = "", imageURL:String?=nil) {
         userTag.text = status
         toot.text = status2
         profileImageView.image = UIImage(named: image)
+        
+        if imageURL != nil {
+            profileImageView.pin_setImage(from: URL(string:imageURL!))
+        }
         
         userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
         userTag.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
@@ -75,6 +79,7 @@ class SettingsCell: SwipeTableViewCell {
         
         
     }
+    
     
 }
 

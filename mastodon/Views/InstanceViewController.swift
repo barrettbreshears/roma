@@ -250,7 +250,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
         title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
-        title.text = StoreStruct.instanceText.lowercased()
+        title.text = StoreStruct.shared.currentInstance.instanceText.lowercased()
         title.textColor = Colours.grayDark2
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         vw.addSubview(title)
@@ -1187,7 +1187,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
         
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: 5000))
         let testClient = Client(
-            baseURL: "https://\(StoreStruct.instanceText)",
+            baseURL: "https://\(StoreStruct.shared.currentInstance.instanceText)",
             accessToken: StoreStruct.client.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in
@@ -1209,7 +1209,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
         
         let request = Timelines.public(local: true, range: .min(id: StoreStruct.newInstanceTags.first?.id ?? "", limit: 5000))
         let testClient = Client(
-            baseURL: "https://\(StoreStruct.instanceText)",
+            baseURL: "https://\(StoreStruct.shared.currentInstance.instanceText)",
             accessToken: StoreStruct.client.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in

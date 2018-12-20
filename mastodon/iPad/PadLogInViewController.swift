@@ -193,13 +193,13 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
                     } else {
                         let application = application.value!
                         
-                        StoreStruct.clientID = application.clientID
-                        StoreStruct.clientSecret = application.clientSecret
-                        StoreStruct.returnedText = returnedText
+                        StoreStruct.shared.currentInstance.clientID = application.clientID
+                        StoreStruct.shared.currentInstance.clientSecret = application.clientSecret
+                        StoreStruct.shared.currentInstance.returnedText = returnedText
                         
                         DispatchQueue.main.async {
-                            StoreStruct.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)
-                            let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.redirect!)&scope=read%20write%20follow&client_id=\(application.clientID)")!
+                            StoreStruct.shared.currentInstance.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                            let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&scope=read%20write%20follow&client_id=\(application.clientID)")!
                             self.safariVC = SFSafariViewController(url: queryURL)
                             self.present(self.safariVC!, animated: true, completion: nil)
                         }
@@ -221,7 +221,7 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
         self.textField.removeFromSuperview()
         self.safariVC!.dismiss(animated: true, completion: nil)
         
-        var request = URLRequest(url: URL(string: "https://\(StoreStruct.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.authCode)&redirect_uri=\(StoreStruct.redirect!)&client_id=\(StoreStruct.clientID)&client_secret=\(StoreStruct.clientSecret)")!)
+        var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.currentInstance.authCode)&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&client_id=\(StoreStruct.shared.currentInstance.clientID)&client_secret=\(StoreStruct.shared.currentInstance.clientSecret)")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -244,14 +244,14 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
                     }
                     
                     
-                    StoreStruct.accessToken = (json["access_token"] as! String)
-                    StoreStruct.client.accessToken = StoreStruct.accessToken
+                    StoreStruct.shared.currentInstance.accessToken = (json["access_token"] as! String)
+                    StoreStruct.client.accessToken = StoreStruct.shared.currentInstance.accessToken
                     
-                    UserDefaults.standard.set(StoreStruct.clientID, forKey: "clientID")
-                    UserDefaults.standard.set(StoreStruct.clientSecret, forKey: "clientSecret")
-                    UserDefaults.standard.set(StoreStruct.authCode, forKey: "authCode")
-                    UserDefaults.standard.set(StoreStruct.accessToken, forKey: "accessToken2")
-                    UserDefaults.standard.set(StoreStruct.returnedText, forKey: "returnedText")
+                    UserDefaults.standard.set(StoreStruct.shared.currentInstance.clientID, forKey: "clientID")
+                    UserDefaults.standard.set(StoreStruct.shared.currentInstance.clientSecret, forKey: "clientSecret")
+                    UserDefaults.standard.set(StoreStruct.shared.currentInstance.authCode, forKey: "authCode")
+                    UserDefaults.standard.set(StoreStruct.shared.currentInstance.accessToken, forKey: "accessToken2")
+                    UserDefaults.standard.set(StoreStruct.shared.currentInstance.returnedText, forKey: "returnedText")
                     
                     let request = Timelines.home()
                     StoreStruct.client.run(request) { (statuses) in

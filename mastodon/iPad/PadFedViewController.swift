@@ -163,8 +163,8 @@ class PadFedViewController: UIViewController, UITableViewDelegate, UITableViewDa
     @objc func goInstance() {
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: nil))
         let testClient = Client(
-            baseURL: "https://\(StoreStruct.instanceText)",
-            accessToken: StoreStruct.client.accessToken ?? ""
+            baseURL: "https://\(StoreStruct.shared.currentInstance.instanceText)",
+            accessToken: StoreStruct.shared.currentInstance.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in
             if let stat = (statuses.value) {
@@ -733,7 +733,7 @@ class PadFedViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         
         
-        let applicationContext = [StoreStruct.client.accessToken ?? "": StoreStruct.returnedText]
+        let applicationContext = [StoreStruct.shared.currentInstance.accessToken ?? "": StoreStruct.shared.currentInstance.returnedText]
         WatchSessionManager.sharedManager.transferUserInfo(userInfo: applicationContext as [String: AnyObject])
         
         //        let request = Notifications.all(range: .default)
@@ -857,7 +857,7 @@ class PadFedViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             var sss = StoreStruct.client.baseURL.replacingOccurrences(of: "https", with: "wss")
             sss = sss.replacingOccurrences(of: "http", with: "wss")
-            socket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/user?access_token=\(StoreStruct.accessToken)&stream=user")!)
+            socket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/user?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=user")!)
             socket.onConnect = {
                 print("websocket is connected")
             }
@@ -935,7 +935,7 @@ class PadFedViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             var sss = StoreStruct.client.baseURL.replacingOccurrences(of: "https", with: "wss")
             sss = sss.replacingOccurrences(of: "http", with: "wss")
-            lsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/public?access_token=\(StoreStruct.accessToken)&stream=public/local")!)
+            lsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/public?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=public/local")!)
             lsocket.onConnect = {
                 print("websocket is connected")
             }
@@ -1006,7 +1006,7 @@ class PadFedViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             var sss = StoreStruct.client.baseURL.replacingOccurrences(of: "https", with: "wss")
             sss = sss.replacingOccurrences(of: "http", with: "wss")
-            fsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/public?access_token=\(StoreStruct.accessToken)&stream=public")!)
+            fsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/public?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=public")!)
             fsocket.onConnect = {
                 print("websocket is connected")
             }
@@ -1670,7 +1670,7 @@ class PadFedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
                 
                 let controller = ComposeViewController()
-                controller.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
+                StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                 controller.inReply = [sto[indexPath.row].reblog ?? sto[indexPath.row]]
                 controller.prevTextReply = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
                 controller.inReplyText = sto[indexPath.row].reblog?.account.username ?? sto[indexPath.row].account.username
@@ -1788,7 +1788,7 @@ class PadFedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             print(action, ind)
                             
                             let controller = ComposeViewController()
-                            controller.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
+                            StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                             controller.idToDel = sto[indexPath.row].id
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
                             self.present(controller, animated: true, completion: nil)
@@ -2345,9 +2345,9 @@ class PadFedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             
                             
                             do {
-                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
-                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
-                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
                             } catch {
                                 print("Couldn't save")
                             }
@@ -2386,9 +2386,9 @@ class PadFedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             
                             
                             do {
-                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
-                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
-                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
                             } catch {
                                 print("Couldn't save")
                             }
@@ -2433,9 +2433,9 @@ class PadFedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             
                             
                             do {
-                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
-                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
-                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
                             } catch {
                                 print("Couldn't save")
                             }

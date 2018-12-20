@@ -28,7 +28,7 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         if let playerId = stateChanges.to.userId {
             print("Current playerId \(playerId)")
             let x00 = StoreStruct.client.baseURL
-            let x11 = StoreStruct.accessToken
+            let x11 = StoreStruct.shared.currentInstance.accessToken
             let player = playerId
             StoreStruct.playerID = playerId
             
@@ -367,10 +367,10 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
             
             
             
-            StoreStruct.accessToken = UserDefaults.standard.object(forKey: "accessToken2") as! String
+            StoreStruct.shared.currentInstance.accessToken = UserDefaults.standard.object(forKey: "accessToken2") as! String
             StoreStruct.client = Client(
-                baseURL: "https://\(StoreStruct.returnedText)",
-                accessToken: StoreStruct.accessToken
+                baseURL: "https://\(StoreStruct.shared.currentInstance.returnedText)",
+                accessToken: StoreStruct.shared.currentInstance.accessToken
             )
             
             
@@ -534,16 +534,16 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         
         
         if UserDefaults.standard.object(forKey: "clientID") == nil {} else {
-            StoreStruct.clientID = UserDefaults.standard.object(forKey: "clientID") as! String
+            StoreStruct.shared.currentInstance.clientID = UserDefaults.standard.object(forKey: "clientID") as! String
         }
         if UserDefaults.standard.object(forKey: "clientSecret") == nil {} else {
-            StoreStruct.clientSecret = UserDefaults.standard.object(forKey: "clientSecret") as! String
+            StoreStruct.shared.currentInstance.clientSecret = UserDefaults.standard.object(forKey: "clientSecret") as! String
         }
         if UserDefaults.standard.object(forKey: "authCode") == nil {} else {
-            StoreStruct.authCode = UserDefaults.standard.object(forKey: "authCode") as! String
+            StoreStruct.shared.currentInstance.authCode = UserDefaults.standard.object(forKey: "authCode") as! String
         }
         if UserDefaults.standard.object(forKey: "returnedText") == nil {} else {
-            StoreStruct.returnedText = UserDefaults.standard.object(forKey: "returnedText") as! String
+            StoreStruct.shared.currentInstance.returnedText = UserDefaults.standard.object(forKey: "returnedText") as! String
         }
         
         

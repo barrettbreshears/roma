@@ -229,10 +229,10 @@ class NewInstanceViewController: UIViewController, UITextViewDelegate {
                 
                 DispatchQueue.main.async {
                 // go to next view
-                StoreStruct.instanceText = self.textView.text
+                StoreStruct.shared.currentInstance.instanceText = self.textView.text
                     
-                    if StoreStruct.instanceLocalToAdd.contains(StoreStruct.instanceText.lowercased()) {} else {
-                        StoreStruct.instanceLocalToAdd.append(StoreStruct.instanceText.lowercased())
+                    if StoreStruct.instanceLocalToAdd.contains(StoreStruct.shared.currentInstance.instanceText.lowercased()) {} else {
+                        StoreStruct.instanceLocalToAdd.append(StoreStruct.shared.currentInstance.instanceText.lowercased())
                         UserDefaults.standard.set(StoreStruct.instanceLocalToAdd, forKey: "instancesLocal")
                     }
                 self.textView.resignFirstResponder()

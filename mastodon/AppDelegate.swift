@@ -17,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
     var blurEffectViewMain = UIView()
     
+    var storeStruct = StoreStruct.shared
     var blurEffect0 = UIBlurEffect()
     var blurEffectView0 = UIVisualEffectView()
     
@@ -91,12 +92,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        print("Response ==> \(url.absoluteString)")
-        let x = url.absoluteString
-        let y = x.split(separator: "=")
-        StoreStruct.authCode = y[1].description
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
-        return true
+        
+        if url.host == "addNewInstance" {
+            print("Response ==> \(url.absoluteString)")
+            let x = url.absoluteString
+            let y = x.split(separator: "=")
+            StoreStruct.shared.newInstance!.authCode = y[1].description
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged"), object: nil)
+            return true
+        } else {
+            print("Response ==> \(url.absoluteString)")
+            let x = url.absoluteString
+            let y = x.split(separator: "=")
+            StoreStruct.shared.currentInstance.authCode = y[1].description
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
+            return true
+        }
     }
 
     
@@ -181,12 +192,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         do {
-            StoreStruct.statusesHome = try Disk.retrieve("home.json", from: .documents, as: [Status].self)
-            StoreStruct.statusesLocal = try Disk.retrieve("local.json", from: .documents, as: [Status].self)
-            StoreStruct.statusesFederated = try Disk.retrieve("fed.json", from: .documents, as: [Status].self)
-            StoreStruct.notifications = try Disk.retrieve("noti.json", from: .documents, as: [Notificationt].self)
-            StoreStruct.notificationsMentions = try Disk.retrieve("ment.json", from: .documents, as: [Notificationt].self)
-            StoreStruct.currentUser = try Disk.retrieve("use.json", from: .documents, as: Account.self)
+            StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
+            StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
+            StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
+            StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
+            StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
+            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)use.json", from: .documents, as: Account.self)
         } catch {
             print("Couldn't load")
         }
@@ -210,14 +221,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UserDefaults.standard.set(StoreStruct.currentUser.username, forKey: "userN")
         do {
-            try Disk.save(StoreStruct.currentUser, to: .documents, as: "use.json")
+            try Disk.save(StoreStruct.currentUser, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)use.json")
             
-            try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
-            try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
-            try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+            try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+            try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+            try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
             
-            try Disk.save(StoreStruct.notifications, to: .documents, as: "noti.json")
-            try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "ment.json")
+            try Disk.save(StoreStruct.notifications, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)noti.json")
+            try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)ment.json")
         } catch {
             print("Couldn't save")
         }
@@ -278,6 +289,68 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }) { (error) in
             print(error.message())
             self.biometricAuthenticationClicked(self)
+        }
+    }
+    
+    func reloadApplication(){
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone:
+            self.window?.rootViewController = ViewController()
+            self.window?.makeKeyAndVisible()
+        case .pad:
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            self.window!.backgroundColor = Colours.white
+            
+            let splitViewController =  UISplitViewController()
+            let rootViewController = PadViewController()
+            
+            let splitViewController2 =  UISplitViewController()
+            let rootViewController2 = PadTimelinesViewController()
+            let rootNavigationController2 = UINavigationController(rootViewController: rootViewController2)
+            
+            let splitViewController3 =  UISplitViewController()
+            let rootViewController3 = PadLocalTimelinesViewController()
+            let detailViewController3 = PadFedViewController()
+            let rootNavigationController3 = UINavigationController(rootViewController: rootViewController3)
+            let detailNavigationController3 = UINavigationController(rootViewController: detailViewController3)
+            
+            splitViewController3.viewControllers = [rootNavigationController3, detailNavigationController3]
+            splitViewController3.preferredPrimaryColumnWidthFraction = 0.5
+            if UIDevice.current.orientation.isPortrait {
+                splitViewController3.preferredDisplayMode = .allVisible
+            } else {
+                splitViewController3.preferredDisplayMode = .primaryHidden
+            }
+            
+            splitViewController2.viewControllers = [rootNavigationController2, splitViewController3]
+            splitViewController2.preferredPrimaryColumnWidthFraction = 0.5
+            splitViewController2.preferredDisplayMode = .allVisible
+            
+            splitViewController.viewControllers = [rootViewController, splitViewController2]
+            splitViewController.minimumPrimaryColumnWidth = 80
+            splitViewController.maximumPrimaryColumnWidth = 80
+            splitViewController.preferredDisplayMode = .allVisible
+            
+            splitViewController.view.backgroundColor = Colours.white
+            splitViewController2.view.backgroundColor = Colours.white
+            splitViewController3.view.backgroundColor = Colours.white
+            rootNavigationController2.view.backgroundColor = Colours.white
+            rootNavigationController3.view.backgroundColor = Colours.white
+            detailNavigationController3.view.backgroundColor = Colours.white
+            self.window!.rootViewController = splitViewController
+            self.window!.makeKeyAndVisible()
+            
+            
+            UINavigationBar.appearance().shadowImage = UIImage()
+            UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+            UINavigationBar.appearance().backgroundColor = Colours.white
+            UINavigationBar.appearance().barTintColor = Colours.black
+            UINavigationBar.appearance().tintColor = Colours.black
+            UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
+        default:
+            self.window?.rootViewController = ViewController()
+            self.window?.makeKeyAndVisible()
         }
     }
 }

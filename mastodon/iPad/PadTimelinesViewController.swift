@@ -169,8 +169,8 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
     @objc func goInstance() {
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: nil))
         let testClient = Client(
-            baseURL: "https://\(StoreStruct.instanceText)",
-            accessToken: StoreStruct.client.accessToken ?? ""
+            baseURL: "https://\(StoreStruct.shared.currentInstance.instanceText)",
+            accessToken: StoreStruct.shared.currentInstance.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in
             if let stat = (statuses.value) {
@@ -986,7 +986,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         
         StoreStruct.currentPage = 0
         
-        let applicationContext = [StoreStruct.client.accessToken ?? "": StoreStruct.returnedText]
+        let applicationContext = [StoreStruct.client.accessToken ?? "": StoreStruct.shared.currentInstance.returnedText]
         WatchSessionManager.sharedManager.transferUserInfo(userInfo: applicationContext as [String: AnyObject])
         
         let request = Notifications.all(range: .default)
@@ -1006,6 +1006,26 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                 
             }
         }
+        
+        
+        
+//        let request = Notifications.all(range: .default)
+//        StoreStruct.client.run(request) { (statuses) in
+//            if let stat = (statuses.value) {
+//                StoreStruct.notifications = stat
+//                
+//                for x in StoreStruct.notifications {
+//                    if x.type == .mention {
+//                        StoreStruct.notificationsMentions.append(x)
+//                        DispatchQueue.main.async {
+//                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
+//                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
+//                        }
+//                    }
+//                }
+//                
+//            }
+//        }
         
         
     }
@@ -1110,7 +1130,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             var sss = StoreStruct.client.baseURL.replacingOccurrences(of: "https", with: "wss")
             sss = sss.replacingOccurrences(of: "http", with: "wss")
-            socket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/user?access_token=\(StoreStruct.accessToken)&stream=user")!)
+            socket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/user?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=user")!)
             socket.onConnect = {
                 print("websocket is connected")
             }
@@ -1188,7 +1208,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             var sss = StoreStruct.client.baseURL.replacingOccurrences(of: "https", with: "wss")
             sss = sss.replacingOccurrences(of: "http", with: "wss")
-            lsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/public?access_token=\(StoreStruct.accessToken)&stream=public/local")!)
+            lsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/public?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=public/local")!)
             lsocket.onConnect = {
                 print("websocket is connected")
             }
@@ -1266,7 +1286,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             var sss = StoreStruct.client.baseURL.replacingOccurrences(of: "https", with: "wss")
             sss = sss.replacingOccurrences(of: "http", with: "wss")
-            fsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/public?access_token=\(StoreStruct.accessToken)&stream=public")!)
+            fsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/public?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=public")!)
             fsocket.onConnect = {
                 print("websocket is connected")
             }
@@ -3205,10 +3225,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                             
                             
                             do {
-                                self.restoreScroll()
-                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
-                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
-                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
                             } catch {
                                 print("Couldn't save")
                             }
@@ -3254,10 +3273,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                             
                             
                             do {
-                                self.restoreScroll()
-                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
-                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
-                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
                             } catch {
                                 print("Couldn't save")
                             }
@@ -3304,10 +3322,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                             
                             
                             do {
-                                self.restoreScroll()
-                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
-                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
-                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
                             } catch {
                                 print("Couldn't save")
                             }
