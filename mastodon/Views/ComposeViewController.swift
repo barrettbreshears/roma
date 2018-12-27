@@ -525,6 +525,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     var theReg = ""
     let imag = UIImagePickerController()
     var gifVidData: Data?
+    var startRepText = ""
     
     
     @objc func actOnSpecialNotificationAuto() {
@@ -601,6 +602,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     return
                 }
             }
+            .popover(anchorView: self.selectedImage1)
             .show(on: self)
         
         
@@ -646,6 +648,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     return
                 }
             }
+            .popover(anchorView: self.selectedImage2)
             .show(on: self)
         
     }
@@ -688,6 +691,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     return
                 }
             }
+            .popover(anchorView: self.selectedImage3)
             .show(on: self)
     }
     @objc func tappedImageView4(_ sender: AnyObject) {
@@ -728,6 +732,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     return
                 }
             }
+            .popover(anchorView: self.selectedImage4)
             .show(on: self)
     }
     
@@ -930,7 +935,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         textView.becomeFirstResponder()
         
         
-        self.textField.text = StoreStruct.spoilerText
+//        self.textField.text = StoreStruct.spoilerText
         
         
         
@@ -1207,24 +1212,30 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
         if inReply.count > 0 {
             self.textField.text = inReply[0].spoilerText
+            if self.textField.text != "" {
+                self.isSensitive = true
+            }
+            
             if inReply[0].visibility == .direct {
                 self.visibility = .direct
                 self.visibilityButton.setImage(UIImage(named: "direct")?.maskWithColor(color: UIColor.white), for: .normal)
             } else {
                 
-                if (UserDefaults.standard.object(forKey: "privToot") == nil) || (UserDefaults.standard.object(forKey: "privToot") as! Int == 0) || inReply[0].visibility == .public {
+                
+                if inReply[0].visibility == .public {
                     self.visibility = .public
                     self.visibilityButton.setImage(UIImage(named: "eye")?.maskWithColor(color: UIColor.white), for: .normal)
-                } else if (UserDefaults.standard.object(forKey: "privToot") as! Int == 1) || inReply[0].visibility == .unlisted {
+                } else if inReply[0].visibility == .unlisted {
                     self.visibility = .unlisted
                     self.visibilityButton.setImage(UIImage(named: "unlisted")?.maskWithColor(color: UIColor.white), for: .normal)
-                } else if (UserDefaults.standard.object(forKey: "privToot") as! Int == 2) || inReply[0].visibility == .private {
+                } else if inReply[0].visibility == .private {
                     self.visibility = .private
                     self.visibilityButton.setImage(UIImage(named: "private")?.maskWithColor(color: UIColor.white), for: .normal)
-                } else if (UserDefaults.standard.object(forKey: "privToot") as! Int == 3) {
+                } else {
                     self.visibility = .direct
                     self.visibilityButton.setImage(UIImage(named: "direct")?.maskWithColor(color: UIColor.white), for: .normal)
                 }
+                
                 
             }
         } else {
@@ -1272,7 +1283,13 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             sectionInset: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         )
         layout.scrollDirection = .horizontal
-        cameraCollectionView = UICollectionView(frame: CGRect(x: CGFloat(0), y: CGFloat(50), width: CGFloat(UIScreen.main.bounds.width), height: CGFloat(210)), collectionViewLayout: layout)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            cameraCollectionView = UICollectionView(frame: CGRect(x: CGFloat(0), y: CGFloat(50), width: CGFloat(UIScreen.main.bounds.width), height: CGFloat(310)), collectionViewLayout: layout)
+        } else {
+            cameraCollectionView = UICollectionView(frame: CGRect(x: CGFloat(0), y: CGFloat(50), width: CGFloat(UIScreen.main.bounds.width), height: CGFloat(210)), collectionViewLayout: layout)
+        }
+        
         cameraCollectionView.backgroundColor = Colours.clear
         cameraCollectionView.delegate = self
         cameraCollectionView.dataSource = self
@@ -1357,12 +1374,13 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         textView.backgroundColor = Colours.clear
         textView.textColor = Colours.grayDark
         
-        
+        //bhere6
         if self.inReply.isEmpty {
             if self.inReplyText == "" {
                 textView.text = self.filledTextFieldText
             } else {
                 textView.text = "@\(self.inReplyText) "
+                self.startRepText = textView.text
             }
         } else {
             let statusAuthor = self.inReply[0].account.acct
@@ -1372,6 +1390,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             textView.text = goo.reduce("") { $0 + $1 + " " }
             textView.text = textView.text.replacingOccurrences(of: "@\(StoreStruct.currentUser.username)", with: "")
             textView.text = textView.text.replacingOccurrences(of: "  ", with: " ")
+            self.startRepText = textView.text
         }
         
         self.view.addSubview(textView)
@@ -1406,8 +1425,13 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         cell.image.layer.borderColor = UIColor.black.cgColor
         cell.image.image = self.images[indexPath.row]
         
-        cell.image.frame.size.width = 190
-        cell.image.frame.size.height = 150
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                cell.image.frame.size.width = 290
+                cell.image.frame.size.height = 250
+            } else {
+                cell.image.frame.size.width = 190
+                cell.image.frame.size.height = 150
+            }
         
         cell.bgImage.layer.masksToBounds = false
         cell.bgImage.layer.shadowColor = UIColor.black.cgColor
@@ -1854,6 +1878,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     return
                 }
             }
+            .popover(anchorView: self.visibilityButton)
             .show(on: self)
     }
     @objc func didTouchUpInsideWarningButton(_ sender: AnyObject) {
@@ -2022,6 +2047,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             return
                         }
                     }
+                    .popover(anchorView: self.emotiButton)
                     .show(on: self)
                 
                 
@@ -2116,6 +2142,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     return
                 }
             }
+            .popover(anchorView: self.emotiButton)
             .show(on: self)
         
         
@@ -2193,7 +2220,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         }
         
         
-        if self.textView.text! == "" {
+        if self.textView.text! == "" || self.textView.text! == self.startRepText {
             self.textView.resignFirstResponder()
             
             StoreStruct.caption1 = ""
@@ -2733,7 +2760,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             impact.impactOccurred()
         }
         if gesture.direction == UISwipeGestureRecognizer.Direction.down {
-            if self.textView.text! == "" {
+            if self.textView.text! == "" || self.textView.text! == self.startRepText {
                 self.textView.resignFirstResponder()
                 
                 StoreStruct.caption1 = ""
@@ -2966,6 +2993,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     return
                 }
             }
+            .popover(anchorView: self.closeButton)
             .show(on: self)
     }
     

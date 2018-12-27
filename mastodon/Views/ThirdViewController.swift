@@ -464,6 +464,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         super.viewDidLoad()
         
         self.view.backgroundColor = Colours.white
+        self.title = ""
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.goMembers), name: NSNotification.Name(rawValue: "goMembers3"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists3"), object: nil)
@@ -492,23 +493,23 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         
         
-        if UIDevice.current.userInterfaceIdiom == .pad {
+        if UIApplication.shared.isSplitOrSlideOver || UIDevice.current.userInterfaceIdiom == .phone {
+            var settingsButton = MNGExpandedTouchAreaButton()
+            settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 36, height: 36)))
+            settingsButton.setImage(UIImage(named: "sett")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+            settingsButton.adjustsImageWhenHighlighted = false
+            settingsButton.addTarget(self, action: #selector(self.setTop), for: .touchUpInside)
             
+            if self.fromOtherUser {} else {
+                let done = UIBarButtonItem.init(customView: settingsButton)
+                self.navigationItem.setLeftBarButton(done, animated: false)
+            }
         } else {
-        
-        var settingsButton = MNGExpandedTouchAreaButton()
-        settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 36, height: 36)))
-        settingsButton.setImage(UIImage(named: "sett")?.maskWithColor(color: Colours.grayLight2), for: .normal)
-        settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        settingsButton.adjustsImageWhenHighlighted = false
-        settingsButton.addTarget(self, action: #selector(self.setTop), for: .touchUpInside)
-        
-        if self.fromOtherUser {} else {
-            let done = UIBarButtonItem.init(customView: settingsButton)
-            self.navigationItem.setLeftBarButton(done, animated: false)
+            
         }
         
-        }
+        
         
         
         
@@ -535,10 +536,21 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         case .phone:
             self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
         case .pad:
-            self.title = "Profile"
             self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
         default:
             self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+        }
+        if UIApplication.shared.isSplitOrSlideOver {
+            
+        } else {
+            switch (deviceIdiom) {
+            case .phone:
+            self.title = ""
+            case .pad:
+            self.title = "Profile"
+            default:
+            self.title = ""
+            }
         }
         self.tableView.register(ProfileHeaderCell.self, forCellReuseIdentifier: "ProfileHeaderCell")
         self.tableView.register(ProfileHeaderCellOwn.self, forCellReuseIdentifier: "ProfileHeaderCellOwn")
@@ -761,10 +773,16 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        print("newsize")
-        print(size)
         
-        self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(size.width), height: Int(size.height))
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            super.viewWillTransition(to: size, with: coordinator)
+//            coordinator.animate(alongsideTransition: nil, completion: {
+//                _ in
+                self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.height) - 80, height: Int(self.view.bounds.width))
+                self.tableView.reloadData()
+//            })
+        }
+        
     }
     
     var zzz: [String:String] = [:]
@@ -963,7 +981,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if indexPath.section == 0 {
             return UITableView.automaticDimension
         } else if indexPath.section == 1 {
-            return 208
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                return 308
+            } else {
+                return 208
+            }
         } else {
             return UITableView.automaticDimension
         }
@@ -1473,6 +1495,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     .show(on: self)
                 
                             }
+                .action(.default("Add Account".localized), image: UIImage(named: "addac1")) { (action, ind) in
+                    print(action, ind)
+                    
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut2"), object: nil)
+                }
                 .action(.default("Log Out".localized), image: UIImage(named: "lout")) { (action, ind) in
                     print(action, ind)
                     
@@ -2363,6 +2390,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     @objc func touchHeaderImage(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
         
         var sto = self.profileStatuses
         
@@ -2374,7 +2405,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let cell = tableView.cellForRow(at: indexPath) as! ProfileHeaderCell
             var images = [SKPhoto]()
             
-            let photo = SKPhoto.photoWithImageURL(sto[0].reblog?.account.headerStatic ?? sto[0].account.headerStatic, holder: nil)
+            let photo = SKPhoto.photoWithImageURL(sto[0].reblog?.account.headerStatic ?? sto[0].account.headerStatic, holder: cell.headerImageView.currentImage ?? nil)
             photo.shouldCachePhotoURLImage = true
             images.append(photo)
             
@@ -2393,7 +2424,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let cell = tableView.cellForRow(at: indexPath) as! ProfileHeaderCellOwn
         var images = [SKPhoto]()
         
-        let photo = SKPhoto.photoWithImageURL(sto[0].reblog?.account.headerStatic ?? sto[0].account.headerStatic, holder: nil)
+        let photo = SKPhoto.photoWithImageURL(sto[0].reblog?.account.headerStatic ?? sto[0].account.headerStatic, holder: cell.headerImageView.currentImage ?? nil)
         photo.shouldCachePhotoURLImage = true
         images.append(photo)
         
@@ -2423,7 +2454,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if let cell = tableView.cellForRow(at: indexPath) as? ProfileHeaderCell {
             var images = [SKPhoto]()
             
-            let photo = SKPhoto.photoWithImageURL(self.chosenUser.avatarStatic, holder: nil)
+            let photo = SKPhoto.photoWithImageURL(self.chosenUser.avatarStatic, holder: cell.profileImageView.currentImage ?? nil)
             photo.shouldCachePhotoURLImage = true
             images.append(photo)
             
@@ -2486,7 +2517,18 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let indexPath = IndexPath(row: sender.tag, section: 2)
             let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
             var images = [SKPhoto]()
+            var coun = 0
             for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                if coun == 0 {
+                    let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                    photo.shouldCachePhotoURLImage = true
+                    if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                        photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                    } else {
+                        photo.caption = y.description ?? ""
+                    }
+                    images.append(photo)
+                } else {
                 let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                 photo.shouldCachePhotoURLImage = true
                 if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
@@ -2495,6 +2537,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     photo.caption = y.description ?? ""
                 }
                 images.append(photo)
+                }
+                coun += 1
             }
             let originImage = sender.currentImage
             if originImage != nil {
@@ -2712,10 +2756,34 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 if sto[indexPath.row].reblog?.visibility ?? sto[indexPath.row].visibility == .direct {
                     reply.image = UIImage(named: "direct2")
-                    return [reply, like]
+                    if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
+                        return [reply, like]
+                    } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 1) {
+                        return [reply, like]
+                    } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 2) {
+                        return [reply, like]
+                    } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 3) {
+                        return [like, reply]
+                    } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 4) {
+                        return [like, reply]
+                    } else {
+                        return [like, reply]
+                    }
                 } else {
                     reply.image = UIImage(named: "reply")
-                    return [reply, like, boost]
+                    if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
+                        return [reply, like, boost]
+                    } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 1) {
+                        return [reply, boost, like]
+                    } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 2) {
+                        return [boost, reply, like]
+                    } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 3) {
+                        return [boost, like, reply]
+                    } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 4) {
+                        return [like, reply, boost]
+                    } else {
+                        return [like, boost, reply]
+                    }
                 }
                 
             } else {
@@ -3245,9 +3313,16 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    
+    
+    
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
         var options = SwipeOptions()
-        options.expansionStyle = .selection
+        if (UserDefaults.standard.object(forKey: "selectSwipe") == nil) || (UserDefaults.standard.object(forKey: "selectSwipe") as! Int == 0) {
+            options.expansionStyle = .selection
+        } else {
+            options.expansionStyle = .none
+        }
         options.transitionStyle = .drag
         options.buttonSpacing = 0
         options.buttonPadding = 0
@@ -3360,6 +3435,19 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white
             Colours.cellQuote = UIColor(red: 33/255.0, green: 33/255.0, blue: 43/255.0, alpha: 1.0)
+            Colours.cellSelected = UIColor(red: 34/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
+            Colours.tabUnselected = UIColor(red: 80/255.0, green: 80/255.0, blue: 90/255.0, alpha: 1.0)
+            Colours.blackUsual = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)
+            Colours.cellOwn = UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0)
+            Colours.cellAlternative = UIColor(red: 20/255.0, green: 20/255.0, blue: 30/255.0, alpha: 1.0)
+            Colours.black = UIColor.white
+            UIApplication.shared.statusBarStyle = .lightContent
+        } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 4) {
+            Colours.white = UIColor(red: 8/255.0, green: 28/255.0, blue: 88/255.0, alpha: 1.0)
+            Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
+            Colours.grayDark2 = UIColor.white
+            Colours.cellNorm = Colours.white
+            Colours.cellQuote = UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)
             Colours.cellSelected = UIColor(red: 34/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
             Colours.tabUnselected = UIColor(red: 80/255.0, green: 80/255.0, blue: 90/255.0, alpha: 1.0)
             Colours.blackUsual = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)

@@ -647,6 +647,8 @@
 		A91701B721CAF09F0005A14C /* PadActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91701B421CAF09F0005A14C /* PadActivityViewController.swift */; };
 		A91701B821CAF09F0005A14C /* PadLocalTimelinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91701B521CAF09F0005A14C /* PadLocalTimelinesViewController.swift */; };
 		A91701B921CAF09F0005A14C /* PadFedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91701B621CAF09F0005A14C /* PadFedViewController.swift */; };
+		A973AF2421D432AA009D7D21 /* ProCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7806850821CC222F00072C41 /* ProCells.swift */; };
+		A973AF2521D432AE009D7D21 /* CollectionProCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7806850A21CC227100072C41 /* CollectionProCells.swift */; };
 		A9D80EE721B84B3900020ECE /* AddInstanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EE621B84B3900020ECE /* AddInstanceCell.swift */; };
 		A9D80EED21B8F27A00020ECE /* InstanceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EEC21B8F27A00020ECE /* InstanceData.swift */; };
 		A9D80EEF21BB154200020ECE /* AccountExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EEE21BB154200020ECE /* AccountExtension.swift */; };
@@ -1400,6 +1402,8 @@
 		53E6F2B0216CCA9400912B83 /* WatchSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
 		53E6F2B3216CDDF800912B83 /* StoreStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreStruct.swift; sourceTree = "<group>"; };
 		53E6F2B6216CDE7D00912B83 /* DetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailController.swift; sourceTree = "<group>"; };
+		7806850821CC222F00072C41 /* ProCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProCells.swift; sourceTree = "<group>"; };
+		7806850A21CC227100072C41 /* CollectionProCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionProCells.swift; sourceTree = "<group>"; };
 		78F6FFEAB47575DB49E46173 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		A91701B421CAF09F0005A14C /* PadActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PadActivityViewController.swift; sourceTree = "<group>"; };
 		A91701B521CAF09F0005A14C /* PadLocalTimelinesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PadLocalTimelinesViewController.swift; sourceTree = "<group>"; };
@@ -2509,6 +2513,8 @@
 				5352D0C3215E6A3500901B60 /* CollectionAppCell.swift */,
 				5329F3872174D0B900C4A23C /* ColourCells.swift */,
 				5329F3892174D0CB00C4A23C /* CollectionColourCell.swift */,
+				7806850821CC222F00072C41 /* ProCells.swift */,
+				7806850A21CC227100072C41 /* CollectionProCells.swift */,
 				A9D80EE621B84B3900020ECE /* AddInstanceCell.swift */,
 			);
 			path = Cells;
@@ -3517,6 +3523,7 @@
 				5351D75721617FC40012960F /* VolumeBarAnimation.swift in Sources */,
 				531E0FA2216E2BA2003E8890 /* NVActivityIndicatorAnimationTriangleSkewSpin.swift in Sources */,
 				5373CA582152B59A00676F3D /* PaddedTextField.swift in Sources */,
+				A973AF2521D432AE009D7D21 /* CollectionProCells.swift in Sources */,
 				5373CAB12152C68000676F3D /* Emoji.swift in Sources */,
 				536A4FB1216B73D600A3D483 /* BulletinManager.swift in Sources */,
 				53BC45BA215AC7D30092223F /* SettingsViewController.swift in Sources */,
@@ -3602,6 +3609,7 @@
 				5373CAC92152C68000676F3D /* DomainBlocks.swift in Sources */,
 				5373CAF72152EDB700676F3D /* SwipeAccessibilityCustomAction.swift in Sources */,
 				5354BAD4216577FD0094C545 /* NormalFooterAnimator.swift in Sources */,
+				A973AF2421D432AA009D7D21 /* ProCells.swift in Sources */,
 				5393859D217393A4002444FC /* DLTagButton.swift in Sources */,
 				5373C9F621519EF800676F3D /* MainFeedCell.swift in Sources */,
 				53170E8421836761005F972B /* PadTimelinesViewController.swift in Sources */,

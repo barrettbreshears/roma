@@ -470,6 +470,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         tableViewF.removeFromSuperview()
         if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
             segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(offset + 5), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
+            
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
                 segmentedControl.shapeStyle = .roundedRect
@@ -526,7 +527,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.view.addSubview(self.tableViewF)
             self.loadLoadLoad()
         } else {
-            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(newoff), width: CGFloat(240), height: CGFloat(40)))
+            if UIApplication.shared.isSplitOrSlideOver {
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+            } else {
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(newoff), width: CGFloat(240), height: CGFloat(40)))
+            }
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
                 segmentedControl.shapeStyle = .roundedRect
@@ -649,6 +654,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         
         if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
             segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(offset + 5), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
+            
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
                 segmentedControl.shapeStyle = .roundedRect
@@ -704,7 +710,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.tableViewF.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableViewF)
         } else {
+            if UIApplication.shared.isSplitOrSlideOver {
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+            } else {
             segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(newoff), width: CGFloat(240), height: CGFloat(40)))
+            }
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
                 segmentedControl.shapeStyle = .roundedRect
@@ -2187,7 +2197,18 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     let indexPath = IndexPath(row: sender.tag, section: 0)
                     let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                     var images = [SKPhoto]()
+                    var coun = 0
                     for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                        if coun == 0 {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            } else {
+                                photo.caption = y.description ?? ""
+                            }
+                            images.append(photo)
+                        } else {
                         let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
@@ -2196,6 +2217,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             photo.caption = y.description ?? ""
                         }
                         images.append(photo)
+                        }
+                        coun += 1
                     }
                     let originImage = sender.currentImage
                     if originImage != nil {
@@ -2212,7 +2235,18 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     let indexPath = IndexPath(row: sender.tag, section: 0)
                     let cell = tableViewL.cellForRow(at: indexPath) as! MainFeedCellImage
                     var images = [SKPhoto]()
+                    var coun = 0
                     for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                        if coun == 0 {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            } else {
+                                photo.caption = y.description ?? ""
+                            }
+                            images.append(photo)
+                        } else {
                         let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
@@ -2221,6 +2255,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             photo.caption = y.description ?? ""
                         }
                         images.append(photo)
+                        }
+                        coun += 1
                     }
                     let originImage = sender.currentImage
                     if originImage != nil {
@@ -2237,7 +2273,18 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     let indexPath = IndexPath(row: sender.tag, section: 0)
                     let cell = tableViewF.cellForRow(at: indexPath) as! MainFeedCellImage
                     var images = [SKPhoto]()
+                    var coun = 0
                     for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                        if coun == 0 {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            } else {
+                                photo.caption = y.description ?? ""
+                            }
+                            images.append(photo)
+                        } else {
                         let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
@@ -2246,6 +2293,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             photo.caption = y.description ?? ""
                         }
                         images.append(photo)
+                        }
+                        coun += 1
                     }
                     let originImage = sender.currentImage
                     if originImage != nil {
@@ -2502,10 +2551,34 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             if sto[indexPath.row].reblog?.visibility ?? sto[indexPath.row].visibility == .direct {
                 reply.image = UIImage(named: "direct2")
-                return [reply, like]
+                if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
+                    return [reply, like]
+                } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 1) {
+                    return [reply, like]
+                } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 2) {
+                    return [reply, like]
+                } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 3) {
+                    return [like, reply]
+                } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 4) {
+                    return [like, reply]
+                } else {
+                    return [like, reply]
+                }
             } else {
                 reply.image = UIImage(named: "reply")
-                return [reply, like, boost]
+                if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
+                    return [reply, like, boost]
+                } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 1) {
+                    return [reply, boost, like]
+                } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 2) {
+                    return [boost, reply, like]
+                } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 3) {
+                    return [boost, like, reply]
+                } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 4) {
+                    return [like, reply, boost]
+                } else {
+                    return [like, boost, reply]
+                }
             }
             
             
@@ -3013,7 +3086,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
         var options = SwipeOptions()
-        options.expansionStyle = .selection
+        if (UserDefaults.standard.object(forKey: "selectSwipe") == nil) || (UserDefaults.standard.object(forKey: "selectSwipe") as! Int == 0) {
+            options.expansionStyle = .selection
+        } else {
+            options.expansionStyle = .none
+        }
         options.transitionStyle = .drag
         options.buttonSpacing = 0
         options.buttonPadding = 0
@@ -3151,13 +3228,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             
                             do {
-                                
-                                
-                                self.restoreScroll()
+//                                self.restoreScroll()
                                 try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
                                 try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
                                 try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
-                                
                             } catch {
                                 print("Couldn't save")
                             }
@@ -3203,7 +3277,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             
                             do {
-                                self.restoreScroll()
+//                                self.restoreScroll()
                                 try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
                                 try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
                                 try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
@@ -3253,7 +3327,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             
                             do {
-                                self.restoreScroll()
+//                                self.restoreScroll()
                                 try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
                                 try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
                                 try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
@@ -3302,6 +3376,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             UIApplication.shared.statusBarStyle = .lightContent
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 2) {
             Colours.white = UIColor(red: 36/255.0, green: 33/255.0, blue: 37/255.0, alpha: 1.0)
+            Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
+            Colours.grayDark2 = UIColor.white
+            Colours.cellNorm = Colours.white
+            Colours.cellQuote = UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)
+            Colours.cellSelected = UIColor(red: 34/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
+            Colours.tabUnselected = UIColor(red: 80/255.0, green: 80/255.0, blue: 90/255.0, alpha: 1.0)
+            Colours.blackUsual = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)
+            Colours.cellOwn = UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0)
+            Colours.cellAlternative = UIColor(red: 20/255.0, green: 20/255.0, blue: 30/255.0, alpha: 1.0)
+            Colours.black = UIColor.white
+            UIApplication.shared.statusBarStyle = .lightContent
+        } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 4) {
+            Colours.white = UIColor(red: 8/255.0, green: 28/255.0, blue: 88/255.0, alpha: 1.0)
             Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white
@@ -3444,7 +3531,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
         segmentedControl.removeFromSuperview()
         if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
+            
             segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(offset + 5), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
+            
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
                 segmentedControl.shapeStyle = .roundedRect
@@ -3458,7 +3547,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             segmentedControl.delegate = self
             view.addSubview(segmentedControl)
         } else {
-            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(newoff), width: CGFloat(240), height: CGFloat(40)))
+            if UIApplication.shared.isSplitOrSlideOver {
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+            } else {
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(newoff), width: CGFloat(240), height: CGFloat(40)))
+            }
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
                 segmentedControl.shapeStyle = .roundedRect

@@ -194,6 +194,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse22")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse23")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse231")
+        self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse099")
         self.tableView.register(AddInstanceCell.self, forCellReuseIdentifier: "addInstanceCell")
         self.tableView.alpha = 1
         self.tableView.delegate = self
@@ -298,7 +299,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         } else if section == 3 {
             title.text = "Biometric Lock".localized
         } else {
-            title.text = "Instances"
+            title.text = "Accounts".localized
         }
         title.textColor = Colours.grayDark2
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
@@ -486,6 +487,15 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: self)
         }
     }
+    @objc func handleToggleSelectSwipe(sender: UISwitch) {
+        if sender.isOn {
+            UserDefaults.standard.set(0, forKey: "selectSwipe")
+            sender.setOn(true, animated: true)
+        } else {
+            UserDefaults.standard.set(1, forKey: "selectSwipe")
+            sender.setOn(false, animated: true)
+        }
+    }
     
     
     
@@ -513,7 +523,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             return cell
         } else if indexPath.section == 1 {
             
-            if indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9 || indexPath.row == 10 {
+            if indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9 || indexPath.row == 10 || indexPath.row == 12 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
                 cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
                 cell.backgroundColor = Colours.white
@@ -571,6 +581,26 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         cell.switchView.setOn(true, animated: false)
                     }
                     cell.switchView.addTarget(self, action: #selector(self.handleToggleSensitiveMain), for: .touchUpInside)
+                }
+                if indexPath.row == 11 {
+                    // select swipe
+                    
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellse099", for: indexPath) as! SettingsCellToggle
+                    cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
+                    cell.backgroundColor = Colours.white
+                    cell.userName.textColor = Colours.black
+                    cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                    cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.white
+                    cell.selectedBackgroundView = bgColorView
+                    if (UserDefaults.standard.object(forKey: "selectSwipe") == nil) || (UserDefaults.standard.object(forKey: "selectSwipe") as! Int == 0) {
+                        cell.switchView.setOn(true, animated: false)
+                    } else {
+                        cell.switchView.setOn(false, animated: false)
+                    }
+                    cell.switchView.addTarget(self, action: #selector(self.handleToggleSelectSwipe), for: .touchUpInside)
+                    return cell
                 }
                 return cell
                 
@@ -718,24 +748,41 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             
             return cell
-            
 
         } else if indexPath.section == 4 {
             
             if indexPath.row == InstanceData.getAllInstances().count  {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "addInstanceCell") as! AddInstanceCell
-                cell.configure()
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
+                cell.configure(status: "Add Account", status2: "Add a new account from any instance.", image: "newac1", imageURL: nil)
+                cell.backgroundColor = Colours.white
+                cell.userName.textColor = Colours.black
+                cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                let bgColorView = UIView()
+                bgColorView.backgroundColor = Colours.white
+                cell.selectedBackgroundView = bgColorView
                 return cell
             } else {
                 let instance = InstanceData.getAllInstances()[indexPath.row]
                 let account = Account.getAccounts()[indexPath.row]
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
-                let instanceAndAccount = "@\(instance.returnedText) "
+                let instanceAndAccount = "\(instance.returnedText) "
+                
+                let instances = InstanceData.getAllInstances()
+                let curr = InstanceData.getCurrentInstance()
+                if curr?.clientID == instances[indexPath.row].clientID {
+                    cell.configure(status: "• \(account.username)", status2: instanceAndAccount, image: "", imageURL:account.avatarStatic )
+                    cell.backgroundColor = Colours.white
+                    cell.userName.textColor = Colours.black
+                    cell.userTag.textColor = Colours.tabSelected
+                    cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                } else {
                 cell.configure(status: account.username, status2:instanceAndAccount, image: "", imageURL:account.avatarStatic )
                 cell.backgroundColor = Colours.white
                 cell.userName.textColor = Colours.black
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                }
                 let bgColorView = UIView()
                 bgColorView.backgroundColor = Colours.white
                 cell.selectedBackgroundView = bgColorView
@@ -878,36 +925,49 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 var filledSet3 = UIImage(named: "unfilledset")
                 var filledSet4 = UIImage(named: "unfilledset")
                 var filledSet5 = UIImage(named: "unfilledset")
+                var filledSet6 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "longToggle") == nil) || (UserDefaults.standard.object(forKey: "longToggle") as! Int == 0) {
                     filledSet1 = UIImage(named: "filledset")
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "unfilledset")
                     filledSet4 = UIImage(named: "unfilledset")
                     filledSet5 = UIImage(named: "unfilledset")
+                    filledSet6 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "longToggle") as! Int == 1) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                     filledSet3 = UIImage(named: "unfilledset")
                     filledSet4 = UIImage(named: "unfilledset")
                     filledSet5 = UIImage(named: "unfilledset")
+                    filledSet6 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "longToggle") as! Int == 2) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "filledset")
                     filledSet4 = UIImage(named: "unfilledset")
                     filledSet5 = UIImage(named: "unfilledset")
+                    filledSet6 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "longToggle") as! Int == 3) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "unfilledset")
                     filledSet4 = UIImage(named: "filledset")
                     filledSet5 = UIImage(named: "unfilledset")
+                    filledSet6 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "longToggle") as! Int == 4) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "unfilledset")
                     filledSet4 = UIImage(named: "unfilledset")
                     filledSet5 = UIImage(named: "filledset")
+                    filledSet6 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "longToggle") as! Int == 6) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                    filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
+                    filledSet6 = UIImage(named: "filledset")
                 }
                 
                 
@@ -936,6 +996,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .action(.default("Rain Confetti".localized), image: filledSet4) { (action, ind) in
                         print(action, ind)
                         UserDefaults.standard.set(3, forKey: "longToggle")
+                    }
+                    .action(.default("Do Nothing".localized), image: filledSet6) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(6, forKey: "longToggle")
                     }
                     .action(.cancel("Dismiss"))
                     .finally { action, index in
@@ -1102,6 +1166,97 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
                     .show(on: self)
             }
+            if indexPath.row == 12 {
+                // swipe order
+                var filledSet1 = UIImage(named: "unfilledset")
+                var filledSet2 = UIImage(named: "unfilledset")
+                var filledSet3 = UIImage(named: "unfilledset")
+                var filledSet4 = UIImage(named: "unfilledset")
+                var filledSet5 = UIImage(named: "unfilledset")
+                var filledSet6 = UIImage(named: "unfilledset")
+                if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
+                    filledSet1 = UIImage(named: "filledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                    filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
+                    filledSet6 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 1) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "filledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                    filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
+                    filledSet6 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 2) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "filledset")
+                    filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
+                    filledSet6 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 3) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                    filledSet4 = UIImage(named: "filledset")
+                    filledSet5 = UIImage(named: "unfilledset")
+                    filledSet6 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 4) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                    filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "filledset")
+                    filledSet6 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 5) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                    filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
+                    filledSet6 = UIImage(named: "filledset")
+                }
+                
+                Alertift.actionSheet(title: title, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("Reply Like Boost".localized), image: filledSet1) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(0, forKey: "sworder")
+                    }
+                    .action(.default("Reply Boost Like".localized), image: filledSet2) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(1, forKey: "sworder")
+                    }
+                    .action(.default("Boost Reply Like".localized), image: filledSet3) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(2, forKey: "sworder")
+                    }
+                    .action(.default("Boost Like Reply".localized), image: filledSet4) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(3, forKey: "sworder")
+                    }
+                    .action(.default("Like Reply Boost".localized), image: filledSet5) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(4, forKey: "sworder")
+                    }
+                    .action(.default("Like Boost Reply".localized), image: filledSet6) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(5, forKey: "sworder")
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
+                    .show(on: self)
+            }
             
             
         }
@@ -1114,26 +1269,37 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
                 var filledSet4 = UIImage(named: "unfilledset")
+                var filledSet5 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "theme") == nil) || (UserDefaults.standard.object(forKey: "theme") as! Int == 0) {
                     filledSet1 = UIImage(named: "filledset")
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "unfilledset")
                     filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "theme") as! Int == 1) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                     filledSet3 = UIImage(named: "unfilledset")
                     filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "theme") as! Int == 2) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "filledset")
                     filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "theme") as! Int == 3) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "unfilledset")
                     filledSet4 = UIImage(named: "filledset")
+                    filledSet5 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "theme") as! Int == 4) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                    filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "filledset")
                 }
                 
                 
@@ -1158,6 +1324,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .action(.default("Midnight".localized), image: filledSet4) { (action, ind) in
                         print(action, ind)
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "black"), object: self)
+                    }
+                    .action(.default("Midnight Blue".localized), image: filledSet5) { (action, ind) in
+                        print(action, ind)
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "midblue"), object: self)
                     }
                     .action(.cancel("Dismiss"))
                     .finally { action, index in
@@ -1677,26 +1847,37 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
                 var filledSet4 = UIImage(named: "unfilledset")
+                var filledSet5 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
                     filledSet1 = UIImage(named: "filledset")
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "unfilledset")
                     filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                     filledSet3 = UIImage(named: "unfilledset")
                     filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "filledset")
                     filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "unfilledset")
                     filledSet4 = UIImage(named: "filledset")
+                    filledSet5 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                    filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "filledset")
                 }
                 
                 
@@ -1721,6 +1902,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .action(.default("Midnight".localized), image: filledSet4) { (action, ind) in
                         print(action, ind)
                         UserDefaults.standard.set(3, forKey: "screenshotcol")
+                    }
+                    .action(.default("Midnight Blue".localized), image: filledSet5) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(4, forKey: "screenshotcol")
                     }
                     .action(.cancel("Dismiss"))
                     .finally { action, index in
@@ -1812,22 +1997,81 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         if indexPath.section == 4 {
             let instances = InstanceData.getAllInstances()
             if indexPath.row == instances.count {
-                // launch the sign in
-                let loginController = ViewController()
-                vc = loginController
-                loginController.loadingAdditionalInstance = true
-                loginController.createLoginView(newInstance: true)
-                self.navigationController?.pushViewController(loginController, animated: true)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut2"), object: nil)
             } else {
                 
-                InstanceData.setCurrentInstance(instance: instances[indexPath.row])
+                //bhere3
                 
-                DispatchQueue.main.async {
+                
+                let curr = InstanceData.getCurrentInstance()
+                if curr?.clientID == instances[indexPath.row].clientID {
                     
-                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                    appDelegate.reloadApplication()
+                    
+                    
+                    Alertift.actionSheet(title: "Already selected", message: "Pick another account, or add a new one.")
+                        .backgroundColor(Colours.white)
+                        .titleTextColor(Colours.grayDark)
+                        .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                        .messageTextAlignment(.left)
+                        .titleTextAlignment(.left)
+                        .action(.cancel("Dismiss"))
+                        .finally { action, index in
+                            if action.style == .cancel {
+                                return
+                            }
+                        }
+                        .show(on: self)
+                    
+                    
+                } else {
+                
+                
+                Alertift.actionSheet(title: nil, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("Switch".localized), image: UIImage(named: "profile")) { (action, ind) in
+                        print(action, ind)
+                        
+                        
+                        InstanceData.setCurrentInstance(instance: instances[indexPath.row])
+                        
+                        DispatchQueue.main.async {
+                            
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            appDelegate.reloadApplication()
+                            
+                            
+                        }
+                        
+                    }
+                    .action(.default("Remove".localized), image: UIImage(named: "block")) { (action, ind) in
+                        print(action, ind)
+                        
+                        var instance = InstanceData.getAllInstances()
+                        var account = Account.getAccounts()
+                        account.remove(at: indexPath.row)
+                        UserDefaults.standard.set(try? PropertyListEncoder().encode(account), forKey:"allAccounts")
+                        instance.remove(at: indexPath.row)
+                        UserDefaults.standard.set(try? PropertyListEncoder().encode(instance), forKey:"instances")
+                        
+                        self.tableView.reloadSections([5], with: .none)
+                        
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .show(on: self)
+                    
                     
                 }
+                
+                
             }
         }
         
@@ -1869,6 +2113,19 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white
             Colours.cellQuote = UIColor(red: 33/255.0, green: 33/255.0, blue: 43/255.0, alpha: 1.0)
+            Colours.cellSelected = UIColor(red: 34/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
+            Colours.tabUnselected = UIColor(red: 80/255.0, green: 80/255.0, blue: 90/255.0, alpha: 1.0)
+            Colours.blackUsual = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)
+            Colours.cellOwn = UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0)
+            Colours.cellAlternative = UIColor(red: 20/255.0, green: 20/255.0, blue: 30/255.0, alpha: 1.0)
+            Colours.black = UIColor.white
+            UIApplication.shared.statusBarStyle = .lightContent
+        } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 4) {
+            Colours.white = UIColor(red: 8/255.0, green: 28/255.0, blue: 88/255.0, alpha: 1.0)
+            Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
+            Colours.grayDark2 = UIColor.white
+            Colours.cellNorm = Colours.white
+            Colours.cellQuote = UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)
             Colours.cellSelected = UIColor(red: 34/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
             Colours.tabUnselected = UIColor(red: 80/255.0, green: 80/255.0, blue: 90/255.0, alpha: 1.0)
             Colours.blackUsual = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)

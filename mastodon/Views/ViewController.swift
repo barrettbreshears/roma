@@ -109,6 +109,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.genericStuff()
     }
     
+    func siriBlue() {
+        UIApplication.shared.statusBarStyle = .lightContent
+        Colours.keyCol = UIKeyboardAppearance.dark
+        UserDefaults.standard.set(4, forKey: "theme")
+        self.genericStuff()
+    }
+    
     func siriConfetti() {
         NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
     }
@@ -211,6 +218,21 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         }
         
         delay(4.5) {
+            let activity3 = NSUserActivity(activityType: "com.vm.rom.bluemid")
+            activity3.title = "Switch to midnight blue mode".localized
+            activity3.userInfo = ["state" : "blue"]
+            activity3.isEligibleForSearch = true
+            if #available(iOS 12.0, *) {
+                activity3.isEligibleForPrediction = true
+                activity3.persistentIdentifier = "com.vm.rom.bluemid"
+            } else {
+                // Fallback on earlier versions
+            }
+            self.view.userActivity = activity3
+            activity3.becomeCurrent()
+        }
+        
+        delay(6) {
             let activity3 = NSUserActivity(activityType: "com.vm.roma.confetti")
             activity3.title = "Confetti time".localized
             activity3.userInfo = ["state" : "confetti"]
@@ -653,6 +675,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         NotificationCenter.default.addObserver(self, selector: #selector(self.themeNight), name: NSNotification.Name(rawValue: "night"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.themeNight2), name: NSNotification.Name(rawValue: "night2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.themeBlack), name: NSNotification.Name(rawValue: "black"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.midBlue), name: NSNotification.Name(rawValue: "midblue"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.confettiCreate), name: NSNotification.Name(rawValue: "confettiCreate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.confettiCreateRe), name: NSNotification.Name(rawValue: "confettiCreateRe"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.confettiCreateLi), name: NSNotification.Name(rawValue: "confettiCreateLi"), object: nil)
@@ -662,6 +685,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         NotificationCenter.default.addObserver(self, selector: #selector(self.stopindi), name: NSNotification.Name(rawValue: "stopindi"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.touchList), name: NSNotification.Name(rawValue: "touchList"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.signOut), name: NSNotification.Name(rawValue: "signOut"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.signOutNewInstance), name: NSNotification.Name(rawValue: "signOut2"), object: nil)
         
         
         
@@ -719,6 +743,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell002")
         self.tableViewLists.register(ListCell.self, forCellReuseIdentifier: "cell002l")
         self.tableViewLists.register(ListCell2.self, forCellReuseIdentifier: "cell002l2")
+        self.tableViewLists.register(ProCells.self, forCellReuseIdentifier: "colcell2")
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longAction(sender:)))
         longPress.minimumPressDuration = 0.5
@@ -858,6 +883,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         self.view0pinch.backgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
                     } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
                         self.view0pinch.backgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
+                    } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
+                        self.view0pinch.backgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
                     }
                     self.view1pinch.image = self.screenshot
                     self.view1pinch.layer.shadowColor = UIColor.black.cgColor
@@ -993,9 +1020,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             return 1
         } else {
             if StoreStruct.instanceLocalToAdd.count > 0 {
-                return 2
+                return 3
             } else {
-                return 1
+                return 2
             }
         }
     }
@@ -1009,7 +1036,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             }
         } else {
             if section == 0 {
-                return InstanceData.getAllInstances().count + 1
+                return 1
+            } else if section == 1 {
+                return StoreStruct.allLists.count + 2
             } else {
                 return StoreStruct.instanceLocalToAdd.count
             }
@@ -1017,10 +1046,144 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if tableView == self.tableViewLists {
+            if indexPath.section == 0 {
+                return 90
+            } else {
+                return UITableView.automaticDimension
+            }
+        }
         return UITableView.automaticDimension
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if tableView == self.tableView {
+            //        if StoreStruct.statusSearch[indexPath.row].mediaAttachments.isEmpty {
+            
+            if self.typeOfSearch == 2 {
+                print("oomp")
+                if StoreStruct.statusSearchUser.count > 0 {
+                    print("oomp1")
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellfs", for: indexPath) as! FollowersCell
+                    cell.configure(StoreStruct.statusSearchUser[indexPath.row])
+                    cell.profileImageView.tag = indexPath.row
+                    //cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                    cell.backgroundColor = Colours.grayDark3
+                    cell.userName.textColor = UIColor.white
+                    cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
+                    cell.toot.textColor = UIColor.white
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.grayDark3
+                    cell.selectedBackgroundView = bgColorView
+                    return cell
+                } else {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! MainFeedCell
+                    cell.profileImageView.tag = indexPath.row
+                    cell.backgroundColor = Colours.grayDark3
+                    cell.userName.textColor = UIColor.white
+                    cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
+                    cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
+                    cell.toot.textColor = UIColor.white
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.grayDark3
+                    cell.selectedBackgroundView = bgColorView
+                    return cell
+                }
+            } else {
+                
+                if StoreStruct.statusSearch.count > 0 {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! MainFeedCell
+                    cell.configure(StoreStruct.statusSearch[indexPath.row])
+                    cell.profileImageView.tag = indexPath.row
+                    cell.backgroundColor = Colours.grayDark3
+                    cell.userName.textColor = UIColor.white
+                    cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
+                    cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
+                    cell.toot.textColor = UIColor.white
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.grayDark3
+                    cell.selectedBackgroundView = bgColorView
+                    return cell
+                } else {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! MainFeedCell
+                    cell.profileImageView.tag = indexPath.row
+                    cell.backgroundColor = Colours.grayDark3
+                    cell.userName.textColor = UIColor.white
+                    cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
+                    cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
+                    cell.toot.textColor = UIColor.white
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.grayDark3
+                    cell.selectedBackgroundView = bgColorView
+                    return cell
+                }
+            }
+        } else {
+            if indexPath.section == 0 {
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: "colcell2", for: indexPath) as! ProCells
+                cell.configure()
+                cell.backgroundColor = Colours.white
+                let bgColorView = UIView()
+                bgColorView.backgroundColor = Colours.white
+                cell.selectedBackgroundView = bgColorView
+                cell.frame.size.width = 60
+                cell.frame.size.height = 60
+                return cell
+                
+            } else if indexPath.section == 1 {
+                if indexPath.row == 0 {
+                    let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as! ListCell
+                    cell.userName.text = "View Other Instance's Timeline"
+                    cell.backgroundColor = Colours.grayDark3
+                    cell.userName.textColor = Colours.tabSelected
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.grayDark3
+                    cell.selectedBackgroundView = bgColorView
+                    return cell
+                } else if indexPath.row == 1 {
+                    let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as! ListCell
+                    cell.userName.text = "Create New List +"
+                    cell.backgroundColor = Colours.grayDark3
+                    cell.userName.textColor = Colours.tabSelected
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.grayDark3
+                    cell.selectedBackgroundView = bgColorView
+                    return cell
+                } else {
+                    let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as! ListCell
+                    cell.delegate = self
+                    cell.configure(StoreStruct.allLists[indexPath.row - 2])
+                    cell.backgroundColor = Colours.grayDark3
+                    cell.userName.textColor = UIColor.white
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.grayDark3
+                    cell.selectedBackgroundView = bgColorView
+                    return cell
+                }
+            } else {
+                
+                let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l2", for: indexPath) as! ListCell2
+                cell.delegate = self
+                cell.configure(StoreStruct.instanceLocalToAdd[indexPath.row])
+                cell.backgroundColor = Colours.grayDark3
+                cell.userName.textColor = UIColor.white
+                let bgColorView = UIView()
+                bgColorView.backgroundColor = Colours.grayDark3
+                cell.selectedBackgroundView = bgColorView
+                return cell
+                
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        /*
         if tableView == self.tableView {
 //        if StoreStruct.statusSearch[indexPath.row].mediaAttachments.isEmpty {
             
@@ -1120,7 +1283,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 
             }
         }
-            
+          */
     }
     
     
@@ -1225,7 +1388,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
-                    .action(.default("Remove Instance Timeline".localized), image: UIImage(named: "block")) { (action, ind) in
+                    .action(.default("Remove".localized), image: UIImage(named: "block")) { (action, ind) in
                         print(action, ind)
                         
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -1282,8 +1445,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     
     
     
-    
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath)
         if tableView == self.tableView {
@@ -1313,26 +1474,59 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.dismissOverlayProper()
             
             if indexPath.section == 0 {
-            
-            if indexPath.row == 0 {
                 
-            }  else {
-                let instance = InstanceData.getAllInstances()[indexPath.row - 1]
-                InstanceData.setCurrentInstance(instance: instance)
+            } else if indexPath.section == 1 {
                 
-                DispatchQueue.main.async {
-                    
-                    let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                    appDelegate.reloadApplication()
-                    
+                if indexPath.row == 0 {
+                    // other instance
+                    let controller = NewInstanceViewController()
+                    controller.editListName = ""
+                    self.present(controller, animated: true, completion: nil)
+                } else if indexPath.row == 1 {
+                    // create new list
+                    let controller = NewListViewController()
+                    self.present(controller, animated: true, completion: nil)
+                } else {
+                    // go to list
+                    StoreStruct.currentList = []
+                    let request = Lists.accounts(id: StoreStruct.allLists[indexPath.row - 2].id)
+                    //let request = Lists.list(id: StoreStruct.allLists[indexPath.row - 2].id)
+                    StoreStruct.client.run(request) { (statuses) in
+                        if let stat = (statuses.value) {
+                            for z in stat {
+                                
+                                let request1 = Accounts.statuses(id: z.id)
+                                StoreStruct.client.run(request1) { (statuses) in
+                                    if let stat = (statuses.value) {
+                                        StoreStruct.currentList = StoreStruct.currentList + stat
+                                        StoreStruct.currentList = StoreStruct.currentList.sorted(by: { $0.createdAt > $1.createdAt })
+                                        StoreStruct.currentListTitle = StoreStruct.allLists[indexPath.row - 2].title
+                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
+                                    }
+                                    
+                                }
+                            }
+                            if StoreStruct.currentPage == 0 {
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists"), object: self)
+                            } else if StoreStruct.currentPage == 1 {
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists2"), object: self)
+                            } else {
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists3"), object: self)
+                            }
+                        }
+                    }
                 }
-            }
-            
+                
                 
             } else {
                 
-                
-                StoreStruct.shared.currentInstance.instanceText = StoreStruct.instanceLocalToAdd[indexPath.row]
+                if (UserDefaults.standard.object(forKey: "instancesLocal") == nil) {
+                    
+                } else {
+                    StoreStruct.instanceLocalToAdd = UserDefaults.standard.object(forKey: "instancesLocal") as! [String]
+                    print(StoreStruct.instanceLocalToAdd)
+                    StoreStruct.instanceText = StoreStruct.instanceLocalToAdd[indexPath.row]
+                }
                 
                 if StoreStruct.currentPage == 0 {
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance"), object: self)
@@ -1344,7 +1538,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 
                 
             }
-                
+            
         }
     }
     
@@ -1391,8 +1585,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     Colours.keyCol = UIKeyboardAppearance.dark
                 }
                 if z == 3 {
-                    newNum = 0
+                    newNum = 4
                     UIApplication.shared.statusBarStyle = .default
+                    Colours.keyCol = UIKeyboardAppearance.light
+                }
+                if z == 4 {
+                    newNum = 0
+                    UIApplication.shared.statusBarStyle = .lightContent
                     Colours.keyCol = UIKeyboardAppearance.light
                 }
             }
@@ -1457,6 +1656,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             if sender.state == .began {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
             }
+        } else if (UserDefaults.standard.object(forKey: "longToggle") as! Int == 6) {
+            print("do nothing")
         } else {
             
             if sender.state == .began {
@@ -1640,6 +1841,71 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     }
     
     
+    @objc func midBlue() {
+        
+        UIApplication.shared.statusBarStyle = .lightContent
+        Colours.keyCol = UIKeyboardAppearance.dark
+        
+        UserDefaults.standard.set(4, forKey: "theme")
+        
+        DispatchQueue.main.async {
+            
+            self.firstView.loadLoadLoad()
+            self.secondView.loadLoadLoad()
+            self.thirdView.loadLoadLoad()
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
+            
+            self.view.backgroundColor = Colours.white
+            self.navigationController?.navigationBar.backgroundColor = Colours.white
+            self.navigationController?.navigationBar.tintColor = Colours.white
+            
+            self.tabBar.barTintColor = Colours.white
+            self.tabBar.backgroundColor = Colours.white
+            self.tabBar.unselectedItemTintColor = Colours.tabUnselected
+            self.tabBar.tintColor = Colours.tabSelected
+            
+            self.firstView.view.backgroundColor = Colours.white
+            self.secondView.view.backgroundColor = Colours.white
+            self.thirdView.view.backgroundColor = Colours.white
+            self.fourthView.view.backgroundColor = Colours.white
+            
+            self.tabOne.navigationBar.backgroundColor = Colours.white
+            self.tabOne.navigationBar.barTintColor = Colours.white
+            self.tabTwo.navigationBar.backgroundColor = Colours.white
+            self.tabTwo.navigationBar.barTintColor = Colours.white
+            self.tabThree.navigationBar.backgroundColor = Colours.white
+            self.tabThree.navigationBar.barTintColor = Colours.white
+            self.tabFour.navigationBar.backgroundColor = Colours.white
+            self.tabFour.navigationBar.barTintColor = Colours.white
+            
+            self.statusBarView.backgroundColor = Colours.white
+            
+        }
+    }
+    
+    
+    @objc func signOutNewInstance() {
+        
+        let instances = InstanceData.getAllInstances()
+//        if indexPath.row == instances.count {
+            // launch the sign in
+            let loginController = ViewController()
+            loginController.loadingAdditionalInstance = true
+            loginController.createLoginView(newInstance: true)
+        self.present(loginController, animated: true, completion: nil)
+//            self.navigationController?.pushViewController(loginController, animated: true)
+//        } else {
+//
+//            InstanceData.setCurrentInstance(instance: instances[indexPath.row])
+//
+//            DispatchQueue.main.async {
+//
+//                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+//                appDelegate.reloadApplication()
+//
+//            }
+//        }
+    }
     
     
     //bh9
@@ -1718,13 +1984,22 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     
     
     
-    
+    @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
+        if gesture.direction == UISwipeGestureRecognizer.Direction.down {
+            print("Swipe Down")
+            self.dismiss(animated: true, completion: nil)
+        }
+    }
     
     func createLoginView(newInstance:Bool = false) {
         self.newInstance = newInstance
         self.loginBG.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         self.loginBG.backgroundColor = Colours.tabSelected
         self.view.addSubview(self.loginBG)
+        
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
+        swipeDown.direction = .down
+        self.loginBG.addGestureRecognizer(swipeDown)
         
         self.loginLogo.frame = CGRect(x: self.view.bounds.width/2 - 40, y: self.view.bounds.height/4 - 40, width: 80, height: 80)
         self.loginLogo.image = UIImage(named: "logLogo")
@@ -1745,6 +2020,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.textField.textColor = UIColor.white
         self.textField.spellCheckingType = .no
         self.textField.returnKeyType = .done
+        self.textField.autocorrectionType = .no
         self.textField.autocapitalizationType = .none
         self.textField.delegate = self
         self.textField.attributedPlaceholder = NSAttributedString(string: "mastodon.technology",
@@ -2060,6 +2336,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         if maxHe > 364 {
             maxHe = Int(364)
         }
+        maxHe += 90
         
         self.searcherView.frame = CGRect(x: 10, y: fromTop, width: Int(wid), height: 60)
         springWithDelay(duration: 0.5, delay: 0, animations: {

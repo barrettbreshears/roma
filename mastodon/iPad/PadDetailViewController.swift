@@ -110,7 +110,11 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
         print("newsize")
         print(size)
         
-        self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(size.width), height: Int(size.height))
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: nil, completion: {
+            _ in
+            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(size.width), height: Int(size.height))
+        })
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -752,7 +756,7 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
                 
                 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cell109", for: indexPath) as! ActionButtonCell2
-                cell.configure()
+                cell.configure(mainStatus: self.mainStatus[0])
                 cell.replyButton.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
                 cell.likeButton.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
                 cell.moreButton.addTarget(self, action: #selector(self.didTouchMore), for: .touchUpInside)
@@ -769,7 +773,7 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
             } else {
                 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cell10", for: indexPath) as! ActionButtonCell
-                cell.configure()
+                cell.configure(mainStatus: self.mainStatus[0])
                 cell.replyButton.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
                 cell.likeButton.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
                 cell.boostButton.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
@@ -2727,7 +2731,11 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
         var options = SwipeOptions()
-        options.expansionStyle = .selection
+        if (UserDefaults.standard.object(forKey: "selectSwipe") == nil) || (UserDefaults.standard.object(forKey: "selectSwipe") as! Int == 0) {
+            options.expansionStyle = .selection
+        } else {
+            options.expansionStyle = .none
+        }
         options.transitionStyle = .drag
         options.buttonSpacing = 0
         options.buttonPadding = 0
@@ -2805,6 +2813,19 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white
             Colours.cellQuote = UIColor(red: 33/255.0, green: 33/255.0, blue: 43/255.0, alpha: 1.0)
+            Colours.cellSelected = UIColor(red: 34/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
+            Colours.tabUnselected = UIColor(red: 80/255.0, green: 80/255.0, blue: 90/255.0, alpha: 1.0)
+            Colours.blackUsual = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)
+            Colours.cellOwn = UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0)
+            Colours.cellAlternative = UIColor(red: 20/255.0, green: 20/255.0, blue: 30/255.0, alpha: 1.0)
+            Colours.black = UIColor.white
+            UIApplication.shared.statusBarStyle = .lightContent
+        } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 3) {
+            Colours.white = UIColor(red: 18/255.0, green: 42/255.0, blue: 111/255.0, alpha: 1.0)
+            Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
+            Colours.grayDark2 = UIColor.white
+            Colours.cellNorm = Colours.white
+            Colours.cellQuote = UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)
             Colours.cellSelected = UIColor(red: 34/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
             Colours.tabUnselected = UIColor(red: 80/255.0, green: 80/255.0, blue: 90/255.0, alpha: 1.0)
             Colours.blackUsual = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)

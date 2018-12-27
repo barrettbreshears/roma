@@ -80,6 +80,7 @@ struct StoreStruct {
     static var currentUser: Account!
     static var userAccounts: [Account]!
     static var newInstanceTags: [Status] = []
+    static var instanceText = ""
     
     static var allLists: [List] = []
     static var allListRelID: String = ""

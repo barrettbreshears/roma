@@ -71,9 +71,35 @@ class ActionButtonCell: UITableViewCell {
         contentView.addConstraint(horizontalCenter)
         
         
-        let horizontalFormat = "H:|-(==cornerMargin)-[reply(40)]-horizontalSpacing-[like(40)]-horizontalSpacing-[boost(40)]-horizontalSpacing-[more(40)]-(==cornerMargin)-|"
-        let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-        contentView.addConstraints(horizontalConstraints)
+        
+        if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
+            let horizontalFormat = "H:|-(==cornerMargin)-[reply(40)]-horizontalSpacing-[like(40)]-horizontalSpacing-[boost(40)]-horizontalSpacing-[more(40)]-(==cornerMargin)-|"
+            let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
+            contentView.addConstraints(horizontalConstraints)
+        } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 1) {
+            let horizontalFormat = "H:|-(==cornerMargin)-[reply(40)]-horizontalSpacing-[boost(40)]-horizontalSpacing-[like(40)]-horizontalSpacing-[more(40)]-(==cornerMargin)-|"
+            let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
+            contentView.addConstraints(horizontalConstraints)
+        } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 2) {
+            let horizontalFormat = "H:|-(==cornerMargin)-[boost(40)]-horizontalSpacing-[reply(40)]-horizontalSpacing-[like(40)]-horizontalSpacing-[more(40)]-(==cornerMargin)-|"
+            let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
+            contentView.addConstraints(horizontalConstraints)
+        } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 3) {
+            let horizontalFormat = "H:|-(==cornerMargin)-[boost(40)]-horizontalSpacing-[like(40)]-horizontalSpacing-[reply(40)]-horizontalSpacing-[more(40)]-(==cornerMargin)-|"
+            let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
+            contentView.addConstraints(horizontalConstraints)
+        } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 4) {
+            let horizontalFormat = "H:|-(==cornerMargin)-[like(40)]-horizontalSpacing-[reply(40)]-horizontalSpacing-[boost(40)]-horizontalSpacing-[more(40)]-(==cornerMargin)-|"
+            let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
+            contentView.addConstraints(horizontalConstraints)
+        } else {
+            let horizontalFormat = "H:|-(==cornerMargin)-[like(40)]-horizontalSpacing-[boost(40)]-horizontalSpacing-[reply(40)]-horizontalSpacing-[more(40)]-(==cornerMargin)-|"
+            let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
+            contentView.addConstraints(horizontalConstraints)
+        }
+        
+        
+        
         
         let verticalFormat = "V:|-20-[reply(40)]-20-|"
         let verticalConstraints = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
@@ -101,11 +127,21 @@ class ActionButtonCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure() {
-        replyButton.setImage(UIImage(named: "reply"), for: .normal)
-        likeButton.setImage(UIImage(named: "like"), for: .normal)
-        boostButton.setImage(UIImage(named: "boost"), for: .normal)
+    func configure(mainStatus: Status) {
+        replyButton.setImage(UIImage(named: "reply0"), for: .normal)
         moreButton.setImage(UIImage(named: "more2"), for: .normal)
+        
+        if mainStatus.reblog?.favourited ?? mainStatus.favourited ?? false || StoreStruct.allLikes.contains(mainStatus.reblog?.id ?? mainStatus.id) {
+            likeButton.setImage(UIImage(named: "like"), for: .normal)
+        } else {
+            likeButton.setImage(UIImage(named: "like0"), for: .normal)
+        }
+        
+        if mainStatus.reblog?.reblogged ?? mainStatus.reblogged ?? false || StoreStruct.allBoosts.contains(mainStatus.reblog?.id ?? mainStatus.id) {
+            boostButton.setImage(UIImage(named: "boost"), for: .normal)
+        } else {
+            boostButton.setImage(UIImage(named: "boost0"), for: .normal)
+        }
     }
     
 }
@@ -191,10 +227,15 @@ class ActionButtonCell2: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure() {
+    func configure(mainStatus: Status) {
         replyButton.setImage(UIImage(named: "direct2"), for: .normal)
-        likeButton.setImage(UIImage(named: "like"), for: .normal)
         moreButton.setImage(UIImage(named: "more2"), for: .normal)
+        
+        if mainStatus.reblog?.favourited ?? mainStatus.favourited ?? false || StoreStruct.allLikes.contains(mainStatus.reblog?.id ?? mainStatus.id) {
+            likeButton.setImage(UIImage(named: "like"), for: .normal)
+        } else {
+            likeButton.setImage(UIImage(named: "like0"), for: .normal)
+        }
     }
     
 }

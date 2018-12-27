@@ -112,7 +112,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         print("newsize")
         print(size)
         
-        self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(size.width), height: Int(size.height))
+        super.viewWillTransition(to: size, with: coordinator)
+//        coordinator.animate(alongsideTransition: nil, completion: {
+//            _ in
+            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(size.width), height: Int(size.height))
+//        })
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -128,6 +132,12 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         default:
             print("nothing")
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -757,7 +767,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 
                 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cell109", for: indexPath) as! ActionButtonCell2
-                cell.configure()
+                cell.configure(mainStatus: self.mainStatus[0])
                 cell.replyButton.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
                 cell.likeButton.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
                 cell.moreButton.addTarget(self, action: #selector(self.didTouchMore), for: .touchUpInside)
@@ -774,7 +784,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell10", for: indexPath) as! ActionButtonCell
-            cell.configure()
+            cell.configure(mainStatus: self.mainStatus[0])
             cell.replyButton.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
             cell.likeButton.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
             cell.boostButton.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
@@ -1228,7 +1238,18 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let indexPath = IndexPath(row: sender.tag, section: 1)
         let cell = tableView.cellForRow(at: indexPath) as! DetailCellImage
         var images = [SKPhoto]()
+            var coun = 0
         for y in sto[0].reblog?.mediaAttachments ?? sto[0].mediaAttachments {
+            if coun == 0 {
+                let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                photo.shouldCachePhotoURLImage = true
+                if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                    photo.caption = sto[0].reblog?.content.stripHTML() ?? sto[0].content.stripHTML()
+                } else {
+                    photo.caption = y.description ?? ""
+                }
+                images.append(photo)
+            } else {
             let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
             photo.shouldCachePhotoURLImage = true
             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
@@ -1237,6 +1258,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 photo.caption = y.description ?? ""
             }
             images.append(photo)
+            }
+            coun += 1
         }
         let originImage = sender.currentImage
         if originImage != nil {
@@ -1297,6 +1320,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         if self.mainStatus[0].reblog?.favourited ?? self.mainStatus[0].favourited ?? false || StoreStruct.allLikes.contains(self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id) {
             
+            if self.mainStatus[0].visibility == .direct {
+                let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as! ActionButtonCell2
+                ce.likeButton.setImage(UIImage(named: "like0"), for: .normal)
+            } else {
+                let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as! ActionButtonCell
+                ce.likeButton.setImage(UIImage(named: "like0"), for: .normal)
+            }
+            
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 let notification = UINotificationFeedbackGenerator()
                 notification.notificationOccurred(.success)
@@ -1314,6 +1345,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 print(statuses.value)
             }
         } else {
+            if self.mainStatus[0].visibility == .direct {
+                let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as! ActionButtonCell2
+                ce.likeButton.setImage(UIImage(named: "like"), for: .normal)
+            } else {
+                let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as! ActionButtonCell
+                ce.likeButton.setImage(UIImage(named: "like"), for: .normal)
+            }
+            
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 let notification = UINotificationFeedbackGenerator()
                 notification.notificationOccurred(.success)
@@ -1346,6 +1385,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         impact.impactOccurred()
         }
         if self.mainStatus[0].reblog?.reblogged ?? self.mainStatus[0].reblogged ?? false || StoreStruct.allBoosts.contains(self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id) {
+            let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as! ActionButtonCell
+            ce.boostButton.setImage(UIImage(named: "boost0"), for: .normal)
+            
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 let notification = UINotificationFeedbackGenerator()
                 notification.notificationOccurred(.success)
@@ -1363,6 +1405,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 print(statuses.value)
             }
         } else {
+            let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as! ActionButtonCell
+            ce.boostButton.setImage(UIImage(named: "boost"), for: .normal)
+            
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 let notification = UINotificationFeedbackGenerator()
                 notification.notificationOccurred(.success)
@@ -1932,7 +1977,18 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 
                 let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                 var images = [SKPhoto]()
+                var coun = 0
                 for y in sto[indexPath.row].mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    } else {
                     let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
@@ -1941,6 +1997,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.caption = y.description ?? ""
                     }
                     images.append(photo)
+                    }
+                    coun += 1
                 }
                 let originImage = sender.currentImage
                 if originImage != nil {
@@ -1956,7 +2014,18 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 
                 let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                 var images = [SKPhoto]()
+                var coun = 0
                 for y in sto[indexPath.row].mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    } else {
                     let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
@@ -1965,6 +2034,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.caption = y.description ?? ""
                     }
                     images.append(photo)
+                    }
                 }
                 let originImage = sender.currentImage
                 if originImage != nil {
@@ -2003,7 +2073,18 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
             var images = [SKPhoto]()
+            var coun = 0
             for y in sto[indexPath.row].mediaAttachments {
+                if coun == 0 {
+                    let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                    photo.shouldCachePhotoURLImage = true
+                    if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                        photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
+                    } else {
+                        photo.caption = y.description ?? ""
+                    }
+                    images.append(photo)
+                } else {
                 let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
                 photo.shouldCachePhotoURLImage = true
                 if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
@@ -2012,6 +2093,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     photo.caption = y.description ?? ""
                 }
                 images.append(photo)
+                }
+                coun += 1
             }
             let originImage = sender.currentImage
             if originImage != nil {
@@ -2027,7 +2110,18 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         let cell = tableView.cellForRow(at: indexPath) as! RepliesCellImage
         var images = [SKPhoto]()
+            var coun = 0
         for y in sto[indexPath.row].mediaAttachments {
+            if coun == 0 {
+                let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                photo.shouldCachePhotoURLImage = true
+                if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                    photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
+                } else {
+                    photo.caption = y.description ?? ""
+                }
+                images.append(photo)
+            } else {
             let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
             photo.shouldCachePhotoURLImage = true
             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
@@ -2036,6 +2130,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 photo.caption = y.description ?? ""
             }
             images.append(photo)
+            }
+            coun += 1
         }
         let originImage = sender.currentImage
         if originImage != nil {
@@ -2229,7 +2325,19 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             reply.transitionDelegate = ScaleTransition.default
             reply.textColor = Colours.tabUnselected
             
-            return [reply, like, boost]
+            if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
+                return [reply, like, boost]
+            } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 1) {
+                return [reply, boost, like]
+            } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 2) {
+                return [boost, reply, like]
+            } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 3) {
+                return [boost, like, reply]
+            } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 4) {
+                return [like, reply, boost]
+            } else {
+                return [like, boost, reply]
+            }
         } else {
             let impact = UIImpactFeedbackGenerator(style: .medium)
             
@@ -2720,7 +2828,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
         var options = SwipeOptions()
-        options.expansionStyle = .selection
+        if (UserDefaults.standard.object(forKey: "selectSwipe") == nil) || (UserDefaults.standard.object(forKey: "selectSwipe") as! Int == 0) {
+            options.expansionStyle = .selection
+        } else {
+            options.expansionStyle = .none
+        }
         options.transitionStyle = .drag
         options.buttonSpacing = 0
         options.buttonPadding = 0
@@ -2798,6 +2910,19 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white
             Colours.cellQuote = UIColor(red: 33/255.0, green: 33/255.0, blue: 43/255.0, alpha: 1.0)
+            Colours.cellSelected = UIColor(red: 34/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
+            Colours.tabUnselected = UIColor(red: 80/255.0, green: 80/255.0, blue: 90/255.0, alpha: 1.0)
+            Colours.blackUsual = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)
+            Colours.cellOwn = UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0)
+            Colours.cellAlternative = UIColor(red: 20/255.0, green: 20/255.0, blue: 30/255.0, alpha: 1.0)
+            Colours.black = UIColor.white
+            UIApplication.shared.statusBarStyle = .lightContent
+        } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 4) {
+            Colours.white = UIColor(red: 8/255.0, green: 28/255.0, blue: 88/255.0, alpha: 1.0)
+            Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
+            Colours.grayDark2 = UIColor.white
+            Colours.cellNorm = Colours.white
+            Colours.cellQuote = UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)
             Colours.cellSelected = UIColor(red: 34/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
             Colours.tabUnselected = UIColor(red: 80/255.0, green: 80/255.0, blue: 90/255.0, alpha: 1.0)
             Colours.blackUsual = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)

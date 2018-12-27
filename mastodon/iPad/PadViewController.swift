@@ -93,24 +93,34 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
     let detailNavigationController6 = UINavigationController(rootViewController: LikedViewController())
     
     
+//    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+//
+//        if self.window?.bounds.width ?? CGFloat(0) > CGFloat(400) && previousTraitCollection == nil {
+//
+//        } else {
+//
+//            print("changed trait")
+//
+//
+//        if UIApplication.shared.isSplitOrSlideOver {
+//            self.window?.rootViewController = ViewController()
+//            self.window?.makeKeyAndVisible()
+//        } else {
+//            
+//        }
+//        }
+//    }
+    
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         print("newsize")
         print(size)
         
-        statusBarView.frame = UIApplication.shared.statusBarFrame
+        super.viewWillTransition(to: size, with: coordinator)
+//        coordinator.animate(alongsideTransition: nil, completion: {
+//            _ in
+        self.statusBarView.frame = UIApplication.shared.statusBarFrame
         
-        rootNavigationController2.preferredContentSize = CGSize(width: self.view.bounds.width, height: self.view.bounds.height)
-        
-//        splitViewController2.preferredPrimaryColumnWidthFraction = 1
-//        splitViewController2.minimumPrimaryColumnWidth = (self.window?.bounds.width ?? CGFloat(0))
-//        splitViewController21.preferredPrimaryColumnWidthFraction = 0.66
-//        splitViewController21.minimumPrimaryColumnWidth = ((self.window?.bounds.width ?? 90 - 80)/3)*2
-//        splitViewController31.preferredPrimaryColumnWidthFraction = 0.33
-//        splitViewController31.minimumPrimaryColumnWidth = (self.window?.bounds.width ?? 90 - 80)/3
-//        splitViewController6.preferredPrimaryColumnWidthFraction = 0.66
-//        splitViewController6.minimumPrimaryColumnWidth = ((self.window?.bounds.width ?? 90 - 80)/3)*2
-//        splitViewController5.preferredPrimaryColumnWidthFraction = 0.33
-//        splitViewController5.minimumPrimaryColumnWidth = (self.window?.bounds.width ?? 90 - 80)/3
+        self.rootNavigationController2.preferredContentSize = CGSize(width: self.view.bounds.width, height: self.view.bounds.height)
         
         if UIDevice.current.orientation.isPortrait {
             self.splitViewController21.preferredDisplayMode = .primaryHidden
@@ -119,6 +129,9 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
             self.splitViewController21.preferredDisplayMode = .allVisible
             self.splitViewController6.preferredDisplayMode = .allVisible
         }
+//        })
+        
+        
     }
     
     func load2() {
@@ -593,8 +606,13 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
                         Colours.keyCol = UIKeyboardAppearance.dark
                     }
                     if z == 3 {
-                        newNum = 0
+                        newNum = 4
                         UIApplication.shared.statusBarStyle = .default
+                        Colours.keyCol = UIKeyboardAppearance.light
+                    }
+                    if z == 4 {
+                        newNum = 0
+                        UIApplication.shared.statusBarStyle = .lightContent
                         Colours.keyCol = UIKeyboardAppearance.light
                     }
                 }
