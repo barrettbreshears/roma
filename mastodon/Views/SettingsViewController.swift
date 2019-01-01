@@ -195,6 +195,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse23")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse231")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse099")
+        self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse0991")
         self.tableView.register(AddInstanceCell.self, forCellReuseIdentifier: "addInstanceCell")
         self.tableView.alpha = 1
         self.tableView.delegate = self
@@ -309,9 +310,15 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         return vw
     }
     
+<<<<<<< HEAD
     var generalArray = ["Realtime Updates", "Notifications", "Haptic Feedback", "Always Display Sensitive Content", "Default Status Privacy", "Default Keyboard Style", "Long-Hold Anywhere Action", "Image Upload Quality", "Status Load Order", "Status Load Position", "Default Video Container"]
     var generalArrayDesc = ["No need to refresh manually, you'll get the latest statuses and notifications pushed to you.", "Realtime push notifications for mentions/follows/boosts/likes.", "Get a responsive little vibration when tapping buttons and other on-screen elements.", "Sensitive content will always be displayed without a content warning overlay.", "Select a default privacy state for you statuses, from public (everyone can see), unlisted (local timelines can see), private (followers can see), and direct (only to the mentioned user).", "Choose from a convenient social keyboard that puts the @ and # keys front and centre, or the default keyboard with a return key.", "Select what happens when you long-hold anywhere in the app.", "Pick the quality of images uploaded when composing statuses. A higher quality image may take longer to upload.", "Pick whether statuses load the latest status (plus roughly 20) when reloading, or whether the reloaded statuses follow on immediately from the top status in the timeline.", "Choose whether to retain the timeline scroll position when streaming and pulling to refresh, or to scroll to the top.", "Choose whether to show videos and GIFs in a custom Picture-in-Picture container which can be swiped down to keep the view around, or in the stock media player, where swiping down dismisses the content."]
     var generalArrayIm = ["setreal", "notifs", "sethap", "setsensitivec", "priv", "keybse", "holdse", "comse", "orderse", "posse", "setvid"]
+=======
+    var generalArray = ["Realtime Updates", "Notifications", "Haptic Feedback", "Always Display Sensitive Content", "Default Toot Privacy", "Default Keyboard Style", "Long-Hold Anywhere Action", "Image Upload Quality", "Toot Load Order", "Toot Load Position", "Default Video Container", "Long Swipe Selection", "Swipe Action Order", "Default Mentions Tab", "Activity Graph"]
+    var generalArrayDesc = ["No need to refresh manually, you'll get the latest toots and notifications pushed to you.", "Realtime push notifications for mentions/follows/boosts/likes.", "Get a responsive little vibration when tapping buttons and other on-screen elements.", "Sensitive content will always be displayed without a content warning overlay.", "Select a default privacy state for you toots, from public (everyone can see), unlisted (local timelines can see), private (followers can see), and direct (only to the mentioned user).", "Choose from a convenient social keyboard that puts the @ and # keys front and centre, or the default keyboard with a return key.", "Select what happens when you long-hold anywhere in the app.", "Pick the quality of images uploaded when composing toots. A higher quality image may take longer to upload.", "Pick whether toots load the latest toot (plus roughly 20) when reloading, or whether the reloaded toots follow on immediately from the top toot in the timeline.", "Choose whether to retain the timeline scroll position when streaming and pulling to refresh, or to scroll to the top.", "Choose whether to show videos and GIFs in a custom Picture-in-Picture container which can be swiped down to keep the view around, or in the stock media player, where swiping down dismisses the content.", "Swipe all the way left or right on a toot to select the action on the edge.", "Select the order of swipe action elements.", "Switch to either show mentions or activity by default.", "Display an activity graph showing recent activity in the mentions tab."]
+    var generalArrayIm = ["setreal", "notifs", "sethap", "setsensitivec", "priv", "keybse", "holdse", "comse", "orderse", "posse", "setvid", "swipeact", "swipeact3", "actdef", "setgraph"]
+>>>>>>> upstream/master
     
     var appearanceArray = ["", "Theme", "Text Size", "Profiles Corner Radius", "Images Corner Radius", "Hide Images in Timelines", "Full Usernames", "Confetti", "Gallery Grid Size", "Time Style", "Profile Header Background", "Segments Size", "Segments Transition Style", "Subtle Activity Notifications", "Profile Display Picture Border", "Pinch Background Theme", "Media Captions", "Status Progress Indicator", "Highlight Direct Messages"]
     var appearanceArrayDesc = ["", "Select from a white day theme, a dark dusk theme, an even darker night theme, or a truly black OLED-friendly theme.", "Always be able to read posts with adjustable text sizing.", "Circle or square, your choice.", "Rounded or not, your choice.", "Timelines with some plain old text, for a distraction-free browsing experience.", "Display the user's full username, with the instance, in statuses.", "Add some fun to posting statuses, following users, reposting statuses, and liking statuses.", "Set the amount of columns in the status composition section's photo picker gallery.", "Pick between absolute or relative time to display in timelines.", "Change the style of the profile header background.", "Choose from larger home and notification screen segments, or tinier ones.", "Pick between a static and linear transition, or a playful liquid one.", "Dims activity notifications, while keeping mentions untouched.", "Select a size for the border around profile view display pictures.", "Select a theme for the background when pinching to status a screenshot.", "Pick whether to display the status text or the image's alt text in media captions.", "Choose whether to show the status progress indicator or not.", "Highlight direct messages in timelines with a subtle background."]
@@ -321,9 +328,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     var bioArrayDesc = ["Add a biometric lock to the app.", "Add a biometric lock to the notifications section."]
     var bioArrayIm = ["biolock1", "biolock2"]
     
-    var aboutArray = ["Mast", "Follow Mast"]
-    var aboutArrayDesc = ["Let us tell you a little bit about ourselves.", "Keep in touch, and get progress updates about what we're up to."]
-    var aboutArrayIm = ["setmas", "setfo"]
+    var aboutArray = ["Mast", "Follow Mast", "URL Schemes"]
+    var aboutArrayDesc = ["Let us tell you a little bit about ourselves.", "Keep in touch, and get progress updates about what we're up to.", "Use these to do specific actions within the app from outside the app."]
+    var aboutArrayIm = ["setmas", "setfo", "schemes"]
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
@@ -496,6 +503,17 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             sender.setOn(false, animated: true)
         }
     }
+    @objc func handleToggleSelectGraph(sender: UISwitch) {
+        if sender.isOn {
+            UserDefaults.standard.set(0, forKey: "setGraph")
+            sender.setOn(true, animated: true)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "refrefref"), object: self)
+        } else {
+            UserDefaults.standard.set(1, forKey: "setGraph")
+            sender.setOn(false, animated: true)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "refrefref"), object: self)
+        }
+    }
     
     
     
@@ -523,7 +541,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             return cell
         } else if indexPath.section == 1 {
             
-            if indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9 || indexPath.row == 10 || indexPath.row == 12 {
+            if indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9 || indexPath.row == 10 || indexPath.row == 12 || indexPath.row == 13 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
                 cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
                 cell.backgroundColor = Colours.white
@@ -600,6 +618,26 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         cell.switchView.setOn(false, animated: false)
                     }
                     cell.switchView.addTarget(self, action: #selector(self.handleToggleSelectSwipe), for: .touchUpInside)
+                    return cell
+                }
+                if indexPath.row == 14 {
+                    // select graph
+                    
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellse0991", for: indexPath) as! SettingsCellToggle
+                    cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
+                    cell.backgroundColor = Colours.white
+                    cell.userName.textColor = Colours.black
+                    cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                    cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.white
+                    cell.selectedBackgroundView = bgColorView
+                    if (UserDefaults.standard.object(forKey: "setGraph") == nil) || (UserDefaults.standard.object(forKey: "setGraph") as! Int == 0) {
+                        cell.switchView.setOn(true, animated: false)
+                    } else {
+                        cell.switchView.setOn(false, animated: false)
+                    }
+                    cell.switchView.addTarget(self, action: #selector(self.handleToggleSelectGraph), for: .touchUpInside)
                     return cell
                 }
                 return cell
@@ -1247,6 +1285,41 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .action(.default("Like Boost Reply".localized), image: filledSet6) { (action, ind) in
                         print(action, ind)
                         UserDefaults.standard.set(5, forKey: "sworder")
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+            if indexPath.row == 13 {
+                // mentions default
+                var filledSet1 = UIImage(named: "unfilledset")
+                var filledSet2 = UIImage(named: "unfilledset")
+                if (UserDefaults.standard.object(forKey: "mentdef2") == nil) || (UserDefaults.standard.object(forKey: "mentdef2") as! Int == 0) {
+                    filledSet1 = UIImage(named: "filledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "mentdef2") as! Int == 1) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "filledset")
+                }
+                
+                Alertift.actionSheet(title: title, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("Mentions".localized), image: filledSet1) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(0, forKey: "mentdef2")
+                    }
+                    .action(.default("Activity".localized), image: filledSet2) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(1, forKey: "mentdef2")
                     }
                     .action(.cancel("Dismiss"))
                     .finally { action, index in
@@ -1991,6 +2064,115 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
         }
         
+<<<<<<< HEAD
+=======
+        if indexPath.section == 4 {
+            if indexPath.row == 0 {
+                // about
+                Alertift.actionSheet(title: "Mast \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "")", message: "A beautiful Mastodon client\nMade with the intention to be reliant\nIt's fast, it's fluid, it's fun\nBut most of all, it's built with love for everyone\n\nMade independantly by @JPEG@mastodon.technology".localized)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 4))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+            if indexPath.row == 1 {
+                // follow
+                Alertift.actionSheet(title: title, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("Mastodon".localized)) { (action, ind) in
+                        print(action, ind)
+                        
+                        
+                        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                            let notification = UINotificationFeedbackGenerator()
+                            notification.notificationOccurred(.success)
+                        }
+                        let statusAlert = StatusAlert()
+                        statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
+                        statusAlert.title = "Followed".localized
+                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.message = "Mastodon Developer"
+                        statusAlert.show()
+                        
+                        if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+                        }
+                        
+                        let request = Accounts.follow(id: "100802707057696937")
+                        StoreStruct.client.run(request) { (statuses) in
+                            if let _ = (statuses.value) {
+                                print("followed")
+                            }
+                        }
+                    }
+                    .action(.default("Developer Twitter".localized)) { (action, ind) in
+                        print(action, ind)
+                        let twUrl = URL(string: "twitter://user?screen_name=JPEGuin")!
+                        let twUrlWeb = URL(string: "https://www.twitter.com/JPEGuin")!
+                        if UIApplication.shared.canOpenURL(twUrl) {
+                            UIApplication.shared.open(twUrl, options: [:], completionHandler: nil)
+                        } else {
+                            self.safariVC = SFSafariViewController(url: twUrlWeb)
+                            self.safariVC?.preferredBarTintColor = Colours.white
+                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                            self.present(self.safariVC!, animated: true, completion: nil)
+                        }
+                    }
+                    .action(.default("Mast Twitter".localized)) { (action, ind) in
+                        print(action, ind)
+                        let twUrl = URL(string: "twitter://user?screen_name=TheMastApp")!
+                        let twUrlWeb = URL(string: "https://www.twitter.com/TheMastApp")!
+                        if UIApplication.shared.canOpenURL(twUrl) {
+                            UIApplication.shared.open(twUrl, options: [:], completionHandler: nil)
+                        } else {
+                            self.safariVC = SFSafariViewController(url: twUrlWeb)
+                            self.safariVC?.preferredBarTintColor = Colours.white
+                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                            self.present(self.safariVC!, animated: true, completion: nil)
+                        }
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 4))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+            if indexPath.row == 2 {
+                // schemes
+                Alertift.actionSheet(title: "URL Schemes".localized, message: "com.shi.mastodon://light : Switch to the light white theme\n\ncom.shi.mastodon://dark : Switch to the dark theme\n\ncom.shi.mastodon://darker : Switch to the darker theme\n\ncom.shi.mastodon://black : Switch to the black OLED theme\n\ncom.shi.mastodon://blue : Switch to the midnight blue theme\n\ncom.shi.mastodon://confetti : Make it rain confetti\n\ncom.shi.mastodon://onboard : Present the onboarding pop-up again\n\ncom.shi.mastodon://home : Switch to the home tab\n\ncom.shi.mastodon://mentions : Switch to the mentions tab\n\ncom.shi.mastodon://profile : Switch to the profile tab\n\ncom.shi.mastodon://toot : Present the toot composer screen\n\ncom.shi.mastodon://id=123 : Go to a toot with the ID 123")
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 4))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+        }
+        
+>>>>>>> upstream/master
         
        
         

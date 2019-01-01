@@ -12,7 +12,7 @@ import Disk
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-
+    
     var window: UIWindow?
     let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
     var blurEffectViewMain = UIView()
@@ -23,14 +23,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var oneTime = false
     
-//    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-//        if 1 == 1 {
-//            NotificationCenter.default.post(name: Notification.Name(rawValue: "createNoti"), object: self)
-//            completionHandler(.newData)
-//        } else {
-//            completionHandler(.failed)
-//        }
-//    }
+    //    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+    //        if 1 == 1 {
+    //            NotificationCenter.default.post(name: Notification.Name(rawValue: "createNoti"), object: self)
+    //            completionHandler(.newData)
+    //        } else {
+    //            completionHandler(.failed)
+    //        }
+    //    }
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         if userActivity.activityType == "com.vm.roma.confetti" {
@@ -93,172 +93,188 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             completionHandler(false)
         }
     }
-
+    
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         
-        if url.host == "addNewInstance" {
-            print("Response ==> \(url.absoluteString)")
-            let x = url.absoluteString
-            let y = x.split(separator: "=")
-            StoreStruct.shared.newInstance!.authCode = y[1].description
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged"), object: nil)
-            return true
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            if url.host == "light" {
+                let viewController0 = window?.rootViewController as! UISplitViewController
+                let viewController = viewController0.viewControllers[0] as! PadViewController
+                viewController.siriLight()
+                return true
+            } else if url.host == "dark" {
+                let viewController0 = window?.rootViewController as! UISplitViewController
+                let viewController = viewController0.viewControllers[0] as! PadViewController
+                viewController.siriDark()
+                return true
+            } else if url.host == "darker" {
+                let viewController0 = window?.rootViewController as! UISplitViewController
+                let viewController = viewController0.viewControllers[0] as! PadViewController
+                viewController.siriDark2()
+                return true
+            } else if url.host == "black" {
+                let viewController0 = window?.rootViewController as! UISplitViewController
+                let viewController = viewController0.viewControllers[0] as! PadViewController
+                viewController.siriOled()
+                return true
+            } else if url.host == "blue" {
+                let viewController0 = window?.rootViewController as! UISplitViewController
+                let viewController = viewController0.viewControllers[0] as! PadViewController
+                viewController.siriBlue()
+                return true
+            } else if url.host == "confetti" {
+                let viewController0 = window?.rootViewController as! UISplitViewController
+                let viewController = viewController0.viewControllers[0] as! PadViewController
+                viewController.siriConfetti()
+                return true
+            } else if url.host == "onboard" {
+//                let viewController = window?.rootViewController as! PadViewController
+//                viewController.presentIntro()
+                return true
+            } else if url.absoluteString.contains("id=") {
+                let x = url.absoluteString
+                let y = x.split(separator: "=")
+                StoreStruct.curID = y[1].description
+                let viewController0 = window?.rootViewController as! UISplitViewController
+                let viewController = viewController0.viewControllers[0] as! PadViewController
+                viewController.gotoID()
+                return true
+            } else if url.host == "home" {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "switch11"), object: self)
+                return true
+            } else if url.host == "mentions" {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "switch22"), object: self)
+                return true
+            } else if url.host == "profile" {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "switch33"), object: self)
+                return true
+            } else if url.host == "toot" {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "switch44"), object: self)
+                return true
+            } else if url.host == "addNewInstance" {
+                print("Response ==> \(url.absoluteString)")
+                let x = url.absoluteString
+                let y = x.split(separator: "=")
+                StoreStruct.shared.newInstance!.authCode = y[1].description
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .phone:
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged"), object: nil)
+                case .pad:
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged2"), object: nil)
+                default:
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged"), object: nil)
+                }
+                return true
+            } else if url.host == "success" {
+                print("Response ==> \(url.absoluteString)")
+                let x = url.absoluteString
+                let y = x.split(separator: "=")
+                StoreStruct.shared.currentInstance.authCode = y[1].description
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .phone:
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
+                case .pad:
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "logged2"), object: nil)
+                default:
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
+                }
+                return true
+            } else {
+                return true
+            }
+            
+            
+            
         } else {
-            print("Response ==> \(url.absoluteString)")
-            let x = url.absoluteString
-            let y = x.split(separator: "=")
-            StoreStruct.shared.currentInstance.authCode = y[1].description
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
-            return true
+            if url.host == "light" {
+                let viewController = window?.rootViewController as! ViewController
+                viewController.siriLight()
+                return true
+            } else if url.host == "dark" {
+                let viewController = window?.rootViewController as! ViewController
+                viewController.siriDark()
+                return true
+            } else if url.host == "darker" {
+                let viewController = window?.rootViewController as! ViewController
+                viewController.siriDark2()
+                return true
+            } else if url.host == "black" {
+                let viewController = window?.rootViewController as! ViewController
+                viewController.siriOled()
+                return true
+            } else if url.host == "blue" {
+                let viewController = window?.rootViewController as! ViewController
+                viewController.siriBlue()
+                return true
+            } else if url.host == "confetti" {
+                let viewController = window?.rootViewController as! ViewController
+                viewController.siriConfetti()
+                return true
+            } else if url.host == "onboard" {
+                let viewController = window?.rootViewController as! ViewController
+                viewController.presentIntro()
+                return true
+            } else if url.absoluteString.contains("id=") {
+                let x = url.absoluteString
+                let y = x.split(separator: "=")
+                StoreStruct.curID = y[1].description
+                let viewController = window?.rootViewController as! ViewController
+                viewController.gotoID()
+                return true
+            } else if url.host == "home" {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "switch11"), object: self)
+                return true
+            } else if url.host == "mentions" {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "switch22"), object: self)
+                return true
+            } else if url.host == "profile" {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "switch33"), object: self)
+                return true
+            } else if url.host == "toot" {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "switch44"), object: self)
+                return true
+            } else if url.host == "addNewInstance" {
+                print("Response ==> \(url.absoluteString)")
+                let x = url.absoluteString
+                let y = x.split(separator: "=")
+                StoreStruct.shared.newInstance!.authCode = y[1].description
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .phone:
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged"), object: nil)
+                case .pad:
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged2"), object: nil)
+                default:
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged"), object: nil)
+                }
+                return true
+            } else if url.host == "success" {
+                print("Response ==> \(url.absoluteString)")
+                let x = url.absoluteString
+                let y = x.split(separator: "=")
+                StoreStruct.shared.currentInstance.authCode = y[1].description
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .phone:
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
+                case .pad:
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "logged2"), object: nil)
+                default:
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
+                }
+                return true
+            } else {
+                return true
+            }
         }
     }
-
+    
     
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-        if UIApplication.shared.isSplitOrSlideOver {
-            self.window?.rootViewController = ViewController()
-            self.window?.makeKeyAndVisible()
-        } else {
-        
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .phone:
-//            self.window?.rootViewController = ViewController()
-//            self.window?.makeKeyAndVisible()
-            print("nothing")
-        case .pad:
-            self.window = UIWindow(frame: UIScreen.main.bounds)
-            self.window!.backgroundColor = Colours.white
-            
-            let splitViewController =  UISplitViewController()
-            let rootViewController = PadViewController()
-            
-            let splitViewController2 =  UISplitViewController()
-            let rootViewController2 = PadTimelinesViewController()
-            let rootNavigationController2 = UINavigationController(rootViewController: rootViewController2)
-            
-            
-            splitViewController2.viewControllers = [rootNavigationController2]
-            splitViewController2.preferredPrimaryColumnWidthFraction = 0.5
-            splitViewController2.preferredDisplayMode = .allVisible
-            
-            splitViewController.viewControllers = [rootViewController, splitViewController2]
-            splitViewController.minimumPrimaryColumnWidth = 80
-            splitViewController.maximumPrimaryColumnWidth = 80
-            splitViewController.preferredDisplayMode = .allVisible
-            
-            splitViewController.view.backgroundColor = Colours.white
-            splitViewController2.view.backgroundColor = Colours.white
-            rootNavigationController2.view.backgroundColor = Colours.white
-            self.window!.rootViewController = splitViewController
-            self.window!.makeKeyAndVisible()
-            
-            
-            UINavigationBar.appearance().shadowImage = UIImage()
-            UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-            UINavigationBar.appearance().backgroundColor = Colours.white
-            UINavigationBar.appearance().barTintColor = Colours.black
-            UINavigationBar.appearance().tintColor = Colours.black
-            UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
-        default:
-//            self.window?.rootViewController = ViewController()
-//            self.window?.makeKeyAndVisible()
-            print("nothing")
-        }
-        
-        }
-        
-        SwiftyGiphyAPI.shared.apiKey = SwiftyGiphyAPI.publicBetaKey
-        
-        
-        
-        
-        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
-        
-        OneSignal.initWithLaunchOptions(launchOptions,
-                                        appId: "4f67f45a-7d0f-4e7d-8624-0ec148f064ed",
-                                        handleNotificationAction: nil,
-                                        settings: onesignalInitSettings)
-        
-        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
-        
-        
-        WatchSessionManager.sharedManager.startSession()
-        
-        
-        let BarButtonItemAppearance = UIBarButtonItem.appearance()
-        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: Colours.grayLight2], for: .normal)
-        BarButtonItemAppearance.tintColor = Colours.grayLight2
-        
-        
-        window?.tintColor = Colours.tabSelected
-        
-        
-        
-        do {
-            StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
-            StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
-            StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
-            StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
-            StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
-            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)use.json", from: .documents, as: Account.self)
-        } catch {
-            print("Couldn't load")
-        }
-        
-        return true
-    }
-    
-    
-    
-    
-
-    func applicationWillResignActive(_ application: UIApplication) {
-        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
-    }
-
-    func applicationDidEnterBackground(_ application: UIApplication) {
-        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        
-        
-        UserDefaults.standard.set(StoreStruct.currentUser.username, forKey: "userN")
-        do {
-            try Disk.save(StoreStruct.currentUser, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)use.json")
-            
-            try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
-            try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
-            try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
-            
-            try Disk.save(StoreStruct.notifications, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)noti.json")
-            try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)ment.json")
-        } catch {
-            print("Couldn't save")
-        }
-        
-    }
-
-    func applicationWillEnterForeground(_ application: UIApplication) {
-        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        
-    }
-
-    func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "startStream"), object: self)
-        
-        
-        if self.oneTime == false {
-            if (UserDefaults.standard.object(forKey: "biometrics") == nil) || (UserDefaults.standard.object(forKey: "biometrics") as! Int == 0) {} else {
-                self.biometricAuthenticationClicked(self)
-                self.oneTime = true
-            }
-        }
-        
         
         if UIApplication.shared.isSplitOrSlideOver {
             self.window?.rootViewController = ViewController()
@@ -312,13 +328,154 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
             
         }
+        
+        SwiftyGiphyAPI.shared.apiKey = SwiftyGiphyAPI.publicBetaKey
+        
+        
+        
+        
+        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
+        
+        OneSignal.initWithLaunchOptions(launchOptions,
+                                        appId: "4f67f45a-7d0f-4e7d-8624-0ec148f064ed",
+                                        handleNotificationAction: nil,
+                                        settings: onesignalInitSettings)
+        
+        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
+        
+        
+        WatchSessionManager.sharedManager.startSession()
+        
+        
+        let BarButtonItemAppearance = UIBarButtonItem.appearance()
+        BarButtonItemAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: Colours.grayLight2], for: .normal)
+        BarButtonItemAppearance.tintColor = Colours.grayLight2
+        
+        
+        window?.tintColor = Colours.tabSelected
+        
+        
+        
+        do {
+            StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
+            StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
+            StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
+            StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
+            StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
+            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)use.json", from: .documents, as: Account.self)
+        } catch {
+            print("Couldn't load")
+        }
+        
+        return true
     }
-
+    
+    
+    
+    
+    
+    func applicationWillResignActive(_ application: UIApplication) {
+        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+        // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+    }
+    
+    func applicationDidEnterBackground(_ application: UIApplication) {
+        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
+        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        
+        if StoreStruct.currentUser != nil {
+            UserDefaults.standard.set(StoreStruct.currentUser.username, forKey: "userN")
+            do {
+                try Disk.save(StoreStruct.currentUser, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)use.json")
+                
+                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
+                
+                try Disk.save(StoreStruct.notifications, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)noti.json")
+                try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)ment.json")
+            } catch {
+                print("Couldn't save")
+            }
+        }
+        
+    }
+    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        
+    }
+    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "startStream"), object: self)
+        
+        
+        if self.oneTime == false {
+            if (UserDefaults.standard.object(forKey: "biometrics") == nil) || (UserDefaults.standard.object(forKey: "biometrics") as! Int == 0) {} else {
+                self.biometricAuthenticationClicked(self)
+                self.oneTime = true
+            }
+        }
+        
+        
+        if UIApplication.shared.isSplitOrSlideOver {
+            self.window?.rootViewController = ViewController()
+            self.window?.makeKeyAndVisible()
+            StoreStruct.isSplit = true
+        } else {
+            if StoreStruct.isSplit {
+            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+            switch (deviceIdiom) {
+            case .phone:
+                print("nothing")
+            case .pad:
+                self.window = UIWindow(frame: UIScreen.main.bounds)
+                self.window!.backgroundColor = Colours.white
+                
+                let splitViewController =  UISplitViewController()
+                let rootViewController = PadViewController()
+                
+                let splitViewController2 =  UISplitViewController()
+                let rootViewController2 = PadTimelinesViewController()
+                let rootNavigationController2 = UINavigationController(rootViewController: rootViewController2)
+                
+                
+                splitViewController2.viewControllers = [rootNavigationController2]
+                splitViewController2.preferredPrimaryColumnWidthFraction = 0.5
+                splitViewController2.preferredDisplayMode = .allVisible
+                
+                splitViewController.viewControllers = [rootViewController, splitViewController2]
+                splitViewController.minimumPrimaryColumnWidth = 80
+                splitViewController.maximumPrimaryColumnWidth = 80
+                splitViewController.preferredDisplayMode = .allVisible
+                
+                splitViewController.view.backgroundColor = Colours.white
+                splitViewController2.view.backgroundColor = Colours.white
+                rootNavigationController2.view.backgroundColor = Colours.white
+                self.window!.rootViewController = splitViewController
+                self.window!.makeKeyAndVisible()
+                
+                
+                UINavigationBar.appearance().shadowImage = UIImage()
+                UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+                UINavigationBar.appearance().backgroundColor = Colours.white
+                UINavigationBar.appearance().barTintColor = Colours.black
+                UINavigationBar.appearance().tintColor = Colours.black
+                UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
+            default:
+                print("nothing")
+            }
+                StoreStruct.isSplit = false
+            }
+        }
+    }
+    
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
+    
+    
     
     func biometricAuthenticationClicked(_ sender: Any) {
         
@@ -354,6 +511,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    func reloadTint() {
+        window?.tintColor = Colours.tabSelected
+    }
+    
     func reloadApplication() {
         
         if UIApplication.shared.isSplitOrSlideOver {
@@ -361,48 +522,48 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.makeKeyAndVisible()
         } else {
             
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .phone:
-            self.window?.rootViewController = ViewController()
-            self.window?.makeKeyAndVisible()
-        case .pad:
-            self.window = UIWindow(frame: UIScreen.main.bounds)
-            self.window!.backgroundColor = Colours.white
-            
-            let splitViewController =  UISplitViewController()
-            let rootViewController = PadViewController()
-            
-            let splitViewController2 =  UISplitViewController()
-            let rootViewController2 = PadTimelinesViewController()
-            let rootNavigationController2 = UINavigationController(rootViewController: rootViewController2)
-            
-            splitViewController2.viewControllers = [rootNavigationController2]
-            splitViewController2.preferredPrimaryColumnWidthFraction = 0.5
-            splitViewController2.preferredDisplayMode = .allVisible
-            
-            splitViewController.viewControllers = [rootViewController, splitViewController2]
-            splitViewController.minimumPrimaryColumnWidth = 80
-            splitViewController.maximumPrimaryColumnWidth = 80
-            splitViewController.preferredDisplayMode = .allVisible
-            
-            splitViewController.view.backgroundColor = Colours.white
-            splitViewController2.view.backgroundColor = Colours.white
-            rootNavigationController2.view.backgroundColor = Colours.white
-            self.window!.rootViewController = splitViewController
-            self.window!.makeKeyAndVisible()
-            
-            
-            UINavigationBar.appearance().shadowImage = UIImage()
-            UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-            UINavigationBar.appearance().backgroundColor = Colours.white
-            UINavigationBar.appearance().barTintColor = Colours.black
-            UINavigationBar.appearance().tintColor = Colours.black
-            UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
-        default:
-            self.window?.rootViewController = ViewController()
-            self.window?.makeKeyAndVisible()
-        }
+            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+            switch (deviceIdiom) {
+            case .phone:
+                self.window?.rootViewController = ViewController()
+                self.window?.makeKeyAndVisible()
+            case .pad:
+                self.window = UIWindow(frame: UIScreen.main.bounds)
+                self.window!.backgroundColor = Colours.white
+                
+                let splitViewController =  UISplitViewController()
+                let rootViewController = PadViewController()
+                
+                let splitViewController2 =  UISplitViewController()
+                let rootViewController2 = PadTimelinesViewController()
+                let rootNavigationController2 = UINavigationController(rootViewController: rootViewController2)
+                
+                splitViewController2.viewControllers = [rootNavigationController2]
+                splitViewController2.preferredPrimaryColumnWidthFraction = 0.5
+                splitViewController2.preferredDisplayMode = .allVisible
+                
+                splitViewController.viewControllers = [rootViewController, splitViewController2]
+                splitViewController.minimumPrimaryColumnWidth = 80
+                splitViewController.maximumPrimaryColumnWidth = 80
+                splitViewController.preferredDisplayMode = .allVisible
+                
+                splitViewController.view.backgroundColor = Colours.white
+                splitViewController2.view.backgroundColor = Colours.white
+                rootNavigationController2.view.backgroundColor = Colours.white
+                self.window!.rootViewController = splitViewController
+                self.window!.makeKeyAndVisible()
+                
+                
+                UINavigationBar.appearance().shadowImage = UIImage()
+                UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+                UINavigationBar.appearance().backgroundColor = Colours.white
+                UINavigationBar.appearance().barTintColor = Colours.black
+                UINavigationBar.appearance().tintColor = Colours.black
+                UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
+            default:
+                self.window?.rootViewController = ViewController()
+                self.window?.makeKeyAndVisible()
+            }
         }
     }
 }

@@ -586,10 +586,18 @@
 	<string>Allow Mast to access your photo library to display your recent pictures and videos for posting within statuses.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
+<<<<<<< HEAD
 		<string>com.vm.roma.oled</string>
 		<string>com.vm.roma.light</string>
 		<string>com.vm.roma.dark</string>
 		<string>com.vm.roma.confetti</string>
+=======
+		<string>com.shi.Mast.oled</string>
+		<string>com.shi.Mast.light</string>
+		<string>com.shi.Mast.dark</string>
+		<string>com.shi.Mast.bluemid</string>
+		<string>com.shi.Mast.confetti</string>
+>>>>>>> upstream/master
 	</array>
 	<key>UIApplicationShortcutItems</key>
 	<array>

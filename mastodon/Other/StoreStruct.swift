@@ -94,4 +94,8 @@ struct StoreStruct {
     static var photoNew = UIImage()
     static var spoilerText = ""
     static var typeOfSearch = 0
+    
+    static var curID = ""
+    static var doOnce = true
+    static var isSplit = false
 }

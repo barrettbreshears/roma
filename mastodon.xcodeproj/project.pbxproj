@@ -46,6 +46,9 @@
 		530976D42179DBD700640D84 /* AuthenticationErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530976D12179DBD700640D84 /* AuthenticationErrors.swift */; };
 		531046C4215AC3AB00FCD068 /* ProfileHeaderCellOwn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531046C3215AC3AB00FCD068 /* ProfileHeaderCellOwn.swift */; };
 		531096B9216D05E100E767DF /* FedTimelineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531096B8216D05E100E767DF /* FedTimelineController.swift */; };
+		5313A23D21D5303900F205E6 /* PadSidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5313A23C21D5303900F205E6 /* PadSidebarViewController.swift */; };
+		5313A23F21D532E700F205E6 /* SidebarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5313A23E21D532E700F205E6 /* SidebarCell.swift */; };
+		5313A24121D5330200F205E6 /* SidebarCellImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5313A24021D5330200F205E6 /* SidebarCellImage.swift */; };
 		5314E30C216D1502007F9651 /* EMTLoadingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5314E2EB216D1502007F9651 /* EMTLoadingIndicator.swift */; };
 		5314E30D216D1502007F9651 /* EMTTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5314E2EC216D1502007F9651 /* EMTTimer.swift */; };
 		5314E30E216D1502007F9651 /* waitIndicatorGraphic-13@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314E2EE216D1502007F9651 /* waitIndicatorGraphic-13@2x.png */; };
@@ -97,6 +100,28 @@
 		5316C89D219D94A00003AB97 /* SwiftyGiphyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5316C88D219D94A00003AB97 /* SwiftyGiphyViewController.swift */; };
 		53170E80218361A4005F972B /* PadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53170E7F218361A4005F972B /* PadViewController.swift */; };
 		53170E8421836761005F972B /* PadTimelinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53170E8321836761005F972B /* PadTimelinesViewController.swift */; };
+		5317C79321DA2E6200746197 /* SideDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C79221DA2E6200746197 /* SideDetailCell.swift */; };
+		5317C79521DA2E9200746197 /* SideDetailCellImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C79421DA2E9200746197 /* SideDetailCellImage.swift */; };
+		5317C79721DA2EE100746197 /* PadDetailViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C79621DA2EE100746197 /* PadDetailViewController2.swift */; };
+		5317C7B021DA334500746197 /* ReferenceLineDrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C79A21DA334500746197 /* ReferenceLineDrawingView.swift */; };
+		5317C7B121DA334500746197 /* BarDrawingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C79B21DA334500746197 /* BarDrawingLayer.swift */; };
+		5317C7B221DA334500746197 /* GradientDrawingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C79C21DA334500746197 /* GradientDrawingLayer.swift */; };
+		5317C7B321DA334500746197 /* DotDrawingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C79D21DA334500746197 /* DotDrawingLayer.swift */; };
+		5317C7B421DA334500746197 /* ScrollableGraphViewDrawingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C79E21DA334500746197 /* ScrollableGraphViewDrawingLayer.swift */; };
+		5317C7B521DA334500746197 /* LineDrawingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C79F21DA334500746197 /* LineDrawingLayer.swift */; };
+		5317C7B621DA334500746197 /* FillDrawingLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7A021DA334500746197 /* FillDrawingLayer.swift */; };
+		5317C7B721DA334500746197 /* ScrollableGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7A121DA334500746197 /* ScrollableGraphView.swift */; };
+		5317C7B821DA334500746197 /* ScrollableGraphViewDrawingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7A321DA334500746197 /* ScrollableGraphViewDrawingDelegate.swift */; };
+		5317C7B921DA334500746197 /* ScrollableGraphViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7A421DA334500746197 /* ScrollableGraphViewDataSource.swift */; };
+		5317C7BA21DA334500746197 /* ReferenceLines.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7A621DA334500746197 /* ReferenceLines.swift */; };
+		5317C7BB21DA334500746197 /* LabelPool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7A721DA334500746197 /* LabelPool.swift */; };
+		5317C7BC21DA334500746197 /* BarPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7A921DA334500746197 /* BarPlot.swift */; };
+		5317C7BD21DA334500746197 /* GraphPointAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7AB21DA334500746197 /* GraphPointAnimation.swift */; };
+		5317C7BE21DA334500746197 /* GraphPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7AC21DA334500746197 /* GraphPoint.swift */; };
+		5317C7BF21DA334500746197 /* Plot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7AD21DA334500746197 /* Plot.swift */; };
+		5317C7C021DA334500746197 /* LinePlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7AE21DA334500746197 /* LinePlot.swift */; };
+		5317C7C121DA334500746197 /* DotPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7AF21DA334500746197 /* DotPlot.swift */; };
+		5318D60821D508710091262E /* PadListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318D60721D508710091262E /* PadListViewController.swift */; };
 		5318F56221877F8A00418159 /* PadLogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318F56121877F8A00418159 /* PadLogInViewController.swift */; };
 		531B04B9217111A100D31715 /* Stickers.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 531B04B8217111A100D31715 /* Stickers.xcassets */; };
 		531BD18C2188672700E12278 /* TNFloatingPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531BD18B2188672700E12278 /* TNFloatingPanel.swift */; };
@@ -618,7 +643,6 @@
 		5373CB502156826000676F3D /* DetailCellImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB4F2156826000676F3D /* DetailCellImage.swift */; };
 		5373CB522156884B00676F3D /* RepliesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB512156884B00676F3D /* RepliesCell.swift */; };
 		5373CB54215688D700676F3D /* RepliesCellImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB53215688D700676F3D /* RepliesCellImage.swift */; };
-		5373CB562156A8B200676F3D /* ScrollableGraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB552156A8B100676F3D /* ScrollableGraphView.swift */; };
 		5373CB582156AA7200676F3D /* GraphCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB572156AA7200676F3D /* GraphCell.swift */; };
 		5373CB5A2157F7C500676F3D /* ListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB592157F7C400676F3D /* ListCell.swift */; };
 		5373CB5C2157FEDA00676F3D /* ListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB5B2157FEDA00676F3D /* ListViewController.swift */; };
@@ -761,6 +785,9 @@
 		530976D12179DBD700640D84 /* AuthenticationErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationErrors.swift; sourceTree = "<group>"; };
 		531046C3215AC3AB00FCD068 /* ProfileHeaderCellOwn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderCellOwn.swift; sourceTree = "<group>"; };
 		531096B8216D05E100E767DF /* FedTimelineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FedTimelineController.swift; sourceTree = "<group>"; };
+		5313A23C21D5303900F205E6 /* PadSidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadSidebarViewController.swift; sourceTree = "<group>"; };
+		5313A23E21D532E700F205E6 /* SidebarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarCell.swift; sourceTree = "<group>"; };
+		5313A24021D5330200F205E6 /* SidebarCellImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SidebarCellImage.swift; sourceTree = "<group>"; };
 		5314E2EB216D1502007F9651 /* EMTLoadingIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EMTLoadingIndicator.swift; sourceTree = "<group>"; };
 		5314E2EC216D1502007F9651 /* EMTTimer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EMTTimer.swift; sourceTree = "<group>"; };
 		5314E2EE216D1502007F9651 /* waitIndicatorGraphic-13@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "waitIndicatorGraphic-13@2x.png"; sourceTree = "<group>"; };
@@ -812,6 +839,28 @@
 		5316C88D219D94A00003AB97 /* SwiftyGiphyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyGiphyViewController.swift; sourceTree = "<group>"; };
 		53170E7F218361A4005F972B /* PadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadViewController.swift; sourceTree = "<group>"; };
 		53170E8321836761005F972B /* PadTimelinesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadTimelinesViewController.swift; sourceTree = "<group>"; };
+		5317C79221DA2E6200746197 /* SideDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideDetailCell.swift; sourceTree = "<group>"; };
+		5317C79421DA2E9200746197 /* SideDetailCellImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideDetailCellImage.swift; sourceTree = "<group>"; };
+		5317C79621DA2EE100746197 /* PadDetailViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadDetailViewController2.swift; sourceTree = "<group>"; };
+		5317C79A21DA334500746197 /* ReferenceLineDrawingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReferenceLineDrawingView.swift; sourceTree = "<group>"; };
+		5317C79B21DA334500746197 /* BarDrawingLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarDrawingLayer.swift; sourceTree = "<group>"; };
+		5317C79C21DA334500746197 /* GradientDrawingLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GradientDrawingLayer.swift; sourceTree = "<group>"; };
+		5317C79D21DA334500746197 /* DotDrawingLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DotDrawingLayer.swift; sourceTree = "<group>"; };
+		5317C79E21DA334500746197 /* ScrollableGraphViewDrawingLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollableGraphViewDrawingLayer.swift; sourceTree = "<group>"; };
+		5317C79F21DA334500746197 /* LineDrawingLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineDrawingLayer.swift; sourceTree = "<group>"; };
+		5317C7A021DA334500746197 /* FillDrawingLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FillDrawingLayer.swift; sourceTree = "<group>"; };
+		5317C7A121DA334500746197 /* ScrollableGraphView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollableGraphView.swift; sourceTree = "<group>"; };
+		5317C7A321DA334500746197 /* ScrollableGraphViewDrawingDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollableGraphViewDrawingDelegate.swift; sourceTree = "<group>"; };
+		5317C7A421DA334500746197 /* ScrollableGraphViewDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollableGraphViewDataSource.swift; sourceTree = "<group>"; };
+		5317C7A621DA334500746197 /* ReferenceLines.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReferenceLines.swift; sourceTree = "<group>"; };
+		5317C7A721DA334500746197 /* LabelPool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelPool.swift; sourceTree = "<group>"; };
+		5317C7A921DA334500746197 /* BarPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BarPlot.swift; sourceTree = "<group>"; };
+		5317C7AB21DA334500746197 /* GraphPointAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphPointAnimation.swift; sourceTree = "<group>"; };
+		5317C7AC21DA334500746197 /* GraphPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GraphPoint.swift; sourceTree = "<group>"; };
+		5317C7AD21DA334500746197 /* Plot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plot.swift; sourceTree = "<group>"; };
+		5317C7AE21DA334500746197 /* LinePlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinePlot.swift; sourceTree = "<group>"; };
+		5317C7AF21DA334500746197 /* DotPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DotPlot.swift; sourceTree = "<group>"; };
+		5318D60721D508710091262E /* PadListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadListViewController.swift; sourceTree = "<group>"; };
 		5318F56121877F8A00418159 /* PadLogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadLogInViewController.swift; sourceTree = "<group>"; };
 		531B04B62171119D00D31715 /* MastStickers.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MastStickers.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		531B04B8217111A100D31715 /* Stickers.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Stickers.xcassets; sourceTree = "<group>"; };
@@ -1377,7 +1426,6 @@
 		5373CB4F2156826000676F3D /* DetailCellImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailCellImage.swift; sourceTree = "<group>"; };
 		5373CB512156884B00676F3D /* RepliesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepliesCell.swift; sourceTree = "<group>"; };
 		5373CB53215688D700676F3D /* RepliesCellImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepliesCellImage.swift; sourceTree = "<group>"; };
-		5373CB552156A8B100676F3D /* ScrollableGraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollableGraphView.swift; sourceTree = "<group>"; };
 		5373CB572156AA7200676F3D /* GraphCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphCell.swift; sourceTree = "<group>"; };
 		5373CB592157F7C400676F3D /* ListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListCell.swift; sourceTree = "<group>"; };
 		5373CB5B2157FEDA00676F3D /* ListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewController.swift; sourceTree = "<group>"; };
@@ -1587,11 +1635,79 @@
 				5318F56121877F8A00418159 /* PadLogInViewController.swift */,
 				53170E8321836761005F972B /* PadTimelinesViewController.swift */,
 				532533BC2185194100A8A65B /* PadMentionsViewController.swift */,
+				5313A23C21D5303900F205E6 /* PadSidebarViewController.swift */,
 				531BD18B2188672700E12278 /* TNFloatingPanel.swift */,
 				531BD18D218867EF00E12278 /* PadSearchViewController.swift */,
+				5318D60721D508710091262E /* PadListViewController.swift */,
 				531BD18F2188762500E12278 /* PadDetailViewController.swift */,
+				5317C79621DA2EE100746197 /* PadDetailViewController2.swift */,
 			);
 			path = iPad;
+			sourceTree = "<group>";
+		};
+		5317C79821DA334500746197 /* ScrollableGraph */ = {
+			isa = PBXGroup;
+			children = (
+				5317C79921DA334500746197 /* Drawing */,
+				5317C7A121DA334500746197 /* ScrollableGraphView.swift */,
+				5317C7A221DA334500746197 /* Protocols */,
+				5317C7A521DA334500746197 /* Reference */,
+				5317C7A821DA334500746197 /* Plots */,
+			);
+			path = ScrollableGraph;
+			sourceTree = "<group>";
+		};
+		5317C79921DA334500746197 /* Drawing */ = {
+			isa = PBXGroup;
+			children = (
+				5317C79A21DA334500746197 /* ReferenceLineDrawingView.swift */,
+				5317C79B21DA334500746197 /* BarDrawingLayer.swift */,
+				5317C79C21DA334500746197 /* GradientDrawingLayer.swift */,
+				5317C79D21DA334500746197 /* DotDrawingLayer.swift */,
+				5317C79E21DA334500746197 /* ScrollableGraphViewDrawingLayer.swift */,
+				5317C79F21DA334500746197 /* LineDrawingLayer.swift */,
+				5317C7A021DA334500746197 /* FillDrawingLayer.swift */,
+			);
+			path = Drawing;
+			sourceTree = "<group>";
+		};
+		5317C7A221DA334500746197 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				5317C7A321DA334500746197 /* ScrollableGraphViewDrawingDelegate.swift */,
+				5317C7A421DA334500746197 /* ScrollableGraphViewDataSource.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		5317C7A521DA334500746197 /* Reference */ = {
+			isa = PBXGroup;
+			children = (
+				5317C7A621DA334500746197 /* ReferenceLines.swift */,
+				5317C7A721DA334500746197 /* LabelPool.swift */,
+			);
+			path = Reference;
+			sourceTree = "<group>";
+		};
+		5317C7A821DA334500746197 /* Plots */ = {
+			isa = PBXGroup;
+			children = (
+				5317C7A921DA334500746197 /* BarPlot.swift */,
+				5317C7AA21DA334500746197 /* Animation */,
+				5317C7AD21DA334500746197 /* Plot.swift */,
+				5317C7AE21DA334500746197 /* LinePlot.swift */,
+				5317C7AF21DA334500746197 /* DotPlot.swift */,
+			);
+			path = Plots;
+			sourceTree = "<group>";
+		};
+		5317C7AA21DA334500746197 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				5317C7AB21DA334500746197 /* GraphPointAnimation.swift */,
+				5317C7AC21DA334500746197 /* GraphPoint.swift */,
+			);
+			path = Animation;
 			sourceTree = "<group>";
 		};
 		531B04B72171119D00D31715 /* MastStickers */ = {
@@ -2424,6 +2540,7 @@
 		5373CA502152357200676F3D /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				5317C79821DA334500746197 /* ScrollableGraph */,
 				530976CC2179DBD700640D84 /* BiometricAuthentication */,
 				531BD60221795D1F00C1509D /* Sentiment */,
 				5329F38D2174DBDF00C4A23C /* Starscream */,
@@ -2446,7 +2563,6 @@
 				5373CADB2152E29700676F3D /* PlainText.swift */,
 				5373CA572152B59A00676F3D /* PaddedTextField.swift */,
 				5373CB4321550EAC00676F3D /* ColumnFlowLayout.swift */,
-				5373CB552156A8B100676F3D /* ScrollableGraphView.swift */,
 				535B33BD215C1A08001A2A7F /* VisualActivityViewController.swift */,
 				53E6F2B0216CCA9400912B83 /* WatchSessionManager.swift */,
 				A9D80EEC21B8F27A00020ECE /* InstanceData.swift */,
@@ -2495,12 +2611,16 @@
 				5315308521B95223007E5C00 /* SearchFeedCell.swift */,
 				5373CB3B2154E93500676F3D /* NotificationCell.swift */,
 				5373CB3D2154E97500676F3D /* NotificationCellImage.swift */,
+				5313A23E21D532E700F205E6 /* SidebarCell.swift */,
+				5313A24021D5330200F205E6 /* SidebarCellImage.swift */,
 				5373CB3F2155049900676F3D /* ProfileHeaderCell.swift */,
 				531046C3215AC3AB00FCD068 /* ProfileHeaderCellOwn.swift */,
 				5373CB4121550E1900676F3D /* ProfileHeaderCellImage.swift */,
 				5373CB4521550EC800676F3D /* CollectionProfileCell.swift */,
 				5373CB4D21566E6500676F3D /* DetailCell.swift */,
 				5373CB4F2156826000676F3D /* DetailCellImage.swift */,
+				5317C79221DA2E6200746197 /* SideDetailCell.swift */,
+				5317C79421DA2E9200746197 /* SideDetailCellImage.swift */,
 				5373CB512156884B00676F3D /* RepliesCell.swift */,
 				5373CB53215688D700676F3D /* RepliesCellImage.swift */,
 				5373CB4B2156686300676F3D /* ActionButtonCell.swift */,
@@ -3450,9 +3570,11 @@
 				5373CB2E21541A0300676F3D /* Dev+GIF.swift in Sources */,
 				5373CAA42152C68000676F3D /* URLComponents.swift in Sources */,
 				5373CA9D2152C68000676F3D /* ClientType.swift in Sources */,
+				5317C7B821DA334500746197 /* ScrollableGraphViewDrawingDelegate.swift in Sources */,
 				53205823215D287700ED0C36 /* DKImagePickerController.swift in Sources */,
 				A91701B721CAF09F0005A14C /* PadActivityViewController.swift in Sources */,
 				5373CB4C2156686300676F3D /* ActionButtonCell.swift in Sources */,
+				5317C7BB21DA334500746197 /* LabelPool.swift in Sources */,
 				5373CAC62152C68000676F3D /* Accounts.swift in Sources */,
 				5373CADA2152E04C00676F3D /* Date.swift in Sources */,
 				5354BADA216577FD0094C545 /* CRRefreshComponent.swift in Sources */,
@@ -3468,6 +3590,7 @@
 				5373CAC32152C68000676F3D /* Payload.swift in Sources */,
 				531E0FA9216E2BA2003E8890 /* NVActivityIndicatorAnimationCubeTransition.swift in Sources */,
 				535B33B5215C0EC6001A2A7F /* XPlayerViewController+UI.swift in Sources */,
+				5313A23D21D5303900F205E6 /* PadSidebarViewController.swift in Sources */,
 				531E0F9F216E2BA2003E8890 /* NVActivityIndicatorAnimationBlank.swift in Sources */,
 				5373CAC72152C68000676F3D /* Blocks.swift in Sources */,
 				5373CB0A2152EDB800676F3D /* SwipeTransitionLayout.swift in Sources */,
@@ -3483,8 +3606,10 @@
 				5373CAA32152C68000676F3D /* String.swift in Sources */,
 				5373CAA92152C68000676F3D /* AccessScope.swift in Sources */,
 				5373CACC2152C68000676F3D /* Instances.swift in Sources */,
+				5317C7B121DA334500746197 /* BarDrawingLayer.swift in Sources */,
 				535B33CB215C31E3001A2A7F /* ActiveType.swift in Sources */,
 				5373CAAF2152C68000676F3D /* ClientApplication.swift in Sources */,
+				5317C79321DA2E6200746197 /* SideDetailCell.swift in Sources */,
 				5373CAFC2152EDB800676F3D /* SwipeAnimator.swift in Sources */,
 				5329F3942174DBDF00C4A23C /* SSLSecurity.swift in Sources */,
 				531E0FA5216E2BA2003E8890 /* NVActivityIndicatorAnimationLineScale.swift in Sources */,
@@ -3492,6 +3617,7 @@
 				5373CAB82152C68000676F3D /* NotificationType.swift in Sources */,
 				5316C893219D94A00003AB97 /* SwiftyGiphyGridLayout.swift in Sources */,
 				5373CB032152EDB800676F3D /* SwipeExpansionStyle.swift in Sources */,
+				5317C7B521DA334500746197 /* LineDrawingLayer.swift in Sources */,
 				A9D80EEF21BB154200020ECE /* AccountExtension.swift in Sources */,
 				5316C895219D94A00003AB97 /* GiphyMultipleGIFResponse.swift in Sources */,
 				5373CAF62152EDB700676F3D /* Swipeable.swift in Sources */,
@@ -3509,7 +3635,9 @@
 				5373CABA2152C68000676F3D /* Report.swift in Sources */,
 				5318F56221877F8A00418159 /* PadLogInViewController.swift in Sources */,
 				A9D80EED21B8F27A00020ECE /* InstanceData.swift in Sources */,
+				5317C7BD21DA334500746197 /* GraphPointAnimation.swift in Sources */,
 				536A4FB9216B73D600A3D483 /* UIView+SafeAnchors.swift in Sources */,
+				5317C79521DA2E9200746197 /* SideDetailCellImage.swift in Sources */,
 				5373CA9C2152C68000676F3D /* ClientError.swift in Sources */,
 				5373CB3A21541A0300676F3D /* SKZoomingScrollView.swift in Sources */,
 				531E0FAC216E2BA2003E8890 /* NVActivityIndicatorAnimationLineScalePulseOutRapid.swift in Sources */,
@@ -3517,10 +3645,12 @@
 				5352D0C4215E6A3500901B60 /* CollectionAppCell.swift in Sources */,
 				5316C897219D94A00003AB97 /* SwiftyGiphyAPI.swift in Sources */,
 				5316C892219D94A00003AB97 /* GiphySimpleSingleGIFResponse.swift in Sources */,
+				5318D60821D508710091262E /* PadListViewController.swift in Sources */,
 				5329F3932174DBDF00C4A23C /* Compression.swift in Sources */,
 				531E0FA7216E2BA2003E8890 /* NVActivityIndicatorAnimationPacman.swift in Sources */,
 				5320581E215D287700ED0C36 /* FontAwesome.swift in Sources */,
 				5351D75721617FC40012960F /* VolumeBarAnimation.swift in Sources */,
+				5317C7BA21DA334500746197 /* ReferenceLines.swift in Sources */,
 				531E0FA2216E2BA2003E8890 /* NVActivityIndicatorAnimationTriangleSkewSpin.swift in Sources */,
 				5373CA582152B59A00676F3D /* PaddedTextField.swift in Sources */,
 				A973AF2521D432AE009D7D21 /* CollectionProCells.swift in Sources */,
@@ -3539,6 +3669,7 @@
 				5373CAAE2152C68000676F3D /* Card.swift in Sources */,
 				531E0FA6216E2BA2003E8890 /* NVActivityIndicatorAnimationBallScaleRippleMultiple.swift in Sources */,
 				53205818215D287700ED0C36 /* FontAwesomeSegmentedControl.swift in Sources */,
+				5317C7B621DA334500746197 /* FillDrawingLayer.swift in Sources */,
 				5373CAAB2152C68000676F3D /* Application.swift in Sources */,
 				5373CB072152EDB800676F3D /* SwipeTableViewCell+Display.swift in Sources */,
 				531E0F89216E2BA2003E8890 /* NVActivityIndicatorAnimationDelegate.swift in Sources */,
@@ -3554,6 +3685,7 @@
 				5373CAC82152C68000676F3D /* Clients.swift in Sources */,
 				531E0F8C216E2BA2003E8890 /* NVActivityIndicatorShape.swift in Sources */,
 				5373CACA2152C68000676F3D /* Favourites.swift in Sources */,
+				5317C7C021DA334500746197 /* LinePlot.swift in Sources */,
 				531BD1902188762500E12278 /* PadDetailViewController.swift in Sources */,
 				531E0F9B216E2BA2003E8890 /* NVActivityIndicatorAnimationBallClipRotatePulse.swift in Sources */,
 				531E0F97216E2BA2003E8890 /* NVActivityIndicatorAnimationBallZigZag.swift in Sources */,
@@ -3581,17 +3713,18 @@
 				531E0FAA216E2BA2003E8890 /* NVActivityIndicatorAnimationBallSpinFadeLoader.swift in Sources */,
 				531E0F94216E2BA2003E8890 /* NVActivityIndicatorAnimationLineSpinFadeLoader.swift in Sources */,
 				53BC45C2215AE4F10092223F /* SettingsCellToggle.swift in Sources */,
+				5317C79721DA2EE100746197 /* PadDetailViewController2.swift in Sources */,
 				5316C88E219D94A00003AB97 /* GiphyImageSet.swift in Sources */,
 				5320581D215D287700ED0C36 /* FontAwesomeTextRepresentable.swift in Sources */,
 				5354BAC6216577FD0094C545 /* UIColorExtension.swift in Sources */,
 				5373CAA52152C68000676F3D /* URLRequest.swift in Sources */,
 				5354BAC8216577FD0094C545 /* RamotionAnimator.swift in Sources */,
+				5317C7BE21DA334500746197 /* GraphPoint.swift in Sources */,
 				531E0F98216E2BA2003E8890 /* NVActivityIndicatorAnimationBallBeat.swift in Sources */,
 				5373CB3321541A0300676F3D /* SKCaptionView.swift in Sources */,
 				53205811215D287700ED0C36 /* DKGroupDataManager.swift in Sources */,
 				536A4FBC216B73D600A3D483 /* HighlightButton.swift in Sources */,
 				5373CB4821565FFC00676F3D /* DetailViewController.swift in Sources */,
-				5373CB562156A8B200676F3D /* ScrollableGraphView.swift in Sources */,
 				5373CABD2152C68000676F3D /* Status.swift in Sources */,
 				536A4FB2216B73D600A3D483 /* BulletinViewController.swift in Sources */,
 				5316C890219D94A00003AB97 /* GiphyMeta.swift in Sources */,
@@ -3642,14 +3775,18 @@
 				5373CB042152EDB800676F3D /* SwipeFeedback.swift in Sources */,
 				5373CB3421541A0300676F3D /* SKDetectingImageView.swift in Sources */,
 				5373CAA02152C68000676F3D /* DateFormatter.swift in Sources */,
+				5313A24121D5330200F205E6 /* SidebarCellImage.swift in Sources */,
 				531E0F9D216E2BA2003E8890 /* NVActivityIndicatorAnimationBallRotateChase.swift in Sources */,
 				5373CB082152EDB800676F3D /* SwipeTableViewCell.swift in Sources */,
 				5373C9EA2151753800676F3D /* FirstViewController.swift in Sources */,
+				5313A23F21D532E700F205E6 /* SidebarCell.swift in Sources */,
 				5373CAA62152C68000676F3D /* Functions.swift in Sources */,
 				5352D090215E48DE00901B60 /* ListMembersViewController.swift in Sources */,
 				5373CABC2152C68000676F3D /* Results.swift in Sources */,
 				5373CAA12152C68000676F3D /* Decodable.swift in Sources */,
 				5373CB582156AA7200676F3D /* GraphCell.swift in Sources */,
+				5317C7B021DA334500746197 /* ReferenceLineDrawingView.swift in Sources */,
+				5317C7B721DA334500746197 /* ScrollableGraphView.swift in Sources */,
 				531E0F8E216E2BA2003E8890 /* NVActivityIndicatorAnimationBallRotate.swift in Sources */,
 				5373CAD52152C68000676F3D /* Timelines.swift in Sources */,
 				5316C89C219D94A00003AB97 /* ParsingTransforms.swift in Sources */,
@@ -3669,6 +3806,7 @@
 				5329F38A2174D0CB00C4A23C /* CollectionColourCell.swift in Sources */,
 				5320580C215D287700ED0C36 /* DKCameraResource.swift in Sources */,
 				A9D80EE721B84B3900020ECE /* AddInstanceCell.swift in Sources */,
+				5317C7BF21DA334500746197 /* Plot.swift in Sources */,
 				5320581B215D287700ED0C36 /* FontAwesomeImageRepresentable.swift in Sources */,
 				5354BAD3216577FD0094C545 /* NormalHeaderAnimator.swift in Sources */,
 				53205813215D287700ED0C36 /* DKAsset.swift in Sources */,
@@ -3715,11 +3853,13 @@
 				53205817215D287700ED0C36 /* FontAwesomeBarButtonItem.swift in Sources */,
 				531BD5FD2178D68400C1509D /* FollowRequestsViewController.swift in Sources */,
 				5373CAAD2152C68000676F3D /* AttachmentType.swift in Sources */,
+				5317C7C121DA334500746197 /* DotPlot.swift in Sources */,
 				531E0F99216E2BA2003E8890 /* NVActivityIndicatorAnimationSemiCircleSpin.swift in Sources */,
 				5373CB1D21540F5E00676F3D /* MainFeedCellImage.swift in Sources */,
 				A91701B821CAF09F0005A14C /* PadLocalTimelinesViewController.swift in Sources */,
 				53205819215D287700ED0C36 /* FontAwesomeView.swift in Sources */,
 				5351D75E21617FC40012960F /* VolumeBarStyle+Presets.swift in Sources */,
+				5317C7B321DA334500746197 /* DotDrawingLayer.swift in Sources */,
 				5373CAAA2152C68000676F3D /* Account.swift in Sources */,
 				531E0FA3216E2BA2003E8890 /* NVActivityIndicatorAnimationBallGridBeat.swift in Sources */,
 				5329F3952174DBDF00C4A23C /* WebSocket.swift in Sources */,
@@ -3741,6 +3881,7 @@
 				531E0FA4216E2BA2003E8890 /* NVActivityIndicatorAnimationBallScaleMultiple.swift in Sources */,
 				5373CB4E21566E6500676F3D /* DetailCell.swift in Sources */,
 				5373CAFB2152EDB800676F3D /* SwipeActionTransitioning.swift in Sources */,
+				5317C7B221DA334500746197 /* GradientDrawingLayer.swift in Sources */,
 				536A4FB8216B73D600A3D483 /* BulletinBackgroundView.swift in Sources */,
 				531E0FA0216E2BA2003E8890 /* NVActivityIndicatorAnimationCircleStrokeSpin.swift in Sources */,
 				5320582F215D287700ED0C36 /* DKAssetGroupListVC.swift in Sources */,
@@ -3752,6 +3893,7 @@
 				5316C896219D94A00003AB97 /* CornerRoundingMaskView.swift in Sources */,
 				5373CAC52152C68000676F3D /* RequestRange.swift in Sources */,
 				536A4FBA216B73D600A3D483 /* ActivityIndicator.swift in Sources */,
+				5317C7B921DA334500746197 /* ScrollableGraphViewDataSource.swift in Sources */,
 				5373CAAC2152C68000676F3D /* Attachment.swift in Sources */,
 				536A4FBD216B73D600A3D483 /* ContainerView.swift in Sources */,
 				5373CAB92152C68000676F3D /* Relationship.swift in Sources */,
@@ -3764,8 +3906,10 @@
 				5320581C215D287700ED0C36 /* FontAwesomeImageView.swift in Sources */,
 				5373CA9F2152C68000676F3D /* Data.swift in Sources */,
 				531E0FAE216E2BA2003E8890 /* NVActivityIndicatorAnimationOrbit.swift in Sources */,
+				5317C7BC21DA334500746197 /* BarPlot.swift in Sources */,
 				531BD18E218867EF00E12278 /* PadSearchViewController.swift in Sources */,
 				5373CB4221550E1900676F3D /* ProfileHeaderCellImage.swift in Sources */,
+				5317C7B421DA334500746197 /* ScrollableGraphViewDrawingLayer.swift in Sources */,
 				5373CB022152EDB800676F3D /* SwipeExpanding.swift in Sources */,
 				5373CAB62152C68000676F3D /* Mention.swift in Sources */,
 				535B33AF215C0EC6001A2A7F /* XPlayerViewController.swift in Sources */,

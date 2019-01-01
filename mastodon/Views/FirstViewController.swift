@@ -146,6 +146,18 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
     }
     
+    @objc func goToID() {
+        sleep(2)
+        let request = Statuses.status(id: StoreStruct.curID)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                let controller = DetailViewController()
+                controller.mainStatus.append(stat)
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
+        }
+    }
+    
     @objc func search() {
         let controller = DetailViewController()
         controller.mainStatus.append(StoreStruct.statusSearch[StoreStruct.searchIndex])
@@ -603,6 +615,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goMembers), name: NSNotification.Name(rawValue: "goMembers"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goInstance), name: NSNotification.Name(rawValue: "goInstance"), object: nil)
@@ -788,6 +801,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 let selection = UISelectionFeedbackGenerator()
                 selection.selectionChanged()
+                
             }
             self?.refreshCont()
             DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {

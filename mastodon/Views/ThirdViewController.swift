@@ -182,7 +182,15 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        self.ai.startAnimating()
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone:
+            self.ai.startAnimating()
+        case .pad:
+            print("nothing")
+        default:
+            self.ai.startAnimating()
+        }
     }
     
     @objc func tappedOnTag() {
@@ -460,12 +468,26 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         super.didReceiveMemoryWarning()
     }
     
+    
+    @objc func goToID() {
+        sleep(2)
+        let request = Statuses.status(id: StoreStruct.curID)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                let controller = DetailViewController()
+                controller.mainStatus.append(stat)
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = Colours.white
         self.title = ""
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid3"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goMembers), name: NSNotification.Name(rawValue: "goMembers3"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists3"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goInstance), name: NSNotification.Name(rawValue: "goInstance3"), object: nil)
@@ -1434,8 +1456,53 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //                                        pickerController.assetType = .allPhotos
 //                                        self.present(pickerController, animated: true) {}
 //                                    }
-                                    
-                                    
+//
+//
+//                                    .action(.default("Edit Header"), image: nil) { (action, ind) in
+//                                        print(action, ind)
+//
+//                                        let pickerController = DKImagePickerController()
+//                                        pickerController.didSelectAssets = { (assets: [DKAsset]) in
+//                                            if assets.count == 0 {
+//                                                return
+//                                            }
+//                                            if assets.count > 0 {
+//                                                assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+//                                                    print("fetched header")
+//                                                    let imageData = (image ?? UIImage()).jpegData(compressionQuality: 0.5)
+//                                                    let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: .jpeg(imageData))
+//                                                    StoreStruct.client.run(request) { (statuses) in
+//                                                        print("fetched header 2")
+//                                                        print(statuses)
+//                                                        if let stat = (statuses.value) {
+//                                                            print(stat)
+//                                                            print("updated")
+//                                                            print(stat.headerStatic)
+//                                                            DispatchQueue.main.async {
+//                                                                NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
+//                                                                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//                                                                    let notification = UINotificationFeedbackGenerator()
+//                                                                    notification.notificationOccurred(.success)
+//                                                                }
+//                                                                let statusAlert = StatusAlert()
+//                                                                statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
+//                                                                statusAlert.title = "Updated Header".localized
+//                                                                statusAlert.contentColor = Colours.grayDark
+//                                                                statusAlert.message = StoreStruct.currentUser.displayName
+//                                                                statusAlert.show()
+//                                                            }
+//                                                        }
+//                                                    }
+//
+//                                                })
+//                                            }
+//                                        }
+//                                        pickerController.showsCancelButton = true
+//                                        pickerController.maxSelectableCount = 1
+//                                        pickerController.allowMultipleTypes = false
+//                                        pickerController.assetType = .allPhotos
+//                                        self.present(pickerController, animated: true) {}
+//                                    }
                                     
                                     
                                     .action(.default("Edit Display Name"), image: nil) { (action, ind) in

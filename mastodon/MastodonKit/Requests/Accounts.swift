@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 public struct Accounts {
     /// Fetches an account.
@@ -55,6 +56,19 @@ public struct Accounts {
 
         let method = HTTPMethod.patch(.parameters(parameters))
         return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
+        
+//        if avatar == nil && header == nil {
+//            let method = HTTPMethod.patch(.parameters(parameters))
+//            return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
+//        } else {
+//            if avatar == nil {
+//                let method = HTTPMethod.patch(.media(header))
+//                return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
+//            } else {
+//                let method = HTTPMethod.patch(.media(avatar))
+//                return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
+//            }
+//        }
     }
 
     /// Gets an account's followers.

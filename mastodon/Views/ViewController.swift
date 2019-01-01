@@ -660,6 +660,37 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         super.didReceiveMemoryWarning()
     }
     
+    func presentIntro() {
+        DispatchQueue.main.async {
+            self.bulletinManager.prepare()
+            self.bulletinManager.presentBulletin(above: self, animated: true, completion: nil)
+        }
+    }
+    
+    func switchTo1() {
+        self.tabBarController?.selectedIndex = 0
+    }
+    
+    func switchTo2() {
+        self.tabBarController?.selectedIndex = 1
+    }
+    
+    func switchTo3() {
+        self.tabBarController?.selectedIndex = 2
+    }
+    
+    func gotoID() {
+        
+        if StoreStruct.currentPage == 0 {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid"), object: self)
+        } else if StoreStruct.currentPage == 1 {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid2"), object: self)
+        } else {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid3"), object: self)
+        }
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Colours.white
@@ -692,8 +723,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         
         if (UserDefaults.standard.object(forKey: "themeaccent") == nil) || (UserDefaults.standard.object(forKey: "themeaccent") as! Int == 0) {
             Colours.tabSelected = StoreStruct.colArray[0]
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.reloadTint()
         } else {
             Colours.tabSelected = StoreStruct.colArray[UserDefaults.standard.object(forKey: "themeaccent") as! Int]
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.reloadTint()
         }
         
         if (UserDefaults.standard.object(forKey: "instancesLocal") == nil) {
@@ -2139,7 +2174,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Not a valid Instance".localized
                             statusAlert.contentColor = Colours.grayDark
-                            statusAlert.message = "  an Instance name like mastodon.technology"
+                            statusAlert.message = "Please enter an Instance name like mastodon.technology"
                             statusAlert.show()
                         }
                         
@@ -2175,7 +2210,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Not a valid Instance".localized
                             statusAlert.contentColor = Colours.grayDark
-                            statusAlert.message = "  an Instance name like mastodon.technology"
+                            statusAlert.message = "Please enter an Instance name like mastodon.technology"
                             statusAlert.show()
                         }
                         

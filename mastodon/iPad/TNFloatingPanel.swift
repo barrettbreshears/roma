@@ -213,8 +213,12 @@ open class FloatingPanelController: UIViewController {
     open func addTo(parent parentViewController: UIViewController) {
         
         parentViewController.addChild(self)
-        parentViewController.view.addSubview(panelContainer)
+//        parentViewController.view.addSubview(panelContainer)
         self.didMove(toParent: parentViewController)
+        
+        let wind = UIApplication.shared.keyWindow!
+        wind.addSubview(panelContainer)
+        
     }
     
     /// Helper to define size of the panel.
@@ -403,7 +407,7 @@ open class FloatingPanelController: UIViewController {
         isPanelVisible = false
         
         /* Compute off-screen position */                 // landscape iPhone iOS 10 fix
-        var xOffset = panel.frame.width  + panel.margins.left + panel.margins.right + 15
+        var xOffset = panel.frame.width  + panel.margins.left + panel.margins.right + 95
         var yOffset = panel.frame.height + panel.margins.top  + panel.margins.bottom
         
         switch panel.position {

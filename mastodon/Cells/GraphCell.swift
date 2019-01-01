@@ -10,7 +10,48 @@ import Foundation
 import UIKit
 import PINRemoteImage
 
-class GraphCell: UITableViewCell {
+class GraphCell: UITableViewCell, ScrollableGraphViewDataSource {
+    
+    func value(forPlot plot: Plot, atIndex pointIndex: Int) -> Double {
+        if pointIndex == 0 {
+            let x = StoreStruct.notifications.filter({ (item) -> Bool in
+                item.type == .mention
+            })
+            return Double(x.count)
+        } else if pointIndex == 1 {
+            let x = StoreStruct.notifications.filter({ (item) -> Bool in
+                item.type == .mention
+            })
+            let y = x.filter({ (item) -> Bool in
+                item.status?.visibility == .direct
+            })
+            return Double(y.count)
+        } else if pointIndex == 2 {
+            let x = StoreStruct.notifications.filter({ (item) -> Bool in
+                item.type == .reblog
+            })
+            return Double(x.count)
+        } else if pointIndex == 3 {
+            let x = StoreStruct.notifications.filter({ (item) -> Bool in
+                item.type == .favourite
+            })
+            return Double(x.count)
+        } else {
+            let x = StoreStruct.notifications.filter({ (item) -> Bool in
+                item.type == .follow
+            })
+            return Double(x.count)
+        }
+    }
+    
+    let labels = ["Mentions", "Private", "Boosts", "Likes", "Follows"]
+    func label(atIndex pointIndex: Int) -> String {
+        return labels[pointIndex]
+    }
+    
+    func numberOfPoints() -> Int {
+        return 5
+    }
     
     var graphView = ScrollableGraphView()
     
@@ -22,43 +63,42 @@ class GraphCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(data: [Double], labels: [String]) {
+    func configure() {
         
-        self.graphView = ScrollableGraphView(frame: CGRect(x: 0, y: 10, width: CGFloat(UIScreen.main.bounds.width), height: 200))
-        
-        self.graphView.lineWidth = 2.5
-        self.graphView.lineColor = Colours.tabSelected
-        self.graphView.lineStyle = ScrollableGraphViewLineStyle.smooth
-        self.graphView.dataPointSize = 1
-        self.graphView.rangeMax = 5
-        self.graphView.shouldFill = true
-        self.graphView.fillType = ScrollableGraphViewFillType.gradient
-        self.graphView.fillColor = Colours.tabSelected
-        self.graphView.fillGradientType = ScrollableGraphViewGradientType.linear
-        self.graphView.fillGradientStartColor = Colours.tabSelected
-        self.graphView.fillGradientEndColor = Colours.white
-        self.graphView.dataPointLabelsSparsity = 2
-        //self.graphView.dataPointSpacing = (self.view.bounds.width / 8) - 3
-        self.graphView.dataPointSize = 2
-        self.graphView.dataPointFillColor = Colours.clear
-        
-        self.graphView.referenceLineLabelFont = UIFont.boldSystemFont(ofSize: 10)
-        self.graphView.referenceLineColor = UIColor.gray.withAlphaComponent(0.3)
-        self.graphView.referenceLineLabelColor = UIColor.darkGray
-        self.graphView.dataPointLabelColor = UIColor.darkGray.withAlphaComponent(0.5)
+        self.graphView.removeFromSuperview()
+        self.graphView = ScrollableGraphView(frame: CGRect(x: 0, y: 20, width: CGFloat(UIScreen.main.bounds.width), height: 200), dataSource: self)
         
         self.graphView.isScrollEnabled = false
-        self.graphView.shouldAnimateOnStartup = false
-        self.graphView.shouldAnimateOnAdapt = false
+        self.graphView.shouldAnimateOnStartup = true
+        self.graphView.shouldAnimateOnAdapt = true
         self.graphView.shouldAdaptRange = true
-        self.graphView.animationDuration = 1
-        self.graphView.adaptAnimationType = ScrollableGraphViewAnimationType.easeOut
-        
         self.graphView.alpha = 1
         
+        let barPlot = BarPlot(identifier: "bar")
+        
+        barPlot.barWidth = 34
+        barPlot.barLineWidth = 1
+        barPlot.barLineColor = Colours.tabSelected
+        barPlot.barColor = Colours.tabSelected
+        barPlot.shouldRoundBarCorners = true
+        
+        barPlot.adaptAnimationType = ScrollableGraphViewAnimationType.easeOut
+        barPlot.animationDuration = 1.5
+        
+        
+        let referenceLines = ReferenceLines()
+        
+        referenceLines.referenceLineLabelFont = UIFont.boldSystemFont(ofSize: 8)
+        referenceLines.referenceLineColor = Colours.black.withAlphaComponent(0.06)
+        referenceLines.referenceLineLabelColor = Colours.black.withAlphaComponent(0.5)
+        
+        referenceLines.dataPointLabelColor = Colours.black.withAlphaComponent(0.5)
+        
+        graphView.backgroundFillColor = Colours.clear
+        graphView.addPlot(plot: barPlot)
+        graphView.addReferenceLines(referenceLines: referenceLines)
+        
         contentView.addSubview(self.graphView)
-        self.graphView.set(data: data, withLabels: labels)
     }
     
 }
-

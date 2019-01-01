@@ -139,7 +139,6 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.tableView.estimatedRowHeight = 89
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
-        
         self.loadLoadLoad()
         
         
@@ -167,7 +166,44 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.navigationController?.navigationItem.backBarButtonItem?.tintColor = Colours.tabUnselected
         
         
+        var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
+        var offset = 88
+        if UIDevice().userInterfaceIdiom == .phone {
+            switch UIScreen.main.nativeBounds.height {
+            case 2688:
+                offset = 88
+            case 2436, 1792:
+                offset = 88
+            default:
+                offset = 64
+                tabHeight = Int(UITabBarController().tabBar.frame.size.height)
+            }
+        }
+        
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone:
+            print("n")
+        case .pad:
+            self.title = "Pinned"
+            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
+        default:
+            print("n")
+        }
+        self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
+        self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+        self.tableView.alpha = 1
+        self.tableView.delegate = self
+        self.tableView.dataSource = self
+        self.tableView.separatorStyle = .singleLine
+        self.tableView.backgroundColor = Colours.white
+        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.layer.masksToBounds = true
+        self.tableView.estimatedRowHeight = 89
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.view.addSubview(self.tableView)
+        self.loadLoadLoad()
+        
         switch (deviceIdiom) {
         case .phone:
             print("nothing")

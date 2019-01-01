@@ -118,6 +118,8 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "dismissThings"), object: self)
+        
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
             let impact = UIImpactFeedbackGenerator(style: .medium)
             impact.impactOccurred()
