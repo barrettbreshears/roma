@@ -498,6 +498,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
             self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellmore")
             self.tableView.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset)
             self.tableView.alpha = 1
             self.tableView.delegate = self
@@ -512,6 +513,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
             self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
+            self.tableViewL.register(SettingsCell.self, forCellReuseIdentifier: "cellmore1")
             self.tableViewL.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset)
             self.tableViewL.alpha = 0
             self.tableViewL.delegate = self
@@ -526,6 +528,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
             self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
+            self.tableViewF.register(SettingsCell.self, forCellReuseIdentifier: "cellmore2")
             self.tableViewF.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset)
             self.tableViewF.alpha = 0
             self.tableViewF.delegate = self
@@ -559,6 +562,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
             self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellmore")
             self.tableView.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset)
             self.tableView.alpha = 1
             self.tableView.delegate = self
@@ -573,6 +577,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
             self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableViewL.register(SettingsCell.self, forCellReuseIdentifier: "cellmore1")
             self.tableViewL.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset)
             self.tableViewL.alpha = 0
             self.tableViewL.delegate = self
@@ -587,6 +592,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
             self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableViewF.register(SettingsCell.self, forCellReuseIdentifier: "cellmore2")
             self.tableViewF.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset)
             self.tableViewF.alpha = 0
             self.tableViewF.delegate = self
@@ -683,6 +689,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
             self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellmore")
             self.tableView.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 65)
             self.tableView.alpha = 1
             self.tableView.delegate = self
@@ -697,6 +704,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
             self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
+            self.tableViewL.register(SettingsCell.self, forCellReuseIdentifier: "cellmore1")
             self.tableViewL.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 65)
             self.tableViewL.alpha = 0
             self.tableViewL.delegate = self
@@ -711,6 +719,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
             self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
+            self.tableViewF.register(SettingsCell.self, forCellReuseIdentifier: "cellmore2")
             self.tableViewF.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 65)
             self.tableViewF.alpha = 0
             self.tableViewF.delegate = self
@@ -743,6 +752,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
             self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellmore")
             self.tableView.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 5)
             self.tableView.alpha = 1
             self.tableView.delegate = self
@@ -757,6 +767,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
             self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
+            self.tableViewL.register(SettingsCell.self, forCellReuseIdentifier: "cellmore1")
             self.tableViewL.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
             self.tableViewL.alpha = 0
             self.tableViewL.delegate = self
@@ -771,6 +782,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
             self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
+            self.tableViewF.register(SettingsCell.self, forCellReuseIdentifier: "cellmore2")
             self.tableViewF.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
             self.tableViewF.alpha = 0
             self.tableViewF.delegate = self
@@ -1568,6 +1580,25 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             } else {
                 
                 
+                
+                if StoreStruct.statusesHome[indexPath.row].id == "loadmorehere" {
+                    
+                    
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellmore", for: indexPath) as! SettingsCell
+                    cell.delegate = self
+                    cell.backgroundColor = Colours.white3
+                    cell.configure(status: "Load More", status2: "Tap to fetch more toots...")
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.white3
+                    cell.selectedBackgroundView = bgColorView
+                    return cell
+                    
+                    
+                    
+                } else {
+                
+                
+                
                 if indexPath.row == StoreStruct.statusesHome.count - 14 {
                     self.fetchMoreHome()
                 }
@@ -1752,6 +1783,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 }
             }
             
+            }
             
             
         } else if tableView == self.tableViewL {
@@ -1766,6 +1798,26 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 cell.selectedBackgroundView = bgColorView
                 return cell
             } else {
+                
+                
+                
+                
+                
+                if StoreStruct.statusesLocal[indexPath.row].id == "loadmorehere" {
+                    
+                    
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellmore1", for: indexPath) as! SettingsCell
+                    cell.delegate = self
+                    cell.backgroundColor = Colours.white3
+                    cell.configure(status: "Load More", status2: "Tap to fetch more toots...")
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.white3
+                    cell.selectedBackgroundView = bgColorView
+                    return cell
+                    
+                    
+                    
+                } else {
                 
                 
                 
@@ -1946,7 +1998,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     cell.selectedBackgroundView = bgColorView
                     return cell
                 }
-                
+                }
             }
         } else {
             
@@ -1959,6 +2011,26 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 cell.selectedBackgroundView = bgColorView
                 return cell
             } else {
+                
+                
+                
+                
+                if StoreStruct.statusesFederated[indexPath.row].id == "loadmorehere" {
+                    
+                    
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellmore2", for: indexPath) as! SettingsCell
+                    cell.delegate = self
+                    cell.backgroundColor = Colours.white3
+                    cell.configure(status: "Load More", status2: "Tap to fetch more toots...")
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.white3
+                    cell.selectedBackgroundView = bgColorView
+                    return cell
+                    
+                    
+                    
+                } else {
+                
                 
                 if indexPath.row == StoreStruct.statusesFederated.count - 14 {
                     self.fetchMoreFederated()
@@ -2135,6 +2207,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     bgColorView.backgroundColor = Colours.white
                     cell.selectedBackgroundView = bgColorView
                     return cell
+                }
                 }
             }
             
@@ -2343,6 +2416,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
         
         
+        if StoreStruct.statusesHome[indexPath.row].id == "loadmorehere" {
+            return nil
+        }
         
         
         if orientation == .left {
@@ -3131,13 +3207,132 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         
         let controller = DetailViewController()
         if self.currentIndex == 0 {
-            controller.mainStatus.append(StoreStruct.statusesHome[indexPath.row])
+            if StoreStruct.statusesHome[indexPath.row].id == "loadmorehere" {
+                self.fetchGap()
+            } else {
+                controller.mainStatus.append(StoreStruct.statusesHome[indexPath.row])
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
         } else if self.currentIndex == 1 {
-            controller.mainStatus.append(StoreStruct.statusesLocal[indexPath.row])
+            if StoreStruct.statusesLocal[indexPath.row].id == "loadmorehere" {
+                self.fetchGap()
+            } else {
+                controller.mainStatus.append(StoreStruct.statusesLocal[indexPath.row])
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
         } else {
-            controller.mainStatus.append(StoreStruct.statusesFederated[indexPath.row])
+            if StoreStruct.statusesFederated[indexPath.row].id == "loadmorehere" {
+                self.fetchGap()
+            } else {
+                controller.mainStatus.append(StoreStruct.statusesFederated[indexPath.row])
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
         }
-        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func fetchGap() {
+        
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator(style: .medium)
+            impact.impactOccurred()
+        }
+        
+        if self.currentIndex == 0 {
+            let request = Timelines.home(range: .max(id: StoreStruct.gapLastHomeID, limit: nil))
+            DispatchQueue.global(qos: .userInitiated).async {
+                StoreStruct.client.run(request) { (statuses) in
+                    if let stat = (statuses.value) {
+                        
+                        if stat.isEmpty {} else {
+                            
+                            let y = StoreStruct.statusesHome.split(separator: StoreStruct.gapLastHomeStat!)
+                            print(y)
+                            StoreStruct.statusesHome.remove(at: y.first!.count + 1)
+                            
+                            if StoreStruct.statusesHome.contains(stat.last!) {
+                                StoreStruct.statusesHome = y.first! + stat + y.last!
+                            } else {
+                                StoreStruct.gapLastHomeID = stat.last?.id ?? ""
+                                let z = stat.last!
+                                z.id = "loadmorehere"
+                                StoreStruct.gapLastHomeStat = z
+                                StoreStruct.statusesHome = y.first! + stat + y.last!
+                            }
+                            
+                            DispatchQueue.main.async {
+//                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                                self.tableView.reloadData()
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        } else if self.currentIndex == 1 {
+            
+            let request = Timelines.public(local: true, range: .max(id: StoreStruct.gapLastLocalID, limit: nil))
+            DispatchQueue.global(qos: .userInitiated).async {
+                StoreStruct.client.run(request) { (statuses) in
+                    if let stat = (statuses.value) {
+                        
+                        if stat.isEmpty {} else {
+                            let y = StoreStruct.statusesLocal.split(separator: StoreStruct.gapLastLocalStat!)
+                            print(y)
+                            StoreStruct.statusesLocal.remove(at: y.first!.count + 1)
+                            
+                            if StoreStruct.statusesLocal.contains(stat.last!) {
+                                StoreStruct.statusesLocal = y.first! + stat + y.last!
+                            } else {
+                                StoreStruct.gapLastLocalID = stat.last?.id ?? ""
+                                let z = stat.last!
+                                z.id = "loadmorehere"
+                                StoreStruct.gapLastLocalStat = z
+                                StoreStruct.statusesLocal = y.first! + stat + y.last!
+                            }
+                            
+                            DispatchQueue.main.async {
+//                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                                self.tableViewL.reloadData()
+                                
+                            }
+                        }
+                    }
+                }
+            }
+            
+        } else {
+            let request = Timelines.public(local: false, range: .max(id: StoreStruct.gapLastFedID, limit: nil))
+            DispatchQueue.global(qos: .userInitiated).async {
+                StoreStruct.client.run(request) { (statuses) in
+                    if let stat = (statuses.value) {
+                        
+                        if stat.isEmpty {} else {
+                            let y = StoreStruct.statusesFederated.split(separator: StoreStruct.gapLastFedStat!)
+                            print("testing")
+                            print(y.first?.count ?? 0)
+                            print(y.last?.count ?? 0)
+                            StoreStruct.statusesFederated.remove(at: y.first!.count + 1)
+                            
+                            if StoreStruct.statusesFederated.contains(stat.last!) {
+                                StoreStruct.statusesFederated = y.first! + stat + y.last!
+                            } else {
+                                StoreStruct.gapLastFedID = stat.last?.id ?? ""
+                                let z = stat.last!
+                                z.id = "loadmorehere"
+                                StoreStruct.gapLastFedStat = z
+                                StoreStruct.statusesFederated = y.first! + stat + y.last!
+                            }
+                            
+                            DispatchQueue.main.async {
+                                //                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                                self.tableViewF.reloadData()
+                            }
+                            
+                        }
+                    }
+                }
+            }
+        }
     }
     
     var lastThing = ""
@@ -3206,16 +3401,33 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     @objc func refreshCont() {
         
         if self.currentIndex == 0 {
-            let request = Timelines.home(range: .min(id: StoreStruct.statusesHome.first?.id ?? "", limit: 5000))
+            let request = Timelines.home(range: .since(id: StoreStruct.statusesHome.first?.id ?? "", limit: 5000))
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
                         
                         var newestC = StoreStruct.statusesHome.count
                         
-                        StoreStruct.statusesHome = stat + StoreStruct.statusesHome
+                        
+                        if let st = stat.last {
+                        if StoreStruct.statusesHome.contains(st) {
+                            print("no need for load more button here")
+                            StoreStruct.statusesHome = stat + StoreStruct.statusesHome
+                        } else {
+                            print("need load more button here")
+                            StoreStruct.gapLastHomeID = stat.last?.id ?? ""
+                            let z = stat.last!
+                            z.id = "loadmorehere"
+                            StoreStruct.gapLastHomeStat = z
+                            StoreStruct.statusesHome = stat + StoreStruct.statusesHome
+                        }
+                        } else {
+                            StoreStruct.statusesHome = stat + StoreStruct.statusesHome
+                        }
+                        
+                        
                         DispatchQueue.main.async {
-                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+//                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             
                             newestC = StoreStruct.statusesHome.count - newestC
                             
@@ -3255,14 +3467,33 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 }
             }
         } else if self.currentIndex == 1 {
-            let request = Timelines.public(local: true, range: .min(id: StoreStruct.statusesLocal.first?.id ?? "", limit: 5000))
+            let request = Timelines.public(local: true, range: .since(id: StoreStruct.statusesLocal.first?.id ?? "", limit: 5000))
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
                         var newestC = StoreStruct.statusesLocal.count
-                        StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
+                        
+                        
+                        
+                        if let st = stat.last {
+                            if StoreStruct.statusesLocal.contains(st) {
+                                print("no need for load more button here")
+                                StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
+                            } else {
+                                print("need load more button here")
+                                StoreStruct.gapLastLocalID = stat.last?.id ?? ""
+                                let z = stat.last!
+                                z.id = "loadmorehere"
+                                StoreStruct.gapLastLocalStat = z
+                                StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
+                            }
+                        } else {
+                            StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
+                        }
+                        
+                        
                         DispatchQueue.main.async {
-                            StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+//                            StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             
                             newestC = StoreStruct.statusesLocal.count - newestC
                             
@@ -3304,14 +3535,32 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 }
             }
         } else {
-            let request = Timelines.public(local: false, range: .min(id: StoreStruct.statusesFederated.first?.id ?? "", limit: 5000))
+            let request = Timelines.public(local: false, range: .since(id: StoreStruct.statusesFederated.first?.id ?? "", limit: 5000))
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
                         var newestC = StoreStruct.statusesFederated.count
-                        StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
+                        
+                        if let st = stat.last {
+                            if StoreStruct.statusesFederated.contains(st) {
+                                print("no need for load more button here")
+                                StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
+                            } else {
+                                print("need load more button here")
+                                StoreStruct.gapLastFedID = stat.last?.id ?? ""
+                                let z = stat.last!
+                                z.id = "loadmorehere"
+                                StoreStruct.gapLastFedStat = z
+                                print(StoreStruct.gapLastFedID)
+                                StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
+                            }
+                        } else {
+                            StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
+                        }
+                        
+                        
                         DispatchQueue.main.async {
-                            StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+//                            StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             
                             newestC = StoreStruct.statusesFederated.count - newestC
                             
@@ -3374,6 +3623,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             Colours.cellOwn = UIColor(red: 243/255.0, green: 242/255.0, blue: 246/255.0, alpha: 1.0)
             Colours.cellAlternative = UIColor(red: 243/255.0, green: 242/255.0, blue: 246/255.0, alpha: 1.0)
             Colours.black = UIColor.black
+            Colours.white3 = UIColor(red: 235/255.0, green: 235/255.0, blue: 235/255.0, alpha: 1.0)
             UIApplication.shared.statusBarStyle = .default
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 1) {
             Colours.white = UIColor(red: 53/255.0, green: 53/255.0, blue: 64/255.0, alpha: 1.0)
@@ -3387,6 +3637,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             Colours.cellOwn = UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0)
             Colours.cellAlternative = UIColor(red: 20/255.0, green: 20/255.0, blue: 30/255.0, alpha: 1.0)
             Colours.black = UIColor.white
+            Colours.white3 = UIColor(red: 33/255.0, green: 33/255.0, blue: 44/255.0, alpha: 1.0)
             UIApplication.shared.statusBarStyle = .lightContent
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 2) {
             Colours.white = UIColor(red: 36/255.0, green: 33/255.0, blue: 37/255.0, alpha: 1.0)
@@ -3400,6 +3651,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             Colours.cellOwn = UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0)
             Colours.cellAlternative = UIColor(red: 20/255.0, green: 20/255.0, blue: 30/255.0, alpha: 1.0)
             Colours.black = UIColor.white
+            Colours.white3 = UIColor(red: 16/255.0, green: 13/255.0, blue: 17/255.0, alpha: 1.0)
             UIApplication.shared.statusBarStyle = .lightContent
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 4) {
             Colours.white = UIColor(red: 8/255.0, green: 28/255.0, blue: 88/255.0, alpha: 1.0)
@@ -3413,6 +3665,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             Colours.cellOwn = UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0)
             Colours.cellAlternative = UIColor(red: 20/255.0, green: 20/255.0, blue: 30/255.0, alpha: 1.0)
             Colours.black = UIColor.white
+            Colours.white3 = UIColor(red: 0/255.0, green: 14/255.0, blue: 69/255.0, alpha: 1.0)
             UIApplication.shared.statusBarStyle = .lightContent
         } else {
             Colours.white = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0)
@@ -3426,6 +3679,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             Colours.cellOwn = UIColor(red: 10/255.0, green: 10/255.0, blue: 20/255.0, alpha: 1.0)
             Colours.cellAlternative = UIColor(red: 20/255.0, green: 20/255.0, blue: 30/255.0, alpha: 1.0)
             Colours.black = UIColor.white
+            Colours.white3 = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0)
             UIApplication.shared.statusBarStyle = .lightContent
         }
         

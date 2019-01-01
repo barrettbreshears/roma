@@ -69,8 +69,13 @@ class GraphCell: UITableViewCell, ScrollableGraphViewDataSource {
         self.graphView = ScrollableGraphView(frame: CGRect(x: 0, y: 20, width: CGFloat(UIScreen.main.bounds.width), height: 200), dataSource: self)
         
         self.graphView.isScrollEnabled = false
-        self.graphView.shouldAnimateOnStartup = true
-        self.graphView.shouldAnimateOnAdapt = true
+        if (UserDefaults.standard.object(forKey: "setGraph2") == nil) || (UserDefaults.standard.object(forKey: "setGraph2") as! Int == 0) {
+            self.graphView.shouldAnimateOnStartup = true
+            self.graphView.shouldAnimateOnAdapt = true
+        } else {
+            self.graphView.shouldAnimateOnStartup = false
+            self.graphView.shouldAnimateOnAdapt = false
+        }
         self.graphView.shouldAdaptRange = true
         self.graphView.alpha = 1
         

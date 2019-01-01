@@ -355,6 +355,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.tintColor = Colours.tabSelected
         
         
+        if StoreStruct.currentUser != nil {
+            if (UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)homeid") == nil) {} else {
+                StoreStruct.gapLastHomeID = UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)homeid") as! String
+            }
+            if (UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)localid") == nil) {} else {
+                StoreStruct.gapLastLocalID = UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)localid") as! String
+            }
+            if (UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)fedid") == nil) {} else {
+                StoreStruct.gapLastFedID = UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)fedid") as! String
+            }
+        }
         
         do {
             StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
@@ -363,6 +374,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
             StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
             StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)use.json", from: .documents, as: Account.self)
+            
+            StoreStruct.gapLastHomeStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)homestat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastLocalStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)localstat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastFedStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fedstat.json", from: .documents, as: Status.self)
         } catch {
             print("Couldn't load")
         }
@@ -384,6 +399,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         
         if StoreStruct.currentUser != nil {
+            UserDefaults.standard.set(StoreStruct.gapLastHomeID, forKey: "\(StoreStruct.shared.currentInstance.clientID)homeid")
+            UserDefaults.standard.set(StoreStruct.gapLastLocalID, forKey: "\(StoreStruct.shared.currentInstance.clientID)localid")
+            UserDefaults.standard.set(StoreStruct.gapLastFedID, forKey: "\(StoreStruct.shared.currentInstance.clientID)fedid")
+            
             UserDefaults.standard.set(StoreStruct.currentUser.username, forKey: "userN")
             do {
                 try Disk.save(StoreStruct.currentUser, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)use.json")
@@ -394,10 +413,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 
                 try Disk.save(StoreStruct.notifications, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)noti.json")
                 try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)ment.json")
+                
+                try Disk.save(StoreStruct.gapLastHomeStat, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)homestat.json")
+                try Disk.save(StoreStruct.gapLastLocalStat, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)localstat.json")
+                try Disk.save(StoreStruct.gapLastFedStat, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fedstat.json")
             } catch {
                 print("Couldn't save")
             }
         }
+        
         
     }
     

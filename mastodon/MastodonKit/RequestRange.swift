@@ -34,17 +34,17 @@ extension RequestRange {
                 Parameter(name: "limit", value: limit.map(limitFunction).flatMap(toOptionalString))
             ]
         case .min(let id, let limit):
-            if (UserDefaults.standard.object(forKey: "orderset") == nil) || (UserDefaults.standard.object(forKey: "orderset") as! Int == 0) {
+//            if (UserDefaults.standard.object(forKey: "orderset") == nil) || (UserDefaults.standard.object(forKey: "orderset") as! Int == 0) {
                 return [
                     Parameter(name: "min_id", value: id),
                     Parameter(name: "limit", value: limit.map(limitFunction).flatMap(toOptionalString))
                 ]
-            } else {
-                return [
-                    Parameter(name: "since_id", value: id),
-                    Parameter(name: "limit", value: limit.map(limitFunction).flatMap(toOptionalString))
-                ]
-            }
+//            } else {
+//                return [
+//                    Parameter(name: "since_id", value: id),
+//                    Parameter(name: "limit", value: limit.map(limitFunction).flatMap(toOptionalString))
+//                ]
+//            }
         case .limit(let limit):
             return [Parameter(name: "limit", value: String(limitFunction(limit)))]
         default:

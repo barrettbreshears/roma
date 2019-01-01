@@ -10,7 +10,7 @@ import Foundation
 
 public class Status: Codable {
     /// The ID of the status.
-    public let id: String
+    public var id: String
     /// A Fediverse-unique resource ID.
     public let uri: String
     /// URL to the status page (can be remote).

@@ -19,7 +19,7 @@ class SettingsCell: SwipeTableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        profileImageView.backgroundColor = Colours.white
+        profileImageView.backgroundColor = Colours.clear
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         userName.translatesAutoresizingMaskIntoConstraints = false
@@ -77,6 +77,9 @@ class SettingsCell: SwipeTableViewCell {
         userTag.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         
+        userName.textColor = Colours.black
+        userTag.textColor = Colours.black.withAlphaComponent(0.8)
+        toot.textColor = Colours.black.withAlphaComponent(0.5)
         
     }
     
