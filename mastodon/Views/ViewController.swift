@@ -2161,7 +2161,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 StoreStruct.shared.newClient = Client(baseURL: "https://\(returnedText)")
                 let request = Clients.register(
                     clientName: "Roma",
-                    redirectURI: "com.vm.roma://success",
+                    redirectURI: "com.vm.roma://addNewInstance",
                     scopes: [.read, .write, .follow],
                     website: "https://pleroma.com"
                 )

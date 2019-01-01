@@ -283,24 +283,13 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
                 
                 
                 // Send off returnedText to client
-<<<<<<< HEAD
-                StoreStruct.client = Client(baseURL: "https://\(returnedText)")
-                let request = Clients.register(
-                    clientName: "Mast",
-                    redirectURI: "com.vm.roma://success",
-                    scopes: [.read, .write, .follow],
-                    website: "https://twitter.com/jpeguin"
-                )
-                StoreStruct.client.run(request) { (application) in
-=======
                 if newInstance {
->>>>>>> upstream/master
                     
                     StoreStruct.shared.newInstance = InstanceData()
                     StoreStruct.shared.newClient = Client(baseURL: "https://\(returnedText)")
                     let request = Clients.register(
-                        clientName: "Mast",
-                        redirectURI: "com.shi.mastodon://addNewInstance",
+                        clientName: "Roma",
+                        redirectURI: "com.vm.roma://addNewInstance",
                         scopes: [.read, .write, .follow],
                         website: "https://twitter.com/jpeguin"
                     )
@@ -325,7 +314,7 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
                             StoreStruct.shared.newInstance?.returnedText = returnedText
                             
                             DispatchQueue.main.async {
-                                StoreStruct.shared.newInstance?.redirect = "com.shi.mastodon://addNewInstance".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                                StoreStruct.shared.newInstance?.redirect = "com.vm.roma://addNewInstance".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                                 let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&scope=read%20write%20follow&client_id=\(application.clientID)")!
                                 self.safariVC = SFSafariViewController(url: queryURL)
                                 self.present(self.safariVC!, animated: true, completion: nil)
@@ -336,26 +325,12 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
                     StoreStruct.client = Client(baseURL: "https://\(returnedText)")
                     let request = Clients.register(
                         clientName: "Mast",
-                        redirectURI: "com.shi.mastodon://success",
+                        redirectURI: "com.vm.roma://success",
                         scopes: [.read, .write, .follow],
                         website: "https://twitter.com/jpeguin"
                     )
                     StoreStruct.client.run(request) { (application) in
                         
-<<<<<<< HEAD
-                    } else {
-                        let application = application.value!
-                        
-                        StoreStruct.shared.currentInstance.clientID = application.clientID
-                        StoreStruct.shared.currentInstance.clientSecret = application.clientSecret
-                        StoreStruct.shared.currentInstance.returnedText = returnedText
-                        
-                        DispatchQueue.main.async {
-                            StoreStruct.shared.currentInstance.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                            let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&scope=read%20write%20follow&client_id=\(application.clientID)")!
-                            self.safariVC = SFSafariViewController(url: queryURL)
-                            self.present(self.safariVC!, animated: true, completion: nil)
-=======
                         if application.value == nil {
                             
                             DispatchQueue.main.async {
@@ -375,12 +350,11 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
                             StoreStruct.shared.currentInstance.returnedText = returnedText
                             
                             DispatchQueue.main.async {
-                                StoreStruct.shared.currentInstance.redirect = "com.shi.mastodon://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                                StoreStruct.shared.currentInstance.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                                 let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&scope=read%20write%20follow&client_id=\(application.clientID)")!
                                 self.safariVC = SFSafariViewController(url: queryURL)
                                 self.present(self.safariVC!, animated: true, completion: nil)
                             }
->>>>>>> upstream/master
                         }
                     }
                 }

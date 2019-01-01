@@ -545,7 +545,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>Mast</string>
+	<string>Roma</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -573,31 +573,23 @@
 		<true/>
 	</dict>
 	<key>NSAppleMusicUsageDescription</key>
-	<string>Allow Mast to access your media to determine what song is currently playing.</string>
+	<string>Allow Roma to access your media to determine what song is currently playing.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>Allow Mast to access your camera to capture pictures and videos for posting within statuses.</string>
+	<string>Allow Roma to access your camera to capture pictures and videos for posting within statuses.</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>Mast requires biometrics permission to authenticate with biometrics.</string>
+	<string>Roma requires biometrics permission to authenticate with biometrics.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Allow Mast to access your microphone to capture sound in videos for posting within statuses.</string>
+	<string>Allow Roma to access your microphone to capture sound in videos for posting within statuses.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>Allow Mast to save images to your photo library.</string>
+	<string>Allow Roma to save images to your photo library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow Mast to access your photo library to display your recent pictures and videos for posting within statuses.</string>
+	<string>Allow Roma to access your photo library to display your recent pictures and videos for posting within statuses.</string>
 	<key>NSUserActivityTypes</key>
 	<array>
-<<<<<<< HEAD
 		<string>com.vm.roma.oled</string>
 		<string>com.vm.roma.light</string>
 		<string>com.vm.roma.dark</string>
 		<string>com.vm.roma.confetti</string>
-=======
-		<string>com.shi.Mast.oled</string>
-		<string>com.shi.Mast.light</string>
-		<string>com.shi.Mast.dark</string>
-		<string>com.shi.Mast.bluemid</string>
-		<string>com.shi.Mast.confetti</string>
->>>>>>> upstream/master
 	</array>
 	<key>UIApplicationShortcutItems</key>
 	<array>
