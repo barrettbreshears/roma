@@ -181,7 +181,7 @@ class RepliesCellImage: SwipeTableViewCell {
                 toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
             } else {
                 let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted")
-                for y in status.reblog?.emojis ?? status.emojis {
+                for y in status.reblog!.emojis {
                     let textAttachment = NSTextAttachment()
                     textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
                     textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.toot.font.lineHeight), height: Int(self.toot.font.lineHeight))

@@ -116,6 +116,21 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
         
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        self.openURL("com.shi.mastodon://id=\(self.allStats[indexPath.row].id)")
+    }
+    
+    @objc func openURL(_ url: String) -> Bool {
+        var responder: UIResponder? = self
+        while responder != nil {
+            if let application = responder as? UIApplication {
+                return application.perform(#selector(openURL(_:)), with: URL(string: url)) != nil
+            }
+            responder = responder?.next
+        }
+        return false
+    }
+    
     func widgetActiveDisplayModeDidChange(_ activeDisplayMode: NCWidgetDisplayMode, withMaximumSize maxSize: CGSize) {
         let expanded = activeDisplayMode == .expanded
         preferredContentSize = expanded ? CGSize(width: maxSize.width, height: 900) : CGSize(width: maxSize.width, height: 75)

@@ -460,9 +460,11 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
         let request = Statuses.status(id: StoreStruct.curID)
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
+                DispatchQueue.main.async {
                 let controller = DetailViewController()
                 controller.mainStatus.append(stat)
                 self.navigationController?.pushViewController(controller, animated: true)
+                }
             }
         }
     }
@@ -1126,6 +1128,14 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                         if hasStatus.mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
                             let cell = tableView2.dequeueReusableCell(withIdentifier: "cell302", for: indexPath) as! NotificationCell
                             cell.delegate = self
+                            
+                            cell.rep1.tag = indexPath.row
+                            cell.like1.tag = indexPath.row
+                            cell.boost1.tag = indexPath.row
+                            cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                            cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                            cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                            
                             cell.configure(StoreStruct.notifications[indexPath.row])
                             cell.profileImageView.tag = indexPath.row
                             cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
@@ -1209,6 +1219,14 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                         } else {
                             let cell = tableView2.dequeueReusableCell(withIdentifier: "cell402", for: indexPath) as! NotificationCellImage
                             cell.delegate = self
+                            
+                            cell.rep1.tag = indexPath.row
+                            cell.like1.tag = indexPath.row
+                            cell.boost1.tag = indexPath.row
+                            cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                            cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                            cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                            
                             cell.configure(StoreStruct.notifications[indexPath.row])
                             cell.profileImageView.tag = indexPath.row
                             cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
@@ -1301,6 +1319,14 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                         
                         let cell = tableView2.dequeueReusableCell(withIdentifier: "cell302", for: indexPath) as! NotificationCell
                         cell.delegate = self
+                        
+                        cell.rep1.tag = indexPath.row
+                        cell.like1.tag = indexPath.row
+                        cell.boost1.tag = indexPath.row
+                        cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                        cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                        cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                        
                         cell.configure(StoreStruct.notifications[indexPath.row])
                         cell.backgroundColor = Colours.white
                         //cell.userName.textColor = Colours.black
@@ -1416,6 +1442,14 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                     if hasStatus.mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
                         let cell = tableView.dequeueReusableCell(withIdentifier: "cell3", for: indexPath) as! NotificationCell
                         cell.delegate = self
+                        
+                        cell.rep1.tag = indexPath.row
+                        cell.like1.tag = indexPath.row
+                        cell.boost1.tag = indexPath.row
+                        cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                        cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                        cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                        
                         cell.configure(StoreStruct.notificationsMentions[indexPath.row])
                         cell.profileImageView.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
@@ -1499,6 +1533,14 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                     } else {
                         let cell = tableView.dequeueReusableCell(withIdentifier: "cell4", for: indexPath) as! NotificationCellImage
                         cell.delegate = self
+                        
+                        cell.rep1.tag = indexPath.row
+                        cell.like1.tag = indexPath.row
+                        cell.boost1.tag = indexPath.row
+                        cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                        cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                        cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                        
                         cell.configure(StoreStruct.notificationsMentions[indexPath.row])
                         cell.profileImageView.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
@@ -1589,6 +1631,14 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                     
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell3", for: indexPath) as! NotificationCell
                     cell.delegate = self
+                    
+                    cell.rep1.tag = indexPath.row
+                    cell.like1.tag = indexPath.row
+                    cell.boost1.tag = indexPath.row
+                    cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                    cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                    cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                    
                     cell.configure(StoreStruct.notificationsMentions[indexPath.row])
                     cell.backgroundColor = Colours.white
                     //cell.userName.textColor = Colours.black
@@ -1791,6 +1841,219 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    @objc func didTouchBoost(sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
+        
+        var theTable = self.tableView
+        var sto = StoreStruct.notifications
+        if self.currentIndex == 0 {
+            sto = StoreStruct.notifications
+            theTable = self.tableView2
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.notificationsMentions
+            theTable = self.tableView
+        }
+        
+        var rrr = 0
+        if self.currentIndex == 0 {
+            rrr = 1
+        }
+        
+        if sto[sender.tag].status!.reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].status?.id ?? "" ) {
+            StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != sto[sender.tag].status?.id ?? ""  }
+            let request2 = Statuses.unreblog(id: sto[sender.tag].status?.id ?? "" )
+            StoreStruct.client.run(request2) { (statuses) in
+                DispatchQueue.main.async {
+                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? NotificationCell {
+                        if sto[sender.tag].status!.favourited! || StoreStruct.allLikes.contains(sto[sender.tag].status?.id ?? "" ) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "like")
+                        } else {
+                            cell.moreImage.image = nil
+                        }
+                        cell.hideSwipe(animated: true)
+                    } else {
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as! NotificationCellImage
+                        if sto[sender.tag].status!.favourited! || StoreStruct.allLikes.contains(sto[sender.tag].status?.id ?? "" ) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "like")
+                        } else {
+                            cell.moreImage.image = nil
+                        }
+                        cell.hideSwipe(animated: true)
+                    }
+                }
+            }
+        } else {
+            StoreStruct.allBoosts.append(sto[sender.tag].status?.id ?? "" )
+            let request2 = Statuses.reblog(id: sto[sender.tag].status?.id ?? "" )
+            StoreStruct.client.run(request2) { (statuses) in
+                DispatchQueue.main.async {
+                    if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreateRe"), object: nil)
+                    }
+                    
+                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? NotificationCell {
+                        if sto[sender.tag].status!.favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].status?.id ?? "" ) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "fifty")
+                        } else {
+                            cell.moreImage.image = UIImage(named: "boost")
+                        }
+                        cell.hideSwipe(animated: true)
+                    } else {
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as! NotificationCellImage
+                        if sto[sender.tag].status!.favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].status?.id ?? "" ) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "fifty")
+                        } else {
+                            cell.moreImage.image = UIImage(named: "boost")
+                        }
+                        cell.hideSwipe(animated: true)
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
+    @objc func didTouchLike(sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
+        
+        var theTable = self.tableView
+        var sto = StoreStruct.notifications
+        if self.currentIndex == 0 {
+            sto = StoreStruct.notifications
+            theTable = self.tableView2
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.notificationsMentions
+            theTable = self.tableView
+        }
+        
+        var rrr = 0
+        if self.currentIndex == 0 {
+            rrr = 1
+        }
+        
+        if sto[sender.tag].status!.favourited! || StoreStruct.allLikes.contains(sto[sender.tag].status?.id ?? "" ) {
+            StoreStruct.allLikes = StoreStruct.allLikes.filter { $0 != sto[sender.tag].status?.id ?? "" }
+            let request2 = Statuses.unfavourite(id: sto[sender.tag].status?.id ?? "" )
+            StoreStruct.client.run(request2) { (statuses) in
+                DispatchQueue.main.async {
+                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? NotificationCell {
+                        if sto[sender.tag].status!.reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].status?.id ?? "" ) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "boost")
+                        } else {
+                            cell.moreImage.image = nil
+                        }
+                        cell.hideSwipe(animated: true)
+                    } else {
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as! NotificationCellImage
+                        if sto[sender.tag].status!.reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].status?.id ?? "" ) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "boost")
+                        } else {
+                            cell.moreImage.image = nil
+                        }
+                        cell.hideSwipe(animated: true)
+                    }
+                }
+            }
+        } else {
+            StoreStruct.allLikes.append(sto[sender.tag].status?.id ?? "" )
+            let request2 = Statuses.favourite(id: sto[sender.tag].status?.id ?? "" )
+            StoreStruct.client.run(request2) { (statuses) in
+                DispatchQueue.main.async {
+                    if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreateLi"), object: nil)
+                    }
+                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? NotificationCell {
+                        if sto[sender.tag].status!.reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].status?.id ?? "" ) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "fifty")
+                        } else {
+                            cell.moreImage.image = UIImage(named: "like")
+                        }
+                        cell.hideSwipe(animated: true)
+                    } else {
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as! NotificationCellImage
+                        if sto[sender.tag].status!.reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].status?.id ?? "" ) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "fifty")
+                        } else {
+                            cell.moreImage.image = UIImage(named: "like")
+                        }
+                        cell.hideSwipe(animated: true)
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
+    @objc func didTouchReply(sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
+        
+        var theTable = self.tableView
+        var sto = StoreStruct.notifications
+        if self.currentIndex == 0 {
+            sto = StoreStruct.notifications
+            theTable = self.tableView2
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.notificationsMentions
+            theTable = self.tableView
+        }
+        
+        let controller = ComposeViewController()
+        StoreStruct.spoilerText = sto[sender.tag].status?.spoilerText ?? ""
+        controller.inReply = [sto[sender.tag].status!]
+        controller.inReplyText = sto[sender.tag].account.username
+        controller.prevTextReply = sto[sender.tag].status!.content.stripHTML()
+        print(sto[sender.tag].account.username)
+        self.present(controller, animated: true, completion: nil)
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         
         var theTable = self.tableView
@@ -1801,6 +2064,11 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
         } else if self.currentIndex == 1 {
             sto = StoreStruct.notificationsMentions
             theTable = self.tableView
+        }
+        
+        
+        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {} else {
+            return nil
         }
         
         if StoreStruct.notifications[indexPath.row].type == .mention || self.currentIndex == 1 {

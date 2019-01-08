@@ -2155,6 +2155,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             sto = self.allPrevious
         }
         
+        
+        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {} else {
+            return nil
+        }
+        
         if orientation == .left {
             let impact = UIImpactFeedbackGenerator(style: .medium)
             

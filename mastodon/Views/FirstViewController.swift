@@ -151,9 +151,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         let request = Statuses.status(id: StoreStruct.curID)
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
-                let controller = DetailViewController()
-                controller.mainStatus.append(stat)
-                self.navigationController?.pushViewController(controller, animated: true)
+                DispatchQueue.main.async {
+                    let controller = DetailViewController()
+                    controller.mainStatus.append(stat)
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
             }
         }
     }
@@ -1608,6 +1610,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MainFeedCell
                     cell.delegate = self
                     cell.backgroundColor = Colours.white
+                    
+                    cell.rep1.tag = indexPath.row
+                    cell.like1.tag = indexPath.row
+                    cell.boost1.tag = indexPath.row
+                    cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                    cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                    cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                    
                     cell.configure(StoreStruct.statusesHome[indexPath.row])
                     cell.profileImageView.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
@@ -1695,6 +1705,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell2", for: indexPath) as! MainFeedCellImage
                     cell.delegate = self
                     cell.backgroundColor = Colours.white
+                    
+                    cell.rep1.tag = indexPath.row
+                    cell.like1.tag = indexPath.row
+                    cell.boost1.tag = indexPath.row
+                    cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                    cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                    cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                    
                     cell.configure(StoreStruct.statusesHome[indexPath.row])
                     cell.profileImageView.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
@@ -1829,6 +1847,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     let cell = tableView.dequeueReusableCell(withIdentifier: "celll", for: indexPath) as! MainFeedCell
                     cell.delegate = self
                     cell.backgroundColor = Colours.white
+                    
+                    cell.rep1.tag = indexPath.row
+                    cell.like1.tag = indexPath.row
+                    cell.boost1.tag = indexPath.row
+                    cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                    cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                    cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                    
                     cell.configure(StoreStruct.statusesLocal[indexPath.row])
                     cell.profileImageView.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
@@ -1913,6 +1939,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell2l", for: indexPath) as! MainFeedCellImage
                     cell.delegate = self
                     cell.backgroundColor = Colours.white
+                    
+                    cell.rep1.tag = indexPath.row
+                    cell.like1.tag = indexPath.row
+                    cell.boost1.tag = indexPath.row
+                    cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                    cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                    cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                    
                     cell.configure(StoreStruct.statusesLocal[indexPath.row])
                     cell.profileImageView.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
@@ -2039,6 +2073,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cellf", for: indexPath) as! MainFeedCell
                     cell.delegate = self
                     cell.backgroundColor = Colours.white
+                    
+                    cell.rep1.tag = indexPath.row
+                    cell.like1.tag = indexPath.row
+                    cell.boost1.tag = indexPath.row
+                    cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                    cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                    cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                    
                     cell.configure(StoreStruct.statusesFederated[indexPath.row])
                     cell.profileImageView.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
@@ -2123,6 +2165,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell2f", for: indexPath) as! MainFeedCellImage
                     cell.delegate = self
                     cell.backgroundColor = Colours.white
+                    
+                    cell.rep1.tag = indexPath.row
+                    cell.like1.tag = indexPath.row
+                    cell.boost1.tag = indexPath.row
+                    cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                    cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                    cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                    
                     cell.configure(StoreStruct.statusesFederated[indexPath.row])
                     cell.profileImageView.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
@@ -2400,6 +2450,203 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
     }
     
+    
+    
+    
+    
+    
+    
+    
+    @objc func didTouchBoost(sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
+        
+        var theTable = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            theTable = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            theTable = self.tableViewL
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            theTable = self.tableViewF
+        }
+        
+        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+            StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
+            let request2 = Statuses.unreblog(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
+            StoreStruct.client.run(request2) { (statuses) in
+                DispatchQueue.main.async {
+                    if let cell = theTable.cellForRow(at:IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
+                        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "like")
+                        } else {
+                            cell.moreImage.image = nil
+                        }
+                        cell.hideSwipe(animated: true)
+                    } else {
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
+                        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "like")
+                        } else {
+                            cell.moreImage.image = nil
+                        }
+                        cell.hideSwipe(animated: true)
+                    }
+                }
+            }
+        } else {
+            StoreStruct.allBoosts.append(sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
+            let request2 = Statuses.reblog(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
+            StoreStruct.client.run(request2) { (statuses) in
+                DispatchQueue.main.async {
+                    
+                    if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreateRe"), object: nil)
+                    }
+                    
+                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
+                        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "fifty")
+                        } else {
+                            cell.moreImage.image = UIImage(named: "boost")
+                        }
+                        cell.hideSwipe(animated: true)
+                    } else {
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
+                        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "fifty")
+                        } else {
+                            cell.moreImage.image = UIImage(named: "boost")
+                        }
+                        cell.hideSwipe(animated: true)
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
+    @objc func didTouchLike(sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
+        
+        var theTable = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            theTable = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            theTable = self.tableViewL
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            theTable = self.tableViewF
+        }
+        
+        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+            StoreStruct.allLikes = StoreStruct.allLikes.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
+            let request2 = Statuses.unfavourite(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
+            StoreStruct.client.run(request2) { (statuses) in
+                DispatchQueue.main.async {
+                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
+                        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "boost")
+                        } else {
+                            cell.moreImage.image = nil
+                        }
+                        cell.hideSwipe(animated: true)
+                    } else {
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
+                        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "boost")
+                        } else {
+                            cell.moreImage.image = nil
+                        }
+                        cell.hideSwipe(animated: true)
+                    }
+                }
+            }
+        } else {
+            StoreStruct.allLikes.append(sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
+            let request2 = Statuses.favourite(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
+            StoreStruct.client.run(request2) { (statuses) in
+                DispatchQueue.main.async {
+                    if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreateLi"), object: nil)
+                    }
+                    
+                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
+                        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "fifty")
+                        } else {
+                            cell.moreImage.image = UIImage(named: "like")
+                        }
+                        cell.hideSwipe(animated: true)
+                    } else {
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
+                        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "fifty")
+                        } else {
+                            cell.moreImage.image = UIImage(named: "like")
+                        }
+                        cell.hideSwipe(animated: true)
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
+    @objc func didTouchReply(sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
+        
+        var theTable = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            theTable = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            theTable = self.tableViewL
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            theTable = self.tableViewF
+        }
+        
+        let controller = ComposeViewController()
+        StoreStruct.spoilerText = sto[sender.tag].reblog?.spoilerText ?? sto[sender.tag].spoilerText
+        controller.inReply = [sto[sender.tag].reblog ?? sto[sender.tag]]
+        controller.prevTextReply = sto[sender.tag].reblog?.content.stripHTML() ?? sto[sender.tag].content.stripHTML()
+        controller.inReplyText = sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username
+        print(sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username)
+        self.present(controller, animated: true, completion: nil)
+    }
+    
+    
+    
+    
+    
+    
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         
         var theTable = self.tableView
@@ -2413,6 +2660,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         } else if self.currentIndex == 2 {
             sto = StoreStruct.statusesFederated
             theTable = self.tableViewF
+        }
+        
+        
+        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {} else {
+            return nil
         }
         
         
@@ -3259,9 +3511,32 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 StoreStruct.statusesHome = y.first! + stat + y.last!
                             }
                             
+                            
+                            let newestC = y.first!.count + stat.count
+                            
                             DispatchQueue.main.async {
-//                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
-                                self.tableView.reloadData()
+                            if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
+                                self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
+                                self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                springWithDelay(duration: 0.5, delay: 0, animations: {
+                                    self.newUpdatesB1.alpha = 1
+                                    self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                })
+                                self.countcount1 = newestC
+                                
+                                DispatchQueue.main.async {
+                                    UIView.setAnimationsEnabled(false)
+                                    self.tableView.reloadData()
+                                    self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                    UIView.setAnimationsEnabled(true)
+                                }
+                            } else {
+                                
+                                DispatchQueue.main.async {
+                                    self.tableView.reloadData()
+                                }
+                                
+                            }
                             }
                             
                         }
@@ -3290,10 +3565,32 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 StoreStruct.statusesLocal = y.first! + stat + y.last!
                             }
                             
+                            
+                            let newestC = y.first!.count + stat.count
+                            
                             DispatchQueue.main.async {
-//                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
-                                self.tableViewL.reloadData()
+                            if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
+                                self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
+                                self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                springWithDelay(duration: 0.5, delay: 0, animations: {
+                                    self.newUpdatesB1.alpha = 1
+                                    self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                })
+                                self.countcount1 = newestC
                                 
+                                DispatchQueue.main.async {
+                                    UIView.setAnimationsEnabled(false)
+                                    self.tableViewL.reloadData()
+                                    self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                    UIView.setAnimationsEnabled(true)
+                                }
+                            } else {
+                                
+                                DispatchQueue.main.async {
+                                    self.tableViewL.reloadData()
+                                }
+                                
+                            }
                             }
                         }
                     }
@@ -3323,9 +3620,32 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 StoreStruct.statusesFederated = y.first! + stat + y.last!
                             }
                             
+                            
+                            let newestC = y.first!.count + stat.count
+                            
                             DispatchQueue.main.async {
-                                //                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
-                                self.tableViewF.reloadData()
+                            if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
+                                self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
+                                self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                springWithDelay(duration: 0.5, delay: 0, animations: {
+                                    self.newUpdatesB1.alpha = 1
+                                    self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                })
+                                self.countcount1 = newestC
+                                
+                                DispatchQueue.main.async {
+                                    UIView.setAnimationsEnabled(false)
+                                    self.tableViewF.reloadData()
+                                    self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                    UIView.setAnimationsEnabled(true)
+                                }
+                            } else {
+                            
+                                DispatchQueue.main.async {
+                                    self.tableViewF.reloadData()
+                                }
+                                
+                            }
                             }
                             
                         }
@@ -3410,7 +3730,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         
                         
                         if let st = stat.last {
-                        if StoreStruct.statusesHome.contains(st) {
+                            if StoreStruct.statusesHome.contains(st) || stat.count == 1 {
                             print("no need for load more button here")
                             StoreStruct.statusesHome = stat + StoreStruct.statusesHome
                         } else {
@@ -3476,7 +3796,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         
                         
                         if let st = stat.last {
-                            if StoreStruct.statusesLocal.contains(st) {
+                            if StoreStruct.statusesLocal.contains(st) || stat.count == 1 {
                                 print("no need for load more button here")
                                 StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
                             } else {
@@ -3542,7 +3862,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         var newestC = StoreStruct.statusesFederated.count
                         
                         if let st = stat.last {
-                            if StoreStruct.statusesFederated.contains(st) {
+                            if StoreStruct.statusesFederated.contains(st) || stat.count == 1 {
                                 print("no need for load more button here")
                                 StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
                             } else {
@@ -3679,7 +3999,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             Colours.cellOwn = UIColor(red: 10/255.0, green: 10/255.0, blue: 20/255.0, alpha: 1.0)
             Colours.cellAlternative = UIColor(red: 20/255.0, green: 20/255.0, blue: 30/255.0, alpha: 1.0)
             Colours.black = UIColor.white
-            Colours.white3 = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0)
+            Colours.white3 = UIColor(red: 30/255.0, green: 34/255.0, blue: 38/255.0, alpha: 1.0)
             UIApplication.shared.statusBarStyle = .lightContent
         }
         

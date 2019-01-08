@@ -680,7 +680,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     }
     
     func gotoID() {
-        
         if StoreStruct.currentPage == 0 {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid"), object: self)
         } else if StoreStruct.currentPage == 1 {
