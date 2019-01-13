@@ -128,6 +128,19 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.didReceiveMemoryWarning()
     }
     
+    
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            self.tableView.reloadData()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -498,6 +511,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         
         var sto = self.currentTags
+        StoreStruct.newIDtoGoTo = sto[sender.tag].id
         
         
         if sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].mediaAttachments[0].type == .gifv {

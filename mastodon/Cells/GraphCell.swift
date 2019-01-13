@@ -44,7 +44,7 @@ class GraphCell: UITableViewCell, ScrollableGraphViewDataSource {
         }
     }
     
-    let labels = ["Mentions", "Private", "Boosts", "Likes", "Follows"]
+    let labels = ["@You", "Direct", "Boosts", "Likes", "Follows"]
     func label(atIndex pointIndex: Int) -> String {
         return labels[pointIndex]
     }
@@ -83,8 +83,13 @@ class GraphCell: UITableViewCell, ScrollableGraphViewDataSource {
         
         barPlot.barWidth = 34
         barPlot.barLineWidth = 1
-        barPlot.barLineColor = Colours.tabSelected
-        barPlot.barColor = Colours.tabSelected
+        if (UserDefaults.standard.object(forKey: "acthue1") == nil) || (UserDefaults.standard.object(forKey: "acthue1") as! Int == 0) {
+            barPlot.barLineColor = Colours.tabSelected
+            barPlot.barColor = Colours.tabSelected
+        } else {
+            barPlot.barLineColor = Colours.white3
+            barPlot.barColor = Colours.white3
+        }
         barPlot.shouldRoundBarCorners = true
         
         barPlot.adaptAnimationType = ScrollableGraphViewAnimationType.easeOut

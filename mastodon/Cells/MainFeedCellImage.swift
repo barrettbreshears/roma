@@ -303,8 +303,8 @@ class MainFeedCellImage: SwipeTableViewCell {
             
             
             
-            
-            if status.emojis.isEmpty {
+          
+            if status.reblog!.emojis.isEmpty {
                 toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
             } else {
                 let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted")
@@ -320,6 +320,7 @@ class MainFeedCellImage: SwipeTableViewCell {
                     }
                 }
                 self.toot.attributedText = attributedString
+                self.reloadInputViews()
             }
             
             
@@ -359,6 +360,7 @@ class MainFeedCellImage: SwipeTableViewCell {
                     }
                 }
                 self.toot.attributedText = attributedString
+                self.reloadInputViews()
             }
             
             
@@ -406,8 +408,7 @@ class MainFeedCellImage: SwipeTableViewCell {
         mainImageView.clipsToBounds = true
         self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
         mainImageView.pin_updateWithProgress = true
-        
-        
+       
         var statusAttachment:Attachment?
         if status.mediaAttachments.count > 0 {
             statusAttachment = status.mediaAttachments[0]

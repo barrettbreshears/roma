@@ -31,6 +31,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     var countcount2 = 0
     var countcount5 = 0
     
+    var settingsButton = UIButton(type: .custom)
     var blurEffectViewMain = UIView()
     var blurEffect0 = UIBlurEffect()
     var blurEffectView0 = UIVisualEffectView()
@@ -451,6 +452,21 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         if (UserDefaults.standard.object(forKey: "biometricsnot") == nil) || (UserDefaults.standard.object(forKey: "biometricsnot") as! Int == 0) {} else {
             self.biometricAuthenticationClicked(self)
         }
+        
+//        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
+//            settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 32, height: 32)))
+//            settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+//            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+//            settingsButton.layer.cornerRadius = 0
+//            settingsButton.layer.masksToBounds = true
+//        } else {
+//            settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 0, y: 0, width: 20, height: 20)))
+//            settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+//            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+//            settingsButton.imageView?.layer.cornerRadius = 10
+//            settingsButton.imageView?.contentMode = .scaleAspectFill
+//            settingsButton.layer.masksToBounds = true
+//        }
     }
     
     
@@ -536,6 +552,24 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         }
     }
     
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            if self.currentIndex == 0 {
+                self.tableView2.reloadData()
+            } else if self.currentIndex == 5 {
+                self.tableView3.reloadData()
+            } else {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -555,16 +589,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         
         self.view.backgroundColor = Colours.white
         
-        
-        var settingsButton = MNGExpandedTouchAreaButton()
-        settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 32, height: 32)))
-        settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
-        settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        settingsButton.adjustsImageWhenHighlighted = false
-        settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
-        
-        let done = UIBarButtonItem.init(customView: settingsButton)
-        self.navigationItem.setLeftBarButton(done, animated: false)
         
         
         
@@ -907,6 +931,29 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             newSize = offset + 15
         }
         
+        
+        
+        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
+            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 32, height: 32)
+            settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+            settingsButton.imageView?.layer.cornerRadius = 0
+            settingsButton.imageView?.contentMode = .scaleAspectFill
+            settingsButton.layer.masksToBounds = true
+        } else {
+            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
+            settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            settingsButton.imageView?.layer.cornerRadius = 18
+            settingsButton.imageView?.contentMode = .scaleAspectFill
+            settingsButton.layer.masksToBounds = true
+        }
+        settingsButton.adjustsImageWhenHighlighted = false
+        settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
+        self.navigationController?.view.addSubview(settingsButton)
+        
+        
+        
         self.newUpdatesB1.frame = CGRect(x: CGFloat(self.view.bounds.width - 42), y: CGFloat(newSize), width: CGFloat(56), height: CGFloat(30))
         self.newUpdatesB1.backgroundColor = Colours.grayLight19
         self.newUpdatesB1.layer.cornerRadius = 10
@@ -946,12 +993,12 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             
         } else {
             
-            self.segmentedControl.currentSegment = 1
+            self.segmentedControl.currentSegment = 2
             
             self.currentIndex = 0
-            //self.tableView2.reloadData()
             self.tableView.alpha = 0
             self.tableView2.alpha = 1
+            self.tableView3.alpha = 0
             
             if StoreStruct.notifications.isEmpty {
                 let request = Notifications.all(range: .default)
@@ -1299,6 +1346,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         } else {
             UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowMent")
         }
+        
+        self.settingsButton.removeFromSuperview()
     }
     
     func numberOfSegmentsInSegmentedControl(_ segmentedControl: SJFluidSegmentedControl) -> Int {
@@ -1316,11 +1365,19 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     }
     
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForSelectedSegmentAtIndex index: Int) -> [UIColor] {
-        return [Colours.tabSelected, Colours.tabSelected]
+        if (UserDefaults.standard.object(forKey: "seghue1") == nil) || (UserDefaults.standard.object(forKey: "seghue1") as! Int == 0) {
+            return [Colours.tabSelected, Colours.tabSelected]
+        } else {
+            return [Colours.grayLight2, Colours.grayLight2]
+        }
     }
     
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForBounce bounce: SJFluidSegmentedControlBounce) -> [UIColor] {
-        return [Colours.tabSelected, Colours.tabSelected]
+        if (UserDefaults.standard.object(forKey: "seghue1") == nil) || (UserDefaults.standard.object(forKey: "seghue1") as! Int == 0) {
+            return [Colours.tabSelected, Colours.tabSelected]
+        } else {
+            return [Colours.grayLight2, Colours.grayLight2]
+        }
     }
     
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, didChangeFromSegmentAtIndex fromIndex: Int, toSegmentAtIndex toIndex: Int) {
@@ -1903,7 +1960,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 } else {
                     
                     
-                    if indexPath.row == StoreStruct.notifications.count - 14 {
+                    if indexPath.row == StoreStruct.notifications.count - 14 || indexPath.row == StoreStruct.notifications.count {
                         self.fetchMoreNotifications()
                     }
                     
@@ -2551,10 +2608,13 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         var sto = StoreStruct.notifications
         if self.currentIndex == 0 {
             sto = StoreStruct.notifications
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
         } else if self.currentIndex == 5 {
             sto = StoreStruct.notificationsDirect
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
         } else if self.currentIndex == 1 {
             sto = StoreStruct.notificationsMentions
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
         }
         
         

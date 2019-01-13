@@ -330,6 +330,7 @@ class NotificationCell: SwipeTableViewCell {
                 }
             }
             self.toot.attributedText = attributedString
+            self.reloadInputViews()
         }
         
         

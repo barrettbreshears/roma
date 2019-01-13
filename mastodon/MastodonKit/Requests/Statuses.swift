@@ -16,6 +16,14 @@ public struct Statuses {
     public static func status(id: String) -> Request<Status> {
         return Request<Status>(path: "/api/v1/statuses/\(id)")
     }
+    
+    /// Fetches a scheduled status.
+    ///
+    /// - Parameter id: The scheduled status id.
+    /// - Returns: Request for `Status`.
+    public static func scheduledStatus(id: String) -> Request<Status> {
+        return Request<Status>(path: "/api/v1/scheduled_statuses/\(id)")
+    }
 
     /// Gets a status context.
     ///
@@ -67,6 +75,7 @@ public struct Statuses {
     ///   - mediaIDs: The array of media IDs to attach to the status (maximum 4).
     ///   - sensitive: Marks the status as NSFW.
     ///   - spoilerText: the text to be shown as a warning before the actual content.
+    ///   - scheduledAt: the timestamp for scheduled toots.
     ///   - visibility: The status' visibility.
     /// - Returns: Request for `Status`.
     public static func create(status: String,
@@ -74,12 +83,14 @@ public struct Statuses {
                               mediaIDs: [String] = [],
                               sensitive: Bool? = nil,
                               spoilerText: String? = nil,
+                              scheduledAt: String? = nil,
                               visibility: Visibility = .public) -> Request<Status> {
         let parameters = [
             Parameter(name: "status", value: status),
             Parameter(name: "in_reply_to_id", value: replyToID),
             Parameter(name: "sensitive", value: sensitive.flatMap(trueOrNil)),
             Parameter(name: "spoiler_text", value: spoilerText),
+            Parameter(name: "scheduled_at", value: scheduledAt),
             Parameter(name: "visibility", value: visibility.rawValue)
             ] + mediaIDs.map(toArrayOfParameters(withName: "media_ids"))
 

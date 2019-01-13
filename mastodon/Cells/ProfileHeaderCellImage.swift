@@ -109,6 +109,7 @@ class ProfileHeaderCellImage: UITableViewCell, UICollectionViewDelegate, UIColle
         }
         
         var sto = self.profileStatusesHasImage
+        StoreStruct.newIDtoGoTo = sto[indexPath.item].id
         
         
         if sto[indexPath.item].mediaAttachments[0].type == .video || sto[indexPath.item].mediaAttachments[0].type == .gifv {

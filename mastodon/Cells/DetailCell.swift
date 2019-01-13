@@ -140,9 +140,10 @@ class DetailCell: UITableViewCell {
             
             
             
-            
-            if status.emojis.isEmpty {
+        
+            if status.reblog!.emojis.isEmpty {
                 toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
+                
             } else {
                 let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted")
                 for y in status.reblog!.emojis {
@@ -157,6 +158,7 @@ class DetailCell: UITableViewCell {
                     }
                 }
                 self.toot.attributedText = attributedString
+                self.reloadInputViews()
             }
             
             
@@ -184,6 +186,7 @@ class DetailCell: UITableViewCell {
                     }
                 }
                 self.toot.attributedText = attributedString
+                self.reloadInputViews()
             }
             
             

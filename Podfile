@@ -21,6 +21,10 @@ pod 'Disk'
 pod 'Alamofire'
 pod 'SwiftyJSON'
 pod 'SwiftyGiphy'
+pod 'Firebase/Core'
+pod 'Fabric'
+pod 'Crashlytics'
+
 
 end
 

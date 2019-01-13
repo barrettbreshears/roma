@@ -469,6 +469,22 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
         }
     }
     
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            if self.currentIndex == 0 {
+                self.tableView2.reloadData()
+            } else {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -1764,8 +1780,10 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
         var sto = StoreStruct.notifications
         if self.currentIndex == 0 {
             sto = StoreStruct.notifications
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
         } else if self.currentIndex == 1 {
             sto = StoreStruct.notificationsMentions
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
         }
         
         

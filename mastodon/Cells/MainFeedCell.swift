@@ -191,7 +191,7 @@ class MainFeedCell: SwipeTableViewCell {
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
             } else {
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-15-[rep1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-15-[lik1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-15-[like1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-15-[boost1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-15-[more1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-173-[rep1(20)]-24-[like1(20)]-24-[boost1(14)]-24-[more1(20)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
@@ -249,7 +249,7 @@ class MainFeedCell: SwipeTableViewCell {
             
             
             
-            if status.emojis.isEmpty {
+            if status.reblog!.emojis.isEmpty {
                 toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
             } else {
                 let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted")
@@ -261,10 +261,10 @@ class MainFeedCell: SwipeTableViewCell {
                     while attributedString.mutableString.contains(":\(y.shortcode):") {
                         let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
-                        
                     }
                 }
                 self.toot.attributedText = attributedString
+                self.reloadInputViews()
             }
             
             
@@ -310,8 +310,6 @@ class MainFeedCell: SwipeTableViewCell {
 //            }
             
             
-            
-            
             if status.emojis.isEmpty {
                 toot.text = status.content.stripHTML()
             } else {
@@ -324,10 +322,10 @@ class MainFeedCell: SwipeTableViewCell {
                     while attributedString.mutableString.contains(":\(y.shortcode):") {
                         let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
-                        
                     }
                 }
                 self.toot.attributedText = attributedString
+                self.reloadInputViews()
             }
             
             

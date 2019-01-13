@@ -156,8 +156,8 @@ class SearchFeedCell: SwipeTableViewCell {
             
             
             
-            
-            if status.emojis.isEmpty {
+       
+            if status.reblog!.emojis.isEmpty {
                 toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
             } else {
                 let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted")
@@ -173,6 +173,7 @@ class SearchFeedCell: SwipeTableViewCell {
                     }
                 }
                 self.toot.attributedText = attributedString
+                self.reloadInputViews()
             }
             
             
@@ -236,6 +237,7 @@ class SearchFeedCell: SwipeTableViewCell {
                     }
                 }
                 self.toot.attributedText = attributedString
+                self.reloadInputViews()
             }
             
             

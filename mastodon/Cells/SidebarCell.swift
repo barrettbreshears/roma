@@ -147,6 +147,10 @@ class SidebarCell: SwipeTableViewCell {
             "episodes" : toot,
             "more" : moreImage,
             "warning" : warningB,
+            "rep1" : rep1,
+            "like1" : like1,
+            "boost1" : boost1,
+            "more1" : more1,
             ]
         
         if UIApplication.shared.isSplitOrSlideOver || UIDevice.current.userInterfaceIdiom == .phone {
@@ -315,6 +319,7 @@ class SidebarCell: SwipeTableViewCell {
                 }
             }
             self.toot.attributedText = attributedString
+            self.reloadInputViews()
         }
         
         

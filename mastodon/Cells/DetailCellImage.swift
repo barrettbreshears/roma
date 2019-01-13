@@ -179,10 +179,8 @@ class DetailCellImage: UITableViewCell {
         if status.reblog?.content.stripHTML() != nil {
 //            toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.username) reposted"
             
-            
-            
-            
-            if status.emojis.isEmpty {
+
+            if status.reblog!.emojis.isEmpty {
                 toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
             } else {
                 let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted")
@@ -198,6 +196,7 @@ class DetailCellImage: UITableViewCell {
                     }
                 }
                 self.toot.attributedText = attributedString
+                self.reloadInputViews()
             }
             
             
@@ -224,6 +223,7 @@ class DetailCellImage: UITableViewCell {
                     }
                 }
                 self.toot.attributedText = attributedString
+                self.reloadInputViews()
             }
             
             
@@ -286,7 +286,7 @@ class DetailCellImage: UITableViewCell {
         mainImageView.imageView?.contentMode = .scaleAspectFill
         self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
         mainImageView.pin_updateWithProgress = true
-        mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].url ?? status.mediaAttachments[0].url)"))
+        mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].previewURL ?? status.mediaAttachments[0].previewURL)"))
         mainImageView.layer.masksToBounds = true
         
         
