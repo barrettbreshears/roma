@@ -3793,7 +3793,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     if let stat = (statuses.value) {
                         var newestC = StoreStruct.statusesLocal.count
                         
-                        
+                        if (newestC == 0){
+                            DispatchQueue.main.async {
+                                self.refreshControl.endRefreshing()
+                                
+                            }
+                            return
+                        }
                         
                         if let st = stat.last {
                             if StoreStruct.statusesLocal.contains(st) || stat.count == 1 {

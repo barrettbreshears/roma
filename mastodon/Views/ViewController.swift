@@ -284,7 +284,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     let currentInstance = InstanceData(clientID: StoreStruct.shared.currentInstance.clientID, clientSecret: StoreStruct.shared.currentInstance.clientSecret, authCode: StoreStruct.shared.currentInstance.authCode, accessToken: StoreStruct.shared.currentInstance.accessToken, returnedText: StoreStruct.shared.currentInstance.returnedText, redirect:StoreStruct.shared.currentInstance.redirect)
                     
                     var instances = InstanceData.getAllInstances()
-                    instances.append(currentInstance)
+                    
+                    if !instances.contains(currentInstance){
+                        instances.append(currentInstance)
+                    }
+                   
                     UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
                     InstanceData.setCurrentInstance(instance: currentInstance)
                     let request = Timelines.home()
@@ -300,9 +304,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     let request2 = Accounts.currentUser()
                     StoreStruct.client.run(request2) { (statuses) in
                         if let stat = (statuses.value) {
-                            StoreStruct.currentUser = stat
-                            Account.addAccountToList(account: stat)
                             DispatchQueue.main.async {
+                                StoreStruct.currentUser = stat
+                                Account.addAccountToList(account: stat)
                                 NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
                             }
                         }
@@ -348,8 +352,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                     print(json)
                     
+                    guard let accessToken = json["access_token"] as? String else {
+                        return
+                    }
                     
-                    newInsatnce.accessToken = (json["access_token"] as! String)
+                    newInsatnce.accessToken = accessToken
                     
                     InstanceData.setCurrentInstance(instance: newInsatnce)
                     var instances = InstanceData.getAllInstances()
