@@ -104,18 +104,21 @@ public struct Accounts {
     ///   - mediaOnly: Only return statuses that have media attachments.
     ///   - pinnedOnly: Only return statuses that have been pinned.
     ///   - excludeReplies: Skip statuses that reply to other statuses.
+    ///   - excludeReblogs: Skip statuses that are boosts.
     ///   - range: The bounds used when requesting data from Mastodon.
     /// - Returns: Request for `[Status]`.
     public static func statuses(id: String,
                                 mediaOnly: Bool? = nil,
                                 pinnedOnly: Bool? = nil,
                                 excludeReplies: Bool? = nil,
+                                excludeReblogs: Bool? = nil,
                                 range: RequestRange = .default) -> Request<[Status]> {
         let rangeParameters = range.parameters(limit: between(1, and: 40, default: 20)) ?? []
         let parameters = rangeParameters + [
             Parameter(name: "only_media", value: mediaOnly.flatMap(trueOrNil)),
             Parameter(name: "pinned", value: pinnedOnly.flatMap(trueOrNil)),
-            Parameter(name: "exclude_replies", value: excludeReplies.flatMap(trueOrNil))
+            Parameter(name: "exclude_replies", value: excludeReplies.flatMap(trueOrNil)),
+            Parameter(name: "exclude_reblogs", value: excludeReblogs.flatMap(trueOrNil))
         ]
 
         let method = HTTPMethod.get(.parameters(parameters))

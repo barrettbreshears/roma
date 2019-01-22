@@ -2059,6 +2059,7 @@ class PadDetailViewController2: UIViewController, UITableViewDelegate, UITableVi
         
         
         var sto = self.allReplies
+        StoreStruct.newIDtoGoTo = sto[sender.tag].id
         let indexPath = IndexPath(row: sender.tag, section: 3)
         
         

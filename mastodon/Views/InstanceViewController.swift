@@ -130,6 +130,24 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
         super.didReceiveMemoryWarning()
     }
     
+    
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
+            self.tableView.reloadData()
+            
+        } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+        } else {
+            
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

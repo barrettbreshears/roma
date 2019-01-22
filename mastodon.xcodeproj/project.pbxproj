@@ -44,6 +44,10 @@
 		530976D22179DBD700640D84 /* BiometricAuthenticationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530976CE2179DBD700640D84 /* BiometricAuthenticationConstants.swift */; };
 		530976D32179DBD700640D84 /* BioMetricAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530976D02179DBD700640D84 /* BioMetricAuthenticator.swift */; };
 		530976D42179DBD700640D84 /* AuthenticationErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530976D12179DBD700640D84 /* AuthenticationErrors.swift */; };
+		530F5B3621E267CA00A910B3 /* StepCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F5B3221E267CA00A910B3 /* StepCollectionViewFlowLayout.swift */; };
+		530F5B3721E267CA00A910B3 /* FullDateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F5B3321E267CA00A910B3 /* FullDateCollectionViewCell.swift */; };
+		530F5B3821E267CA00A910B3 /* DateTimePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F5B3421E267CA00A910B3 /* DateTimePicker.swift */; };
+		530F5B3921E267CA00A910B3 /* DateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F5B3521E267CA00A910B3 /* DateCollectionViewCell.swift */; };
 		531046C4215AC3AB00FCD068 /* ProfileHeaderCellOwn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531046C3215AC3AB00FCD068 /* ProfileHeaderCellOwn.swift */; };
 		531096B9216D05E100E767DF /* FedTimelineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531096B8216D05E100E767DF /* FedTimelineController.swift */; };
 		5313A23D21D5303900F205E6 /* PadSidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5313A23C21D5303900F205E6 /* PadSidebarViewController.swift */; };
@@ -783,6 +787,10 @@
 		530976CE2179DBD700640D84 /* BiometricAuthenticationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometricAuthenticationConstants.swift; sourceTree = "<group>"; };
 		530976D02179DBD700640D84 /* BioMetricAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BioMetricAuthenticator.swift; sourceTree = "<group>"; };
 		530976D12179DBD700640D84 /* AuthenticationErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationErrors.swift; sourceTree = "<group>"; };
+		530F5B3221E267CA00A910B3 /* StepCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		530F5B3321E267CA00A910B3 /* FullDateCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullDateCollectionViewCell.swift; sourceTree = "<group>"; };
+		530F5B3421E267CA00A910B3 /* DateTimePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTimePicker.swift; sourceTree = "<group>"; };
+		530F5B3521E267CA00A910B3 /* DateCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateCollectionViewCell.swift; sourceTree = "<group>"; };
 		531046C3215AC3AB00FCD068 /* ProfileHeaderCellOwn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderCellOwn.swift; sourceTree = "<group>"; };
 		531096B8216D05E100E767DF /* FedTimelineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FedTimelineController.swift; sourceTree = "<group>"; };
 		5313A23C21D5303900F205E6 /* PadSidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadSidebarViewController.swift; sourceTree = "<group>"; };
@@ -1545,6 +1553,17 @@
 				530976D12179DBD700640D84 /* AuthenticationErrors.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		530F5B3121E267CA00A910B3 /* DateTime */ = {
+			isa = PBXGroup;
+			children = (
+				530F5B3221E267CA00A910B3 /* StepCollectionViewFlowLayout.swift */,
+				530F5B3321E267CA00A910B3 /* FullDateCollectionViewCell.swift */,
+				530F5B3421E267CA00A910B3 /* DateTimePicker.swift */,
+				530F5B3521E267CA00A910B3 /* DateCollectionViewCell.swift */,
+			);
+			path = DateTime;
 			sourceTree = "<group>";
 		};
 		5314E2E9216D1502007F9651 /* EMTLoadingIndicator */ = {
@@ -2540,6 +2559,7 @@
 		5373CA502152357200676F3D /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				530F5B3121E267CA00A910B3 /* DateTime */,
 				5317C79821DA334500746197 /* ScrollableGraph */,
 				530976CC2179DBD700640D84 /* BiometricAuthentication */,
 				531BD60221795D1F00C1509D /* Sentiment */,
@@ -3826,6 +3846,7 @@
 				5373CA9E2152C68000676F3D /* CharacterSet.swift in Sources */,
 				5373CB642159564400676F3D /* FollowersCell.swift in Sources */,
 				5373CB502156826000676F3D /* DetailCellImage.swift in Sources */,
+				530F5B3921E267CA00A910B3 /* DateCollectionViewCell.swift in Sources */,
 				5373CB002152EDB800676F3D /* SwipeCollectionViewCellDelegate.swift in Sources */,
 				535B339B215C0198001A2A7F /* BoostersViewController.swift in Sources */,
 				531E0F96216E2BA2003E8890 /* NVActivityIndicatorAnimationBallScale.swift in Sources */,
@@ -3871,6 +3892,7 @@
 				5373CAD42152C68000676F3D /* Statuses.swift in Sources */,
 				535B33CA215C31E3001A2A7F /* ActiveBuilder.swift in Sources */,
 				5373C9D8215173EE00676F3D /* AppDelegate.swift in Sources */,
+				530F5B3621E267CA00A910B3 /* StepCollectionViewFlowLayout.swift in Sources */,
 				535B33B0215C0EC6001A2A7F /* XPlayerViewController+State.swift in Sources */,
 				5373CAF92152EDB700676F3D /* SwipeActionButton.swift in Sources */,
 				5354BAD1216577FD0094C545 /* FastCircleLayer.swift in Sources */,
@@ -3900,7 +3922,9 @@
 				53205828215D287700ED0C36 /* DKAssetGroupGridLayout.swift in Sources */,
 				5393859C217393A4002444FC /* DLTagView.swift in Sources */,
 				5373CAF52152EDB700676F3D /* Extensions.swift in Sources */,
+				530F5B3821E267CA00A910B3 /* DateTimePicker.swift in Sources */,
 				5373CAB72152C68000676F3D /* Notification.swift in Sources */,
+				530F5B3721E267CA00A910B3 /* FullDateCollectionViewCell.swift in Sources */,
 				535B33B4215C0EC6001A2A7F /* XPlayer.swift in Sources */,
 				5354BACD216577FD0094C545 /* FastAnimator.swift in Sources */,
 				5320581C215D287700ED0C36 /* FontAwesomeImageView.swift in Sources */,

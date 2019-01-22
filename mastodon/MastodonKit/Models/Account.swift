@@ -39,6 +39,8 @@ public class Account: Codable {
     public let followingCount: Int
     /// The number of statuses the account has made.
     public let statusesCount: Int
+    /// An array of Emoji.
+    public let emojis: [Emoji]
     
     public let fields: [HashType]
 
@@ -59,5 +61,6 @@ public class Account: Codable {
         case followingCount = "following_count"
         case statusesCount = "statuses_count"
         case fields
+        case emojis
     }
 }

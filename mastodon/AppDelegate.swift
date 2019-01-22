@@ -368,12 +368,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         do {
+            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)use.json", from: .documents, as: Account.self)
             StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
             StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
             StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
             StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
             StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
-            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)use.json", from: .documents, as: Account.self)
             
             StoreStruct.gapLastHomeStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)homestat.json", from: .documents, as: Status.self)
             StoreStruct.gapLastLocalStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)localstat.json", from: .documents, as: Status.self)

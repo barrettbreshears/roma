@@ -259,6 +259,25 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
         userTag.text = "@\(status.acct)"
         toot.text = status.note.stripHTML()
         
+        
+        if status.emojis.isEmpty {
+            userName.text = status.displayName.stripHTML()
+        } else {
+            let attributedString = NSMutableAttributedString(string: status.displayName.stripHTML())
+            for y in status.emojis {
+                let textAttachment = NSTextAttachment()
+                textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
+                textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.userName.font.lineHeight), height: Int(self.userName.font.lineHeight))
+                let attrStringWithImage = NSAttributedString(attachment: textAttachment)
+                while attributedString.mutableString.contains(":\(y.shortcode):") {
+                    let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
+                    attributedString.replaceCharacters(in: range, with: attrStringWithImage)
+                }
+            }
+            self.userName.attributedText = attributedString
+            self.reloadInputViews()
+        }
+        
         date.text = "Joined on \(status.createdAt.toString(dateStyle: .medium, timeStyle: .medium))"
         
         let numberFormatter = NumberFormatter()
@@ -471,6 +490,25 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
         userName.text = status.displayName
         userTag.text = "@\(status.acct)"
         toot.text = status.note.stripHTML()
+        
+        
+        if status.emojis.isEmpty {
+            userName.text = status.displayName.stripHTML()
+        } else {
+            let attributedString = NSMutableAttributedString(string: status.displayName.stripHTML())
+            for y in status.emojis {
+                let textAttachment = NSTextAttachment()
+                textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
+                textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.userName.font.lineHeight), height: Int(self.userName.font.lineHeight))
+                let attrStringWithImage = NSAttributedString(attachment: textAttachment)
+                while attributedString.mutableString.contains(":\(y.shortcode):") {
+                    let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
+                    attributedString.replaceCharacters(in: range, with: attrStringWithImage)
+                }
+            }
+            self.userName.attributedText = attributedString
+            self.reloadInputViews()
+        }
         
         date.text = "Joined on \(status.createdAt.toString(dateStyle: .medium, timeStyle: .medium))"
         

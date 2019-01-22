@@ -145,6 +145,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
+                self.tableView.reloadData()
+                
+            } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+            } else {
+                
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -2059,6 +2078,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         
         var sto = self.allReplies
+        StoreStruct.newIDtoGoTo = sto[sender.tag].id
         let indexPath = IndexPath(row: sender.tag, section: 3)
         
         
