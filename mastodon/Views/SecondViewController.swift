@@ -2614,16 +2614,20 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             selection.selectionChanged()
         }
         
+        var theTable = self.tableView
         var sto = StoreStruct.notifications
         if self.currentIndex == 0 {
             sto = StoreStruct.notifications
             StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView2
         } else if self.currentIndex == 5 {
             sto = StoreStruct.notificationsDirect
             StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView3
         } else if self.currentIndex == 1 {
             sto = StoreStruct.notificationsMentions
             StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView
         }
         
         
@@ -2650,7 +2654,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             }
             
             if self.currentIndex == 1 {
-            let cell = tableView.cellForRow(at: indexPath) as! NotificationCellImage
+            let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
             var images = [SKPhoto]()
                 var coun = 0
             for y in sto[indexPath.row].status!.mediaAttachments {
@@ -2686,39 +2690,76 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             }
             } else {
                 
-                let cell = tableView2.cellForRow(at: indexPath) as! NotificationCellImage
-                var images = [SKPhoto]()
-                var coun = 0
-                for y in sto[indexPath.row].status!.mediaAttachments {
-                    if coun == 0 {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
-                        photo.shouldCachePhotoURLImage = true
-                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                if self.currentIndex == 5 {
+                    let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                    var images = [SKPhoto]()
+                    var coun = 0
+                    for y in sto[indexPath.row].status!.mediaAttachments {
+                        if coun == 0 {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                            } else {
+                                photo.caption = y.description ?? ""
+                            }
+                            images.append(photo)
                         } else {
-                            photo.caption = y.description ?? ""
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                            } else {
+                                photo.caption = y.description ?? ""
+                            }
+                            images.append(photo)
                         }
-                        images.append(photo)
-                    } else {
-                    let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
-                    photo.shouldCachePhotoURLImage = true
-                    if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                        photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                    } else {
-                        photo.caption = y.description ?? ""
+                        coun += 1
                     }
-                    images.append(photo)
+                    let originImage = sender.currentImage
+                    if originImage != nil {
+                        let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
+                        browser.displayToolbar = true
+                        browser.displayAction = true
+                        browser.delegate = self
+                        browser.initializePageIndex(0)
+                        present(browser, animated: true, completion: nil)
                     }
-                    coun += 1
-                }
-                let originImage = sender.currentImage
-                if originImage != nil {
-                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
-                    browser.delegate = self
-                    browser.initializePageIndex(0)
-                    present(browser, animated: true, completion: nil)
+                } else {
+                    let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
+                    var images = [SKPhoto]()
+                    var coun = 0
+                    for y in sto[indexPath.row].status!.mediaAttachments {
+                        if coun == 0 {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                            } else {
+                                photo.caption = y.description ?? ""
+                            }
+                            images.append(photo)
+                        } else {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                            } else {
+                                photo.caption = y.description ?? ""
+                            }
+                            images.append(photo)
+                        }
+                        coun += 1
+                    }
+                    let originImage = sender.currentImage
+                    if originImage != nil {
+                        let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
+                        browser.displayToolbar = true
+                        browser.displayAction = true
+                        browser.delegate = self
+                        browser.initializePageIndex(0)
+                        present(browser, animated: true, completion: nil)
+                    }
                 }
             }
             

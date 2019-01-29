@@ -1971,11 +1971,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         
         
         
-        do {
-            try Disk.clear(.documents)
-        } catch {
-            print("couldn't clear disk")
-        }
+//        do {
+//            try Disk.clear(.documents)
+//        } catch {
+//            print("couldn't clear disk")
+//        }
         
         
         self.textField.text = ""
@@ -2031,8 +2031,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         StoreStruct.allPins = []
         StoreStruct.photoNew = UIImage()
         
-        InstanceData.clearInstances()
-        Account.clearAccounts()
+//        InstanceData.clearInstances()
+//        Account.clearAccounts()
         self.createLoginView()
         
         

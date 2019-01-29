@@ -116,6 +116,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.ai.alpha = 0
             self.ai.removeFromSuperview()
             self.tableView.reloadData()
+            if StoreStruct.statusesHome.isEmpty {
+                self.refreshCont()
+            }
         }
     }
     
@@ -1087,6 +1090,120 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 print("max chars --")
                 print(stat.max_toot_chars)
                 StoreStruct.maxChars = stat.max_toot_chars ?? 500
+            }
+        }
+        
+        
+        
+        if StoreStruct.initTimeline == false {
+            StoreStruct.initTimeline = true
+            if (UserDefaults.standard.object(forKey: "inittimeline") == nil) || (UserDefaults.standard.object(forKey: "inittimeline") as! Int == 0) {
+                self.segmentedControl.currentSegment = 0
+                if self.countcount1 == 0 {
+                    self.newUpdatesB1.alpha = 0
+                    self.newUpdatesB2.alpha = 0
+                    self.newUpdatesB3.alpha = 0
+                } else {
+                    self.newUpdatesB1.alpha = 1
+                    self.newUpdatesB2.alpha = 0
+                    self.newUpdatesB3.alpha = 0
+                }
+                
+                self.currentIndex = 0
+                self.tableView.reloadData()
+                self.tableView.alpha = 1
+                self.tableViewL.alpha = 0
+                self.tableViewF.alpha = 0
+                if (UserDefaults.standard.object(forKey: "savedRowHome1") == nil) {} else {
+                    
+                }
+                
+                // stream
+                if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
+                    if self.hStream == false {
+                        self.streamDataHome()
+                        
+                    }
+                }
+            } else if (UserDefaults.standard.object(forKey: "inittimeline") as! Int == 1) {
+                self.segmentedControl.currentSegment = 1
+                if self.countcount2 == 0 {
+                    self.newUpdatesB1.alpha = 0
+                    self.newUpdatesB2.alpha = 0
+                    self.newUpdatesB3.alpha = 0
+                } else {
+                    self.newUpdatesB1.alpha = 0
+                    self.newUpdatesB2.alpha = 1
+                    self.newUpdatesB3.alpha = 0
+                }
+                
+                self.currentIndex = 1
+                self.tableView.alpha = 0
+                self.tableViewL.alpha = 1
+                self.tableViewF.alpha = 0
+                
+                if StoreStruct.statusesLocal.isEmpty {
+                    let request = Timelines.public(local: true, range: .default)
+                    StoreStruct.client.run(request) { (statuses) in
+                        if let stat = (statuses.value) {
+                            StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
+                            DispatchQueue.main.async {
+                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                                self.tableViewL.reloadData()
+                                
+                            }
+                        }
+                    }
+                } else {
+                    //bbbhere
+                    self.tableViewL.reloadData()
+                }
+                
+                // stream
+                if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
+                    if self.lStream == false {
+                        self.streamDataLocal()
+                    }
+                }
+            } else {
+                self.segmentedControl.currentSegment = 2
+                if self.countcount3 == 0 {
+                    self.newUpdatesB1.alpha = 0
+                    self.newUpdatesB2.alpha = 0
+                    self.newUpdatesB3.alpha = 0
+                } else {
+                    self.newUpdatesB1.alpha = 0
+                    self.newUpdatesB2.alpha = 0
+                    self.newUpdatesB3.alpha = 1
+                }
+                
+                self.currentIndex = 2
+                self.tableView.alpha = 0
+                self.tableViewL.alpha = 0
+                self.tableViewF.alpha = 1
+                
+                if StoreStruct.statusesFederated.isEmpty {
+                    let request = Timelines.public(local: false, range: .default)
+                    StoreStruct.client.run(request) { (statuses) in
+                        if let stat = (statuses.value) {
+                            StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
+                            DispatchQueue.main.async {
+                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                                self.tableViewF.reloadData()
+                                
+                            }
+                        }
+                    }
+                } else {
+                    ///bbhere
+                    self.tableViewF.reloadData()
+                }
+                // stream
+                if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
+                    if self.fStream == false {
+                        self.streamDataFed()
+                    }
+                }
             }
         }
     }
@@ -2740,7 +2857,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
         
         
-        if StoreStruct.statusesHome[indexPath.row].id == "loadmorehere" {
+        if sto[indexPath.row].id == "loadmorehere" {
             return nil
         }
         

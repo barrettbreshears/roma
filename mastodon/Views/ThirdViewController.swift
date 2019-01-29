@@ -1624,96 +1624,96 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     
                                     
                                     
-                                    
-//                                    .action(.default("Edit Display Picture"), image: nil) { (action, ind) in
-//                                        print(action, ind)
-//
-//                                        let pickerController = DKImagePickerController()
-//                                        pickerController.didSelectAssets = { (assets: [DKAsset]) in
-//                                            if assets.count == 0 {
-//                                                return
-//                                            }
-//                                            if assets.count > 0 {
-//                                                assets[0].fetchOriginalImage(true, completeBlock: { image, info in
-//                                                    let imageData = (image ?? UIImage()).jpegData(compressionQuality: 0.82)
-//                                                    let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: .jpeg(imageData), header: nil)
-//                                                    StoreStruct.client.run(request) { (statuses) in
-//                                                        print(statuses)
-//                                                        if let stat = (statuses.value) {
-//                                                            print(stat)
-//                                                            print("updated")
-//                                                            DispatchQueue.main.async {
-//                                                                NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
-//                                                                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-//                                                                    let notification = UINotificationFeedbackGenerator()
-//                                                                    notification.notificationOccurred(.success)
-//                                                                }
-//                                                                let statusAlert = StatusAlert()
-//                                                                statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
-//                                                                statusAlert.title = "Updated Display Picture".localized
-//                                                                statusAlert.contentColor = Colours.grayDark
-//                                                                statusAlert.message = StoreStruct.currentUser.displayName
-//                                                                statusAlert.show()
-//                                                            }
-//                                                        }
-//                                                    }
-//
-//                                                })
-//                                            }
-//                                        }
-//                                        pickerController.showsCancelButton = true
-//                                        pickerController.maxSelectableCount = 1
-//                                        pickerController.allowMultipleTypes = false
-//                                        pickerController.assetType = .allPhotos
-//                                        self.present(pickerController, animated: true) {}
-//                                    }
-//
-//
-//                                    .action(.default("Edit Header"), image: nil) { (action, ind) in
-//                                        print(action, ind)
-//
-//                                        let pickerController = DKImagePickerController()
-//                                        pickerController.didSelectAssets = { (assets: [DKAsset]) in
-//                                            if assets.count == 0 {
-//                                                return
-//                                            }
-//                                            if assets.count > 0 {
-//                                                assets[0].fetchOriginalImage(true, completeBlock: { image, info in
-//                                                    print("fetched header")
-//                                                    let imageData = (image ?? UIImage()).jpegData(compressionQuality: 0.5)
-//                                                    let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: .jpeg(imageData))
-//                                                    StoreStruct.client.run(request) { (statuses) in
-//                                                        print("fetched header 2")
-//                                                        print(statuses)
-//                                                        if let stat = (statuses.value) {
-//                                                            print(stat)
-//                                                            print("updated")
-//                                                            print(stat.headerStatic)
-//                                                            DispatchQueue.main.async {
-//                                                                NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
-//                                                                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-//                                                                    let notification = UINotificationFeedbackGenerator()
-//                                                                    notification.notificationOccurred(.success)
-//                                                                }
-//                                                                let statusAlert = StatusAlert()
-//                                                                statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
-//                                                                statusAlert.title = "Updated Header".localized
-//                                                                statusAlert.contentColor = Colours.grayDark
-//                                                                statusAlert.message = StoreStruct.currentUser.displayName
-//                                                                statusAlert.show()
-//                                                            }
-//                                                        }
-//                                                    }
-//
-//                                                })
-//                                            }
-//                                        }
-//                                        pickerController.showsCancelButton = true
-//                                        pickerController.maxSelectableCount = 1
-//                                        pickerController.allowMultipleTypes = false
-//                                        pickerController.assetType = .allPhotos
-//                                        self.present(pickerController, animated: true) {}
-//                                    }
+                                    // uncomment below for profile avatar and header
+                                    .action(.default("Edit Display Picture"), image: nil) { (action, ind) in
+                                        print(action, ind)
+
+                                        let pickerController = DKImagePickerController()
+                                        pickerController.didSelectAssets = { (assets: [DKAsset]) in
+                                            if assets.count == 0 {
+                                                return
+                                            }
+                                            if assets.count > 0 {
+                                                assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                                                    let imageData = (image ?? UIImage()).jpegData(compressionQuality: 0.82)
+                                                    let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: .jpeg(imageData), header: nil)
+                                                    StoreStruct.client.run(request) { (statuses) in
+                                                        print(statuses)
+                                                        if let stat = (statuses.value) {
+                                                            print(stat)
+                                                            print("updated")
+                                                            DispatchQueue.main.async {
+                                                                NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
+                                                                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                                                    let notification = UINotificationFeedbackGenerator()
+                                                                    notification.notificationOccurred(.success)
+                                                                }
+                                                                let statusAlert = StatusAlert()
+                                                                statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
+                                                                statusAlert.title = "Updated Display Picture".localized
+                                                                statusAlert.contentColor = Colours.grayDark
+                                                                statusAlert.message = StoreStruct.currentUser.displayName
+                                                                statusAlert.show()
+                                                            }
+                                                        }
+                                                    }
+
+                                                })
+                                            }
+                                        }
+                                        pickerController.showsCancelButton = true
+                                        pickerController.maxSelectableCount = 1
+                                        pickerController.allowMultipleTypes = false
+                                        pickerController.assetType = .allPhotos
+                                        self.present(pickerController, animated: true) {}
+                                    }
+
+
+                                    .action(.default("Edit Header"), image: nil) { (action, ind) in
+                                        print(action, ind)
+
+                                        let pickerController = DKImagePickerController()
+                                        pickerController.didSelectAssets = { (assets: [DKAsset]) in
+                                            if assets.count == 0 {
+                                                return
+                                            }
+                                            if assets.count > 0 {
+                                                assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                                                    print("fetched header")
+                                                    let imageData = (image ?? UIImage()).jpegData(compressionQuality: 0.5)
+                                                    let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: .jpeg(imageData))
+                                                    StoreStruct.client.run(request) { (statuses) in
+                                                        print("fetched header 2")
+                                                        print(statuses)
+                                                        if let stat = (statuses.value) {
+                                                            print(stat)
+                                                            print("updated")
+                                                            print(stat.headerStatic)
+                                                            DispatchQueue.main.async {
+                                                                NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
+                                                                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                                                    let notification = UINotificationFeedbackGenerator()
+                                                                    notification.notificationOccurred(.success)
+                                                                }
+                                                                let statusAlert = StatusAlert()
+                                                                statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
+                                                                statusAlert.title = "Updated Header".localized
+                                                                statusAlert.contentColor = Colours.grayDark
+                                                                statusAlert.message = StoreStruct.currentUser.displayName
+                                                                statusAlert.show()
+                                                            }
+                                                        }
+                                                    }
+
+                                                })
+                                            }
+                                        }
+                                        pickerController.showsCancelButton = true
+                                        pickerController.maxSelectableCount = 1
+                                        pickerController.allowMultipleTypes = false
+                                        pickerController.assetType = .allPhotos
+                                        self.present(pickerController, animated: true) {}
+                                    }
                                     
                                     
                                     .action(.default("Edit Display Name"), image: nil) { (action, ind) in

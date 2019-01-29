@@ -19,6 +19,7 @@ import AVFoundation
 class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SwiftyGiphyViewControllerDelegate, DateTimePickerDelegate {
     
     let gifCont = SwiftyGiphyViewController()
+    var isGifVid = false
     
     func giphyControllerDidSelectGif(controller: SwiftyGiphyViewController, item: GiphyItem) {
         print(item.fixedHeightStillImage)
@@ -26,6 +27,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
         let videoURL = item.downsizedImage?.url as! NSURL
         do {
+            self.isGifVid = true
             self.gifVidData = try NSData(contentsOf: videoURL as URL, options: .mappedIfSafe) as Data
         } catch {
             print("err")
@@ -1555,6 +1557,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                    
                     let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as! NSURL
                     do {
+                        self.isGifVid = true
                         self.gifVidData = try NSData(contentsOf: videoURL as URL, options: .mappedIfSafe) as Data
                     } catch {
                         print("err")
@@ -1645,6 +1648,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     if let avassetURL = avAsset as? AVURLAsset {
                         //self.completeVidURL = avassetURL.url
                         guard let video1 = try? Data(contentsOf: avassetURL.url) else { return }
+                        self.isGifVid = true
                         self.gifVidData = video1
                     }
                 })
@@ -2355,7 +2359,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
         
         
-        if self.gifVidData != nil {
+        if self.gifVidData != nil || self.isGifVid {
             print("gifvidnotnil")
             
             let request = Media.upload(media: .gif(self.gifVidData))

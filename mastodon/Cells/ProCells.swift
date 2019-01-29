@@ -64,6 +64,8 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
         
         
         cell.configure()
+        print("count: \(Account.getAccounts().count)")
+        print(indexPath.row)
         
         if indexPath.row >= InstanceData.getAllInstances().count {
             

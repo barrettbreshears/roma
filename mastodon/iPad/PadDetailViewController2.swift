@@ -132,6 +132,25 @@ class PadDetailViewController2: UIViewController, UITableViewDelegate, UITableVi
         default:
             print("nothing")
         }
+        
+        
+        
+        let request = Statuses.status(id: self.mainStatus[0].id)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                DispatchQueue.main.async {
+                    if stat.reblog?.mediaAttachments.isEmpty ?? stat.mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
+                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! SideDetailCell
+                        cell.configure(stat)
+                        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                    } else {
+                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! SideDetailCellImage
+                        cell.configure(stat)
+                        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                    }
+                }
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {

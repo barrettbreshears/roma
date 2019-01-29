@@ -210,7 +210,7 @@ public extension Date {
                 }
             }
         }
-        if compare(.isThisYear) {
+//        if compare(.isThisYear) {
             if isPast {
                 if compare(.isLastMonth) {
                     return strings?[.oneMonthPast] ?? NSLocalizedString("1M", comment: "Date format")
@@ -226,22 +226,22 @@ public extension Date {
                     return String(format: string, Double(abs(since(Date(), in: .month))))
                 }
             }
-        }
-        if isPast {
-            if compare(.isLastYear) {
-                return strings?[.oneYearPast] ?? NSLocalizedString("1y", comment: "Date format")
-            } else {
-                let string = strings?[.yearsPast] ?? NSLocalizedString("%.fy", comment: "Date format")
-                return String(format: string, Double(abs(since(Date(), in: .year))))
-            }
-        } else {
-            if compare(.isNextYear) {
-                return strings?[.oneYearFuture] ?? NSLocalizedString("next year", comment: "Date format")
-            } else {
-                let string = strings?[.yearsFuture] ?? NSLocalizedString("in %.f years", comment: "Date format")
-                return String(format: string, Double(abs(since(Date(), in: .year))))
-            }
-        }
+//        }
+//        if isPast {
+//            if compare(.isLastYear) {
+//                return strings?[.oneYearPast] ?? NSLocalizedString("1y", comment: "Date format")
+//            } else {
+//                let string = strings?[.yearsPast] ?? NSLocalizedString("%.fy", comment: "Date format")
+//                return String(format: string, Double(abs(since(Date(), in: .year))))
+//            }
+//        } else {
+//            if compare(.isNextYear) {
+//                return strings?[.oneYearFuture] ?? NSLocalizedString("next year", comment: "Date format")
+//            } else {
+//                let string = strings?[.yearsFuture] ?? NSLocalizedString("in %.f years", comment: "Date format")
+//                return String(format: string, Double(abs(since(Date(), in: .year))))
+//            }
+//        }
     }
     
     

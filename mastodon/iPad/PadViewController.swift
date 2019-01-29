@@ -570,6 +570,19 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
             
             
             
+            if StoreStruct.statusesHome.isEmpty {
+                let request = Timelines.home()
+                StoreStruct.client.run(request) { (statuses) in
+                    if let stat = (statuses.value) {
+                        StoreStruct.statusesHome = stat
+                        StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
+                    }
+                }
+            }
+            
+            
+            
             let request2 = Accounts.currentUser()
             StoreStruct.client.run(request2) { (statuses) in
                 if let stat = (statuses.value) {
