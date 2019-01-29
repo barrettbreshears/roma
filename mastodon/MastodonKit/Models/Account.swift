@@ -43,6 +43,8 @@ public class Account: Codable {
     public let emojis: [Emoji]
     
     public let fields: [HashType]
+    
+    public let bot: Bool
 
     private enum CodingKeys: String, CodingKey {
         case id
@@ -62,5 +64,6 @@ public class Account: Codable {
         case statusesCount = "statuses_count"
         case fields
         case emojis
+        case bot
     }
 }

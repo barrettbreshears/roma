@@ -286,6 +286,9 @@ class ProfileHeaderCell: SwipeTableViewCell {
         if status.locked {
             settings.setImage(UIImage(named: "private")?.maskWithColor(color: UIColor.black), for: .normal)
         }
+        if status.bot {
+            settings.setImage(UIImage(named: "boticon")?.maskWithColor(color: UIColor.black), for: .normal)
+        }
         
     }
     

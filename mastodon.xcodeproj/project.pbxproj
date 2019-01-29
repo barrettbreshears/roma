@@ -86,6 +86,8 @@
 		5314E32A216D1502007F9651 /* waitIndicatorGraphic-16@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314E30A216D1502007F9651 /* waitIndicatorGraphic-16@2x.png */; };
 		5314E32B216D1502007F9651 /* waitIndicatorGraphic-20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314E30B216D1502007F9651 /* waitIndicatorGraphic-20@2x.png */; };
 		5315308621B95223007E5C00 /* SearchFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315308521B95223007E5C00 /* SearchFeedCell.swift */; };
+		5315728D21FCC22300328053 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5315728C21FCC22300328053 /* Settings.bundle */; };
+		5315728F21FCC2E300328053 /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315728E21FCC2E300328053 /* SettingsBundleHelper.swift */; };
 		5316C88E219D94A00003AB97 /* GiphyImageSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5316C87E219D949F0003AB97 /* GiphyImageSet.swift */; };
 		5316C88F219D94A00003AB97 /* GiphyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5316C87F219D949F0003AB97 /* GiphyUser.swift */; };
 		5316C890219D94A00003AB97 /* GiphyMeta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5316C880219D949F0003AB97 /* GiphyMeta.swift */; };
@@ -830,6 +832,8 @@
 		5314E30A216D1502007F9651 /* waitIndicatorGraphic-16@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "waitIndicatorGraphic-16@2x.png"; sourceTree = "<group>"; };
 		5314E30B216D1502007F9651 /* waitIndicatorGraphic-20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "waitIndicatorGraphic-20@2x.png"; sourceTree = "<group>"; };
 		5315308521B95223007E5C00 /* SearchFeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFeedCell.swift; sourceTree = "<group>"; };
+		5315728C21FCC22300328053 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		5315728E21FCC2E300328053 /* SettingsBundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBundleHelper.swift; sourceTree = "<group>"; };
 		5316C87E219D949F0003AB97 /* GiphyImageSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyImageSet.swift; sourceTree = "<group>"; };
 		5316C87F219D949F0003AB97 /* GiphyUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyUser.swift; sourceTree = "<group>"; };
 		5316C880219D949F0003AB97 /* GiphyMeta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyMeta.swift; sourceTree = "<group>"; };
@@ -2487,6 +2491,8 @@
 				5354BA282163F9200094C545 /* mastodon.entitlements */,
 				5373CA5B2152C67F00676F3D /* MastodonKit */,
 				5373C9D7215173EE00676F3D /* AppDelegate.swift */,
+				5315728E21FCC2E300328053 /* SettingsBundleHelper.swift */,
+				5315728C21FCC22300328053 /* Settings.bundle */,
 				5373CA512152357D00676F3D /* Views */,
 				5373CA522152358500676F3D /* Cells */,
 				5373CA502152357200676F3D /* Other */,
@@ -3208,6 +3214,7 @@
 				530976AF2179D8D900640D84 /* icon10@2x.png in Resources */,
 				535B33BB215C0EC6001A2A7F /* minimize_24.png in Resources */,
 				530976BD2179D8D900640D84 /* icon13.png in Resources */,
+				5315728D21FCC22300328053 /* Settings.bundle in Resources */,
 				530976C62179D8D900640D84 /* icon15.png in Resources */,
 				5352D0AC215E679300901B60 /* icon3@3x.png in Resources */,
 				530976A82179D8D900640D84 /* icon16@2x.png in Resources */,
@@ -3711,6 +3718,7 @@
 				5320582D215D287700ED0C36 /* DKAssetGroupDetailBaseCell.swift in Sources */,
 				5354BACC216577FD0094C545 /* WCLLoadingView.swift in Sources */,
 				535B33C9215C31E3001A2A7F /* StringTrimExtension.swift in Sources */,
+				5315728F21FCC2E300328053 /* SettingsBundleHelper.swift in Sources */,
 				53205812215D287700ED0C36 /* DKAssetGroup.swift in Sources */,
 				5354BAD9216577FD0094C545 /* CRRefreshProtocol.swift in Sources */,
 				5373CAAE2152C68000676F3D /* Card.swift in Sources */,
