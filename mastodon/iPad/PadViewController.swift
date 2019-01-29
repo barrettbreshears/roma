@@ -856,7 +856,9 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
             self.button56.layer.masksToBounds = true
         } else {
             self.button56.frame = CGRect(x: 5, y: 340, width: 70, height: 70)
-            self.button56.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            if StoreStruct.currentUser != nil {
+                self.button56.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            }
             self.button56.contentEdgeInsets = UIEdgeInsets(top: insetsConst, left: insetsConst, bottom: insetsConst, right: insetsConst)
             self.button56.imageView?.layer.cornerRadius = 35
             self.button56.imageView?.contentMode = .scaleAspectFill

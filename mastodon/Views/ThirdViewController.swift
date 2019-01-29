@@ -498,7 +498,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
-            self.tableView.reloadData()
+            if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
+                self.tableView.reloadData()
+                
+            } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+            } else {
+                
+            }
         }
     }
     
@@ -1492,6 +1499,15 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                     
                 }
+                .action(.default("Share Profile Link".localized), image: UIImage(named: "share")) { (action, ind) in
+                    print(action, ind)
+                    
+                    let objectsToShare = [self.chosenUser.url]
+                    let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                    vc.previewNumberOfLines = 5
+                    vc.previewFont = UIFont.systemFont(ofSize: 14)
+                    self.present(vc, animated: true, completion: nil)
+                }
                 .action(.cancel("Dismiss"))
                 .finally { action, index in
                     if action.style == .cancel {
@@ -1761,6 +1777,15 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     print(action, ind)
                     
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut2"), object: nil)
+                }
+                .action(.default("Share Profile Link".localized), image: UIImage(named: "share")) { (action, ind) in
+                    print(action, ind)
+                    
+                        let objectsToShare = [self.chosenUser.url]
+                        let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                        vc.previewNumberOfLines = 5
+                        vc.previewFont = UIFont.systemFont(ofSize: 14)
+                        self.present(vc, animated: true, completion: nil)
                 }
                 .action(.default("Log Out".localized), image: UIImage(named: "lout")) { (action, ind) in
                     print(action, ind)

@@ -670,12 +670,19 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
     
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
-            if self.currentIndex == 0 {
-                self.tableView.reloadData()
-            } else if self.currentIndex == 1 {
-                self.tableViewL.reloadData()
+            
+            if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
+                if self.currentIndex == 0 {
+                    self.tableView.reloadData()
+                } else if self.currentIndex == 1 {
+                    self.tableViewL.reloadData()
+                } else {
+                    self.tableViewF.reloadData()
+                }
+            } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
             } else {
-                self.tableViewF.reloadData()
+                
             }
         }
     }
@@ -3794,7 +3801,10 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         DispatchQueue.main.async {
                             StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             
-                            newestC = StoreStruct.statusesHome.count - newestC
+                            newestC = StoreStruct.statusesHome.count - newestC - 1
+                            if newestC < 0 {
+                                newestC = 0
+                            }
                             
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                 self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
@@ -3859,7 +3869,10 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         DispatchQueue.main.async {
                             StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             
-                            newestC = StoreStruct.statusesLocal.count - newestC
+                            newestC = StoreStruct.statusesLocal.count - newestC - 1
+                            if newestC < 0 {
+                                newestC = 0
+                            }
                             
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                 self.newUpdatesB2.setTitle("\(newestC)  ", for: .normal)
@@ -3927,7 +3940,10 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         DispatchQueue.main.async {
                             StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             
-                            newestC = StoreStruct.statusesFederated.count - newestC
+                            newestC = StoreStruct.statusesFederated.count - newestC - 1
+                            if newestC < 0 {
+                                newestC = 0
+                            }
                             
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                 self.newUpdatesB3.setTitle("\(newestC)  ", for: .normal)

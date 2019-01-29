@@ -644,12 +644,18 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
+            if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
             if self.currentIndex == 0 {
                 self.tableView.reloadData()
             } else if self.currentIndex == 1 {
                 self.tableViewL.reloadData()
             } else {
                 self.tableViewF.reloadData()
+            }
+            } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+            } else {
+                
             }
         }
     }
@@ -1001,7 +1007,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             settingsButton.layer.masksToBounds = true
         } else {
             settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
-            settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            if StoreStruct.currentUser != nil {
+                settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            }
             settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             settingsButton.imageView?.layer.cornerRadius = 18
             settingsButton.imageView?.contentMode = .scaleAspectFill
@@ -1704,7 +1712,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         
                         
                         let controller = ThirdViewController()
-                        if newString == StoreStruct.currentUser.username {} else {
+                        if newString == StoreStruct.currentUser?.username {} else {
                             controller.fromOtherUser = true
                         }
                         let request = Accounts.search(query: newString)
@@ -1801,7 +1809,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         
                         
                         let controller = ThirdViewController()
-                        if newString == StoreStruct.currentUser.username {} else {
+                        if newString == StoreStruct.currentUser?.username {} else {
                             controller.fromOtherUser = true
                         }
                         let request = Accounts.search(query: newString)
@@ -1938,7 +1946,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         
                         
                         let controller = ThirdViewController()
-                        if newString == StoreStruct.currentUser.username {} else {
+                        if newString == StoreStruct.currentUser?.username {} else {
                             controller.fromOtherUser = true
                         }
                         let request = Accounts.search(query: newString)
@@ -2034,7 +2042,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         
                         
                         let controller = ThirdViewController()
-                        if newString == StoreStruct.currentUser.username {} else {
+                        if newString == StoreStruct.currentUser?.username {} else {
                             controller.fromOtherUser = true
                         }
                         let request = Accounts.search(query: newString)
@@ -2164,7 +2172,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         
                         
                         let controller = ThirdViewController()
-                        if newString == StoreStruct.currentUser.username {} else {
+                        if newString == StoreStruct.currentUser?.username {} else {
                             controller.fromOtherUser = true
                         }
                         let request = Accounts.search(query: newString)
@@ -2260,7 +2268,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         
                         
                         let controller = ThirdViewController()
-                        if newString == StoreStruct.currentUser.username {} else {
+                        if newString == StoreStruct.currentUser?.username {} else {
                             controller.fromOtherUser = true
                         }
                         let request = Accounts.search(query: newString)
@@ -2340,7 +2348,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
         
         let controller = ThirdViewController()
-        if sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username == StoreStruct.currentUser.username {} else {
+        if sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username == StoreStruct.currentUser?.username {} else {
             controller.fromOtherUser = true
         }
         if self.currentIndex == 0 {
@@ -3026,7 +3034,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 }
                 
                 
-                if sto[indexPath.row].account.id == StoreStruct.currentUser.id {
+                if sto[indexPath.row].account.id == StoreStruct.currentUser?.id {
                     
                     
                     
@@ -3817,7 +3825,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         DispatchQueue.main.async {
                             StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             
-                            newestC = StoreStruct.statusesHome.count - newestC
+                            newestC = StoreStruct.statusesHome.count - newestC - 1
+                            if newestC < 0 {
+                                newestC = 0
+                            }
+                            print("newestC: \(newestC)")
                             
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                 self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
@@ -3856,7 +3868,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     if let stat = (statuses.value) {
                         var newestC = StoreStruct.statusesLocal.count
                         
-                        
+                        if (newestC == 0){
+                            DispatchQueue.main.async {
+                                self.refreshControl.endRefreshing()
+                                
+                            }
+                            return
+                        }
                         
                         if let st = stat.last {
                             if StoreStruct.statusesLocal.contains(st) || stat.count == 1 {
@@ -3881,7 +3899,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         DispatchQueue.main.async {
                             StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             
-                            newestC = StoreStruct.statusesLocal.count - newestC
+                            newestC = StoreStruct.statusesLocal.count - newestC - 1
+                            if newestC < 0 {
+                                newestC = 0
+                            }
                             
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                 self.newUpdatesB2.setTitle("\(newestC)  ", for: .normal)
@@ -3951,7 +3972,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         DispatchQueue.main.async {
                             StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             
-                            newestC = StoreStruct.statusesFederated.count - newestC
+                            newestC = StoreStruct.statusesFederated.count - newestC - 1
+                            if newestC < 0 {
+                                newestC = 0
+                            }
                             
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                 self.newUpdatesB3.setTitle("\(newestC)  ", for: .normal)

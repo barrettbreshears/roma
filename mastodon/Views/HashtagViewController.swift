@@ -136,8 +136,13 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if motion == .motionShake {
+        if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
             self.tableView.reloadData()
+            
+        } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+        } else {
+            
         }
     }
     

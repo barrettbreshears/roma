@@ -477,10 +477,18 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
     
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
-            if self.currentIndex == 0 {
-                self.tableView2.reloadData()
+            
+            
+            if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
+                if self.currentIndex == 0 {
+                    self.tableView2.reloadData()
+                } else {
+                    self.tableView.reloadData()
+                }
+            } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
             } else {
-                self.tableView.reloadData()
+                
             }
         }
     }

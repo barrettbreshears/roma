@@ -322,6 +322,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
 
 
     var appearanceArrayIm = ["", "setnight", "settext", "setpro", "setima", "setima2", "userat", "confett", "gridse", "timese", "headbgse", "segse", "segse2", "subtleno" , "bordset", "pinchset", "heavyse", "indic", "direct2"]
+
     
     var bioArray = ["Lock App", "Lock Notifications"]
     var bioArrayDesc = ["Add a biometric lock to the app.", "Add a biometric lock to the notifications section."]
@@ -558,7 +559,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             return cell
         } else if indexPath.section == 1 {
             
-            if indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9 || indexPath.row == 11 || indexPath.row == 12 || indexPath.row == 15 {
+            if indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9 || indexPath.row == 11 || indexPath.row == 12 || indexPath.row == 15 || indexPath.row == 17 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
                 cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
                 cell.backgroundColor = Colours.white
@@ -1359,8 +1360,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             if indexPath.row == 15 {
                 // toot action placement
                 
-                
-                
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
@@ -1370,8 +1369,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
-                
                 
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
@@ -1388,6 +1385,53 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         print(action, ind)
                         UserDefaults.standard.set(1, forKey: "tootpl")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+            if indexPath.row == 17 {
+                // shake gesture
+                
+                var filledSet1 = UIImage(named: "unfilledset")
+                var filledSet2 = UIImage(named: "unfilledset")
+                var filledSet3 = UIImage(named: "unfilledset")
+                if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
+                    filledSet1 = UIImage(named: "filledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "filledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 2) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "filledset")
+                }
+                
+                Alertift.actionSheet(title: title, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("Hide Sensitive Content".localized), image: filledSet1) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(0, forKey: "shakegest")
+                    }
+                    .action(.default("Rain Confetti".localized), image: filledSet2) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(1, forKey: "shakegest")
+                    }
+                    .action(.default("Do Nothing".localized), image: filledSet2) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(2, forKey: "shakegest")
                     }
                     .action(.cancel("Dismiss"))
                     .finally { action, index in

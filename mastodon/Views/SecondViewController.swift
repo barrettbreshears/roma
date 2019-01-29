@@ -63,7 +63,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     if StoreStruct.notifications[indexPath.row].type == .follow {
                         let controller = ThirdViewController()
                         
-                        if StoreStruct.notifications[indexPath.row].account.username == StoreStruct.currentUser.username {} else {
+                        if StoreStruct.notifications[indexPath.row].account.username == StoreStruct.currentUser?.username {} else {
                             controller.fromOtherUser = true
                         }
                         controller.userIDtoUse = StoreStruct.notifications[indexPath.row].account.id
@@ -560,12 +560,19 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
-            if self.currentIndex == 0 {
-                self.tableView2.reloadData()
-            } else if self.currentIndex == 5 {
-                self.tableView3.reloadData()
+            
+            if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
+                if self.currentIndex == 0 {
+                    self.tableView2.reloadData()
+                } else if self.currentIndex == 5 {
+                    self.tableView3.reloadData()
+                } else {
+                    self.tableView.reloadData()
+                }
+            } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
             } else {
-                self.tableView.reloadData()
+                
             }
         }
     }
@@ -942,7 +949,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             settingsButton.layer.masksToBounds = true
         } else {
             settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
-            settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            if StoreStruct.currentUser != nil {
+                settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            }
             settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             settingsButton.imageView?.layer.cornerRadius = 18
             settingsButton.imageView?.contentMode = .scaleAspectFill
