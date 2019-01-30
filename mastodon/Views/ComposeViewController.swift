@@ -1872,25 +1872,25 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
             .messageTextAlignment(.left)
             .titleTextAlignment(.left)
-            .action(.default("Public".localized)) { (action, ind) in
+            .action(.default("Public - Post to public timelines".localized)) { (action, ind) in
                 print(action, ind)
                 self.visibility = .public
                 self.visibilityButton.setImage(UIImage(named: "eye"), for: .normal)
                 self.bringBackDrawer()
             }
-            .action(.default("Unlisted".localized)) { (action, ind) in
+            .action(.default("Unlisted - Do not post to public timelines".localized)) { (action, ind) in
                 print(action, ind)
                 self.visibility = .unlisted
                 self.visibilityButton.setImage(UIImage(named: "unlisted"), for: .normal)
                 self.bringBackDrawer()
             }
-            .action(.default("Private".localized)) { (action, ind) in
+            .action(.default("Private - Post only to followers".localized)) { (action, ind) in
                 print(action, ind)
                 self.visibility = .private
                 self.visibilityButton.setImage(UIImage(named: "private"), for: .normal)
                 self.bringBackDrawer()
             }
-            .action(.default("Direct".localized)) { (action, ind) in
+            .action(.default("Direct - Post to mentioned users only".localized)) { (action, ind) in
                 print(action, ind)
                 self.visibility = .direct
                 self.visibilityButton.setImage(UIImage(named: "direct"), for: .normal)

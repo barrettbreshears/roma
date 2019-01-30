@@ -951,19 +951,19 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
-                    .action(.default("Public".localized), image: filledSet1) { (action, ind) in
+                    .action(.default("Public - Post to public timelines".localized), image: filledSet1) { (action, ind) in
                         print(action, ind)
                         UserDefaults.standard.set(0, forKey: "privToot")
                     }
-                    .action(.default("Unlisted".localized), image: filledSet2) { (action, ind) in
+                    .action(.default("Unlisted - Do not post to public timelines".localized), image: filledSet2) { (action, ind) in
                         print(action, ind)
                         UserDefaults.standard.set(1, forKey: "privToot")
                     }
-                    .action(.default("Private".localized), image: filledSet3) { (action, ind) in
+                    .action(.default("Private - Post only to followers".localized), image: filledSet3) { (action, ind) in
                         print(action, ind)
                         UserDefaults.standard.set(2, forKey: "privToot")
                     }
-                    .action(.default("Direct".localized), image: filledSet4) { (action, ind) in
+                    .action(.default("Direct - Post to mentioned users only".localized), image: filledSet4) { (action, ind) in
                         print(action, ind)
                         UserDefaults.standard.set(3, forKey: "privToot")
                     }
