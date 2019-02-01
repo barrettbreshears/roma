@@ -169,4 +169,19 @@ public struct Statuses {
     public static func unmute(id: String) -> Request<Status> {
         return Request<Status>(path: "/api/v1/statuses/\(id)/unmute", method: .post(.empty))
     }
+    
+    /// Get scheduled statuses.
+    ///
+    /// - Returns: Request for `[ScheduledStatus]`.
+    public static func allScheduled() -> Request<[ScheduledStatus]> {
+        return Request<[ScheduledStatus]>(path: "/api/v1/scheduled_statuses", method: .get(.empty))
+    }
+    
+    /// Delete a scheduled status.
+    ///
+    /// - Parameter id: The status id.
+    /// - Returns: Request for `Status`.
+    public static func deleteScheduled(id: String) -> Request<Empty> {
+        return Request<Empty>(path: "/api/v1/scheduled_statuses/\(id)", method: .delete(.empty))
+    }
 }

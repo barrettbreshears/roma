@@ -935,6 +935,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         super.viewDidAppear(true)
         
         
+        StoreStruct.currentPage = 587
         textView.becomeFirstResponder()
         
         
@@ -1396,7 +1397,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             if self.inReplyText == "" {
                 textView.text = self.filledTextFieldText
             } else {
-                textView.text = "@\(self.inReplyText) "
+                //maybe an issue:
+//                textView.text = "@\(self.inReplyText) "
+                textView.text = "\(self.filledTextFieldText) "
                 self.startRepText = textView.text
             }
         } else {
@@ -2068,7 +2071,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             }
                         }
                         
-                }
+                    }
                     .action(.cancel("Dismiss"))
                     .finally { action, index in
                         if action.style == .cancel {
@@ -2172,17 +2175,8 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     self.picker.alpha = 1
                 })
                 self.picker.completionHandler = { date in
-                    print(date.toString())
-                    let dateFormatterGet = DateFormatter()
-                    dateFormatterGet.dateFormat = "M/d/yy, h:mm a"
-                    let dateFormatterPrint = DateFormatter()
-                    dateFormatterPrint.dateFormat = "yyyy-MM-dd HH:mm"
-                    var timestamp = ""
-                    if let date1 = dateFormatterGet.date(from: date.toString()) {
-                        timestamp = (dateFormatterPrint.string(from: date1))
-                    }
-                    print(timestamp)
-                    self.scheduleTime = timestamp
+                    print(date.iso8601())
+                    self.scheduleTime = date.iso8601()
                     self.isScheduled = true
                 }
             }
@@ -2217,7 +2211,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
     }
     
-    let picker = DateTimePicker.create(minimumDate: Date().addingTimeInterval(10 * 60), maximumDate: Date().addingTimeInterval(900000 * 60 * 24 * 4))
+    let picker = DateTimePicker.create(minimumDate: Date().addingTimeInterval(5 * 60), maximumDate: Date().addingTimeInterval(900000 * 60 * 24 * 4))
     
     
     
@@ -3155,8 +3149,8 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             }
         }
         
-        
-        
+        StoreStruct.savedComposeText = textView.text ?? ""
+        StoreStruct.savedInReplyText = self.inReplyText
     }
     
     

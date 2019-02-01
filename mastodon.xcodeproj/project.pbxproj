@@ -88,6 +88,12 @@
 		5315308621B95223007E5C00 /* SearchFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315308521B95223007E5C00 /* SearchFeedCell.swift */; };
 		5315728D21FCC22300328053 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5315728C21FCC22300328053 /* Settings.bundle */; };
 		5315728F21FCC2E300328053 /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315728E21FCC2E300328053 /* SettingsBundleHelper.swift */; };
+		5315ECE021FDE0AE00A3F1A9 /* FollowSuggestionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315ECDF21FDE0AE00A3F1A9 /* FollowSuggestionsViewController.swift */; };
+		5315ECE221FDF4AB00A3F1A9 /* EndorsedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315ECE121FDF4AB00A3F1A9 /* EndorsedViewController.swift */; };
+		5315ECE421FE13CB00A3F1A9 /* ScheduledStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315ECE321FE13CB00A3F1A9 /* ScheduledStatus.swift */; };
+		5315ECE621FE145600A3F1A9 /* StatusPara.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315ECE521FE145600A3F1A9 /* StatusPara.swift */; };
+		5315ECE821FE1A0B00A3F1A9 /* ScheduledStatusesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315ECE721FE1A0B00A3F1A9 /* ScheduledStatusesViewController.swift */; };
+		5315ECEA21FE1B3400A3F1A9 /* ScheduledCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315ECE921FE1B3400A3F1A9 /* ScheduledCell.swift */; };
 		5316C88E219D94A00003AB97 /* GiphyImageSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5316C87E219D949F0003AB97 /* GiphyImageSet.swift */; };
 		5316C88F219D94A00003AB97 /* GiphyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5316C87F219D949F0003AB97 /* GiphyUser.swift */; };
 		5316C890219D94A00003AB97 /* GiphyMeta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5316C880219D949F0003AB97 /* GiphyMeta.swift */; };
@@ -834,6 +840,12 @@
 		5315308521B95223007E5C00 /* SearchFeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFeedCell.swift; sourceTree = "<group>"; };
 		5315728C21FCC22300328053 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		5315728E21FCC2E300328053 /* SettingsBundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBundleHelper.swift; sourceTree = "<group>"; };
+		5315ECDF21FDE0AE00A3F1A9 /* FollowSuggestionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowSuggestionsViewController.swift; sourceTree = "<group>"; };
+		5315ECE121FDF4AB00A3F1A9 /* EndorsedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndorsedViewController.swift; sourceTree = "<group>"; };
+		5315ECE321FE13CB00A3F1A9 /* ScheduledStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledStatus.swift; sourceTree = "<group>"; };
+		5315ECE521FE145600A3F1A9 /* StatusPara.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPara.swift; sourceTree = "<group>"; };
+		5315ECE721FE1A0B00A3F1A9 /* ScheduledStatusesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledStatusesViewController.swift; sourceTree = "<group>"; };
+		5315ECE921FE1B3400A3F1A9 /* ScheduledCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledCell.swift; sourceTree = "<group>"; };
 		5316C87E219D949F0003AB97 /* GiphyImageSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyImageSet.swift; sourceTree = "<group>"; };
 		5316C87F219D949F0003AB97 /* GiphyUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyUser.swift; sourceTree = "<group>"; };
 		5316C880219D949F0003AB97 /* GiphyMeta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyMeta.swift; sourceTree = "<group>"; };
@@ -2609,6 +2621,7 @@
 				5373C9F12151956300676F3D /* ThirdViewController.swift */,
 				5373C9F32151957200676F3D /* FourthViewController.swift */,
 				5373CB4721565FFB00676F3D /* DetailViewController.swift */,
+				5315ECE721FE1A0B00A3F1A9 /* ScheduledStatusesViewController.swift */,
 				5373CB492156602900676F3D /* ComposeViewController.swift */,
 				5351B98D2167ADF400002069 /* NewListViewController.swift */,
 				539385852172A782002444FC /* NewProfileViewController.swift */,
@@ -2625,6 +2638,8 @@
 				532057D7215CF4D500ED0C36 /* BlockedViewController.swift */,
 				531BD5FC2178D68400C1509D /* FollowRequestsViewController.swift */,
 				5373CB612159553500676F3D /* FollowersViewController.swift */,
+				5315ECDF21FDE0AE00A3F1A9 /* FollowSuggestionsViewController.swift */,
+				5315ECE121FDF4AB00A3F1A9 /* EndorsedViewController.swift */,
 				535B339A215C0198001A2A7F /* BoostersViewController.swift */,
 				5352D08F215E48DE00901B60 /* ListMembersViewController.swift */,
 				53BC45B9215AC7D30092223F /* SettingsViewController.swift */,
@@ -2637,6 +2652,7 @@
 			children = (
 				5373C9F521519EF800676F3D /* MainFeedCell.swift */,
 				5373CB1C21540F5D00676F3D /* MainFeedCellImage.swift */,
+				5315ECE921FE1B3400A3F1A9 /* ScheduledCell.swift */,
 				5315308521B95223007E5C00 /* SearchFeedCell.swift */,
 				5373CB3B2154E93500676F3D /* NotificationCell.swift */,
 				5373CB3D2154E97500676F3D /* NotificationCellImage.swift */,
@@ -2732,6 +2748,8 @@
 				5373CA7E2152C67F00676F3D /* RequestError.swift */,
 				5373CA7F2152C67F00676F3D /* Results.swift */,
 				5373CA802152C67F00676F3D /* Status.swift */,
+				5315ECE321FE13CB00A3F1A9 /* ScheduledStatus.swift */,
+				5315ECE521FE145600A3F1A9 /* StatusPara.swift */,
 				5373CA812152C67F00676F3D /* Tag.swift */,
 				5373CA822152C67F00676F3D /* Visibility.swift */,
 			);
@@ -3689,6 +3707,7 @@
 				5373CABA2152C68000676F3D /* Report.swift in Sources */,
 				5318F56221877F8A00418159 /* PadLogInViewController.swift in Sources */,
 				A9D80EED21B8F27A00020ECE /* InstanceData.swift in Sources */,
+				5315ECE421FE13CB00A3F1A9 /* ScheduledStatus.swift in Sources */,
 				5317C7BD21DA334500746197 /* GraphPointAnimation.swift in Sources */,
 				536A4FB9216B73D600A3D483 /* UIView+SafeAnchors.swift in Sources */,
 				5317C79521DA2E9200746197 /* SideDetailCellImage.swift in Sources */,
@@ -3906,9 +3925,11 @@
 				53205824215D287700ED0C36 /* DKImagePickerControllerDefaultUIDelegate.swift in Sources */,
 				5373C9DA215173EE00676F3D /* ViewController.swift in Sources */,
 				5373CAA72152C68000676F3D /* HTTPMethod.swift in Sources */,
+				5315ECE621FE145600A3F1A9 /* StatusPara.swift in Sources */,
 				53205817215D287700ED0C36 /* FontAwesomeBarButtonItem.swift in Sources */,
 				531BD5FD2178D68400C1509D /* FollowRequestsViewController.swift in Sources */,
 				5373CAAD2152C68000676F3D /* AttachmentType.swift in Sources */,
+				5315ECEA21FE1B3400A3F1A9 /* ScheduledCell.swift in Sources */,
 				5317C7C121DA334500746197 /* DotPlot.swift in Sources */,
 				531E0F99216E2BA2003E8890 /* NVActivityIndicatorAnimationSemiCircleSpin.swift in Sources */,
 				5373CB1D21540F5E00676F3D /* MainFeedCellImage.swift in Sources */,
@@ -3937,11 +3958,14 @@
 				531E0F9E216E2BA2003E8890 /* NVActivityIndicatorAnimationBallPulse.swift in Sources */,
 				531E0FA4216E2BA2003E8890 /* NVActivityIndicatorAnimationBallScaleMultiple.swift in Sources */,
 				5373CB4E21566E6500676F3D /* DetailCell.swift in Sources */,
+				5315ECE021FDE0AE00A3F1A9 /* FollowSuggestionsViewController.swift in Sources */,
 				5373CAFB2152EDB800676F3D /* SwipeActionTransitioning.swift in Sources */,
 				5317C7B221DA334500746197 /* GradientDrawingLayer.swift in Sources */,
 				536A4FB8216B73D600A3D483 /* BulletinBackgroundView.swift in Sources */,
 				531E0FA0216E2BA2003E8890 /* NVActivityIndicatorAnimationCircleStrokeSpin.swift in Sources */,
+				5315ECE821FE1A0B00A3F1A9 /* ScheduledStatusesViewController.swift in Sources */,
 				5320582F215D287700ED0C36 /* DKAssetGroupListVC.swift in Sources */,
+				5315ECE221FDF4AB00A3F1A9 /* EndorsedViewController.swift in Sources */,
 				5373CAFF2152EDB800676F3D /* SwipeCollectionViewCell.swift in Sources */,
 				5373CB3721541A0300676F3D /* SKPhoto.swift in Sources */,
 				5373CB182152FCF300676F3D /* Alertift.swift in Sources */,

@@ -170,7 +170,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
     @objc func goInstance() {
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: nil))
         let testClient = Client(
-            baseURL: "https://\(StoreStruct.shared.currentInstance.instanceText)",
+            baseURL: "https://\(StoreStruct.instanceText)",
             accessToken: StoreStruct.shared.currentInstance.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in
@@ -687,9 +687,47 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         }
     }
     
+    @objc func savedComposePresent() {
+        DispatchQueue.main.async {
+            
+            Alertift.actionSheet(title: nil, message: "Oops! Looks like the app was quit while you were in the middle of a great toot. Would you like to get back to composing it?")
+                .backgroundColor(Colours.white)
+                .titleTextColor(Colours.grayDark)
+                .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                .messageTextAlignment(.left)
+                .titleTextAlignment(.left)
+                .action(.default("Resume Composing Toot".localized), image: nil) { (action, ind) in
+                    let controller = ComposeViewController()
+                    controller.inReply = []
+                    controller.inReplyText = StoreStruct.savedInReplyText
+                    controller.filledTextFieldText = StoreStruct.savedComposeText
+                    self.present(controller, animated: true, completion: nil)
+                    StoreStruct.savedComposeText = ""
+                    UserDefaults.standard.set(StoreStruct.savedComposeText, forKey: "composeSaved")
+                    StoreStruct.savedInReplyText = ""
+                    UserDefaults.standard.set(StoreStruct.savedInReplyText, forKey: "savedInReplyText")
+                }
+                .action(.cancel("Dismiss")) { (action, ind) in
+                    StoreStruct.savedComposeText = ""
+                    UserDefaults.standard.set(StoreStruct.savedComposeText, forKey: "composeSaved")
+                    StoreStruct.savedInReplyText = ""
+                    UserDefaults.standard.set(StoreStruct.savedInReplyText, forKey: "savedInReplyText")
+                }
+                .finally { action, index in
+                    if action.style == .cancel {
+                        return
+                    }
+                }
+                .popover(anchorView: self.view)
+                .show(on: self)
+            
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.savedComposePresent), name: NSNotification.Name(rawValue: "savedComposePresent"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goMembers), name: NSNotification.Name(rawValue: "goMembers"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists"), object: nil)

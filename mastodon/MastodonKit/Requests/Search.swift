@@ -16,9 +16,16 @@ public struct Search {
     ///   - resolve: Whether to resolve non-local accounts.
     /// - Returns: Request for `Results`.
     public static func search(query: String, resolve: Bool? = nil) -> Request<Results> {
+        var res = resolve
+        if (UserDefaults.standard.object(forKey: "searchsco") == nil) || (UserDefaults.standard.object(forKey: "searchsco") as! Int == 0) {
+            res = false
+        } else {
+            res = true
+        }
+        
         let parameters = [
             Parameter(name: "q", value: query),
-            Parameter(name: "resolve", value: resolve.flatMap(trueOrNil))
+            Parameter(name: "resolve", value: res.flatMap(trueOrNil))
         ]
 
         let method = HTTPMethod.get(.parameters(parameters))

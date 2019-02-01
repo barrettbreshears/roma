@@ -268,7 +268,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
         title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
-        title.text = StoreStruct.shared.currentInstance.instanceText.lowercased()
+        title.text = StoreStruct.instanceText.lowercased()
         title.textColor = Colours.grayDark2
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         vw.addSubview(title)

@@ -408,6 +408,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+        
+        if StoreStruct.currentPage == 587 {
+            UserDefaults.standard.set(StoreStruct.savedComposeText, forKey: "composeSaved")
+            UserDefaults.standard.set(StoreStruct.savedInReplyText, forKey: "savedInReplyText")
+        }
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -449,6 +454,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         NotificationCenter.default.post(name: Notification.Name(rawValue: "startStream"), object: self)
+        
+        
+        if (UserDefaults.standard.object(forKey: "composeSaved") == nil) || (UserDefaults.standard.object(forKey: "composeSaved") as? String == "") {
+            
+        } else {
+            if let x = UserDefaults.standard.object(forKey: "composeSaved") as? String {
+                StoreStruct.savedComposeText = x
+                if let y = UserDefaults.standard.object(forKey: "savedInReplyText") as? String {
+                    StoreStruct.savedInReplyText = y
+                    StoreStruct.savedComposeText = x
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "savedComposePresent"), object: nil)
+                }
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "savedComposePresent"), object: nil)
+            }
+        }
         
         SettingsBundleHelper.checkAndExecuteSettings()
         SettingsBundleHelper.setVersionAndBuildNumber()

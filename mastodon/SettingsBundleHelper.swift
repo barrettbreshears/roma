@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import Disk
 
 class SettingsBundleHelper {
     
@@ -71,6 +72,12 @@ class SettingsBundleHelper {
             StoreStruct.allBoosts = []
             StoreStruct.allPins = []
             StoreStruct.photoNew = UIImage()
+            
+            do {
+                try Disk.clear(.documents)
+            } catch {
+                print("couldn't clear disk")
+            }
         }
     }
     

@@ -37,6 +37,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var isPeeking = false
     var segmentedControl: SJFluidSegmentedControl!
     var currentIndex = 0
+    var isEndorsed = false
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard let indexPath = self.tableView.indexPathForRow(at: location) else { return nil }
@@ -96,7 +97,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @objc func goInstance() {
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: 5000))
         let testClient = Client(
-            baseURL: "https://\(StoreStruct.shared.currentInstance.instanceText)",
+            baseURL: "https://\(StoreStruct.instanceText)",
             accessToken: StoreStruct.shared.currentInstance.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in
@@ -998,6 +999,19 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         
         if self.fromOtherUser && self.isPeeking == false && self.userIDtoUse != StoreStruct.currentUser.id {
+            
+            let request00 = Accounts.allEndorsements()
+            StoreStruct.client.run(request00) { (statuses) in
+                if let stat = (statuses.value) {
+                    guard let chosen = self.chosenUser else { return }
+                    let s = stat.filter { $0.id == chosen.id }
+                    if s.isEmpty {
+                        self.isEndorsed = false
+                    } else {
+                        self.isEndorsed = true
+                    }
+                }
+            }
             let request0 = Mutes.all()
             StoreStruct.client.run(request0) { (statuses) in
                 if let stat = (statuses.value) {
@@ -1254,6 +1268,24 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             } else {
                 title = "Does not follow you".localized
             }
+            var endoTitle = "Endorse"
+            if self.isEndorsed {
+                endoTitle = "Remove Endorsement"
+            } else {
+                endoTitle = "Endorse"
+            }
+            var muteTitle = "Mute"
+            if self.isMuted {
+                muteTitle = "Unmute"
+            } else {
+                muteTitle = "Mute"
+            }
+            var blockText = "Block"
+            if self.isBlocked {
+                blockText = "Unblock"
+            } else {
+                blockText = "Block"
+            }
             
             //bh3
             var imim = UIImage()
@@ -1359,6 +1391,59 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                     
                 }
+                
+                // change below endorse
+                .action(.default(endoTitle), image: UIImage(named: "profile")) { (action, ind) in
+                    print(action, ind)
+                    
+                    if self.isEndorsed {
+                        let request = Accounts.endorseRemove(id: self.chosenUser.id)
+                        StoreStruct.client.run(request) { (statuses) in
+                            if let stat = (statuses.value) {
+                                DispatchQueue.main.async {
+                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                        let notification = UINotificationFeedbackGenerator()
+                                        notification.notificationOccurred(.success)
+                                    }
+                                    let statusAlert = StatusAlert()
+                                    statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
+                                    statusAlert.title = "Removed Endorsement".localized
+                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.message = self.chosenUser.displayName
+                                    statusAlert.show()
+                                    
+                                    self.isEndorsed = false
+                                }
+                            }
+                        }
+                    } else {
+                        let request = Accounts.endorse(id: self.chosenUser.id)
+                        StoreStruct.client.run(request) { (statuses) in
+                            if let stat = (statuses.value) {
+                                DispatchQueue.main.async {
+                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                        let notification = UINotificationFeedbackGenerator()
+                                        notification.notificationOccurred(.success)
+                                    }
+                                    let statusAlert = StatusAlert()
+                                    statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
+                                    statusAlert.title = "Endorsed".localized
+                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.message = self.chosenUser.displayName
+                                    statusAlert.show()
+                                    
+                                    self.isEndorsed = true
+                                }
+                            }
+                        }
+                    }
+                    
+                }
+                
+            
+                
+                
+                
                 .action(.default("Add to a List".localized), image: UIImage(named: "list")) { (action, ind) in
                     print(action, ind)
                     
@@ -1412,7 +1497,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     
                     
                 }
-                .action(.default("Mute/Unmute".localized), image: UIImage(named: "block")) { (action, ind) in
+                .action(.default(muteTitle), image: UIImage(named: "block")) { (action, ind) in
                     print(action, ind)
                     
                     if self.isMuted == false {
@@ -1455,7 +1540,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     }
                 }
-                .action(.default("Block/Unblock".localized), image: UIImage(named: "block2")) { (action, ind) in
+                .action(.default(blockText), image: UIImage(named: "block2")) { (action, ind) in
                     print(action, ind)
                     
                     if self.isBlocked == false {
@@ -1607,6 +1692,50 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 let controller = BlockedViewController()
                                 controller.currentTagTitle = "Blocked"
                                 controller.currentTags = stat
+                                self.navigationController?.pushViewController(controller, animated: true)
+                            }
+                        }
+                    }
+                }
+                .action(.default("Scheduled Toots"), image: UIImage(named: "schedule")) { (action, ind) in
+                    print(action, ind)
+                    
+                    let request = Statuses.allScheduled()
+                    StoreStruct.client.run(request) { (statuses) in
+                        print("scheduled stats")
+                        print(statuses)
+                        if let stat = (statuses.value) {
+                            DispatchQueue.main.async {
+                                let controller = ScheduledStatusesViewController()
+                                controller.statuses = stat
+                                self.navigationController?.pushViewController(controller, animated: true)
+                            }
+                        }
+                    }
+                }
+                .action(.default("Follow Suggestions".localized), image: UIImage(named: "profile")) { (action, ind) in
+                    print(action, ind)
+                    
+                    let request = Accounts.followSuggestions()
+                    StoreStruct.client.run(request) { (statuses) in
+                        if let stat = (statuses.value) {
+                            DispatchQueue.main.async {
+                                let controller = FollowSuggestionsViewController()
+                                controller.statusFollows = stat
+                                self.navigationController?.pushViewController(controller, animated: true)
+                            }
+                        }
+                    }
+                }
+                .action(.default("Endorsed Accounts".localized), image: UIImage(named: "profile")) { (action, ind) in
+                    print(action, ind)
+                    
+                    let request = Accounts.allEndorsements()
+                    StoreStruct.client.run(request) { (statuses) in
+                        if let stat = (statuses.value) {
+                            DispatchQueue.main.async {
+                                let controller = EndorsedViewController()
+                                controller.statusFollows = stat
                                 self.navigationController?.pushViewController(controller, animated: true)
                             }
                         }
@@ -3035,25 +3164,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+       
         var sto = self.profileStatuses
-        
+        if self.currentIndex == 0 {
+            sto = self.profileStatuses
+        } else {
+            sto = self.profileStatuses2
+        }
         
         if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {} else {
             return nil
@@ -3921,7 +4039,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if self.currentIndex == 0 {
         
         let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: nil, pinnedOnly: false, excludeReplies: true, excludeReblogs: true, range: .min(id: self.profileStatuses.first?.id ?? "", limit: 5000))
-        DispatchQueue.global(qos: .userInitiated).async {
+//        DispatchQueue.global(qos: .userInitiated).async {
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
                     self.profileStatuses = stat + self.profileStatuses
@@ -3933,7 +4051,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                 }
             }
-        }
+//        }
             
         } else {
             
@@ -3945,7 +4063,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
             
             let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: nil, pinnedOnly: false, excludeReplies: false, excludeReblogs: zzz, range: .min(id: self.profileStatuses2.first?.id ?? "", limit: 5000))
-            DispatchQueue.global(qos: .userInitiated).async {
+//            DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
                         self.profileStatuses2 = stat + self.profileStatuses2
@@ -3957,7 +4075,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     }
                 }
-            }
+//            }
             
         }
     }

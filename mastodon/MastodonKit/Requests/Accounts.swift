@@ -96,6 +96,38 @@ public struct Accounts {
 
         return Request<[Account]>(path: "/api/v1/accounts/\(id)/following", method: method)
     }
+    
+    /// Follow suggestions.
+    ///
+    /// - Returns: Request for `[Account]`.
+    public static func followSuggestions() -> Request<[Account]> {
+        return Request<[Account]>(path: "/api/v1/suggestions", method: .get(.empty))
+    }
+    
+    /// Endorse an account.
+    ///
+    /// - Parameters:
+    ///   - id: The account id
+    /// - Returns: Request for `Relationship`.
+    public static func endorse(id: String) -> Request<Relationship> {
+        return Request<Relationship>(path: "/api/v1/accounts/\(id)/pin", method: .post(.empty))
+    }
+    
+    /// Remove endorsement from an account.
+    ///
+    /// - Parameters:
+    ///   - id: The account id
+    /// - Returns: Request for `Relationship`.
+    public static func endorseRemove(id: String) -> Request<Relationship> {
+        return Request<Relationship>(path: "/api/v1/accounts/\(id)/unpin", method: .post(.empty))
+    }
+    
+    /// Get endorsements.
+    ///
+    /// - Returns: Request for `[Account]`.
+    public static func allEndorsements() -> Request<[Account]> {
+        return Request<[Account]>(path: "/api/v1/endorsements", method: .get(.empty))
+    }
 
     /// Gets an account's statuses.
     ///

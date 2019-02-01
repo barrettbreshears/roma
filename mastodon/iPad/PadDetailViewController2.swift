@@ -134,23 +134,7 @@ class PadDetailViewController2: UIViewController, UITableViewDelegate, UITableVi
         }
         
         
-        
-        let request = Statuses.status(id: self.mainStatus[0].id)
-        StoreStruct.client.run(request) { (statuses) in
-            if let stat = (statuses.value) {
-                DispatchQueue.main.async {
-                    if stat.reblog?.mediaAttachments.isEmpty ?? stat.mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
-                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! SideDetailCell
-                        cell.configure(stat)
-                        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
-                    } else {
-                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! SideDetailCellImage
-                        cell.configure(stat)
-                        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
-                    }
-                }
-            }
-        }
+        self.refDetailCount()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -1332,6 +1316,26 @@ class PadDetailViewController2: UIViewController, UITableViewDelegate, UITableVi
         
     }
     
+    func refDetailCount() {
+        
+        let request = Statuses.status(id: self.mainStatus[0].id)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                DispatchQueue.main.async {
+                    if stat.reblog?.mediaAttachments.isEmpty ?? stat.mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
+                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! SideDetailCell
+                        cell.configure(stat)
+                        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                    } else {
+                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! SideDetailCellImage
+                        cell.configure(stat)
+                        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                    }
+                }
+            }
+        }
+    }
+    
     @objc func didTouchLike(sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
             let impact = UIImpactFeedbackGenerator()
@@ -1363,6 +1367,8 @@ class PadDetailViewController2: UIViewController, UITableViewDelegate, UITableVi
             StoreStruct.client.run(request2) { (statuses) in
                 print(statuses.value)
             }
+            
+            self.refDetailCount()
         } else {
             if self.mainStatus[0].visibility == .direct {
                 let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as! ActionButtonCell2
@@ -1394,6 +1400,8 @@ class PadDetailViewController2: UIViewController, UITableViewDelegate, UITableVi
                 }
                 print(statuses.value)
             }
+            
+            self.refDetailCount()
         }
         
     }
@@ -1423,6 +1431,8 @@ class PadDetailViewController2: UIViewController, UITableViewDelegate, UITableVi
             StoreStruct.client.run(request2) { (statuses) in
                 print(statuses.value)
             }
+            
+            self.refDetailCount()
         } else {
             let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as! ActionButtonCell
             ce.boostButton.setImage(UIImage(named: "boost"), for: .normal)
@@ -1449,6 +1459,8 @@ class PadDetailViewController2: UIViewController, UITableViewDelegate, UITableVi
                 }
                 print(statuses.value)
             }
+            
+            self.refDetailCount()
         }
         
     }
