@@ -129,8 +129,8 @@ class RepliesCell: SwipeTableViewCell {
             
             
             
-            
-            if status.emojis.isEmpty {
+       
+            if status.reblog!.emojis.isEmpty {
                 toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
             } else {
                 let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted")
@@ -146,8 +146,29 @@ class RepliesCell: SwipeTableViewCell {
                     }
                 }
                 self.toot.attributedText = attributedString
+                self.reloadInputViews()
             }
             
+            
+            
+            
+            if status.reblog?.account.emojis.isEmpty ?? true {
+                userName.text = status.reblog?.account.displayName.stripHTML()
+            } else {
+                let attributedString = NSMutableAttributedString(string: status.reblog?.account.displayName.stripHTML() ?? "")
+                for y in status.reblog?.account.emojis ?? [] {
+                    let textAttachment = NSTextAttachment()
+                    textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
+                    textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.userName.font.lineHeight), height: Int(self.userName.font.lineHeight))
+                    let attrStringWithImage = NSAttributedString(attachment: textAttachment)
+                    while attributedString.mutableString.contains(":\(y.shortcode):") {
+                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
+                        attributedString.replaceCharacters(in: range, with: attrStringWithImage)
+                    }
+                }
+                self.userName.attributedText = attributedString
+                self.reloadInputViews()
+            }
             
             
             
@@ -173,6 +194,26 @@ class RepliesCell: SwipeTableViewCell {
                     }
                 }
                 self.toot.attributedText = attributedString
+                self.reloadInputViews()
+            }
+            
+            
+            if status.account.emojis.isEmpty {
+                userName.text = status.account.displayName.stripHTML()
+            } else {
+                let attributedString = NSMutableAttributedString(string: status.account.displayName.stripHTML())
+                for y in status.account.emojis {
+                    let textAttachment = NSTextAttachment()
+                    textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
+                    textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.userName.font.lineHeight), height: Int(self.userName.font.lineHeight))
+                    let attrStringWithImage = NSAttributedString(attachment: textAttachment)
+                    while attributedString.mutableString.contains(":\(y.shortcode):") {
+                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
+                        attributedString.replaceCharacters(in: range, with: attrStringWithImage)
+                    }
+                }
+                self.userName.attributedText = attributedString
+                self.reloadInputViews()
             }
             
             

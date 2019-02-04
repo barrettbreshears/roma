@@ -16,9 +16,10 @@ import SwiftyJSON
 import AVKit
 import AVFoundation
 
-class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SwiftyGiphyViewControllerDelegate {
+class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SwiftyGiphyViewControllerDelegate, DateTimePickerDelegate {
     
     let gifCont = SwiftyGiphyViewController()
+    var isGifVid = false
     
     func giphyControllerDidSelectGif(controller: SwiftyGiphyViewController, item: GiphyItem) {
         print(item.fixedHeightStillImage)
@@ -26,6 +27,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
         let videoURL = item.downsizedImage?.url as! NSURL
         do {
+            self.isGifVid = true
             self.gifVidData = try NSData(contentsOf: videoURL as URL, options: .mappedIfSafe) as Data
         } catch {
             print("err")
@@ -526,7 +528,8 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     let imag = UIImagePickerController()
     var gifVidData: Data?
     var startRepText = ""
-    
+    var isScheduled = false
+    var scheduleTime: String?
     
     @objc func actOnSpecialNotificationAuto() {
         //dothestuff
@@ -775,7 +778,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             }
             self.textView.becomeFirstResponder()
             springWithDelay(duration: 0.6, delay: 0, animations: {
-                self.bgView.backgroundColor = Colours.tabSelected
+                self.bgView.backgroundColor = Colours.clear
                 self.removeLabel.alpha = 0
             })
         } else {
@@ -822,7 +825,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             }
             self.textView.becomeFirstResponder()
             springWithDelay(duration: 0.6, delay: 0, animations: {
-                self.bgView.backgroundColor = Colours.tabSelected
+                self.bgView.backgroundColor = Colours.clear
                 self.removeLabel.alpha = 0
             })
         } else {
@@ -867,7 +870,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             }
             self.textView.becomeFirstResponder()
             springWithDelay(duration: 0.6, delay: 0, animations: {
-                self.bgView.backgroundColor = Colours.tabSelected
+                self.bgView.backgroundColor = Colours.clear
                 self.removeLabel.alpha = 0
             })
         } else {
@@ -909,7 +912,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             }
             self.textView.becomeFirstResponder()
             springWithDelay(duration: 0.6, delay: 0, animations: {
-                self.bgView.backgroundColor = Colours.tabSelected
+                self.bgView.backgroundColor = Colours.clear
                 self.removeLabel.alpha = 0
             })
         } else {
@@ -932,6 +935,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         super.viewDidAppear(true)
         
         
+        StoreStruct.currentPage = 587
         textView.becomeFirstResponder()
         
         
@@ -1089,11 +1093,21 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         super.didReceiveMemoryWarning()
     }
     
+    func dateTimePicker(_ picker: DateTimePicker, didSelectDate: Date) {
+        print(picker.selectedDateString)
+    }
+    
+    @objc func doneDate() {
+        self.picker.removeFromSuperview()
+        self.textView.becomeFirstResponder()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         StoreStruct.spoilerText = ""
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.doneDate), name: NSNotification.Name(rawValue: "doneDate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.actOnSpecialNotificationAuto), name: NSNotification.Name(rawValue: "cpick"), object: nil)
         
         self.view.backgroundColor = Colours.white
@@ -1123,7 +1137,11 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
         
         bgView.frame = CGRect(x:0, y:Int(self.view.bounds.height) - 40 - Int(self.keyHeight), width:Int(self.view.bounds.width), height:Int(self.keyHeight) + 40)
-        bgView.backgroundColor = Colours.tabSelected
+        if (UserDefaults.standard.object(forKey: "barhue1") == nil) || (UserDefaults.standard.object(forKey: "barhue1") as! Int == 0) {
+            bgView.backgroundColor = Colours.tabSelected
+        } else {
+            bgView.backgroundColor = Colours.white3
+        }
         self.view.addSubview(bgView)
         
         
@@ -1134,8 +1152,8 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .singleLine
-        self.tableView.backgroundColor = Colours.tabSelected
-        self.tableView.separatorColor = Colours.tabSelected
+        self.tableView.backgroundColor = Colours.clear
+        self.tableView.separatorColor = Colours.clear
         self.tableView.layer.masksToBounds = true
         self.tableView.estimatedRowHeight = 89
         self.tableView.rowHeight = UITableView.automaticDimension
@@ -1153,8 +1171,8 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.tableViewDrafts.delegate = self
         self.tableViewDrafts.dataSource = self
         self.tableViewDrafts.separatorStyle = .singleLine
-        self.tableViewDrafts.backgroundColor = Colours.tabSelected
-        self.tableViewDrafts.separatorColor = Colours.tabSelected
+        self.tableViewDrafts.backgroundColor = Colours.clear
+        self.tableViewDrafts.separatorColor = Colours.clear
         self.tableViewDrafts.layer.masksToBounds = true
         self.tableViewDrafts.estimatedRowHeight = 89
         self.tableViewDrafts.rowHeight = UITableView.automaticDimension
@@ -1167,8 +1185,8 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.tableViewASCII.delegate = self
         self.tableViewASCII.dataSource = self
         self.tableViewASCII.separatorStyle = .singleLine
-        self.tableViewASCII.backgroundColor = Colours.tabSelected
-        self.tableViewASCII.separatorColor = Colours.tabSelected
+        self.tableViewASCII.backgroundColor = Colours.clear
+        self.tableViewASCII.separatorColor = Colours.clear
         self.tableViewASCII.layer.masksToBounds = true
         self.tableViewASCII.estimatedRowHeight = 89
         self.tableViewASCII.rowHeight = UITableView.automaticDimension
@@ -1182,8 +1200,8 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.tableViewEmoti.delegate = self
         self.tableViewEmoti.dataSource = self
         self.tableViewEmoti.separatorStyle = .singleLine
-        self.tableViewEmoti.backgroundColor = Colours.tabSelected
-        self.tableViewEmoti.separatorColor = Colours.tabSelected
+        self.tableViewEmoti.backgroundColor = Colours.clear
+        self.tableViewEmoti.separatorColor = Colours.clear
         self.tableViewEmoti.layer.masksToBounds = true
         self.tableViewEmoti.estimatedRowHeight = 89
         self.tableViewEmoti.rowHeight = UITableView.automaticDimension
@@ -1348,7 +1366,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.closeButton.addTarget(self, action: #selector(didTouchUpInsideCloseButton), for: .touchUpInside)
         self.view.addSubview(self.closeButton)
         
-        countLabel.text = "500"
+        countLabel.text = "\(StoreStruct.maxChars)"
         countLabel.textColor = Colours.gray.withAlphaComponent(0.65)
         countLabel.textAlignment = .center
         self.view.addSubview(countLabel)
@@ -1379,7 +1397,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             if self.inReplyText == "" {
                 textView.text = self.filledTextFieldText
             } else {
-                textView.text = "@\(self.inReplyText) "
+                //maybe an issue:
+//                textView.text = "@\(self.inReplyText) "
+                textView.text = "\(self.filledTextFieldText) "
                 self.startRepText = textView.text
             }
         } else {
@@ -1540,6 +1560,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                    
                     let videoURL = info[UIImagePickerController.InfoKey.mediaURL] as! NSURL
                     do {
+                        self.isGifVid = true
                         self.gifVidData = try NSData(contentsOf: videoURL as URL, options: .mappedIfSafe) as Data
                     } catch {
                         print("err")
@@ -1630,6 +1651,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     if let avassetURL = avAsset as? AVURLAsset {
                         //self.completeVidURL = avassetURL.url
                         guard let video1 = try? Data(contentsOf: avassetURL.url) else { return }
+                        self.isGifVid = true
                         self.gifVidData = video1
                     }
                 })
@@ -1764,7 +1786,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
 //            }
 //        })
         
-        
+        if self.picker.isDescendant(of: self.view) {
+            self.picker.removeFromSuperview()
+        }
         
         DispatchQueue.main.async {
         let status = PHPhotoLibrary.authorizationStatus()
@@ -1828,6 +1852,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         impact.impactOccurred()
         }
         
+        if self.picker.isDescendant(of: self.view) {
+            self.picker.removeFromSuperview()
+        }
+        
         self.textView.resignFirstResponder()
         springWithDelay(duration: 0.5, delay: 0, animations: {
             self.cameraButton.alpha = 0.45
@@ -1847,25 +1875,25 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
             .messageTextAlignment(.left)
             .titleTextAlignment(.left)
-            .action(.default("Public".localized)) { (action, ind) in
+            .action(.default("Public - Post to public timelines".localized)) { (action, ind) in
                 print(action, ind)
                 self.visibility = .public
                 self.visibilityButton.setImage(UIImage(named: "eye"), for: .normal)
                 self.bringBackDrawer()
             }
-            .action(.default("Unlisted".localized)) { (action, ind) in
+            .action(.default("Unlisted - Do not post to public timelines".localized)) { (action, ind) in
                 print(action, ind)
                 self.visibility = .unlisted
                 self.visibilityButton.setImage(UIImage(named: "unlisted"), for: .normal)
                 self.bringBackDrawer()
             }
-            .action(.default("Private".localized)) { (action, ind) in
+            .action(.default("Private - Post only to followers".localized)) { (action, ind) in
                 print(action, ind)
                 self.visibility = .private
                 self.visibilityButton.setImage(UIImage(named: "private"), for: .normal)
                 self.bringBackDrawer()
             }
-            .action(.default("Direct".localized)) { (action, ind) in
+            .action(.default("Direct - Post to mentioned users only".localized)) { (action, ind) in
                 print(action, ind)
                 self.visibility = .direct
                 self.visibilityButton.setImage(UIImage(named: "direct"), for: .normal)
@@ -1885,6 +1913,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
         let impact = UIImpactFeedbackGenerator()
         impact.impactOccurred()
+        }
+        
+        if self.picker.isDescendant(of: self.view) {
+            self.picker.removeFromSuperview()
         }
         
         self.textField.becomeFirstResponder()
@@ -2039,7 +2071,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             }
                         }
                         
-                }
+                    }
                     .action(.cancel("Dismiss"))
                     .finally { action, index in
                         if action.style == .cancel {
@@ -2090,12 +2122,20 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             .action(.default("ASCII Text Faces"), image: UIImage(named: "ascii")) { (action, ind) in
                 print(action, ind)
                 
+                if self.picker.isDescendant(of: self.view) {
+                    self.picker.removeFromSuperview()
+                }
+                
                 springWithDelay(duration: 0.6, delay: 0, animations: {
                     self.tableViewASCII.alpha = 1
                 })
             }
             .action(.default("Instance Emoticons"), image: UIImage(named: "emoti")) { (action, ind) in
                 print(action, ind)
+                
+                if self.picker.isDescendant(of: self.view) {
+                    self.picker.removeFromSuperview()
+                }
                 
                 springWithDelay(duration: 0.6, delay: 0, animations: {
                     self.tableViewEmoti.alpha = 1
@@ -2112,6 +2152,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             .action(.default("Insert GIF"), image: UIImage(named: "giff")) { (action, ind) in
                 print(action, ind)
                 
+                if self.picker.isDescendant(of: self.view) {
+                    self.picker.removeFromSuperview()
+                }
+                
                 self.gifCont.delegate = self
 //                self.present(self.gifCont, animated: true, completion: nil)
                 
@@ -2121,8 +2165,27 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 self.present(navController, animated:true, completion: nil)
                 
             }
+            .action(.default("Schedule Toot"), image: UIImage(named: "schedule")) { (action, ind) in
+                print(action, ind)
+                self.picker.delegate = self
+                self.picker.frame = CGRect(x: 0, y: self.view.bounds.height - self.picker.frame.size.height, width: self.view.bounds.width, height: self.picker.frame.size.height)
+                self.picker.alpha = 0
+                self.view.addSubview(self.picker)
+                springWithDelay(duration: 0.5, delay: 0, animations: {
+                    self.picker.alpha = 1
+                })
+                self.picker.completionHandler = { date in
+                    print(date.iso8601())
+                    self.scheduleTime = date.iso8601()
+                    self.isScheduled = true
+                }
+            }
             .action(.default("Drafts"), image: UIImage(named: "list")) { (action, ind) in
                 print(action, ind)
+                
+                if self.picker.isDescendant(of: self.view) {
+                    self.picker.removeFromSuperview()
+                }
                 
                 springWithDelay(duration: 0.6, delay: 0, animations: {
                     self.tableViewDrafts.alpha = 1
@@ -2148,6 +2211,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
     }
     
+    let picker = DateTimePicker.create(minimumDate: Date().addingTimeInterval(5 * 60), maximumDate: Date().addingTimeInterval(900000 * 60 * 24 * 4))
     
     
     
@@ -2280,12 +2344,16 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             compression = 0.5
         }
         
+        var successMessage = "posted"
+        if self.scheduleTime != nil {
+            successMessage = "scheduled"
+        }
         
         StoreStruct.drafts.append(self.textView.text!)
         UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
         
         
-        if self.gifVidData != nil {
+        if self.gifVidData != nil || self.isGifVid {
             print("gifvidnotnil")
             
             let request = Media.upload(media: .gif(self.gifVidData))
@@ -2294,7 +2362,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     print(stat.id)
                     mediaIDs.append(stat.id)
                     
-                    let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, visibility: self.visibility)
+                    let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
                     DispatchQueue.global(qos: .userInitiated).async {
                         StoreStruct.client.run(request0) { (statuses) in
                             print(statuses)
@@ -2303,7 +2371,29 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             DispatchQueue.main.async {
                                 NotificationCenter.default.post(name: Notification.Name(rawValue: "stopindi"), object: self)
                             }
-                            if statuses.isError {
+                            if statuses.isError && self.scheduleTime != nil {
+                                
+                                StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
+                                UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+                                
+                                DispatchQueue.main.async {
+                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                        let notification = UINotificationFeedbackGenerator()
+                                        notification.notificationOccurred(.success)
+                                    }
+                                    let statusAlert = StatusAlert()
+                                    statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
+                                    statusAlert.title = "Toot Toot!".localized
+                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.message = "Successfully \(successMessage)"
+                                    statusAlert.show()
+                                    
+                                    StoreStruct.caption1 = ""
+                                    StoreStruct.caption2 = ""
+                                    StoreStruct.caption3 = ""
+                                    StoreStruct.caption4 = ""
+                                }
+                                } else if statuses.isError {
                                 DispatchQueue.main.async {
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
@@ -2326,7 +2416,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Status Posted!".localized
                                 statusAlert.contentColor = Colours.grayDark
-                                statusAlert.message = "Successfully posted"
+                                statusAlert.message = "Successfully \(successMessage)"
                                 statusAlert.show()
                                 
                                 StoreStruct.caption1 = ""
@@ -2401,7 +2491,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             }
                                             
                                             
-                                            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, visibility: self.visibility)
+                                            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
                                             DispatchQueue.global(qos: .userInitiated).async {
                                                 StoreStruct.client.run(request0) { (statuses) in
                                                     print(statuses)
@@ -2409,7 +2499,29 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                     DispatchQueue.main.async {
                                                         NotificationCenter.default.post(name: Notification.Name(rawValue: "stopindi"), object: self)
                                                     }
-                                                    if statuses.isError {
+                                                    if statuses.isError && self.scheduleTime != nil {
+                                                        
+                                                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
+                                                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+                                                        
+                                                        DispatchQueue.main.async {
+                                                            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                                                let notification = UINotificationFeedbackGenerator()
+                                                                notification.notificationOccurred(.success)
+                                                            }
+                                                            let statusAlert = StatusAlert()
+                                                            statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
+                                                            statusAlert.title = "Toot Toot!".localized
+                                                            statusAlert.contentColor = Colours.grayDark
+                                                            statusAlert.message = "Successfully \(successMessage)"
+                                                            statusAlert.show()
+                                                            
+                                                            StoreStruct.caption1 = ""
+                                                            StoreStruct.caption2 = ""
+                                                            StoreStruct.caption3 = ""
+                                                            StoreStruct.caption4 = ""
+                                                        }
+                                                        } else if statuses.isError {
                                                         DispatchQueue.main.async {
                                                             let statusAlert = StatusAlert()
                                                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
@@ -2432,7 +2544,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                         statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                                         statusAlert.title = "Status Posted!".localized
                                                         statusAlert.contentColor = Colours.grayDark
-                                                        statusAlert.message = "Successfully posted"
+                                                        statusAlert.message = "Successfully \(successMessage)"
                                                         statusAlert.show()
                                                         
                                                         StoreStruct.caption1 = ""
@@ -2495,7 +2607,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     }
                                     
                                     
-                                    let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, visibility: self.visibility)
+                                    let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
                                     DispatchQueue.global(qos: .userInitiated).async {
                                         StoreStruct.client.run(request0) { (statuses) in
                                             print(statuses)
@@ -2503,7 +2615,29 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             DispatchQueue.main.async {
                                                 NotificationCenter.default.post(name: Notification.Name(rawValue: "stopindi"), object: self)
                                             }
-                                            if statuses.isError {
+                                            if statuses.isError && self.scheduleTime != nil {
+                                                
+                                                StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
+                                                UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+                                                
+                                                DispatchQueue.main.async {
+                                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                                        let notification = UINotificationFeedbackGenerator()
+                                                        notification.notificationOccurred(.success)
+                                                    }
+                                                    let statusAlert = StatusAlert()
+                                                    statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
+                                                    statusAlert.title = "Toot Toot!".localized
+                                                    statusAlert.contentColor = Colours.grayDark
+                                                    statusAlert.message = "Successfully \(successMessage)"
+                                                    statusAlert.show()
+                                                    
+                                                    StoreStruct.caption1 = ""
+                                                    StoreStruct.caption2 = ""
+                                                    StoreStruct.caption3 = ""
+                                                    StoreStruct.caption4 = ""
+                                                }
+                                                } else if statuses.isError {
                                                 DispatchQueue.main.async {
                                                     let statusAlert = StatusAlert()
                                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
@@ -2526,7 +2660,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                             statusAlert.title = "Status Posted!".localized
                                             statusAlert.contentColor = Colours.grayDark
-                                            statusAlert.message = "Successfully posted"
+                                            statusAlert.message = "Successfully \(successMessage)"
                                             statusAlert.show()
                                                 
                                                 StoreStruct.caption1 = ""
@@ -2575,7 +2709,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 print(statuses)
                             }
                             
-                            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, visibility: self.visibility)
+                            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
                             DispatchQueue.global(qos: .userInitiated).async {
                                 StoreStruct.client.run(request0) { (statuses) in
                                     print(statuses)
@@ -2584,7 +2718,29 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                         NotificationCenter.default.post(name: Notification.Name(rawValue: "stopindi"), object: self)
                                     }
                                     
-                                    if statuses.isError {
+                                    if statuses.isError && self.scheduleTime != nil {
+                                        
+                                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
+                                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+                                        
+                                        DispatchQueue.main.async {
+                                            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                                let notification = UINotificationFeedbackGenerator()
+                                                notification.notificationOccurred(.success)
+                                            }
+                                            let statusAlert = StatusAlert()
+                                            statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
+                                            statusAlert.title = "Toot Toot!".localized
+                                            statusAlert.contentColor = Colours.grayDark
+                                            statusAlert.message = "Successfully \(successMessage)"
+                                            statusAlert.show()
+                                            
+                                            StoreStruct.caption1 = ""
+                                            StoreStruct.caption2 = ""
+                                            StoreStruct.caption3 = ""
+                                            StoreStruct.caption4 = ""
+                                        }
+                                        } else if statuses.isError {
                                         DispatchQueue.main.async {
                                             let statusAlert = StatusAlert()
                                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
@@ -2607,7 +2763,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Status Posted".localized
                                     statusAlert.contentColor = Colours.grayDark
-                                    statusAlert.message = "Successfully posted"
+                                    statusAlert.message = "Successfully \(successMessage)"
                                     statusAlert.show()
                                         
                                         StoreStruct.caption1 = ""
@@ -2641,7 +2797,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         print(statuses)
                     }
                     
-                    let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, visibility: self.visibility)
+                    let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
                     DispatchQueue.global(qos: .userInitiated).async {
                         StoreStruct.client.run(request0) { (statuses) in
                             print(statuses)
@@ -2649,7 +2805,29 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             DispatchQueue.main.async {
                                 NotificationCenter.default.post(name: Notification.Name(rawValue: "stopindi"), object: self)
                             }
-                            if statuses.isError {
+                            if statuses.isError && self.scheduleTime != nil {
+                                
+                                StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
+                                UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+                                
+                                DispatchQueue.main.async {
+                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                        let notification = UINotificationFeedbackGenerator()
+                                        notification.notificationOccurred(.success)
+                                    }
+                                    let statusAlert = StatusAlert()
+                                    statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
+                                    statusAlert.title = "Toot Toot!".localized
+                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.message = "Successfully \(successMessage)"
+                                    statusAlert.show()
+                                    
+                                    StoreStruct.caption1 = ""
+                                    StoreStruct.caption2 = ""
+                                    StoreStruct.caption3 = ""
+                                    StoreStruct.caption4 = ""
+                                }
+                                } else if statuses.isError {
                                 DispatchQueue.main.async {
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
@@ -2672,7 +2850,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Status Posted".localized
                             statusAlert.contentColor = Colours.grayDark
-                            statusAlert.message = "Successfully posted"
+                            statusAlert.message = "Successfully \(successMessage)"
                             statusAlert.show()
                                 
                                 StoreStruct.caption1 = ""
@@ -2692,7 +2870,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 }
             }
         } else if self.selectedImage1.image == nil {
-            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, visibility: self.visibility)
+            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request0) { (statuses) in
                     print(statuses)
@@ -2701,7 +2879,29 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "stopindi"), object: self)
                     }
                     
-                    if statuses.isError {
+                    if statuses.isError && self.scheduleTime != nil {
+                        
+                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
+                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+                        
+                        DispatchQueue.main.async {
+                            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                let notification = UINotificationFeedbackGenerator()
+                                notification.notificationOccurred(.success)
+                            }
+                            let statusAlert = StatusAlert()
+                            statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
+                            statusAlert.title = "Toot Toot!".localized
+                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.message = "Successfully \(successMessage)"
+                            statusAlert.show()
+                            
+                            StoreStruct.caption1 = ""
+                            StoreStruct.caption2 = ""
+                            StoreStruct.caption3 = ""
+                            StoreStruct.caption4 = ""
+                        }
+                    } else if statuses.isError {
                         DispatchQueue.main.async {
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
@@ -2724,7 +2924,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                     statusAlert.title = "Status Posted".localized
                     statusAlert.contentColor = Colours.grayDark
-                    statusAlert.message = "Successfully posted"
+                    statusAlert.message = "Successfully \(successMessage)"
                     statusAlert.show()
                         
                         StoreStruct.caption1 = ""
@@ -2826,6 +3026,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     
     func textViewDidBeginEditing(_ textView: UITextView) {
         self.bringBackDrawer()
+        if self.picker.isDescendant(of: self.view) {
+            self.picker.removeFromSuperview()
+        }
     }
     
     
@@ -2850,7 +3053,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
 //        self.textView.normalizeText()
         
-        let newCount = 500 - (textView.text?.count)!
+        let newCount = StoreStruct.maxChars - (textView.text?.count)!
         countLabel.text = "\(newCount)"
         
         if Int(countLabel.text!)! < 1 {
@@ -2946,8 +3149,8 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             }
         }
         
-        
-        
+        StoreStruct.savedComposeText = textView.text ?? ""
+        StoreStruct.savedInReplyText = self.inReplyText
     }
     
     
@@ -3035,7 +3238,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         title.textColor = UIColor.white
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         vw.addSubview(title)
-        vw.backgroundColor = Colours.tabSelected
+        vw.backgroundColor = Colours.clear
         
         return vw
     }
@@ -3064,12 +3267,12 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellfolfol", for: indexPath) as! FollowersCell
             cell.configure(StoreStruct.statusSearchUser[indexPath.row])
             cell.profileImageView.tag = indexPath.row
-            cell.backgroundColor = Colours.tabSelected
+            cell.backgroundColor = Colours.clear
             cell.userName.textColor = UIColor.white
             cell.userTag.textColor = UIColor.white
             cell.toot.textColor = UIColor.white.withAlphaComponent(0.6)
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.tabSelected
+            bgColorView.backgroundColor = Colours.clear
             cell.selectedBackgroundView = bgColorView
             return cell
             
@@ -3081,12 +3284,12 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             cell.textLabel?.textAlignment = .left
             
                 let backgroundView = UIView()
-                backgroundView.backgroundColor = Colours.tabSelected
+                backgroundView.backgroundColor = Colours.clear
                 cell.selectedBackgroundView = backgroundView
             
             cell.textLabel?.textColor = UIColor.white
             cell.textLabel?.numberOfLines = 0
-            cell.backgroundColor = Colours.tabSelected
+            cell.backgroundColor = Colours.clear
             return cell
             
         } else if tableView == self.tableViewEmoti {
@@ -3101,12 +3304,12 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             cell.textLabel?.textAlignment = .left
             
             let backgroundView = UIView()
-            backgroundView.backgroundColor = Colours.tabSelected
+            backgroundView.backgroundColor = Colours.clear
             cell.selectedBackgroundView = backgroundView
             
             cell.textLabel?.textColor = UIColor.white
             cell.textLabel?.numberOfLines = 0
-            cell.backgroundColor = Colours.tabSelected
+            cell.backgroundColor = Colours.clear
             return cell
             
         } else {
@@ -3121,12 +3324,12 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 cell.textLabel?.textAlignment = .left
                 
                 let backgroundView = UIView()
-                backgroundView.backgroundColor = Colours.tabSelected
+                backgroundView.backgroundColor = Colours.clear
                 cell.selectedBackgroundView = backgroundView
             }
             cell.textLabel?.textColor = UIColor.white
             cell.textLabel?.numberOfLines = 0
-            cell.backgroundColor = Colours.tabSelected
+            cell.backgroundColor = Colours.clear
             return cell
         }
     }

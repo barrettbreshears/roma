@@ -570,6 +570,19 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
             
             
             
+            if StoreStruct.statusesHome.isEmpty {
+                let request = Timelines.home()
+                StoreStruct.client.run(request) { (statuses) in
+                    if let stat = (statuses.value) {
+                        StoreStruct.statusesHome = stat
+                        StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
+                    }
+                }
+            }
+            
+            
+            
             let request2 = Accounts.currentUser()
             StoreStruct.client.run(request2) { (statuses) in
                 if let stat = (statuses.value) {
@@ -580,7 +593,21 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
             
         }
         
-        
+//        let insetsConst: CGFloat = 22
+//        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
+//            self.button56.frame = CGRect(x: 5, y: 340, width: 70, height: 70)
+//            self.button56.setImage(UIImage(named: "list")?.maskWithColor(color: self.unselectCol), for: .normal)
+//            self.button56.contentEdgeInsets = UIEdgeInsets(top: insetsConst, left: insetsConst, bottom: insetsConst, right: insetsConst)
+//            self.button56.layer.cornerRadius = 0
+//            self.button56.layer.masksToBounds = true
+//        } else {
+//            self.button56.frame = CGRect(x: 5, y: 340, width: 70, height: 70)
+//            self.button56.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+//            self.button56.contentEdgeInsets = UIEdgeInsets(top: insetsConst, left: insetsConst, bottom: insetsConst, right: insetsConst)
+//            self.button56.imageView?.layer.cornerRadius = 35
+//            self.button56.imageView?.contentMode = .scaleAspectFill
+//            self.button56.layer.masksToBounds = true
+//        }
     }
     
     
@@ -833,9 +860,24 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         self.button4.addTarget(self, action: #selector(self.b4Touched), for: .touchUpInside)
         self.view.addSubview(self.button4)
         
-        self.button56.frame = CGRect(x: 5, y: 340, width: 70, height: 70)
-        self.button56.setImage(UIImage(named: "list")?.maskWithColor(color: self.unselectCol), for: .normal)
-        self.button56.contentEdgeInsets = UIEdgeInsets(top: insetsConst, left: insetsConst, bottom: insetsConst, right: insetsConst)
+        
+        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
+            self.button56.frame = CGRect(x: 5, y: 340, width: 70, height: 70)
+            self.button56.setImage(UIImage(named: "list")?.maskWithColor(color: self.unselectCol), for: .normal)
+            self.button56.contentEdgeInsets = UIEdgeInsets(top: insetsConst, left: insetsConst, bottom: insetsConst, right: insetsConst)
+            self.button56.layer.cornerRadius = 0
+            self.button56.layer.masksToBounds = true
+        } else {
+            self.button56.frame = CGRect(x: 5, y: 340, width: 70, height: 70)
+            if StoreStruct.currentUser != nil {
+                self.button56.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            }
+            self.button56.contentEdgeInsets = UIEdgeInsets(top: insetsConst, left: insetsConst, bottom: insetsConst, right: insetsConst)
+            self.button56.imageView?.layer.cornerRadius = 35
+            self.button56.imageView?.contentMode = .scaleAspectFill
+            self.button56.layer.masksToBounds = true
+        }
+        
         self.button56.backgroundColor = UIColor.clear
         self.button56.addTarget(self, action: #selector(self.b56Touched), for: .touchUpInside)
         self.view.addSubview(self.button56)
@@ -934,12 +976,12 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
                     }
                     if z == 3 {
                         newNum = 4
-                        UIApplication.shared.statusBarStyle = .default
-                        Colours.keyCol = UIKeyboardAppearance.light
+                        UIApplication.shared.statusBarStyle = .lightContent
+                        Colours.keyCol = UIKeyboardAppearance.dark
                     }
                     if z == 4 {
                         newNum = 0
-                        UIApplication.shared.statusBarStyle = .lightContent
+                        UIApplication.shared.statusBarStyle = .default
                         Colours.keyCol = UIKeyboardAppearance.light
                     }
                 }

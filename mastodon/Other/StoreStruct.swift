@@ -24,20 +24,28 @@ struct StoreStruct {
                            UIColor(red: 149/255.0, green: 192/255.0, blue: 248/255.0, alpha: 1.0),
                            UIColor(red: 152/255.0, green: 228/255.0, blue: 220/255.0, alpha: 1.0),
                            UIColor(red: 122/255.0, green: 236/255.0, blue: 238/255.0, alpha: 1.0),
+                           UIColor(red: 122/255.0, green: 238/255.0, blue: 145/255.0, alpha: 1.0),
                            UIColor(red: 115/255.0, green: 191/255.0, blue: 105/255.0, alpha: 1.0),
                            UIColor(red: 159/255.0, green: 224/255.0, blue: 151/255.0, alpha: 1.0),
                            UIColor(red: 238/255.0, green: 235/255.0, blue: 162/255.0, alpha: 1.0),
+                           UIColor(red: 255/255.0, green: 238/255.0, blue: 71/255.0, alpha: 1.0),
                            UIColor(red: 240/255.0, green: 252/255.0, blue: 83/255.0, alpha: 1.0),
                            UIColor(red: 248/255.0, green: 173/255.0, blue: 59/255.0, alpha: 1.0),
                            UIColor(red: 244/255.0, green: 135/255.0, blue: 83/255.0, alpha: 1.0),
+                           UIColor(red: 255/255.0, green: 108/255.0, blue: 38/255.0, alpha: 1.0),
                            UIColor(red: 253/255.0, green: 109/255.0, blue: 109/255.0, alpha: 1.0),
+                           UIColor(red: 254/255.0, green: 72/255.0, blue: 72/255.0, alpha: 1.0),
                            UIColor(red: 253/255.0, green: 43/255.0, blue: 43/255.0, alpha: 1.0),
                            UIColor(red: 243/255.0, green: 137/255.0, blue: 201/255.0, alpha: 1.0),
                            UIColor(red: 250/255.0, green: 69/255.0, blue: 178/255.0, alpha: 1.0),
+                           UIColor(red: 165/255.0, green: 29/255.0, blue: 111/255.0, alpha: 1.0),
                            UIColor(red: 216/255.0, green: 166/255.0, blue: 102/255.0, alpha: 1.0),
+                           UIColor(red: 203/255.0, green: 144/255.0, blue: 42/255.0, alpha: 1.0),
                            UIColor(red: 168/255.0, green: 111/255.0, blue: 13/255.0, alpha: 1.0),
+                           UIColor(red: 150/255.0, green: 150/255.0, blue: 160/255.0, alpha: 1.0),
                            UIColor(red: 100/255.0, green: 100/255.0, blue: 110/255.0, alpha: 1.0),
-                           UIColor(red: 58/255.0, green: 58/255.0, blue: 65/255.0, alpha: 1.0)]
+                           UIColor(red: 58/255.0, green: 58/255.0, blue: 65/255.0, alpha: 1.0),
+                           UIColor(red: 38/255.0, green: 38/255.0, blue: 45/255.0, alpha: 1.0)]
     
     static var client = Client(baseURL: StoreStruct.shared.currentInstance.returnedText, accessToken:StoreStruct.shared.currentInstance.accessToken)
     var currentInstance:InstanceData = InstanceData.getCurrentInstance() ?? InstanceData()
@@ -107,4 +115,11 @@ struct StoreStruct {
     static var gapLastHomeStat: Status? = nil
     static var gapLastLocalStat: Status? = nil
     static var gapLastFedStat: Status? = nil
+    
+    static var newIDtoGoTo = ""
+    static var maxChars = 500
+    static var initTimeline = false
+    
+    static var savedComposeText = ""
+    static var savedInReplyText = ""
 }

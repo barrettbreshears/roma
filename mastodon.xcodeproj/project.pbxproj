@@ -44,6 +44,10 @@
 		530976D22179DBD700640D84 /* BiometricAuthenticationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530976CE2179DBD700640D84 /* BiometricAuthenticationConstants.swift */; };
 		530976D32179DBD700640D84 /* BioMetricAuthenticator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530976D02179DBD700640D84 /* BioMetricAuthenticator.swift */; };
 		530976D42179DBD700640D84 /* AuthenticationErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530976D12179DBD700640D84 /* AuthenticationErrors.swift */; };
+		530F5B3621E267CA00A910B3 /* StepCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F5B3221E267CA00A910B3 /* StepCollectionViewFlowLayout.swift */; };
+		530F5B3721E267CA00A910B3 /* FullDateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F5B3321E267CA00A910B3 /* FullDateCollectionViewCell.swift */; };
+		530F5B3821E267CA00A910B3 /* DateTimePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F5B3421E267CA00A910B3 /* DateTimePicker.swift */; };
+		530F5B3921E267CA00A910B3 /* DateCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530F5B3521E267CA00A910B3 /* DateCollectionViewCell.swift */; };
 		531046C4215AC3AB00FCD068 /* ProfileHeaderCellOwn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531046C3215AC3AB00FCD068 /* ProfileHeaderCellOwn.swift */; };
 		531096B9216D05E100E767DF /* FedTimelineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531096B8216D05E100E767DF /* FedTimelineController.swift */; };
 		5313A23D21D5303900F205E6 /* PadSidebarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5313A23C21D5303900F205E6 /* PadSidebarViewController.swift */; };
@@ -82,6 +86,14 @@
 		5314E32A216D1502007F9651 /* waitIndicatorGraphic-16@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314E30A216D1502007F9651 /* waitIndicatorGraphic-16@2x.png */; };
 		5314E32B216D1502007F9651 /* waitIndicatorGraphic-20@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5314E30B216D1502007F9651 /* waitIndicatorGraphic-20@2x.png */; };
 		5315308621B95223007E5C00 /* SearchFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315308521B95223007E5C00 /* SearchFeedCell.swift */; };
+		5315728D21FCC22300328053 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5315728C21FCC22300328053 /* Settings.bundle */; };
+		5315728F21FCC2E300328053 /* SettingsBundleHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315728E21FCC2E300328053 /* SettingsBundleHelper.swift */; };
+		5315ECE021FDE0AE00A3F1A9 /* FollowSuggestionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315ECDF21FDE0AE00A3F1A9 /* FollowSuggestionsViewController.swift */; };
+		5315ECE221FDF4AB00A3F1A9 /* EndorsedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315ECE121FDF4AB00A3F1A9 /* EndorsedViewController.swift */; };
+		5315ECE421FE13CB00A3F1A9 /* ScheduledStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315ECE321FE13CB00A3F1A9 /* ScheduledStatus.swift */; };
+		5315ECE621FE145600A3F1A9 /* StatusPara.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315ECE521FE145600A3F1A9 /* StatusPara.swift */; };
+		5315ECE821FE1A0B00A3F1A9 /* ScheduledStatusesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315ECE721FE1A0B00A3F1A9 /* ScheduledStatusesViewController.swift */; };
+		5315ECEA21FE1B3400A3F1A9 /* ScheduledCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5315ECE921FE1B3400A3F1A9 /* ScheduledCell.swift */; };
 		5316C88E219D94A00003AB97 /* GiphyImageSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5316C87E219D949F0003AB97 /* GiphyImageSet.swift */; };
 		5316C88F219D94A00003AB97 /* GiphyUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5316C87F219D949F0003AB97 /* GiphyUser.swift */; };
 		5316C890219D94A00003AB97 /* GiphyMeta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5316C880219D949F0003AB97 /* GiphyMeta.swift */; };
@@ -677,6 +689,7 @@
 		A9D80EE721B84B3900020ECE /* AddInstanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EE621B84B3900020ECE /* AddInstanceCell.swift */; };
 		A9D80EED21B8F27A00020ECE /* InstanceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EEC21B8F27A00020ECE /* InstanceData.swift */; };
 		A9D80EEF21BB154200020ECE /* AccountExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EEE21BB154200020ECE /* AccountExtension.swift */; };
+		A9F2EC6221EBAD96006AD130 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9F2EC6121EBAD96006AD130 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -784,6 +797,10 @@
 		530976CE2179DBD700640D84 /* BiometricAuthenticationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometricAuthenticationConstants.swift; sourceTree = "<group>"; };
 		530976D02179DBD700640D84 /* BioMetricAuthenticator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BioMetricAuthenticator.swift; sourceTree = "<group>"; };
 		530976D12179DBD700640D84 /* AuthenticationErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationErrors.swift; sourceTree = "<group>"; };
+		530F5B3221E267CA00A910B3 /* StepCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		530F5B3321E267CA00A910B3 /* FullDateCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullDateCollectionViewCell.swift; sourceTree = "<group>"; };
+		530F5B3421E267CA00A910B3 /* DateTimePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateTimePicker.swift; sourceTree = "<group>"; };
+		530F5B3521E267CA00A910B3 /* DateCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DateCollectionViewCell.swift; sourceTree = "<group>"; };
 		531046C3215AC3AB00FCD068 /* ProfileHeaderCellOwn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderCellOwn.swift; sourceTree = "<group>"; };
 		531096B8216D05E100E767DF /* FedTimelineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FedTimelineController.swift; sourceTree = "<group>"; };
 		5313A23C21D5303900F205E6 /* PadSidebarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadSidebarViewController.swift; sourceTree = "<group>"; };
@@ -822,6 +839,14 @@
 		5314E30A216D1502007F9651 /* waitIndicatorGraphic-16@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "waitIndicatorGraphic-16@2x.png"; sourceTree = "<group>"; };
 		5314E30B216D1502007F9651 /* waitIndicatorGraphic-20@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "waitIndicatorGraphic-20@2x.png"; sourceTree = "<group>"; };
 		5315308521B95223007E5C00 /* SearchFeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFeedCell.swift; sourceTree = "<group>"; };
+		5315728C21FCC22300328053 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		5315728E21FCC2E300328053 /* SettingsBundleHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsBundleHelper.swift; sourceTree = "<group>"; };
+		5315ECDF21FDE0AE00A3F1A9 /* FollowSuggestionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowSuggestionsViewController.swift; sourceTree = "<group>"; };
+		5315ECE121FDF4AB00A3F1A9 /* EndorsedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EndorsedViewController.swift; sourceTree = "<group>"; };
+		5315ECE321FE13CB00A3F1A9 /* ScheduledStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledStatus.swift; sourceTree = "<group>"; };
+		5315ECE521FE145600A3F1A9 /* StatusPara.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusPara.swift; sourceTree = "<group>"; };
+		5315ECE721FE1A0B00A3F1A9 /* ScheduledStatusesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledStatusesViewController.swift; sourceTree = "<group>"; };
+		5315ECE921FE1B3400A3F1A9 /* ScheduledCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledCell.swift; sourceTree = "<group>"; };
 		5316C87E219D949F0003AB97 /* GiphyImageSet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyImageSet.swift; sourceTree = "<group>"; };
 		5316C87F219D949F0003AB97 /* GiphyUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyUser.swift; sourceTree = "<group>"; };
 		5316C880219D949F0003AB97 /* GiphyMeta.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GiphyMeta.swift; sourceTree = "<group>"; };
@@ -1461,6 +1486,7 @@
 		A9D80EE621B84B3900020ECE /* AddInstanceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddInstanceCell.swift; sourceTree = "<group>"; };
 		A9D80EEC21B8F27A00020ECE /* InstanceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceData.swift; sourceTree = "<group>"; };
 		A9D80EEE21BB154200020ECE /* AccountExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountExtension.swift; sourceTree = "<group>"; };
+		A9F2EC6121EBAD96006AD130 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		EB34E7270977A0E776889D91 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		FF27AD0E7990D1A32A4F2E25 /* Pods_mastodon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mastodon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -1546,6 +1572,17 @@
 				530976D12179DBD700640D84 /* AuthenticationErrors.swift */,
 			);
 			path = Authentication;
+			sourceTree = "<group>";
+		};
+		530F5B3121E267CA00A910B3 /* DateTime */ = {
+			isa = PBXGroup;
+			children = (
+				530F5B3221E267CA00A910B3 /* StepCollectionViewFlowLayout.swift */,
+				530F5B3321E267CA00A910B3 /* FullDateCollectionViewCell.swift */,
+				530F5B3421E267CA00A910B3 /* DateTimePicker.swift */,
+				530F5B3521E267CA00A910B3 /* DateCollectionViewCell.swift */,
+			);
+			path = DateTime;
 			sourceTree = "<group>";
 		};
 		5314E2E9216D1502007F9651 /* EMTLoadingIndicator */ = {
@@ -2463,9 +2500,12 @@
 		5373C9D6215173EE00676F3D /* mastodon */ = {
 			isa = PBXGroup;
 			children = (
+				A9F2EC6121EBAD96006AD130 /* GoogleService-Info.plist */,
 				5354BA282163F9200094C545 /* mastodon.entitlements */,
 				5373CA5B2152C67F00676F3D /* MastodonKit */,
 				5373C9D7215173EE00676F3D /* AppDelegate.swift */,
+				5315728E21FCC2E300328053 /* SettingsBundleHelper.swift */,
+				5315728C21FCC22300328053 /* Settings.bundle */,
 				5373CA512152357D00676F3D /* Views */,
 				5373CA522152358500676F3D /* Cells */,
 				5373CA502152357200676F3D /* Other */,
@@ -2541,7 +2581,7 @@
 		5373CA502152357200676F3D /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				A968E8852207DABA000EED23 /* text */,
+				530F5B3121E267CA00A910B3 /* DateTime */,
 				5317C79821DA334500746197 /* ScrollableGraph */,
 				530976CC2179DBD700640D84 /* BiometricAuthentication */,
 				531BD60221795D1F00C1509D /* Sentiment */,
@@ -2582,6 +2622,7 @@
 				5373C9F12151956300676F3D /* ThirdViewController.swift */,
 				5373C9F32151957200676F3D /* FourthViewController.swift */,
 				5373CB4721565FFB00676F3D /* DetailViewController.swift */,
+				5315ECE721FE1A0B00A3F1A9 /* ScheduledStatusesViewController.swift */,
 				5373CB492156602900676F3D /* ComposeViewController.swift */,
 				5351B98D2167ADF400002069 /* NewListViewController.swift */,
 				539385852172A782002444FC /* NewProfileViewController.swift */,
@@ -2598,6 +2639,8 @@
 				532057D7215CF4D500ED0C36 /* BlockedViewController.swift */,
 				531BD5FC2178D68400C1509D /* FollowRequestsViewController.swift */,
 				5373CB612159553500676F3D /* FollowersViewController.swift */,
+				5315ECDF21FDE0AE00A3F1A9 /* FollowSuggestionsViewController.swift */,
+				5315ECE121FDF4AB00A3F1A9 /* EndorsedViewController.swift */,
 				535B339A215C0198001A2A7F /* BoostersViewController.swift */,
 				5352D08F215E48DE00901B60 /* ListMembersViewController.swift */,
 				53BC45B9215AC7D30092223F /* SettingsViewController.swift */,
@@ -2611,6 +2654,7 @@
 			children = (
 				5373C9F521519EF800676F3D /* MainFeedCell.swift */,
 				5373CB1C21540F5D00676F3D /* MainFeedCellImage.swift */,
+				5315ECE921FE1B3400A3F1A9 /* ScheduledCell.swift */,
 				5315308521B95223007E5C00 /* SearchFeedCell.swift */,
 				5373CB3B2154E93500676F3D /* NotificationCell.swift */,
 				5373CB3D2154E97500676F3D /* NotificationCellImage.swift */,
@@ -2706,6 +2750,8 @@
 				5373CA7E2152C67F00676F3D /* RequestError.swift */,
 				5373CA7F2152C67F00676F3D /* Results.swift */,
 				5373CA802152C67F00676F3D /* Status.swift */,
+				5315ECE321FE13CB00A3F1A9 /* ScheduledStatus.swift */,
+				5315ECE521FE145600A3F1A9 /* StatusPara.swift */,
 				5373CA812152C67F00676F3D /* Tag.swift */,
 				5373CA822152C67F00676F3D /* Visibility.swift */,
 			);
@@ -2966,6 +3012,7 @@
 				02AD34E9640810FD6DCFE77C /* [CP] Embed Pods Frameworks */,
 				5354BA272163F89E0094C545 /* Embed App Extensions */,
 				536A4FE6216B843A00A3D483 /* Embed Watch Content */,
+				A9F2EC6321EBAF65006AD130 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -3195,6 +3242,7 @@
 				530976AF2179D8D900640D84 /* icon10@2x.png in Resources */,
 				535B33BB215C0EC6001A2A7F /* minimize_24.png in Resources */,
 				530976BD2179D8D900640D84 /* icon13.png in Resources */,
+				5315728D21FCC22300328053 /* Settings.bundle in Resources */,
 				530976C62179D8D900640D84 /* icon15.png in Resources */,
 				5352D0AC215E679300901B60 /* icon3@3x.png in Resources */,
 				530976A82179D8D900640D84 /* icon16@2x.png in Resources */,
@@ -3236,6 +3284,7 @@
 				5352D0A7215E679300901B60 /* icon6@3x.png in Resources */,
 				530976B22179D8D900640D84 /* icon11.png in Resources */,
 				5352D0B7215E679400901B60 /* icon2.png in Resources */,
+				A9F2EC6221EBAD96006AD130 /* GoogleService-Info.plist in Resources */,
 				530976A92179D8D900640D84 /* icon16@3x.png in Resources */,
 				5352D0C8215E74B400901B60 /* icon9@3x.png in Resources */,
 				5352D0B4215E679400901B60 /* icon3@2x.png in Resources */,
@@ -3261,6 +3310,7 @@
 				"${BUILT_PRODUCTS_DIR}/Disk/Disk.framework",
 				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
 				"${BUILT_PRODUCTS_DIR}/FootlessParser/FootlessParser.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/NSTimer-Blocks/NSTimer_Blocks.framework",
 				"${BUILT_PRODUCTS_DIR}/NextLevel/NextLevel.framework",
 				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
@@ -3277,6 +3327,7 @@
 				"${BUILT_PRODUCTS_DIR}/SwiftyGiphy/SwiftyGiphy.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/TinyConstraints/TinyConstraints.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -3284,6 +3335,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Disk.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FootlessParser.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSTimer_Blocks.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NextLevel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
@@ -3300,6 +3352,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyGiphy.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TinyConstraints.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -3341,6 +3394,24 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
+		};
+		A9F2EC6321EBAF65006AD130 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(BUILT_PRODUCTS_DIR)/$(INFOPLIST_PATH)",
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\"${PODS_ROOT}/Fabric/run\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -3646,6 +3717,7 @@
 				5373CABA2152C68000676F3D /* Report.swift in Sources */,
 				5318F56221877F8A00418159 /* PadLogInViewController.swift in Sources */,
 				A9D80EED21B8F27A00020ECE /* InstanceData.swift in Sources */,
+				5315ECE421FE13CB00A3F1A9 /* ScheduledStatus.swift in Sources */,
 				5317C7BD21DA334500746197 /* GraphPointAnimation.swift in Sources */,
 				536A4FB9216B73D600A3D483 /* UIView+SafeAnchors.swift in Sources */,
 				5317C79521DA2E9200746197 /* SideDetailCellImage.swift in Sources */,
@@ -3675,6 +3747,7 @@
 				5320582D215D287700ED0C36 /* DKAssetGroupDetailBaseCell.swift in Sources */,
 				5354BACC216577FD0094C545 /* WCLLoadingView.swift in Sources */,
 				535B33C9215C31E3001A2A7F /* StringTrimExtension.swift in Sources */,
+				5315728F21FCC2E300328053 /* SettingsBundleHelper.swift in Sources */,
 				53205812215D287700ED0C36 /* DKAssetGroup.swift in Sources */,
 				5354BAD9216577FD0094C545 /* CRRefreshProtocol.swift in Sources */,
 				5373CAAE2152C68000676F3D /* Card.swift in Sources */,
@@ -3837,6 +3910,7 @@
 				5373CA9E2152C68000676F3D /* CharacterSet.swift in Sources */,
 				5373CB642159564400676F3D /* FollowersCell.swift in Sources */,
 				5373CB502156826000676F3D /* DetailCellImage.swift in Sources */,
+				530F5B3921E267CA00A910B3 /* DateCollectionViewCell.swift in Sources */,
 				5373CB002152EDB800676F3D /* SwipeCollectionViewCellDelegate.swift in Sources */,
 				535B339B215C0198001A2A7F /* BoostersViewController.swift in Sources */,
 				531E0F96216E2BA2003E8890 /* NVActivityIndicatorAnimationBallScale.swift in Sources */,
@@ -3861,10 +3935,12 @@
 				53205824215D287700ED0C36 /* DKImagePickerControllerDefaultUIDelegate.swift in Sources */,
 				5373C9DA215173EE00676F3D /* ViewController.swift in Sources */,
 				5373CAA72152C68000676F3D /* HTTPMethod.swift in Sources */,
+				5315ECE621FE145600A3F1A9 /* StatusPara.swift in Sources */,
 				53205817215D287700ED0C36 /* FontAwesomeBarButtonItem.swift in Sources */,
 				531BD5FD2178D68400C1509D /* FollowRequestsViewController.swift in Sources */,
 				5373CAAD2152C68000676F3D /* AttachmentType.swift in Sources */,
 				A968E8842207D418000EED23 /* TermsController.swift in Sources */,
+				5315ECEA21FE1B3400A3F1A9 /* ScheduledCell.swift in Sources */,
 				5317C7C121DA334500746197 /* DotPlot.swift in Sources */,
 				531E0F99216E2BA2003E8890 /* NVActivityIndicatorAnimationSemiCircleSpin.swift in Sources */,
 				5373CB1D21540F5E00676F3D /* MainFeedCellImage.swift in Sources */,
@@ -3883,6 +3959,7 @@
 				5373CAD42152C68000676F3D /* Statuses.swift in Sources */,
 				535B33CA215C31E3001A2A7F /* ActiveBuilder.swift in Sources */,
 				5373C9D8215173EE00676F3D /* AppDelegate.swift in Sources */,
+				530F5B3621E267CA00A910B3 /* StepCollectionViewFlowLayout.swift in Sources */,
 				535B33B0215C0EC6001A2A7F /* XPlayerViewController+State.swift in Sources */,
 				5373CAF92152EDB700676F3D /* SwipeActionButton.swift in Sources */,
 				5354BAD1216577FD0094C545 /* FastCircleLayer.swift in Sources */,
@@ -3892,11 +3969,14 @@
 				531E0F9E216E2BA2003E8890 /* NVActivityIndicatorAnimationBallPulse.swift in Sources */,
 				531E0FA4216E2BA2003E8890 /* NVActivityIndicatorAnimationBallScaleMultiple.swift in Sources */,
 				5373CB4E21566E6500676F3D /* DetailCell.swift in Sources */,
+				5315ECE021FDE0AE00A3F1A9 /* FollowSuggestionsViewController.swift in Sources */,
 				5373CAFB2152EDB800676F3D /* SwipeActionTransitioning.swift in Sources */,
 				5317C7B221DA334500746197 /* GradientDrawingLayer.swift in Sources */,
 				536A4FB8216B73D600A3D483 /* BulletinBackgroundView.swift in Sources */,
 				531E0FA0216E2BA2003E8890 /* NVActivityIndicatorAnimationCircleStrokeSpin.swift in Sources */,
+				5315ECE821FE1A0B00A3F1A9 /* ScheduledStatusesViewController.swift in Sources */,
 				5320582F215D287700ED0C36 /* DKAssetGroupListVC.swift in Sources */,
+				5315ECE221FDF4AB00A3F1A9 /* EndorsedViewController.swift in Sources */,
 				5373CAFF2152EDB800676F3D /* SwipeCollectionViewCell.swift in Sources */,
 				5373CB3721541A0300676F3D /* SKPhoto.swift in Sources */,
 				5373CB182152FCF300676F3D /* Alertift.swift in Sources */,
@@ -3912,7 +3992,9 @@
 				53205828215D287700ED0C36 /* DKAssetGroupGridLayout.swift in Sources */,
 				5393859C217393A4002444FC /* DLTagView.swift in Sources */,
 				5373CAF52152EDB700676F3D /* Extensions.swift in Sources */,
+				530F5B3821E267CA00A910B3 /* DateTimePicker.swift in Sources */,
 				5373CAB72152C68000676F3D /* Notification.swift in Sources */,
+				530F5B3721E267CA00A910B3 /* FullDateCollectionViewCell.swift in Sources */,
 				535B33B4215C0EC6001A2A7F /* XPlayer.swift in Sources */,
 				5354BACD216577FD0094C545 /* FastAnimator.swift in Sources */,
 				5320581C215D287700ED0C36 /* FontAwesomeImageView.swift in Sources */,

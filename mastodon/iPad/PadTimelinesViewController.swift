@@ -170,7 +170,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
     @objc func goInstance() {
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: nil))
         let testClient = Client(
-            baseURL: "https://\(StoreStruct.shared.currentInstance.instanceText)",
+            baseURL: "https://\(StoreStruct.instanceText)",
             accessToken: StoreStruct.shared.currentInstance.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in
@@ -486,6 +486,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
             self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellmore")
             self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
             self.tableView.alpha = 1
             self.tableView.delegate = self
@@ -500,6 +501,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
             self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
+            self.tableViewL.register(SettingsCell.self, forCellReuseIdentifier: "cellmore1")
             self.tableViewL.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
             self.tableViewL.alpha = 0
             self.tableViewL.delegate = self
@@ -514,6 +516,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
             self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
+            self.tableViewF.register(SettingsCell.self, forCellReuseIdentifier: "cellmore2")
             self.tableViewF.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
             self.tableViewF.alpha = 0
             self.tableViewF.delegate = self
@@ -543,6 +546,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
             self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellmore")
             self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
             self.tableView.alpha = 1
             self.tableView.delegate = self
@@ -557,6 +561,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
             self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableViewL.register(SettingsCell.self, forCellReuseIdentifier: "cellmore1")
             self.tableViewL.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
             self.tableViewL.alpha = 0
             self.tableViewL.delegate = self
@@ -571,6 +576,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
             self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableViewF.register(SettingsCell.self, forCellReuseIdentifier: "cellmore2")
             self.tableViewF.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - 80)
             self.tableViewF.alpha = 0
             self.tableViewF.delegate = self
@@ -656,9 +662,72 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
     }
     
     
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            
+            if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
+                if self.currentIndex == 0 {
+                    self.tableView.reloadData()
+                } else if self.currentIndex == 1 {
+                    self.tableViewL.reloadData()
+                } else {
+                    self.tableViewF.reloadData()
+                }
+            } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+            } else {
+                
+            }
+        }
+    }
+    
+    @objc func savedComposePresent() {
+        DispatchQueue.main.async {
+            
+            Alertift.actionSheet(title: nil, message: "Oops! Looks like the app was quit while you were in the middle of a great toot. Would you like to get back to composing it?")
+                .backgroundColor(Colours.white)
+                .titleTextColor(Colours.grayDark)
+                .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                .messageTextAlignment(.left)
+                .titleTextAlignment(.left)
+                .action(.default("Resume Composing Toot".localized), image: nil) { (action, ind) in
+                    let controller = ComposeViewController()
+                    controller.inReply = []
+                    controller.inReplyText = StoreStruct.savedInReplyText
+                    controller.filledTextFieldText = StoreStruct.savedComposeText
+                    self.present(controller, animated: true, completion: nil)
+                    StoreStruct.savedComposeText = ""
+                    UserDefaults.standard.set(StoreStruct.savedComposeText, forKey: "composeSaved")
+                    StoreStruct.savedInReplyText = ""
+                    UserDefaults.standard.set(StoreStruct.savedInReplyText, forKey: "savedInReplyText")
+                }
+                .action(.cancel("Dismiss")) { (action, ind) in
+                    StoreStruct.savedComposeText = ""
+                    UserDefaults.standard.set(StoreStruct.savedComposeText, forKey: "composeSaved")
+                    StoreStruct.savedInReplyText = ""
+                    UserDefaults.standard.set(StoreStruct.savedInReplyText, forKey: "savedInReplyText")
+                }
+                .finally { action, index in
+                    if action.style == .cancel {
+                        return
+                    }
+                }
+                .popover(anchorView: self.view)
+                .show(on: self)
+            
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.savedComposePresent), name: NSNotification.Name(rawValue: "savedComposePresent"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goMembers), name: NSNotification.Name(rawValue: "goMembers"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists"), object: nil)
@@ -932,6 +1001,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
             self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellmore")
             self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
             self.tableView.alpha = 1
             self.tableView.delegate = self
@@ -946,6 +1016,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
             self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
+            self.tableViewL.register(SettingsCell.self, forCellReuseIdentifier: "cellmore1")
             self.tableViewL.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
             self.tableViewL.alpha = 0
             self.tableViewL.delegate = self
@@ -960,6 +1031,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
             self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
+            self.tableViewF.register(SettingsCell.self, forCellReuseIdentifier: "cellmore2")
             self.tableViewF.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
             self.tableViewF.alpha = 0
             self.tableViewF.delegate = self
@@ -988,6 +1060,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
             self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+            self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellmore")
             self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
             self.tableView.alpha = 1
             self.tableView.delegate = self
@@ -1002,6 +1075,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
             self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
+            self.tableViewL.register(SettingsCell.self, forCellReuseIdentifier: "cellmore1")
             self.tableViewL.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
             self.tableViewL.alpha = 0
             self.tableViewL.delegate = self
@@ -1016,6 +1090,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
             self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
+            self.tableViewF.register(SettingsCell.self, forCellReuseIdentifier: "cellmore2")
             self.tableViewF.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
             self.tableViewF.alpha = 0
             self.tableViewF.delegate = self
@@ -1109,6 +1184,120 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
 //            }
 //        }
         
+        
+        
+        
+        if StoreStruct.initTimeline == false {
+            StoreStruct.initTimeline = true
+            if (UserDefaults.standard.object(forKey: "inittimeline") == nil) || (UserDefaults.standard.object(forKey: "inittimeline") as! Int == 0) {
+                self.segmentedControl.currentSegment = 0
+                if self.countcount1 == 0 {
+                    self.newUpdatesB1.alpha = 0
+                    self.newUpdatesB2.alpha = 0
+                    self.newUpdatesB3.alpha = 0
+                } else {
+                    self.newUpdatesB1.alpha = 1
+                    self.newUpdatesB2.alpha = 0
+                    self.newUpdatesB3.alpha = 0
+                }
+                
+                self.currentIndex = 0
+                self.tableView.reloadData()
+                self.tableView.alpha = 1
+                self.tableViewL.alpha = 0
+                self.tableViewF.alpha = 0
+                if (UserDefaults.standard.object(forKey: "savedRowHome1") == nil) {} else {
+                    
+                }
+                
+                // stream
+                if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
+                    if self.hStream == false {
+                        self.streamDataHome()
+                        
+                    }
+                }
+            } else if (UserDefaults.standard.object(forKey: "inittimeline") as! Int == 1) {
+                self.segmentedControl.currentSegment = 1
+                if self.countcount2 == 0 {
+                    self.newUpdatesB1.alpha = 0
+                    self.newUpdatesB2.alpha = 0
+                    self.newUpdatesB3.alpha = 0
+                } else {
+                    self.newUpdatesB1.alpha = 0
+                    self.newUpdatesB2.alpha = 1
+                    self.newUpdatesB3.alpha = 0
+                }
+                
+                self.currentIndex = 1
+                self.tableView.alpha = 0
+                self.tableViewL.alpha = 1
+                self.tableViewF.alpha = 0
+                
+                if StoreStruct.statusesLocal.isEmpty {
+                    let request = Timelines.public(local: true, range: .default)
+                    StoreStruct.client.run(request) { (statuses) in
+                        if let stat = (statuses.value) {
+                            StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
+                            DispatchQueue.main.async {
+                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                                self.tableViewL.reloadData()
+                                
+                            }
+                        }
+                    }
+                } else {
+                    //bbbhere
+                    self.tableViewL.reloadData()
+                }
+                
+                // stream
+                if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
+                    if self.lStream == false {
+                        self.streamDataLocal()
+                    }
+                }
+            } else {
+                self.segmentedControl.currentSegment = 2
+                if self.countcount3 == 0 {
+                    self.newUpdatesB1.alpha = 0
+                    self.newUpdatesB2.alpha = 0
+                    self.newUpdatesB3.alpha = 0
+                } else {
+                    self.newUpdatesB1.alpha = 0
+                    self.newUpdatesB2.alpha = 0
+                    self.newUpdatesB3.alpha = 1
+                }
+                
+                self.currentIndex = 2
+                self.tableView.alpha = 0
+                self.tableViewL.alpha = 0
+                self.tableViewF.alpha = 1
+                
+                if StoreStruct.statusesFederated.isEmpty {
+                    let request = Timelines.public(local: false, range: .default)
+                    StoreStruct.client.run(request) { (statuses) in
+                        if let stat = (statuses.value) {
+                            StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
+                            DispatchQueue.main.async {
+                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                                self.tableViewF.reloadData()
+                                
+                            }
+                        }
+                    }
+                } else {
+                    ///bbhere
+                    self.tableViewF.reloadData()
+                }
+                // stream
+                if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
+                    if self.fStream == false {
+                        self.streamDataFed()
+                    }
+                }
+            }
+        }
         
     }
     
@@ -1502,11 +1691,19 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
     }
     
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForSelectedSegmentAtIndex index: Int) -> [UIColor] {
-        return [Colours.tabSelected, Colours.tabSelected]
+        if (UserDefaults.standard.object(forKey: "seghue1") == nil) || (UserDefaults.standard.object(forKey: "seghue1") as! Int == 0) {
+            return [Colours.tabSelected, Colours.tabSelected]
+        } else {
+            return [Colours.grayLight2, Colours.grayLight2]
+        }
     }
     
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForBounce bounce: SJFluidSegmentedControlBounce) -> [UIColor] {
-        return [Colours.tabSelected, Colours.tabSelected]
+        if (UserDefaults.standard.object(forKey: "seghue1") == nil) || (UserDefaults.standard.object(forKey: "seghue1") as! Int == 0) {
+            return [Colours.tabSelected, Colours.tabSelected]
+        } else {
+            return [Colours.grayLight2, Colours.grayLight2]
+        }
     }
     //backh2
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, didChangeFromSegmentAtIndex fromIndex: Int, toSegmentAtIndex toIndex: Int) {
@@ -1656,7 +1853,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             
             
-            if StoreStruct.statusesHome.count == 0 || indexPath.row >= StoreStruct.statusesHome.count {
+            if StoreStruct.statusesHome.count <= 0 || indexPath.row >= StoreStruct.statusesHome.count {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MainFeedCell
                 cell.backgroundColor = Colours.white
                 let bgColorView = UIView()
@@ -1893,7 +2090,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             
             
             
-            if StoreStruct.statusesLocal.count == 0 || indexPath.row >= StoreStruct.statusesLocal.count  {
+            if StoreStruct.statusesLocal.count <= 0 || indexPath.row >= StoreStruct.statusesLocal.count  {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "celll", for: indexPath) as! MainFeedCell
                 cell.backgroundColor = Colours.white
                 let bgColorView = UIView()
@@ -2115,7 +2312,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         } else {
             
             
-            if StoreStruct.statusesFederated.count == 0 || indexPath.row >= StoreStruct.statusesFederated.count  {
+            if StoreStruct.statusesFederated.count <= 0 || indexPath.row >= StoreStruct.statusesFederated.count  {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellf", for: indexPath) as! MainFeedCell
                 cell.backgroundColor = Colours.white
                 let bgColorView = UIView()
@@ -2382,10 +2579,13 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         var sto = StoreStruct.statusesHome
         if self.currentIndex == 0 {
             sto = StoreStruct.statusesHome
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
         } else if self.currentIndex == 1 {
             sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
         } else if self.currentIndex == 2 {
             sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
         }
         
         if sto.count < 1 {} else {
@@ -2713,7 +2913,8 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             return nil
         }
         
-        if StoreStruct.statusesHome[indexPath.row].id == "loadmorehere" {
+        
+        if sto[indexPath.row].id == "loadmorehere" {
             return nil
         }
         
@@ -3581,9 +3782,31 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 StoreStruct.statusesHome = y.first! + stat + y.last!
                             }
                             
+                            let newestC = y.first!.count + stat.count
+                            
                             DispatchQueue.main.async {
-                                //                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
-                                self.tableView.reloadData()
+                                if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
+                                    self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
+                                    self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                    springWithDelay(duration: 0.5, delay: 0, animations: {
+                                        self.newUpdatesB1.alpha = 1
+                                        self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                    })
+                                    self.countcount1 = newestC
+                                    
+                                    DispatchQueue.main.async {
+                                        UIView.setAnimationsEnabled(false)
+                                        self.tableView.reloadData()
+                                        self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                        UIView.setAnimationsEnabled(true)
+                                    }
+                                } else {
+                                    
+                                    DispatchQueue.main.async {
+                                        self.tableView.reloadData()
+                                    }
+                                    
+                                }
                             }
                             
                         }
@@ -3611,10 +3834,31 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 StoreStruct.statusesLocal = y.first! + stat + y.last!
                             }
                             
+                            let newestC = y.first!.count + stat.count
+                            
                             DispatchQueue.main.async {
-                                //                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
-                                self.tableViewL.reloadData()
-                                
+                                if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
+                                    self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
+                                    self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                    springWithDelay(duration: 0.5, delay: 0, animations: {
+                                        self.newUpdatesB1.alpha = 1
+                                        self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                    })
+                                    self.countcount1 = newestC
+                                    
+                                    DispatchQueue.main.async {
+                                        UIView.setAnimationsEnabled(false)
+                                        self.tableViewL.reloadData()
+                                        self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                        UIView.setAnimationsEnabled(true)
+                                    }
+                                } else {
+                                    
+                                    DispatchQueue.main.async {
+                                        self.tableViewL.reloadData()
+                                    }
+                                    
+                                }
                             }
                         }
                     }
@@ -3644,9 +3888,31 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 StoreStruct.statusesFederated = y.first! + stat + y.last!
                             }
                             
+                            let newestC = y.first!.count + stat.count
+                            
                             DispatchQueue.main.async {
-                                //                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
-                                self.tableViewF.reloadData()
+                                if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
+                                    self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
+                                    self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                    springWithDelay(duration: 0.5, delay: 0, animations: {
+                                        self.newUpdatesB1.alpha = 1
+                                        self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                    })
+                                    self.countcount1 = newestC
+                                    
+                                    DispatchQueue.main.async {
+                                        UIView.setAnimationsEnabled(false)
+                                        self.tableViewF.reloadData()
+                                        self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                        UIView.setAnimationsEnabled(true)
+                                    }
+                                } else {
+                                    
+                                    DispatchQueue.main.async {
+                                        self.tableViewF.reloadData()
+                                    }
+                                    
+                                }
                             }
                             
                         }
@@ -3722,7 +3988,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
     @objc func refreshCont() {
         
         if self.currentIndex == 0 {
-            let request = Timelines.home(range: .min(id: StoreStruct.statusesHome.first?.id ?? "", limit: 5000))
+            let request = Timelines.home(range: .since(id: StoreStruct.statusesHome.first?.id ?? "", limit: 5000))
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
@@ -3734,6 +4000,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                             if StoreStruct.statusesHome.contains(st) || stat.count == 1 {
                                 print("no need for load more button here")
                                 StoreStruct.statusesHome = stat + StoreStruct.statusesHome
+//                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             } else {
                                 print("need load more button here")
                                 StoreStruct.gapLastHomeID = stat.last?.id ?? ""
@@ -3741,16 +4008,21 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 z.id = "loadmorehere"
                                 StoreStruct.gapLastHomeStat = z
                                 StoreStruct.statusesHome = stat + StoreStruct.statusesHome
+//                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             }
                         } else {
                             StoreStruct.statusesHome = stat + StoreStruct.statusesHome
+//                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                         }
                         
                         
                         DispatchQueue.main.async {
                             StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             
-                            newestC = StoreStruct.statusesHome.count - newestC
+                            newestC = StoreStruct.statusesHome.count - newestC - 1
+                            if newestC < 0 {
+                                newestC = 0
+                            }
                             
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                 self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
@@ -3787,7 +4059,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                 }
             }
         } else if self.currentIndex == 1 {
-            let request = Timelines.public(local: true, range: .min(id: StoreStruct.statusesLocal.first?.id ?? "", limit: 5000))
+            let request = Timelines.public(local: true, range: .since(id: StoreStruct.statusesLocal.first?.id ?? "", limit: 5000))
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
@@ -3797,6 +4069,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                             if StoreStruct.statusesLocal.contains(st) || stat.count == 1 {
                                 print("no need for load more button here")
                                 StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
+//                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             } else {
                                 print("need load more button here")
                                 StoreStruct.gapLastLocalID = stat.last?.id ?? ""
@@ -3804,15 +4077,20 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 z.id = "loadmorehere"
                                 StoreStruct.gapLastLocalStat = z
                                 StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
+//                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             }
                         } else {
                             StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
+//                            StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                         }
                         
                         DispatchQueue.main.async {
                             StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             
-                            newestC = StoreStruct.statusesLocal.count - newestC
+                            newestC = StoreStruct.statusesLocal.count - newestC - 1
+                            if newestC < 0 {
+                                newestC = 0
+                            }
                             
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                 self.newUpdatesB2.setTitle("\(newestC)  ", for: .normal)
@@ -3851,7 +4129,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                 }
             }
         } else {
-            let request = Timelines.public(local: false, range: .min(id: StoreStruct.statusesFederated.first?.id ?? "", limit: 5000))
+            let request = Timelines.public(local: false, range: .since(id: StoreStruct.statusesFederated.first?.id ?? "", limit: 5000))
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
@@ -3861,6 +4139,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                             if StoreStruct.statusesFederated.contains(st) || stat.count == 1 {
                                 print("no need for load more button here")
                                 StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
+//                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             } else {
                                 print("need load more button here")
                                 StoreStruct.gapLastFedID = stat.last?.id ?? ""
@@ -3869,15 +4148,20 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 StoreStruct.gapLastFedStat = z
                                 print(StoreStruct.gapLastFedID)
                                 StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
+//                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             }
                         } else {
                             StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
+//                            StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                         }
                         
                         DispatchQueue.main.async {
                             StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             
-                            newestC = StoreStruct.statusesFederated.count - newestC
+                            newestC = StoreStruct.statusesFederated.count - newestC - 1
+                            if newestC < 0 {
+                                newestC = 0
+                            }
                             
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                 self.newUpdatesB3.setTitle("\(newestC)  ", for: .normal)

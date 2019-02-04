@@ -9,6 +9,7 @@
 import UIKit
 import OneSignal
 import Disk
+import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -31,6 +32,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //            completionHandler(.failed)
     //        }
     //    }
+    
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        if let tabBarController = window?.rootViewController as? UITabBarController {
+            if let tabBarViewControllers = tabBarController.viewControllers {
+                if let projectsNavigationController = tabBarViewControllers[1] as? UINavigationController {
+                    if projectsNavigationController.visibleViewController is SKPhotoBrowser {
+                        return .all
+                    }
+                }
+            }
+        }
+        return .portrait
+    }
     
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         if userActivity.activityType == "com.vm.roma.confetti" {
@@ -276,6 +290,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        
+        FirebaseApp.configure()
         if UIApplication.shared.isSplitOrSlideOver {
             self.window?.rootViewController = ViewController()
             self.window?.makeKeyAndVisible()
@@ -368,12 +384,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         do {
+            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)use.json", from: .documents, as: Account.self)
             StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
             StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
             StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
             StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
             StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
-            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)use.json", from: .documents, as: Account.self)
             
             StoreStruct.gapLastHomeStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)homestat.json", from: .documents, as: Status.self)
             StoreStruct.gapLastLocalStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)localstat.json", from: .documents, as: Status.self)
@@ -392,6 +408,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+        
+        if StoreStruct.currentPage == 587 {
+            UserDefaults.standard.set(StoreStruct.savedComposeText, forKey: "composeSaved")
+            UserDefaults.standard.set(StoreStruct.savedInReplyText, forKey: "savedInReplyText")
+        }
     }
     
     func applicationDidEnterBackground(_ application: UIApplication) {
@@ -434,6 +455,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         NotificationCenter.default.post(name: Notification.Name(rawValue: "startStream"), object: self)
         
+        
+        if (UserDefaults.standard.object(forKey: "composeSaved") == nil) || (UserDefaults.standard.object(forKey: "composeSaved") as? String == "") {
+            
+        } else {
+            if let x = UserDefaults.standard.object(forKey: "composeSaved") as? String {
+                StoreStruct.savedComposeText = x
+                if let y = UserDefaults.standard.object(forKey: "savedInReplyText") as? String {
+                    StoreStruct.savedInReplyText = y
+                    StoreStruct.savedComposeText = x
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "savedComposePresent"), object: nil)
+                }
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "savedComposePresent"), object: nil)
+            }
+        }
+        
+        SettingsBundleHelper.checkAndExecuteSettings()
+        SettingsBundleHelper.setVersionAndBuildNumber()
         
         if self.oneTime == false {
             if (UserDefaults.standard.object(forKey: "biometrics") == nil) || (UserDefaults.standard.object(forKey: "biometrics") as! Int == 0) {} else {
@@ -540,6 +578,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func reloadApplication() {
+        
+        
+        do {
+            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)use.json", from: .documents, as: Account.self)
+            StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
+            StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
+            StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
+            StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
+            StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
+            
+            StoreStruct.gapLastHomeStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)homestat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastLocalStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)localstat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastFedStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fedstat.json", from: .documents, as: Status.self)
+        } catch {
+            print("Couldn't load")
+        }
         
         if UIApplication.shared.isSplitOrSlideOver {
             self.window?.rootViewController = ViewController()

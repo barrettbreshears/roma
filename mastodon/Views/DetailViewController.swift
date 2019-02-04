@@ -132,6 +132,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         default:
             print("nothing")
         }
+        
+        
+        self.refDetailCount()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -144,6 +147,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         super.didReceiveMemoryWarning()
     }
     
+    
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
+                self.tableView.reloadData()
+                
+            } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+            } else {
+                
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -1313,6 +1335,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
     }
     
+    func refDetailCount() {
+        let request = Statuses.status(id: self.mainStatus[0].id)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                DispatchQueue.main.async {
+                    if stat.reblog?.mediaAttachments.isEmpty ?? stat.mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
+                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! DetailCell
+                        cell.configure(stat)
+                        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                    } else {
+                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! DetailCellImage
+                        cell.configure(stat)
+                        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                    }
+                }
+            }
+        }
+    }
+    
     @objc func didTouchLike(sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
         let impact = UIImpactFeedbackGenerator()
@@ -1344,6 +1385,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             StoreStruct.client.run(request2) { (statuses) in
                 print(statuses.value)
             }
+            
+            self.refDetailCount()
         } else {
             if self.mainStatus[0].visibility == .direct {
                 let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as! ActionButtonCell2
@@ -1375,6 +1418,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
                 print(statuses.value)
             }
+            
+            self.refDetailCount()
         }
         
     }
@@ -1404,6 +1449,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             StoreStruct.client.run(request2) { (statuses) in
                 print(statuses.value)
             }
+            
+            self.refDetailCount()
         } else {
             let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as! ActionButtonCell
             ce.boostButton.setImage(UIImage(named: "boost"), for: .normal)
@@ -1430,6 +1477,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
                 print(statuses.value)
             }
+            
+            self.refDetailCount()
         }
         
     }
@@ -2059,6 +2108,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         
         var sto = self.allReplies
+        StoreStruct.newIDtoGoTo = sto[sender.tag].id
         let indexPath = IndexPath(row: sender.tag, section: 3)
         
         
