@@ -204,7 +204,6 @@
 		5320582F215D287700ED0C36 /* DKAssetGroupListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320580B215D287600ED0C36 /* DKAssetGroupListVC.swift */; };
 		53205831215D317900ED0C36 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53205830215D317800ED0C36 /* CameraViewController.swift */; };
 		5322D7DD2167659900B952F5 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5322D7DC2167659900B952F5 /* NotificationService.swift */; };
-		532429AE21923130002EEEAA /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 532429AD21923130002EEEAA /* StoreKit.framework */; };
 		532533BD2185194100A8A65B /* PadMentionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532533BC2185194100A8A65B /* PadMentionsViewController.swift */; };
 		5329F3842174B21F00C4A23C /* NewInstanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5329F3832174B21F00C4A23C /* NewInstanceViewController.swift */; };
 		5329F3862174B31400C4A23C /* InstanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5329F3852174B31400C4A23C /* InstanceViewController.swift */; };
@@ -671,6 +670,8 @@
 		A91701B721CAF09F0005A14C /* PadActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91701B421CAF09F0005A14C /* PadActivityViewController.swift */; };
 		A91701B821CAF09F0005A14C /* PadLocalTimelinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91701B521CAF09F0005A14C /* PadLocalTimelinesViewController.swift */; };
 		A91701B921CAF09F0005A14C /* PadFedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91701B621CAF09F0005A14C /* PadFedViewController.swift */; };
+		A968E8842207D418000EED23 /* TermsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A968E8832207D418000EED23 /* TermsController.swift */; };
+		A968E8872207DACE000EED23 /* terms.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A968E8862207DACE000EED23 /* terms.rtf */; };
 		A973AF2421D432AA009D7D21 /* ProCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7806850821CC222F00072C41 /* ProCells.swift */; };
 		A973AF2521D432AE009D7D21 /* CollectionProCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7806850A21CC227100072C41 /* CollectionProCells.swift */; };
 		A9D80EE721B84B3900020ECE /* AddInstanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EE621B84B3900020ECE /* AddInstanceCell.swift */; };
@@ -948,7 +949,6 @@
 		5322D7DA2167659900B952F5 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		5322D7DC2167659900B952F5 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		5322D7DE2167659900B952F5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		532429AD21923130002EEEAA /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		532533BC2185194100A8A65B /* PadMentionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadMentionsViewController.swift; sourceTree = "<group>"; };
 		5329F3832174B21F00C4A23C /* NewInstanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewInstanceViewController.swift; sourceTree = "<group>"; };
 		5329F3852174B31400C4A23C /* InstanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceViewController.swift; sourceTree = "<group>"; };
@@ -1456,6 +1456,8 @@
 		A91701B421CAF09F0005A14C /* PadActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PadActivityViewController.swift; sourceTree = "<group>"; };
 		A91701B521CAF09F0005A14C /* PadLocalTimelinesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PadLocalTimelinesViewController.swift; sourceTree = "<group>"; };
 		A91701B621CAF09F0005A14C /* PadFedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PadFedViewController.swift; sourceTree = "<group>"; };
+		A968E8832207D418000EED23 /* TermsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsController.swift; sourceTree = "<group>"; };
+		A968E8862207DACE000EED23 /* terms.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = terms.rtf; sourceTree = "<group>"; };
 		A9D80EE621B84B3900020ECE /* AddInstanceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddInstanceCell.swift; sourceTree = "<group>"; };
 		A9D80EEC21B8F27A00020ECE /* InstanceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceData.swift; sourceTree = "<group>"; };
 		A9D80EEE21BB154200020ECE /* AccountExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountExtension.swift; sourceTree = "<group>"; };
@@ -1498,7 +1500,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				532429AE21923130002EEEAA /* StoreKit.framework in Frameworks */,
 				536A4F9C216B60AD00A3D483 /* Intents.framework in Frameworks */,
 				2D83B0540BC7A32FFB4FB91C /* Pods_mastodon.framework in Frameworks */,
 			);
@@ -2540,6 +2541,7 @@
 		5373CA502152357200676F3D /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				A968E8852207DABA000EED23 /* text */,
 				5317C79821DA334500746197 /* ScrollableGraph */,
 				530976CC2179DBD700640D84 /* BiometricAuthentication */,
 				531BD60221795D1F00C1509D /* Sentiment */,
@@ -2599,6 +2601,7 @@
 				535B339A215C0198001A2A7F /* BoostersViewController.swift */,
 				5352D08F215E48DE00901B60 /* ListMembersViewController.swift */,
 				53BC45B9215AC7D30092223F /* SettingsViewController.swift */,
+				A968E8832207D418000EED23 /* TermsController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2819,13 +2822,20 @@
 		7138629AB3761F8644F6E477 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				532429AD21923130002EEEAA /* StoreKit.framework */,
 				536A4F9B216B60AD00A3D483 /* Intents.framework */,
 				FF27AD0E7990D1A32A4F2E25 /* Pods_mastodon.framework */,
 				5354BAF221668D5A0094C545 /* NotificationCenter.framework */,
 				225E59B831453EAA30848ED9 /* Pods_OneSignalNotificationServiceExtension.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A968E8852207DABA000EED23 /* text */ = {
+			isa = PBXGroup;
+			children = (
+				A968E8862207DACE000EED23 /* terms.rtf */,
+			);
+			path = text;
 			sourceTree = "<group>";
 		};
 		C27DCB277D141E1273E766A3 /* Pods */ = {
@@ -3027,13 +3037,13 @@
 								enabled = 1;
 							};
 							com.apple.InAppPurchase = {
-								enabled = 1;
+								enabled = 0;
 							};
 							com.apple.Push = {
 								enabled = 1;
 							};
 							com.apple.Siri = {
-								enabled = 1;
+								enabled = 0;
 							};
 						};
 					};
@@ -3158,6 +3168,7 @@
 			files = (
 				5352D0AE215E679300901B60 /* icon6@2x.png in Resources */,
 				530976BC2179D8D900640D84 /* icon13@2x.png in Resources */,
+				A968E8872207DACE000EED23 /* terms.rtf in Resources */,
 				535B33B7215C0EC6001A2A7F /* x_24.png in Resources */,
 				535B33BC215C0EC6001A2A7F /* play_24.png in Resources */,
 				5373C9E2215173F000676F3D /* LaunchScreen.storyboard in Resources */,
@@ -3853,6 +3864,7 @@
 				53205817215D287700ED0C36 /* FontAwesomeBarButtonItem.swift in Sources */,
 				531BD5FD2178D68400C1509D /* FollowRequestsViewController.swift in Sources */,
 				5373CAAD2152C68000676F3D /* AttachmentType.swift in Sources */,
+				A968E8842207D418000EED23 /* TermsController.swift in Sources */,
 				5317C7C121DA334500746197 /* DotPlot.swift in Sources */,
 				531E0F99216E2BA2003E8890 /* NVActivityIndicatorAnimationSemiCircleSpin.swift in Sources */,
 				5373CB1D21540F5E00676F3D /* MainFeedCellImage.swift in Sources */,

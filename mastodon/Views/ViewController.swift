@@ -72,6 +72,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     var loginLogo = UIImageView()
     var loginLabel = UILabel()
     var textField = PaddedTextField()
+    var termsButton = UIButton()
     var safariVC: SFSafariViewController?
     
     var searcherView = UIView()
@@ -2060,6 +2061,23 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.textField.attributedPlaceholder = NSAttributedString(string: "mastodon.technology",
                                                                   attributes: [NSAttributedString.Key.foregroundColor: Colours.tabSelected])
         self.view.addSubview(self.textField)
+        
+        self.termsButton.frame = CGRect(x: 40, y: textField.frame.origin.y + 200, width: self.view.bounds.width - 80, height: 90)
+        self.termsButton.backgroundColor = UIColor.black.withAlphaComponent(0.08)
+        self.termsButton.layer.cornerRadius = 10
+        self.termsButton.tintColor = UIColor.white
+        self.termsButton.titleLabel?.numberOfLines = 0
+        self.termsButton.titleLabel?.lineBreakMode = .byWordWrapping
+        self.termsButton.setTitle("By using Roma you agree to our Terms of Service. Tap to review them.", for: .normal)
+        self.termsButton.addTarget(self, action: #selector(self.showTerms), for: .touchUpInside)
+        self.view.addSubview(self.termsButton)
+        
+    }
+    
+    @objc func showTerms(){
+        let termsController = TermsController()
+        let navigationController = UINavigationController(rootViewController: termsController)
+        self.present(navigationController, animated: true, completion: nil)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
