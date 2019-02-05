@@ -130,6 +130,24 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
         super.didReceiveMemoryWarning()
     }
     
+    
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
+            self.tableView.reloadData()
+            
+        } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+        } else {
+            
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -250,7 +268,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
         title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
-        title.text = StoreStruct.shared.currentInstance.instanceText.lowercased()
+        title.text = StoreStruct.instanceText.lowercased()
         title.textColor = Colours.grayDark2
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         vw.addSubview(title)

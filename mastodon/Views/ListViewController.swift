@@ -128,6 +128,24 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         super.didReceiveMemoryWarning()
     }
     
+    
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
+            self.tableView.reloadData()
+            
+        } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+        } else {
+            
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -504,10 +522,13 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         var sto = StoreStruct.currentList
         if self.currentIndex == 0 {
             sto = StoreStruct.currentList
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
         } else if self.currentIndex == 1 {
             sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
         } else if self.currentIndex == 2 {
             sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
         }
         
         

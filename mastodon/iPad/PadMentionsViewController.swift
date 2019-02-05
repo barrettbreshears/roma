@@ -183,7 +183,7 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
     @objc func goInstance() {
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: 5000))
         let testClient = Client(
-            baseURL: "https://\(StoreStruct.shared.currentInstance.instanceText)",
+            baseURL: "https://\(StoreStruct.instanceText)",
             accessToken: StoreStruct.shared.currentInstance.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in
@@ -465,6 +465,30 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                 controller.mainStatus.append(stat)
                 self.navigationController?.pushViewController(controller, animated: true)
                 }
+            }
+        }
+    }
+    
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            
+            
+            if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
+                if self.currentIndex == 0 {
+                    self.tableView2.reloadData()
+                } else {
+                    self.tableView.reloadData()
+                }
+            } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+            } else {
+                
             }
         }
     }
@@ -1764,8 +1788,10 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
         var sto = StoreStruct.notifications
         if self.currentIndex == 0 {
             sto = StoreStruct.notifications
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
         } else if self.currentIndex == 1 {
             sto = StoreStruct.notificationsMentions
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
         }
         
         

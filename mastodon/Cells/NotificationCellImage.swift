@@ -219,7 +219,7 @@ class NotificationCellImage: SwipeTableViewCell {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-105-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-11-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-54-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
         } else {
             
             contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-110-[type(40)]-4-[image(40)]-13-[name]-(>=5)-[date]-120-|", options: [], metrics: nil, views: viewsDict))
@@ -271,7 +271,7 @@ class NotificationCellImage: SwipeTableViewCell {
             contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
             
             contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-11-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-54-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
         
         }
     }
@@ -404,8 +404,29 @@ class NotificationCellImage: SwipeTableViewCell {
                 }
             }
             self.toot.attributedText = attributedString
+            self.reloadInputViews()
         }
         
+        
+        
+        
+        if status.account.emojis.isEmpty {
+            userName.text = status.account.displayName.stripHTML()
+        } else {
+            let attributedString = NSMutableAttributedString(string: status.account.displayName.stripHTML())
+            for y in status.account.emojis {
+                let textAttachment = NSTextAttachment()
+                textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
+                textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.userName.font.lineHeight), height: Int(self.userName.font.lineHeight))
+                let attrStringWithImage = NSAttributedString(attachment: textAttachment)
+                while attributedString.mutableString.contains(":\(y.shortcode):") {
+                    let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
+                    attributedString.replaceCharacters(in: range, with: attrStringWithImage)
+                }
+            }
+            self.userName.attributedText = attributedString
+            self.reloadInputViews()
+        }
         
         
         
@@ -435,7 +456,7 @@ class NotificationCellImage: SwipeTableViewCell {
         mainImageView.imageView?.contentMode = .scaleAspectFill
         self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
         mainImageView.pin_updateWithProgress = true
-        mainImageView.pin_setImage(from: URL(string: "\(status.status?.mediaAttachments[0].url ?? "")"))
+        mainImageView.pin_setImage(from: URL(string: "\(status.status?.mediaAttachments[0].previewURL ?? "")"))
         mainImageView.layer.masksToBounds = true
         mainImageView.layer.borderColor = UIColor.black.cgColor
         if (UserDefaults.standard.object(forKey: "imCorner") == nil || UserDefaults.standard.object(forKey: "imCorner") as! Int == 0) {

@@ -31,6 +31,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     var countcount2 = 0
     var countcount5 = 0
     
+    var settingsButton = UIButton(type: .custom)
     var blurEffectViewMain = UIView()
     var blurEffect0 = UIBlurEffect()
     var blurEffectView0 = UIVisualEffectView()
@@ -62,7 +63,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     if StoreStruct.notifications[indexPath.row].type == .follow {
                         let controller = ThirdViewController()
                         
-                        if StoreStruct.notifications[indexPath.row].account.username == StoreStruct.currentUser.username {} else {
+                        if StoreStruct.notifications[indexPath.row].account.username == StoreStruct.currentUser?.username {} else {
                             controller.fromOtherUser = true
                         }
                         controller.userIDtoUse = StoreStruct.notifications[indexPath.row].account.id
@@ -216,7 +217,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     @objc func goInstance() {
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: 5000))
         let testClient = Client(
-            baseURL: "https://\(StoreStruct.shared.currentInstance.instanceText)",
+            baseURL: "https://\(StoreStruct.instanceText)",
             accessToken: StoreStruct.shared.currentInstance.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in
@@ -451,6 +452,21 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         if (UserDefaults.standard.object(forKey: "biometricsnot") == nil) || (UserDefaults.standard.object(forKey: "biometricsnot") as! Int == 0) {} else {
             self.biometricAuthenticationClicked(self)
         }
+        
+//        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
+//            settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 32, height: 32)))
+//            settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+//            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+//            settingsButton.layer.cornerRadius = 0
+//            settingsButton.layer.masksToBounds = true
+//        } else {
+//            settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 0, y: 0, width: 20, height: 20)))
+//            settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+//            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
+//            settingsButton.imageView?.layer.cornerRadius = 10
+//            settingsButton.imageView?.contentMode = .scaleAspectFill
+//            settingsButton.layer.masksToBounds = true
+//        }
     }
     
     
@@ -536,6 +552,31 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         }
     }
     
+    override var canBecomeFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            
+            if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
+                if self.currentIndex == 0 {
+                    self.tableView2.reloadData()
+                } else if self.currentIndex == 5 {
+                    self.tableView3.reloadData()
+                } else {
+                    self.tableView.reloadData()
+                }
+            } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+            } else {
+                
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -555,16 +596,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         
         self.view.backgroundColor = Colours.white
         
-        
-        var settingsButton = MNGExpandedTouchAreaButton()
-        settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 32, height: 32)))
-        settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
-        settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        settingsButton.adjustsImageWhenHighlighted = false
-        settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
-        
-        let done = UIBarButtonItem.init(customView: settingsButton)
-        self.navigationItem.setLeftBarButton(done, animated: false)
         
         
         
@@ -907,6 +938,31 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             newSize = offset + 15
         }
         
+        
+        
+        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
+            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 32, height: 32)
+            settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+            settingsButton.imageView?.layer.cornerRadius = 0
+            settingsButton.imageView?.contentMode = .scaleAspectFill
+            settingsButton.layer.masksToBounds = true
+        } else {
+            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
+            if StoreStruct.currentUser != nil {
+                settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            }
+            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            settingsButton.imageView?.layer.cornerRadius = 18
+            settingsButton.imageView?.contentMode = .scaleAspectFill
+            settingsButton.layer.masksToBounds = true
+        }
+        settingsButton.adjustsImageWhenHighlighted = false
+        settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
+        self.navigationController?.view.addSubview(settingsButton)
+        
+        
+        
         self.newUpdatesB1.frame = CGRect(x: CGFloat(self.view.bounds.width - 42), y: CGFloat(newSize), width: CGFloat(56), height: CGFloat(30))
         self.newUpdatesB1.backgroundColor = Colours.grayLight19
         self.newUpdatesB1.layer.cornerRadius = 10
@@ -946,12 +1002,12 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             
         } else {
             
-            self.segmentedControl.currentSegment = 1
+            self.segmentedControl.currentSegment = 2
             
             self.currentIndex = 0
-            //self.tableView2.reloadData()
             self.tableView.alpha = 0
             self.tableView2.alpha = 1
+            self.tableView3.alpha = 0
             
             if StoreStruct.notifications.isEmpty {
                 let request = Notifications.all(range: .default)
@@ -1299,6 +1355,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         } else {
             UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowMent")
         }
+        
+        self.settingsButton.removeFromSuperview()
     }
     
     func numberOfSegmentsInSegmentedControl(_ segmentedControl: SJFluidSegmentedControl) -> Int {
@@ -1316,11 +1374,19 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     }
     
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForSelectedSegmentAtIndex index: Int) -> [UIColor] {
-        return [Colours.tabSelected, Colours.tabSelected]
+        if (UserDefaults.standard.object(forKey: "seghue1") == nil) || (UserDefaults.standard.object(forKey: "seghue1") as! Int == 0) {
+            return [Colours.tabSelected, Colours.tabSelected]
+        } else {
+            return [Colours.grayLight2, Colours.grayLight2]
+        }
     }
     
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForBounce bounce: SJFluidSegmentedControlBounce) -> [UIColor] {
-        return [Colours.tabSelected, Colours.tabSelected]
+        if (UserDefaults.standard.object(forKey: "seghue1") == nil) || (UserDefaults.standard.object(forKey: "seghue1") as! Int == 0) {
+            return [Colours.tabSelected, Colours.tabSelected]
+        } else {
+            return [Colours.grayLight2, Colours.grayLight2]
+        }
     }
     
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, didChangeFromSegmentAtIndex fromIndex: Int, toSegmentAtIndex toIndex: Int) {
@@ -1903,7 +1969,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 } else {
                     
                     
-                    if indexPath.row == StoreStruct.notifications.count - 14 {
+                    if indexPath.row == StoreStruct.notifications.count - 14 || indexPath.row == StoreStruct.notifications.count {
                         self.fetchMoreNotifications()
                     }
                     
@@ -2548,13 +2614,20 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             selection.selectionChanged()
         }
         
+        var theTable = self.tableView
         var sto = StoreStruct.notifications
         if self.currentIndex == 0 {
             sto = StoreStruct.notifications
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView2
         } else if self.currentIndex == 5 {
             sto = StoreStruct.notificationsDirect
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView3
         } else if self.currentIndex == 1 {
             sto = StoreStruct.notificationsMentions
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView
         }
         
         
@@ -2581,7 +2654,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             }
             
             if self.currentIndex == 1 {
-            let cell = tableView.cellForRow(at: indexPath) as! NotificationCellImage
+            let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
             var images = [SKPhoto]()
                 var coun = 0
             for y in sto[indexPath.row].status!.mediaAttachments {
@@ -2617,39 +2690,76 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             }
             } else {
                 
-                let cell = tableView2.cellForRow(at: indexPath) as! NotificationCellImage
-                var images = [SKPhoto]()
-                var coun = 0
-                for y in sto[indexPath.row].status!.mediaAttachments {
-                    if coun == 0 {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
-                        photo.shouldCachePhotoURLImage = true
-                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                if self.currentIndex == 5 {
+                    let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                    var images = [SKPhoto]()
+                    var coun = 0
+                    for y in sto[indexPath.row].status!.mediaAttachments {
+                        if coun == 0 {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                            } else {
+                                photo.caption = y.description ?? ""
+                            }
+                            images.append(photo)
                         } else {
-                            photo.caption = y.description ?? ""
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                            } else {
+                                photo.caption = y.description ?? ""
+                            }
+                            images.append(photo)
                         }
-                        images.append(photo)
-                    } else {
-                    let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
-                    photo.shouldCachePhotoURLImage = true
-                    if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                        photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                    } else {
-                        photo.caption = y.description ?? ""
+                        coun += 1
                     }
-                    images.append(photo)
+                    let originImage = sender.currentImage
+                    if originImage != nil {
+                        let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
+                        browser.displayToolbar = true
+                        browser.displayAction = true
+                        browser.delegate = self
+                        browser.initializePageIndex(0)
+                        present(browser, animated: true, completion: nil)
                     }
-                    coun += 1
-                }
-                let originImage = sender.currentImage
-                if originImage != nil {
-                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
-                    browser.delegate = self
-                    browser.initializePageIndex(0)
-                    present(browser, animated: true, completion: nil)
+                } else {
+                    let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
+                    var images = [SKPhoto]()
+                    var coun = 0
+                    for y in sto[indexPath.row].status!.mediaAttachments {
+                        if coun == 0 {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                            } else {
+                                photo.caption = y.description ?? ""
+                            }
+                            images.append(photo)
+                        } else {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                            } else {
+                                photo.caption = y.description ?? ""
+                            }
+                            images.append(photo)
+                        }
+                        coun += 1
+                    }
+                    let originImage = sender.currentImage
+                    if originImage != nil {
+                        let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
+                        browser.displayToolbar = true
+                        browser.displayAction = true
+                        browser.delegate = self
+                        browser.initializePageIndex(0)
+                        present(browser, animated: true, completion: nil)
+                    }
                 }
             }
             

@@ -195,7 +195,7 @@ class MainFeedCellImage: SwipeTableViewCell {
             ]
         
         
-        if UIApplication.shared.isSplitOrSlideOver || UIDevice.current.userInterfaceIdiom == .phone {
+//        if UIApplication.shared.isSplitOrSlideOver || UIDevice.current.userInterfaceIdiom == .phone {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[name]-(>=5)-[date]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[image2(26)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[artist]-(>=5)-[more(16)]-20-|", options: [], metrics: nil, views: viewsDict))
@@ -219,42 +219,42 @@ class MainFeedCellImage: SwipeTableViewCell {
             }
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-71-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-11-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-54-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
-        } else {
-            
-            
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-120-[image(40)]-13-[name]-(>=5)-[date]-120-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-140-[image2(26)]-(>=120)-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-120-[image(40)]-13-[artist]-(>=5)-[more(16)]-120-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-120-[image(40)]-13-[episodes]-120-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-173-[mainImage]-120-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-183-[mainImageBG]-130-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[date]-2-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-32-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-            
-            if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(500)]-23-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(500)]-23-|", options: [], metrics: nil, views: viewsDict))
-            } else {
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(500)]-23-[rep1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(500)]-25-[rep1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(500)]-25-[like1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(500)]-25-[boost1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(500)]-25-[more1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-173-[rep1(20)]-24-[like1(20)]-24-[boost1(14)]-24-[more1(20)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
-            }
-            
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-171-[warning]-117-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-11-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
-            
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
-            
-        }
+//        } else {
+//
+//
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-120-[image(40)]-13-[name]-(>=5)-[date]-120-|", options: [], metrics: nil, views: viewsDict))
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-140-[image2(26)]-(>=120)-|", options: [], metrics: nil, views: viewsDict))
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-120-[image(40)]-13-[artist]-(>=5)-[more(16)]-120-|", options: [], metrics: nil, views: viewsDict))
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-120-[image(40)]-13-[episodes]-120-|", options: [], metrics: nil, views: viewsDict))
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-173-[mainImage]-120-|", options: [], metrics: nil, views: viewsDict))
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-183-[mainImageBG]-130-|", options: [], metrics: nil, views: viewsDict))
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[date]-2-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-32-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+//
+//            if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(500)]-23-|", options: [], metrics: nil, views: viewsDict))
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(500)]-23-|", options: [], metrics: nil, views: viewsDict))
+//            } else {
+//                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(500)]-23-[rep1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
+//                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(500)]-25-[rep1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
+//                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(500)]-25-[like1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
+//                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(500)]-25-[boost1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
+//                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(500)]-25-[more1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
+//                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-173-[rep1(20)]-24-[like1(20)]-24-[boost1(14)]-24-[more1(20)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+//            }
+//
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-171-[warning]-117-|", options: [], metrics: nil, views: viewsDict))
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-11-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
+//
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+//
+//        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -303,8 +303,8 @@ class MainFeedCellImage: SwipeTableViewCell {
             
             
             
-            
-            if status.emojis.isEmpty {
+          
+            if status.reblog!.emojis.isEmpty {
                 toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
             } else {
                 let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted")
@@ -320,6 +320,28 @@ class MainFeedCellImage: SwipeTableViewCell {
                     }
                 }
                 self.toot.attributedText = attributedString
+                self.reloadInputViews()
+            }
+            
+            
+            
+            
+            if status.reblog?.account.emojis.isEmpty ?? true {
+                userName.text = status.reblog?.account.displayName.stripHTML()
+            } else {
+                let attributedString = NSMutableAttributedString(string: status.reblog?.account.displayName.stripHTML() ?? "")
+                for y in status.reblog?.account.emojis ?? [] {
+                    let textAttachment = NSTextAttachment()
+                    textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
+                    textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.userName.font.lineHeight), height: Int(self.userName.font.lineHeight))
+                    let attrStringWithImage = NSAttributedString(attachment: textAttachment)
+                    while attributedString.mutableString.contains(":\(y.shortcode):") {
+                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
+                        attributedString.replaceCharacters(in: range, with: attrStringWithImage)
+                    }
+                }
+                self.userName.attributedText = attributedString
+                self.reloadInputViews()
             }
             
             
@@ -359,8 +381,28 @@ class MainFeedCellImage: SwipeTableViewCell {
                     }
                 }
                 self.toot.attributedText = attributedString
+                self.reloadInputViews()
             }
             
+            
+            
+            if status.account.emojis.isEmpty {
+                userName.text = status.account.displayName.stripHTML()
+            } else {
+                let attributedString = NSMutableAttributedString(string: status.account.displayName.stripHTML())
+                for y in status.account.emojis {
+                    let textAttachment = NSTextAttachment()
+                    textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
+                    textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.userName.font.lineHeight), height: Int(self.userName.font.lineHeight))
+                    let attrStringWithImage = NSAttributedString(attachment: textAttachment)
+                    while attributedString.mutableString.contains(":\(y.shortcode):") {
+                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
+                        attributedString.replaceCharacters(in: range, with: attrStringWithImage)
+                    }
+                }
+                self.userName.attributedText = attributedString
+                self.reloadInputViews()
+            }
             
             
             profileImageView2.pin_setPlaceholder(with: UIImage(named: "logo2345"))
@@ -406,18 +448,7 @@ class MainFeedCellImage: SwipeTableViewCell {
         mainImageView.clipsToBounds = true
         self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
         mainImageView.pin_updateWithProgress = true
-        
-        
-        var statusAttachment:Attachment?
-        if status.mediaAttachments.count > 0 {
-            statusAttachment = status.mediaAttachments[0]
-        }
-        
-        if status.reblog?.mediaAttachments[0].type == .video || statusAttachment?.type == .video {
-            mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].previewURL ?? status.mediaAttachments[0].previewURL)"))
-        } else {
-            mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].url ?? status.mediaAttachments[0].url)"))
-        }
+        mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].previewURL ?? status.mediaAttachments[0].previewURL)"))
         mainImageView.layer.masksToBounds = true
         mainImageView.layer.borderColor = UIColor.black.cgColor
         if (UserDefaults.standard.object(forKey: "imCorner") == nil || UserDefaults.standard.object(forKey: "imCorner") as! Int == 0) {

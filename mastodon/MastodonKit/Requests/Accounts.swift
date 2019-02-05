@@ -54,21 +54,21 @@ public struct Accounts {
             Parameter(name: "locked", value: lockText)
         ]
 
-        let method = HTTPMethod.patch(.parameters(parameters))
-        return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
+//        let method = HTTPMethod.patch(.parameters(parameters))
+//        return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
         
-//        if avatar == nil && header == nil {
-//            let method = HTTPMethod.patch(.parameters(parameters))
-//            return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
-//        } else {
-//            if avatar == nil {
-//                let method = HTTPMethod.patch(.media(header))
-//                return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
-//            } else {
-//                let method = HTTPMethod.patch(.media(avatar))
-//                return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
-//            }
-//        }
+        if avatar == nil && header == nil {
+            let method = HTTPMethod.patch(.parameters(parameters))
+            return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
+        } else {
+            if avatar == nil {
+                let method = HTTPMethod.patch(.other(parameters))
+                return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
+            } else {
+                let method = HTTPMethod.patch(.other(parameters))
+                return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
+            }
+        }
     }
 
     /// Gets an account's followers.
@@ -96,6 +96,38 @@ public struct Accounts {
 
         return Request<[Account]>(path: "/api/v1/accounts/\(id)/following", method: method)
     }
+    
+    /// Follow suggestions.
+    ///
+    /// - Returns: Request for `[Account]`.
+    public static func followSuggestions() -> Request<[Account]> {
+        return Request<[Account]>(path: "/api/v1/suggestions", method: .get(.empty))
+    }
+    
+    /// Endorse an account.
+    ///
+    /// - Parameters:
+    ///   - id: The account id
+    /// - Returns: Request for `Relationship`.
+    public static func endorse(id: String) -> Request<Relationship> {
+        return Request<Relationship>(path: "/api/v1/accounts/\(id)/pin", method: .post(.empty))
+    }
+    
+    /// Remove endorsement from an account.
+    ///
+    /// - Parameters:
+    ///   - id: The account id
+    /// - Returns: Request for `Relationship`.
+    public static func endorseRemove(id: String) -> Request<Relationship> {
+        return Request<Relationship>(path: "/api/v1/accounts/\(id)/unpin", method: .post(.empty))
+    }
+    
+    /// Get endorsements.
+    ///
+    /// - Returns: Request for `[Account]`.
+    public static func allEndorsements() -> Request<[Account]> {
+        return Request<[Account]>(path: "/api/v1/endorsements", method: .get(.empty))
+    }
 
     /// Gets an account's statuses.
     ///
@@ -104,18 +136,21 @@ public struct Accounts {
     ///   - mediaOnly: Only return statuses that have media attachments.
     ///   - pinnedOnly: Only return statuses that have been pinned.
     ///   - excludeReplies: Skip statuses that reply to other statuses.
+    ///   - excludeReblogs: Skip statuses that are boosts.
     ///   - range: The bounds used when requesting data from Mastodon.
     /// - Returns: Request for `[Status]`.
     public static func statuses(id: String,
                                 mediaOnly: Bool? = nil,
                                 pinnedOnly: Bool? = nil,
                                 excludeReplies: Bool? = nil,
+                                excludeReblogs: Bool? = nil,
                                 range: RequestRange = .default) -> Request<[Status]> {
         let rangeParameters = range.parameters(limit: between(1, and: 40, default: 20)) ?? []
         let parameters = rangeParameters + [
             Parameter(name: "only_media", value: mediaOnly.flatMap(trueOrNil)),
             Parameter(name: "pinned", value: pinnedOnly.flatMap(trueOrNil)),
-            Parameter(name: "exclude_replies", value: excludeReplies.flatMap(trueOrNil))
+            Parameter(name: "exclude_replies", value: excludeReplies.flatMap(trueOrNil)),
+            Parameter(name: "exclude_reblogs", value: excludeReblogs.flatMap(trueOrNil))
         ]
 
         let method = HTTPMethod.get(.parameters(parameters))

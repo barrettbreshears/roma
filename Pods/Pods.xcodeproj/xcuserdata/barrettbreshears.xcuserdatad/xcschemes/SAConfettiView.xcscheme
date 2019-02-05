@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6D27BB7A24612CB6B626CCE147E453FE"
+               BlueprintIdentifier = "723BCCC5C5B25FE4686A433A6F3596F8"
                BlueprintName = "SAConfettiView"
                ReferencedContainer = "container:Pods.xcodeproj"
                BuildableName = "SAConfettiView.framework">

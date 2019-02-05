@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>53876474934-4lnq338e15hnnilsnm5b19oc3h81u8s0.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.53876474934-4lnq338e15hnnilsnm5b19oc3h81u8s0</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCiOx8SetouqR9mCfGiFZ_2DCnleSy0obo</string>
+	<key>GCM_SENDER_ID</key>
+	<string>53876474934</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.vm.roma</string>
+	<key>PROJECT_ID</key>
+	<string>roma-ios</string>
+	<key>STORAGE_BUCKET</key>
+	<string>roma-ios.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:53876474934:ios:d6230cc96fd2bfd5</string>
+	<key>DATABASE_URL</key>
+	<string>https://roma-ios.firebaseio.com</string>
+</dict>
+</plist>

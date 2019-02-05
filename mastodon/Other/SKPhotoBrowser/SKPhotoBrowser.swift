@@ -430,29 +430,27 @@ open class SKPhotoBrowser: UIViewController, UIScrollViewDelegate {
         isPerformingLayout = false
     }
     
+    @objc func openURL(_ url: String) -> Bool {
+        var responder: UIResponder? = self
+        while responder != nil {
+            if let application = responder as? UIApplication {
+                return application.perform(#selector(openURL(_:)), with: URL(string: url)) != nil
+            }
+            responder = responder?.next
+        }
+        return false
+    }
+    
     @objc func tapFired(recognizer: UITapGestureRecognizer) {
         print("tapped bottom")
         
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator(style: .medium)
+            impact.impactOccurred()
+        }
+        
+        self.openURL("com.shi.mastodon://id=\(StoreStruct.newIDtoGoTo)")
         self.determineAndClose()
-//        if TweetStruct.whichView == 0 {
-//            NotificationCenter.default.post(name: Notification.Name(rawValue: "sktap"), object: self)
-//        }
-//        if TweetStruct.whichView == 1 {
-//            NotificationCenter.default.post(name: Notification.Name(rawValue: "sktap1"), object: self)
-//        }
-//        if TweetStruct.whichView == 999 {
-//            NotificationCenter.default.post(name: Notification.Name(rawValue: "sktap999"), object: self)
-//        }
-//        if TweetStruct.whichView == 3 {
-//            NotificationCenter.default.post(name: Notification.Name(rawValue: "sktap3"), object: self)
-//        }
-//        if TweetStruct.whichView == 10 {
-//            NotificationCenter.default.post(name: Notification.Name(rawValue: "sktap10"), object: self)
-//        }
-//        if TweetStruct.whichView == 98 {
-//            NotificationCenter.default.post(name: Notification.Name(rawValue: "sktap98"), object: self)
-//        }
-       
     }
     
     open override func viewDidAppear(_ animated: Bool) {

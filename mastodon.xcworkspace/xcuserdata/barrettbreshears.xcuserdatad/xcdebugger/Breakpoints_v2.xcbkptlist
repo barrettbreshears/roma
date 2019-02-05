@@ -31,7 +31,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1847"
             endingLineNumber = "1847"
-            landmarkName = "themeBlack()"
+            landmarkName = "themeNight2()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -63,7 +63,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1857"
             endingLineNumber = "1857"
-            landmarkName = "themeBlack()"
+            landmarkName = "themeNight2()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -95,7 +95,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1884"
             endingLineNumber = "1884"
-            landmarkName = "midBlue()"
+            landmarkName = "themeBlack()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -287,7 +287,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1486"
             endingLineNumber = "1486"
-            landmarkName = "tableView(_:didSelectRowAt:)"
+            landmarkName = "tableView(_:editActionsForRowAt:for:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

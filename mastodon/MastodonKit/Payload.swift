@@ -10,6 +10,7 @@ import Foundation
 
 enum Payload {
     case parameters([Parameter]?)
+    case other([Parameter]?)
     case media(MediaAttachment?)
     case empty
 }
@@ -18,6 +19,7 @@ extension Payload {
     var items: [URLQueryItem]? {
         switch self {
         case .parameters(let parameters): return parameters?.compactMap(toQueryItem)
+        case .other(let parameters): return parameters?.compactMap(toQueryItem)
         case .media: return nil
         case .empty: return nil
         }
@@ -26,6 +28,11 @@ extension Payload {
     var data: Data? {
         switch self {
         case .parameters(let parameters):
+            return parameters?
+                .compactMap(toString)
+                .joined(separator: "&")
+                .data(using: .utf8)
+        case .other(let parameters):
             return parameters?
                 .compactMap(toString)
                 .joined(separator: "&")
@@ -39,6 +46,8 @@ extension Payload {
         switch self {
         case .parameters(let parameters):
             return parameters.map { _ in "application/x-www-form-urlencoded; charset=utf-8" }
+        case .other(let parameters):
+            return parameters.map { _ in "multipart/form-data; boundary=MastodonKitBoundary" }
         case .media(let mediaAttachment):
             return mediaAttachment.map { _ in "multipart/form-data; boundary=MastodonKitBoundary" }
         case .empty: return nil
