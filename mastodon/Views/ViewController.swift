@@ -255,6 +255,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.loginLogo.removeFromSuperview()
         self.loginLabel.removeFromSuperview()
         self.textField.removeFromSuperview()
+        self.termsButton.removeFromSuperview()
         self.safariVC?.dismiss(animated: true, completion: nil)
         
         var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.currentInstance.authCode)&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&client_id=\(StoreStruct.shared.currentInstance.clientID)&client_secret=\(StoreStruct.shared.currentInstance.clientSecret)")!)
@@ -2026,11 +2027,27 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         }
     }
     
+    @objc
+    func dismissNewLogin(){
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     func createLoginView(newInstance:Bool = false) {
+        
+        
         self.newInstance = newInstance
         self.loginBG.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         self.loginBG.backgroundColor = Colours.tabSelected
         self.view.addSubview(self.loginBG)
+        
+        if newInstance {
+            let cancelBtn = UIButton()
+            cancelBtn.setTitle("Cancel", for: .normal)
+            cancelBtn.tintColor = .white
+            cancelBtn.frame = CGRect(x: 10, y: 30, width: 70, height: 45)
+            cancelBtn.addTarget(self, action: #selector(dismissNewLogin), for: .touchUpInside)
+            self.view.addSubview(cancelBtn)
+        }
         
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
         swipeDown.direction = .down

@@ -13,11 +13,17 @@ class TermsController:UIViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let doneBtn = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.dismissTerms))
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        let doneBtn = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.dismissTerms))
+        self.navigationItem.leftBarButtonItem = doneBtn
+        
+        self.title = "TOS"
+        
         webView.frame = self.view.frame
         view.addSubview(webView)
         let url = Bundle.main.url(forResource: "terms", withExtension: "rtf")
