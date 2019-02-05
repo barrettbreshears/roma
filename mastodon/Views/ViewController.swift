@@ -2079,11 +2079,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                                                                   attributes: [NSAttributedString.Key.foregroundColor: Colours.tabSelected])
         self.view.addSubview(self.textField)
         
-        self.termsButton.frame = CGRect(x: 40, y: textField.frame.origin.y + 200, width: self.view.bounds.width - 80, height: 90)
+        self.termsButton.frame = CGRect(x: 40, y: textField.frame.origin.y + 200, width: self.view.bounds.width - 80, height: 50)
         self.termsButton.backgroundColor = UIColor.black.withAlphaComponent(0.08)
         self.termsButton.layer.cornerRadius = 10
-        self.termsButton.tintColor = UIColor.white
+        self.termsButton.tintColor = UIColor.white.withAlphaComponent(0.6)
         self.termsButton.titleLabel?.numberOfLines = 0
+        self.termsButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
         self.termsButton.titleLabel?.lineBreakMode = .byWordWrapping
         self.termsButton.setTitle("By using Roma you agree to our Terms of Service. Tap to review them.", for: .normal)
         self.termsButton.addTarget(self, action: #selector(self.showTerms), for: .touchUpInside)
