@@ -697,13 +697,13 @@
 		A91701B721CAF09F0005A14C /* PadActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91701B421CAF09F0005A14C /* PadActivityViewController.swift */; };
 		A91701B821CAF09F0005A14C /* PadLocalTimelinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91701B521CAF09F0005A14C /* PadLocalTimelinesViewController.swift */; };
 		A91701B921CAF09F0005A14C /* PadFedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91701B621CAF09F0005A14C /* PadFedViewController.swift */; };
+		A947585A220CDFC100735D0A /* terms.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A9475859220CDFC100735D0A /* terms.rtf */; };
 		A968E8842207D418000EED23 /* TermsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A968E8832207D418000EED23 /* TermsController.swift */; };
 		A973AF2421D432AA009D7D21 /* ProCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7806850821CC222F00072C41 /* ProCells.swift */; };
 		A973AF2521D432AE009D7D21 /* CollectionProCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7806850A21CC227100072C41 /* CollectionProCells.swift */; };
 		A9D80EE721B84B3900020ECE /* AddInstanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EE621B84B3900020ECE /* AddInstanceCell.swift */; };
 		A9D80EED21B8F27A00020ECE /* InstanceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EEC21B8F27A00020ECE /* InstanceData.swift */; };
 		A9D80EEF21BB154200020ECE /* AccountExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EEE21BB154200020ECE /* AccountExtension.swift */; };
-		A9DD7749220A0962008E09E9 /* terms.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A9DD7748220A0962008E09E9 /* terms.rtf */; };
 		A9F2EC6221EBAD96006AD130 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A9F2EC6121EBAD96006AD130 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
@@ -1512,6 +1512,7 @@
 		A91701B421CAF09F0005A14C /* PadActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PadActivityViewController.swift; sourceTree = "<group>"; };
 		A91701B521CAF09F0005A14C /* PadLocalTimelinesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PadLocalTimelinesViewController.swift; sourceTree = "<group>"; };
 		A91701B621CAF09F0005A14C /* PadFedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PadFedViewController.swift; sourceTree = "<group>"; };
+		A9475859220CDFC100735D0A /* terms.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = terms.rtf; sourceTree = "<group>"; };
 		A968E8832207D418000EED23 /* TermsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsController.swift; sourceTree = "<group>"; };
 		A968E8862207DACE000EED23 /* terms.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = terms.rtf; sourceTree = "<group>"; };
 		A9D80EE621B84B3900020ECE /* AddInstanceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddInstanceCell.swift; sourceTree = "<group>"; };
@@ -2628,6 +2629,7 @@
 		5373CA502152357200676F3D /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				A9475858220CDFC100735D0A /* text */,
 				531CCD5522073CC900A56145 /* ChromaColorPicker */,
 				530F5B3121E267CA00A910B3 /* DateTime */,
 				5317C79821DA334500746197 /* ScrollableGraph */,
@@ -2933,20 +2935,21 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A9475858220CDFC100735D0A /* text */ = {
+			isa = PBXGroup;
+			children = (
+				A9475859220CDFC100735D0A /* terms.rtf */,
+			);
+			path = text;
+			sourceTree = "<group>";
+		};
 		A968E888220A06AD000EED23 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
 				A968E8862207DACE000EED23 /* terms.rtf */,
-			);
-			name = "Recovered References";
-			sourceTree = "<group>";
-		};
-		A9DD7747220A0962008E09E9 /* text */ = {
-			isa = PBXGroup;
-			children = (
 				A9DD7748220A0962008E09E9 /* terms.rtf */,
 			);
-			path = text;
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		C27DCB277D141E1273E766A3 /* Pods */ = {
@@ -3312,7 +3315,7 @@
 				530976A82179D8D900640D84 /* icon16@2x.png in Resources */,
 				5352D0A6215E679300901B60 /* icon3.png in Resources */,
 				530976C02179D8D900640D84 /* icon18@2x.png in Resources */,
-				A9DD7749220A0962008E09E9 /* terms.rtf in Resources */,
+				A947585A220CDFC100735D0A /* terms.rtf in Resources */,
 				5373C9DF215173F000676F3D /* Assets.xcassets in Resources */,
 				53205825215D287700ED0C36 /* DKImagePickerController.bundle in Resources */,
 				53205815215D287700ED0C36 /* LICENSE in Resources */,

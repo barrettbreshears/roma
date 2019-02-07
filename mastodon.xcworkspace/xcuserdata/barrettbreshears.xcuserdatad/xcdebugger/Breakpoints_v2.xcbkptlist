@@ -271,7 +271,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1510"
             endingLineNumber = "1510"
-            landmarkName = "tableView(_:didSelectRowAt:)"
+            landmarkName = "tableView(_:editActionsOptionsForRowAt:for:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
