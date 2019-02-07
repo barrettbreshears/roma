@@ -134,6 +134,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
         StoreStruct.client.run(request2) { (statuses) in
             if let stat = (statuses.value) {
                 self.statusFollowers = stat
+                self.statusFollows = self.statusFollows.removeDuplicates()
                 DispatchQueue.main.async {
                         self.tableView.reloadData()
                 }
@@ -304,6 +305,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                 if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
                     self.lastThing = stat.first?.id ?? ""
                 self.statusFollows = self.statusFollows + stat
+                    self.statusFollows = self.statusFollows.removeDuplicates()
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
@@ -321,6 +323,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                 if stat.isEmpty || self.lastThing2 == stat.first?.id ?? "" {} else {
                     self.lastThing2 = stat.first?.id ?? ""
                 self.statusFollows = self.statusFollows + stat
+                    self.statusFollows = self.statusFollows.removeDuplicates()
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }

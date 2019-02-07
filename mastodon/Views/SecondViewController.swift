@@ -3441,6 +3441,14 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     self.present(vc, animated: true, completion: nil)
                                     
                                 }
+                                .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                                    print(action, ind)
+                                    
+                                    let controller = NewQRViewController()
+                                    controller.ur = sto[indexPath.row].status?.url?.absoluteString ?? "https://www.thebluebird.app"
+                                    self.present(controller, animated: true, completion: nil)
+                                    
+                                }
                                 .action(.cancel("Dismiss"))
                                 .finally { action, index in
                                     if action.style == .cancel {
@@ -4009,6 +4017,14 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     vc.previewNumberOfLines = 5
                                     vc.previewFont = UIFont.systemFont(ofSize: 14)
                                     self.present(vc, animated: true, completion: nil)
+                                    
+                                }
+                                .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                                    print(action, ind)
+                                    
+                                    let controller = NewQRViewController()
+                                    controller.ur = sto[indexPath.row].status?.url?.absoluteString ?? "https://www.thebluebird.app"
+                                    self.present(controller, animated: true, completion: nil)
                                     
                                 }
                                 .action(.cancel("Dismiss"))

@@ -63,27 +63,45 @@ class ColourCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionColourCell", for: indexPath) as! CollectionColourCell
         
-        cell.configure()
         
-        
-        cell.image.backgroundColor = StoreStruct.colArray[indexPath.row]
-        
-        cell.image.frame = CGRect(x: 0, y: 0, width: 55, height: 55)
-        cell.bgImage.frame = CGRect(x: 0, y: 0, width: 55, height: 55)
-        
-        
-        cell.bgImage.layer.masksToBounds = false
-        cell.bgImage.layer.shadowColor = UIColor.black.cgColor
-        cell.bgImage.layer.shadowOffset = CGSize(width:0, height:6)
-        cell.bgImage.layer.shadowRadius = 12
-        cell.bgImage.layer.shadowOpacity = 0.12
-        
-        cell.frame.size.width = 55
-        cell.frame.size.height = 55
-        
-        cell.backgroundColor = Colours.clear
-        
-        return cell
+        if indexPath.row == StoreStruct.colArray.count - 1 {
+            // manual hex code
+            cell.image.backgroundColor = UIColor.clear
+            cell.image.image = UIImage(named: "hex")
+            
+            cell.image.frame = CGRect(x: 0, y: 0, width: 55, height: 55)
+            cell.image.layer.cornerRadius = 0
+            cell.bgImage.backgroundColor = UIColor.clear
+            
+            cell.frame.size.width = 55
+            cell.frame.size.height = 55
+            
+            cell.backgroundColor = Colours.clear
+            
+            return cell
+            
+        } else {
+            cell.configure()
+            
+            cell.image.backgroundColor = StoreStruct.colArray[indexPath.row]
+            
+            cell.image.frame = CGRect(x: 0, y: 0, width: 55, height: 55)
+            cell.bgImage.frame = CGRect(x: 0, y: 0, width: 55, height: 55)
+            
+            
+            cell.bgImage.layer.masksToBounds = false
+            cell.bgImage.layer.shadowColor = UIColor.black.cgColor
+            cell.bgImage.layer.shadowOffset = CGSize(width:0, height:6)
+            cell.bgImage.layer.shadowRadius = 12
+            cell.bgImage.layer.shadowOpacity = 0.12
+            
+            cell.frame.size.width = 55
+            cell.frame.size.height = 55
+            
+            cell.backgroundColor = Colours.clear
+            
+            return cell
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -93,12 +111,19 @@ class ColourCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDa
             impact.impactOccurred()
         }
         
-        Colours.tabSelected = StoreStruct.colArray[indexPath.row]
-        window?.tintColor = Colours.tabSelected
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "themeTopStuff"), object: self)
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "segTheme"), object: self)
-        UserDefaults.standard.set(indexPath.row, forKey: "themeaccent")
+        if indexPath.row == StoreStruct.colArray.count - 1 {
+            // manual hex code
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "hexnew"), object: self)
+        } else {
+            
+            Colours.tabSelected = StoreStruct.colArray[indexPath.row]
+            window?.tintColor = Colours.tabSelected
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "themeTopStuff"), object: self)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "segTheme"), object: self)
+            UserDefaults.standard.set(indexPath.row, forKey: "themeaccent")
+            
+        }
     }
     
 }

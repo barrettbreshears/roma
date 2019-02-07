@@ -14,3 +14,10 @@ public class Context: Codable {
     /// The descendants of the status in the conversation, as a list of statuses.
     public let descendants: [Status]
 }
+
+public enum Context2: String, Codable {
+    case home
+    case notifications
+    case `public`
+    case thread
+}

@@ -14,6 +14,10 @@ func toString(scope: AccessScope) -> String {
     return scope.rawValue
 }
 
+func toString(scope: Context2) -> String {
+    return scope.rawValue
+}
+
 func toArrayOfParameters<A>(withName name: String) -> (A) -> Parameter {
     return { value in Parameter(name: "\(name)[]", value: String(describing: value)) }
 }

@@ -30,6 +30,8 @@ public struct Client: ClientType {
 
     public func run<Model>(_ request: Request<Model>, completion: @escaping (Result<Model>) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
+            
+            print("url shouldn't be malformed: \(URLComponents(baseURL: self.baseURL, request: request)?.url ?? URL(string: "www.google.com"))")
         guard
             let components = URLComponents(baseURL: self.baseURL, request: request),
             let url = components.url

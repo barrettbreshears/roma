@@ -171,6 +171,17 @@ class NewCaptionViewController: UIViewController, UITextViewDelegate {
     
     
     func textViewDidChange(_ textView: UITextView) {
+        
+        if (UserDefaults.standard.object(forKey: "keyhap") == nil) || (UserDefaults.standard.object(forKey: "keyhap") as! Int == 0) {
+            
+        } else if (UserDefaults.standard.object(forKey: "keyhap") as! Int == 1) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        } else if (UserDefaults.standard.object(forKey: "keyhap") as! Int == 2) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
+        
         if (textView.text?.count)! > 0 {
             tootLabel.setTitleColor(Colours.tabSelected, for: .normal)
         } else {

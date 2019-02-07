@@ -16,6 +16,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .circleStrokeSpin, color: Colours.tabSelected)
     var segmentedControl: SJFluidSegmentedControl!
     var tableView = UITableView()
+    var tableView2 = UITableView()
     var currentIndex = 0
     var profileStatus = ""
     var statusLiked: [Account] = []
@@ -27,6 +28,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             self.loadLoadLoad()
         }
     }
+    
     @objc func search() {
         let controller = DetailViewController()
         controller.mainStatus.append(StoreStruct.statusSearch[StoreStruct.searchIndex])
@@ -99,6 +101,20 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
         
+        self.tableView2.register(FollowersCell.self, forCellReuseIdentifier: "cellf2")
+        self.tableView2.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 65)
+        self.tableView2.alpha = 1
+        self.tableView2.delegate = self
+        self.tableView2.dataSource = self
+        self.tableView2.separatorStyle = .singleLine
+        self.tableView2.backgroundColor = Colours.white
+        self.tableView2.separatorColor = Colours.cellQuote
+        self.tableView2.layer.masksToBounds = true
+        self.tableView2.estimatedRowHeight = 89
+        self.tableView2.rowHeight = UITableView.automaticDimension
+        self.tableView2.alpha = 0
+        self.view.addSubview(self.tableView2)
+        
         self.loadLoadLoad()
         
     }
@@ -108,15 +124,15 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
         print(size)
         
         super.viewWillTransition(to: size, with: coordinator)
-//        coordinator.animate(alongsideTransition: nil, completion: {
-//            _ in
-            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(size.width), height: Int(size.height))
-//        })
+        //        coordinator.animate(alongsideTransition: nil, completion: {
+        //            _ in
+        self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(size.width), height: Int(size.height))
+        //        })
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-
+        
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
@@ -127,15 +143,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             print("nothing")
         }
         
-        let request = Statuses.rebloggedBy(id: self.profileStatus)
-        StoreStruct.client.run(request) { (statuses) in
-            if let stat = (statuses.value) {
-                self.statusBoosted = stat
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
-        }
+        print("testboost \(self.statusBoosted.first?.displayName)")
         
         StoreStruct.currentPage = 90
     }
@@ -147,9 +155,9 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
     
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, titleForSegmentAtIndex index: Int) -> String? {
         if index == 0 {
-            return "Likes".localized
+            return "\(statusLiked.count) Likes".localized
         } else {
-            return "Boosts".localized
+            return "\(statusBoosted.count) Boosts".localized
         }
     }
     
@@ -177,19 +185,18 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
         }
         if toIndex == 0 {
             self.currentIndex = 0
+            self.tableView.alpha = 1
+            self.tableView2.alpha = 0
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
         }
         if toIndex == 1 {
-            
-            print("switchseg")
-            
             self.currentIndex = 1
-//            self.fetchFollowers()
+            self.tableView.alpha = 0
+            self.tableView2.alpha = 1
             DispatchQueue.main.async {
-                print("here99")
-                self.tableView.reloadData()
+                self.tableView2.reloadData()
             }
         }
     }
@@ -210,11 +217,10 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if self.currentIndex == 0 {
-            
-            print("testmmeeee")
+        if tableView == self.tableView {
             
             if self.statusLiked.count == 0 {
+                self.fetchFollows()
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellf", for: indexPath) as! FollowersCell
                 cell.backgroundColor = Colours.white
                 let bgColorView = UIView()
@@ -223,64 +229,52 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
                 return cell
             } else {
                 
-            if indexPath.row == self.statusLiked.count - 6 {
-                self.fetchFollows()
-            }
-            
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellf", for: indexPath) as! FollowersCell
-            cell.configure(self.statusLiked[indexPath.row])
-            cell.profileImageView.tag = indexPath.row
-            cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
-            cell.backgroundColor = Colours.white
-            cell.userName.textColor = Colours.black
-            cell.userTag.textColor = Colours.black
-            cell.toot.textColor = Colours.black.withAlphaComponent(0.6)
-            let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
-            cell.selectedBackgroundView = bgColorView
-            return cell
+                if indexPath.row == self.statusLiked.count - 6 {
+                    self.fetchFollows()
+                }
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellf", for: indexPath) as! FollowersCell
+                cell.configure(self.statusLiked[indexPath.row])
+                cell.profileImageView.tag = indexPath.row
+                cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                cell.backgroundColor = Colours.white
+                cell.userName.textColor = Colours.black
+                cell.userTag.textColor = Colours.black
+                cell.toot.textColor = Colours.black.withAlphaComponent(0.6)
+                let bgColorView = UIView()
+                bgColorView.backgroundColor = Colours.white
+                cell.selectedBackgroundView = bgColorView
+                return cell
                 
             }
         } else {
             
-            
-            print("testme")
-            print(statusBoosted.count)
-            print(statusBoosted.first?.displayName ?? "no")
-            
-            
-            
             if self.statusBoosted.count == 0 {
-                
-                if self.doItOnce {
                 self.fetchFollowers()
-                    self.doItOnce = false
-                }
-                
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellf", for: indexPath) as! FollowersCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellf2", for: indexPath) as! FollowersCell
                 cell.backgroundColor = Colours.white
                 let bgColorView = UIView()
                 bgColorView.backgroundColor = Colours.white
                 cell.selectedBackgroundView = bgColorView
                 return cell
             } else {
-            
-            if indexPath.row == self.statusBoosted.count - 6 {
-                self.fetchFollowers()
-            }
-            
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellf", for: indexPath) as! FollowersCell
-            cell.configure(self.statusBoosted[indexPath.row])
-            cell.profileImageView.tag = indexPath.row
-            cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
-            cell.backgroundColor = Colours.white
-            cell.userName.textColor = Colours.black
-            cell.userTag.textColor = Colours.black
-            cell.toot.textColor = Colours.black.withAlphaComponent(0.6)
-            let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
-            cell.selectedBackgroundView = bgColorView
-            return cell
+                
+                if indexPath.row == self.statusBoosted.count - 6 {
+                    self.fetchFollowers()
+                }
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellf2", for: indexPath) as! FollowersCell
+                cell.configure(self.statusBoosted[indexPath.row])
+                cell.profileImageView.tag = indexPath.row
+                cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                cell.backgroundColor = Colours.white
+                cell.userName.textColor = Colours.black
+                cell.userTag.textColor = Colours.black
+                cell.toot.textColor = Colours.black.withAlphaComponent(0.6)
+                let bgColorView = UIView()
+                bgColorView.backgroundColor = Colours.white
+                cell.selectedBackgroundView = bgColorView
+                return cell
                 
             }
         }
@@ -302,8 +296,8 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
     
     @objc func didTouchProfile(sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let selection = UISelectionFeedbackGenerator()
-        selection.selectionChanged()
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
         }
     }
     
@@ -312,13 +306,13 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
         let request = Statuses.favouritedBy(id: self.profileStatus, range: .max(id: self.statusLiked.last?.id ?? "", limit: nil))
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
-                
                 if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
                     self.lastThing = stat.first?.id ?? ""
-                self.statusLiked = self.statusLiked + stat
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
+                    self.statusLiked = self.statusLiked + stat
+                    self.statusLiked = self.statusLiked.removeDuplicates()
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                 }
             }
         }
@@ -326,30 +320,16 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
     
     var lastThing2 = ""
     func fetchFollowers() {
-        
-        print("boostfetch")
-        
         let request = Statuses.rebloggedBy(id: self.profileStatus, range: .max(id: self.statusBoosted.last?.id ?? "", limit: nil))
         StoreStruct.client.run(request) { (statuses) in
-            print("boostfetch2")
             if let stat = (statuses.value) {
-                print("boostfetch3")
-                
-                print(statuses)
-                
-                if stat.isEmpty || self.lastThing2 == stat.first?.id ?? "" {
-                    print("boostfetch4")
-                    self.statusBoosted = []
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
-                } else {
-                    print("boostfetch5")
+                if stat.isEmpty || self.lastThing2 == stat.first?.id ?? "" {} else {
                     self.lastThing2 = stat.first?.id ?? ""
-                self.statusBoosted = self.statusBoosted + stat
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
+                    self.statusBoosted = self.statusBoosted + stat
+                    self.statusBoosted = self.statusBoosted.removeDuplicates()
+                    DispatchQueue.main.async {
+                        self.tableView2.reloadData()
+                    }
                 }
             }
         }

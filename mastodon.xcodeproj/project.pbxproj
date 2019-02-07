@@ -133,6 +133,7 @@
 		5317C7BF21DA334500746197 /* Plot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7AD21DA334500746197 /* Plot.swift */; };
 		5317C7C021DA334500746197 /* LinePlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7AE21DA334500746197 /* LinePlot.swift */; };
 		5317C7C121DA334500746197 /* DotPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7AF21DA334500746197 /* DotPlot.swift */; };
+		5318D3E8220CCC1D00E5C41A /* Pulsator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318D3E7220CCC1D00E5C41A /* Pulsator.swift */; };
 		5318D60821D508710091262E /* PadListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318D60721D508710091262E /* PadListViewController.swift */; };
 		5318F56221877F8A00418159 /* PadLogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318F56121877F8A00418159 /* PadLogInViewController.swift */; };
 		531B04B9217111A100D31715 /* Stickers.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 531B04B8217111A100D31715 /* Stickers.xcassets */; };
@@ -141,6 +142,18 @@
 		531BD1902188762500E12278 /* PadDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531BD18F2188762500E12278 /* PadDetailViewController.swift */; };
 		531BD5FD2178D68400C1509D /* FollowRequestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531BD5FC2178D68400C1509D /* FollowRequestsViewController.swift */; };
 		531BD60421795D1F00C1509D /* SentimentAnalysisRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531BD60321795D1F00C1509D /* SentimentAnalysisRequest.swift */; };
+		531CCD3722072BC500A56145 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CCD3622072BC500A56145 /* Filters.swift */; };
+		531CCD3922072D5600A56145 /* FilterToots.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CCD3822072D5600A56145 /* FilterToots.swift */; };
+		531CCD5422073C3C00A56145 /* NewHuePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CCD5322073C3C00A56145 /* NewHuePickerViewController.swift */; };
+		531CCD5D22073CCA00A56145 /* ChromaShadeSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CCD5622073CC900A56145 /* ChromaShadeSlider.swift */; };
+		531CCD5E22073CCA00A56145 /* UIColor+Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CCD5722073CC900A56145 /* UIColor+Utilities.swift */; };
+		531CCD5F22073CCA00A56145 /* ChromaColorPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CCD5922073CC900A56145 /* ChromaColorPicker.swift */; };
+		531CCD6022073CCA00A56145 /* ColorModeToggleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CCD5A22073CC900A56145 /* ColorModeToggleButton.swift */; };
+		531CCD6122073CCA00A56145 /* ChromaHandle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CCD5B22073CC900A56145 /* ChromaHandle.swift */; };
+		531CCD6222073CCA00A56145 /* ChromaAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CCD5C22073CC900A56145 /* ChromaAddButton.swift */; };
+		531CCD642207406C00A56145 /* FiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CCD632207406C00A56145 /* FiltersViewController.swift */; };
+		531CCD662207413C00A56145 /* FiltersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CCD652207413C00A56145 /* FiltersCell.swift */; };
+		531CCD682207457400A56145 /* NewFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CCD672207457400A56145 /* NewFilterViewController.swift */; };
 		531E0F89216E2BA2003E8890 /* NVActivityIndicatorAnimationDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E0F61216E2BA1003E8890 /* NVActivityIndicatorAnimationDelegate.swift */; };
 		531E0F8A216E2BA2003E8890 /* NVActivityIndicatorPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E0F63216E2BA1003E8890 /* NVActivityIndicatorPresenter.swift */; };
 		531E0F8B216E2BA2003E8890 /* NVActivityIndicatorViewable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E0F64216E2BA1003E8890 /* NVActivityIndicatorViewable.swift */; };
@@ -674,6 +687,8 @@
 		53BC45BA215AC7D30092223F /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BC45B9215AC7D30092223F /* SettingsViewController.swift */; };
 		53BC45BC215AC8EE0092223F /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BC45BB215AC8EE0092223F /* SettingsCell.swift */; };
 		53BC45C2215AE4F10092223F /* SettingsCellToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BC45C1215AE4F10092223F /* SettingsCellToggle.swift */; };
+		53C037B0220A2A6F0047EBC4 /* NewQRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C037AF220A2A6F0047EBC4 /* NewQRViewController.swift */; };
+		53E5039B2207153100FD5CF2 /* NewHexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E5039A2207153100FD5CF2 /* NewHexViewController.swift */; };
 		53E6F2B1216CCA9400912B83 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E6F2B0216CCA9400912B83 /* WatchSessionManager.swift */; };
 		53E6F2B2216CCA9400912B83 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E6F2B0216CCA9400912B83 /* WatchSessionManager.swift */; };
 		53E6F2B5216CDDF800912B83 /* StoreStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E6F2B3216CDDF800912B83 /* StoreStruct.swift */; };
@@ -886,6 +901,7 @@
 		5317C7AD21DA334500746197 /* Plot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Plot.swift; sourceTree = "<group>"; };
 		5317C7AE21DA334500746197 /* LinePlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinePlot.swift; sourceTree = "<group>"; };
 		5317C7AF21DA334500746197 /* DotPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DotPlot.swift; sourceTree = "<group>"; };
+		5318D3E7220CCC1D00E5C41A /* Pulsator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pulsator.swift; sourceTree = "<group>"; };
 		5318D60721D508710091262E /* PadListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadListViewController.swift; sourceTree = "<group>"; };
 		5318F56121877F8A00418159 /* PadLogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadLogInViewController.swift; sourceTree = "<group>"; };
 		531B04B62171119D00D31715 /* MastStickers.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MastStickers.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -896,6 +912,19 @@
 		531BD18F2188762500E12278 /* PadDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadDetailViewController.swift; sourceTree = "<group>"; };
 		531BD5FC2178D68400C1509D /* FollowRequestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowRequestsViewController.swift; sourceTree = "<group>"; };
 		531BD60321795D1F00C1509D /* SentimentAnalysisRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SentimentAnalysisRequest.swift; sourceTree = "<group>"; };
+		531CCD3622072BC500A56145 /* Filters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
+		531CCD3822072D5600A56145 /* FilterToots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterToots.swift; sourceTree = "<group>"; };
+		531CCD5322073C3C00A56145 /* NewHuePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHuePickerViewController.swift; sourceTree = "<group>"; };
+		531CCD5622073CC900A56145 /* ChromaShadeSlider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromaShadeSlider.swift; sourceTree = "<group>"; };
+		531CCD5722073CC900A56145 /* UIColor+Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Utilities.swift"; sourceTree = "<group>"; };
+		531CCD5822073CC900A56145 /* ChromaColorPicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChromaColorPicker.h; sourceTree = "<group>"; };
+		531CCD5922073CC900A56145 /* ChromaColorPicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromaColorPicker.swift; sourceTree = "<group>"; };
+		531CCD5A22073CC900A56145 /* ColorModeToggleButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorModeToggleButton.swift; sourceTree = "<group>"; };
+		531CCD5B22073CC900A56145 /* ChromaHandle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromaHandle.swift; sourceTree = "<group>"; };
+		531CCD5C22073CC900A56145 /* ChromaAddButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChromaAddButton.swift; sourceTree = "<group>"; };
+		531CCD632207406C00A56145 /* FiltersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersViewController.swift; sourceTree = "<group>"; };
+		531CCD652207413C00A56145 /* FiltersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersCell.swift; sourceTree = "<group>"; };
+		531CCD672207457400A56145 /* NewFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewFilterViewController.swift; sourceTree = "<group>"; };
 		531E0F61216E2BA1003E8890 /* NVActivityIndicatorAnimationDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorAnimationDelegate.swift; sourceTree = "<group>"; };
 		531E0F63216E2BA1003E8890 /* NVActivityIndicatorPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorPresenter.swift; sourceTree = "<group>"; };
 		531E0F64216E2BA1003E8890 /* NVActivityIndicatorViewable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorViewable.swift; sourceTree = "<group>"; };
@@ -1472,6 +1501,8 @@
 		53BC45B9215AC7D30092223F /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		53BC45BB215AC8EE0092223F /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		53BC45C1215AE4F10092223F /* SettingsCellToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCellToggle.swift; sourceTree = "<group>"; };
+		53C037AF220A2A6F0047EBC4 /* NewQRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewQRViewController.swift; sourceTree = "<group>"; };
+		53E5039A2207153100FD5CF2 /* NewHexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHexViewController.swift; sourceTree = "<group>"; };
 		53E6F2B0216CCA9400912B83 /* WatchSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
 		53E6F2B3216CDDF800912B83 /* StoreStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreStruct.swift; sourceTree = "<group>"; };
 		53E6F2B6216CDE7D00912B83 /* DetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailController.swift; sourceTree = "<group>"; };
@@ -1764,6 +1795,20 @@
 				531BD60321795D1F00C1509D /* SentimentAnalysisRequest.swift */,
 			);
 			path = Sentiment;
+			sourceTree = "<group>";
+		};
+		531CCD5522073CC900A56145 /* ChromaColorPicker */ = {
+			isa = PBXGroup;
+			children = (
+				531CCD5622073CC900A56145 /* ChromaShadeSlider.swift */,
+				531CCD5722073CC900A56145 /* UIColor+Utilities.swift */,
+				531CCD5822073CC900A56145 /* ChromaColorPicker.h */,
+				531CCD5922073CC900A56145 /* ChromaColorPicker.swift */,
+				531CCD5A22073CC900A56145 /* ColorModeToggleButton.swift */,
+				531CCD5B22073CC900A56145 /* ChromaHandle.swift */,
+				531CCD5C22073CC900A56145 /* ChromaAddButton.swift */,
+			);
+			path = ChromaColorPicker;
 			sourceTree = "<group>";
 		};
 		531E0F60216E2BA1003E8890 /* NVActivityIndicatorView */ = {
@@ -2583,7 +2628,7 @@
 		5373CA502152357200676F3D /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				A9DD7747220A0962008E09E9 /* text */,
+				531CCD5522073CC900A56145 /* ChromaColorPicker */,
 				530F5B3121E267CA00A910B3 /* DateTime */,
 				5317C79821DA334500746197 /* ScrollableGraph */,
 				530976CC2179DBD700640D84 /* BiometricAuthentication */,
@@ -2632,6 +2677,10 @@
 				539385872172A9E4002444FC /* NewProfileNoteViewController.swift */,
 				5329F3832174B21F00C4A23C /* NewInstanceViewController.swift */,
 				53ADB307217E4F6C00A7C431 /* NewCaptionViewController.swift */,
+				53E5039A2207153100FD5CF2 /* NewHexViewController.swift */,
+				531CCD5322073C3C00A56145 /* NewHuePickerViewController.swift */,
+				531CCD672207457400A56145 /* NewFilterViewController.swift */,
+				53C037AF220A2A6F0047EBC4 /* NewQRViewController.swift */,
 				5329F3852174B31400C4A23C /* InstanceViewController.swift */,
 				53205830215D317800ED0C36 /* CameraViewController.swift */,
 				5373CB5B2157FEDA00676F3D /* ListViewController.swift */,
@@ -2640,6 +2689,7 @@
 				5354BAA621653C740094C545 /* PinnedViewController.swift */,
 				535B33D1215CF0AD001A2A7F /* MutedViewController.swift */,
 				532057D7215CF4D500ED0C36 /* BlockedViewController.swift */,
+				531CCD632207406C00A56145 /* FiltersViewController.swift */,
 				531BD5FC2178D68400C1509D /* FollowRequestsViewController.swift */,
 				5373CB612159553500676F3D /* FollowersViewController.swift */,
 				5315ECDF21FDE0AE00A3F1A9 /* FollowSuggestionsViewController.swift */,
@@ -2676,6 +2726,7 @@
 				5373CB4B2156686300676F3D /* ActionButtonCell.swift */,
 				5373CB572156AA7200676F3D /* GraphCell.swift */,
 				5373CB592157F7C400676F3D /* ListCell.swift */,
+				531CCD652207413C00A56145 /* FiltersCell.swift */,
 				5373CB632159564400676F3D /* FollowersCell.swift */,
 				53BC45BB215AC8EE0092223F /* SettingsCell.swift */,
 				53BC45C1215AE4F10092223F /* SettingsCellToggle.swift */,
@@ -2742,6 +2793,7 @@
 				5373CA732152C67F00676F3D /* Context.swift */,
 				5373CA742152C67F00676F3D /* Emoji.swift */,
 				5373CA752152C67F00676F3D /* Empty.swift */,
+				531CCD3622072BC500A56145 /* Filters.swift */,
 				5373CA762152C67F00676F3D /* Instance.swift */,
 				5373CA772152C67F00676F3D /* List.swift */,
 				5373CA782152C67F00676F3D /* LoginSettings.swift */,
@@ -2769,6 +2821,7 @@
 				5373CA8C2152C67F00676F3D /* Clients.swift */,
 				5373CA8D2152C67F00676F3D /* DomainBlocks.swift */,
 				5373CA8E2152C67F00676F3D /* Favourites.swift */,
+				531CCD3822072D5600A56145 /* FilterToots.swift */,
 				5373CA8F2152C67F00676F3D /* FollowRequests.swift */,
 				5373CA902152C67F00676F3D /* Instances.swift */,
 				5373CA912152C67F00676F3D /* Lists.swift */,
@@ -2810,6 +2863,7 @@
 				5373CAF22152EDB700676F3D /* SwipeTableViewCell.swift */,
 				5373CAF32152EDB700676F3D /* SwipeTableViewCellDelegate.swift */,
 				5373CAF42152EDB700676F3D /* SwipeTransitionLayout.swift */,
+				5318D3E7220CCC1D00E5C41A /* Pulsator.swift */,
 			);
 			path = Swipe;
 			sourceTree = "<group>";
@@ -3659,6 +3713,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				531CCD6122073CCA00A56145 /* ChromaHandle.swift in Sources */,
 				5316C89D219D94A00003AB97 /* SwiftyGiphyViewController.swift in Sources */,
 				5373CB2E21541A0300676F3D /* Dev+GIF.swift in Sources */,
 				5373CAA42152C68000676F3D /* URLComponents.swift in Sources */,
@@ -3697,7 +3752,10 @@
 				530976D32179DBD700640D84 /* BioMetricAuthenticator.swift in Sources */,
 				536A4FB5216B73D600A3D483 /* PageBulletinItem.swift in Sources */,
 				5373CAA32152C68000676F3D /* String.swift in Sources */,
+				531CCD5422073C3C00A56145 /* NewHuePickerViewController.swift in Sources */,
+				531CCD3922072D5600A56145 /* FilterToots.swift in Sources */,
 				5373CAA92152C68000676F3D /* AccessScope.swift in Sources */,
+				531CCD662207413C00A56145 /* FiltersCell.swift in Sources */,
 				5373CACC2152C68000676F3D /* Instances.swift in Sources */,
 				5317C7B121DA334500746197 /* BarDrawingLayer.swift in Sources */,
 				535B33CB215C31E3001A2A7F /* ActiveType.swift in Sources */,
@@ -3710,6 +3768,7 @@
 				5373CAB82152C68000676F3D /* NotificationType.swift in Sources */,
 				5316C893219D94A00003AB97 /* SwiftyGiphyGridLayout.swift in Sources */,
 				5373CB032152EDB800676F3D /* SwipeExpansionStyle.swift in Sources */,
+				531CCD682207457400A56145 /* NewFilterViewController.swift in Sources */,
 				5317C7B521DA334500746197 /* LineDrawingLayer.swift in Sources */,
 				A9D80EEF21BB154200020ECE /* AccountExtension.swift in Sources */,
 				5316C895219D94A00003AB97 /* GiphyMultipleGIFResponse.swift in Sources */,
@@ -3721,6 +3780,7 @@
 				5316C88F219D94A00003AB97 /* GiphyUser.swift in Sources */,
 				531E0F95216E2BA2003E8890 /* NVActivityIndicatorAnimationBallZigZagDeflect.swift in Sources */,
 				532057D8215CF4D500ED0C36 /* BlockedViewController.swift in Sources */,
+				531CCD3722072BC500A56145 /* Filters.swift in Sources */,
 				5316C898219D94A00003AB97 /* SwiftyGiphyCollectionViewCell.swift in Sources */,
 				5373CB5C2157FEDA00676F3D /* ListViewController.swift in Sources */,
 				531BD60421795D1F00C1509D /* SentimentAnalysisRequest.swift in Sources */,
@@ -3785,6 +3845,7 @@
 				531E0F9B216E2BA2003E8890 /* NVActivityIndicatorAnimationBallClipRotatePulse.swift in Sources */,
 				531E0F97216E2BA2003E8890 /* NVActivityIndicatorAnimationBallZigZag.swift in Sources */,
 				531046C4215AC3AB00FCD068 /* ProfileHeaderCellOwn.swift in Sources */,
+				531CCD6022073CCA00A56145 /* ColorModeToggleButton.swift in Sources */,
 				531E0F92216E2BA2003E8890 /* NVActivityIndicatorAnimationBallTrianglePath.swift in Sources */,
 				5373CAD12152C68000676F3D /* Notifications.swift in Sources */,
 				532533BD2185194100A8A65B /* PadMentionsViewController.swift in Sources */,
@@ -3825,6 +3886,7 @@
 				5316C890219D94A00003AB97 /* GiphyMeta.swift in Sources */,
 				5320582E215D287700ED0C36 /* DKAssetGroupDetailImageCell.swift in Sources */,
 				5351D75821617FC40012960F /* VolumeBarStackView.swift in Sources */,
+				53C037B0220A2A6F0047EBC4 /* NewQRViewController.swift in Sources */,
 				5373CAFA2152EDB700676F3D /* SwipeActionsView.swift in Sources */,
 				5373CB2F21541A0300676F3D /* UIImage+Rotation.swift in Sources */,
 				5320581A215D287700ED0C36 /* FontAwesomeTabBarItem.swift in Sources */,
@@ -3862,8 +3924,10 @@
 				5373CB3121541A0300676F3D /* GifIt.swift in Sources */,
 				5373CB402155049900676F3D /* ProfileHeaderCell.swift in Sources */,
 				5354BAC5216577FD0094C545 /* CRRefreshAnimator.swift in Sources */,
+				531CCD5D22073CCA00A56145 /* ChromaShadeSlider.swift in Sources */,
 				5373CB3621541A0300676F3D /* SKIndicatorView.swift in Sources */,
 				5373CB162152FCF300676F3D /* ActionSheet.swift in Sources */,
+				5318D3E8220CCC1D00E5C41A /* Pulsator.swift in Sources */,
 				5373CB052152EDB800676F3D /* SwipeOptions.swift in Sources */,
 				535B33BE215C1A08001A2A7F /* VisualActivityViewController.swift in Sources */,
 				5393859E217393A4002444FC /* DLTagInfo.swift in Sources */,
@@ -3888,6 +3952,7 @@
 				53170E80218361A4005F972B /* PadViewController.swift in Sources */,
 				5373CAB32152C68000676F3D /* Instance.swift in Sources */,
 				5351B98E2167ADF400002069 /* NewListViewController.swift in Sources */,
+				531CCD5F22073CCA00A56145 /* ChromaColorPicker.swift in Sources */,
 				531E0F93216E2BA2003E8890 /* NVActivityIndicatorAnimationLineScalePulseOut.swift in Sources */,
 				5373CACE2152C68000676F3D /* Login.swift in Sources */,
 				536A4FBE216B73D600A3D483 /* BulletinInterfaceFactory.swift in Sources */,
@@ -3957,6 +4022,7 @@
 				5373CB1D21540F5E00676F3D /* MainFeedCellImage.swift in Sources */,
 				A91701B821CAF09F0005A14C /* PadLocalTimelinesViewController.swift in Sources */,
 				53205819215D287700ED0C36 /* FontAwesomeView.swift in Sources */,
+				531CCD5E22073CCA00A56145 /* UIColor+Utilities.swift in Sources */,
 				5351D75E21617FC40012960F /* VolumeBarStyle+Presets.swift in Sources */,
 				5317C7B321DA334500746197 /* DotDrawingLayer.swift in Sources */,
 				5373CAAA2152C68000676F3D /* Account.swift in Sources */,
@@ -4004,6 +4070,7 @@
 				5393859C217393A4002444FC /* DLTagView.swift in Sources */,
 				5373CAF52152EDB700676F3D /* Extensions.swift in Sources */,
 				530F5B3821E267CA00A910B3 /* DateTimePicker.swift in Sources */,
+				531CCD642207406C00A56145 /* FiltersViewController.swift in Sources */,
 				5373CAB72152C68000676F3D /* Notification.swift in Sources */,
 				530F5B3721E267CA00A910B3 /* FullDateCollectionViewCell.swift in Sources */,
 				535B33B4215C0EC6001A2A7F /* XPlayer.swift in Sources */,
@@ -4019,8 +4086,10 @@
 				5373CAB62152C68000676F3D /* Mention.swift in Sources */,
 				535B33AF215C0EC6001A2A7F /* XPlayerViewController.swift in Sources */,
 				5320581F215D287700ED0C36 /* FontAwesomeStateRequirement.swift in Sources */,
+				53E5039B2207153100FD5CF2 /* NewHexViewController.swift in Sources */,
 				5351D75D21617FC40012960F /* VolumeBarStyle.swift in Sources */,
 				5373CAB42152C68000676F3D /* List.swift in Sources */,
+				531CCD6222073CCA00A56145 /* ChromaAddButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

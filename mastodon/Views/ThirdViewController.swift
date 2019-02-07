@@ -1584,14 +1584,44 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                     
                 }
-                .action(.default("Share Profile Link".localized), image: UIImage(named: "share")) { (action, ind) in
+                .action(.default("Share Profile".localized), image: UIImage(named: "share")) { (action, ind) in
                     print(action, ind)
                     
-                    let objectsToShare = [self.chosenUser.url]
-                    let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-                    vc.previewNumberOfLines = 5
-                    vc.previewFont = UIFont.systemFont(ofSize: 14)
-                    self.present(vc, animated: true, completion: nil)
+                    
+                    Alertift.actionSheet()
+                        .backgroundColor(Colours.white)
+                        .titleTextColor(Colours.grayDark)
+                        .messageTextColor(Colours.grayDark)
+                        .messageTextAlignment(.left)
+                        .titleTextAlignment(.left)
+                        .action(.default("Share Link".localized), image: UIImage(named: "share")) { (action, ind) in
+                            print(action, ind)
+                            
+                            let objectsToShare = [self.chosenUser.url]
+                            let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                            vc.previewNumberOfLines = 5
+                            vc.previewFont = UIFont.systemFont(ofSize: 14)
+                            self.present(vc, animated: true, completion: nil)
+                        }
+                        .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                            print(action, ind)
+                            
+                            let controller = NewQRViewController()
+                            controller.ur = self.chosenUser.url
+                            self.present(controller, animated: true, completion: nil)
+                            
+                        }
+                        .action(.cancel("Dismiss"))
+                        .finally { action, index in
+                            if action.style == .cancel {
+                                return
+                            }
+                        }
+                        .show(on: self)
+                    
+                    
+                    
+                    
                 }
                 .action(.cancel("Dismiss"))
                 .finally { action, index in
@@ -1691,6 +1721,21 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             DispatchQueue.main.async {
                                 let controller = BlockedViewController()
                                 controller.currentTagTitle = "Blocked"
+                                controller.currentTags = stat
+                                self.navigationController?.pushViewController(controller, animated: true)
+                            }
+                        }
+                    }
+                }
+                .action(.default("Toot Filters".localized), image: UIImage(named: "filters")) { (action, ind) in
+                    print(action, ind)
+                    
+                    let request = FilterToots.all()
+                    StoreStruct.client.run(request) { (statuses) in
+                        if let stat = (statuses.value) {
+                            DispatchQueue.main.async {
+                                let controller = FiltersViewController()
+                                controller.currentTagTitle = "Toot Filters"
                                 controller.currentTags = stat
                                 self.navigationController?.pushViewController(controller, animated: true)
                             }
@@ -1907,14 +1952,43 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut2"), object: nil)
                 }
-                .action(.default("Share Profile Link".localized), image: UIImage(named: "share")) { (action, ind) in
+                .action(.default("Share Profile".localized), image: UIImage(named: "share")) { (action, ind) in
                     print(action, ind)
                     
-                        let objectsToShare = [self.chosenUser.url]
-                        let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
-                        vc.previewNumberOfLines = 5
-                        vc.previewFont = UIFont.systemFont(ofSize: 14)
-                        self.present(vc, animated: true, completion: nil)
+                    
+                    
+                    Alertift.actionSheet()
+                        .backgroundColor(Colours.white)
+                        .titleTextColor(Colours.grayDark)
+                        .messageTextColor(Colours.grayDark)
+                        .messageTextAlignment(.left)
+                        .titleTextAlignment(.left)
+                        .action(.default("Share Link".localized), image: UIImage(named: "share")) { (action, ind) in
+                            print(action, ind)
+                            
+                            let objectsToShare = [self.chosenUser.url]
+                            let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                            vc.previewNumberOfLines = 5
+                            vc.previewFont = UIFont.systemFont(ofSize: 14)
+                            self.present(vc, animated: true, completion: nil)
+                        }
+                        .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                            print(action, ind)
+                            
+                            let controller = NewQRViewController()
+                            controller.ur = self.chosenUser.url
+                            self.present(controller, animated: true, completion: nil)
+                            
+                        }
+                        .action(.cancel("Dismiss"))
+                        .finally { action, index in
+                            if action.style == .cancel {
+                                return
+                            }
+                        }
+                        .show(on: self)
+                    
+                    
                 }
                 .action(.default("Log Out".localized), image: UIImage(named: "lout")) { (action, ind) in
                     print(action, ind)
@@ -2869,6 +2943,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
             
         } else {
+            
+            if self.chosenUser.fields.count > 0 {
         
         let cell = tableView.cellForRow(at: indexPath) as! ProfileHeaderCellOwn
         var images = [SKPhoto]()
@@ -2886,6 +2962,30 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             browser.initializePageIndex(0)
             present(browser, animated: true, completion: nil)
         }
+                
+                
+            } else {
+                
+                
+                
+                let cell = tableView.cellForRow(at: indexPath) as! ProfileHeaderCellOwn2
+                var images = [SKPhoto]()
+                
+                let photo = SKPhoto.photoWithImageURL(sto[0].reblog?.account.headerStatic ?? sto[0].account.headerStatic, holder: cell.headerImageView.currentImage ?? nil)
+                photo.shouldCachePhotoURLImage = true
+                images.append(photo)
+                
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.headerImageView)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(0)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
             
         }
         
@@ -2918,6 +3018,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
             
         } else {
+            if self.chosenUser.fields.count > 0 {
             let cell = tableView.cellForRow(at: indexPath) as! ProfileHeaderCellOwn
             var images = [SKPhoto]()
             
@@ -2933,6 +3034,29 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 browser.delegate = self
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
+            }
+                
+            } else {
+                
+                
+                let cell = tableView.cellForRow(at: indexPath) as! ProfileHeaderCellOwn2
+                var images = [SKPhoto]()
+                
+                let photo = SKPhoto.photoWithImageURL(self.chosenUser.avatarStatic, holder: nil)
+                photo.shouldCachePhotoURLImage = true
+                images.append(photo)
+                
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.profileImageView)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(0)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+                
             }
         }
     }
@@ -3578,6 +3702,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         }
                                         
                                     }
+                                    .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                                        print(action, ind)
+                                        
+                                        let controller = NewQRViewController()
+                                        controller.ur = sto[indexPath.row].reblog?.url?.absoluteString ?? sto[indexPath.row].url?.absoluteString ?? "https://www.thebluebird.app"
+                                        self.present(controller, animated: true, completion: nil)
+                                        
+                                    }
                                     .action(.cancel("Dismiss"))
                                     .finally { action, index in
                                         if action.style == .cancel {
@@ -3890,6 +4022,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     vc.previewFont = UIFont.systemFont(ofSize: 14)
                                     self.present(vc, animated: true, completion: nil)
                                     }
+                                    
+                                }
+                                .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                                    print(action, ind)
+                                    
+                                    let controller = NewQRViewController()
+                                    controller.ur = sto[indexPath.row].reblog?.url?.absoluteString ?? sto[indexPath.row].url?.absoluteString ?? "https://www.thebluebird.app"
+                                    self.present(controller, animated: true, completion: nil)
                                     
                                 }
                                 .action(.cancel("Dismiss"))

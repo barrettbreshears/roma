@@ -211,6 +211,17 @@ class PadSearchViewController: UIViewController, SJFluidSegmentedControlDataSour
     
     @objc func textFieldDidChange(_ textField: UITextField) {
         
+        if (UserDefaults.standard.object(forKey: "keyhap") == nil) || (UserDefaults.standard.object(forKey: "keyhap") as! Int == 0) {
+            
+        } else if (UserDefaults.standard.object(forKey: "keyhap") as! Int == 1) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        } else if (UserDefaults.standard.object(forKey: "keyhap") as! Int == 2) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
+        
+        
         print("changed")
         var fromTop = 45
         if UIDevice().userInterfaceIdiom == .phone {

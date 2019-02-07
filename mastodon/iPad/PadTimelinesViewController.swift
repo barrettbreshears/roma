@@ -1417,7 +1417,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                 do {
                     let jsonResult = try JSONSerialization.jsonObject(with: data0, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String: Any]
                     let re = jsonResult?["payload"]
-                    let te = SSEvent.init(type: "update", data: re as! String)
+                    let te = SSEvent.init(type: "update", data: re as? String ?? "")
                     let data = te.data.data(using: .utf8)!
                     guard let model = try? Status.decode(data: data) else {
                         return
@@ -1495,7 +1495,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                 do {
                     let jsonResult = try JSONSerialization.jsonObject(with: data0, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String: Any]
                     let re = jsonResult?["payload"]
-                    let te = SSEvent.init(type: "update", data: re as! String)
+                    let te = SSEvent.init(type: "update", data: re as? String ?? "")
                     let data = te.data.data(using: .utf8)!
                     guard let model = try? Status.decode(data: data) else {
                         return
@@ -1573,7 +1573,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                 do {
                     let jsonResult = try JSONSerialization.jsonObject(with: data0, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String: Any]
                     let re = jsonResult?["payload"]
-                    let te = SSEvent.init(type: "update", data: re as! String)
+                    let te = SSEvent.init(type: "update", data: re as? String ?? "")
                     let data = te.data.data(using: .utf8)!
                     guard let model = try? Status.decode(data: data) else {
                         return
@@ -3333,6 +3333,14 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                     self.present(vc, animated: true, completion: nil)
                                     
                                 }
+                                .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                                    print(action, ind)
+                                    
+                                    let controller = NewQRViewController()
+                                    controller.ur = sto[indexPath.row].url?.absoluteString ?? "https://www.thebluebird.app"
+                                    self.present(controller, animated: true, completion: nil)
+                                    
+                                }
                                 .action(.cancel("Dismiss"))
                                 .finally { action, index in
                                     if action.style == .cancel {
@@ -3639,6 +3647,14 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
 //                                    vc.previewNumberOfLines = 5
 //                                    vc.previewFont = UIFont.systemFont(ofSize: 14)
                                     self.present(vc, animated: true, completion: nil)
+                                    
+                                }
+                                .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                                    print(action, ind)
+                                    
+                                    let controller = NewQRViewController()
+                                    controller.ur = sto[indexPath.row].reblog?.url?.absoluteString ?? sto[indexPath.row].url?.absoluteString ?? "https://www.thebluebird.app"
+                                    self.present(controller, animated: true, completion: nil)
                                     
                                 }
                                 .action(.cancel("Dismiss"))

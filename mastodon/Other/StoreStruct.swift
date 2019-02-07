@@ -45,7 +45,8 @@ struct StoreStruct {
                            UIColor(red: 150/255.0, green: 150/255.0, blue: 160/255.0, alpha: 1.0),
                            UIColor(red: 100/255.0, green: 100/255.0, blue: 110/255.0, alpha: 1.0),
                            UIColor(red: 58/255.0, green: 58/255.0, blue: 65/255.0, alpha: 1.0),
-                           UIColor(red: 38/255.0, green: 38/255.0, blue: 45/255.0, alpha: 1.0)]
+                           UIColor(red: 38/255.0, green: 38/255.0, blue: 45/255.0, alpha: 1.0),
+                           UIColor.clear]
     
     static var client = Client(baseURL: StoreStruct.shared.currentInstance.returnedText, accessToken:StoreStruct.shared.currentInstance.accessToken)
     var currentInstance:InstanceData = InstanceData.getCurrentInstance() ?? InstanceData()
@@ -122,4 +123,6 @@ struct StoreStruct {
     
     static var savedComposeText = ""
     static var savedInReplyText = ""
+    
+    static var hexCol = UIColor.white
 }

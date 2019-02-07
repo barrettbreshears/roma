@@ -1091,8 +1091,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.tableView.alpha = 1
         })
         
-//        self.navigationController?.navigationBar.tintColor = Colours.tabUnselected
-//        self.navigationController?.navigationBar.barTintColor = Colours.tabUnselected
         self.navigationController?.navigationItem.backBarButtonItem?.tintColor = Colours.tabUnselected
         
         StoreStruct.currentPage = 0
@@ -1107,8 +1105,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 
                 for x in StoreStruct.notifications {
                     if x.type == .mention {
-                        StoreStruct.notificationsMentions.append(x)
                         DispatchQueue.main.async {
+                            StoreStruct.notificationsMentions.append(x)
                             StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
                             StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
                         }
@@ -1362,7 +1360,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 do {
                     let jsonResult = try JSONSerialization.jsonObject(with: data0, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String: Any]
                     let re = jsonResult?["payload"]
-                    let te = SSEvent.init(type: "update", data: re as! String)
+                    let te = SSEvent.init(type: "update", data: re as? String ?? "")
                     let data = te.data.data(using: .utf8)!
                     guard let model = try? Status.decode(data: data) else {
                         return
@@ -1440,7 +1438,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 do {
                     let jsonResult = try JSONSerialization.jsonObject(with: data0, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String: Any]
                     let re = jsonResult?["payload"]
-                    let te = SSEvent.init(type: "update", data: re as! String)
+                    let te = SSEvent.init(type: "update", data: re as? String ?? "")
                     let data = te.data.data(using: .utf8)!
                     guard let model = try? Status.decode(data: data) else {
                         return
@@ -1518,7 +1516,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 do {
                     let jsonResult = try JSONSerialization.jsonObject(with: data0, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String: Any]
                     let re = jsonResult?["payload"]
-                    let te = SSEvent.init(type: "update", data: re as! String)
+                    let te = SSEvent.init(type: "update", data: re as? String ?? "")
                     let data = te.data.data(using: .utf8)!
                     guard let model = try? Status.decode(data: data) else {
                         return
@@ -3304,6 +3302,17 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     self.present(vc, animated: true, completion: nil)
                                     
                                 }
+                                .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                                    print(action, ind)
+                                    
+                                    let controller = NewQRViewController()
+                                    controller.ur = sto[indexPath.row].reblog?.url?.absoluteString ?? sto[indexPath.row].url?.absoluteString ?? "https://www.thebluebird.app"
+                                    self.present(controller, animated: true, completion: nil)
+                                    
+                                }
+                                
+                            
+                                
                                 .action(.cancel("Dismiss"))
                                 .finally { action, index in
                                     if action.style == .cancel {
@@ -3598,6 +3607,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     vc.previewNumberOfLines = 5
                                     vc.previewFont = UIFont.systemFont(ofSize: 14)
                                     self.present(vc, animated: true, completion: nil)
+                                    
+                                }
+                                .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                                    print(action, ind)
+                                    
+                                    let controller = NewQRViewController()
+                                    controller.ur = sto[indexPath.row].reblog?.url?.absoluteString ?? sto[indexPath.row].url?.absoluteString ?? "https://www.thebluebird.app"
+                                    self.present(controller, animated: true, completion: nil)
                                     
                                 }
                                 .action(.cancel("Dismiss"))
@@ -3998,7 +4015,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 UIView.setAnimationsEnabled(false)
                                 self.tableView.reloadData()
                                 self.refreshControl.endRefreshing()
-                                self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                if newestC == 0 {
+                                    
+                                } else {
+                                    self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                }
                                 UIView.setAnimationsEnabled(true)
                             } else {
                                 self.tableView.reloadData()
@@ -4073,7 +4094,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 UIView.setAnimationsEnabled(false)
                                 self.tableViewL.reloadData()
                                 self.refreshControl.endRefreshing()
-                                self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                if newestC == 0 {
+                                    
+                                } else {
+                                    self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                }
                                 UIView.setAnimationsEnabled(true)
                             } else {
                                 
@@ -4146,7 +4171,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 UIView.setAnimationsEnabled(false)
                                 self.tableViewF.reloadData()
                                 self.refreshControl.endRefreshing()
-                                self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                if newestC == 0 {
+                                    
+                                } else {
+                                    self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                }
                                 UIView.setAnimationsEnabled(true)
                                 
                             } else {

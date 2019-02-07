@@ -489,6 +489,76 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         return string2
     }
     
+    func doubleTheText(string: String) -> String {
+        var string2 = string
+        string2 = string.replacingOccurrences(of: "a", with: "𝕒")
+        string2 = string2.replacingOccurrences(of: "b", with: "𝕓")
+        string2 = string2.replacingOccurrences(of: "c", with: "𝕔")
+        string2 = string2.replacingOccurrences(of: "d", with: "𝕕")
+        string2 = string2.replacingOccurrences(of: "e", with: "𝕖")
+        string2 = string2.replacingOccurrences(of: "f", with: "𝕗")
+        string2 = string2.replacingOccurrences(of: "g", with: "𝕘")
+        string2 = string2.replacingOccurrences(of: "h", with: "𝕙")
+        string2 = string2.replacingOccurrences(of: "i", with: "𝕚")
+        string2 = string2.replacingOccurrences(of: "j", with: "𝕛")
+        string2 = string2.replacingOccurrences(of: "k", with: "𝕜")
+        string2 = string2.replacingOccurrences(of: "l", with: "𝕝")
+        string2 = string2.replacingOccurrences(of: "m", with: "𝕞")
+        string2 = string2.replacingOccurrences(of: "n", with: "𝕟")
+        string2 = string2.replacingOccurrences(of: "o", with: "𝕠")
+        string2 = string2.replacingOccurrences(of: "p", with: "𝕡")
+        string2 = string2.replacingOccurrences(of: "q", with: "𝕢")
+        string2 = string2.replacingOccurrences(of: "r", with: "𝕣")
+        string2 = string2.replacingOccurrences(of: "s", with: "𝕤")
+        string2 = string2.replacingOccurrences(of: "t", with: "𝕥")
+        string2 = string2.replacingOccurrences(of: "u", with: "𝕦")
+        string2 = string2.replacingOccurrences(of: "v", with: "𝕧")
+        string2 = string2.replacingOccurrences(of: "w", with: "𝕨")
+        string2 = string2.replacingOccurrences(of: "x", with: "𝕩")
+        string2 = string2.replacingOccurrences(of: "y", with: "𝕪")
+        string2 = string2.replacingOccurrences(of: "z", with: "𝕫")
+        
+        string2 = string2.replacingOccurrences(of: "A", with: "𝔸")
+        string2 = string2.replacingOccurrences(of: "B", with: "𝔹")
+        string2 = string2.replacingOccurrences(of: "C", with: "ℂ")
+        string2 = string2.replacingOccurrences(of: "D", with: "𝔻")
+        string2 = string2.replacingOccurrences(of: "E", with: "𝔼")
+        string2 = string2.replacingOccurrences(of: "F", with: "𝔽")
+        string2 = string2.replacingOccurrences(of: "G", with: "𝔾")
+        string2 = string2.replacingOccurrences(of: "H", with: "ℍ")
+        string2 = string2.replacingOccurrences(of: "I", with: "𝕀")
+        string2 = string2.replacingOccurrences(of: "J", with: "𝕁")
+        string2 = string2.replacingOccurrences(of: "K", with: "𝕂")
+        string2 = string2.replacingOccurrences(of: "L", with: "𝕃")
+        string2 = string2.replacingOccurrences(of: "M", with: "𝕄")
+        string2 = string2.replacingOccurrences(of: "N", with: "ℕ")
+        string2 = string2.replacingOccurrences(of: "O", with: "𝕆")
+        string2 = string2.replacingOccurrences(of: "P", with: "ℙ")
+        string2 = string2.replacingOccurrences(of: "Q", with: "ℚ")
+        string2 = string2.replacingOccurrences(of: "R", with: "ℝ")
+        string2 = string2.replacingOccurrences(of: "S", with: "𝕊")
+        string2 = string2.replacingOccurrences(of: "T", with: "𝕋")
+        string2 = string2.replacingOccurrences(of: "U", with: "𝕌")
+        string2 = string2.replacingOccurrences(of: "V", with: "𝕍")
+        string2 = string2.replacingOccurrences(of: "W", with: "𝕎")
+        string2 = string2.replacingOccurrences(of: "X", with: "𝕏")
+        string2 = string2.replacingOccurrences(of: "Y", with: "𝕐")
+        string2 = string2.replacingOccurrences(of: "Z", with: "ℤ")
+        
+        string2 = string2.replacingOccurrences(of: "1", with: "𝟙")
+        string2 = string2.replacingOccurrences(of: "2", with: "𝟚")
+        string2 = string2.replacingOccurrences(of: "3", with: "𝟛")
+        string2 = string2.replacingOccurrences(of: "4", with: "𝟜")
+        string2 = string2.replacingOccurrences(of: "5", with: "𝟝")
+        string2 = string2.replacingOccurrences(of: "6", with: "𝟞")
+        string2 = string2.replacingOccurrences(of: "7", with: "𝟟")
+        string2 = string2.replacingOccurrences(of: "8", with: "𝟠")
+        string2 = string2.replacingOccurrences(of: "9", with: "𝟡")
+        string2 = string2.replacingOccurrences(of: "0", with: "𝟘")
+        
+        return string2
+    }
+    
     var closeButton = MNGExpandedTouchAreaButton()
     var cameraButton = MNGExpandedTouchAreaButton()
     var visibilityButton = MNGExpandedTouchAreaButton()
@@ -2072,6 +2142,21 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         }
                         
                     }
+                    .action(.default("  Double Stroke Text"), image: UIImage(named: "doublestroke")) { (action, ind) in
+                        print(action, ind)
+                        
+                        self.bringBackDrawer()
+                        if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
+                            if selectedText == "" {
+                                let monoT = self.doubleTheText(string: self.textView.text)
+                                self.textView.text = monoT
+                            } else {
+                                let monoT = self.doubleTheText(string: selectedText)
+                                self.textView.text = self.textView.text.replacingOccurrences(of: selectedText, with: monoT)
+                            }
+                        }
+                        
+                    }
                     .action(.cancel("Dismiss"))
                     .finally { action, index in
                         if action.style == .cancel {
@@ -3033,6 +3118,20 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     
     
     func textViewDidChange(_ textView: UITextView) {
+        
+        
+        
+        if (UserDefaults.standard.object(forKey: "keyhap") == nil) || (UserDefaults.standard.object(forKey: "keyhap") as! Int == 0) {
+            
+        } else if (UserDefaults.standard.object(forKey: "keyhap") as! Int == 1) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        } else if (UserDefaults.standard.object(forKey: "keyhap") as! Int == 2) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
+        
+        
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
         var closeB = 47
@@ -3238,7 +3337,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         title.textColor = UIColor.white
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         vw.addSubview(title)
-        vw.backgroundColor = Colours.clear
+        vw.backgroundColor = Colours.tabSelected
         
         return vw
     }

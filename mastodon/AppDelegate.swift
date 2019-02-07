@@ -70,8 +70,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        print("RECRECREC")
-        
         let request = Notifications.all(range: .default)
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {

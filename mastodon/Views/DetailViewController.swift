@@ -1308,10 +1308,27 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
-                    let controller = BoostersViewController()
-                    controller.statusLiked = stat
-                    controller.profileStatus = self.mainStatus[0].reblog?.account.id ?? self.mainStatus[0].account.id ?? ""
-                    self.navigationController?.pushViewController(controller, animated: true)
+                    
+                    
+                    let request0 = Statuses.rebloggedBy(id: self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id)
+                    StoreStruct.client.run(request0) { (statuses) in
+                        if let stat0 = (statuses.value) {
+                            
+                            
+                            DispatchQueue.main.async {
+                            
+                                let controller = BoostersViewController()
+                                controller.statusLiked = stat
+                                controller.statusBoosted = stat0
+                                controller.profileStatus = self.mainStatus[0].reblog?.account.id ?? self.mainStatus[0].account.id ?? ""
+                                self.navigationController?.pushViewController(controller, animated: true)
+                                
+                            }
+                            
+                        }
+                    }
+                
+                            
                 }
             }
         }
@@ -1631,6 +1648,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             self.present(vc, animated: true, completion: nil)
                             
                         }
+                        .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                            print(action, ind)
+                            
+                            let controller = NewQRViewController()
+                            controller.ur = self.mainStatus[0].url?.absoluteString ?? "https://www.thebluebird.app"
+                            self.present(controller, animated: true, completion: nil)
+                            
+                        }
                         .action(.cancel("Dismiss"))
                         .finally { action, index in
                             if action.style == .cancel {
@@ -1924,6 +1949,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         vc.previewNumberOfLines = 5
                         vc.previewFont = UIFont.systemFont(ofSize: 14)
                         self.present(vc, animated: true, completion: nil)
+                        
+                    }
+                    .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                        print(action, ind)
+                        
+                        let controller = NewQRViewController()
+                        controller.ur = self.mainStatus[0].url?.absoluteString ?? "https://www.thebluebird.app"
+                        self.present(controller, animated: true, completion: nil)
                         
                     }
                     .action(.cancel("Dismiss"))
@@ -2544,6 +2577,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     self.present(vc, animated: true, completion: nil)
                                     
                                 }
+                                .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                                    print(action, ind)
+                                    
+                                    let controller = NewQRViewController()
+                                    controller.ur = sto[indexPath.row].url?.absoluteString ?? "https://www.thebluebird.app"
+                                    self.present(controller, animated: true, completion: nil)
+                                    
+                                }
                                 .action(.cancel("Dismiss"))
                                 .finally { action, index in
                                     if action.style == .cancel {
@@ -2836,6 +2877,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 vc.previewNumberOfLines = 5
                                 vc.previewFont = UIFont.systemFont(ofSize: 14)
                                 self.present(vc, animated: true, completion: nil)
+                                
+                            }
+                            .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                                print(action, ind)
+                                
+                                let controller = NewQRViewController()
+                                controller.ur = sto[indexPath.row].url?.absoluteString ?? "https://www.thebluebird.app"
+                                self.present(controller, animated: true, completion: nil)
                                 
                             }
                             .action(.cancel("Dismiss"))

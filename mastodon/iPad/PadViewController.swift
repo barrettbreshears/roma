@@ -34,7 +34,7 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
             let player = playerId
             StoreStruct.playerID = playerId
             
-            let url = URL(string: "http://188.166.84.187:3000/register")!
+            let url = URL(string: "http:// 163.237.247.103:3000/register")!
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             let myParams = "instance_url=\(x00)&access_token=\(x11)&device_token=\(player)"

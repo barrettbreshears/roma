@@ -171,6 +171,17 @@ class InnerAlertController: UIAlertController {
     ///
     /// - Parameter notification: notification (object is UITextField)
     @objc private func textFieldDidChange(_ notification: Notification) {
+        
+        if (UserDefaults.standard.object(forKey: "keyhap") == nil) || (UserDefaults.standard.object(forKey: "keyhap") as! Int == 0) {
+            
+        } else if (UserDefaults.standard.object(forKey: "keyhap") as! Int == 1) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        } else if (UserDefaults.standard.object(forKey: "keyhap") as! Int == 2) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
+        
         guard let textField = notification.object as? UITextField else {
             return
         }
