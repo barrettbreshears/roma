@@ -124,7 +124,7 @@ class MainFeedCellImage: SwipeTableViewCell {
         rep1.setImage(UIImage(named: "reply3")?.maskWithColor(color: Colours.gray), for: .normal)
         rep1.backgroundColor = UIColor.clear
         rep1.layer.masksToBounds = true
-        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
+        if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
             self.rep1.alpha = 0
         } else {
             self.rep1.alpha = 1
@@ -133,7 +133,7 @@ class MainFeedCellImage: SwipeTableViewCell {
         like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
         like1.backgroundColor = UIColor.clear
         like1.layer.masksToBounds = true
-        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
+        if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
             self.like1.alpha = 0
         } else {
             self.like1.alpha = 1
@@ -142,7 +142,7 @@ class MainFeedCellImage: SwipeTableViewCell {
         boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
         boost1.backgroundColor = UIColor.clear
         boost1.layer.masksToBounds = true
-        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
+        if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
             self.boost1.alpha = 0
         } else {
             self.boost1.alpha = 1
@@ -151,7 +151,7 @@ class MainFeedCellImage: SwipeTableViewCell {
         more1.setImage(UIImage(named: "more")?.maskWithColor(color: Colours.gray), for: .normal)
         more1.backgroundColor = UIColor.clear
         more1.layer.masksToBounds = true
-        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
+        if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
             self.more1.alpha = 0
         } else {
             self.more1.alpha = 0
@@ -206,7 +206,7 @@ class MainFeedCellImage: SwipeTableViewCell {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-32-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
             
-            if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
+            if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(200)]-23-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(200)]-23-|", options: [], metrics: nil, views: viewsDict))
             } else {
@@ -236,7 +236,7 @@ class MainFeedCellImage: SwipeTableViewCell {
 //            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
 //            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-32-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
 //
-//            if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
+//            if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
 //            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(500)]-23-|", options: [], metrics: nil, views: viewsDict))
 //            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(500)]-23-|", options: [], metrics: nil, views: viewsDict))
 //            } else {

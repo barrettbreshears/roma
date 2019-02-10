@@ -351,7 +351,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
         
         OneSignal.initWithLaunchOptions(launchOptions,
-                                        appId: "4f67f45a-7d0f-4e7d-8624-0ec148f064ed",
+                                        appId: "8bacaad0-9486-43d7-ab7f-af9075636437",
                                         handleNotificationAction: nil,
                                         settings: onesignalInitSettings)
         

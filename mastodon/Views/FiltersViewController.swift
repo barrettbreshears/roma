@@ -186,9 +186,9 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         let title = UILabel()
         title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
         if self.currentTags.count == 0 {
-            title.text = "No Toot Filters"
+            title.text = "No Status Filters"
         } else {
-            title.text = "Toot Filters"
+            title.text = "Status Filters"
         }
         title.textColor = Colours.grayDark2
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)

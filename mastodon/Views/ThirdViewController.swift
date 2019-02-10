@@ -1727,7 +1727,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     }
                 }
-                .action(.default("Toot Filters".localized), image: UIImage(named: "filters")) { (action, ind) in
+                .action(.default("Status Filters".localized), image: UIImage(named: "filters")) { (action, ind) in
                     print(action, ind)
                     
                     let request = FilterToots.all()
@@ -1735,14 +1735,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         if let stat = (statuses.value) {
                             DispatchQueue.main.async {
                                 let controller = FiltersViewController()
-                                controller.currentTagTitle = "Toot Filters"
+                                controller.currentTagTitle = "Status Filters"
                                 controller.currentTags = stat
                                 self.navigationController?.pushViewController(controller, animated: true)
                             }
                         }
                     }
                 }
-                .action(.default("Scheduled Toots"), image: UIImage(named: "schedule")) { (action, ind) in
+                .action(.default("Scheduled Posts"), image: UIImage(named: "schedule")) { (action, ind) in
                     print(action, ind)
                     
                     let request = Statuses.allScheduled()
@@ -3297,7 +3297,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             sto = self.profileStatuses2
         }
         
-        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {} else {
+        if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {} else {
             return nil
         }
         

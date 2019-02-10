@@ -290,32 +290,28 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     if !instances.contains(currentInstance){
                         instances.append(currentInstance)
                     }
-                   
-                    UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
-                    InstanceData.setCurrentInstance(instance: currentInstance)
-                    let request = Timelines.home()
-                    StoreStruct.client.run(request) { (statuses) in
-                        if let stat = (statuses.value) {
-                            StoreStruct.statusesHome = stat
-                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
-                        }
-                    }
-                    
-                    
                     let request2 = Accounts.currentUser()
                     StoreStruct.client.run(request2) { (statuses) in
-                        if let stat = (statuses.value) {
-                            DispatchQueue.main.async {
-                                StoreStruct.currentUser = stat
-                                Account.addAccountToList(account: stat)
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
+                        if let account = (statuses.value) {
+                            
+                            UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
+                            InstanceData.setCurrentInstance(instance: currentInstance)
+                            let request = Timelines.home()
+                            StoreStruct.client.run(request) { (statuses) in
+                                if let stat = (statuses.value) {
+                                     DispatchQueue.main.async {
+                                        StoreStruct.currentUser = account
+                                        Account.addAccountToList(account: account)
+                                        StoreStruct.statusesHome = stat
+                                        StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
+                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
+                                    }
+                                }
                             }
+                            
                         }
                     }
-                    
-                    
-                    
                     
                     // onboarding
                     if (UserDefaults.standard.object(forKey: "onb") == nil) || (UserDefaults.standard.object(forKey: "onb") as! Int == 0) {
@@ -365,48 +361,30 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     instances.append(newInsatnce)
                     UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
                     
-                    
-                    let request = Timelines.home()
-                    StoreStruct.shared.newClient.run(request) { (statuses) in
-                        if let stat = (statuses.value) {
-                            StoreStruct.statusesHome = stat
-                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
-                        }
-                    }
-                    
-                    
                     let request2 = Accounts.currentUser()
                     StoreStruct.shared.newClient.run(request2) { (statuses) in
                         print("THIS IS THE STATUS \(statuses)")
                         if let stat = (statuses.value) {
                             StoreStruct.currentUser = stat
                             Account.addAccountToList(account: stat)
-                            DispatchQueue.main.async {
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
+                            
+                            let request = Timelines.home()
+                            StoreStruct.shared.newClient.run(request) { (statuses) in
+                                if let stat = (statuses.value) {
+                                    StoreStruct.statusesHome = stat
+                                    StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                                    DispatchQueue.main.async {
+                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
+                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
+                                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                                        appDelegate.reloadApplication()
+                                    }
+                                    
+                                }
                             }
+                            
                         }
                     }
-                    
-                    
-                    
-                    
-                    // onboarding
-                    if (UserDefaults.standard.object(forKey: "onb") == nil) || (UserDefaults.standard.object(forKey: "onb") as! Int == 0) {
-                        DispatchQueue.main.async {
-                            self.bulletinManager.prepare()
-                            self.bulletinManager.presentBulletin(above: self, animated: true, completion: nil)
-                        }
-                    }
-                    
-                    
-                    DispatchQueue.main.async {
-                        
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        appDelegate.reloadApplication()
-                        
-                    }
-                    
                     
                 }
             } catch let error {
@@ -527,7 +505,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             let player = playerId
             StoreStruct.playerID = playerId
             
-            let url = URL(string: "http://163.237.247.103:3000/register")!
+            let url = URL(string: "https://pushrelay1.your.org:443/register")!
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             let myParams = "instance_url=\(x00)&access_token=\(x11)&device_token=\(player)"

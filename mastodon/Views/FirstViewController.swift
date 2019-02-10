@@ -2888,7 +2888,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
         
         
-        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {} else {
+        if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {} else {
             return nil
         }
         
