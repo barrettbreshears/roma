@@ -52,6 +52,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     var segmentedControl: SJFluidSegmentedControl!
     var typeOfSearch = 0
     var newestText = ""
+    var accountClient = Client(baseURL: "")
     
     var tabOne = UINavigationController()
     var tabTwo = UINavigationController()
@@ -335,6 +336,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     
     @objc func newInstanceLogged(){
         
+        
         var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.newInstance!.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.newInstance!.authCode)&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&client_id=\(StoreStruct.shared.newInstance!.clientID)&client_secret=\(StoreStruct.shared.newInstance!.clientSecret)")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -354,12 +356,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         return
                     }
                     
-                    newInsatnce.accessToken = accessToken
                     
-                    InstanceData.setCurrentInstance(instance: newInsatnce)
-                    var instances = InstanceData.getAllInstances()
-                    instances.append(newInsatnce)
-                    UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
+                    newInsatnce.accessToken = accessToken
+                    StoreStruct.shared.newClient.accessToken = accessToken
+                    
                     
                     let request2 = Accounts.currentUser()
                     StoreStruct.shared.newClient.run(request2) { (statuses) in
@@ -374,6 +374,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                                     StoreStruct.statusesHome = stat
                                     StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                                     DispatchQueue.main.async {
+                                        InstanceData.setCurrentInstance(instance: newInsatnce)
+                                        var instances = InstanceData.getAllInstances()
+                                        instances.append(newInsatnce)
+                                        UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
                                         NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
                                         NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
                                         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -505,7 +509,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             let player = playerId
             StoreStruct.playerID = playerId
             
-            let url = URL(string: "https://pushrelay1.your.org:443/register")!
+            let url = URL(string: "https://pushrelay1.your.org/register")!
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             let myParams = "instance_url=\(x00)&access_token=\(x11)&device_token=\(player)"
@@ -845,7 +849,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             let request2 = Accounts.currentUser()
             StoreStruct.client.run(request2) { (statuses) in
                 if let stat = (statuses.value) {
-                    Account.addAccountToList(account: stat)
                     StoreStruct.currentUser = stat
                 }
             }
@@ -2019,8 +2022,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         StoreStruct.allPins = []
         StoreStruct.photoNew = UIImage()
         
-//        InstanceData.clearInstances()
-//        Account.clearAccounts()
+        InstanceData.clearInstances()
+        Account.clearAccounts()
         self.createLoginView()
         
         
@@ -2293,8 +2296,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     override func viewDidAppear(_ animated: Bool) {
         
         super.viewDidAppear(true)
-        
-        
+        checkAccounts()
         
         let request = Lists.all()
         StoreStruct.client.run(request) { (statuses) in
@@ -2311,7 +2313,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             let request2 = Accounts.currentUser()
             StoreStruct.client.run(request2) { (statuses) in
                 if let stat = (statuses.value) {
-                    Account.addAccountToList(account: stat)
                     StoreStruct.currentUser = stat
                 }
             }
@@ -2347,6 +2348,36 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         }
     }
     
+    func checkAccounts(){
+        
+        if InstanceData.getAllInstances().count != Account.getAccounts().count {
+            Account.clearAccounts()
+            getAccount(currentIndex: 0)
+        }
+        
+    }
+    
+    func getAccount(currentIndex:Int){
+        
+        if currentIndex >= InstanceData.getAllInstances().count {
+            return
+        }
+        
+        let instance = InstanceData.getAllInstances()[currentIndex]
+        let accountClient = Client(baseURL: "https://\(instance.returnedText)", accessToken: instance.accessToken, session: .shared)
+        let accountRequest = Accounts.currentUser()
+        accountClient.run(accountRequest) { (account) in
+            print("THIS IS THE STATUS \(account)")
+            print(account.error?.localizedDescription)
+            if let stat = (account.value) {
+                Account.addAccountToList(account: stat)
+                let nextIndex = currentIndex + 1
+                self.getAccount(currentIndex: nextIndex)
+            }
+        }
+       
+        
+    }
     
     @objc func touchList() {
         self.tList()

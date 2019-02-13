@@ -2968,7 +2968,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 
                 
-                let cell = tableView.cellForRow(at: indexPath) as! ProfileHeaderCellOwn2
+                guard let cell = tableView.cellForRow(at: indexPath) as? ProfileHeaderCellOwn2 else {
+                    return
+                }
                 var images = [SKPhoto]()
                 
                 let photo = SKPhoto.photoWithImageURL(sto[0].reblog?.account.headerStatic ?? sto[0].account.headerStatic, holder: cell.headerImageView.currentImage ?? nil)
@@ -3039,7 +3041,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             } else {
                 
                 
-                let cell = tableView.cellForRow(at: indexPath) as! ProfileHeaderCellOwn2
+                guard let cell = tableView.cellForRow(at: indexPath) as? ProfileHeaderCellOwn2 else {
+                    return
+                }
                 var images = [SKPhoto]()
                 
                 let photo = SKPhoto.photoWithImageURL(self.chosenUser.avatarStatic, holder: nil)

@@ -11,6 +11,7 @@ import UIKit
 
 class CollectionProCells: UICollectionViewCell {
     
+    var account:Account?
     var bgImage = UIImageView()
     var image = UIImageView()
     
@@ -39,7 +40,17 @@ class CollectionProCells: UICollectionViewCell {
         self.image.frame.size.height = 55
         self.image.backgroundColor = UIColor.clear
         self.image.layer.cornerRadius = 27.5
+        self.image.image = nil
         contentView.addSubview(image)
+    }
+    
+    func setImageFromAccount(account:Account){
+        
+        if account.avatarStatic != nil {
+            self.image.pin_setImage(from: URL(string: account.avatarStatic))
+            
+        }
+        
     }
 }
 

@@ -1013,6 +1013,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
+        
+        
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
         var newoff = 45

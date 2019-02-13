@@ -59,6 +59,20 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
         return InstanceData.getAllInstances().count + 1
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionColourCell", for: indexPath) as! CollectionProCells
+        if indexPath.row >= InstanceData.getAllInstances().count {
+            cell.image.image = UIImage(named: "newac2")
+        } else {
+            let account = Account.getAccounts()[indexPath.row]
+            print("index \(indexPath.row) \(account.avatarStatic)")
+            if account.avatarStatic != nil {
+                cell.setImageFromAccount(account: account)
+            }
+        }
+    }
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionColourCell", for: indexPath) as! CollectionProCells
         
@@ -73,7 +87,7 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
             
         } else {
             
-            
+            cell.image.image = nil
             let instances = InstanceData.getAllInstances()
             var curr = InstanceData.getCurrentInstance()
             if curr?.clientID == instances[indexPath.row].clientID {
@@ -83,15 +97,13 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
             }
             cell.image.layer.borderColor = Colours.tabSelected.cgColor
             
-            
-            
             let instance = InstanceData.getAllInstances()[indexPath.row]
             let account = Account.getAccounts()[indexPath.row]
-        
-        if account.avatarStatic != nil {
-            cell.image.pin_setImage(from: URL(string: account.avatarStatic))
-        }
-        cell.image.backgroundColor = Colours.clear
+            
+            if account.avatarStatic != nil {
+                cell.setImageFromAccount(account: account)
+            }
+            cell.image.backgroundColor = Colours.clear
             
         }
         

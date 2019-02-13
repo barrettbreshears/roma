@@ -19,10 +19,8 @@ extension Account: Equatable {
             return
         }
         
-        if !accounts.contains(account) {
-            accounts.append(account)
-            UserDefaults.standard.set(try? PropertyListEncoder().encode(accounts), forKey:"allAccounts")
-        }
+        accounts.append(account)
+        UserDefaults.standard.set(try? PropertyListEncoder().encode(accounts), forKey:"allAccounts")
         
     }
     
