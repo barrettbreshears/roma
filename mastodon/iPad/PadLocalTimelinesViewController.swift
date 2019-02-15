@@ -850,7 +850,7 @@ class PadLocalTimelinesViewController: UIViewController, UITableViewDelegate, UI
             
             var sss = StoreStruct.client.baseURL.replacingOccurrences(of: "https", with: "wss")
             sss = sss.replacingOccurrences(of: "http", with: "wss")
-            socket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/user?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=user")!)
+            socket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=user")!)
             socket.onConnect = {
                 print("websocket is connected")
             }
@@ -928,7 +928,7 @@ class PadLocalTimelinesViewController: UIViewController, UITableViewDelegate, UI
             
             var sss = StoreStruct.client.baseURL.replacingOccurrences(of: "https", with: "wss")
             sss = sss.replacingOccurrences(of: "http", with: "wss")
-            lsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/public?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=public/local")!)
+            lsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=public/local")!)
             lsocket.onConnect = {
                 print("websocket is connected")
             }
@@ -999,7 +999,7 @@ class PadLocalTimelinesViewController: UIViewController, UITableViewDelegate, UI
             
             var sss = StoreStruct.client.baseURL.replacingOccurrences(of: "https", with: "wss")
             sss = sss.replacingOccurrences(of: "http", with: "wss")
-            fsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/public?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=public")!)
+            fsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=public")!)
             fsocket.onConnect = {
                 print("websocket is connected")
             }

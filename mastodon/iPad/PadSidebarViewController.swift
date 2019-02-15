@@ -893,7 +893,7 @@ class PadSidebarViewController: UIViewController, UITableViewDelegate, UITableVi
             
             var sss = StoreStruct.client.baseURL.replacingOccurrences(of: "https", with: "wss")
             sss = sss.replacingOccurrences(of: "http", with: "wss")
-            nsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/user?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=user")!)
+            nsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=user")!)
             nsocket.onConnect = {
                 print("websocket is connected")
             }

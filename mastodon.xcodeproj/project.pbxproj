@@ -212,7 +212,6 @@
 		5320581E215D287700ED0C36 /* FontAwesome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057F6215D287600ED0C36 /* FontAwesome.swift */; };
 		5320581F215D287700ED0C36 /* FontAwesomeStateRequirement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057F7215D287600ED0C36 /* FontAwesomeStateRequirement.swift */; };
 		53205820215D287700ED0C36 /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057F8215D287600ED0C36 /* Enum.swift */; };
-		53205821215D287700ED0C36 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 532057F9215D287600ED0C36 /* README.md */; };
 		53205822215D287700ED0C36 /* DKImageResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057FC215D287600ED0C36 /* DKImageResource.swift */; };
 		53205823215D287700ED0C36 /* DKImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057FD215D287600ED0C36 /* DKImagePickerController.swift */; };
 		53205824215D287700ED0C36 /* DKImagePickerControllerDefaultUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057FE215D287600ED0C36 /* DKImagePickerControllerDefaultUIDelegate.swift */; };
@@ -697,6 +696,11 @@
 		A91701B721CAF09F0005A14C /* PadActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91701B421CAF09F0005A14C /* PadActivityViewController.swift */; };
 		A91701B821CAF09F0005A14C /* PadLocalTimelinesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91701B521CAF09F0005A14C /* PadLocalTimelinesViewController.swift */; };
 		A91701B921CAF09F0005A14C /* PadFedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A91701B621CAF09F0005A14C /* PadFedViewController.swift */; };
+		A9296DD12215F7D600BEE7A7 /* PushNotificationDataObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DCB2215F7D500BEE7A7 /* PushNotificationDataObjects.swift */; };
+		A9296DD32215F7D600BEE7A7 /* Decode85.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DCD2215F7D600BEE7A7 /* Decode85.swift */; };
+		A9296DD42215F7D600BEE7A7 /* DecryptNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DCE2215F7D600BEE7A7 /* DecryptNotification.swift */; };
+		A9296DD52215F7D600BEE7A7 /* PushNotificationReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DCF2215F7D600BEE7A7 /* PushNotificationReceiver.swift */; };
+		A9296DD62215F7D600BEE7A7 /* SwiftGCM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DD02215F7D600BEE7A7 /* SwiftGCM.swift */; };
 		A947585A220CDFC100735D0A /* terms.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A9475859220CDFC100735D0A /* terms.rtf */; };
 		A968E8842207D418000EED23 /* TermsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A968E8832207D418000EED23 /* TermsController.swift */; };
 		A973AF2421D432AA009D7D21 /* ProCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7806850821CC222F00072C41 /* ProCells.swift */; };
@@ -1512,6 +1516,13 @@
 		A91701B421CAF09F0005A14C /* PadActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PadActivityViewController.swift; sourceTree = "<group>"; };
 		A91701B521CAF09F0005A14C /* PadLocalTimelinesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PadLocalTimelinesViewController.swift; sourceTree = "<group>"; };
 		A91701B621CAF09F0005A14C /* PadFedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PadFedViewController.swift; sourceTree = "<group>"; };
+		A9296DCB2215F7D500BEE7A7 /* PushNotificationDataObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushNotificationDataObjects.swift; sourceTree = "<group>"; };
+		A9296DCC2215F7D500BEE7A7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		A9296DCD2215F7D600BEE7A7 /* Decode85.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decode85.swift; sourceTree = "<group>"; };
+		A9296DCE2215F7D600BEE7A7 /* DecryptNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecryptNotification.swift; sourceTree = "<group>"; };
+		A9296DCF2215F7D600BEE7A7 /* PushNotificationReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushNotificationReceiver.swift; sourceTree = "<group>"; };
+		A9296DD02215F7D600BEE7A7 /* SwiftGCM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftGCM.swift; sourceTree = "<group>"; };
+		A9296DD722160B5100BEE7A7 /* mastodon-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mastodon-Bridging-Header.h"; sourceTree = "<group>"; };
 		A9475859220CDFC100735D0A /* terms.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = terms.rtf; sourceTree = "<group>"; };
 		A968E8832207D418000EED23 /* TermsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsController.swift; sourceTree = "<group>"; };
 		A968E8862207DACE000EED23 /* terms.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = terms.rtf; sourceTree = "<group>"; };
@@ -2622,6 +2633,7 @@
 				530976A62179D8D900640D84 /* icon20.png */,
 				530976952179D8D500640D84 /* icon20@2x.png */,
 				530976962179D8D500640D84 /* icon20@3x.png */,
+				A9296DD722160B5100BEE7A7 /* mastodon-Bridging-Header.h */,
 			);
 			path = mastodon;
 			sourceTree = "<group>";
@@ -2629,6 +2641,7 @@
 		5373CA502152357200676F3D /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				A9296DCA2215F7C400BEE7A7 /* push */,
 				A9475858220CDFC100735D0A /* text */,
 				531CCD5522073CC900A56145 /* ChromaColorPicker */,
 				530F5B3121E267CA00A910B3 /* DateTime */,
@@ -2935,6 +2948,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A9296DCA2215F7C400BEE7A7 /* push */ = {
+			isa = PBXGroup;
+			children = (
+				A9296DCD2215F7D600BEE7A7 /* Decode85.swift */,
+				A9296DCE2215F7D600BEE7A7 /* DecryptNotification.swift */,
+				A9296DCB2215F7D500BEE7A7 /* PushNotificationDataObjects.swift */,
+				A9296DCF2215F7D600BEE7A7 /* PushNotificationReceiver.swift */,
+				A9296DCC2215F7D500BEE7A7 /* README.md */,
+				A9296DD02215F7D600BEE7A7 /* SwiftGCM.swift */,
+			);
+			path = push;
+			sourceTree = "<group>";
+		};
 		A9475858220CDFC100735D0A /* text */ = {
 			isa = PBXGroup;
 			children = (
@@ -3144,6 +3170,7 @@
 					};
 					5373C9D3215173EE00676F3D = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1010;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -3291,7 +3318,6 @@
 				5352D0CA215E74B400901B60 /* icon9@2x.png in Resources */,
 				5373CA0F2151AC8D00676F3D /* Localizable.strings in Resources */,
 				530976AA2179D8D900640D84 /* icon10.png in Resources */,
-				53205821215D287700ED0C36 /* README.md in Resources */,
 				5352D0A8215E679300901B60 /* icon5@3x.png in Resources */,
 				535B33B8215C0EC6001A2A7F /* maximize_24.png in Resources */,
 				5352D0AB215E679300901B60 /* icon8@2x.png in Resources */,
@@ -3729,6 +3755,7 @@
 				5373CAC62152C68000676F3D /* Accounts.swift in Sources */,
 				5373CADA2152E04C00676F3D /* Date.swift in Sources */,
 				5354BADA216577FD0094C545 /* CRRefreshComponent.swift in Sources */,
+				A9296DD62215F7D600BEE7A7 /* SwiftGCM.swift in Sources */,
 				5373CB1A2152FCF300676F3D /* Debug.swift in Sources */,
 				5373CB1B2152FCF300676F3D /* InnerAlertController.swift in Sources */,
 				53ADB308217E4F6C00A7C431 /* NewCaptionViewController.swift in Sources */,
@@ -3890,10 +3917,12 @@
 				5320582E215D287700ED0C36 /* DKAssetGroupDetailImageCell.swift in Sources */,
 				5351D75821617FC40012960F /* VolumeBarStackView.swift in Sources */,
 				53C037B0220A2A6F0047EBC4 /* NewQRViewController.swift in Sources */,
+				A9296DD42215F7D600BEE7A7 /* DecryptNotification.swift in Sources */,
 				5373CAFA2152EDB700676F3D /* SwipeActionsView.swift in Sources */,
 				5373CB2F21541A0300676F3D /* UIImage+Rotation.swift in Sources */,
 				5320581A215D287700ED0C36 /* FontAwesomeTabBarItem.swift in Sources */,
 				53E6F2B1216CCA9400912B83 /* WatchSessionManager.swift in Sources */,
+				A9296DD52215F7D600BEE7A7 /* PushNotificationReceiver.swift in Sources */,
 				5373CB092152EDB800676F3D /* SwipeTableViewCellDelegate.swift in Sources */,
 				5354BACA216577FD0094C545 /* RamotionBallLayer.swift in Sources */,
 				5373CABF2152C68000676F3D /* Visibility.swift in Sources */,
@@ -3926,6 +3955,7 @@
 				5373CAB02152C68000676F3D /* Context.swift in Sources */,
 				5373CB3121541A0300676F3D /* GifIt.swift in Sources */,
 				5373CB402155049900676F3D /* ProfileHeaderCell.swift in Sources */,
+				A9296DD32215F7D600BEE7A7 /* Decode85.swift in Sources */,
 				5354BAC5216577FD0094C545 /* CRRefreshAnimator.swift in Sources */,
 				531CCD5D22073CCA00A56145 /* ChromaShadeSlider.swift in Sources */,
 				5373CB3621541A0300676F3D /* SKIndicatorView.swift in Sources */,
@@ -3981,6 +4011,7 @@
 				535B33C8215C31E3001A2A7F /* RegexParser.swift in Sources */,
 				5354BAA721653C740094C545 /* PinnedViewController.swift in Sources */,
 				536A4FB3216B73D600A3D483 /* BulletinItem.swift in Sources */,
+				A9296DD12215F7D600BEE7A7 /* PushNotificationDataObjects.swift in Sources */,
 				535B33B3215C0EC6001A2A7F /* XPlayerViewController+Action.swift in Sources */,
 				5316C89B219D94A00003AB97 /* RoundedCornerView.swift in Sources */,
 				5373CB012152EDB800676F3D /* SwipeController.swift in Sources */,
@@ -4562,6 +4593,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = mastodon/mastodon.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -4575,6 +4607,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vm.roma;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "mastodon/mastodon-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -4586,6 +4620,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = mastodon/mastodon.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
@@ -4599,6 +4634,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vm.roma;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "mastodon/mastodon-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

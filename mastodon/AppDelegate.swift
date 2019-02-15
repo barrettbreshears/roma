@@ -90,6 +90,82 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
+    
+    func application(
+        _ application: UIApplication,
+        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+        ) {
+        let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
+        let token = tokenParts.joined()
+        print("Device Token: \(token)")
+        
+        guard  StoreStruct.shared.currentInstance.returnedText != "", let receiver = try? PushNotificationReceiver() else {
+            return
+        }
+        
+        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay1.your.org/relay-to/production/\(token)", receiver: receiver, alerts: PushNotificationAlerts.all)
+        
+        //create the url with URL
+        let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
+        
+        //create the session object
+        let session = URLSession.shared
+        
+        //now create the URLRequest object using the url object
+        var request = URLRequest(url: url)
+        
+        request.httpMethod = "POST"// "POST" //set http method as POST
+        
+        
+        
+        let jsonEncoder = JSONEncoder()
+        do {
+            let jsonData = try jsonEncoder.encode(requestParams)
+            let jsonString = String(data: jsonData, encoding: .utf8)
+            
+            request.httpBody = jsonData
+            print("JSON String : " + jsonString!)
+        }
+        catch {
+             print(error.localizedDescription)
+        }
+        request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        //create dataTask using the session object to send data to the server
+        let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
+            
+            guard error == nil else {
+                return
+            }
+            
+            guard let data = data else {
+                return
+            }
+            
+            do {
+                //create json object from data
+                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                    print(json)
+                    // handle json...
+                }
+            } catch let error {
+                print(error.localizedDescription)
+            }
+        })
+        task.resume()
+        
+    }
+    
+    func application(
+        _ application: UIApplication,
+        didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("Failed to register: \(error)")
+    }
+
+    
+    
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         if shortcutItem.type == "com.vm.roma.feed" {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "switch11"), object: self)
@@ -347,16 +423,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         
-        
-        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
-        
-        OneSignal.initWithLaunchOptions(launchOptions,
-                                        appId: "8bacaad0-9486-43d7-ab7f-af9075636437",
-                                        handleNotificationAction: nil,
-                                        settings: onesignalInitSettings)
-        
-        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
-        
+//        
+//        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
+//        
+//        OneSignal.initWithLaunchOptions(launchOptions,
+//                                        appId: "8bacaad0-9486-43d7-ab7f-af9075636437",
+//                                        handleNotificationAction: nil,
+//                                        settings: onesignalInitSettings)
+//        
+//        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
+//        
         
         WatchSessionManager.sharedManager.startSession()
         
