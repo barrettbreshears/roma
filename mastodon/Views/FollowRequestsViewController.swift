@@ -263,7 +263,9 @@ class FollowRequestsViewController: UIViewController, UITableViewDelegate, UITab
                                 statusAlert.title = "Accepted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = self.currentTags[indexPath.row].displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 self.currentTags.remove(at: indexPath.row)
                                 self.tableView.reloadData()
@@ -288,7 +290,9 @@ class FollowRequestsViewController: UIViewController, UITableViewDelegate, UITab
                                 statusAlert.title = "Rejected".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = self.currentTags[indexPath.row].displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 self.currentTags.remove(at: indexPath.row)
                                 self.tableView.reloadData()

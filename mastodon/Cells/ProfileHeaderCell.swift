@@ -23,6 +23,7 @@ class ProfileHeaderCell: SwipeTableViewCell {
     var blurEffectView = UIVisualEffectView()
     var more = UIButton()
     var settings = UIButton()
+    var settings2 = UIButton()
     var tagListView = DLTagView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -32,6 +33,7 @@ class ProfileHeaderCell: SwipeTableViewCell {
         headerImageView.backgroundColor = Colours.tabSelected
         more.backgroundColor = UIColor.clear
         settings.backgroundColor = UIColor.clear
+        settings2.backgroundColor = UIColor.clear
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         headerImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -42,6 +44,7 @@ class ProfileHeaderCell: SwipeTableViewCell {
         follows.translatesAutoresizingMaskIntoConstraints = false
         more.translatesAutoresizingMaskIntoConstraints = false
         settings.translatesAutoresizingMaskIntoConstraints = false
+        settings2.translatesAutoresizingMaskIntoConstraints = false
         tagListView.translatesAutoresizingMaskIntoConstraints = false
         
         if (UserDefaults.standard.object(forKey: "proCorner") == nil || UserDefaults.standard.object(forKey: "proCorner") as! Int == 0) {
@@ -57,10 +60,11 @@ class ProfileHeaderCell: SwipeTableViewCell {
         more.layer.cornerRadius = 20
         more.layer.masksToBounds = true
         
-        settings.layer.cornerRadius = 20
+        settings.layer.cornerRadius = 15
         settings.layer.masksToBounds = true
+        settings2.layer.cornerRadius = 20
+        settings2.layer.masksToBounds = true
         headerImageView.layer.masksToBounds = true
-        
         
         userName.numberOfLines = 0
         userTag.numberOfLines = 0
@@ -94,6 +98,7 @@ class ProfileHeaderCell: SwipeTableViewCell {
         contentView.addSubview(toot)
         contentView.addSubview(more)
         contentView.addSubview(settings)
+        contentView.addSubview(settings2)
         contentView.addSubview(tagListView)
         contentView.addSubview(follows)
         
@@ -107,17 +112,21 @@ class ProfileHeaderCell: SwipeTableViewCell {
             "follows" : follows,
             "more" : more,
             "settings" : settings,
+            "settings2" : settings2,
             "tagListView" : tagListView,
             ]
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[header]|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=20)-[settings(40)]-28-[image(100)]-28-[more(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=10)-[settings(80)]-16-[image(100)]-28-[more(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[date]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-60-[more(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-60-[settings(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-65-[settings(30)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[image(100)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-150-[name]-4-[artist]-15-[episodes]-15-[follows]-4-[date]-10-[tagListView(60)]-14-|", options: [], metrics: nil, views: viewsDict))
+        
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=10)-[settings(80)]-81-[settings2(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-95-[settings2(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[tagListView]-0-|", options: [], metrics: nil, views: viewsDict))
         
@@ -284,13 +293,82 @@ class ProfileHeaderCell: SwipeTableViewCell {
         more.setImage(UIImage(named: "more4"), for: .normal)
         
         if status.locked {
-            settings.setImage(UIImage(named: "private")?.maskWithColor(color: UIColor.black), for: .normal)
-        }
-        if status.bot {
-            settings.setImage(UIImage(named: "boticon")?.maskWithColor(color: UIColor.black), for: .normal)
+            settings2.setImage(UIImage(named: "private")?.maskWithColor(color: Colours.grayDark), for: .normal)
+            settings2.imageEdgeInsets = UIEdgeInsets(top: 11, left: 14, bottom: 11, right: 14)
+            settings2.contentMode = .scaleAspectFit
+            settings2.backgroundColor = Colours.white
+        } else if status.bot {
+            settings2.setImage(UIImage(named: "boticon")?.maskWithColor(color: Colours.grayDark), for: .normal)
+            settings2.imageEdgeInsets = UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12)
+            settings2.contentMode = .scaleAspectFit
+            settings2.backgroundColor = Colours.white
+        } else {
+            settings2.backgroundColor = Colours.clear
         }
         
+        
+        
+        let request02 = Accounts.relationships(ids: [StoreStruct.currentUser.id, status.id])
+        StoreStruct.client.run(request02) { (statuses) in
+            if let stat = (statuses.value) {
+                
+                if stat[1].followedBy {
+                    DispatchQueue.main.async {
+                        self.userTag.text = "\(self.userTag.text ?? "") • Follows you"
+                    }
+                }
+                
+                if stat[1].following {
+                    DispatchQueue.main.async {
+                        self.settings.setTitle("Following", for: .normal)
+                        self.settings.setTitleColor(Colours.white, for: .normal)
+                        self.settings.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .heavy)
+                        self.settings.backgroundColor = Colours.tabSelected
+                        self.settings.layer.borderColor = Colours.white.cgColor
+                        self.settings.layer.borderWidth = 0
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.settings.setTitle("Follow", for: .normal)
+                        self.settings.setTitleColor(Colours.grayDark, for: .normal)
+                        self.settings.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .heavy)
+                        self.settings.backgroundColor = Colours.white
+                        self.settings.layer.borderColor = Colours.white.cgColor
+                        self.settings.layer.borderWidth = 0
+                    }
+                }
+            }
+        }
+        
+        
+        
     }
+    
+    
+    func changeFollowStatus(_ isFollowing: Bool) {
+        
+                if isFollowing {
+                    DispatchQueue.main.async {
+                        self.settings.setTitle("Following", for: .normal)
+                        self.settings.setTitleColor(Colours.white, for: .normal)
+                        self.settings.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+                        self.settings.backgroundColor = Colours.tabSelected
+                        self.settings.layer.borderColor = Colours.white.cgColor
+                        self.settings.layer.borderWidth = 2
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        self.settings.setTitle("Follow", for: .normal)
+                        self.settings.setTitleColor(Colours.grayDark, for: .normal)
+                        self.settings.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+                        self.settings.backgroundColor = Colours.white
+                        self.settings.layer.borderColor = Colours.white.cgColor
+                        self.settings.layer.borderWidth = 2
+                    }
+                }
+        
+    }
+    
     
 }
 

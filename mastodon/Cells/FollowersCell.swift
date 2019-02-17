@@ -75,9 +75,9 @@ class FollowersCell: SwipeTableViewCell {
     
     func configure(_ status: Account) {
         if (UserDefaults.standard.object(forKey: "mentionToggle") == nil || UserDefaults.standard.object(forKey: "mentionToggle") as! Int == 0) {
-            userTag.text = "\(status.displayName) @\(status.acct)"
+            userTag.text = "@\(status.acct)"
         } else {
-            userTag.text = "\(status.displayName) @\(status.username)"
+            userTag.text = "@\(status.username)"
         }
         toot.text = status.note.stripHTML()
         
@@ -104,9 +104,11 @@ class FollowersCell: SwipeTableViewCell {
             self.reloadInputViews()
         }
         
-        profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
-        profileImageView.pin_updateWithProgress = true
-        profileImageView.pin_setImage(from: URL(string: "\(status.avatar)"))
+        DispatchQueue.global(qos: .userInitiated).async {
+        self.profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
+        self.profileImageView.pin_updateWithProgress = true
+        self.profileImageView.pin_setImage(from: URL(string: "\(status.avatar)"))
+        }
         profileImageView.layer.masksToBounds = true
         profileImageView.layer.borderColor = UIColor.black.cgColor
         profileImageView.layer.borderWidth = 0.2

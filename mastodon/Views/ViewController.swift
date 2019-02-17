@@ -54,10 +54,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     var newestText = ""
     var accountClient = Client(baseURL: "")
     
-    var tabOne = UINavigationController()
-    var tabTwo = UINavigationController()
-    var tabThree = UINavigationController()
-    var tabFour = UINavigationController()
+    var tabOne = SAHistoryNavigationViewController()
+    var tabTwo = SAHistoryNavigationViewController()
+    var tabThree = SAHistoryNavigationViewController()
+    var tabFour = SAHistoryNavigationViewController()
     
     var firstView = FirstViewController()
     var secondView = SecondViewController()
@@ -259,7 +259,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.termsButton.removeFromSuperview()
         self.safariVC?.dismiss(animated: true, completion: nil)
         
-        var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.currentInstance.authCode)&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&client_id=\(StoreStruct.shared.currentInstance.clientID)&client_secret=\(StoreStruct.shared.currentInstance.clientSecret)")!)
+        var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.currentInstance.authCode)&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&client_id=\(StoreStruct.shared.currentInstance.clientID)&client_secret=\(StoreStruct.shared.currentInstance.clientSecret)&scope=read%20write%20follow%20push")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -335,7 +335,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     
     
     @objc func newInstanceLogged(){
-        
         
         var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.newInstance!.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.newInstance!.authCode)&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&client_id=\(StoreStruct.shared.newInstance!.clientID)&client_secret=\(StoreStruct.shared.newInstance!.clientSecret)")!)
         request.httpMethod = "POST"
@@ -433,10 +432,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         page.actionHandler = { item in
             print("Action button tapped")
             
-            OneSignal.add(self as OSSubscriptionObserver)
-            OneSignal.promptForPushNotifications(userResponse: { accepted in
-                print("User accepted notifications: \(accepted)")
-            })
+            let center = UNUserNotificationCenter.current()
+            center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
+                // Enable or disable features based on authorization.
+            }
+            UIApplication.shared.registerForRemoteNotifications()
             
             item.manager?.push(item: self.makeSiriPage())
         }
@@ -735,7 +735,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             StoreStruct.instanceLocalToAdd = UserDefaults.standard.object(forKey: "instancesLocal") as! [String]
         }
         
-        
+        if (UserDefaults.standard.object(forKey: "popupset") == nil) {
+            UserDefaults.standard.set(1, forKey: "popupset")
+        }
         
         
         self.tabBar.barTintColor = Colours.white
@@ -819,10 +821,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         } else {
             
             
-            OneSignal.add(self as OSSubscriptionObserver)
-            OneSignal.promptForPushNotifications(userResponse: { accepted in
-                print("User accepted notifications: \(accepted)")
-            })
+//            OneSignal.add(self as OSSubscriptionObserver)
+//            OneSignal.promptForPushNotifications(userResponse: { accepted in
+//                print("User accepted notifications: \(accepted)")
+//            })
             
             
             
@@ -1390,7 +1392,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     statusAlert.title = "Deleted".localized
                     statusAlert.contentColor = Colours.grayDark
                     statusAlert.message = StoreStruct.allLists[indexPath.row - 2].title
-                    statusAlert.show()
+                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                     
                     let request = Lists.delete(id: StoreStruct.allLists[indexPath.row - 2].id)
                     StoreStruct.client.run(request) { (statuses) in
@@ -1418,6 +1422,66 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         more.transitionDelegate = ScaleTransition.default
         more.textColor = Colours.tabUnselected
         return [more]
+            
+            
+            
+        } else if indexPath.section == 1 {
+            let impact = UIImpactFeedbackGenerator(style: .medium)
+            
+            let more = SwipeAction(style: .default, title: nil) { action, indexPath in
+                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                    impact.impactOccurred()
+                }
+                Alertift.actionSheet(title: nil, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("Remove".localized), image: UIImage(named: "block")) { (action, ind) in
+                        print(action, ind)
+                        
+                        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                            let notification = UINotificationFeedbackGenerator()
+                            notification.notificationOccurred(.success)
+                        }
+                        
+                        let statusAlert = StatusAlert()
+                        statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
+                        statusAlert.title = "Removed".localized
+                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.message = StoreStruct.allLists[indexPath.row - 2].title
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            statusAlert.show()
+                        }
+                        
+                        let request = Lists.delete(id: StoreStruct.allLists[indexPath.row - 2].id)
+                        StoreStruct.client.run(request) { (statuses) in
+                            DispatchQueue.main.async {
+                                StoreStruct.allLists.remove(at: indexPath.row - 2)
+                                self.tableViewLists.reloadData()
+                            }
+                        }
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .show(on: self)
+                
+                
+                if let cell = tableView.cellForRow(at: indexPath) as? FollowersCell {
+                    cell.hideSwipe(animated: true)
+                }
+            }
+            more.backgroundColor = Colours.grayDark3
+            more.image = UIImage(named: "more2")
+            more.transitionDelegate = ScaleTransition.default
+            more.textColor = Colours.tabUnselected
+            return [more]
+            
             
         } else {
             
@@ -1448,7 +1512,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         statusAlert.title = "Removed".localized
                         statusAlert.contentColor = Colours.grayDark
                         statusAlert.message = StoreStruct.instanceLocalToAdd[indexPath.row]
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
                         statusAlert.show()
+                    }
                         
                         StoreStruct.instanceLocalToAdd.remove(at: indexPath.row)
                         UserDefaults.standard.set(StoreStruct.instanceLocalToAdd, forKey: "instancesLocal")
@@ -2221,7 +2287,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                             statusAlert.title = "Not a valid Instance".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Please enter an Instance name like mastodon.technology"
-                            statusAlert.show()
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                         }
                         
                     } else {
@@ -2233,7 +2301,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         StoreStruct.shared.newInstance?.redirect = "com.vm.roma://addNewInstance".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                         let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&scope=read%20write%20follow&client_id=\(application.clientID)")!
                         DispatchQueue.main.async {
-                           
                             self.safariVC = SFSafariViewController(url: queryURL)
                             self.present(self.safariVC!, animated: true, completion: nil)
                         }
@@ -2257,7 +2324,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                             statusAlert.title = "Not a valid Instance".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Please enter an Instance name like mastodon.technology"
-                            statusAlert.show()
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                         }
                         
                     } else {
@@ -2433,6 +2502,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.tableViewLists.estimatedRowHeight = 89
         self.tableViewLists.rowHeight = UITableView.automaticDimension
         self.searcherView.addSubview(self.tableViewLists)
+        
+        
+        self.tableViewLists.reloadData()
         
         //animate
         self.searcherView.transform = CGAffineTransform(scaleX: 0.65, y: 0.65)
@@ -2803,11 +2875,19 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         
         DispatchQueue.main.async {
             
-            
-            
             // Create Tab one
-            self.tabOne = UINavigationController(rootViewController: self.firstView)
-            //let tabOne = TweetsViewController()
+            self.tabOne = SAHistoryNavigationViewController(rootViewController: self.firstView)
+            if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
+                self.tabOne.historyBackgroundColor = Colours.tabSelected
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
+                self.tabOne.historyBackgroundColor = UIColor(red: 53/250, green: 53/250, blue: 64/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
+                self.tabOne.historyBackgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
+                self.tabOne.historyBackgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
+                self.tabOne.historyBackgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
+            }
             let tabOneBarItem = UITabBarItem(title: "", image: UIImage(named: "feed")?.maskWithColor(color: Colours.gray), selectedImage: UIImage(named: "feed")?.maskWithColor(color: Colours.gray))
             tabOneBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
             self.tabOne.tabBarItem = tabOneBarItem
@@ -2815,11 +2895,20 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabOne.navigationBar.barTintColor = Colours.white
             self.tabOne.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.tabOne.tabBarItem.tag = 1
-            //tabOne.navigationBar.shadowImage = UIImage()
             
             // Create Tab two
-            self.tabTwo = UINavigationController(rootViewController: self.secondView)
-            //let tabTwo = MentionsViewController()
+            self.tabTwo = SAHistoryNavigationViewController(rootViewController: self.secondView)
+            if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
+                self.tabTwo.historyBackgroundColor = Colours.tabSelected
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
+                self.tabTwo.historyBackgroundColor = UIColor(red: 53/250, green: 53/250, blue: 64/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
+                self.tabTwo.historyBackgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
+                self.tabTwo.historyBackgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
+                self.tabTwo.historyBackgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
+            }
             let tabTwoBarItem2 = UITabBarItem(title: "", image: UIImage(named: "notifications")?.maskWithColor(color: Colours.gray), selectedImage: UIImage(named: "notifications")?.maskWithColor(color: Colours.gray))
             tabTwoBarItem2.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
             self.tabTwo.tabBarItem = tabTwoBarItem2
@@ -2827,11 +2916,20 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabTwo.navigationBar.barTintColor = Colours.white
             self.tabTwo.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.tabTwo.tabBarItem.tag = 2
-            //tabTwo.navigationBar.shadowImage = UIImage()
             
             // Create Tab three
-            self.tabThree = UINavigationController(rootViewController: self.thirdView)
-            //let tabThree = MessageViewController()
+            self.tabThree = SAHistoryNavigationViewController(rootViewController: self.thirdView)
+            if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
+                self.tabThree.historyBackgroundColor = Colours.tabSelected
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
+                self.tabThree.historyBackgroundColor = UIColor(red: 53/250, green: 53/250, blue: 64/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
+                self.tabThree.historyBackgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
+                self.tabThree.historyBackgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
+                self.tabThree.historyBackgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
+            }
             let tabThreeBarItem = UITabBarItem(title: "", image: UIImage(named: "profile")?.maskWithColor(color: Colours.gray), selectedImage: UIImage(named: "profile")?.maskWithColor(color: Colours.gray))
             tabThreeBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
             self.tabThree.tabBarItem = tabThreeBarItem
@@ -2839,11 +2937,20 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabThree.navigationBar.barTintColor = Colours.white
             self.tabThree.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.tabThree.tabBarItem.tag = 3
-            //tabThree.navigationBar.shadowImage = UIImage()
             
             // Create Tab four
-            self.tabFour = UINavigationController(rootViewController: self.fourthView)
-            //let tabFour = ProfileViewController()
+            self.tabFour = SAHistoryNavigationViewController(rootViewController: self.fourthView)
+            if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
+                self.tabFour.historyBackgroundColor = Colours.tabSelected
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
+                self.tabFour.historyBackgroundColor = UIColor(red: 53/250, green: 53/250, blue: 64/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
+                self.tabFour.historyBackgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
+                self.tabFour.historyBackgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
+                self.tabFour.historyBackgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
+            }
             let tabFourBarItem = UITabBarItem(title: "", image: UIImage(named: "toot")?.maskWithColor(color: Colours.gray), selectedImage: UIImage(named: "toot")?.maskWithColor(color: Colours.gray))
             tabFourBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
             self.tabFour.tabBarItem = tabFourBarItem
@@ -2851,7 +2958,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabFour.navigationBar.barTintColor = Colours.white
             self.tabFour.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.tabFour.tabBarItem.tag = 4
-            //tabFour.navigationBar.shadowImage = UIImage()
             
             
             //bh5

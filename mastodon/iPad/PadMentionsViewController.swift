@@ -515,6 +515,11 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
         self.navigationController?.navigationBar.backgroundColor = Colours.white
         self.navigationController?.navigationBar.tintColor = Colours.black
         
+        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
+            self?.player.seek(to: CMTime.zero)
+            self?.player.play()
+        }
+        
         
 //        var settingsButton = MNGExpandedTouchAreaButton()
 //        settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 32, height: 32)))
@@ -689,6 +694,7 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                 tabHeight = Int(UITabBarController().tabBar.frame.size.height)
             }
         }
+        self.restoreScroll()
         
         //bh4
         var newSize = offset + 65
@@ -1779,6 +1785,7 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
+    var player = AVPlayer()
     @objc func tappedImage(_ sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
             let selection = UISelectionFeedbackGenerator()
@@ -1801,9 +1808,9 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
             if (UserDefaults.standard.object(forKey: "vidgif") == nil) || (UserDefaults.standard.object(forKey: "vidgif") as! Int == 0) {
                 XPlayer.play(videoURL)
             } else {
-                let player = AVPlayer(url: videoURL)
+                self.player = AVPlayer(url: videoURL)
                 let playerViewController = AVPlayerViewController()
-                playerViewController.player = player
+                playerViewController.player = self.player
                 self.present(playerViewController, animated: true) {
                     playerViewController.player!.play()
                 }
@@ -2384,7 +2391,9 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                                 statusAlert.title = "Muted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.mute(id: sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -2403,7 +2412,9 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                                 statusAlert.title = "Unmuted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.unmute(id: sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -2428,7 +2439,9 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                                 statusAlert.title = "Blocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.block(id: sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -2447,7 +2460,9 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                                 statusAlert.title = "Unblocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.unblock(id: sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -2482,7 +2497,9 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Harassment"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "Harassment")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -2506,7 +2523,9 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "No Content Warning"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "No Content Warning")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -2530,7 +2549,9 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Spam"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "Spam")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -2701,7 +2722,7 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
     
     func restoreScroll() {
         DispatchQueue.main.async {
-            self.tableView2.reloadData()
+//            self.tableView2.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowNotif") == nil) {} else {
                 if StoreStruct.notifications.count > 5 {
                     self.tableView2.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowNotif") as! CGFloat), animated: false)
@@ -2709,7 +2730,7 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
             }
         }
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+//            self.tableView.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowMent") == nil) {} else {
                 if StoreStruct.notificationsMentions.count > 5 {
                     self.tableView.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowMent") as! CGFloat), animated: false)

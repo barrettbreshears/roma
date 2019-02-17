@@ -56,7 +56,7 @@ class InstanceData:Codable {
     
     static func setCurrentInstance(instance:InstanceData) {
         
-        guard let instanceData = try? JSONEncoder().encode(instance) else{
+        guard let instanceData = try? JSONEncoder().encode(instance) else {
            return
         }
         

@@ -23,6 +23,11 @@ class SideDetailCellImage: UITableViewCell {
     var mainImageViewBG = UIView()
     var imageCountTag = UIButton()
     
+    var smallImage1 = UIButton()
+    var smallImage2 = UIButton()
+    var smallImage3 = UIButton()
+    var smallImage4 = UIButton()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -280,9 +285,11 @@ class SideDetailCellImage: UITableViewCell {
         
         faves.setTitle("\(formattedNumber ?? "0") \(likeText) and \(formattedNumber2 ?? "0") \(boostText)", for: .normal)
         
-        profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
-        profileImageView.pin_updateWithProgress = true
-        profileImageView.pin_setImage(from: URL(string: "\(status.reblog?.account.avatar ?? status.account.avatar)"))
+        DispatchQueue.global(qos: .userInitiated).async {
+        self.profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
+        self.profileImageView.pin_updateWithProgress = true
+        self.profileImageView.pin_setImage(from: URL(string: "\(status.reblog?.account.avatar ?? status.account.avatar)"))
+        }
         profileImageView.layer.masksToBounds = true
         profileImageView.layer.borderColor = UIColor.black.cgColor
         profileImageView.layer.borderWidth = 0.2
@@ -306,9 +313,11 @@ class SideDetailCellImage: UITableViewCell {
         
         mainImageView.contentMode = .scaleAspectFill
         mainImageView.imageView?.contentMode = .scaleAspectFill
+//        DispatchQueue.global(qos: .userInitiated).async {
         self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
-        mainImageView.pin_updateWithProgress = true
-        mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].previewURL ?? status.mediaAttachments[0].previewURL)"))
+        self.mainImageView.pin_updateWithProgress = true
+        self.mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].previewURL ?? status.mediaAttachments[0].previewURL)"))
+//        }
         mainImageView.layer.masksToBounds = true
         
         
@@ -322,7 +331,8 @@ class SideDetailCellImage: UITableViewCell {
             imageCountTag.backgroundColor = Colours.tabSelected
             imageCountTag.alpha = 1
         } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count > 1 {
-            imageCountTag.setTitle("\(status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count)", for: .normal)
+            let z = status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count ?? 0
+            imageCountTag.setTitle("\(z)", for: .normal)
             imageCountTag.backgroundColor = Colours.tabSelected
             imageCountTag.alpha = 1
         } else {

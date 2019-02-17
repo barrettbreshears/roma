@@ -69,6 +69,11 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
             }
         }
         
+        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
+            self?.player.seek(to: CMTime.zero)
+            self?.player.play()
+        }
+        
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
@@ -207,6 +212,7 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
     
     
     
+    var player = AVPlayer()
     @objc func tappedImage(_ sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
             let selection = UISelectionFeedbackGenerator()
@@ -224,9 +230,9 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
                 if (UserDefaults.standard.object(forKey: "vidgif") == nil) || (UserDefaults.standard.object(forKey: "vidgif") as! Int == 0) {
                     XPlayer.play(videoURL)
                 } else {
-                    let player = AVPlayer(url: videoURL)
+                    self.player = AVPlayer(url: videoURL)
                     let playerViewController = AVPlayerViewController()
-                    playerViewController.player = player
+                    playerViewController.player = self.player
                     self.present(playerViewController, animated: true) {
                         playerViewController.player!.play()
                     }
@@ -313,7 +319,9 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
                     statusAlert.title = "Deleted".localized
                     statusAlert.contentColor = Colours.grayDark
                     statusAlert.message = "Not scheduled anymore"
-                    statusAlert.show()
+                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                     
                     let request0 = Statuses.allScheduled()
                     StoreStruct.client.run(request0) { (statuses) in

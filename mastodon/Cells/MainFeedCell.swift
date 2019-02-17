@@ -218,7 +218,15 @@ class MainFeedCell: SwipeTableViewCell {
             
         } else {
             if status.visibility == .direct {
-                self.contentView.backgroundColor = Colours.cellQuote
+                if UserDefaults.standard.object(forKey: "dmTog") as! Int == 1 {
+                    self.contentView.backgroundColor = Colours.cellQuote
+                }
+                if UserDefaults.standard.object(forKey: "dmTog") as! Int == 2 {
+                    self.contentView.backgroundColor = Colours.tabUnselected
+                }
+                if UserDefaults.standard.object(forKey: "dmTog") as! Int == 3 {
+                    self.contentView.backgroundColor = Colours.tabSelected
+                }
             } else {
                 self.contentView.backgroundColor = Colours.white
             }
@@ -392,9 +400,11 @@ class MainFeedCell: SwipeTableViewCell {
         date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
         
-        profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
-        profileImageView.pin_updateWithProgress = true
-        profileImageView.pin_setImage(from: URL(string: "\(status.reblog?.account.avatar ?? status.account.avatar)"))
+        DispatchQueue.global(qos: .userInitiated).async {
+        self.profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
+        self.profileImageView.pin_updateWithProgress = true
+        self.profileImageView.pin_setImage(from: URL(string: "\(status.reblog?.account.avatar ?? status.account.avatar)"))
+        }
         profileImageView.layer.masksToBounds = true
         profileImageView.layer.borderColor = UIColor.black.cgColor
         profileImageView.layer.borderWidth = 0.2

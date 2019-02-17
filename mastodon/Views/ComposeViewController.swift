@@ -560,6 +560,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     }
     
     var closeButton = MNGExpandedTouchAreaButton()
+    var avatarButton = MNGExpandedTouchAreaButton()
     var cameraButton = MNGExpandedTouchAreaButton()
     var visibilityButton = MNGExpandedTouchAreaButton()
     var warningButton = MNGExpandedTouchAreaButton()
@@ -600,6 +601,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     var startRepText = ""
     var isScheduled = false
     var scheduleTime: String?
+    var boosterText = ""
     
     @objc func actOnSpecialNotificationAuto() {
         //dothestuff
@@ -1042,6 +1044,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             print("nothing")
         case .pad:
             self.closeButton.frame = CGRect(x: 20, y: 30, width: 32, height: 32)
+            self.avatarButton.frame = CGRect(x: 70, y: 30, width: 32, height: 32)
             countLabel.frame = CGRect(x: CGFloat(self.view.bounds.width/2 - 50), y: CGFloat(30), width: CGFloat(100), height: CGFloat(36))
             tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(30), width: CGFloat(150), height: CGFloat(36))
             textView.frame = CGRect(x:20, y: (70), width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(170) - Int(self.keyHeight))
@@ -1414,21 +1417,37 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         switch (deviceIdiom) {
         case .phone:
             self.closeButton.frame = CGRect(x: 20, y: closeB, width: 32, height: 32)
+            self.avatarButton.frame = CGRect(x: 70, y: closeB, width: 32, height: 32)
             countLabel.frame = CGRect(x: CGFloat(self.view.bounds.width/2 - 50), y: CGFloat(closeB), width: CGFloat(100), height: CGFloat(36))
             tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(closeB), width: CGFloat(150), height: CGFloat(36))
             textView.frame = CGRect(x:20, y: offset, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(160) - Int(self.keyHeight))
         case .pad:
             self.closeButton.frame = CGRect(x: 20, y: 30, width: 32, height: 32)
+            self.avatarButton.frame = CGRect(x: 70, y: 30, width: 32, height: 32)
             countLabel.frame = CGRect(x: CGFloat(self.view.bounds.width/2 - 50), y: CGFloat(30), width: CGFloat(100), height: CGFloat(36))
             tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(30), width: CGFloat(150), height: CGFloat(36))
             textView.frame = CGRect(x:20, y: (70), width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(170) - Int(self.keyHeight))
         default:
             self.closeButton.frame = CGRect(x: 20, y: closeB, width: 32, height: 32)
+            self.avatarButton.frame = CGRect(x: 70, y: closeB, width: 32, height: 32)
             countLabel.frame = CGRect(x: CGFloat(self.view.bounds.width/2 - 50), y: CGFloat(closeB), width: CGFloat(100), height: CGFloat(36))
             tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(closeB), width: CGFloat(150), height: CGFloat(36))
             textView.frame = CGRect(x:20, y: offset, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(160) - Int(self.keyHeight))
         }
         
+        
+        if StoreStruct.currentUser != nil {
+            self.avatarButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatar)"))
+        }
+        self.avatarButton.layer.cornerRadius = 16
+        self.avatarButton.layer.masksToBounds = true
+        self.avatarButton.adjustsImageWhenHighlighted = false
+        if (UserDefaults.standard.object(forKey: "compav") == nil) || (UserDefaults.standard.object(forKey: "compav") as! Int == 0) {
+            self.avatarButton.alpha = 0
+        } else {
+            self.avatarButton.alpha = 1
+        }
+        self.view.addSubview(self.avatarButton)
         
         self.closeButton.setImage(UIImage(named: "block")?.maskWithColor(color: Colours.grayLight2), for: .normal)
         self.closeButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
@@ -1467,15 +1486,17 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             if self.inReplyText == "" {
                 textView.text = self.filledTextFieldText
             } else {
-                //maybe an issue:
-//                textView.text = "@\(self.inReplyText) "
                 textView.text = "\(self.filledTextFieldText) "
                 self.startRepText = textView.text
             }
         } else {
             let statusAuthor = self.inReply[0].account.acct
-            let mentionedAccountsOnStatus = self.inReply[0].mentions.compactMap { $0.acct }
-            let allAccounts = [statusAuthor] + (mentionedAccountsOnStatus)
+            var mentionedAccountsOnStatus = self.inReply[0].mentions.compactMap { $0.acct }
+            var allAccounts = [statusAuthor] + (mentionedAccountsOnStatus)
+            if mentionedAccountsOnStatus.contains(statusAuthor) {
+                mentionedAccountsOnStatus = mentionedAccountsOnStatus.filter{ $0 != statusAuthor }
+                allAccounts = [statusAuthor] + (mentionedAccountsOnStatus)
+            }
             let goo = allAccounts.map{ "@\($0)" }
             textView.text = goo.reduce("") { $0 + $1 + " " }
             textView.text = textView.text.replacingOccurrences(of: "@\(StoreStruct.currentUser.username)", with: "")
@@ -2471,7 +2492,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     statusAlert.title = "Toot Toot!".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Successfully \(successMessage)"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     StoreStruct.caption1 = ""
                                     StoreStruct.caption2 = ""
@@ -2485,7 +2508,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     statusAlert.title = "Could not Post".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Saved to drafts"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 }
                             } else {
                                 
@@ -2502,15 +2527,21 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 statusAlert.title = "Status Posted!".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = "Successfully \(successMessage)"
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 StoreStruct.caption1 = ""
                                 StoreStruct.caption2 = ""
                                 StoreStruct.caption3 = ""
                                 StoreStruct.caption4 = ""
                                 
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+                                if (UserDefaults.standard.object(forKey: "juto") == nil) || (UserDefaults.standard.object(forKey: "juto") as! Int == 0) {
+                                    
+                                } else {
+                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
+                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+                                }
                                 if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
                                     NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
                                 }
@@ -2599,7 +2630,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                             statusAlert.title = "Toot Toot!".localized
                                                             statusAlert.contentColor = Colours.grayDark
                                                             statusAlert.message = "Successfully \(successMessage)"
-                                                            statusAlert.show()
+                                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                                             
                                                             StoreStruct.caption1 = ""
                                                             StoreStruct.caption2 = ""
@@ -2613,7 +2646,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                             statusAlert.title = "Could not Post".localized
                                                             statusAlert.contentColor = Colours.grayDark
                                                             statusAlert.message = "Saved to drafts"
-                                                            statusAlert.show()
+                                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                                         }
                                                     } else {
                                                         
@@ -2630,15 +2665,21 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                         statusAlert.title = "Status Posted!".localized
                                                         statusAlert.contentColor = Colours.grayDark
                                                         statusAlert.message = "Successfully \(successMessage)"
-                                                        statusAlert.show()
+                                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                                         
                                                         StoreStruct.caption1 = ""
                                                         StoreStruct.caption2 = ""
                                                         StoreStruct.caption3 = ""
                                                         StoreStruct.caption4 = ""
                                                         
-                                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
-                                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+                                                        if (UserDefaults.standard.object(forKey: "juto") == nil) || (UserDefaults.standard.object(forKey: "juto") as! Int == 0) {
+                                                            
+                                                        } else {
+                                                            NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
+                                                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+                                                        }
                                                         if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
                                                             NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
                                                         }
@@ -2715,7 +2756,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                     statusAlert.title = "Toot Toot!".localized
                                                     statusAlert.contentColor = Colours.grayDark
                                                     statusAlert.message = "Successfully \(successMessage)"
-                                                    statusAlert.show()
+                                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                                     
                                                     StoreStruct.caption1 = ""
                                                     StoreStruct.caption2 = ""
@@ -2729,7 +2772,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                     statusAlert.title = "Could not Post".localized
                                                     statusAlert.contentColor = Colours.grayDark
                                                     statusAlert.message = "Saved to drafts"
-                                                    statusAlert.show()
+                                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                                 }
                                             } else {
                                                 
@@ -2746,15 +2791,21 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             statusAlert.title = "Status Posted!".localized
                                             statusAlert.contentColor = Colours.grayDark
                                             statusAlert.message = "Successfully \(successMessage)"
-                                            statusAlert.show()
+                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                                 
                                                 StoreStruct.caption1 = ""
                                                 StoreStruct.caption2 = ""
                                                 StoreStruct.caption3 = ""
                                                 StoreStruct.caption4 = ""
                                                 
-                                                NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
-                                                NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+                                                if (UserDefaults.standard.object(forKey: "juto") == nil) || (UserDefaults.standard.object(forKey: "juto") as! Int == 0) {
+                                                    
+                                                } else {
+                                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
+                                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+                                                }
                                                 if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
                                                     NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
                                                 }
@@ -2818,7 +2869,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             statusAlert.title = "Toot Toot!".localized
                                             statusAlert.contentColor = Colours.grayDark
                                             statusAlert.message = "Successfully \(successMessage)"
-                                            statusAlert.show()
+                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                             
                                             StoreStruct.caption1 = ""
                                             StoreStruct.caption2 = ""
@@ -2832,7 +2885,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             statusAlert.title = "Could not Post".localized
                                             statusAlert.contentColor = Colours.grayDark
                                             statusAlert.message = "Saved to drafts"
-                                            statusAlert.show()
+                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                         }
                                     } else {
                                         
@@ -2849,15 +2904,21 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     statusAlert.title = "Status Posted".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Successfully \(successMessage)"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                         
                                         StoreStruct.caption1 = ""
                                         StoreStruct.caption2 = ""
                                         StoreStruct.caption3 = ""
                                         StoreStruct.caption4 = ""
                                         
-                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
-                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+                                        if (UserDefaults.standard.object(forKey: "juto") == nil) || (UserDefaults.standard.object(forKey: "juto") as! Int == 0) {
+                                            
+                                        } else {
+                                            NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
+                                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+                                        }
                                         if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
                                             NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
                                         }
@@ -2905,7 +2966,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     statusAlert.title = "Toot Toot!".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Successfully \(successMessage)"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     StoreStruct.caption1 = ""
                                     StoreStruct.caption2 = ""
@@ -2919,7 +2982,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     statusAlert.title = "Could not Toot".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Saved to drafts"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 }
                             } else {
                                 
@@ -2936,15 +3001,21 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             statusAlert.title = "Status Posted".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Successfully \(successMessage)"
-                            statusAlert.show()
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 StoreStruct.caption1 = ""
                                 StoreStruct.caption2 = ""
                                 StoreStruct.caption3 = ""
                                 StoreStruct.caption4 = ""
                                 
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+                                if (UserDefaults.standard.object(forKey: "juto") == nil) || (UserDefaults.standard.object(forKey: "juto") as! Int == 0) {
+                                    
+                                } else {
+                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
+                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+                                }
                                 if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
                                     NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
                                 }
@@ -2979,7 +3050,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             statusAlert.title = "Toot Toot!".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Successfully \(successMessage)"
-                            statusAlert.show()
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                             
                             StoreStruct.caption1 = ""
                             StoreStruct.caption2 = ""
@@ -2993,7 +3066,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             statusAlert.title = "Could not Post".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Saved to drafts"
-                            statusAlert.show()
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                         }
                     } else {
                         
@@ -3010,15 +3085,21 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     statusAlert.title = "Status Posted".localized
                     statusAlert.contentColor = Colours.grayDark
                     statusAlert.message = "Successfully \(successMessage)"
-                    statusAlert.show()
+                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                         
                         StoreStruct.caption1 = ""
                         StoreStruct.caption2 = ""
                         StoreStruct.caption3 = ""
                         StoreStruct.caption4 = ""
                         
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+                        if (UserDefaults.standard.object(forKey: "juto") == nil) || (UserDefaults.standard.object(forKey: "juto") as! Int == 0) {
+                            
+                        } else {
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+                        }
                         if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
                             NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
                         }

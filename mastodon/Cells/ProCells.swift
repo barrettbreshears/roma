@@ -81,16 +81,18 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
         print("count: \(Account.getAccounts().count)")
         print(indexPath.row)
         
-        if indexPath.row >= InstanceData.getAllInstances().count {
+        if indexPath.item >= InstanceData.getAllInstances().count {
             
             cell.image.image = UIImage(named: "newac2")
+            cell.image.layer.borderColor = Colours.clear.cgColor
+            cell.image.layer.borderWidth = 0
             
         } else {
             
             cell.image.image = nil
             let instances = InstanceData.getAllInstances()
-            var curr = InstanceData.getCurrentInstance()
-            if curr?.clientID == instances[indexPath.row].clientID {
+            let curr = InstanceData.getCurrentInstance()
+            if curr?.clientID == instances[indexPath.item].clientID {
                 cell.image.layer.borderWidth = 3.6
             } else {
                 cell.image.layer.borderWidth = 0
@@ -145,24 +147,23 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
             
         } else {
         
-        
-        
         let instances = InstanceData.getAllInstances()
-        var curr = InstanceData.getCurrentInstance()
+        let curr = InstanceData.getCurrentInstance()
+            
         if curr?.clientID == instances[indexPath.item].clientID {
             
         } else {
         
         
         
-        if indexPath.row >= InstanceData.getAllInstances().count {
+        if indexPath.item >= InstanceData.getAllInstances().count {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut2"), object: nil)
         } else {
             
-            InstanceData.setCurrentInstance(instance: instances[indexPath.row])
             
             DispatchQueue.main.async {
                 
+                InstanceData.setCurrentInstance(instance: instances[indexPath.item])
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 appDelegate.reloadApplication()
                 
