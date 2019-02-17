@@ -701,6 +701,13 @@
 		A9296DD42215F7D600BEE7A7 /* DecryptNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DCE2215F7D600BEE7A7 /* DecryptNotification.swift */; };
 		A9296DD52215F7D600BEE7A7 /* PushNotificationReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DCF2215F7D600BEE7A7 /* PushNotificationReceiver.swift */; };
 		A9296DD62215F7D600BEE7A7 /* SwiftGCM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DD02215F7D600BEE7A7 /* SwiftGCM.swift */; };
+		A9296DE222176F7C00BEE7A7 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DE122176F7C00BEE7A7 /* NotificationService.swift */; };
+		A9296DEA22176FD100BEE7A7 /* Decode85.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DCD2215F7D600BEE7A7 /* Decode85.swift */; };
+		A9296DEB22176FD100BEE7A7 /* DecryptNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DCE2215F7D600BEE7A7 /* DecryptNotification.swift */; };
+		A9296DEC22176FD100BEE7A7 /* PushNotificationDataObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DCB2215F7D500BEE7A7 /* PushNotificationDataObjects.swift */; };
+		A9296DED22176FD100BEE7A7 /* PushNotificationReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DCF2215F7D600BEE7A7 /* PushNotificationReceiver.swift */; };
+		A9296DEE22176FD500BEE7A7 /* SwiftGCM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DD02215F7D600BEE7A7 /* SwiftGCM.swift */; };
+		A9296DF32217A28300BEE7A7 /* Roma Push Extentsion.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A9296DDF22176F7C00BEE7A7 /* Roma Push Extentsion.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A947585A220CDFC100735D0A /* terms.rtf in Resources */ = {isa = PBXBuildFile; fileRef = A9475859220CDFC100735D0A /* terms.rtf */; };
 		A968E8842207D418000EED23 /* TermsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A968E8832207D418000EED23 /* TermsController.swift */; };
 		A973AF2421D432AA009D7D21 /* ProCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7806850821CC222F00072C41 /* ProCells.swift */; };
@@ -740,6 +747,13 @@
 			remoteGlobalIDString = 536A4FCC216B843A00A3D483;
 			remoteInfo = "MastWatch Extension";
 		};
+		A9296DE422176F7C00BEE7A7 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5373C9CC215173EE00676F3D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9296DDE22176F7C00BEE7A7;
+			remoteInfo = "Roma Push Extentsion";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -749,6 +763,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				A9296DF32217A28300BEE7A7 /* Roma Push Extentsion.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1523,6 +1538,11 @@
 		A9296DCF2215F7D600BEE7A7 /* PushNotificationReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushNotificationReceiver.swift; sourceTree = "<group>"; };
 		A9296DD02215F7D600BEE7A7 /* SwiftGCM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftGCM.swift; sourceTree = "<group>"; };
 		A9296DD722160B5100BEE7A7 /* mastodon-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mastodon-Bridging-Header.h"; sourceTree = "<group>"; };
+		A9296DDF22176F7C00BEE7A7 /* Roma Push Extentsion.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Roma Push Extentsion.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9296DE122176F7C00BEE7A7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		A9296DE322176F7C00BEE7A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A9296DEF221771DC00BEE7A7 /* Roma Push Extentsion-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Roma Push Extentsion-Bridging-Header.h"; sourceTree = "<group>"; };
+		A9296DF42217A3B100BEE7A7 /* Roma Push Extentsion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Roma Push Extentsion.entitlements"; sourceTree = "<group>"; };
 		A9475859220CDFC100735D0A /* terms.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = terms.rtf; sourceTree = "<group>"; };
 		A968E8832207D418000EED23 /* TermsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsController.swift; sourceTree = "<group>"; };
 		A968E8862207DACE000EED23 /* terms.rtf */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; path = terms.rtf; sourceTree = "<group>"; };
@@ -1576,6 +1596,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7AC61BDF3FD076DD6C519248 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9296DDC22176F7C00BEE7A7 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2535,6 +2562,7 @@
 				536A4FC2216B843700A3D483 /* MastWatch */,
 				536A4FD1216B843A00A3D483 /* MastWatch Extension */,
 				531B04B72171119D00D31715 /* MastStickers */,
+				A9296DE022176F7C00BEE7A7 /* Roma Push Extentsion */,
 				5373C9D5215173EE00676F3D /* Products */,
 				C27DCB277D141E1273E766A3 /* Pods */,
 				7138629AB3761F8644F6E477 /* Frameworks */,
@@ -2552,6 +2580,7 @@
 				536A4FC1216B843700A3D483 /* MastWatch.app */,
 				536A4FCD216B843A00A3D483 /* MastWatch Extension.appex */,
 				531B04B62171119D00D31715 /* MastStickers.appex */,
+				A9296DDF22176F7C00BEE7A7 /* Roma Push Extentsion.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2961,6 +2990,17 @@
 			path = push;
 			sourceTree = "<group>";
 		};
+		A9296DE022176F7C00BEE7A7 /* Roma Push Extentsion */ = {
+			isa = PBXGroup;
+			children = (
+				A9296DF42217A3B100BEE7A7 /* Roma Push Extentsion.entitlements */,
+				A9296DE122176F7C00BEE7A7 /* NotificationService.swift */,
+				A9296DE322176F7C00BEE7A7 /* Info.plist */,
+				A9296DEF221771DC00BEE7A7 /* Roma Push Extentsion-Bridging-Header.h */,
+			);
+			path = "Roma Push Extentsion";
+			sourceTree = "<group>";
+		};
 		A9475858220CDFC100735D0A /* text */ = {
 			isa = PBXGroup;
 			children = (
@@ -3114,11 +3154,29 @@
 				5354BA222163F89E0094C545 /* PBXTargetDependency */,
 				5354BAFC21668D5A0094C545 /* PBXTargetDependency */,
 				5322D7E02167659900B952F5 /* PBXTargetDependency */,
+				A9296DE522176F7C00BEE7A7 /* PBXTargetDependency */,
 			);
 			name = mastodon;
 			productName = mastodon;
 			productReference = 5373C9D4215173EE00676F3D /* mastodon.app */;
 			productType = "com.apple.product-type.application";
+		};
+		A9296DDE22176F7C00BEE7A7 /* Roma Push Extentsion */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9296DE722176F7C00BEE7A7 /* Build configuration list for PBXNativeTarget "Roma Push Extentsion" */;
+			buildPhases = (
+				A9296DDB22176F7C00BEE7A7 /* Sources */,
+				A9296DDC22176F7C00BEE7A7 /* Frameworks */,
+				A9296DDD22176F7C00BEE7A7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Roma Push Extentsion";
+			productName = "Roma Push Extentsion";
+			productReference = A9296DDF22176F7C00BEE7A7 /* Roma Push Extentsion.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -3126,7 +3184,7 @@
 		5373C9CC215173EE00676F3D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1000;
+				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Shihab Mehboob";
 				TargetAttributes = {
@@ -3189,6 +3247,15 @@
 							};
 						};
 					};
+					A9296DDE22176F7C00BEE7A7 = {
+						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
+						SystemCapabilities = {
+							com.apple.ApplicationGroups.iOS = {
+								enabled = 1;
+							};
+						};
+					};
 				};
 			};
 			buildConfigurationList = 5373C9CF215173EE00676F3D /* Build configuration list for PBXProject "mastodon" */;
@@ -3221,6 +3288,7 @@
 				536A4FC0216B843700A3D483 /* MastWatch */,
 				536A4FCC216B843A00A3D483 /* MastWatch Extension */,
 				531B04B52171119D00D31715 /* MastStickers */,
+				A9296DDE22176F7C00BEE7A7 /* Roma Push Extentsion */,
 			);
 		};
 /* End PBXProject section */
@@ -3387,6 +3455,13 @@
 				5352D0B3215E679300901B60 /* icon4@2x.png in Resources */,
 				5352D0AD215E679300901B60 /* icon5@2x.png in Resources */,
 				530976AC2179D8D900640D84 /* icon18.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A9296DDD22176F7C00BEE7A7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4127,6 +4202,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		A9296DDB22176F7C00BEE7A7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9296DEA22176FD100BEE7A7 /* Decode85.swift in Sources */,
+				A9296DEC22176FD100BEE7A7 /* PushNotificationDataObjects.swift in Sources */,
+				A9296DE222176F7C00BEE7A7 /* NotificationService.swift in Sources */,
+				A9296DEE22176FD500BEE7A7 /* SwiftGCM.swift in Sources */,
+				A9296DED22176FD100BEE7A7 /* PushNotificationReceiver.swift in Sources */,
+				A9296DEB22176FD100BEE7A7 /* DecryptNotification.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -4149,6 +4237,11 @@
 			isa = PBXTargetDependency;
 			target = 536A4FCC216B843A00A3D483 /* MastWatch Extension */;
 			targetProxy = 536A4FCF216B843A00A3D483 /* PBXContainerItemProxy */;
+		};
+		A9296DE522176F7C00BEE7A7 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9296DDE22176F7C00BEE7A7 /* Roma Push Extentsion */;
+			targetProxy = A9296DE422176F7C00BEE7A7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -4640,6 +4733,55 @@
 			};
 			name = Release;
 		};
+		A9296DE822176F7C00BEE7A7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "Roma Push Extentsion/Roma Push Extentsion.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5877VK992M;
+				INFOPLIST_FILE = "Roma Push Extentsion/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vm.roma.Roma-Push-Extentsion";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Roma Push Extentsion/Roma Push Extentsion-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A9296DE922176F7C00BEE7A7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = "Roma Push Extentsion/Roma Push Extentsion.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 5877VK992M;
+				INFOPLIST_FILE = "Roma Push Extentsion/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vm.roma.Roma-Push-Extentsion";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Roma Push Extentsion/Roma Push Extentsion-Bridging-Header.h";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -4711,6 +4853,15 @@
 			buildConfigurations = (
 				5373C9E7215173F000676F3D /* Debug */,
 				5373C9E8215173F000676F3D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A9296DE722176F7C00BEE7A7 /* Build configuration list for PBXNativeTarget "Roma Push Extentsion" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9296DE822176F7C00BEE7A7 /* Debug */,
+				A9296DE922176F7C00BEE7A7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

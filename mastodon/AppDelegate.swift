@@ -99,11 +99,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let token = tokenParts.joined()
         print("Device Token: \(token)")
         
-        guard  StoreStruct.shared.currentInstance.returnedText != "", let receiver = try? PushNotificationReceiver() else {
+        var state:PushNotificationState!
+        
+        if let storedState = PushNotificationReceiver.getSate() {
+            state = storedState
+        } else {
+            let reciver = try! PushNotificationReceiver()
+            let subScription = PushNotificationSubscription(endpoint: URL(string:"https://pushrelay1.your.org/relay-to/production/\(token)")!, alerts: PushNotificationAlerts.all)
+            let deviceToken = PushNotificationDeviceToken(deviceToken: deviceToken)
+            state = PushNotificationState(receiver: reciver, subscription: subScription, deviceToken: deviceToken)
+            PushNotificationReceiver.setState(state: state)
+            
+        }
+        
+        
+        guard  StoreStruct.shared.currentInstance.returnedText != "" else {
             return
         }
         
-        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay1.your.org/relay-to/production/\(token)", receiver: receiver, alerts: PushNotificationAlerts.all)
+        
+        // try delete first
+        
+        
+        let requestParams = PushNotificationSubscriptionRequest(endpoint: state.subscription.endpoint.absoluteString, receiver: state.receiver, alerts: state.subscription.alerts)
         
         //create the url with URL
         let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
@@ -114,7 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //now create the URLRequest object using the url object
         var request = URLRequest(url: url)
         
-        request.httpMethod = "POST"// "POST" //set http method as POST
+        request.httpMethod = "DELETE"// "POST" //set http method as POST
         
         
         
@@ -127,7 +145,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("JSON String : " + jsonString!)
         }
         catch {
-             print(error.localizedDescription)
+            print(error.localizedDescription)
         }
         request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -136,23 +154,61 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //create dataTask using the session object to send data to the server
         let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
             
-            guard error == nil else {
-                return
-            }
             
-            guard let data = data else {
-                return
-            }
+            let requestParams = PushNotificationSubscriptionRequest(endpoint: state.subscription.endpoint.absoluteString, receiver: state.receiver, alerts: state.subscription.alerts)
             
+            //create the url with URL
+            let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
+            
+            //create the session object
+            let session = URLSession.shared
+            
+            //now create the URLRequest object using the url object
+            var request = URLRequest(url: url)
+            
+            request.httpMethod = "POST"// "POST" //set http method as POST
+            
+            
+            
+            let jsonEncoder = JSONEncoder()
             do {
-                //create json object from data
-                if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                    print(json)
-                    // handle json...
-                }
-            } catch let error {
+                let jsonData = try jsonEncoder.encode(requestParams)
+                let jsonString = String(data: jsonData, encoding: .utf8)
+                
+                request.httpBody = jsonData
+                print("JSON String : " + jsonString!)
+            }
+            catch {
                 print(error.localizedDescription)
             }
+            request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            
+            //create dataTask using the session object to send data to the server
+            let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
+                
+                guard error == nil else {
+                    return
+                }
+                
+                guard let data = data else {
+                    return
+                }
+                
+                do {
+                    //create json object from data
+                    if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                        print(json)
+                        // handle json...
+                    }
+                } catch let error {
+                    print(error.localizedDescription)
+                }
+            })
+            task.resume()
+            
+            
         })
         task.resume()
         
@@ -737,3 +793,4 @@ extension UIApplication {
         return true
     }
 }
+

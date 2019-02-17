@@ -1406,7 +1406,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                         }
                     }
-                } catch {
+                } catch  {
                     print("failfail")
                     return
                 }

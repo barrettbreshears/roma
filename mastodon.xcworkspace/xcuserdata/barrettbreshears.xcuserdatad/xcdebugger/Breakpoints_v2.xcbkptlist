@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ViewController.swift"
-            timestampString = "571944511.520077"
+            timestampString = "571972663.460568"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1828"
@@ -42,7 +42,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ViewController.swift"
-            timestampString = "571944511.522879"
+            timestampString = "571972663.461182"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1852"
@@ -58,7 +58,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ViewController.swift"
-            timestampString = "571944511.523627"
+            timestampString = "571972663.461772"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1838"
@@ -74,7 +74,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ViewController.swift"
-            timestampString = "571944511.524353"
+            timestampString = "571972663.4629329"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1858"
@@ -90,7 +90,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ViewController.swift"
-            timestampString = "571944511.524482"
+            timestampString = "571972663.463021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1865"
@@ -106,7 +106,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ViewController.swift"
-            timestampString = "571944511.5245889"
+            timestampString = "571972663.463608"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1893"
@@ -122,7 +122,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ViewController.swift"
-            timestampString = "571944511.524682"
+            timestampString = "571972663.463671"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1099"
@@ -138,7 +138,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ViewController.swift"
-            timestampString = "571944511.524773"
+            timestampString = "571972663.463724"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1113"
@@ -154,7 +154,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ViewController.swift"
-            timestampString = "571944511.5248621"
+            timestampString = "571972663.463773"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1126"
@@ -234,7 +234,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ViewController.swift"
-            timestampString = "571944511.5256341"
+            timestampString = "571972663.4638799"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1491"
@@ -250,7 +250,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ViewController.swift"
-            timestampString = "571944511.525757"
+            timestampString = "571972663.463935"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1467"
@@ -282,7 +282,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ViewController.swift"
-            timestampString = "571944511.5258811"
+            timestampString = "571972663.463995"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "340"
@@ -298,11 +298,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/AppDelegate.swift"
-            timestampString = "571944511.5266"
+            timestampString = "571975241.229012"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "329"
-            endingLineNumber = "329"
+            startingLineNumber = "385"
+            endingLineNumber = "385"
             landmarkName = "application(_:open:sourceApplication:annotation:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -314,7 +314,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ViewController.swift"
-            timestampString = "571944511.528438"
+            timestampString = "571972663.464393"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "2230"
@@ -346,7 +346,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ViewController.swift"
-            timestampString = "571944511.528551"
+            timestampString = "571972663.464458"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "369"
@@ -378,23 +378,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/FirstViewController.swift"
-            timestampString = "571944511.528684"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1360"
-            endingLineNumber = "1360"
-            landmarkName = "streamDataHome()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "mastodon/Views/FirstViewController.swift"
-            timestampString = "571944511.5315"
+            timestampString = "571975241.229224"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1438"
@@ -410,7 +394,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/FirstViewController.swift"
-            timestampString = "571944511.532338"
+            timestampString = "571975241.229334"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "219"
@@ -422,15 +406,15 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/AppDelegate.swift"
-            timestampString = "571944511.533728"
+            timestampString = "571975241.229424"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "100"
-            endingLineNumber = "100"
+            startingLineNumber = "158"
+            endingLineNumber = "158"
             landmarkName = "application(_:didRegisterForRemoteNotificationsWithDeviceToken:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -442,11 +426,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/AppDelegate.swift"
-            timestampString = "571944511.534071"
+            timestampString = "571975241.2295181"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "150"
-            endingLineNumber = "150"
+            startingLineNumber = "202"
+            endingLineNumber = "202"
             landmarkName = "application(_:didRegisterForRemoteNotificationsWithDeviceToken:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -457,13 +441,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "mastodon/AppDelegate.swift"
-            timestampString = "571944511.534326"
+            filePath = "Roma Push Extentsion/NotificationService.swift"
+            timestampString = "571975241.2296031"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
-            landmarkName = "application(_:didRegisterForRemoteNotificationsWithDeviceToken:)"
+            startingLineNumber = "18"
+            endingLineNumber = "18"
+            landmarkName = "didReceive(_:withContentHandler:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -473,13 +457,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "mastodon/AppDelegate.swift"
-            timestampString = "571944511.53448"
+            filePath = "Roma Push Extentsion/NotificationService.swift"
+            timestampString = "571975241.229663"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "109"
-            endingLineNumber = "109"
-            landmarkName = "application(_:didRegisterForRemoteNotificationsWithDeviceToken:)"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
+            landmarkName = "didReceive(_:withContentHandler:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -489,13 +473,61 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "mastodon/AppDelegate.swift"
-            timestampString = "571944528.9542429"
+            filePath = "mastodon/Other/push/PushNotificationReceiver.swift"
+            timestampString = "571975241.229735"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "133"
-            endingLineNumber = "133"
-            landmarkName = "application(_:didRegisterForRemoteNotificationsWithDeviceToken:)"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
+            landmarkName = "decrypt(payload:salt:serverPublicKeyData:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "mastodon/Other/push/PushNotificationReceiver.swift"
+            timestampString = "571975241.230055"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "185"
+            endingLineNumber = "185"
+            landmarkName = "getReciver()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "mastodon/Other/push/PushNotificationReceiver.swift"
+            timestampString = "571975241.230262"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "167"
+            endingLineNumber = "167"
+            landmarkName = "getSate()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "mastodon/Other/push/PushNotificationReceiver.swift"
+            timestampString = "571975241.230446"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "157"
+            endingLineNumber = "157"
+            landmarkName = "setState(state:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
