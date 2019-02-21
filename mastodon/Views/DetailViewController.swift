@@ -2297,52 +2297,49 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let indexPath = IndexPath(row: sender.tag, section: 3)
         
         if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {} else {
-            return nil
+            return
         }
         
-        if orientation == .left {
-            let impact = UIImpactFeedbackGenerator(style: .medium)
+        let impact = UIImpactFeedbackGenerator(style: .medium)
+        
+        if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
             
-            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
-                
-            } else {
-                
-//                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
-                var images = [SKPhoto]()
-                var coun = 0
-                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
-                    if coun == 0 {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage1.currentImage ?? nil)
-                        photo.shouldCachePhotoURLImage = true
-                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
-                            photo.caption = y.description ?? ""
-                        }
-                        images.append(photo)
+        } else {
+            
+            //                let indexPath = IndexPath(row: sender.tag, section: 0)
+            let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+            var images = [SKPhoto]()
+            var coun = 0
+            for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                if coun == 0 {
+                    let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage1.currentImage ?? nil)
+                    photo.shouldCachePhotoURLImage = true
+                    if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                        photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
                     } else {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
-                        photo.shouldCachePhotoURLImage = true
-                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
-                            photo.caption = y.description ?? ""
-                        }
-                        images.append(photo)
+                        photo.caption = y.description ?? ""
                     }
-                    coun += 1
+                    images.append(photo)
+                } else {
+                    let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                    photo.shouldCachePhotoURLImage = true
+                    if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                        photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                    } else {
+                        photo.caption = y.description ?? ""
+                    }
+                    images.append(photo)
                 }
-                let originImage = sender.currentImage
-                if originImage != nil {
-                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
-                    browser.delegate = self
-                    browser.initializePageIndex(0)
-                    present(browser, animated: true, completion: nil)
-                }
-                
+                coun += 1
+            }
+            let originImage = sender.currentImage
+            if originImage != nil {
+                let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
+                browser.displayToolbar = true
+                browser.displayAction = true
+                browser.delegate = self
+                browser.initializePageIndex(0)
+                present(browser, animated: true, completion: nil)
             }
             
         }

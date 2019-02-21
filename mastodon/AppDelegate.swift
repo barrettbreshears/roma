@@ -473,8 +473,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         SwiftyGiphyAPI.shared.apiKey = SwiftyGiphyAPI.publicBetaKey
         
         
-        
-<<<<<<< HEAD
 //        
 //        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
 //        
@@ -484,19 +482,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //                                        settings: onesignalInitSettings)
 //        
 //        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
-//        
-=======
-        
-//        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
 //
-//        OneSignal.initWithLaunchOptions(launchOptions,
-//                                        appId: "4f67f45a-7d0f-4e7d-8624-0ec148f064ed",
-//                                        handleNotificationAction: nil,
-//                                        settings: onesignalInitSettings)
-//
-//        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
-        
->>>>>>> b73eb8aafb311dafe6efc1513b4f6051a095720c
         
         WatchSessionManager.sharedManager.startSession()
         
