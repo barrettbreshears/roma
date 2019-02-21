@@ -273,7 +273,9 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 statusAlert.title = "Removed Filter".localized
                 statusAlert.contentColor = Colours.grayDark
                 statusAlert.message = self.currentTags[indexPath.row].phrase
-                statusAlert.show()
+                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                 
                 
                 let request = FilterToots.delete(id: self.currentTags[indexPath.row].id)

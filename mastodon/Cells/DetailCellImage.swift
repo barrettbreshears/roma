@@ -23,6 +23,11 @@ class DetailCellImage: UITableViewCell {
     var mainImageViewBG = UIView()
     var imageCountTag = UIButton()
     
+    var smallImage1 = UIButton()
+    var smallImage2 = UIButton()
+    var smallImage3 = UIButton()
+    var smallImage4 = UIButton()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -298,9 +303,11 @@ class DetailCellImage: UITableViewCell {
         
         faves.setTitle("\(formattedNumber ?? "0") \(likeText) and \(formattedNumber2 ?? "0") \(boostText)", for: .normal)
         
-        profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
-        profileImageView.pin_updateWithProgress = true
-        profileImageView.pin_setImage(from: URL(string: "\(status.reblog?.account.avatar ?? status.account.avatar)"))
+        DispatchQueue.global(qos: .userInitiated).async {
+        self.profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
+        self.profileImageView.pin_updateWithProgress = true
+        self.profileImageView.pin_setImage(from: URL(string: "\(status.reblog?.account.avatar ?? status.account.avatar)"))
+        }
         profileImageView.layer.masksToBounds = true
         profileImageView.layer.borderColor = UIColor.black.cgColor
         profileImageView.layer.borderWidth = 0.2
@@ -324,28 +331,176 @@ class DetailCellImage: UITableViewCell {
         
         mainImageView.contentMode = .scaleAspectFill
         mainImageView.imageView?.contentMode = .scaleAspectFill
-        self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
-        mainImageView.pin_updateWithProgress = true
-        mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].previewURL ?? status.mediaAttachments[0].previewURL)"))
         mainImageView.layer.masksToBounds = true
         
         
+        self.smallImage1.alpha = 0
+        self.smallImage2.alpha = 0
+        self.smallImage3.alpha = 0
+        self.smallImage4.alpha = 0
         imageCountTag.isUserInteractionEnabled = false
         if status.reblog?.mediaAttachments[0].type ?? status.mediaAttachments[0].type == .video {
+//            self.mainImageView.setImage(UIImage(), for: .normal)
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
+                self.mainImageView.pin_updateWithProgress = true
+                self.mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].previewURL ?? status.mediaAttachments[0].previewURL)"))
+            }
             imageCountTag.setTitle("\u{25b6}", for: .normal)
             imageCountTag.backgroundColor = Colours.tabSelected
             imageCountTag.alpha = 1
         } else if status.reblog?.mediaAttachments[0].type ?? status.mediaAttachments[0].type == .gifv {
+//            self.mainImageView.setImage(UIImage(), for: .normal)
+            DispatchQueue.global(qos: .userInitiated).async {
+                self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
+                self.mainImageView.pin_updateWithProgress = true
+                self.mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].previewURL ?? status.mediaAttachments[0].previewURL)"))
+            }
             imageCountTag.setTitle("GIF", for: .normal)
             imageCountTag.backgroundColor = Colours.tabSelected
             imageCountTag.alpha = 1
         } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count > 1 {
-            imageCountTag.setTitle("\(status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count)", for: .normal)
-            imageCountTag.backgroundColor = Colours.tabSelected
-            imageCountTag.alpha = 1
+            self.mainImageView.setImage(UIImage(), for: .normal)
+            if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count == 2 {
+                self.smallImage1.frame = CGRect(x: -2, y: 0, width: (UIScreen.main.bounds.width)/2, height: 240)
+                self.smallImage1.contentMode = .scaleAspectFill
+                self.smallImage1.imageView?.contentMode = .scaleAspectFill
+                self.smallImage1.clipsToBounds = true
+                DispatchQueue.global(qos: .userInitiated).async {
+                self.smallImage1.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
+                self.smallImage1.pin_updateWithProgress = true
+                self.smallImage1.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].previewURL ?? status.mediaAttachments[0].previewURL)"))
+                }
+                self.smallImage1.layer.masksToBounds = true
+                self.smallImage1.layer.borderColor = UIColor.black.cgColor
+                self.smallImage1.alpha = 1
+                self.mainImageView.addSubview(self.smallImage1)
+                
+                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: 0, width: (UIScreen.main.bounds.width)/2, height: 240)
+                self.smallImage2.contentMode = .scaleAspectFill
+                self.smallImage2.imageView?.contentMode = .scaleAspectFill
+                self.smallImage2.clipsToBounds = true
+                DispatchQueue.global(qos: .userInitiated).async {
+                self.smallImage2.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
+                self.smallImage2.pin_updateWithProgress = true
+                self.smallImage2.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[1].previewURL ?? status.mediaAttachments[1].previewURL)"))
+                }
+                self.smallImage2.layer.masksToBounds = true
+                self.smallImage2.layer.borderColor = UIColor.black.cgColor
+                self.smallImage2.alpha = 1
+                self.mainImageView.addSubview(self.smallImage2)
+            } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count == 3 {
+                self.smallImage1.frame = CGRect(x: -2, y: 0, width: (UIScreen.main.bounds.width)/2, height: 240)
+                self.smallImage1.contentMode = .scaleAspectFill
+                self.smallImage1.imageView?.contentMode = .scaleAspectFill
+                self.smallImage1.clipsToBounds = true
+                DispatchQueue.global(qos: .userInitiated).async {
+                self.smallImage1.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
+                self.smallImage1.pin_updateWithProgress = true
+                self.smallImage1.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].previewURL ?? status.mediaAttachments[0].previewURL)"))
+                }
+                self.smallImage1.layer.masksToBounds = true
+                self.smallImage1.layer.borderColor = UIColor.black.cgColor
+                self.smallImage1.alpha = 1
+                self.mainImageView.addSubview(self.smallImage1)
+                
+                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: -2, width: (UIScreen.main.bounds.width)/2, height: 120)
+                self.smallImage2.contentMode = .scaleAspectFill
+                self.smallImage2.imageView?.contentMode = .scaleAspectFill
+                self.smallImage2.clipsToBounds = true
+                DispatchQueue.global(qos: .userInitiated).async {
+                self.smallImage2.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
+                self.smallImage2.pin_updateWithProgress = true
+                self.smallImage2.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[1].previewURL ?? status.mediaAttachments[1].previewURL)"))
+                }
+                self.smallImage2.layer.masksToBounds = true
+                self.smallImage2.layer.borderColor = UIColor.black.cgColor
+                self.smallImage2.alpha = 1
+                self.mainImageView.addSubview(self.smallImage2)
+                
+                self.smallImage3.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: 122, width: (UIScreen.main.bounds.width)/2, height: 120)
+                self.smallImage3.contentMode = .scaleAspectFill
+                self.smallImage3.imageView?.contentMode = .scaleAspectFill
+                self.smallImage3.clipsToBounds = true
+                DispatchQueue.global(qos: .userInitiated).async {
+                self.smallImage3.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
+                self.smallImage3.pin_updateWithProgress = true
+                self.smallImage3.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[2].previewURL ?? status.mediaAttachments[2].previewURL)"))
+                }
+                self.smallImage3.layer.masksToBounds = true
+                self.smallImage3.layer.borderColor = UIColor.black.cgColor
+                self.smallImage3.alpha = 1
+                self.mainImageView.addSubview(self.smallImage3)
+            } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count == 4 {
+                self.smallImage1.frame = CGRect(x: -2, y: -2, width: (UIScreen.main.bounds.width)/2, height: 120)
+                self.smallImage1.contentMode = .scaleAspectFill
+                self.smallImage1.imageView?.contentMode = .scaleAspectFill
+                self.smallImage1.clipsToBounds = true
+                DispatchQueue.global(qos: .userInitiated).async {
+                self.smallImage1.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
+                self.smallImage1.pin_updateWithProgress = true
+                self.smallImage1.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].previewURL ?? status.mediaAttachments[0].previewURL)"))
+                }
+                self.smallImage1.layer.masksToBounds = true
+                self.smallImage1.layer.borderColor = UIColor.black.cgColor
+                self.smallImage1.alpha = 1
+                self.mainImageView.addSubview(self.smallImage1)
+                
+                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: -2, width: (UIScreen.main.bounds.width)/2, height: 120)
+                self.smallImage2.contentMode = .scaleAspectFill
+                self.smallImage2.imageView?.contentMode = .scaleAspectFill
+                self.smallImage2.clipsToBounds = true
+                DispatchQueue.global(qos: .userInitiated).async {
+                self.smallImage2.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
+                self.smallImage2.pin_updateWithProgress = true
+                self.smallImage2.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[1].previewURL ?? status.mediaAttachments[1].previewURL)"))
+                }
+                self.smallImage2.layer.masksToBounds = true
+                self.smallImage2.layer.borderColor = UIColor.black.cgColor
+                self.smallImage2.alpha = 1
+                self.mainImageView.addSubview(self.smallImage2)
+                
+                self.smallImage3.frame = CGRect(x: -2, y: 122, width: (UIScreen.main.bounds.width)/2, height: 120)
+                self.smallImage3.contentMode = .scaleAspectFill
+                self.smallImage3.imageView?.contentMode = .scaleAspectFill
+                self.smallImage3.clipsToBounds = true
+                DispatchQueue.global(qos: .userInitiated).async {
+                self.smallImage3.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
+                self.smallImage3.pin_updateWithProgress = true
+                self.smallImage3.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[2].previewURL ?? status.mediaAttachments[2].previewURL)"))
+                }
+                self.smallImage3.layer.masksToBounds = true
+                self.smallImage3.layer.borderColor = UIColor.black.cgColor
+                self.smallImage3.alpha = 1
+                self.mainImageView.addSubview(self.smallImage3)
+                
+                self.smallImage4.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: 122, width: (UIScreen.main.bounds.width)/2, height: 120)
+                self.smallImage4.contentMode = .scaleAspectFill
+                self.smallImage4.imageView?.contentMode = .scaleAspectFill
+                self.smallImage4.clipsToBounds = true
+                DispatchQueue.global(qos: .userInitiated).async {
+                self.smallImage4.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
+                self.smallImage4.pin_updateWithProgress = true
+                self.smallImage4.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[3].previewURL ?? status.mediaAttachments[3].previewURL)"))
+                }
+                self.smallImage4.layer.masksToBounds = true
+                self.smallImage4.layer.borderColor = UIColor.black.cgColor
+                self.smallImage4.alpha = 1
+                self.mainImageView.addSubview(self.smallImage4)
+            } else {
+                self.smallImage1.alpha = 0
+                self.smallImage2.alpha = 0
+                self.smallImage3.alpha = 0
+                self.smallImage4.alpha = 0
+            }
         } else {
             imageCountTag.backgroundColor = Colours.clear
             imageCountTag.alpha = 0
+            DispatchQueue.global(qos: .userInitiated).async {
+            self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
+            self.mainImageView.pin_updateWithProgress = true
+            self.mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].previewURL ?? status.mediaAttachments[0].previewURL)"))
+            }
         }
         
     }

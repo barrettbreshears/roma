@@ -46,37 +46,238 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
         super.didReceiveMemoryWarning()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {} else {
+            springWithDelay(duration: 0.4, delay: 0, animations: {
+                self.segmentedControl.alpha = 0
+            })
+        }
+    }
+    
+    @objc func changeSeg() {
+        
+        var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
+        var offset = 88
+        var newoff = 45
+        if UIDevice().userInterfaceIdiom == .phone {
+            switch UIScreen.main.nativeBounds.height {
+            case 2688:
+                offset = 88
+                newoff = 45
+            case 2436, 1792:
+                offset = 88
+                newoff = 45
+            default:
+                offset = 64
+                tabHeight = Int(UITabBarController().tabBar.frame.size.height)
+                newoff = 24
+            }
+        }
+        
+        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
+            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(offset + 5), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
+            segmentedControl.dataSource = self
+            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
+                segmentedControl.shapeStyle = .roundedRect
+            } else {
+                segmentedControl.shapeStyle = .liquid
+            }
+            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.cornerRadius = 12
+            segmentedControl.shadowsEnabled = false
+            segmentedControl.transitionStyle = .slide
+            segmentedControl.delegate = self
+            view.addSubview(segmentedControl)
+            
+            self.tableView.register(FollowersCell.self, forCellReuseIdentifier: "cellf")
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 65)
+            self.tableView.alpha = 1
+            self.tableView.delegate = self
+            self.tableView.dataSource = self
+            self.tableView.separatorStyle = .singleLine
+            self.tableView.backgroundColor = Colours.white
+            self.tableView.separatorColor = Colours.cellQuote
+            self.tableView.layer.masksToBounds = true
+            self.tableView.estimatedRowHeight = 89
+            self.tableView.rowHeight = UITableView.automaticDimension
+            self.view.addSubview(self.tableView)
+            
+            self.tableView2.register(FollowersCell.self, forCellReuseIdentifier: "cellf2")
+            self.tableView2.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 65)
+            self.tableView2.alpha = 1
+            self.tableView2.delegate = self
+            self.tableView2.dataSource = self
+            self.tableView2.separatorStyle = .singleLine
+            self.tableView2.backgroundColor = Colours.white
+            self.tableView2.separatorColor = Colours.cellQuote
+            self.tableView2.layer.masksToBounds = true
+            self.tableView2.estimatedRowHeight = 89
+            self.tableView2.rowHeight = UITableView.automaticDimension
+            self.tableView2.alpha = 0
+            self.view.addSubview(self.tableView2)
+        } else {
+            if UIApplication.shared.isSplitOrSlideOver {
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+            } else {
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(newoff), width: CGFloat(240), height: CGFloat(40)))
+            }
+            segmentedControl.dataSource = self
+            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
+                segmentedControl.shapeStyle = .roundedRect
+            } else {
+                segmentedControl.shapeStyle = .liquid
+            }
+            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.cornerRadius = 12
+            segmentedControl.shadowsEnabled = false
+            segmentedControl.transitionStyle = .slide
+            segmentedControl.delegate = self
+            self.navigationController?.view.addSubview(segmentedControl)
+            
+            self.tableView.register(FollowersCell.self, forCellReuseIdentifier: "cellf")
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 15)
+            self.tableView.alpha = 1
+            self.tableView.delegate = self
+            self.tableView.dataSource = self
+            self.tableView.separatorStyle = .singleLine
+            self.tableView.backgroundColor = Colours.white
+            self.tableView.separatorColor = Colours.cellQuote
+            self.tableView.layer.masksToBounds = true
+            self.tableView.estimatedRowHeight = 89
+            self.tableView.rowHeight = UITableView.automaticDimension
+            self.view.addSubview(self.tableView)
+            
+            self.tableView2.register(FollowersCell.self, forCellReuseIdentifier: "cellf2")
+            self.tableView2.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 15)
+            self.tableView2.alpha = 1
+            self.tableView2.delegate = self
+            self.tableView2.dataSource = self
+            self.tableView2.separatorStyle = .singleLine
+            self.tableView2.backgroundColor = Colours.white
+            self.tableView2.separatorColor = Colours.cellQuote
+            self.tableView2.layer.masksToBounds = true
+            self.tableView2.estimatedRowHeight = 89
+            self.tableView2.rowHeight = UITableView.automaticDimension
+            self.tableView2.alpha = 0
+            self.view.addSubview(self.tableView2)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(self.search), name: NSNotification.Name(rawValue: "search"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.load), name: NSNotification.Name(rawValue: "load"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.changeSeg), name: NSNotification.Name(rawValue: "changeSeg"), object: nil)
         
         self.ai.frame = CGRect(x: self.view.bounds.width/2 - 20, y: self.view.bounds.height/2, width: 40, height: 40)
         self.view.backgroundColor = Colours.white
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
+        var newoff = 45
         if UIDevice().userInterfaceIdiom == .phone {
             switch UIScreen.main.nativeBounds.height {
             case 2688:
                 offset = 88
+                newoff = 45
             case 2436, 1792:
                 offset = 88
+                newoff = 45
             default:
                 offset = 64
                 tabHeight = Int(UITabBarController().tabBar.frame.size.height)
+                newoff = 24
             }
         }
         
-        segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(offset + 5), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
-        segmentedControl.dataSource = self
-        segmentedControl.shapeStyle = .roundedRect
-        segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
-        segmentedControl.cornerRadius = 12
-        segmentedControl.shadowsEnabled = false
-        segmentedControl.transitionStyle = .slide
-        segmentedControl.delegate = self
-        view.addSubview(segmentedControl)
+        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
+            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(offset + 5), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
+            segmentedControl.dataSource = self
+            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
+                segmentedControl.shapeStyle = .roundedRect
+            } else {
+                segmentedControl.shapeStyle = .liquid
+            }
+            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.cornerRadius = 12
+            segmentedControl.shadowsEnabled = false
+            segmentedControl.transitionStyle = .slide
+            segmentedControl.delegate = self
+            view.addSubview(segmentedControl)
+            
+            self.tableView.register(FollowersCell.self, forCellReuseIdentifier: "cellf")
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 65)
+            self.tableView.alpha = 1
+            self.tableView.delegate = self
+            self.tableView.dataSource = self
+            self.tableView.separatorStyle = .singleLine
+            self.tableView.backgroundColor = Colours.white
+            self.tableView.separatorColor = Colours.cellQuote
+            self.tableView.layer.masksToBounds = true
+            self.tableView.estimatedRowHeight = 89
+            self.tableView.rowHeight = UITableView.automaticDimension
+            self.view.addSubview(self.tableView)
+            
+            self.tableView2.register(FollowersCell.self, forCellReuseIdentifier: "cellf2")
+            self.tableView2.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 65)
+            self.tableView2.alpha = 1
+            self.tableView2.delegate = self
+            self.tableView2.dataSource = self
+            self.tableView2.separatorStyle = .singleLine
+            self.tableView2.backgroundColor = Colours.white
+            self.tableView2.separatorColor = Colours.cellQuote
+            self.tableView2.layer.masksToBounds = true
+            self.tableView2.estimatedRowHeight = 89
+            self.tableView2.rowHeight = UITableView.automaticDimension
+            self.tableView2.alpha = 0
+            self.view.addSubview(self.tableView2)
+        } else {
+            if UIApplication.shared.isSplitOrSlideOver {
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+            } else {
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(newoff), width: CGFloat(240), height: CGFloat(40)))
+            }
+            segmentedControl.dataSource = self
+            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
+                segmentedControl.shapeStyle = .roundedRect
+            } else {
+                segmentedControl.shapeStyle = .liquid
+            }
+            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.cornerRadius = 12
+            segmentedControl.shadowsEnabled = false
+            segmentedControl.transitionStyle = .slide
+            segmentedControl.delegate = self
+            self.navigationController?.view.addSubview(segmentedControl)
+            
+            self.tableView.register(FollowersCell.self, forCellReuseIdentifier: "cellf")
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 15)
+            self.tableView.alpha = 1
+            self.tableView.delegate = self
+            self.tableView.dataSource = self
+            self.tableView.separatorStyle = .singleLine
+            self.tableView.backgroundColor = Colours.white
+            self.tableView.separatorColor = Colours.cellQuote
+            self.tableView.layer.masksToBounds = true
+            self.tableView.estimatedRowHeight = 89
+            self.tableView.rowHeight = UITableView.automaticDimension
+            self.view.addSubview(self.tableView)
+            
+            self.tableView2.register(FollowersCell.self, forCellReuseIdentifier: "cellf2")
+            self.tableView2.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 15)
+            self.tableView2.alpha = 1
+            self.tableView2.delegate = self
+            self.tableView2.dataSource = self
+            self.tableView2.separatorStyle = .singleLine
+            self.tableView2.backgroundColor = Colours.white
+            self.tableView2.separatorColor = Colours.cellQuote
+            self.tableView2.layer.masksToBounds = true
+            self.tableView2.estimatedRowHeight = 89
+            self.tableView2.rowHeight = UITableView.automaticDimension
+            self.tableView2.alpha = 0
+            self.view.addSubview(self.tableView2)
+        }
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
@@ -87,33 +288,6 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
         default:
             print("nothing")
         }
-        
-        self.tableView.register(FollowersCell.self, forCellReuseIdentifier: "cellf")
-        self.tableView.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 65)
-        self.tableView.alpha = 1
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.separatorStyle = .singleLine
-        self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
-        self.tableView.layer.masksToBounds = true
-        self.tableView.estimatedRowHeight = 89
-        self.tableView.rowHeight = UITableView.automaticDimension
-        self.view.addSubview(self.tableView)
-        
-        self.tableView2.register(FollowersCell.self, forCellReuseIdentifier: "cellf2")
-        self.tableView2.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 65)
-        self.tableView2.alpha = 1
-        self.tableView2.delegate = self
-        self.tableView2.dataSource = self
-        self.tableView2.separatorStyle = .singleLine
-        self.tableView2.backgroundColor = Colours.white
-        self.tableView2.separatorColor = Colours.cellQuote
-        self.tableView2.layer.masksToBounds = true
-        self.tableView2.estimatedRowHeight = 89
-        self.tableView2.rowHeight = UITableView.automaticDimension
-        self.tableView2.alpha = 0
-        self.view.addSubview(self.tableView2)
         
         self.loadLoadLoad()
         
@@ -142,6 +316,16 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
         default:
             print("nothing")
         }
+        
+        springWithDelay(duration: 0.4, delay: 0, animations: {
+            self.segmentedControl.alpha = 1
+        })
+        
+        if StoreStruct.historyBool {
+            self.changeSeg()
+        }
+        
+        StoreStruct.historyBool = false
         
         print("testboost \(self.statusBoosted.first?.displayName)")
         

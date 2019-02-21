@@ -18,9 +18,9 @@ import UIKit
     // #######
     
     /// How far the "maximum" reference line is from the top of the view's frame. In points.
-    @IBInspectable open var topMargin: CGFloat = 10
+    @IBInspectable open var topMargin1: CGFloat = 10
     /// How far the "minimum" reference line is from the bottom of the view's frame. In points.
-    @IBInspectable open var bottomMargin: CGFloat = 10
+    @IBInspectable open var bottomMargin1: CGFloat = 10
     /// How far the first point on the graph should be placed from the left hand side of the view.
     @IBInspectable open var leftmostPointPadding: CGFloat = 50
     /// How far the final point on the graph should be placed from the right hand side of the view.
@@ -285,7 +285,7 @@ import UIKit
         
         if(referenceLines.shouldShowReferenceLines) {
             let viewport = CGRect(x: 0, y: 0, width: viewportWidth, height: viewportHeight)
-            var referenceLineBottomMargin = bottomMargin
+            var referenceLineBottomMargin = bottomMargin1
             
             // Have to adjust the bottom line if we are showing data point labels (x-axis).
             if(referenceLines.shouldShowLabels && referenceLines.dataPointLabelFont != nil) {
@@ -295,7 +295,7 @@ import UIKit
             referenceLineView?.removeFromSuperview()
             referenceLineView = ReferenceLineDrawingView(
                 frame: viewport,
-                topMargin: topMargin,
+                topMargin: topMargin1,
                 bottomMargin: referenceLineBottomMargin,
                 referenceLineColor: referenceLines.referenceLineColor,
                 referenceLineThickness: referenceLines.referenceLineThickness,
@@ -315,7 +315,7 @@ import UIKit
         // if frame height is too small we won't be able to calculate zeroYPosition
         // so make sure to proceed only if there is enough space
         var availableGraphHeight = frame.height
-        availableGraphHeight = availableGraphHeight - topMargin - bottomMargin
+        availableGraphHeight = availableGraphHeight - topMargin1 - bottomMargin1
         
         if let referenceLines = referenceLines {
             if(referenceLines.shouldShowLabels && referenceLines.dataPointLabelFont != nil) {
@@ -897,7 +897,7 @@ import UIKit
         //                                                     max = the range's current maximum
         
         // Calculate the position on in the view for the value specified.
-        var graphHeight = viewportHeight - topMargin - bottomMargin
+        var graphHeight = viewportHeight - topMargin1 - bottomMargin1
         
         if let ref = self.referenceLines {
             if(ref.shouldShowLabels && ref.dataPointLabelFont != nil) {
@@ -906,7 +906,7 @@ import UIKit
         }
         
         let x = (CGFloat(index) * dataPointSpacing) + leftmostPointPadding
-        let y = (CGFloat((value - rangeMax) / (rangeMin - rangeMax)) * graphHeight) + topMargin
+        let y = (CGFloat((value - rangeMax) / (rangeMin - rangeMax)) * graphHeight) + topMargin1
         
         return CGPoint(x: x, y: y)
     }

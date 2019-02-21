@@ -446,6 +446,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+        
         self.ai.startAnimating()
         
         
@@ -453,20 +454,26 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.biometricAuthenticationClicked(self)
         }
         
-//        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
-//            settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 32, height: 32)))
-//            settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
-//            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-//            settingsButton.layer.cornerRadius = 0
-//            settingsButton.layer.masksToBounds = true
-//        } else {
-//            settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 0, y: 0, width: 20, height: 20)))
-//            settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
-//            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-//            settingsButton.imageView?.layer.cornerRadius = 10
-//            settingsButton.imageView?.contentMode = .scaleAspectFill
-//            settingsButton.layer.masksToBounds = true
-//        }
+        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
+            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 32, height: 32)
+            settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+            settingsButton.imageView?.layer.cornerRadius = 0
+            settingsButton.imageView?.contentMode = .scaleAspectFill
+            settingsButton.layer.masksToBounds = true
+        } else {
+            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
+            if StoreStruct.currentUser != nil {
+                settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            }
+            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            settingsButton.imageView?.layer.cornerRadius = 18
+            settingsButton.imageView?.contentMode = .scaleAspectFill
+            settingsButton.layer.masksToBounds = true
+        }
+        settingsButton.adjustsImageWhenHighlighted = false
+        settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
+        self.navigationController?.view.addSubview(settingsButton)
     }
     
     
@@ -596,6 +603,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         
         self.view.backgroundColor = Colours.white
         
+        
+        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
+            self?.player.seek(to: CMTime.zero)
+            self?.player.play()
+        }
         
         
         
@@ -911,6 +923,13 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             //            self.tableView.alpha = 1
         })
         
+        if StoreStruct.historyBool {
+            self.changeSeg()
+        }
+        
+        self.restoreScroll()
+        
+        StoreStruct.historyBool = false
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -1343,10 +1362,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.ai.removeFromSuperview()
         }
         if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {} else {
-            springWithDelay(duration: 0.4, delay: 0, animations: {
+//            springWithDelay(duration: 0.4, delay: 0, animations: {
                 self.segmentedControl.alpha = 0
                 //            self.tableView.alpha = 0
-            })
+//            })
         }
         if self.currentIndex == 0 {
             UserDefaults.standard.set(self.tableView2.contentOffset.y, forKey: "savedRowNotif")
@@ -1747,7 +1766,15 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         cell.profileImageView.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
+                    cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
+                    cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
+                    cell.smallImage3.addTarget(self, action: #selector(self.tappedImageS3(_:)), for: .touchUpInside)
+                    cell.smallImage4.addTarget(self, action: #selector(self.tappedImageS4(_:)), for: .touchUpInside)
                         cell.mainImageView.tag = indexPath.row
+                    cell.smallImage1.tag = indexPath.row
+                    cell.smallImage2.tag = indexPath.row
+                    cell.smallImage3.tag = indexPath.row
+                    cell.smallImage4.tag = indexPath.row
                         cell.backgroundColor = Colours.white
                         //cell.userName.textColor = Colours.black
                         //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
@@ -2082,7 +2109,15 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             cell.profileImageView.tag = indexPath.row
                             cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                             cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
+                    cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
+                    cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
+                    cell.smallImage3.addTarget(self, action: #selector(self.tappedImageS3(_:)), for: .touchUpInside)
+                    cell.smallImage4.addTarget(self, action: #selector(self.tappedImageS4(_:)), for: .touchUpInside)
                             cell.mainImageView.tag = indexPath.row
+                    cell.smallImage1.tag = indexPath.row
+                    cell.smallImage2.tag = indexPath.row
+                    cell.smallImage3.tag = indexPath.row
+                    cell.smallImage4.tag = indexPath.row
                             cell.backgroundColor = Colours.white
                             //cell.userName.textColor = Colours.black
                             //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
@@ -2396,7 +2431,15 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         cell.profileImageView.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
+                    cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
+                    cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
+                    cell.smallImage3.addTarget(self, action: #selector(self.tappedImageS3(_:)), for: .touchUpInside)
+                    cell.smallImage4.addTarget(self, action: #selector(self.tappedImageS4(_:)), for: .touchUpInside)
                         cell.mainImageView.tag = indexPath.row
+                    cell.smallImage1.tag = indexPath.row
+                    cell.smallImage2.tag = indexPath.row
+                    cell.smallImage3.tag = indexPath.row
+                    cell.smallImage4.tag = indexPath.row
                         cell.backgroundColor = Colours.white
                         //cell.userName.textColor = Colours.black
                         //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
@@ -2608,6 +2651,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
+    var player = AVPlayer()
     @objc func tappedImage(_ sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
             let selection = UISelectionFeedbackGenerator()
@@ -2637,9 +2681,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             if (UserDefaults.standard.object(forKey: "vidgif") == nil) || (UserDefaults.standard.object(forKey: "vidgif") as! Int == 0) {
                 XPlayer.play(videoURL)
             } else {
-                let player = AVPlayer(url: videoURL)
+                self.player = AVPlayer(url: videoURL)
                 let playerViewController = AVPlayerViewController()
-                playerViewController.player = player
+                playerViewController.player = self.player
                 self.present(playerViewController, animated: true) {
                     playerViewController.player!.play()
                 }
@@ -2767,6 +2811,303 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     }
     
     
+    
+    
+    
+    @objc func tappedImageS1(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var theTable = self.tableView
+        var sto = StoreStruct.notifications
+        if self.currentIndex == 0 {
+            sto = StoreStruct.notifications
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView2
+        } else if self.currentIndex == 5 {
+            sto = StoreStruct.notificationsDirect
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView3
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.notificationsMentions
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView
+        }
+        var indexPath = IndexPath(row: sender.tag, section: 0)
+        if self.currentIndex == 0 {
+            indexPath = IndexPath(row: sender.tag, section: 1)
+        }
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].status?.mediaAttachments[0].type == .video || sto[sender.tag].status?.mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+//                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].status!.mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage1.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(0)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
+    
+    @objc func tappedImageS2(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var theTable = self.tableView
+        var sto = StoreStruct.notifications
+        if self.currentIndex == 0 {
+            sto = StoreStruct.notifications
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView2
+        } else if self.currentIndex == 5 {
+            sto = StoreStruct.notificationsDirect
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView3
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.notificationsMentions
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView
+        }
+        var indexPath = IndexPath(row: sender.tag, section: 0)
+        if self.currentIndex == 0 {
+            indexPath = IndexPath(row: sender.tag, section: 1)
+        }
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].status?.mediaAttachments[0].type == .video || sto[sender.tag].status?.mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+//                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].status!.mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage2.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage2)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(1)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
+    
+    
+    @objc func tappedImageS3(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var theTable = self.tableView
+        var sto = StoreStruct.notifications
+        if self.currentIndex == 0 {
+            sto = StoreStruct.notifications
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView2
+        } else if self.currentIndex == 5 {
+            sto = StoreStruct.notificationsDirect
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView3
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.notificationsMentions
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView
+        }
+        var indexPath = IndexPath(row: sender.tag, section: 0)
+        if self.currentIndex == 0 {
+            indexPath = IndexPath(row: sender.tag, section: 1)
+        }
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].status?.mediaAttachments[0].type == .video || sto[sender.tag].status?.mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+//                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].status!.mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage3.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage3)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(2)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
+    
+    
+    
+    @objc func tappedImageS4(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var theTable = self.tableView
+        var sto = StoreStruct.notifications
+        if self.currentIndex == 0 {
+            sto = StoreStruct.notifications
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView2
+        } else if self.currentIndex == 5 {
+            sto = StoreStruct.notificationsDirect
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView3
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.notificationsMentions
+            StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
+            theTable = self.tableView
+        }
+        var indexPath = IndexPath(row: sender.tag, section: 0)
+        if self.currentIndex == 0 {
+            indexPath = IndexPath(row: sender.tag, section: 1)
+        }
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].status?.mediaAttachments[0].type == .video || sto[sender.tag].status?.mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+//                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].status!.mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage4.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage4)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(3)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
     
     
     
@@ -3192,7 +3533,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 statusAlert.title = "Muted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.mute(id: sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3211,7 +3554,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 statusAlert.title = "Unmuted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.unmute(id: sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3236,7 +3581,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 statusAlert.title = "Blocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.block(id: sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3255,7 +3602,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 statusAlert.title = "Unblocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.unblock(id: sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3290,7 +3639,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Harassment"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "Harassment")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -3314,7 +3665,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "No Content Warning"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "No Content Warning")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -3338,7 +3691,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Spam"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "Spam")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -3770,7 +4125,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 statusAlert.title = "Muted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.mute(id: sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3789,7 +4146,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 statusAlert.title = "Unmuted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.unmute(id: sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3814,7 +4173,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 statusAlert.title = "Blocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.block(id: sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3833,7 +4194,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 statusAlert.title = "Unblocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.unblock(id: sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3868,7 +4231,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Harassment"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "Harassment")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -3892,7 +4257,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "No Content Warning"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "No Content Warning")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -3916,7 +4283,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Spam"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "Spam")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -4087,7 +4456,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     
     func restoreScroll() {
         DispatchQueue.main.async {
-            self.tableView3.reloadData()
+//            self.tableView3.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowDirect") == nil) {} else {
                 if StoreStruct.notificationsDirect.count > 5 {
                     self.tableView3.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowDirect") as! CGFloat), animated: false)
@@ -4095,7 +4464,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             }
         }
         DispatchQueue.main.async {
-            self.tableView2.reloadData()
+//            self.tableView2.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowNotif") == nil) {} else {
                 if StoreStruct.notifications.count > 5 {
                     self.tableView2.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowNotif") as! CGFloat), animated: false)
@@ -4103,7 +4472,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             }
         }
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+//            self.tableView.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowMent") == nil) {} else {
                 if StoreStruct.notificationsMentions.count > 5 {
                     self.tableView.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowMent") as! CGFloat), animated: false)

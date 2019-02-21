@@ -196,7 +196,9 @@ class PadListViewController: UIViewController, UITextFieldDelegate, UITableViewD
                         statusAlert.title = "Deleted".localized
                         statusAlert.contentColor = Colours.grayDark
                         statusAlert.message = StoreStruct.allLists[indexPath.row - 2].title
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
                         statusAlert.show()
+                    }
                         
                         let request = Lists.delete(id: StoreStruct.allLists[indexPath.row - 2].id)
                         StoreStruct.client.run(request) { (statuses) in
@@ -255,7 +257,9 @@ class PadListViewController: UIViewController, UITextFieldDelegate, UITableViewD
                         statusAlert.title = "Removed".localized
                         statusAlert.contentColor = Colours.grayDark
                         statusAlert.message = StoreStruct.instanceLocalToAdd[indexPath.row]
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
                         statusAlert.show()
+                    }
                         
                         StoreStruct.instanceLocalToAdd.remove(at: indexPath.row)
                         UserDefaults.standard.set(StoreStruct.instanceLocalToAdd, forKey: "instancesLocal")

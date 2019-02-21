@@ -31,6 +31,7 @@ class SettingsBundleHelper {
             UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
             UserDefaults.standard.synchronize()
             
+            UserDefaults.standard.set(nil, forKey: "onb")
             StoreStruct.client = Client(baseURL: "")
             StoreStruct.shared.currentInstance.redirect = ""
             StoreStruct.shared.currentInstance.returnedText = ""

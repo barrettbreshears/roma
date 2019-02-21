@@ -14,8 +14,8 @@ internal class ReferenceLineDrawingView : UIView {
     
     // Store information about the ScrollableGraphView
     private var currentRange: (min: Double, max: Double) = (0,100)
-    private var topMargin: CGFloat = 10
-    private var bottomMargin: CGFloat = 10
+    private var topMargin1: CGFloat = 10
+    private var bottomMargin1: CGFloat = 10
     
     private var lineWidth: CGFloat {
         get {
@@ -41,8 +41,8 @@ internal class ReferenceLineDrawingView : UIView {
     init(frame: CGRect, topMargin: CGFloat, bottomMargin: CGFloat, referenceLineColor: UIColor, referenceLineThickness: CGFloat, referenceLineSettings: ReferenceLines) {
         super.init(frame: frame)
         
-        self.topMargin = topMargin
-        self.bottomMargin = bottomMargin
+        self.topMargin1 = topMargin
+        self.bottomMargin1 = bottomMargin
         
         // The reference line layer draws the reference lines and we handle the labels elsewhere.
         self.referenceLineLayer.frame = self.frame
@@ -74,11 +74,11 @@ internal class ReferenceLineDrawingView : UIView {
         labels.removeAll()
         
         if(self.settings.includeMinMax) {
-            let maxLineStart = CGPoint(x: 0, y: topMargin)
-            let maxLineEnd = CGPoint(x: lineWidth, y: topMargin)
+            let maxLineStart = CGPoint(x: 0, y: topMargin1)
+            let maxLineEnd = CGPoint(x: lineWidth, y: topMargin1)
             
-            let minLineStart = CGPoint(x: 0, y: self.bounds.height - bottomMargin)
-            let minLineEnd = CGPoint(x: lineWidth, y: self.bounds.height - bottomMargin)
+            let minLineStart = CGPoint(x: 0, y: self.bounds.height - bottomMargin1)
+            let minLineEnd = CGPoint(x: lineWidth, y: self.bounds.height - bottomMargin1)
             
             let numberFormatter = referenceNumberFormatter()
             
@@ -89,7 +89,7 @@ internal class ReferenceLineDrawingView : UIView {
             addLine(withTag: minString, from: minLineStart, to: minLineEnd, in: referenceLinePath)
         }
         
-        let initialRect = CGRect(x: self.bounds.origin.x, y: self.bounds.origin.y + topMargin, width: self.bounds.size.width, height: self.bounds.size.height - (topMargin + bottomMargin))
+        let initialRect = CGRect(x: self.bounds.origin.x, y: self.bounds.origin.y + topMargin1, width: self.bounds.size.width, height: self.bounds.size.height - (topMargin1 + bottomMargin1))
         
         switch(settings.positionType) {
         case .relative:
@@ -272,7 +272,7 @@ internal class ReferenceLineDrawingView : UIView {
     
     private func calculateYAxisValue(for point: CGPoint) -> Double {
         
-        let graphHeight = self.frame.size.height - (topMargin + bottomMargin)
+        let graphHeight = self.frame.size.height - (topMargin1 + bottomMargin1)
         
         //                                          value = the corresponding value on the graph for any y co-ordinate in the view
         //           y - t                          y = the y co-ordinate in the view for which we want to know the corresponding value on the graph
@@ -281,7 +281,7 @@ internal class ReferenceLineDrawingView : UIView {
         //                                          min = the range's current mininum
         //                                          max = the range's current maximum
         
-        var value = (((point.y - topMargin) / (graphHeight)) * CGFloat((self.currentRange.min - self.currentRange.max))) + CGFloat(self.currentRange.max)
+        var value = (((point.y - topMargin1) / (graphHeight)) * CGFloat((self.currentRange.min - self.currentRange.max))) + CGFloat(self.currentRange.max)
         
         // Sometimes results in "negative zero"
         if(value == 0) {
@@ -294,8 +294,8 @@ internal class ReferenceLineDrawingView : UIView {
     private func calculateYPositionForYAxisValue(value: Double) -> CGFloat {
         
         // Just an algebraic re-arrangement of calculateYAxisValue
-        let graphHeight = self.frame.size.height - (topMargin + bottomMargin)
-        var y = ((CGFloat(value - self.currentRange.max) / CGFloat(self.currentRange.min - self.currentRange.max)) * graphHeight) + topMargin
+        let graphHeight = self.frame.size.height - (topMargin1 + bottomMargin1)
+        var y = ((CGFloat(value - self.currentRange.max) / CGFloat(self.currentRange.min - self.currentRange.max)) * graphHeight) + topMargin1
         
         if (y == 0) {
             y = 0

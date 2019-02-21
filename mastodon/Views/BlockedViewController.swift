@@ -268,7 +268,9 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
                     statusAlert.title = "Unblocked".localized
                     statusAlert.contentColor = Colours.grayDark
                     statusAlert.message = sto[indexPath.row].displayName
-                    statusAlert.show()
+                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                     
                     let request = Accounts.unblock(id: sto[indexPath.row].id)
                     StoreStruct.client.run(request) { (statuses) in

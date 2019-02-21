@@ -190,7 +190,7 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
 //                let request = Clients.register(
 //                    clientName: "Mast",
 //                    redirectURI: "com.shi.mastodon://success",
-//                    scopes: [.read, .write, .follow],
+//                    scopes: [.read, .write, .follow, .push],
 //                    website: "https://twitter.com/jpeguin"
 //                )
 //                StoreStruct.client.run(request) { (application) in
@@ -203,7 +203,9 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
 //                            statusAlert.title = "Not a valid Instance".localized
 //                            statusAlert.contentColor = Colours.grayDark
 //                            statusAlert.message = "Please enter an Instance name like mastodon.technology"
-//                            statusAlert.show()
+//                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+//                        statusAlert.show()
+//                    }
 //                        }
 //
 //                    } else {
@@ -303,7 +305,9 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
                                 statusAlert.title = "Not a valid Instance".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = "Please enter an Instance name like mastodon.technology"
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                             }
                             
                         } else {
@@ -339,7 +343,9 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
                                 statusAlert.title = "Not a valid Instance".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = "Please enter an Instance name like mastodon.technology"
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                             }
                             
                         } else {
@@ -503,7 +509,7 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
         print(StoreStruct.shared.currentInstance.clientID)
         print(StoreStruct.shared.currentInstance.clientSecret)
         
-        var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.currentInstance.authCode)&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&client_id=\(StoreStruct.shared.currentInstance.clientID)&client_secret=\(StoreStruct.shared.currentInstance.clientSecret)")!)
+        var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.currentInstance.authCode)&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&client_id=\(StoreStruct.shared.currentInstance.clientID)&client_secret=\(StoreStruct.shared.currentInstance.clientSecret)&scope=read%20write%20follow%20push")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -599,7 +605,7 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
         self.textField.removeFromSuperview()
         //        self.safariVC?.dismiss(animated: true, completion: nil)
         
-        var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.newInstance!.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.newInstance!.authCode)&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&client_id=\(StoreStruct.shared.newInstance!.clientID)&client_secret=\(StoreStruct.shared.newInstance!.clientSecret)")!)
+        var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.newInstance!.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.newInstance!.authCode)&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&client_id=\(StoreStruct.shared.newInstance!.clientID)&client_secret=\(StoreStruct.shared.newInstance!.clientSecret)&scope=read%20write%20follow%20push")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")

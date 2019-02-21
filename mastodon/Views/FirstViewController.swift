@@ -18,6 +18,7 @@ import SAConfettiView
 import Disk
 import AVKit
 import AVFoundation
+import OneSignal
 
 class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, URLSessionDataDelegate, UIViewControllerPreviewingDelegate {
     
@@ -127,17 +128,29 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             let indexPath = IndexPath(row: 0, section: 0)
             if StoreStruct.statusesHome.count > 0 {
                 if self.tableView.alpha == 1 {
-                    self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+                    if StoreStruct.statusesHome.count <= 0 {
+                        
+                    } else {
+                        self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+                    }
                 }
             }
             
             if self.tableViewL.alpha == 1 && StoreStruct.statusesLocal.count > 0 {
                 print("scrolllocal")
-                self.tableViewL.scrollToRow(at: indexPath, at: .top, animated: true)
+                if StoreStruct.statusesLocal.count <= 0 {
+                    
+                } else {
+                    self.tableViewL.scrollToRow(at: indexPath, at: .top, animated: true)
+                }
             } else {
                 if StoreStruct.statusesFederated.count > 0 {
                     print("scrollfed")
-                    self.tableViewF.scrollToRow(at: indexPath, at: .top, animated: true)
+                    if StoreStruct.statusesFederated.count <= 0 {
+                        
+                    } else {
+                        self.tableViewF.scrollToRow(at: indexPath, at: .top, animated: true)
+                    }
                 }
             }
             
@@ -278,21 +291,27 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.ai.startAnimating()
         }
         
-//        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
-//            settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 32, height: 32)))
-//            settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
-//            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-//            settingsButton.layer.cornerRadius = 0
-//            settingsButton.layer.masksToBounds = true
-//        } else {
-//            settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 0, y: 0, width: 20, height: 20)))
-//            settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
-//            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: 5)
-//            settingsButton.imageView?.layer.cornerRadius = 10
-//            settingsButton.imageView?.contentMode = .scaleAspectFill
-//            settingsButton.layer.masksToBounds = true
-//        }
         
+        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
+            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 32, height: 32)
+            settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+            settingsButton.imageView?.layer.cornerRadius = 0
+            settingsButton.imageView?.contentMode = .scaleAspectFill
+            settingsButton.layer.masksToBounds = true
+        } else {
+            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
+            if StoreStruct.currentUser != nil {
+                settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            }
+            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            settingsButton.imageView?.layer.cornerRadius = 18
+            settingsButton.imageView?.contentMode = .scaleAspectFill
+            settingsButton.layer.masksToBounds = true
+        }
+        settingsButton.adjustsImageWhenHighlighted = false
+        settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
+        self.navigationController?.view.addSubview(settingsButton)
     }
     
     
@@ -721,7 +740,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         
         self.view.backgroundColor = Colours.white
         
-        
+        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
+            self?.player.seek(to: CMTime.zero)
+            self?.player.play()
+        }
         
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
@@ -955,7 +977,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     
     func restoreScroll() {
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+//            self.tableView.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowHome1") == nil) {} else {
                 if StoreStruct.statusesHome.count > 5 {
                     self.tableView.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowHome1") as! CGFloat), animated: false)
@@ -963,7 +985,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
         }
         DispatchQueue.main.async {
-            self.tableViewL.reloadData()
+//            self.tableViewL.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowLocal1") == nil) {} else {
                 if StoreStruct.statusesLocal.count > 5 {
                     self.tableViewL.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowLocal1") as! CGFloat), animated: false)
@@ -971,7 +993,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
         }
         DispatchQueue.main.async {
-            self.tableViewF.reloadData()
+//            self.tableViewF.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowFed1") == nil) {} else {
                 if StoreStruct.statusesFederated.count > 5 {
                     self.tableViewF.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowFed1") as! CGFloat), animated: false)
@@ -996,10 +1018,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         super.viewWillDisappear(true)
         
         if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {} else {
-            springWithDelay(duration: 0.4, delay: 0, animations: {
+//            springWithDelay(duration: 0.4, delay: 0, animations: {
                 self.segmentedControl.alpha = 0
-                //            self.tableView.alpha = 0
-            })
+//            })
         }
         
         UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowHome1")
@@ -1033,6 +1054,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
         }
         
+        
+        self.restoreScroll()
+        
+//        if (OneSignal.getPermissionSubscriptionState()?.subscriptionStatus.subscribed ?? false) {
+//            OneSignal.setSubscription(false)
+//            OneSignal.setSubscription(true)
+//        }
+        
         //bh4
         var newSize = offset + 65
         if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
@@ -1051,7 +1080,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         } else {
             settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
             if StoreStruct.currentUser != nil {
-                settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+                settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatar)"))
             }
             settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
             settingsButton.imageView?.layer.cornerRadius = 18
@@ -1087,11 +1116,15 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         self.view.addSubview(self.newUpdatesB3)
         
         
-        
         springWithDelay(duration: 0.4, delay: 0, animations: {
             self.segmentedControl.alpha = 1
             self.tableView.alpha = 1
         })
+        if StoreStruct.historyBool {
+            self.changeSeg()
+        }
+        
+        StoreStruct.historyBool = false
         
         self.navigationController?.navigationItem.backBarButtonItem?.tintColor = Colours.tabUnselected
         
@@ -1942,8 +1975,21 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     cell.configure(StoreStruct.statusesHome[indexPath.row])
                     cell.profileImageView.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                    
                     cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
+                    cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
+                    cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
+                    cell.smallImage3.addTarget(self, action: #selector(self.tappedImageS3(_:)), for: .touchUpInside)
+                    cell.smallImage4.addTarget(self, action: #selector(self.tappedImageS4(_:)), for: .touchUpInside)
+                    
                     cell.mainImageView.tag = indexPath.row
+                    cell.smallImage1.tag = indexPath.row
+                    cell.smallImage2.tag = indexPath.row
+                    cell.smallImage3.tag = indexPath.row
+                    cell.smallImage4.tag = indexPath.row
+                    
+                    
+                    
                     cell.userName.textColor = Colours.black
                     cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
                     cell.date.textColor = Colours.black.withAlphaComponent(0.6)
@@ -2177,7 +2223,15 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     cell.profileImageView.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
+                    cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
+                    cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
+                    cell.smallImage3.addTarget(self, action: #selector(self.tappedImageS3(_:)), for: .touchUpInside)
+                    cell.smallImage4.addTarget(self, action: #selector(self.tappedImageS4(_:)), for: .touchUpInside)
                     cell.mainImageView.tag = indexPath.row
+                    cell.smallImage1.tag = indexPath.row
+                    cell.smallImage2.tag = indexPath.row
+                    cell.smallImage3.tag = indexPath.row
+                    cell.smallImage4.tag = indexPath.row
                     cell.userName.textColor = Colours.black
                     cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
                     cell.date.textColor = Colours.black.withAlphaComponent(0.6)
@@ -2403,7 +2457,15 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     cell.profileImageView.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
+                    cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
+                    cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
+                    cell.smallImage3.addTarget(self, action: #selector(self.tappedImageS3(_:)), for: .touchUpInside)
+                    cell.smallImage4.addTarget(self, action: #selector(self.tappedImageS4(_:)), for: .touchUpInside)
                     cell.mainImageView.tag = indexPath.row
+                    cell.smallImage1.tag = indexPath.row
+                    cell.smallImage2.tag = indexPath.row
+                    cell.smallImage3.tag = indexPath.row
+                    cell.smallImage4.tag = indexPath.row
                     cell.userName.textColor = Colours.black
                     cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
                     cell.date.textColor = Colours.black.withAlphaComponent(0.6)
@@ -2520,6 +2582,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
     }
     
+    var player = AVPlayer()
     @objc func tappedImage(_ sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
             let selection = UISelectionFeedbackGenerator()
@@ -2547,9 +2610,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 if (UserDefaults.standard.object(forKey: "vidgif") == nil) || (UserDefaults.standard.object(forKey: "vidgif") as! Int == 0) {
                     XPlayer.play(videoURL)
                 } else {
-                    let player = AVPlayer(url: videoURL)
+                    self.player = AVPlayer(url: videoURL)
                     let playerViewController = AVPlayerViewController()
-                    playerViewController.player = player
+                    playerViewController.player = self.player
                     self.present(playerViewController, animated: true) {
                         playerViewController.player!.play()
                     }
@@ -2681,6 +2744,285 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     
     
     
+    
+    @objc func tappedImageS1(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var tab = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewL
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewF
+        }
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+                    let indexPath = IndexPath(row: sender.tag, section: 0)
+                    let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                    var images = [SKPhoto]()
+                    var coun = 0
+                    for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                        if coun == 0 {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage1.currentImage ?? nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            } else {
+                                photo.caption = y.description ?? ""
+                            }
+                            images.append(photo)
+                        } else {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            } else {
+                                photo.caption = y.description ?? ""
+                            }
+                            images.append(photo)
+                        }
+                        coun += 1
+                    }
+                    let originImage = sender.currentImage
+                    if originImage != nil {
+                        let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
+                        browser.displayToolbar = true
+                        browser.displayAction = true
+                        browser.delegate = self
+                        browser.initializePageIndex(0)
+                        present(browser, animated: true, completion: nil)
+                    }
+                
+            }
+            
+        }
+    }
+    
+    @objc func tappedImageS2(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var tab = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewL
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewF
+        }
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage2.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage2)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(1)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
+    
+    
+    @objc func tappedImageS3(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var tab = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewL
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewF
+        }
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage3.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage3)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(2)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
+    
+    
+    
+    @objc func tappedImageS4(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var tab = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewL
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewF
+        }
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage4.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage4)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(3)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
     
     
     
@@ -3072,7 +3414,15 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 like.backgroundColor = Colours.white
             } else {
                 if sto[indexPath.row].visibility == .direct {
-                    like.backgroundColor = Colours.cellQuote
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 1 {
+                        like.backgroundColor = Colours.cellQuote
+                    }
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 2 {
+                        like.backgroundColor = Colours.tabUnselected
+                    }
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 3 {
+                        like.backgroundColor = Colours.tabSelected
+                    }
                 } else {
                     like.backgroundColor = Colours.white
                 }
@@ -3109,7 +3459,15 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 reply.backgroundColor = Colours.white
             } else {
                 if sto[indexPath.row].visibility == .direct {
-                    reply.backgroundColor = Colours.cellQuote
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 1 {
+                        reply.backgroundColor = Colours.cellQuote
+                    }
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 2 {
+                        reply.backgroundColor = Colours.tabUnselected
+                    }
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 3 {
+                        reply.backgroundColor = Colours.tabSelected
+                    }
                 } else {
                     reply.backgroundColor = Colours.white
                 }
@@ -3252,7 +3610,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         .action(.default("Delete".localized), image: UIImage(named: "block")) { (action, ind) in
                             print(action, ind)
                             
-                            let request = Statuses.delete(id: sto[indexPath.row].id)
+                            let theId = sto[indexPath.row].id
+                            let request = Statuses.delete(id: theId)
                             StoreStruct.client.run(request) { (statuses) in
                                 print("deleted")
                                 
@@ -3362,7 +3721,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 statusAlert.title = "Muted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.mute(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3381,7 +3742,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 statusAlert.title = "Unmuted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.unmute(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3406,7 +3769,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 statusAlert.title = "Blocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.block(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3425,7 +3790,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 statusAlert.title = "Unblocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.unblock(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3459,7 +3826,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Harassment"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Harassment")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -3483,7 +3852,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "No Content Warning"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "No Content Warning")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -3507,7 +3878,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Spam"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Spam")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -3656,7 +4029,15 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 more.backgroundColor = Colours.white
             } else {
                 if sto[indexPath.row].visibility == .direct {
-                    more.backgroundColor = Colours.cellQuote
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 1 {
+                        more.backgroundColor = Colours.cellQuote
+                    }
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 2 {
+                        more.backgroundColor = Colours.tabUnselected
+                    }
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 3 {
+                        more.backgroundColor = Colours.tabSelected
+                    }
                 } else {
                     more.backgroundColor = Colours.white
                 }
@@ -3751,12 +4132,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             if StoreStruct.statusesHome.contains(stat.last!) {
                                 StoreStruct.statusesHome = y.first! + stat + y.last!
+                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             } else {
                                 StoreStruct.gapLastHomeID = stat.last?.id ?? ""
                                 let z = stat.last!
                                 z.id = "loadmorehere"
                                 StoreStruct.gapLastHomeStat = z
                                 StoreStruct.statusesHome = y.first! + stat + y.last!
+                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             }
                             
                             
@@ -3775,7 +4158,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 DispatchQueue.main.async {
                                     UIView.setAnimationsEnabled(false)
                                     self.tableView.reloadData()
-                                    self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                    if newestC == 0 {
+                                        
+                                    } else {
+//                                        self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                    }
                                     UIView.setAnimationsEnabled(true)
                                 }
                             } else {
@@ -3805,12 +4192,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             if StoreStruct.statusesLocal.contains(stat.last!) {
                                 StoreStruct.statusesLocal = y.first! + stat + y.last!
+                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             } else {
                                 StoreStruct.gapLastLocalID = stat.last?.id ?? ""
                                 let z = stat.last!
                                 z.id = "loadmorehere"
                                 StoreStruct.gapLastLocalStat = z
                                 StoreStruct.statusesLocal = y.first! + stat + y.last!
+                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             }
                             
                             
@@ -3829,7 +4218,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 DispatchQueue.main.async {
                                     UIView.setAnimationsEnabled(false)
                                     self.tableViewL.reloadData()
-                                    self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                    if newestC == 0 {
+                                        
+                                    } else {
+//                                        self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                    }
                                     UIView.setAnimationsEnabled(true)
                                 }
                             } else {
@@ -3860,12 +4253,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             if StoreStruct.statusesFederated.contains(stat.last!) {
                                 StoreStruct.statusesFederated = y.first! + stat + y.last!
+                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             } else {
                                 StoreStruct.gapLastFedID = stat.last?.id ?? ""
                                 let z = stat.last!
                                 z.id = "loadmorehere"
                                 StoreStruct.gapLastFedStat = z
                                 StoreStruct.statusesFederated = y.first! + stat + y.last!
+                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             }
                             
                             
@@ -3884,7 +4279,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 DispatchQueue.main.async {
                                     UIView.setAnimationsEnabled(false)
                                     self.tableViewF.reloadData()
-                                    self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                    if newestC == 0 {
+                                        
+                                    } else {
+//                                        self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                    }
                                     UIView.setAnimationsEnabled(true)
                                 }
                             } else {
@@ -3979,10 +4378,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         
                         
                         if let st = stat.last {
-                            if StoreStruct.statusesHome.contains(st) || stat.count == 1 {
+                            if StoreStruct.statusesHome.contains(st) || stat.count < 20 {
                             print("no need for load more button here")
                             StoreStruct.statusesHome = stat + StoreStruct.statusesHome
-//                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                         } else {
                             print("need load more button here")
                             StoreStruct.gapLastHomeID = stat.last?.id ?? ""
@@ -3990,11 +4389,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             z.id = "loadmorehere"
                             StoreStruct.gapLastHomeStat = z
                             StoreStruct.statusesHome = stat + StoreStruct.statusesHome
-//                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                         }
                         } else {
                             StoreStruct.statusesHome = stat + StoreStruct.statusesHome
-//                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                         }
                         
                         
@@ -4022,7 +4421,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if newestC == 0 {
                                     
                                 } else {
-                                    self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                    self.tableView.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
                                 }
                                 UIView.setAnimationsEnabled(true)
                             } else {
@@ -4057,10 +4456,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         }
                         
                         if let st = stat.last {
-                            if StoreStruct.statusesLocal.contains(st) || stat.count == 1 {
+                            if StoreStruct.statusesLocal.contains(st) || stat.count < 20 {
                                 print("no need for load more button here")
                                 StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
-//                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             } else {
                                 print("need load more button here")
                                 StoreStruct.gapLastLocalID = stat.last?.id ?? ""
@@ -4068,11 +4467,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 z.id = "loadmorehere"
                                 StoreStruct.gapLastLocalStat = z
                                 StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
-//                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             }
                         } else {
                             StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
-//                            StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                            StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                         }
                         
                         
@@ -4101,7 +4500,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if newestC == 0 {
                                     
                                 } else {
-                                    self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                    self.tableViewL.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
                                 }
                                 UIView.setAnimationsEnabled(true)
                             } else {
@@ -4133,10 +4532,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         var newestC = StoreStruct.statusesFederated.count
                         
                         if let st = stat.last {
-                            if StoreStruct.statusesFederated.contains(st) || stat.count == 1 {
+                            if StoreStruct.statusesFederated.contains(st) || stat.count < 20 {
                                 print("no need for load more button here")
                                 StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
-//                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             } else {
                                 print("need load more button here")
                                 StoreStruct.gapLastFedID = stat.last?.id ?? ""
@@ -4145,11 +4544,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 StoreStruct.gapLastFedStat = z
                                 print(StoreStruct.gapLastFedID)
                                 StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
-//                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             }
                         } else {
                             StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
-//                            StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                            StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                         }
                         
                         
@@ -4178,7 +4577,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if newestC == 0 {
                                     
                                 } else {
-                                    self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                    self.tableViewF.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
                                 }
                                 UIView.setAnimationsEnabled(true)
                                 

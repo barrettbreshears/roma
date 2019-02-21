@@ -212,7 +212,9 @@ class NewListViewController: UIViewController, UITextViewDelegate {
                     statusAlert.title = "Created List".localized
                     statusAlert.contentColor = Colours.grayDark
                     statusAlert.message = self.textView.text
-                    statusAlert.show()
+                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                 }
             }
         }
@@ -234,7 +236,9 @@ class NewListViewController: UIViewController, UITextViewDelegate {
                     statusAlert.title = "Edited List".localized
                     statusAlert.contentColor = Colours.grayDark
                     statusAlert.message = self.textView.text
-                    statusAlert.show()
+                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                     }
                 }
             }

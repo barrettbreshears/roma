@@ -90,7 +90,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    
     func application(
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
@@ -98,7 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
         print("Device Token: \(token)")
-        
+    
         var state:PushNotificationState!
         
         if let storedState = PushNotificationReceiver.getSate() {
@@ -131,7 +130,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //now create the URLRequest object using the url object
         var request = URLRequest(url: url)
-        
+    
         request.httpMethod = "DELETE"// "POST" //set http method as POST
         
         
@@ -153,8 +152,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         //create dataTask using the session object to send data to the server
         let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-            
-            
+   
             let requestParams = PushNotificationSubscriptionRequest(endpoint: state.subscription.endpoint.absoluteString, receiver: state.receiver, alerts: state.subscription.alerts)
             
             //create the url with URL
@@ -208,19 +206,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             })
             task.resume()
             
-            
         })
         task.resume()
         
     }
-    
+
     func application(
         _ application: UIApplication,
         didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Failed to register: \(error)")
     }
-
-    
     
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         if shortcutItem.type == "com.vm.roma.feed" {
@@ -383,7 +378,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("Response ==> \(url.absoluteString)")
                 let x = url.absoluteString
                 let y = x.split(separator: "=")
-                StoreStruct.shared.newInstance!.authCode = y[1].description
+                StoreStruct.shared.newInstance!.authCode = y.last?.description ?? ""
                 let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
                 switch (deviceIdiom) {
                 case .phone:
@@ -479,6 +474,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         
+<<<<<<< HEAD
 //        
 //        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
 //        
@@ -489,6 +485,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        
 //        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
 //        
+=======
+        
+//        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
+//
+//        OneSignal.initWithLaunchOptions(launchOptions,
+//                                        appId: "4f67f45a-7d0f-4e7d-8624-0ec148f064ed",
+//                                        handleNotificationAction: nil,
+//                                        settings: onesignalInitSettings)
+//
+//        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
+        
+>>>>>>> b73eb8aafb311dafe6efc1513b4f6051a095720c
         
         WatchSessionManager.sharedManager.startSession()
         

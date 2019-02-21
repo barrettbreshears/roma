@@ -361,9 +361,11 @@ class NotificationCell: SwipeTableViewCell {
         date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
         
-        profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
-        profileImageView.pin_updateWithProgress = true
-        profileImageView.pin_setImage(from: URL(string: "\(status.account.avatar)"))
+        DispatchQueue.global(qos: .userInitiated).async {
+        self.profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
+        self.profileImageView.pin_updateWithProgress = true
+        self.profileImageView.pin_setImage(from: URL(string: "\(status.account.avatar)"))
+        }
         profileImageView.layer.masksToBounds = true
         profileImageView.layer.borderColor = UIColor.black.cgColor
         profileImageView.layer.borderWidth = 0.2

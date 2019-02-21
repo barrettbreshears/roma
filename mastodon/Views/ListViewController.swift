@@ -155,6 +155,11 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name: NSNotification.Name(rawValue: "refresh"), object: nil)
         //NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTop1), name: NSNotification.Name(rawValue: "scrollTop1"), object: nil)
         
+        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
+            self?.player.seek(to: CMTime.zero)
+            self?.player.play()
+        }
+        
         self.view.backgroundColor = Colours.white
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
@@ -404,7 +409,15 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                 cell.profileImageView.tag = indexPath.row
                 cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                 cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
+                    cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
+                    cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
+                    cell.smallImage3.addTarget(self, action: #selector(self.tappedImageS3(_:)), for: .touchUpInside)
+                    cell.smallImage4.addTarget(self, action: #selector(self.tappedImageS4(_:)), for: .touchUpInside)
                 cell.mainImageView.tag = indexPath.row
+                    cell.smallImage1.tag = indexPath.row
+                    cell.smallImage2.tag = indexPath.row
+                    cell.smallImage3.tag = indexPath.row
+                    cell.smallImage4.tag = indexPath.row
                 cell.userName.textColor = Colours.black
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
                 cell.date.textColor = Colours.black.withAlphaComponent(0.6)
@@ -512,6 +525,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    var player = AVPlayer()
     @objc func tappedImage(_ sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
         let selection = UISelectionFeedbackGenerator()
@@ -538,9 +552,9 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             if (UserDefaults.standard.object(forKey: "vidgif") == nil) || (UserDefaults.standard.object(forKey: "vidgif") as! Int == 0) {
                 XPlayer.play(videoURL)
             } else {
-                let player = AVPlayer(url: videoURL)
+                self.player = AVPlayer(url: videoURL)
                 let playerViewController = AVPlayerViewController()
-                playerViewController.player = player
+                playerViewController.player = self.player
                 self.present(playerViewController, animated: true) {
                     playerViewController.player!.play()
                 }
@@ -589,6 +603,287 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
+    
+    
+    
+    @objc func tappedImageS1(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var tab = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        }
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage1.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(0)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
+    
+    @objc func tappedImageS2(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var tab = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        }
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage2.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage2)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(1)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
+    
+    
+    @objc func tappedImageS3(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var tab = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        }
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage3.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage3)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(2)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
+    
+    
+    
+    @objc func tappedImageS4(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var tab = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        }
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage4.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else {
+                            photo.caption = y.description ?? ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage4)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(3)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
     
     
     
@@ -980,7 +1275,15 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                 like.backgroundColor = Colours.white
             } else {
                 if sto[indexPath.row].visibility == .direct {
-                    like.backgroundColor = Colours.cellQuote
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 1 {
+                        like.backgroundColor = Colours.cellQuote
+                    }
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 2 {
+                        like.backgroundColor = Colours.tabUnselected
+                    }
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 3 {
+                        like.backgroundColor = Colours.tabSelected
+                    }
                 } else {
                     like.backgroundColor = Colours.white
                 }
@@ -1017,7 +1320,15 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                 reply.backgroundColor = Colours.white
             } else {
                 if sto[indexPath.row].visibility == .direct {
-                    reply.backgroundColor = Colours.cellQuote
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 1 {
+                        reply.backgroundColor = Colours.cellQuote
+                    }
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 2 {
+                        reply.backgroundColor = Colours.tabUnselected
+                    }
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 3 {
+                        reply.backgroundColor = Colours.tabSelected
+                    }
                 } else {
                     reply.backgroundColor = Colours.white
                 }
@@ -1277,7 +1588,9 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                             statusAlert.title = "Muted".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                            statusAlert.show()
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                             
                             let request = Accounts.mute(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                             StoreStruct.client.run(request) { (statuses) in
@@ -1296,7 +1609,9 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                             statusAlert.title = "Unmuted".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                            statusAlert.show()
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                             
                             let request = Accounts.unmute(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                             StoreStruct.client.run(request) { (statuses) in
@@ -1321,7 +1636,9 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                             statusAlert.title = "Blocked".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                            statusAlert.show()
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                             
                             let request = Accounts.block(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                             StoreStruct.client.run(request) { (statuses) in
@@ -1340,7 +1657,9 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                             statusAlert.title = "Unblocked".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                            statusAlert.show()
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                             
                             let request = Accounts.unblock(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                             StoreStruct.client.run(request) { (statuses) in
@@ -1374,7 +1693,9 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                                 statusAlert.title = "Reported".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = "Harassment"
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Harassment")
                                 StoreStruct.client.run(request) { (statuses) in
@@ -1398,7 +1719,9 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                                 statusAlert.title = "Reported".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = "No Content Warning"
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "No Content Warning")
                                 StoreStruct.client.run(request) { (statuses) in
@@ -1422,7 +1745,9 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                                 statusAlert.title = "Reported".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = "Spam"
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Spam")
                                 StoreStruct.client.run(request) { (statuses) in
@@ -1583,7 +1908,15 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                 more.backgroundColor = Colours.white
             } else {
                 if sto[indexPath.row].visibility == .direct {
-                    more.backgroundColor = Colours.cellQuote
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 1 {
+                        more.backgroundColor = Colours.cellQuote
+                    }
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 2 {
+                        more.backgroundColor = Colours.tabUnselected
+                    }
+                    if UserDefaults.standard.object(forKey: "dmTog") as! Int == 3 {
+                        more.backgroundColor = Colours.tabSelected
+                    }
                 } else {
                     more.backgroundColor = Colours.white
                 }

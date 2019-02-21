@@ -22,6 +22,11 @@ class RepliesCellImage: SwipeTableViewCell {
     var moreImage = UIImageView()
     var imageCountTag = UIButton()
     
+    var smallImage1 = UIButton()
+    var smallImage2 = UIButton()
+    var smallImage3 = UIButton()
+    var smallImage4 = UIButton()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -270,9 +275,11 @@ class RepliesCellImage: SwipeTableViewCell {
         date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
         
-        profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
-        profileImageView.pin_updateWithProgress = true
-        profileImageView.pin_setImage(from: URL(string: "\(status.reblog?.account.avatar ?? status.account.avatar)"))
+        DispatchQueue.global(qos: .userInitiated).async {
+        self.profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
+        self.profileImageView.pin_updateWithProgress = true
+        self.profileImageView.pin_setImage(from: URL(string: "\(status.reblog?.account.avatar ?? status.account.avatar)"))
+        }
         profileImageView.layer.masksToBounds = true
         profileImageView.layer.borderColor = UIColor.black.cgColor
         profileImageView.layer.borderWidth = 0.2
@@ -288,9 +295,11 @@ class RepliesCellImage: SwipeTableViewCell {
         
         mainImageView.contentMode = .scaleAspectFill
         mainImageView.imageView?.contentMode = .scaleAspectFill
+//        DispatchQueue.global(qos: .userInitiated).async {
         self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
-        mainImageView.pin_updateWithProgress = true
-        mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].url ?? status.mediaAttachments[0].url)"))
+        self.mainImageView.pin_updateWithProgress = true
+        self.mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].url ?? status.mediaAttachments[0].url)"))
+//        }
         mainImageView.layer.masksToBounds = true
         mainImageView.layer.borderColor = UIColor.black.cgColor
         if (UserDefaults.standard.object(forKey: "imCorner") == nil || UserDefaults.standard.object(forKey: "imCorner") as! Int == 0) {

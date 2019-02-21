@@ -754,6 +754,11 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         self.navigationController?.navigationBar.backgroundColor = Colours.white
         self.navigationController?.navigationBar.tintColor = Colours.black
         
+        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
+            self?.player.seek(to: CMTime.zero)
+            self?.player.play()
+        }
+        
         
 //        var settingsButton = MNGExpandedTouchAreaButton()
 //        settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 32, height: 32)))
@@ -900,7 +905,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
     
     func restoreScroll() {
         DispatchQueue.main.async {
-            self.tableView.reloadData()
+//            self.tableView.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowHome1") == nil) {} else {
                 if StoreStruct.statusesHome.count > 5 {
                     self.tableView.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowHome1") as! CGFloat), animated: false)
@@ -908,7 +913,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             }
         }
         DispatchQueue.main.async {
-            self.tableViewL.reloadData()
+//            self.tableViewL.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowLocal1") == nil) {} else {
                 if StoreStruct.statusesLocal.count > 5 {
                     self.tableViewL.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowLocal1") as! CGFloat), animated: false)
@@ -916,7 +921,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             }
         }
         DispatchQueue.main.async {
-            self.tableViewF.reloadData()
+//            self.tableViewF.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowFed1") == nil) {} else {
                 if StoreStruct.statusesFederated.count > 5 {
                     self.tableViewF.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowFed1") as! CGFloat), animated: false)
@@ -974,6 +979,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                 tabHeight = Int(UITabBarController().tabBar.frame.size.height)
             }
         }
+        self.restoreScroll()
         
         //bh4
         var newSize = offset + 65
@@ -2569,6 +2575,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         }
     }
     
+    var player = AVPlayer()
     @objc func tappedImage(_ sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
             let selection = UISelectionFeedbackGenerator()
@@ -2596,9 +2603,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                 if (UserDefaults.standard.object(forKey: "vidgif") == nil) || (UserDefaults.standard.object(forKey: "vidgif") as! Int == 0) {
                     XPlayer.play(videoURL)
                 } else {
-                    let player = AVPlayer(url: videoURL)
+                    self.player = AVPlayer(url: videoURL)
                     let playerViewController = AVPlayerViewController()
-                    playerViewController.player = player
+                    playerViewController.player = self.player
                     self.present(playerViewController, animated: true) {
                         playerViewController.player!.play()
                     }
@@ -3388,7 +3395,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 statusAlert.title = "Muted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.mute(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3407,7 +3416,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 statusAlert.title = "Unmuted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.unmute(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3432,7 +3443,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 statusAlert.title = "Blocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.block(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3451,7 +3464,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 statusAlert.title = "Unblocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                                statusAlert.show()
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                 
                                 let request = Accounts.unblock(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
@@ -3485,7 +3500,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Harassment"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Harassment")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -3509,7 +3526,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "No Content Warning"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "No Content Warning")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -3533,7 +3552,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Spam"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Spam")
                                     StoreStruct.client.run(request) { (statuses) in
@@ -3790,12 +3811,14 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                             
                             if StoreStruct.statusesHome.contains(stat.last!) {
                                 StoreStruct.statusesHome = y.first! + stat + y.last!
+                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             } else {
                                 StoreStruct.gapLastHomeID = stat.last?.id ?? ""
                                 let z = stat.last!
                                 z.id = "loadmorehere"
                                 StoreStruct.gapLastHomeStat = z
                                 StoreStruct.statusesHome = y.first! + stat + y.last!
+                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             }
                             
                             let newestC = y.first!.count + stat.count
@@ -3813,7 +3836,11 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                     DispatchQueue.main.async {
                                         UIView.setAnimationsEnabled(false)
                                         self.tableView.reloadData()
-                                        self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                        if newestC == 0 {
+                                            
+                                        } else {
+//                                            self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                        }
                                         UIView.setAnimationsEnabled(true)
                                     }
                                 } else {
@@ -3842,12 +3869,14 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                             
                             if StoreStruct.statusesLocal.contains(stat.last!) {
                                 StoreStruct.statusesLocal = y.first! + stat + y.last!
+                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             } else {
                                 StoreStruct.gapLastLocalID = stat.last?.id ?? ""
                                 let z = stat.last!
                                 z.id = "loadmorehere"
                                 StoreStruct.gapLastLocalStat = z
                                 StoreStruct.statusesLocal = y.first! + stat + y.last!
+                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             }
                             
                             let newestC = y.first!.count + stat.count
@@ -3865,7 +3894,11 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                     DispatchQueue.main.async {
                                         UIView.setAnimationsEnabled(false)
                                         self.tableViewL.reloadData()
-                                        self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                        if newestC == 0 {
+                                            
+                                        } else {
+//                                            self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                        }
                                         UIView.setAnimationsEnabled(true)
                                     }
                                 } else {
@@ -3896,12 +3929,14 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                             
                             if StoreStruct.statusesFederated.contains(stat.last!) {
                                 StoreStruct.statusesFederated = y.first! + stat + y.last!
+                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             } else {
                                 StoreStruct.gapLastFedID = stat.last?.id ?? ""
                                 let z = stat.last!
                                 z.id = "loadmorehere"
                                 StoreStruct.gapLastFedStat = z
                                 StoreStruct.statusesFederated = y.first! + stat + y.last!
+                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             }
                             
                             let newestC = y.first!.count + stat.count
@@ -3919,7 +3954,11 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                     DispatchQueue.main.async {
                                         UIView.setAnimationsEnabled(false)
                                         self.tableViewF.reloadData()
-                                        self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                        if newestC == 0 {
+                                            
+                                        } else {
+//                                            self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                        }
                                         UIView.setAnimationsEnabled(true)
                                     }
                                 } else {
@@ -4013,10 +4052,10 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         
                         
                         if let st = stat.last {
-                            if StoreStruct.statusesHome.contains(st) || stat.count == 1 {
+                            if StoreStruct.statusesHome.contains(st) || stat.count < 20 {
                                 print("no need for load more button here")
                                 StoreStruct.statusesHome = stat + StoreStruct.statusesHome
-//                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             } else {
                                 print("need load more button here")
                                 StoreStruct.gapLastHomeID = stat.last?.id ?? ""
@@ -4024,11 +4063,11 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 z.id = "loadmorehere"
                                 StoreStruct.gapLastHomeStat = z
                                 StoreStruct.statusesHome = stat + StoreStruct.statusesHome
-//                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             }
                         } else {
                             StoreStruct.statusesHome = stat + StoreStruct.statusesHome
-//                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                         }
                         
                         
@@ -4054,7 +4093,11 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 UIView.setAnimationsEnabled(false)
                                 self.tableView.reloadData()
                                 self.refreshControl.endRefreshing()
-                                self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                if newestC == 0 {
+                                    
+                                } else {
+                                    self.tableView.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
+                                }
                                 UIView.setAnimationsEnabled(true)
                             } else {
                                 self.tableView.reloadData()
@@ -4082,10 +4125,10 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         var newestC = StoreStruct.statusesLocal.count
                         
                         if let st = stat.last {
-                            if StoreStruct.statusesLocal.contains(st) || stat.count == 1 {
+                            if StoreStruct.statusesLocal.contains(st) || stat.count < 20 {
                                 print("no need for load more button here")
                                 StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
-//                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             } else {
                                 print("need load more button here")
                                 StoreStruct.gapLastLocalID = stat.last?.id ?? ""
@@ -4093,11 +4136,11 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 z.id = "loadmorehere"
                                 StoreStruct.gapLastLocalStat = z
                                 StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
-//                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             }
                         } else {
                             StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
-//                            StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                            StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                         }
                         
                         DispatchQueue.main.async {
@@ -4122,7 +4165,11 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 UIView.setAnimationsEnabled(false)
                                 self.tableViewL.reloadData()
                                 self.refreshControl.endRefreshing()
-                                self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                if newestC == 0 {
+                                    
+                                } else {
+                                    self.tableViewL.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
+                                }
                                 UIView.setAnimationsEnabled(true)
                             } else {
                                 
@@ -4152,10 +4199,10 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         var newestC = StoreStruct.statusesFederated.count
                         
                         if let st = stat.last {
-                            if StoreStruct.statusesFederated.contains(st) || stat.count == 1 {
+                            if StoreStruct.statusesFederated.contains(st) || stat.count < 20 {
                                 print("no need for load more button here")
                                 StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
-//                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             } else {
                                 print("need load more button here")
                                 StoreStruct.gapLastFedID = stat.last?.id ?? ""
@@ -4164,11 +4211,11 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 StoreStruct.gapLastFedStat = z
                                 print(StoreStruct.gapLastFedID)
                                 StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
-//                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             }
                         } else {
                             StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
-//                            StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                            StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                         }
                         
                         DispatchQueue.main.async {
@@ -4193,7 +4240,11 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 UIView.setAnimationsEnabled(false)
                                 self.tableViewF.reloadData()
                                 self.refreshControl.endRefreshing()
-                                self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                if newestC == 0 {
+                                    
+                                } else {
+                                    self.tableViewF.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
+                                }
                                 UIView.setAnimationsEnabled(true)
                                 
                             } else {

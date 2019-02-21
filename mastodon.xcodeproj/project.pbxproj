@@ -450,6 +450,20 @@
 		535B33CE215C3641001A2A7F /* HashtagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B33CD215C3641001A2A7F /* HashtagViewController.swift */; };
 		535B33D0215CE9A9001A2A7F /* LikedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B33CF215CE9A9001A2A7F /* LikedViewController.swift */; };
 		535B33D2215CF0AD001A2A7F /* MutedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B33D1215CF0AD001A2A7F /* MutedViewController.swift */; };
+		53631C33221364D0000D5B40 /* SAHistoryViewAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53631C2B221364D0000D5B40 /* SAHistoryViewAnimatedTransitioning.swift */; };
+		53631C34221364D0000D5B40 /* SAHistoryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53631C2C221364D0000D5B40 /* SAHistoryExtension.swift */; };
+		53631C35221364D0000D5B40 /* UIView+Screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53631C2D221364D0000D5B40 /* UIView+Screenshot.swift */; };
+		53631C36221364D0000D5B40 /* UIViewController+Screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53631C2E221364D0000D5B40 /* UIViewController+Screenshot.swift */; };
+		53631C37221364D0000D5B40 /* SAThirdDimensionalTouchRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53631C2F221364D0000D5B40 /* SAThirdDimensionalTouchRecognizer.swift */; };
+		53631C38221364D0000D5B40 /* SAHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53631C30221364D0000D5B40 /* SAHistoryViewController.swift */; };
+		53631C39221364D0000D5B40 /* SAHistoryNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53631C31221364D0000D5B40 /* SAHistoryNavigationViewController.swift */; };
+		53631C3A221364D0000D5B40 /* SAHistoryNavigationTransitionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53631C32221364D0000D5B40 /* SAHistoryNavigationTransitionController.swift */; };
+		53631C4322136A1D000D5B40 /* Array+MisterFusion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53631C3D22136A1D000D5B40 /* Array+MisterFusion.swift */; };
+		53631C4422136A1D000D5B40 /* MisterFusionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53631C3E22136A1D000D5B40 /* MisterFusionExtension.swift */; };
+		53631C4522136A1D000D5B40 /* MisterFusion.SafeArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53631C3F22136A1D000D5B40 /* MisterFusion.SafeArea.swift */; };
+		53631C4622136A1D000D5B40 /* MisterFusionConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53631C4022136A1D000D5B40 /* MisterFusionConvertible.swift */; };
+		53631C4722136A1D000D5B40 /* Deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53631C4122136A1D000D5B40 /* Deprecated.swift */; };
+		53631C4822136A1D000D5B40 /* MisterFusion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53631C4222136A1D000D5B40 /* MisterFusion.swift */; };
 		536A4F9C216B60AD00A3D483 /* Intents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 536A4F9B216B60AD00A3D483 /* Intents.framework */; };
 		536A4FB1216B73D600A3D483 /* BulletinManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536A4FA2216B73D600A3D483 /* BulletinManager.swift */; };
 		536A4FB2216B73D600A3D483 /* BulletinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 536A4FA3216B73D600A3D483 /* BulletinViewController.swift */; };
@@ -926,6 +940,16 @@
 		531B04B62171119D00D31715 /* MastStickers.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MastStickers.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		531B04B8217111A100D31715 /* Stickers.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Stickers.xcassets; sourceTree = "<group>"; };
 		531B04BA217111A100D31715 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		531B61C1221960B200DD3845 /* SwiftGCM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftGCM.swift; sourceTree = "<group>"; };
+		531B61C2221960B200DD3845 /* DecryptNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecryptNotification.swift; sourceTree = "<group>"; };
+		531B61C4221960B200DD3845 /* PushNotificationReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushNotificationReceiver.swift; sourceTree = "<group>"; };
+		531B61C5221960B200DD3845 /* PushNotificationDataObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushNotificationDataObjects.swift; sourceTree = "<group>"; };
+		531B61C6221960B200DD3845 /* Decode85.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decode85.swift; sourceTree = "<group>"; };
+		531B61D1221960EC00DD3845 /* Mast Push.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Mast Push.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		531B61D3221960EC00DD3845 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		531B61D5221960EC00DD3845 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		531B61DC221961B700DD3845 /* Mast Push-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mast Push-Bridging-Header.h"; sourceTree = "<group>"; };
+		531B61DD221961B800DD3845 /* Mast Push.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Mast Push.entitlements"; sourceTree = "<group>"; };
 		531BD18B2188672700E12278 /* TNFloatingPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TNFloatingPanel.swift; sourceTree = "<group>"; };
 		531BD18D218867EF00E12278 /* PadSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadSearchViewController.swift; sourceTree = "<group>"; };
 		531BD18F2188762500E12278 /* PadDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadDetailViewController.swift; sourceTree = "<group>"; };
@@ -1252,6 +1276,21 @@
 		535B33CD215C3641001A2A7F /* HashtagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagViewController.swift; sourceTree = "<group>"; };
 		535B33CF215CE9A9001A2A7F /* LikedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedViewController.swift; sourceTree = "<group>"; };
 		535B33D1215CF0AD001A2A7F /* MutedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutedViewController.swift; sourceTree = "<group>"; };
+		53631C2B221364D0000D5B40 /* SAHistoryViewAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAHistoryViewAnimatedTransitioning.swift; sourceTree = "<group>"; };
+		53631C2C221364D0000D5B40 /* SAHistoryExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAHistoryExtension.swift; sourceTree = "<group>"; };
+		53631C2D221364D0000D5B40 /* UIView+Screenshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Screenshot.swift"; sourceTree = "<group>"; };
+		53631C2E221364D0000D5B40 /* UIViewController+Screenshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Screenshot.swift"; sourceTree = "<group>"; };
+		53631C2F221364D0000D5B40 /* SAThirdDimensionalTouchRecognizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAThirdDimensionalTouchRecognizer.swift; sourceTree = "<group>"; };
+		53631C30221364D0000D5B40 /* SAHistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAHistoryViewController.swift; sourceTree = "<group>"; };
+		53631C31221364D0000D5B40 /* SAHistoryNavigationViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAHistoryNavigationViewController.swift; sourceTree = "<group>"; };
+		53631C32221364D0000D5B40 /* SAHistoryNavigationTransitionController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAHistoryNavigationTransitionController.swift; sourceTree = "<group>"; };
+		53631C3C22136A1D000D5B40 /* MisterFusion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MisterFusion.h; sourceTree = "<group>"; };
+		53631C3D22136A1D000D5B40 /* Array+MisterFusion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+MisterFusion.swift"; sourceTree = "<group>"; };
+		53631C3E22136A1D000D5B40 /* MisterFusionExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MisterFusionExtension.swift; sourceTree = "<group>"; };
+		53631C3F22136A1D000D5B40 /* MisterFusion.SafeArea.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MisterFusion.SafeArea.swift; sourceTree = "<group>"; };
+		53631C4022136A1D000D5B40 /* MisterFusionConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MisterFusionConvertible.swift; sourceTree = "<group>"; };
+		53631C4122136A1D000D5B40 /* Deprecated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Deprecated.swift; sourceTree = "<group>"; };
+		53631C4222136A1D000D5B40 /* MisterFusion.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MisterFusion.swift; sourceTree = "<group>"; };
 		536A4F9B216B60AD00A3D483 /* Intents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Intents.framework; path = System/Library/Frameworks/Intents.framework; sourceTree = SDKROOT; };
 		536A4FA2216B73D600A3D483 /* BulletinManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BulletinManager.swift; sourceTree = "<group>"; };
 		536A4FA3216B73D600A3D483 /* BulletinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BulletinViewController.swift; sourceTree = "<group>"; };
@@ -1521,6 +1560,7 @@
 		53BC45BB215AC8EE0092223F /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		53BC45C1215AE4F10092223F /* SettingsCellToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCellToggle.swift; sourceTree = "<group>"; };
 		53C037AF220A2A6F0047EBC4 /* NewQRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewQRViewController.swift; sourceTree = "<group>"; };
+		53D14D9322183D330037C865 /* mastodon-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "mastodon-Bridging-Header.h"; sourceTree = "<group>"; };
 		53E5039A2207153100FD5CF2 /* NewHexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHexViewController.swift; sourceTree = "<group>"; };
 		53E6F2B0216CCA9400912B83 /* WatchSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
 		53E6F2B3216CDDF800912B83 /* StoreStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreStruct.swift; sourceTree = "<group>"; };
@@ -1556,6 +1596,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		531B61CE221960EC00DD3845 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5322D7D72167659900B952F5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -1826,6 +1873,29 @@
 				531B04BA217111A100D31715 /* Info.plist */,
 			);
 			path = MastStickers;
+			sourceTree = "<group>";
+		};
+		531B61C0221960B200DD3845 /* push */ = {
+			isa = PBXGroup;
+			children = (
+				531B61C1221960B200DD3845 /* SwiftGCM.swift */,
+				531B61C2221960B200DD3845 /* DecryptNotification.swift */,
+				531B61C4221960B200DD3845 /* PushNotificationReceiver.swift */,
+				531B61C5221960B200DD3845 /* PushNotificationDataObjects.swift */,
+				531B61C6221960B200DD3845 /* Decode85.swift */,
+			);
+			path = push;
+			sourceTree = "<group>";
+		};
+		531B61D2221960EC00DD3845 /* Mast Push */ = {
+			isa = PBXGroup;
+			children = (
+				531B61DC221961B700DD3845 /* Mast Push-Bridging-Header.h */,
+				531B61DD221961B800DD3845 /* Mast Push.entitlements */,
+				531B61D3221960EC00DD3845 /* NotificationService.swift */,
+				531B61D5221960EC00DD3845 /* Info.plist */,
+			);
+			path = "Mast Push";
 			sourceTree = "<group>";
 		};
 		531BD60221795D1F00C1509D /* Sentiment */ = {
@@ -2393,6 +2463,35 @@
 				535B33C5215C31E3001A2A7F /* ActiveLabel.h */,
 			);
 			path = ActiveLabel;
+			sourceTree = "<group>";
+		};
+		53631C2A221364D0000D5B40 /* SAHistoryNavigationViewController */ = {
+			isa = PBXGroup;
+			children = (
+				53631C2B221364D0000D5B40 /* SAHistoryViewAnimatedTransitioning.swift */,
+				53631C2C221364D0000D5B40 /* SAHistoryExtension.swift */,
+				53631C2D221364D0000D5B40 /* UIView+Screenshot.swift */,
+				53631C2E221364D0000D5B40 /* UIViewController+Screenshot.swift */,
+				53631C2F221364D0000D5B40 /* SAThirdDimensionalTouchRecognizer.swift */,
+				53631C30221364D0000D5B40 /* SAHistoryViewController.swift */,
+				53631C31221364D0000D5B40 /* SAHistoryNavigationViewController.swift */,
+				53631C32221364D0000D5B40 /* SAHistoryNavigationTransitionController.swift */,
+			);
+			path = SAHistoryNavigationViewController;
+			sourceTree = "<group>";
+		};
+		53631C3B22136A1D000D5B40 /* MisterFusion */ = {
+			isa = PBXGroup;
+			children = (
+				53631C3C22136A1D000D5B40 /* MisterFusion.h */,
+				53631C3D22136A1D000D5B40 /* Array+MisterFusion.swift */,
+				53631C3E22136A1D000D5B40 /* MisterFusionExtension.swift */,
+				53631C3F22136A1D000D5B40 /* MisterFusion.SafeArea.swift */,
+				53631C4022136A1D000D5B40 /* MisterFusionConvertible.swift */,
+				53631C4122136A1D000D5B40 /* Deprecated.swift */,
+				53631C4222136A1D000D5B40 /* MisterFusion.swift */,
+			);
+			path = MisterFusion;
 			sourceTree = "<group>";
 		};
 		536A4FA1216B73D600A3D483 /* BulletinBoard */ = {
@@ -3048,6 +3147,23 @@
 			productReference = 531B04B62171119D00D31715 /* MastStickers.appex */;
 			productType = "com.apple.product-type.app-extension.messages-sticker-pack";
 		};
+		531B61D0221960EC00DD3845 /* Mast Push */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 531B61D9221960EC00DD3845 /* Build configuration list for PBXNativeTarget "Mast Push" */;
+			buildPhases = (
+				531B61CD221960EC00DD3845 /* Sources */,
+				531B61CE221960EC00DD3845 /* Frameworks */,
+				531B61CF221960EC00DD3845 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Mast Push";
+			productName = "Mast Push";
+			productReference = 531B61D1221960EC00DD3845 /* Mast Push.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		5322D7D92167659900B952F5 /* OneSignalNotificationServiceExtension */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5322D7E22167659900B952F5 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
@@ -3191,6 +3307,9 @@
 					531B04B52171119D00D31715 = {
 						CreatedOnToolsVersion = 10.0;
 					};
+					531B61D0221960EC00DD3845 = {
+						CreatedOnToolsVersion = 10.1;
+					};
 					5322D7D92167659900B952F5 = {
 						CreatedOnToolsVersion = 10.0;
 					};
@@ -3299,6 +3418,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				531B04B9217111A100D31715 /* Stickers.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		531B61CF221960EC00DD3845 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3585,6 +3711,19 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		531B61CD221960EC00DD3845 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				531B61DE2219685D00DD3845 /* SwiftGCM.swift in Sources */,
+				531B61DF2219685D00DD3845 /* DecryptNotification.swift in Sources */,
+				531B61E02219685D00DD3845 /* PushNotificationReceiver.swift in Sources */,
+				531B61E12219685D00DD3845 /* PushNotificationDataObjects.swift in Sources */,
+				531B61E22219685D00DD3845 /* Decode85.swift in Sources */,
+				531B61D4221960EC00DD3845 /* NotificationService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5322D7D62167659900B952F5 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -3821,6 +3960,7 @@
 				5316C89D219D94A00003AB97 /* SwiftyGiphyViewController.swift in Sources */,
 				5373CB2E21541A0300676F3D /* Dev+GIF.swift in Sources */,
 				5373CAA42152C68000676F3D /* URLComponents.swift in Sources */,
+				53631C4522136A1D000D5B40 /* MisterFusion.SafeArea.swift in Sources */,
 				5373CA9D2152C68000676F3D /* ClientType.swift in Sources */,
 				5317C7B821DA334500746197 /* ScrollableGraphViewDrawingDelegate.swift in Sources */,
 				53205823215D287700ED0C36 /* DKImagePickerController.swift in Sources */,
@@ -3852,6 +3992,7 @@
 				531E0FAD216E2BA2003E8890 /* NVActivityIndicatorAnimationBallPulseRise.swift in Sources */,
 				5373CB3921541A0300676F3D /* SKPhotoBrowser.swift in Sources */,
 				5373CACF2152C68000676F3D /* Media.swift in Sources */,
+				53631C4322136A1D000D5B40 /* Array+MisterFusion.swift in Sources */,
 				5373C9F02151953C00676F3D /* SecondViewController.swift in Sources */,
 				531E0F91216E2BA2003E8890 /* NVActivityIndicatorAnimationBallClipRotateMultiple.swift in Sources */,
 				530976D32179DBD700640D84 /* BioMetricAuthenticator.swift in Sources */,
@@ -3873,6 +4014,7 @@
 				5373CAB82152C68000676F3D /* NotificationType.swift in Sources */,
 				5316C893219D94A00003AB97 /* SwiftyGiphyGridLayout.swift in Sources */,
 				5373CB032152EDB800676F3D /* SwipeExpansionStyle.swift in Sources */,
+				53631C38221364D0000D5B40 /* SAHistoryViewController.swift in Sources */,
 				531CCD682207457400A56145 /* NewFilterViewController.swift in Sources */,
 				5317C7B521DA334500746197 /* LineDrawingLayer.swift in Sources */,
 				A9D80EEF21BB154200020ECE /* AccountExtension.swift in Sources */,
@@ -3881,6 +4023,9 @@
 				5373CAB52152C68000676F3D /* LoginSettings.swift in Sources */,
 				5373CAD82152C89700676F3D /* StoreStruct.swift in Sources */,
 				5316C899219D94A00003AB97 /* GiphySingleGIFResponse.swift in Sources */,
+				531B61C7221960B300DD3845 /* SwiftGCM.swift in Sources */,
+				53631C39221364D0000D5B40 /* SAHistoryNavigationViewController.swift in Sources */,
+				53631C3A221364D0000D5B40 /* SAHistoryNavigationTransitionController.swift in Sources */,
 				5351D75C21617FC40012960F /* VolumeBar.swift in Sources */,
 				5316C88F219D94A00003AB97 /* GiphyUser.swift in Sources */,
 				531E0F95216E2BA2003E8890 /* NVActivityIndicatorAnimationBallZigZagDeflect.swift in Sources */,
@@ -3920,6 +4065,8 @@
 				5351D75B21617FC40012960F /* VolumeBarAnimation+Presets.swift in Sources */,
 				5373CA9B2152C68000676F3D /* Client.swift in Sources */,
 				536A4FB4216B73D600A3D483 /* BulletinBackgroundViewStyle.swift in Sources */,
+				531B61C8221960B300DD3845 /* DecryptNotification.swift in Sources */,
+				53631C35221364D0000D5B40 /* UIView+Screenshot.swift in Sources */,
 				5320582D215D287700ED0C36 /* DKAssetGroupDetailBaseCell.swift in Sources */,
 				5354BACC216577FD0094C545 /* WCLLoadingView.swift in Sources */,
 				535B33C9215C31E3001A2A7F /* StringTrimExtension.swift in Sources */,
@@ -3973,6 +4120,7 @@
 				5373CAC02152C68000676F3D /* Pagination.swift in Sources */,
 				531E0FAA216E2BA2003E8890 /* NVActivityIndicatorAnimationBallSpinFadeLoader.swift in Sources */,
 				531E0F94216E2BA2003E8890 /* NVActivityIndicatorAnimationLineSpinFadeLoader.swift in Sources */,
+				53631C4822136A1D000D5B40 /* MisterFusion.swift in Sources */,
 				53BC45C2215AE4F10092223F /* SettingsCellToggle.swift in Sources */,
 				5317C79721DA2EE100746197 /* PadDetailViewController2.swift in Sources */,
 				5316C88E219D94A00003AB97 /* GiphyImageSet.swift in Sources */,
@@ -4076,6 +4224,7 @@
 				A9D80EE721B84B3900020ECE /* AddInstanceCell.swift in Sources */,
 				5317C7BF21DA334500746197 /* Plot.swift in Sources */,
 				5320581B215D287700ED0C36 /* FontAwesomeImageRepresentable.swift in Sources */,
+				531B61CA221960B300DD3845 /* PushNotificationReceiver.swift in Sources */,
 				5354BAD3216577FD0094C545 /* NormalHeaderAnimator.swift in Sources */,
 				53205813215D287700ED0C36 /* DKAsset.swift in Sources */,
 				5316C891219D94A00003AB97 /* GiphyItem.swift in Sources */,
@@ -4084,19 +4233,23 @@
 				5373CAD62152C68000676F3D /* Result.swift in Sources */,
 				5373CAD02152C68000676F3D /* Mutes.swift in Sources */,
 				535B33C8215C31E3001A2A7F /* RegexParser.swift in Sources */,
+				53631C33221364D0000D5B40 /* SAHistoryViewAnimatedTransitioning.swift in Sources */,
 				5354BAA721653C740094C545 /* PinnedViewController.swift in Sources */,
 				536A4FB3216B73D600A3D483 /* BulletinItem.swift in Sources */,
 				A9296DD12215F7D600BEE7A7 /* PushNotificationDataObjects.swift in Sources */,
 				535B33B3215C0EC6001A2A7F /* XPlayerViewController+Action.swift in Sources */,
+				53631C4722136A1D000D5B40 /* Deprecated.swift in Sources */,
 				5316C89B219D94A00003AB97 /* RoundedCornerView.swift in Sources */,
 				5373CB012152EDB800676F3D /* SwipeController.swift in Sources */,
 				5373CB3C2154E93500676F3D /* NotificationCell.swift in Sources */,
+				531B61CB221960B300DD3845 /* PushNotificationDataObjects.swift in Sources */,
 				5354BAD8216577FD0094C545 /* CRRefreshExtension.swift in Sources */,
 				5373CA9E2152C68000676F3D /* CharacterSet.swift in Sources */,
 				5373CB642159564400676F3D /* FollowersCell.swift in Sources */,
 				5373CB502156826000676F3D /* DetailCellImage.swift in Sources */,
 				530F5B3921E267CA00A910B3 /* DateCollectionViewCell.swift in Sources */,
 				5373CB002152EDB800676F3D /* SwipeCollectionViewCellDelegate.swift in Sources */,
+				53631C36221364D0000D5B40 /* UIViewController+Screenshot.swift in Sources */,
 				535B339B215C0198001A2A7F /* BoostersViewController.swift in Sources */,
 				531E0F96216E2BA2003E8890 /* NVActivityIndicatorAnimationBallScale.swift in Sources */,
 				5373C9F22151956300676F3D /* ThirdViewController.swift in Sources */,
@@ -4128,6 +4281,7 @@
 				5315ECEA21FE1B3400A3F1A9 /* ScheduledCell.swift in Sources */,
 				5317C7C121DA334500746197 /* DotPlot.swift in Sources */,
 				531E0F99216E2BA2003E8890 /* NVActivityIndicatorAnimationSemiCircleSpin.swift in Sources */,
+				53631C4622136A1D000D5B40 /* MisterFusionConvertible.swift in Sources */,
 				5373CB1D21540F5E00676F3D /* MainFeedCellImage.swift in Sources */,
 				A91701B821CAF09F0005A14C /* PadLocalTimelinesViewController.swift in Sources */,
 				53205819215D287700ED0C36 /* FontAwesomeView.swift in Sources */,
@@ -4173,13 +4327,17 @@
 				536A4FBA216B73D600A3D483 /* ActivityIndicator.swift in Sources */,
 				5317C7B921DA334500746197 /* ScrollableGraphViewDataSource.swift in Sources */,
 				5373CAAC2152C68000676F3D /* Attachment.swift in Sources */,
+				531B61CC221960B300DD3845 /* Decode85.swift in Sources */,
 				536A4FBD216B73D600A3D483 /* ContainerView.swift in Sources */,
+				53631C37221364D0000D5B40 /* SAThirdDimensionalTouchRecognizer.swift in Sources */,
 				5373CAB92152C68000676F3D /* Relationship.swift in Sources */,
 				53205828215D287700ED0C36 /* DKAssetGroupGridLayout.swift in Sources */,
 				5393859C217393A4002444FC /* DLTagView.swift in Sources */,
 				5373CAF52152EDB700676F3D /* Extensions.swift in Sources */,
 				530F5B3821E267CA00A910B3 /* DateTimePicker.swift in Sources */,
 				531CCD642207406C00A56145 /* FiltersViewController.swift in Sources */,
+				53631C4422136A1D000D5B40 /* MisterFusionExtension.swift in Sources */,
+				53631C34221364D0000D5B40 /* SAHistoryExtension.swift in Sources */,
 				5373CAB72152C68000676F3D /* Notification.swift in Sources */,
 				530F5B3721E267CA00A910B3 /* FullDateCollectionViewCell.swift in Sources */,
 				535B33B4215C0EC6001A2A7F /* XPlayer.swift in Sources */,
@@ -4346,6 +4504,52 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vm.roma.MastStickers;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		531B61DA221960EC00DD3845 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Mast Push/Mast Push.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R5WHJ77XXD;
+				INFOPLIST_FILE = "Mast Push/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.shi.Mast.Mast-Push";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Mast Push/Mast Push-Bridging-Header.h";
+				SWIFT_VERSION = 4.2;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		531B61DB221960EC00DD3845 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "Mast Push/Mast Push.entitlements";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = R5WHJ77XXD;
+				INFOPLIST_FILE = "Mast Push/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.shi.Mast.Mast-Push";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Mast Push/Mast Push-Bridging-Header.h";
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -4790,6 +4994,15 @@
 			buildConfigurations = (
 				531B04BF217111A100D31715 /* Debug */,
 				531B04C0217111A100D31715 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		531B61D9221960EC00DD3845 /* Build configuration list for PBXNativeTarget "Mast Push" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				531B61DA221960EC00DD3845 /* Debug */,
+				531B61DB221960EC00DD3845 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

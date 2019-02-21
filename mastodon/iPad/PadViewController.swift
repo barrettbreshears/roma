@@ -34,7 +34,7 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
             let player = playerId
             StoreStruct.playerID = playerId
             
-            let url = URL(string: "http:// 163.237.247.103:3000/register")!
+            let url = URL(string: "https://pushrelay-mast1.your.org/register")!
             var request = URLRequest(url: url)
             request.httpMethod = "POST"
             let myParams = "instance_url=\(x00)&access_token=\(x11)&device_token=\(player)"
@@ -801,6 +801,23 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         statusBarView.backgroundColor = Colours.white
         view.addSubview(statusBarView)
         
+        if (UserDefaults.standard.object(forKey: "themeaccent") == nil) || (UserDefaults.standard.object(forKey: "themeaccent") as! Int == 0) {
+            Colours.tabSelected = StoreStruct.colArray[0]
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.reloadTint()
+        } else if (UserDefaults.standard.object(forKey: "themeaccent") as? Int == 500) {
+            if UserDefaults.standard.object(forKey: "hexhex") as? String != nil {
+                let hexText = UserDefaults.standard.object(forKey: "hexhex") as? String ?? "ffffff"
+                StoreStruct.hexCol = UIColor(hexString: hexText) ?? UIColor(red: 107/255.0, green: 122/255.0, blue: 214/255.0, alpha: 1.0)
+                Colours.tabSelected = StoreStruct.hexCol
+                let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                appDelegate.reloadTint()
+            }
+        } else {
+            Colours.tabSelected = StoreStruct.colArray[UserDefaults.standard.object(forKey: "themeaccent") as! Int]
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.reloadTint()
+        }
         
         
         self.load2()

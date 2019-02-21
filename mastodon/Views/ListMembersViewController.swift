@@ -260,7 +260,9 @@ class ListMembersViewController: UIViewController, UITableViewDelegate, UITableV
                     statusAlert.title = "Removed".localized
                     statusAlert.contentColor = Colours.grayDark
                     statusAlert.message = sto[indexPath.row].displayName
-                    statusAlert.show()
+                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        statusAlert.show()
+                    }
                     
                     let request = Lists.remove(accountIDs: [self.currentTags[indexPath.row].id], fromList: StoreStruct.allListRelID)
                     StoreStruct.client.run(request) { (statuses) in
