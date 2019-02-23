@@ -23,6 +23,7 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
     var blurEffectView = UIVisualEffectView()
     var more = UIButton()
     var settings = UIButton()
+    var settings2 = UIButton()
     var tagListView = DLTagView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -32,7 +33,8 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
         headerImageView.backgroundColor = Colours.tabSelected
         more.backgroundColor = UIColor.clear
         settings.backgroundColor = UIColor.clear
-        settings.alpha = 0
+        settings2.backgroundColor = UIColor.clear
+//        settings.alpha = 0
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         headerImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -43,6 +45,7 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
         follows.translatesAutoresizingMaskIntoConstraints = false
         more.translatesAutoresizingMaskIntoConstraints = false
         settings.translatesAutoresizingMaskIntoConstraints = false
+        settings2.translatesAutoresizingMaskIntoConstraints = false
         tagListView.translatesAutoresizingMaskIntoConstraints = false
         
         if (UserDefaults.standard.object(forKey: "proCorner") == nil || UserDefaults.standard.object(forKey: "proCorner") as! Int == 0) {
@@ -59,6 +62,8 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
         more.layer.masksToBounds = true
         settings.layer.cornerRadius = 20
         settings.layer.masksToBounds = true
+        settings2.layer.cornerRadius = 20
+        settings2.layer.masksToBounds = true
         
         headerImageView.layer.masksToBounds = true
         
@@ -96,6 +101,7 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
         contentView.addSubview(toot)
         contentView.addSubview(more)
         contentView.addSubview(settings)
+        contentView.addSubview(settings2)
         contentView.addSubview(tagListView)
         contentView.addSubview(follows)
         
@@ -108,6 +114,7 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
             "episodes" : toot,
             "more" : more,
             "settings" : settings,
+            "settings2" : settings2,
             "tagListView" : tagListView,
             "follows" : follows,
             ]
@@ -121,6 +128,8 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[image(100)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-150-[name]-4-[artist]-15-[episodes]-15-[follows]-4-[date]-10-[tagListView(60)]-14-|", options: [], metrics: nil, views: viewsDict))
         
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=20)-[settings(40)]-93-[settings2(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-95-[settings2(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[tagListView]-0-|", options: [], metrics: nil, views: viewsDict))
         
         
@@ -259,6 +268,11 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
         userTag.text = "@\(status.acct)"
         toot.text = status.note.stripHTML()
         
+        headerImageView.imageView?.image?.getColors { colors in
+            self.userName.textColor = self.pickTextColor(bgColor: colors?.background ?? UIColor.white)
+            self.userTag.textColor = self.pickTextColor(bgColor: colors?.background ?? UIColor.white)
+            self.toot.textColor = self.pickTextColor(bgColor: colors?.background ?? UIColor.white)
+        }
         
         if status.emojis.isEmpty {
             userName.text = status.displayName.stripHTML()
@@ -291,10 +305,35 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
         follows.setTitle("\(formattedNumber ?? "0") follows     \(formattedNumber2 ?? "0") followers", for: .normal)
         
         more.setImage(UIImage(named: "more4"), for: .normal)
-//        settings.setImage(UIImage(named: "set"), for: .normal)
+        settings.backgroundColor = UIColor.white
+        if (UserDefaults.standard.object(forKey: "likepin") == nil) || (UserDefaults.standard.object(forKey: "likepin") as! Int == 0) {
+            settings.setImage(UIImage(named: "like2")?.maskWithColor(color: UIColor.darkGray), for: .normal)
+        } else {
+            settings.setImage(UIImage(named: "pinned")?.maskWithColor(color: UIColor.darkGray), for: .normal)
+        }
         
+        if status.locked {
+            settings2.setImage(UIImage(named: "private")?.maskWithColor(color: Colours.grayDark), for: .normal)
+            settings2.imageEdgeInsets = UIEdgeInsets(top: 11, left: 14, bottom: 11, right: 14)
+            settings2.contentMode = .scaleAspectFit
+            settings2.backgroundColor = Colours.white
+        } else if status.bot {
+            settings2.setImage(UIImage(named: "boticon")?.maskWithColor(color: Colours.grayDark), for: .normal)
+            settings2.imageEdgeInsets = UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12)
+            settings2.contentMode = .scaleAspectFit
+            settings2.backgroundColor = Colours.white
+        } else {
+            settings2.backgroundColor = Colours.clear
+        }
     }
     
+    
+    func pickTextColor(bgColor: UIColor) -> UIColor {
+        let r = bgColor.cgColor.components?[0] ?? 0
+        let g = bgColor.cgColor.components?[1] ?? 0
+        let b = bgColor.cgColor.components?[2] ?? 0
+        return (((r * 0.299) + (g * 0.587) + (b * 0.114)) > 186) ? UIColor.darkGray : UIColor.white
+    }
 }
 
 
@@ -319,6 +358,7 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
     var blurEffectView = UIVisualEffectView()
     var more = UIButton()
     var settings = UIButton()
+    var settings2 = UIButton()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -327,7 +367,8 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
         headerImageView.backgroundColor = Colours.tabSelected
         more.backgroundColor = UIColor.clear
         settings.backgroundColor = UIColor.clear
-        settings.alpha = 0
+        settings2.backgroundColor = UIColor.clear
+//        settings.alpha = 0
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         headerImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -338,6 +379,7 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
         follows.translatesAutoresizingMaskIntoConstraints = false
         more.translatesAutoresizingMaskIntoConstraints = false
         settings.translatesAutoresizingMaskIntoConstraints = false
+        settings2.translatesAutoresizingMaskIntoConstraints = false
         
         if (UserDefaults.standard.object(forKey: "proCorner") == nil || UserDefaults.standard.object(forKey: "proCorner") as! Int == 0) {
             profileImageView.layer.cornerRadius = 50
@@ -353,6 +395,8 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
         more.layer.masksToBounds = true
         settings.layer.cornerRadius = 20
         settings.layer.masksToBounds = true
+        settings2.layer.cornerRadius = 20
+        settings2.layer.masksToBounds = true
         
         headerImageView.layer.masksToBounds = true
         
@@ -390,6 +434,7 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
         contentView.addSubview(toot)
         contentView.addSubview(more)
         contentView.addSubview(settings)
+        contentView.addSubview(settings2)
         contentView.addSubview(follows)
         
         let viewsDict = [
@@ -401,6 +446,7 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
             "episodes" : toot,
             "more" : more,
             "settings" : settings,
+            "settings2" : settings2,
             "follows" : follows,
             ]
         
@@ -412,6 +458,8 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-60-[settings(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[image(100)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-150-[name]-4-[artist]-15-[episodes]-15-[follows]-4-[date]-14-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=20)-[settings(40)]-93-[settings2(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-95-[settings2(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         
         
         profileImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
@@ -491,6 +539,11 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
         userTag.text = "@\(status.acct)"
         toot.text = status.note.stripHTML()
         
+        headerImageView.imageView?.image?.getColors { colors in
+            self.userName.textColor = self.pickTextColor(bgColor: colors?.background ?? UIColor.white)
+            self.userTag.textColor = self.pickTextColor(bgColor: colors?.background ?? UIColor.white)
+            self.toot.textColor = self.pickTextColor(bgColor: colors?.background ?? UIColor.white)
+        }
         
         if status.emojis.isEmpty {
             userName.text = status.displayName.stripHTML()
@@ -523,10 +576,34 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
         follows.setTitle("\(formattedNumber ?? "0") follows     \(formattedNumber2 ?? "0") followers", for: .normal)
         
         more.setImage(UIImage(named: "more4"), for: .normal)
-//        settings.setImage(UIImage(named: "set"), for: .normal)
+        settings.backgroundColor = UIColor.white
+        if (UserDefaults.standard.object(forKey: "likepin") == nil) || (UserDefaults.standard.object(forKey: "likepin") as! Int == 0) {
+            settings.setImage(UIImage(named: "like2")?.maskWithColor(color: UIColor.darkGray), for: .normal)
+        } else {
+            settings.setImage(UIImage(named: "pinned")?.maskWithColor(color: UIColor.darkGray), for: .normal)
+        }
         
+        if status.locked {
+            settings2.setImage(UIImage(named: "private")?.maskWithColor(color: Colours.grayDark), for: .normal)
+            settings2.imageEdgeInsets = UIEdgeInsets(top: 11, left: 14, bottom: 11, right: 14)
+            settings2.contentMode = .scaleAspectFit
+            settings2.backgroundColor = Colours.white
+        } else if status.bot {
+            settings2.setImage(UIImage(named: "boticon")?.maskWithColor(color: Colours.grayDark), for: .normal)
+            settings2.imageEdgeInsets = UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12)
+            settings2.contentMode = .scaleAspectFit
+            settings2.backgroundColor = Colours.white
+        } else {
+            settings2.backgroundColor = Colours.clear
+        }
     }
     
+    func pickTextColor(bgColor: UIColor) -> UIColor {
+        let r = bgColor.cgColor.components?[0] ?? 0
+        let g = bgColor.cgColor.components?[1] ?? 0
+        let b = bgColor.cgColor.components?[2] ?? 0
+        return (((r * 0.299) + (g * 0.587) + (b * 0.114)) > 186) ? UIColor.darkGray : UIColor.white
+    }
 }
 
 

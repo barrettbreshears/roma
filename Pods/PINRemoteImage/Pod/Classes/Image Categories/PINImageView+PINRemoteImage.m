@@ -90,9 +90,23 @@
     [PINRemoteImageCategoryManager setUpdateWithProgressOnView:updateWithProgress onView:self];
 }
 
+void runOnMainQueueWithoutDeadlocking2(void (^block)(void))
+{
+    if ([NSThread isMainThread])
+    {
+        block();
+    }
+    else
+    {
+        dispatch_sync(dispatch_get_main_queue(), block);
+    }
+}
+
 - (void)pin_setPlaceholderWithImage:(PINImage *)image
 {
-    self.image = image;
+    runOnMainQueueWithoutDeadlocking2(^{
+        self.image = image;
+    });
 }
 
 - (void)pin_updateUIWithImage:(PINImage *)image animatedImage:(FLAnimatedImage *)animatedImage

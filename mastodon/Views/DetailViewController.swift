@@ -240,6 +240,58 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell9")
         self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell900")
         self.tableView.register(RepliesCellImage.self, forCellReuseIdentifier: "cell90")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink0")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink1")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink2")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink3")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink4")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink5")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink6")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink7")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink8")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink9")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink10")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink11")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink12")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink13")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink14")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink15")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink16")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink17")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink18")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink19")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink20")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink21")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink22")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink23")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink24")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink25")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink26")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink27")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink28")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink29")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink30")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink31")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink32")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink33")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink34")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink35")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink36")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink37")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink38")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink39")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink40")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink41")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink42")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink43")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink44")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink45")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink46")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink47")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink48")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink49")
+        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink50")
         self.tableView.alpha = 1
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -347,6 +399,17 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if section == 0 {
             return self.allPrevious.count
         } else if section == 1 {
+            
+            if (UserDefaults.standard.object(forKey: "linkcards") == nil) || (UserDefaults.standard.object(forKey: "linkcards") as! Int == 0) {
+                let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+                let matches = detector.matches(in: self.mainStatus[0].content, options: [], range: NSRange(location: 0, length: self.mainStatus[0].content.utf16.count))
+                if matches.count > 0 {
+                    return matches.count
+                }
+            } else {
+                return 1
+            }
+            
             return 1
         } else if section == 2 {
             return 1
@@ -614,6 +677,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             
             // Main status
             
+            
+            if indexPath.row == 0 {
+            
+            
             if self.mainStatus[indexPath.row].reblog?.mediaAttachments.isEmpty ?? self.mainStatus[indexPath.row].mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cell7", for: indexPath) as! DetailCell
                 cell.configure(self.mainStatus[0])
@@ -799,6 +866,28 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 bgColorView.backgroundColor = Colours.white
                 cell.selectedBackgroundView = bgColorView
                 return cell
+            }
+                
+            } else {
+                
+                
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: "DetailCellLink\(indexPath.row)", for: indexPath) as! DetailCellLink
+                let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+                let matches = detector.matches(in: self.mainStatus[0].content, options: [], range: NSRange(location: 0, length: self.mainStatus[0].content.utf16.count))
+                if matches.count > 0 {
+                    if let range = Range(matches[indexPath.row - 1].range, in: self.mainStatus[0].content) {
+                        let url = self.mainStatus[0].content[range]
+                        cell.configure(String(url))
+                    }
+                }
+                cell.backgroundColor = Colours.white
+                let bgColorView = UIView()
+                bgColorView.backgroundColor = Colours.white
+                cell.selectedBackgroundView = bgColorView
+                return cell
+                
+                
             }
             
             
@@ -1278,6 +1367,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         var sto = self.mainStatus
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto[0].reblog?.mediaAttachments[0].type ?? sto[0].mediaAttachments[0].type == .video || sto[0].reblog?.mediaAttachments[0].type ?? sto[0].mediaAttachments[0].type == .gifv {
             
             let videoURL = URL(string: sto[0].reblog?.mediaAttachments[0].url ?? sto[0].mediaAttachments[0].url)!
@@ -1305,8 +1396,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 photo.shouldCachePhotoURLImage = true
                 if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                     photo.caption = sto[0].reblog?.content.stripHTML() ?? sto[0].content.stripHTML()
-                } else {
+                } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                     photo.caption = y.description ?? ""
+                } else {
+                    photo.caption = ""
                 }
                 images.append(photo)
             } else {
@@ -1314,9 +1407,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             photo.shouldCachePhotoURLImage = true
             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                 photo.caption = sto[0].reblog?.content.stripHTML() ?? sto[0].content.stripHTML()
-            } else {
+            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                 photo.caption = y.description ?? ""
-            }
+            } else {
+                photo.caption = ""
+                }
             images.append(photo)
             }
             coun += 1
@@ -1396,13 +1491,15 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
                     if stat.reblog?.mediaAttachments.isEmpty ?? stat.mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
-                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! DetailCell
-                        cell.configure(stat)
-                        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                        if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? DetailCell {
+                            cell.configure(stat)
+                            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                        }
                     } else {
-                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as! DetailCellImage
-                        cell.configure(stat)
-                        self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                        if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? DetailCellImage {
+                            cell.configure(stat)
+                            self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                        }
                     }
                 }
             }
@@ -2100,6 +2197,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let indexPath = IndexPath(row: sender.tag, section: 0)
         
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].mediaAttachments[0].type == .gifv {
             
             let videoURL = URL(string: sto[sender.tag].mediaAttachments[0].url)!
@@ -2118,8 +2217,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2127,9 +2228,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                         photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
-                    } else {
+                    } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                         photo.caption = y.description ?? ""
-                    }
+                    } else {
+                        photo.caption = ""
+                        }
                     images.append(photo)
                     }
                     coun += 1
@@ -2155,8 +2258,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2164,9 +2269,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                         photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
-                    } else {
+                    } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                         photo.caption = y.description ?? ""
-                    }
+                    } else {
+                        photo.caption = ""
+                        }
                     images.append(photo)
                     }
                 }
@@ -2197,6 +2304,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let indexPath = IndexPath(row: sender.tag, section: 3)
         
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].mediaAttachments[0].type == .gifv {
             
             let videoURL = URL(string: sto[sender.tag].mediaAttachments[0].url)!
@@ -2215,8 +2324,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                         photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
-                    } else {
+                    } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                         photo.caption = y.description ?? ""
+                    } else {
+                        photo.caption = ""
                     }
                     images.append(photo)
                 } else {
@@ -2224,9 +2335,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 photo.shouldCachePhotoURLImage = true
                 if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                     photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
-                } else {
+                } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                     photo.caption = y.description ?? ""
-                }
+                } else {
+                    photo.caption = ""
+                    }
                 images.append(photo)
                 }
                 coun += 1
@@ -2252,8 +2365,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 photo.shouldCachePhotoURLImage = true
                 if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                     photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
-                } else {
+                } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                     photo.caption = y.description ?? ""
+                } else {
+                    photo.caption = ""
                 }
                 images.append(photo)
             } else {
@@ -2261,9 +2376,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             photo.shouldCachePhotoURLImage = true
             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                 photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
-            } else {
+            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                 photo.caption = y.description ?? ""
-            }
+            } else {
+                photo.caption = ""
+                }
             images.append(photo)
             }
             coun += 1
@@ -2296,50 +2413,54 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
         let indexPath = IndexPath(row: sender.tag, section: 3)
         
-        if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {} else {
-            return
-        }
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
         
-        let impact = UIImpactFeedbackGenerator(style: .medium)
-        
-        if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+        if sto.count < 1 {} else {
             
-        } else {
-            
-            //                let indexPath = IndexPath(row: sender.tag, section: 0)
-            let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
-            var images = [SKPhoto]()
-            var coun = 0
-            for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
-                if coun == 0 {
-                    let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage1.currentImage ?? nil)
-                    photo.shouldCachePhotoURLImage = true
-                    if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                        photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+                //                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage1.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                            photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
+                        }
+                        images.append(photo)
                     } else {
-                        photo.caption = y.description ?? ""
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                            photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
+                        }
+                        images.append(photo)
                     }
-                    images.append(photo)
-                } else {
-                    let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
-                    photo.shouldCachePhotoURLImage = true
-                    if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                        photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                    } else {
-                        photo.caption = y.description ?? ""
-                    }
-                    images.append(photo)
+                    coun += 1
                 }
-                coun += 1
-            }
-            let originImage = sender.currentImage
-            if originImage != nil {
-                let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
-                browser.displayToolbar = true
-                browser.displayAction = true
-                browser.delegate = self
-                browser.initializePageIndex(0)
-                present(browser, animated: true, completion: nil)
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(0)
+                    present(browser, animated: true, completion: nil)
+                }
+                
             }
             
         }
@@ -2354,6 +2475,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         var sto = self.allReplies
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
         let indexPath = IndexPath(row: sender.tag, section: 3)
+        
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
         
         if sto.count < 1 {} else {
             
@@ -2371,8 +2494,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2380,8 +2505,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -2413,6 +2540,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
         let indexPath = IndexPath(row: sender.tag, section: 3)
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -2429,8 +2558,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2438,8 +2569,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -2472,6 +2605,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
         let indexPath = IndexPath(row: sender.tag, section: 3)
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -2488,8 +2623,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2497,8 +2634,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -2535,6 +2674,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         var sto = self.allPrevious
         let indexPath = IndexPath(row: sender.tag, section: 0)
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -2551,8 +2692,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2560,8 +2703,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -2591,6 +2736,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         var sto = self.allPrevious
         let indexPath = IndexPath(row: sender.tag, section: 0)
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -2607,8 +2754,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2616,8 +2765,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -2648,6 +2799,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         var sto = self.allPrevious
         let indexPath = IndexPath(row: sender.tag, section: 0)
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -2664,8 +2817,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2673,8 +2828,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -2706,6 +2863,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         var sto = self.allPrevious
         let indexPath = IndexPath(row: sender.tag, section: 0)
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -2722,8 +2881,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2731,8 +2892,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -2768,6 +2931,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         var sto = self.mainStatus
         let indexPath = IndexPath(row: sender.tag, section: 1)
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -2775,7 +2940,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
                 
                 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = self.tableView.cellForRow(at: indexPath) as! DetailCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
@@ -2784,8 +2949,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2793,8 +2960,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -2824,6 +2993,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         var sto = self.mainStatus
         let indexPath = IndexPath(row: sender.tag, section: 1)
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -2831,7 +3002,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
                 
                 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = self.tableView.cellForRow(at: indexPath) as! DetailCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
@@ -2840,8 +3011,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2849,8 +3022,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -2881,6 +3056,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         var sto = self.mainStatus
         let indexPath = IndexPath(row: sender.tag, section: 1)
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -2888,7 +3065,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
                 
                 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = self.tableView.cellForRow(at: indexPath) as! DetailCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
@@ -2897,8 +3074,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2906,8 +3085,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -2939,6 +3120,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         var sto = self.mainStatus
         let indexPath = IndexPath(row: sender.tag, section: 1)
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -2946,7 +3129,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
                 
                 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = self.tableView.cellForRow(at: indexPath) as! DetailCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
@@ -2955,8 +3138,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2964,8 +3149,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }

@@ -254,7 +254,11 @@ class ProfileHeaderCell: SwipeTableViewCell {
         
         userName.text = status.displayName
         
-        
+        headerImageView.imageView?.image?.getColors { colors in
+            self.userName.textColor = self.pickTextColor(bgColor: colors?.background ?? UIColor.white)
+            self.userTag.textColor = self.pickTextColor(bgColor: colors?.background ?? UIColor.white)
+            self.toot.textColor = self.pickTextColor(bgColor: colors?.background ?? UIColor.white)
+        }
         
         if status.emojis.isEmpty {
             userName.text = status.displayName.stripHTML()
@@ -369,6 +373,13 @@ class ProfileHeaderCell: SwipeTableViewCell {
         
     }
     
+    
+    func pickTextColor(bgColor: UIColor) -> UIColor {
+        let r = bgColor.cgColor.components?[0] ?? 0
+        let g = bgColor.cgColor.components?[1] ?? 0
+        let b = bgColor.cgColor.components?[2] ?? 0
+        return (((r * 0.299) + (g * 0.587) + (b * 0.114)) > 186) ? UIColor.darkGray : UIColor.white
+    }
     
 }
 

@@ -10,11 +10,11 @@ import Foundation
 import UIKit
 import StatusAlert
 
-class NewInstanceViewController: UIViewController, UITextViewDelegate {
+class NewInstanceViewController: UIViewController, UITextFieldDelegate {
     
     var closeButton = MNGExpandedTouchAreaButton()
     var tootLabel = UIButton()
-    var textView = UITextView()
+    var textView = UITextField()
     var keyHeight = 0
     var bgView = UIView()
     var titleV = UILabel()
@@ -88,7 +88,7 @@ class NewInstanceViewController: UIViewController, UITextViewDelegate {
         titleV.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         self.view.addSubview(titleV)
         
-        textView.frame = CGRect(x:20, y: offset + 45, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(170) - Int(self.keyHeight))
+        textView.frame = CGRect(x:20, y: offset + 45, width:Int(self.view.bounds.width - 40), height:Int(50))
         textView.font = UIFont.systemFont(ofSize: Colours.fontSize1 + 2)
         textView.tintColor = Colours.tabSelected
         textView.delegate = self
@@ -98,6 +98,9 @@ class NewInstanceViewController: UIViewController, UITextViewDelegate {
         } else {
             textView.keyboardType = .default
         }
+        textView.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        textView.attributedPlaceholder = NSAttributedString(string: "e.g. mastodon.social",
+                                                            attributes: [NSAttributedString.Key.foregroundColor: Colours.tabUnselected])
         textView.keyboardAppearance = Colours.keyCol
         textView.backgroundColor = Colours.white
         textView.textColor = Colours.grayDark
@@ -138,7 +141,7 @@ class NewInstanceViewController: UIViewController, UITextViewDelegate {
             }
         }
         bgView.frame = CGRect(x:0, y:Int(self.view.bounds.height) - 50 - Int(self.keyHeight), width:Int(self.view.bounds.width), height:Int(self.keyHeight) + 50)
-        textView.frame = CGRect(x:20, y:offset + 45, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(offset) - Int(120) - Int(self.keyHeight))
+        textView.frame = CGRect(x:20, y:offset + 45, width:Int(self.view.bounds.width - 40), height:Int(50))
     }
     
     @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
@@ -162,14 +165,7 @@ class NewInstanceViewController: UIViewController, UITextViewDelegate {
         self.dismiss(animated: true, completion: nil)
     }
     
-    
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        
-    }
-    
-    
-    func textViewDidChange(_ textView: UITextView) {
+    @objc func textFieldDidChange(_ textField: UITextField) {
         
         if (UserDefaults.standard.object(forKey: "keyhap") == nil) || (UserDefaults.standard.object(forKey: "keyhap") as! Int == 0) {
             
@@ -240,7 +236,7 @@ class NewInstanceViewController: UIViewController, UITextViewDelegate {
                 
                 DispatchQueue.main.async {
                 // go to next view
-                StoreStruct.shared.currentInstance.instanceText = self.textView.text
+                StoreStruct.shared.currentInstance.instanceText = self.textView.text ?? ""
                     
                     if StoreStruct.instanceLocalToAdd.contains(StoreStruct.shared.currentInstance.instanceText.lowercased()) {} else {
                         StoreStruct.instanceLocalToAdd.append(StoreStruct.shared.currentInstance.instanceText.lowercased())

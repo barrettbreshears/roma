@@ -543,7 +543,7 @@ class MainFeedCellImage: SwipeTableViewCell {
             imageCountTag.setTitle("GIF", for: .normal)
             imageCountTag.backgroundColor = Colours.tabSelected
             imageCountTag.alpha = 1
-        } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count > 1 {
+        } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count > 1 && (UIApplication.shared.isSplitOrSlideOver || UIDevice.current.userInterfaceIdiom == .phone) {
             self.mainImageView.setImage(UIImage(), for: .normal)
             if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count == 2 {
                 self.smallImage1.frame = CGRect(x: -2, y: 0, width: (UIScreen.main.bounds.width - 93)/2, height: 200)

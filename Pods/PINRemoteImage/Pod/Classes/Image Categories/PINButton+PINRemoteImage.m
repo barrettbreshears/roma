@@ -90,10 +90,24 @@
     [PINRemoteImageCategoryManager setUpdateWithProgressOnView:updateWithProgress onView:self];
 }
 
+void runOnMainQueueWithoutDeadlocking(void (^block)(void))
+{
+    if ([NSThread isMainThread])
+    {
+        block();
+    }
+    else
+    {
+        dispatch_sync(dispatch_get_main_queue(), block);
+    }
+}
+
 - (void)pin_setPlaceholderWithImage:(PINImage *)image
 {
 #if PIN_TARGET_IOS
-    [self setImage:image forState:UIControlStateNormal];
+    runOnMainQueueWithoutDeadlocking(^{
+        [self setImage:image forState:UIControlStateNormal];
+    });
 #elif PIN_TARGET_MAC
     [self setImage:image];
 #endif

@@ -124,6 +124,8 @@ class ProfileHeaderCellImage: UITableViewCell, UICollectionViewDelegate, UIColle
         let cell = collectionView.cellForItem(at: indexPath) as! CollectionProfileCell
         var images = [SKPhoto]()
             var coun = 0
+        
+            if (UserDefaults.standard.object(forKey: "swrece") == nil) || (UserDefaults.standard.object(forKey: "swrece") as! Int == 0) {
         for y in sto[indexPath.row].mediaAttachments {
             if coun == 0 {
                 let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.image.image)
@@ -138,6 +140,23 @@ class ProfileHeaderCellImage: UITableViewCell, UICollectionViewDelegate, UIColle
             }
             coun += 1
         }
+            } else {
+                for y in self.profileStatusesHasImage {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.mediaAttachments[0].url, holder: cell.image.image)
+                        photo.shouldCachePhotoURLImage = true
+                        photo.caption = y.content.stripHTML()
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.mediaAttachments[0].url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        photo.caption = y.content.stripHTML()
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+            }
+                
         let originImage = cell.image.image
         if originImage != nil {
             let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.image)

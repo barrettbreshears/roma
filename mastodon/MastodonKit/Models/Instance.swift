@@ -21,4 +21,21 @@ public class Instance: Codable {
     public let version: String?
     /// Max toot characters for Pleroma (and supported) instances.
     public let max_toot_chars: Int?
+    /// Further instance stats
+    public let stats: Stats
+}
+
+public class Stats: Codable {
+    /// User count
+    public let userCount: Int
+    /// Status count
+    public let statusCount: Int
+    /// Domain count
+    public let domainCount: Int
+    
+    private enum CodingKeys: String, CodingKey {
+        case userCount = "user_count"
+        case statusCount = "status_count"
+        case domainCount = "domain_count"
+    }
 }

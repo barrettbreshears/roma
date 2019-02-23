@@ -166,8 +166,6 @@ extension PushNotificationReceiver {
     static func getSate() -> PushNotificationState? {
          if let userDefaults = UserDefaults(suiteName: "group.com.vm.roma.wormhole" ) {
             
-            
-            
             guard let state = userDefaults.data(forKey: "PushNotificationState"),  let theState = try? JSONDecoder().decode(PushNotificationState.self, from: state) else {
                return nil
             }

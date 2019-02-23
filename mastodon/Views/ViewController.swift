@@ -10,12 +10,12 @@ import UIKit
 import SafariServices
 import StatusAlert
 import SJFluidSegmentedControl
-import OneSignal
 import SAConfettiView
 import WatchConnectivity
 import Disk
+import UserNotifications
 
-class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, OSSubscriptionObserver, WCSessionDelegate {
+class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, WCSessionDelegate, UNUserNotificationCenterDelegate {
     
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         print("active: \(activationState)")
@@ -432,17 +432,28 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         page.actionHandler = { item in
             print("Action button tapped")
             
+            UserDefaults.standard.set(true, forKey: "pnmentions")
+            UserDefaults.standard.set(true, forKey: "pnlikes")
+            UserDefaults.standard.set(true, forKey: "pnboosts")
+            UserDefaults.standard.set(true, forKey: "pnfollows")
+            
             let center = UNUserNotificationCenter.current()
             center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
                 // Enable or disable features based on authorization.
+                DispatchQueue.main.async {
+                    UIApplication.shared.registerForRemoteNotifications()
+                }
             }
-            UIApplication.shared.registerForRemoteNotifications()
             
             item.manager?.push(item: self.makeSiriPage())
         }
         
         page.alternativeHandler = { item in
             print("Action button tapped")
+            UserDefaults.standard.set(false, forKey: "pnmentions")
+            UserDefaults.standard.set(false, forKey: "pnlikes")
+            UserDefaults.standard.set(false, forKey: "pnboosts")
+            UserDefaults.standard.set(false, forKey: "pnfollows")
             item.manager?.push(item: self.makeSiriPage())
         }
         
@@ -488,52 +499,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         }
         
         return page
-    }
-    
-    
-    
-    
-    
-    
-    
-    func onOSSubscriptionChanged(_ stateChanges: OSSubscriptionStateChanges!) {
-        if !stateChanges.from.subscribed && stateChanges.to.subscribed {
-            print("Subscribed for OneSignal push notifications!")
-        }
-        print("SubscriptionStateChange: \n\(String(describing: stateChanges))")
-        
-        if let playerId = stateChanges.to.userId {
-            print("Current playerId \(playerId)")
-            let x00 = StoreStruct.client.baseURL
-            let x11 = StoreStruct.shared.currentInstance.accessToken
-            let player = playerId
-            StoreStruct.playerID = playerId
-            
-            let url = URL(string: "https://pushrelay1.your.org/register")!
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            let myParams = "instance_url=\(x00)&access_token=\(x11)&device_token=\(player)"
-            let postData = myParams.data(using: String.Encoding.ascii, allowLossyConversion: true)
-            let postLength = String(format: "%d", postData!.count)
-            request.setValue(postLength, forHTTPHeaderField: "Content-Length")
-            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            request.httpBody = postData
-            
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                guard let data = data, error == nil else {
-                    print("error=\(String(describing: error))")
-                    return
-                }
-                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
-                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                    print("response = \(String(describing: response))")
-                }
-                let responseString = String(data: data, encoding: .utf8)
-                print("responseString = \(String(describing: responseString))")
-            }
-            task.resume()
-            
-        }
     }
     
     
@@ -678,7 +643,16 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         } else {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid3"), object: self)
         }
-        
+    }
+    
+    func gotoIDNoti() {
+        if StoreStruct.currentPage == 0 {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti"), object: self)
+        } else if StoreStruct.currentPage == 1 {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti2"), object: self)
+        } else {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti3"), object: self)
+        }
     }
     
     override func viewDidLoad() {
@@ -820,14 +794,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.createLoginView()
         } else {
             
-            
-//            OneSignal.add(self as OSSubscriptionObserver)
-//            OneSignal.promptForPushNotifications(userResponse: { accepted in
-//                print("User accepted notifications: \(accepted)")
-//            })
-            
-            
-            
             StoreStruct.shared.currentInstance.accessToken = UserDefaults.standard.object(forKey: "accessToken") as! String
             StoreStruct.client = Client(
                 baseURL: "https://\(StoreStruct.shared.currentInstance.returnedText)",
@@ -883,9 +849,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         }
         
     }
-    
-    
-    
     
     
     
@@ -1136,7 +1099,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     bgColorView.backgroundColor = Colours.grayDark3
                     cell.selectedBackgroundView = bgColorView
                     return cell
-                    } else {
+            } else {
                         //bhere7
                         let cell = tableView.dequeueReusableCell(withIdentifier: "cell002", for: indexPath) as! MainFeedCellImage
                         cell.configure(StoreStruct.statusSearch[indexPath.row])

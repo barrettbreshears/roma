@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import OneSignal
 import Disk
 import Firebase
 
@@ -70,6 +69,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        if application.applicationState == .inactive {
+            if let userDefaults = UserDefaults(suiteName: "group.com.shi.Mast.wormhole") {
+                if userDefaults.value(forKey: "notidpush") != nil {
+                    let id = userDefaults.value(forKey: "notidpush") as? Int64 ?? 0
+                    StoreStruct.curIDNoti = "\(id)"
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        let viewController0 = window?.rootViewController as! UISplitViewController
+                        let viewController = viewController0.viewControllers[0] as! PadViewController
+                        viewController.gotoIDNoti()
+                    } else {
+                        let viewController = window?.rootViewController as! ViewController
+                        viewController.gotoIDNoti()
+                    }
+
+                    userDefaults.set(nil, forKey: "notidpush")
+                }
+            }
+        }
+        
+        UIApplication.shared.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
+        
         let request = Notifications.all(range: .default)
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
@@ -112,7 +133,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         
-        guard  StoreStruct.shared.currentInstance.returnedText != "" else {
+        guard StoreStruct.shared.currentInstance.returnedText != "" else {
             return
         }
         
@@ -278,6 +299,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let viewController = viewController0.viewControllers[0] as! PadViewController
                 viewController.gotoID()
                 return true
+            } else if url.absoluteString.contains("instance=") {
+                let x = url.absoluteString
+                let y = x.split(separator: "=")
+                self.tempGotoInstance(y[1].description)
+                return true
             } else if url.host == "home" {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "switch11"), object: self)
                 return true
@@ -362,6 +388,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let viewController = window?.rootViewController as! ViewController
                 viewController.gotoID()
                 return true
+            } else if url.absoluteString.contains("instance=") {
+                let x = url.absoluteString
+                let y = x.split(separator: "=")
+                self.tempGotoInstance(y[1].description)
+                return true
             } else if url.host == "home" {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "switch11"), object: self)
                 return true
@@ -410,7 +441,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
     
-    
+    func tempGotoInstance(_ text: String) {
+        StoreStruct.client = Client(baseURL: "https://\(text)")
+        let request = Clients.register(
+            clientName: "Mast",
+            redirectURI: "com.shi.mastodon://success",
+            scopes: [.read, .write, .follow, .push],
+            website: "https://twitter.com/jpeguin"
+        )
+        StoreStruct.client.run(request) { (application) in
+            
+            if application.value == nil {} else {
+                
+                DispatchQueue.main.async {
+                    // go to next view
+                    StoreStruct.shared.currentInstance.instanceText = text
+                    
+                    if StoreStruct.instanceLocalToAdd.contains(StoreStruct.shared.currentInstance.instanceText.lowercased()) {} else {
+                        StoreStruct.instanceLocalToAdd.append(StoreStruct.shared.currentInstance.instanceText.lowercased())
+                        UserDefaults.standard.set(StoreStruct.instanceLocalToAdd, forKey: "instancesLocal")
+                    }
+                    
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadLists"), object: nil)
+                    if StoreStruct.currentPage == 0 {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance"), object: self)
+                    } else if StoreStruct.currentPage == 1 {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance2"), object: self)
+                    } else {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance3"), object: self)
+                    }
+                }
+                
+            }
+        }
+    }
     
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -472,17 +536,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         SwiftyGiphyAPI.shared.apiKey = SwiftyGiphyAPI.publicBetaKey
         
-        
-//        
-//        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
-//        
-//        OneSignal.initWithLaunchOptions(launchOptions,
-//                                        appId: "8bacaad0-9486-43d7-ab7f-af9075636437",
-//                                        handleNotificationAction: nil,
-//                                        settings: onesignalInitSettings)
-//        
-//        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
-//
         
         WatchSessionManager.sharedManager.startSession()
         
@@ -579,6 +632,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         NotificationCenter.default.post(name: Notification.Name(rawValue: "startStream"), object: self)
         
+        UIApplication.shared.applicationIconBadgeNumber = 0
         
         if (UserDefaults.standard.object(forKey: "composeSaved") == nil) || (UserDefaults.standard.object(forKey: "composeSaved") as? String == "") {
             

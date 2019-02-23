@@ -15,8 +15,9 @@ import SAConfettiView
 import AVKit
 import AVFoundation
 import SJFluidSegmentedControl
+import MessageUI
 
-class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate {
+class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, CrownControlDelegate, MFMailComposeViewControllerDelegate {
     
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .circleStrokeSpin, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
@@ -38,6 +39,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var segmentedControl: SJFluidSegmentedControl!
     var currentIndex = 0
     var isEndorsed = false
+    private var crownControl: CrownControl!
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
+    }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard let indexPath = self.tableView.indexPathForRow(at: location) else { return nil }
@@ -478,6 +484,19 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     
+    @objc func goToIDNoti() {
+        let request = Notifications.notification(id: StoreStruct.curIDNoti)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                DispatchQueue.main.async {
+                    let controller = DetailViewController()
+                    controller.mainStatus.append(stat.status!)
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        }
+    }
+    
     @objc func goToID() {
         sleep(2)
         let request = Statuses.status(id: StoreStruct.curID)
@@ -511,6 +530,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+            crownControl?.spinToMatchScrollViewOffset()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -518,6 +544,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.title = ""
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid3"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goToIDNoti), name: NSNotification.Name(rawValue: "gotoidnoti3"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goMembers), name: NSNotification.Name(rawValue: "goMembers3"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists3"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goInstance), name: NSNotification.Name(rawValue: "goInstance3"), object: nil)
@@ -556,7 +583,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             settingsButton.setImage(UIImage(named: "sett")?.maskWithColor(color: Colours.grayLight2), for: .normal)
             settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
             settingsButton.adjustsImageWhenHighlighted = false
-            settingsButton.addTarget(self, action: #selector(self.setTop), for: .touchUpInside)
+            settingsButton.addTarget(self, action: #selector(self.setTop1), for: .touchUpInside)
             
             if self.fromOtherUser {} else {
                 let done = UIBarButtonItem.init(customView: settingsButton)
@@ -663,22 +690,43 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         
+        
+        
         self.setupProfile()
         
         
         if (traitCollection.forceTouchCapability == .available) {
             registerForPreviewing(with: self, sourceView: self.tableView)
         }
+        
+        
+        if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+            self.crownScroll()
+        }
+    }
+    
+    func crownScroll() {
+        var attributes = CrownAttributes(scrollView: self.tableView, scrollAxis: .vertical)
+        attributes.backgroundStyle.content = .gradient(gradient: .init(colors: [UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0), UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.backgroundStyle.border = .value(color: UIColor(red: 34/255.0, green: 34/255.0, blue: 35/255.0, alpha: 1.0), width: 1)
+        attributes.foregroundStyle.content = .gradient(gradient: .init(colors: [Colours.tabSelected, Colours.tabSelected], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.foregroundStyle.border = .value(color: UIColor(red: 200/255.0, green: 200/255.0, blue: 200/255.0, alpha: 1.0), width: 0)
+        attributes.feedback.leading.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        attributes.feedback.trailing.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        let verticalConstraint = CrownAttributes.AxisConstraint(crownEdge: .bottom, anchorView: self.tableView, anchorViewEdge: .bottom, offset: -50)
+        let horizontalConstraint = CrownAttributes.AxisConstraint(crownEdge: .trailing, anchorView: self.tableView, anchorViewEdge: .trailing, offset: -50)
+        crownControl = CrownControl(attributes: attributes, delegate: self)
+        crownControl.layout(in: view, horizontalConstaint: horizontalConstraint, verticalConstraint: verticalConstraint)
     }
     
     func setupProfile() {
-        
+
         if self.fromOtherUser == true {
             let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: false, pinnedOnly: false, excludeReplies: true, excludeReblogs: true, range: .min(id: "", limit: 5000))
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
                     if stat.isEmpty {
-                        
+
                         let request09 = Accounts.account(id: self.userIDtoUse)
                         StoreStruct.client.run(request09) { (statuses) in
                             if let stat = (statuses.value) {
@@ -688,108 +736,108 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 }
                             }
                         }
-                        
+
                     } else {
                         self.profileStatuses = stat
                         self.chosenUser = self.profileStatuses[0].account
                         DispatchQueue.main.async {
-                            
+
                             self.ai.alpha = 0
                             self.ai.removeFromSuperview()
                             self.tableView.reloadData()
                         }
-                        
+
                     }
                 }
             }
         } else {
-            
+
             if StoreStruct.currentUser == nil {
                 let request2 = Accounts.currentUser()
                 StoreStruct.client.run(request2) { (statuses) in
                     if let stat = (statuses.value) {
                         StoreStruct.currentUser = stat
-                        
-                        
+
+
                         self.userIDtoUse = StoreStruct.currentUser.id
                         let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: false, pinnedOnly: false, excludeReplies: true, excludeReblogs: true, range: .min(id: "", limit: 5000))
                         StoreStruct.client.run(request) { (statuses) in
                             if let stat = (statuses.value) {
-                                
+
                                 if stat.isEmpty {
-                                    
+
                                     DispatchQueue.main.async {
                                         self.chosenUser = StoreStruct.currentUser
                                         self.tableView.reloadData()
                                     }
-                                    
+
                                 } else {
-                                    
+
                                     self.profileStatuses = stat
                                     self.chosenUser = self.profileStatuses[0].account
                                     DispatchQueue.main.async {
-                                        
+
                                         self.ai.alpha = 0
                                         self.ai.removeFromSuperview()
                                         self.tableView.reloadData()
                                     }
-                                    
+
                                 }
-                                
+
                             }
                         }
-                        
+
                     }
                 }
             } else {
-                
-                
+
+
                 self.userIDtoUse = StoreStruct.currentUser.id
                 let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: false, pinnedOnly: false, excludeReplies: true, excludeReblogs: true, range: .min(id: "", limit: 5000))
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
-                        
+
                         if stat.isEmpty {
-                            
+
                             DispatchQueue.main.async {
                                 self.chosenUser = StoreStruct.currentUser
                                 self.tableView.reloadData()
                             }
-                            
+
                         } else {
-                            
+
                             self.profileStatuses = stat
                             self.chosenUser = self.profileStatuses[0].account
                             DispatchQueue.main.async {
-                                
+
                                 self.ai.alpha = 0
                                 self.ai.removeFromSuperview()
                                 self.tableView.reloadData()
                             }
-                            
+
                         }
-                        
+
                     }
                 }
-                
-                
+
+
             }
         }
-        
-        
+
+
         var zzz = false
         if (UserDefaults.standard.object(forKey: "boostpro3") == nil) || (UserDefaults.standard.object(forKey: "boostpro3") as! Int == 0) {
             zzz = false
         } else {
             zzz = true
         }
-        
+
         if self.fromOtherUser == true {
             let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: false, pinnedOnly: false, excludeReplies: false, excludeReblogs: zzz, range: .min(id: "", limit: 5000))
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
                     if stat.isEmpty {
-                        
+
                         let request09 = Accounts.account(id: self.userIDtoUse)
                         StoreStruct.client.run(request09) { (statuses) in
                             if let stat = (statuses.value) {
@@ -799,95 +847,95 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 }
                             }
                         }
-                        
+
                     } else {
                         self.profileStatuses2 = stat
                         self.chosenUser = self.profileStatuses2[0].account
                         DispatchQueue.main.async {
-                            
+
                             self.ai.alpha = 0
                             self.ai.removeFromSuperview()
                             self.tableView.reloadData()
                         }
-                        
+
                     }
                 }
             }
         } else {
-            
+
             if StoreStruct.currentUser == nil {
                 let request2 = Accounts.currentUser()
                 StoreStruct.client.run(request2) { (statuses) in
                     if let stat = (statuses.value) {
                         StoreStruct.currentUser = stat
-                        
-                        
+
+
                         self.userIDtoUse = StoreStruct.currentUser.id
                         let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: false, pinnedOnly: false, excludeReplies: false, excludeReblogs: zzz, range: .min(id: "", limit: 5000))
                         StoreStruct.client.run(request) { (statuses) in
                             if let stat = (statuses.value) {
-                                
+
                                 if stat.isEmpty {
-                                    
+
                                     DispatchQueue.main.async {
                                         self.chosenUser = StoreStruct.currentUser
                                         self.tableView.reloadData()
                                     }
-                                    
+
                                 } else {
-                                    
+
                                     self.profileStatuses2 = stat
                                     self.chosenUser = self.profileStatuses2[0].account
                                     DispatchQueue.main.async {
-                                        
+
                                         self.ai.alpha = 0
                                         self.ai.removeFromSuperview()
                                         self.tableView.reloadData()
                                     }
-                                    
+
                                 }
-                                
+
                             }
                         }
-                        
+
                     }
                 }
             } else {
-                
-                
+
+
                 self.userIDtoUse = StoreStruct.currentUser.id
                 let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: false, pinnedOnly: false, excludeReplies: false, excludeReblogs: zzz, range: .min(id: "", limit: 5000))
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
-                        
+
                         if stat.isEmpty {
-                            
+
                             DispatchQueue.main.async {
                                 self.chosenUser = StoreStruct.currentUser
                                 self.tableView.reloadData()
                             }
-                            
+
                         } else {
-                            
+
                             self.profileStatuses2 = stat
                             self.chosenUser = self.profileStatuses2[0].account
                             DispatchQueue.main.async {
-                                
+
                                 self.ai.alpha = 0
                                 self.ai.removeFromSuperview()
                                 self.tableView.reloadData()
                             }
-                            
+
                         }
-                        
+
                     }
                 }
-                
-                
+
+
             }
         }
-        
-        
+
+
         let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: true, pinnedOnly: nil, excludeReplies: nil, excludeReblogs: true, range: .min(id: "", limit: 5000))
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
@@ -910,7 +958,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
         }
-        
+
     }
     
     public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -936,7 +984,6 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.navigationController?.navigationItem.backBarButtonItem?.tintColor = Colours.tabUnselected
         
         StoreStruct.currentPage = 2
-        
         
         if StoreStruct.currentUser == nil {
             let request2 = Accounts.currentUser()
@@ -1241,7 +1288,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     
     
-    @objc func setTop() {
+    @objc func setTop1() {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
             let impact = UIImpactFeedbackGenerator()
             impact.impactOccurred()
@@ -1249,6 +1296,40 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         let controller = SettingsViewController()
         self.navigationController?.pushViewController(controller, animated: true)
+    }
+    @objc func setTop() {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
+        
+        if (UserDefaults.standard.object(forKey: "likepin") == nil) || (UserDefaults.standard.object(forKey: "likepin") as! Int == 0) {
+        let controller = LikedViewController()
+        controller.currentTagTitle = "Liked"
+        let request = Favourites.all()
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                controller.currentTags = stat
+                DispatchQueue.main.async {
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        }
+        } else {
+            
+            let controller = PinnedViewController()
+            controller.currentTagTitle = "Pinned"
+            controller.curID = self.chosenUser.id
+            let request = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: nil, pinnedOnly: true, excludeReplies: nil, excludeReblogs: false, range: .min(id: "", limit: 5000))
+            StoreStruct.client.run(request) { (statuses) in
+                if let stat = (statuses.value) {
+                    controller.currentTags = stat
+                    DispatchQueue.main.async {
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    }
+                }
+            }
+        }
     }
     
     
@@ -1475,7 +1556,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
                 
                 // change below endorse
-                .action(.default(endoTitle), image: UIImage(named: "profile")) { (action, ind) in
+                .action(.default(endoTitle), image: UIImage(named: "endo")) { (action, ind) in
                     print(action, ind)
                     
                     if self.isEndorsed {
@@ -1838,7 +1919,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     }
                 }
-                .action(.default("Scheduled Posts"), image: UIImage(named: "schedule")) { (action, ind) in
+                .action(.default("Scheduled Toots"), image: UIImage(named: "scheduled")) { (action, ind) in
                     print(action, ind)
                     
                     let request = Statuses.allScheduled()
@@ -1854,7 +1935,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     }
                 }
-                .action(.default("Follow Suggestions".localized), image: UIImage(named: "profile")) { (action, ind) in
+                .action(.default("Follow Suggestions".localized), image: UIImage(named: "folsug")) { (action, ind) in
                     print(action, ind)
                     
                     let request = Accounts.followSuggestions()
@@ -1868,7 +1949,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     }
                 }
-                .action(.default("Endorsed Accounts".localized), image: UIImage(named: "profile")) { (action, ind) in
+                .action(.default("Endorsed Accounts".localized), image: UIImage(named: "endo")) { (action, ind) in
                     print(action, ind)
                     
                     let request = Accounts.allEndorsements()
@@ -1881,6 +1962,34 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             }
                         }
                     }
+                }
+                .action(.default("Instance Details".localized), image: UIImage(named: "instats")) { (action, ind) in
+                    print(action, ind)
+                    Alertift.actionSheet(title: "\(StoreStruct.currentInstanceDetails.first?.title.stripHTML() ?? "Instance") (\(StoreStruct.currentInstanceDetails.first?.version ?? "1.0.0"))", message: "\(StoreStruct.currentInstanceDetails.first?.stats.userCount ?? 0) users\n\(StoreStruct.currentInstanceDetails.first?.stats.statusCount ?? 0) statuses\n\(StoreStruct.currentInstanceDetails.first?.stats.domainCount ?? 0) domains\n\n\(StoreStruct.currentInstanceDetails.first?.description.stripHTML() ?? "")")
+                        .backgroundColor(Colours.white)
+                        .titleTextColor(Colours.grayDark)
+                        .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                        .messageTextAlignment(.left)
+                        .titleTextAlignment(.left)
+                        .action(.default("Instance Admin Contact".localized), image: nil) { (action, ind) in
+                            if MFMailComposeViewController.canSendMail() {
+                                let mail = MFMailComposeViewController()
+                                mail.mailComposeDelegate = self
+                                mail.setToRecipients([StoreStruct.currentInstanceDetails.first?.email ?? "shihab.mehboob@hotmail.com"])
+                                
+                                self.present(mail, animated: true)
+                            } else {
+                                // show failure alert
+                            }
+                        }
+                        .action(.cancel("Dismiss"))
+                        .finally { action, index in
+                            if action.style == .cancel {
+                                return
+                            }
+                        }
+                        .popover(anchorView: self.view)
+                        .show(on: self)
                 }
                             .action(.default("Edit Profile".localized), image: UIImage(named: "profile")) { (action, ind) in
                                 print(action, ind)
@@ -2168,7 +2277,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 if self.fromOtherUser == true {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileHeaderCell", for: indexPath) as! ProfileHeaderCell
-//                    cell.configure(self.chosenUser)
+                    cell.configure(self.chosenUser)
                     cell.profileImageView.addTarget(self, action: #selector(self.touchProfileImage(_:)), for: .touchUpInside)
                     cell.headerImageView.addTarget(self, action: #selector(self.touchHeaderImage(_:)), for: .touchUpInside)
                     cell.follows.addTarget(self, action: #selector(self.didTouchFollows), for: .touchUpInside)
@@ -3034,6 +3143,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let indexPath = IndexPath(row: sender.tag, section: 0)
         
         
+        StoreStruct.currentImageURL = sto[sender.tag].url ?? URL(string: "www.google.com")
+        
         if self.fromOtherUser {
             
             let cell = tableView.cellForRow(at: indexPath) as! ProfileHeaderCell
@@ -3112,11 +3223,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         var sto = self.profileStatuses
         
+        StoreStruct.currentImageURL = sto[sender.tag].url ?? URL(string: "www.google.com")
+        
         let indexPath = IndexPath(row: sender.tag, section: 0)
         if let cell = tableView.cellForRow(at: indexPath) as? ProfileHeaderCell {
             var images = [SKPhoto]()
             
-            let photo = SKPhoto.photoWithImageURL(self.chosenUser.avatarStatic, holder: cell.profileImageView.currentImage ?? nil)
+            let photo = SKPhoto.photoWithImageURL(self.chosenUser.avatar, holder: cell.profileImageView.currentImage ?? nil)
             photo.shouldCachePhotoURLImage = true
             images.append(photo)
             
@@ -3135,7 +3248,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let cell = tableView.cellForRow(at: indexPath) as! ProfileHeaderCellOwn
             var images = [SKPhoto]()
             
-            let photo = SKPhoto.photoWithImageURL(self.chosenUser.avatarStatic, holder: nil)
+            let photo = SKPhoto.photoWithImageURL(self.chosenUser.avatar, holder: nil)
             photo.shouldCachePhotoURLImage = true
             images.append(photo)
             
@@ -3157,7 +3270,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
                 var images = [SKPhoto]()
                 
-                let photo = SKPhoto.photoWithImageURL(self.chosenUser.avatarStatic, holder: nil)
+                let photo = SKPhoto.photoWithImageURL(self.chosenUser.avatar, holder: nil)
                 photo.shouldCachePhotoURLImage = true
                 images.append(photo)
                 
@@ -3186,6 +3299,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var sto = self.profileStatuses
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
         
         if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
             
@@ -3214,8 +3328,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                         photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                    } else {
+                    } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                         photo.caption = y.description ?? ""
+                    } else {
+                        photo.caption = ""
                     }
                     images.append(photo)
                 } else {
@@ -3223,9 +3339,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 photo.shouldCachePhotoURLImage = true
                 if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                     photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                } else {
+                } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                     photo.caption = y.description ?? ""
-                }
+                } else {
+                    photo.caption = ""
+                    }
                 images.append(photo)
                 }
                 coun += 1
@@ -3255,6 +3373,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var sto = self.profileStatuses
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -3271,8 +3391,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -3280,8 +3402,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -3311,6 +3435,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var sto = self.profileStatuses
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -3327,8 +3453,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -3336,8 +3464,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -3368,6 +3498,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var sto = self.profileStatuses
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -3384,8 +3516,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -3393,8 +3527,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -3426,6 +3562,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         var sto = self.profileStatuses
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -3442,8 +3580,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -3451,8 +3591,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -3489,7 +3631,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let request2 = Statuses.unreblog(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
             StoreStruct.client.run(request2) { (statuses) in
                 DispatchQueue.main.async {
-                    if let cell = theTable.cellForRow(at:IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
+                    if let cell = theTable.cellForRow(at:IndexPath(row: sender.tag, section: 2)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "like")
@@ -3498,7 +3640,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                         cell.hideSwipe(animated: true)
                     } else {
-                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 2)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "like")
@@ -3519,7 +3661,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreateRe"), object: nil)
                     }
                     
-                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
+                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 2)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
@@ -3528,7 +3670,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                         cell.hideSwipe(animated: true)
                     } else {
-                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 2)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
@@ -3558,7 +3700,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let request2 = Statuses.unfavourite(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
             StoreStruct.client.run(request2) { (statuses) in
                 DispatchQueue.main.async {
-                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
+                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 2)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "boost")
@@ -3567,7 +3709,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                         cell.hideSwipe(animated: true)
                     } else {
-                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 2)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "boost")
@@ -3587,7 +3729,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreateLi"), object: nil)
                     }
                     
-                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
+                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 2)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
@@ -3596,7 +3738,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                         cell.hideSwipe(animated: true)
                     } else {
-                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 2)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
@@ -3974,6 +4116,15 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             }
                             .action(.default("Delete".localized), image: UIImage(named: "block")) { (action, ind) in
                                 print(action, ind)
+                                
+                                if self.currentIndex == 0 {
+                                    self.profileStatuses = self.profileStatuses.filter { $0 != self.profileStatuses[indexPath.row] }
+                                    self.tableView.deleteRows(at: [indexPath], with: .none)
+                                } else if self.currentIndex == 1 {
+                                    self.profileStatuses2 = self.profileStatuses2.filter { $0 != self.profileStatuses2[indexPath.row] }
+                                    self.tableView.deleteRows(at: [indexPath], with: .none)
+                                }
+                                
                                 
                                 let request = Statuses.delete(id: sto[indexPath.row].id)
                                 StoreStruct.client.run(request) { (statuses) in

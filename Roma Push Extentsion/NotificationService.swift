@@ -7,6 +7,7 @@
 //
 
 import UserNotifications
+import UIKit
 
 class NotificationService: UNNotificationServiceExtension {
 

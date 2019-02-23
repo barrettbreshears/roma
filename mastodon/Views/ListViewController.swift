@@ -15,7 +15,7 @@ import SAConfettiView
 import AVKit
 import AVFoundation
 
-class ListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate {
+class ListViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate {
     
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .circleStrokeSpin, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
@@ -23,6 +23,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
     var tableView = UITableView()
     var refreshControl = UIRefreshControl()
     var currentIndex = 0
+    private var crownControl: CrownControl!
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard let indexPath = self.tableView.indexPathForRow(at: location) else { return nil }
@@ -146,6 +147,13 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+            crownControl?.spinToMatchScrollViewOffset()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -211,6 +219,24 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         if (traitCollection.forceTouchCapability == .available) {
             registerForPreviewing(with: self, sourceView: self.tableView)
         }
+        
+        if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+            self.crownScroll()
+        }
+    }
+    
+    func crownScroll() {
+        var attributes = CrownAttributes(scrollView: self.tableView, scrollAxis: .vertical)
+        attributes.backgroundStyle.content = .gradient(gradient: .init(colors: [UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0), UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.backgroundStyle.border = .value(color: UIColor(red: 34/255.0, green: 34/255.0, blue: 35/255.0, alpha: 1.0), width: 1)
+        attributes.foregroundStyle.content = .gradient(gradient: .init(colors: [Colours.tabSelected, Colours.tabSelected], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.foregroundStyle.border = .value(color: UIColor(red: 200/255.0, green: 200/255.0, blue: 200/255.0, alpha: 1.0), width: 0)
+        attributes.feedback.leading.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        attributes.feedback.trailing.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        let verticalConstraint = CrownAttributes.AxisConstraint(crownEdge: .bottom, anchorView: self.tableView, anchorViewEdge: .bottom, offset: -50)
+        let horizontalConstraint = CrownAttributes.AxisConstraint(crownEdge: .trailing, anchorView: self.tableView, anchorViewEdge: .trailing, offset: -50)
+        crownControl = CrownControl(attributes: attributes, delegate: self)
+        crownControl.layout(in: view, horizontalConstaint: horizontalConstraint, verticalConstraint: verticalConstraint)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -246,16 +272,16 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         default:
             print("n")
         }
-        self.tableView.alpha = 1
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.separatorStyle = .singleLine
-        self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
-        self.tableView.layer.masksToBounds = true
-        self.tableView.estimatedRowHeight = 89
-        self.tableView.rowHeight = UITableView.automaticDimension
-        self.view.addSubview(self.tableView)
+//        self.tableView.alpha = 1
+//        self.tableView.delegate = self
+//        self.tableView.dataSource = self
+//        self.tableView.separatorStyle = .singleLine
+//        self.tableView.backgroundColor = Colours.white
+//        self.tableView.separatorColor = Colours.cellQuote
+//        self.tableView.layer.masksToBounds = true
+//        self.tableView.estimatedRowHeight = 89
+//        self.tableView.rowHeight = UITableView.automaticDimension
+//        self.view.addSubview(self.tableView)
     }
     
     
@@ -546,6 +572,8 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
             
             let videoURL = URL(string: sto[sender.tag].reblog?.mediaAttachments[0].url ?? sto[sender.tag].mediaAttachments[0].url)!
@@ -573,8 +601,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                 photo.shouldCachePhotoURLImage = true
                 if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                     photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                } else {
+                } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                     photo.caption = y.description ?? ""
+                } else {
+                    photo.caption = ""
                 }
                 images.append(photo)
             } else {
@@ -582,9 +612,11 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             photo.shouldCachePhotoURLImage = true
             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                 photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-            } else {
+            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                 photo.caption = y.description ?? ""
-            }
+            } else {
+                photo.caption = ""
+                }
             images.append(photo)
             }
             coun += 1
@@ -628,6 +660,8 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             tab = self.tableView
         }
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -644,8 +678,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -653,8 +689,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -697,6 +735,8 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             tab = self.tableView
         }
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -713,8 +753,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -722,8 +764,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -767,6 +811,8 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             tab = self.tableView
         }
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -783,8 +829,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -792,8 +840,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -838,6 +888,8 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
             tab = self.tableView
         }
         
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
@@ -854,8 +906,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -863,8 +917,10 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -1468,6 +1524,11 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                         }
                         .action(.default("Delete".localized), image: UIImage(named: "block")) { (action, ind) in
                             print(action, ind)
+                            
+                            
+                                StoreStruct.currentList = StoreStruct.currentList.filter { $0 != StoreStruct.currentList[indexPath.row] }
+                                self.tableView.deleteRows(at: [indexPath], with: .none)
+                            
                             
                             let request = Statuses.delete(id: sto[indexPath.row].id)
                             StoreStruct.client.run(request) { (statuses) in

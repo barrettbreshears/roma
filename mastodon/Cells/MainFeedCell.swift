@@ -316,29 +316,6 @@ class MainFeedCell: SwipeTableViewCell {
         } else {
             
             
-//            if status.emojis.isEmpty {
-//                toot.text = status.content.stripHTML()
-//            } else {
-//                toot.text = "loading"
-//                toot.textColor = Colours.white
-//                let attributedString = NSMutableAttributedString(string: status.content.stripHTML())
-//                for y in status.emojis {
-//                    let textAttachment = NSTextAttachment()
-//                    let data = try? Data(contentsOf: y.url)
-//                    if let imageData = data {
-//                        textAttachment.image = UIImage(data: imageData)
-//                        textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.toot.font.lineHeight), height: Int(self.toot.font.lineHeight))
-//                        let attrStringWithImage = NSAttributedString(attachment: textAttachment)
-//                        while attributedString.mutableString.contains(":\(y.shortcode):") {
-//                            let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
-//                            attributedString.replaceCharacters(in: range, with: attrStringWithImage)
-//                        }
-//                    }
-//                }
-//                self.toot.attributedText = attributedString
-//            }
-            
-            
             if status.emojis.isEmpty {
                 toot.text = status.content.stripHTML()
             } else {

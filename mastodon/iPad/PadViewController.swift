@@ -9,58 +9,16 @@
 import Foundation
 import UIKit
 import SafariServices
-import OneSignal
 import StatusAlert
 import SAConfettiView
 
-class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionObserver, UIGestureRecognizerDelegate {
+class PadViewController: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
     
     var curr = 0
     var unselectCol = UIColor(red: 75/255.0, green: 75/255.0, blue: 85/255.0, alpha: 1.0)
     var isSearching = false
     var isListing = false
     var tappedB = 0
-    
-    func onOSSubscriptionChanged(_ stateChanges: OSSubscriptionStateChanges!) {
-        if !stateChanges.from.subscribed && stateChanges.to.subscribed {
-            print("Subscribed for OneSignal push notifications!")
-        }
-        print("SubscriptionStateChange: \n\(String(describing: stateChanges))")
-        
-        if let playerId = stateChanges.to.userId {
-            print("Current playerId \(playerId)")
-            let x00 = StoreStruct.client.baseURL
-            let x11 = StoreStruct.shared.currentInstance.accessToken
-            let player = playerId
-            StoreStruct.playerID = playerId
-            
-            let url = URL(string: "https://pushrelay-mast1.your.org/register")!
-            var request = URLRequest(url: url)
-            request.httpMethod = "POST"
-            let myParams = "instance_url=\(x00)&access_token=\(x11)&device_token=\(player)"
-            let postData = myParams.data(using: String.Encoding.ascii, allowLossyConversion: true)
-            let postLength = String(format: "%d", postData!.count)
-            request.setValue(postLength, forHTTPHeaderField: "Content-Length")
-            request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-            request.httpBody = postData
-            
-            let task = URLSession.shared.dataTask(with: request) { data, response, error in
-                guard let data = data, error == nil else {
-                    print("error=\(String(describing: error))")
-                    return
-                }
-                if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {
-                    print("statusCode should be 200, but is \(httpStatus.statusCode)")
-                    print("response = \(String(describing: response))")
-                }
-                let responseString = String(data: data, encoding: .utf8)
-                print("responseString = \(String(describing: responseString))")
-            }
-            task.resume()
-            
-        }
-    }
-    
     
     @objc func confettiCreate() {
         let confettiView = SAConfettiView(frame: self.view.bounds)
@@ -676,6 +634,16 @@ class PadViewController: UIViewController, UITextFieldDelegate, OSSubscriptionOb
         Colours.keyCol = UIKeyboardAppearance.dark
         UserDefaults.standard.set(4, forKey: "theme")
         self.genericStuff()
+    }
+    
+    func gotoIDNoti() {
+        if StoreStruct.currentPage == 0 {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti"), object: self)
+        } else if StoreStruct.currentPage == 1 {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti2"), object: self)
+        } else {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti3"), object: self)
+        }
     }
     
     func gotoID() {
