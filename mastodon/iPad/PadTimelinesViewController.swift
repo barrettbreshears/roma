@@ -19,7 +19,7 @@ import Disk
 import AVKit
 import AVFoundation
 
-class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, URLSessionDataDelegate, UIViewControllerPreviewingDelegate {
+class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, URLSessionDataDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate {
     
     var socket: WebSocket!
     var lsocket: WebSocket!
@@ -47,6 +47,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
     var lStream = false
     var fStream = false
     var previousScrollOffset: CGFloat = 0
+    private var crownControl: CrownControl!
+    private var crownControl2: CrownControl!
+    private var crownControl3: CrownControl!
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         if self.currentIndex == 0 {
@@ -271,6 +274,11 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         if self.currentIndex == 0 {
             
             
+            if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+                crownControl?.spinToMatchScrollViewOffset()
+            }
+            
+            
             
             let indexPath1 = IndexPath(row: self.countcount1 - 1, section: 0)
             if self.tableView.indexPathsForVisibleRows?.contains(indexPath1) ?? false {
@@ -318,6 +326,10 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         } else if self.currentIndex == 1 {
             
             
+            if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+                crownControl2?.spinToMatchScrollViewOffset()
+            }
+            
             
             let indexPath1 = IndexPath(row: self.countcount2 - 1, section: 0)
             if self.tableViewL.indexPathsForVisibleRows?.contains(indexPath1) ?? false {
@@ -363,6 +375,10 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             }
             
         } else {
+            
+            if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+                crownControl3?.spinToMatchScrollViewOffset()
+            }
             
             let indexPath1 = IndexPath(row: self.countcount3 - 1, section: 0)
             if self.tableViewF.indexPathsForVisibleRows?.contains(indexPath1) ?? false {
@@ -646,6 +662,19 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         })
     }
     
+    @objc func goToIDNoti() {
+        let request = Notifications.notification(id: StoreStruct.curIDNoti)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                DispatchQueue.main.async {
+                    let controller = DetailViewController()
+                    controller.mainStatus.append(stat.status!)
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        }
+    }
+    
     
     @objc func goToID() {
         sleep(2)
@@ -728,6 +757,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         super.viewDidLoad()
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.savedComposePresent), name: NSNotification.Name(rawValue: "savedComposePresent"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goMembers), name: NSNotification.Name(rawValue: "goMembers"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists"), object: nil)
@@ -899,15 +929,64 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         
         self.restoreScroll()
         
+        
+        if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+            self.crownScroll()
+            self.crownScroll2()
+            self.crownScroll3()
+        }
     }
     
+    func crownScroll() {
+        var attributes = CrownAttributes(scrollView: self.tableView, scrollAxis: .vertical)
+        attributes.backgroundStyle.content = .gradient(gradient: .init(colors: [UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0), UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.backgroundStyle.border = .value(color: UIColor(red: 34/255.0, green: 34/255.0, blue: 35/255.0, alpha: 1.0), width: 1)
+        attributes.foregroundStyle.content = .gradient(gradient: .init(colors: [Colours.tabSelected, Colours.tabSelected], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.foregroundStyle.border = .value(color: UIColor(red: 200/255.0, green: 200/255.0, blue: 200/255.0, alpha: 1.0), width: 0)
+        attributes.feedback.leading.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        attributes.feedback.trailing.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        let verticalConstraint = CrownAttributes.AxisConstraint(crownEdge: .bottom, anchorView: self.tableView, anchorViewEdge: .bottom, offset: -50)
+        let horizontalConstraint = CrownAttributes.AxisConstraint(crownEdge: .trailing, anchorView: self.tableView, anchorViewEdge: .trailing, offset: -50)
+        crownControl = CrownControl(attributes: attributes, delegate: self)
+        crownControl.layout(in: view, horizontalConstaint: horizontalConstraint, verticalConstraint: verticalConstraint)
+    }
+    
+    func crownScroll2() {
+        var attributes = CrownAttributes(scrollView: self.tableViewL, scrollAxis: .vertical)
+        attributes.backgroundStyle.content = .gradient(gradient: .init(colors: [UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0), UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.backgroundStyle.border = .value(color: UIColor(red: 34/255.0, green: 34/255.0, blue: 35/255.0, alpha: 1.0), width: 1)
+        attributes.foregroundStyle.content = .gradient(gradient: .init(colors: [Colours.tabSelected, Colours.tabSelected], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.foregroundStyle.border = .value(color: UIColor(red: 200/255.0, green: 200/255.0, blue: 200/255.0, alpha: 1.0), width: 0)
+        attributes.feedback.leading.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        attributes.feedback.trailing.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        let verticalConstraint = CrownAttributes.AxisConstraint(crownEdge: .bottom, anchorView: self.tableViewL, anchorViewEdge: .bottom, offset: -50)
+        let horizontalConstraint = CrownAttributes.AxisConstraint(crownEdge: .trailing, anchorView: self.tableViewL, anchorViewEdge: .trailing, offset: -50)
+        crownControl2 = CrownControl(attributes: attributes, delegate: self)
+        crownControl2.layout(in: view, horizontalConstaint: horizontalConstraint, verticalConstraint: verticalConstraint)
+        crownControl2.hideCrown()
+    }
+    
+    func crownScroll3() {
+        var attributes = CrownAttributes(scrollView: self.tableViewF, scrollAxis: .vertical)
+        attributes.backgroundStyle.content = .gradient(gradient: .init(colors: [UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0), UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.backgroundStyle.border = .value(color: UIColor(red: 34/255.0, green: 34/255.0, blue: 35/255.0, alpha: 1.0), width: 1)
+        attributes.foregroundStyle.content = .gradient(gradient: .init(colors: [Colours.tabSelected, Colours.tabSelected], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.foregroundStyle.border = .value(color: UIColor(red: 200/255.0, green: 200/255.0, blue: 200/255.0, alpha: 1.0), width: 0)
+        attributes.feedback.leading.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        attributes.feedback.trailing.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        let verticalConstraint = CrownAttributes.AxisConstraint(crownEdge: .bottom, anchorView: self.tableViewF, anchorViewEdge: .bottom, offset: -50)
+        let horizontalConstraint = CrownAttributes.AxisConstraint(crownEdge: .trailing, anchorView: self.tableViewF, anchorViewEdge: .trailing, offset: -50)
+        crownControl3 = CrownControl(attributes: attributes, delegate: self)
+        crownControl3.layout(in: view, horizontalConstaint: horizontalConstraint, verticalConstraint: verticalConstraint)
+        crownControl3.hideCrown()
+    }
     
     
     func restoreScroll() {
         DispatchQueue.main.async {
 //            self.tableView.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowHome1") == nil) {} else {
-                if StoreStruct.statusesHome.count > 5 {
+                if StoreStruct.statusesHome.count > 0 {
                     self.tableView.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowHome1") as! CGFloat), animated: false)
                 }
             }
@@ -915,7 +994,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         DispatchQueue.main.async {
 //            self.tableViewL.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowLocal1") == nil) {} else {
-                if StoreStruct.statusesLocal.count > 5 {
+                if StoreStruct.statusesLocal.count > 0 {
                     self.tableViewL.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowLocal1") as! CGFloat), animated: false)
                 }
             }
@@ -923,7 +1002,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         DispatchQueue.main.async {
 //            self.tableViewF.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowFed1") == nil) {} else {
-                if StoreStruct.statusesFederated.count > 5 {
+                if StoreStruct.statusesFederated.count > 0 {
                     self.tableViewF.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowFed1") as! CGFloat), animated: false)
                 }
             }
@@ -931,8 +1010,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
     }
     
     
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if self.currentIndex == 0 {
             UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowHome1")
         } else if self.currentIndex == 1 {
@@ -979,7 +1057,6 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                 tabHeight = Int(UITabBarController().tabBar.frame.size.height)
             }
         }
-        self.restoreScroll()
         
         //bh4
         var newSize = offset + 65
@@ -1723,6 +1800,12 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         
         if toIndex == 0 {
             
+            if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+                crownControl.showCrown()
+                crownControl2.hideCrown()
+                crownControl3.hideCrown()
+            }
+            
             if self.countcount1 == 0 {
                 self.newUpdatesB1.alpha = 0
                 self.newUpdatesB2.alpha = 0
@@ -1751,6 +1834,12 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             }
         }
         if toIndex == 1 {
+            
+            if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+                crownControl.hideCrown()
+                crownControl2.showCrown()
+                crownControl3.hideCrown()
+            }
             
             if self.countcount2 == 0 {
                 self.newUpdatesB1.alpha = 0
@@ -1792,6 +1881,12 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             }
         }
         if toIndex == 2 {
+            
+            if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+                crownControl.hideCrown()
+                crownControl2.hideCrown()
+                crownControl3.showCrown()
+            }
             
             if self.countcount3 == 0 {
                 self.newUpdatesB1.alpha = 0
@@ -1871,6 +1966,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                 
                 if StoreStruct.statusesHome[indexPath.row].id == "loadmorehere" {
                     
+                    if (UserDefaults.standard.object(forKey: "autol1") == nil) || (UserDefaults.standard.object(forKey: "autol1") as! Int == 0) {} else {
+                        self.fetchGap()
+                    }
                     
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cellmore", for: indexPath) as! SettingsCell
                     cell.delegate = self
@@ -2109,6 +2207,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                 
                 if StoreStruct.statusesLocal[indexPath.row].id == "loadmorehere" {
                     
+                    if (UserDefaults.standard.object(forKey: "autol1") == nil) || (UserDefaults.standard.object(forKey: "autol1") as! Int == 0) {} else {
+                        self.fetchGap()
+                    }
                     
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cellmore1", for: indexPath) as! SettingsCell
                     cell.delegate = self
@@ -2330,6 +2431,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                 
                 if StoreStruct.statusesFederated[indexPath.row].id == "loadmorehere" {
                     
+                    if (UserDefaults.standard.object(forKey: "autol1") == nil) || (UserDefaults.standard.object(forKey: "autol1") as! Int == 0) {} else {
+                        self.fetchGap()
+                    }
                     
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cellmore2", for: indexPath) as! SettingsCell
                     cell.delegate = self
@@ -2624,8 +2728,10 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -2649,8 +2755,10 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -2674,8 +2782,10 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -3807,7 +3917,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                             
                             let y = StoreStruct.statusesHome.split(separator: StoreStruct.gapLastHomeStat!)
                             print(y)
+                            if StoreStruct.statusesHome.count >= y.first!.count + 1 {
                             StoreStruct.statusesHome.remove(at: y.first!.count + 1)
+                            }
                             
                             if StoreStruct.statusesHome.contains(stat.last!) {
                                 StoreStruct.statusesHome = y.first! + stat + y.last!
@@ -3839,7 +3951,17 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                         if newestC == 0 {
                                             
                                         } else {
-//                                            self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                            if (UserDefaults.standard.object(forKey: "lmore1") == nil) || (UserDefaults.standard.object(forKey: "lmore1") as! Int == 0) {} else {
+                                                self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                                
+                                                do {
+                                                    try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                                    try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                                    try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
+                                                } catch {
+                                                    print("Couldn't save")
+                                                }
+                                            }
                                         }
                                         UIView.setAnimationsEnabled(true)
                                     }
@@ -3865,7 +3987,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         if stat.isEmpty {} else {
                             let y = StoreStruct.statusesLocal.split(separator: StoreStruct.gapLastLocalStat!)
                             print(y)
+                            if StoreStruct.statusesLocal.count >= y.first!.count + 1 {
                             StoreStruct.statusesLocal.remove(at: y.first!.count + 1)
+                            }
                             
                             if StoreStruct.statusesLocal.contains(stat.last!) {
                                 StoreStruct.statusesLocal = y.first! + stat + y.last!
@@ -3897,7 +4021,17 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                         if newestC == 0 {
                                             
                                         } else {
-//                                            self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                            if (UserDefaults.standard.object(forKey: "lmore1") == nil) || (UserDefaults.standard.object(forKey: "lmore1") as! Int == 0) {} else {
+                                                self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                                
+                                                do {
+                                                    try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                                    try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                                    try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
+                                                } catch {
+                                                    print("Couldn't save")
+                                                }
+                                            }
                                         }
                                         UIView.setAnimationsEnabled(true)
                                     }
@@ -3925,7 +4059,9 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                             print("testing")
                             print(y.first?.count ?? 0)
                             print(y.last?.count ?? 0)
+                            if StoreStruct.statusesFederated.count >= y.first!.count + 1 {
                             StoreStruct.statusesFederated.remove(at: y.first!.count + 1)
+                            }
                             
                             if StoreStruct.statusesFederated.contains(stat.last!) {
                                 StoreStruct.statusesFederated = y.first! + stat + y.last!
@@ -3957,7 +4093,17 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                         if newestC == 0 {
                                             
                                         } else {
-//                                            self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                            if (UserDefaults.standard.object(forKey: "lmore1") == nil) || (UserDefaults.standard.object(forKey: "lmore1") as! Int == 0) {} else {
+                                                self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                                
+                                                do {
+                                                    try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                                    try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                                    try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
+                                                } catch {
+                                                    print("Couldn't save")
+                                                }
+                                            }
                                         }
                                         UIView.setAnimationsEnabled(true)
                                     }
@@ -3991,6 +4137,13 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         DispatchQueue.main.async {
                             StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             self.tableView.reloadData()
+                            do {
+                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
+                            } catch {
+                                print("Couldn't save")
+                            }
                         }
                         
                     }
@@ -4012,6 +4165,13 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         DispatchQueue.main.async {
                             StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             self.tableViewL.reloadData()
+                            do {
+                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
+                            } catch {
+                                print("Couldn't save")
+                            }
                             
                         }
                     }
@@ -4033,6 +4193,13 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         DispatchQueue.main.async {
                             StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             self.tableViewF.reloadData()
+                            do {
+                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
+                            } catch {
+                                print("Couldn't save")
+                            }
                         }
                     }
                 }

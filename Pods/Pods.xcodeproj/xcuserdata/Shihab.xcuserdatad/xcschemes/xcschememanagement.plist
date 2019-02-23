@@ -91,33 +91,40 @@
 			<key>orderHint</key>
 			<integer>9</integer>
 		</dict>
-		<key>ReactiveSSE.xcscheme</key>
+		<key>QuickLayout.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>11</integer>
 		</dict>
-		<key>ReactiveSwift.xcscheme</key>
+		<key>ReactiveSSE.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>12</integer>
 		</dict>
-		<key>Regift.xcscheme</key>
+		<key>ReactiveSwift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>13</integer>
 		</dict>
-		<key>Result.xcscheme</key>
+		<key>Regift.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>14</integer>
+		</dict>
+		<key>Result.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>16</integer>
 		</dict>
 		<key>SAConfettiView-SAConfettiView.xcscheme</key>
 		<dict>

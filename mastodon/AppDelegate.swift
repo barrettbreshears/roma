@@ -7,23 +7,22 @@
 //
 
 import UIKit
-import OneSignal
 import Disk
 import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    
+
     var window: UIWindow?
     let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
     var blurEffectViewMain = UIView()
-    
+
     var storeStruct = StoreStruct.shared
     var blurEffect0 = UIBlurEffect()
     var blurEffectView0 = UIVisualEffectView()
-    
+
     var oneTime = false
-    
+
     //    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
     //        if 1 == 1 {
     //            NotificationCenter.default.post(name: Notification.Name(rawValue: "createNoti"), object: self)
@@ -32,7 +31,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     //            completionHandler(.failed)
     //        }
     //    }
-    
+
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         if let tabBarController = window?.rootViewController as? UITabBarController {
             if let tabBarViewControllers = tabBarController.viewControllers {
@@ -45,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return .portrait
     }
-    
+
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         if userActivity.activityType == "com.vm.roma.confetti" {
             let viewController = window?.rootViewController as! ViewController
@@ -68,13 +67,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         return true
     }
-    
+
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+
+        if application.applicationState == .inactive {
+            if let userDefaults = UserDefaults(suiteName: "group.com.shi.Mast.wormhole") {
+                if userDefaults.value(forKey: "notidpush") != nil {
+                    let id = userDefaults.value(forKey: "notidpush") as? Int64 ?? 0
+                    StoreStruct.curIDNoti = "\(id)"
+                    if UIDevice.current.userInterfaceIdiom == .pad {
+                        let viewController0 = window?.rootViewController as! UISplitViewController
+                        let viewController = viewController0.viewControllers[0] as! PadViewController
+                        viewController.gotoIDNoti()
+                    } else {
+                        let viewController = window?.rootViewController as! ViewController
+                        viewController.gotoIDNoti()
+                    }
+
+                    userDefaults.set(nil, forKey: "notidpush")
+                }
+            }
+        }
+
+        UIApplication.shared.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
+
         let request = Notifications.all(range: .default)
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 StoreStruct.notifications = stat
-                
+
                 for x in StoreStruct.notifications {
                     if x.type == .mention {
                         StoreStruct.notificationsMentions.append(x)
@@ -85,11 +106,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                         }
                     }
                 }
-                
+
             }
         }
     }
-    
+
     func application(
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
@@ -97,49 +118,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
         print("Device Token: \(token)")
-    
+
         var state:PushNotificationState!
-        
+
         if let storedState = PushNotificationReceiver.getSate() {
             state = storedState
         } else {
             let reciver = try! PushNotificationReceiver()
-            let subScription = PushNotificationSubscription(endpoint: URL(string:"https://pushrelay1.your.org/relay-to/production/\(token)")!, alerts: PushNotificationAlerts.all)
+            let subScription = PushNotificationSubscription(endpoint: URL(string:"https://pushrelay-roma1.your.org/relay-to/production/\(token)")!, alerts: PushNotificationAlerts.all)
             let deviceToken = PushNotificationDeviceToken(deviceToken: deviceToken)
             state = PushNotificationState(receiver: reciver, subscription: subScription, deviceToken: deviceToken)
             PushNotificationReceiver.setState(state: state)
-            
+
         }
-        
-        
-        guard  StoreStruct.shared.currentInstance.returnedText != "" else {
+
+
+        guard StoreStruct.shared.currentInstance.returnedText != "" else {
             return
         }
-        
-        
-        // try delete first
-        
-        
-        let requestParams = PushNotificationSubscriptionRequest(endpoint: state.subscription.endpoint.absoluteString, receiver: state.receiver, alerts: state.subscription.alerts)
-        
+        let receiver = try! PushNotificationReceiver()
+        let subscription = PushNotificationSubscription(endpoint: URL(string:"https://pushrelay-roma1.your.org/relay-to/production/\(token)")!, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
+        let deviceToken = PushNotificationDeviceToken(deviceToken: deviceToken)
+        state = PushNotificationState(receiver: receiver, subscription: subscription, deviceToken: deviceToken)
+        PushNotificationReceiver.setState(state: state)
+
+        // change following when pushing to App Store or for local dev
+        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-roma1.your.org/relay-to/production/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
+//        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-mast1-dev.your.org/relay-to/development/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
+
         //create the url with URL
         let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
-        
+
         //create the session object
         let session = URLSession.shared
-        
+
         //now create the URLRequest object using the url object
         var request = URLRequest(url: url)
-    
+
         request.httpMethod = "DELETE"// "POST" //set http method as POST
-        
-        
-        
+
+
+
         let jsonEncoder = JSONEncoder()
         do {
             let jsonData = try jsonEncoder.encode(requestParams)
             let jsonString = String(data: jsonData, encoding: .utf8)
-            
+
             request.httpBody = jsonData
             print("JSON String : " + jsonString!)
         }
@@ -149,30 +173,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
-        
+
         //create dataTask using the session object to send data to the server
         let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-   
-            let requestParams = PushNotificationSubscriptionRequest(endpoint: state.subscription.endpoint.absoluteString, receiver: state.receiver, alerts: state.subscription.alerts)
-            
+
+            let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-roma1.your.org/relay-to/production/\(token)", receiver: state.receiver, alerts: state.subscription.alerts)
+
             //create the url with URL
             let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
-            
+
             //create the session object
             let session = URLSession.shared
-            
+
             //now create the URLRequest object using the url object
             var request = URLRequest(url: url)
-            
+
             request.httpMethod = "POST"// "POST" //set http method as POST
-            
-            
-            
+
+
+
             let jsonEncoder = JSONEncoder()
             do {
                 let jsonData = try jsonEncoder.encode(requestParams)
                 let jsonString = String(data: jsonData, encoding: .utf8)
-                
+
                 request.httpBody = jsonData
                 print("JSON String : " + jsonString!)
             }
@@ -182,18 +206,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("application/json", forHTTPHeaderField: "Accept")
-            
+
             //create dataTask using the session object to send data to the server
             let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-                
+
                 guard error == nil else {
                     return
                 }
-                
+
                 guard let data = data else {
                     return
                 }
-                
+
                 do {
                     //create json object from data
                     if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
@@ -205,10 +229,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 }
             })
             task.resume()
-            
+
         })
         task.resume()
-        
+
     }
 
     func application(
@@ -216,7 +240,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("Failed to register: \(error)")
     }
-    
+
     func application(_ application: UIApplication, performActionFor shortcutItem: UIApplicationShortcutItem, completionHandler: @escaping (Bool) -> Void) {
         if shortcutItem.type == "com.vm.roma.feed" {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "switch11"), object: self)
@@ -232,9 +256,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             completionHandler(false)
         }
     }
-    
+
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
-        
+
         if UIDevice.current.userInterfaceIdiom == .pad {
             if url.host == "light" {
                 let viewController0 = window?.rootViewController as! UISplitViewController
@@ -277,6 +301,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let viewController0 = window?.rootViewController as! UISplitViewController
                 let viewController = viewController0.viewControllers[0] as! PadViewController
                 viewController.gotoID()
+                return true
+            } else if url.absoluteString.contains("instance=") {
+                let x = url.absoluteString
+                let y = x.split(separator: "=")
+                self.tempGotoInstance(y[1].description)
                 return true
             } else if url.host == "home" {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "switch11"), object: self)
@@ -323,9 +352,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             } else {
                 return true
             }
-            
-            
-            
+
+
+
         } else {
             if url.host == "light" {
                 let viewController = window?.rootViewController as! ViewController
@@ -361,6 +390,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 StoreStruct.curID = y[1].description
                 let viewController = window?.rootViewController as! ViewController
                 viewController.gotoID()
+                return true
+            } else if url.absoluteString.contains("instance=") {
+                let x = url.absoluteString
+                let y = x.split(separator: "=")
+                self.tempGotoInstance(y[1].description)
                 return true
             } else if url.host == "home" {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "switch11"), object: self)
@@ -409,19 +443,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
-    
-    
-    
+
+    func tempGotoInstance(_ text: String) {
+        StoreStruct.client = Client(baseURL: "https://\(text)")
+        let request = Clients.register(
+            clientName: "Mast",
+            redirectURI: "com.shi.mastodon://success",
+            scopes: [.read, .write, .follow, .push],
+            website: "https://twitter.com/jpeguin"
+        )
+        StoreStruct.client.run(request) { (application) in
+
+            if application.value == nil {} else {
+
+                DispatchQueue.main.async {
+                    // go to next view
+                    StoreStruct.shared.currentInstance.instanceText = text
+
+                    if StoreStruct.instanceLocalToAdd.contains(StoreStruct.shared.currentInstance.instanceText.lowercased()) {} else {
+                        StoreStruct.instanceLocalToAdd.append(StoreStruct.shared.currentInstance.instanceText.lowercased())
+                        UserDefaults.standard.set(StoreStruct.instanceLocalToAdd, forKey: "instancesLocal")
+                    }
+
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadLists"), object: nil)
+                    if StoreStruct.currentPage == 0 {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance"), object: self)
+                    } else if StoreStruct.currentPage == 1 {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance2"), object: self)
+                    } else {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance3"), object: self)
+                    }
+                }
+
+            }
+        }
+    }
+
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        
-        
+
+
         FirebaseApp.configure()
         if UIApplication.shared.isSplitOrSlideOver {
             self.window?.rootViewController = ViewController()
             self.window?.makeKeyAndVisible()
         } else {
-            
+
             let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
             switch (deviceIdiom) {
             case .phone:
@@ -431,31 +498,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             case .pad:
                 self.window = UIWindow(frame: UIScreen.main.bounds)
                 self.window!.backgroundColor = Colours.white
-                
+
                 let splitViewController =  UISplitViewController()
                 let rootViewController = PadViewController()
-                
+
                 let splitViewController2 =  UISplitViewController()
                 let rootViewController2 = PadTimelinesViewController()
                 let rootNavigationController2 = UINavigationController(rootViewController: rootViewController2)
-                
-                
+
+
                 splitViewController2.viewControllers = [rootNavigationController2]
                 splitViewController2.preferredPrimaryColumnWidthFraction = 0.5
                 splitViewController2.preferredDisplayMode = .allVisible
-                
+
                 splitViewController.viewControllers = [rootViewController, splitViewController2]
                 splitViewController.minimumPrimaryColumnWidth = 80
                 splitViewController.maximumPrimaryColumnWidth = 80
                 splitViewController.preferredDisplayMode = .allVisible
-                
+
                 splitViewController.view.backgroundColor = Colours.white
                 splitViewController2.view.backgroundColor = Colours.white
                 rootNavigationController2.view.backgroundColor = Colours.white
                 self.window!.rootViewController = splitViewController
                 self.window!.makeKeyAndVisible()
-                
-                
+
+
                 UINavigationBar.appearance().shadowImage = UIImage()
                 UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
                 UINavigationBar.appearance().backgroundColor = Colours.white
@@ -467,34 +534,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 //            self.window?.makeKeyAndVisible()
                 print("nothing")
             }
-            
+
         }
-        
+
         SwiftyGiphyAPI.shared.apiKey = SwiftyGiphyAPI.publicBetaKey
-        
-        
-//        
-//        let onesignalInitSettings = [kOSSettingsKeyAutoPrompt: false]
-//        
-//        OneSignal.initWithLaunchOptions(launchOptions,
-//                                        appId: "8bacaad0-9486-43d7-ab7f-af9075636437",
-//                                        handleNotificationAction: nil,
-//                                        settings: onesignalInitSettings)
-//        
-//        OneSignal.inFocusDisplayType = OSNotificationDisplayType.notification;
-//
-        
+
+
         WatchSessionManager.sharedManager.startSession()
-        
-        
+
+
         let BarButtonItemAppearance = UIBarButtonItem.appearance()
         BarButtonItemAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: Colours.grayLight2], for: .normal)
         BarButtonItemAppearance.tintColor = Colours.grayLight2
-        
-        
+
+
         window?.tintColor = Colours.tabSelected
-        
-        
+
+
         if StoreStruct.currentUser != nil {
             if (UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)homeid") == nil) {} else {
                 StoreStruct.gapLastHomeID = UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)homeid") as! String
@@ -506,7 +562,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 StoreStruct.gapLastFedID = UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)fedid") as! String
             }
         }
-        
+
         do {
             StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)use.json", from: .documents, as: Account.self)
             StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
@@ -514,51 +570,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
             StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
             StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
-            
+
             StoreStruct.gapLastHomeStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)homestat.json", from: .documents, as: Status.self)
             StoreStruct.gapLastLocalStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)localstat.json", from: .documents, as: Status.self)
             StoreStruct.gapLastFedStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fedstat.json", from: .documents, as: Status.self)
         } catch {
             print("Couldn't load")
         }
-        
+
         return true
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
-        
+
         if StoreStruct.currentPage == 587 {
             UserDefaults.standard.set(StoreStruct.savedComposeText, forKey: "composeSaved")
             UserDefaults.standard.set(StoreStruct.savedInReplyText, forKey: "savedInReplyText")
         }
     }
-    
+
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
-        
+
         if StoreStruct.currentUser != nil {
             UserDefaults.standard.set(StoreStruct.gapLastHomeID, forKey: "\(StoreStruct.shared.currentInstance.clientID)homeid")
             UserDefaults.standard.set(StoreStruct.gapLastLocalID, forKey: "\(StoreStruct.shared.currentInstance.clientID)localid")
             UserDefaults.standard.set(StoreStruct.gapLastFedID, forKey: "\(StoreStruct.shared.currentInstance.clientID)fedid")
-            
+
             UserDefaults.standard.set(StoreStruct.currentUser.username, forKey: "userN")
             do {
                 try Disk.save(StoreStruct.currentUser, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)use.json")
-                
+
                 try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
                 try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
                 try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
-                
+
                 try Disk.save(StoreStruct.notifications, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)noti.json")
                 try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)ment.json")
-                
+
                 try Disk.save(StoreStruct.gapLastHomeStat, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)homestat.json")
                 try Disk.save(StoreStruct.gapLastLocalStat, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)localstat.json")
                 try Disk.save(StoreStruct.gapLastFedStat, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fedstat.json")
@@ -566,22 +622,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 print("Couldn't save")
             }
         }
-        
-        
+
+
     }
-    
+
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        
+
     }
-    
+
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
         NotificationCenter.default.post(name: Notification.Name(rawValue: "startStream"), object: self)
-        
-        
+
+        UIApplication.shared.applicationIconBadgeNumber = 0
+
         if (UserDefaults.standard.object(forKey: "composeSaved") == nil) || (UserDefaults.standard.object(forKey: "composeSaved") as? String == "") {
-            
+
         } else {
             if let x = UserDefaults.standard.object(forKey: "composeSaved") as? String {
                 StoreStruct.savedComposeText = x
@@ -593,18 +650,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "savedComposePresent"), object: nil)
             }
         }
-        
+
         SettingsBundleHelper.checkAndExecuteSettings()
         SettingsBundleHelper.setVersionAndBuildNumber()
-        
+
         if self.oneTime == false {
             if (UserDefaults.standard.object(forKey: "biometrics") == nil) || (UserDefaults.standard.object(forKey: "biometrics") as! Int == 0) {} else {
                 self.biometricAuthenticationClicked(self)
                 self.oneTime = true
             }
         }
-        
-        
+
+
         if UIApplication.shared.isSplitOrSlideOver {
             self.window?.rootViewController = ViewController()
             self.window?.makeKeyAndVisible()
@@ -618,31 +675,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             case .pad:
                 self.window = UIWindow(frame: UIScreen.main.bounds)
                 self.window!.backgroundColor = Colours.white
-                
+
                 let splitViewController =  UISplitViewController()
                 let rootViewController = PadViewController()
-                
+
                 let splitViewController2 =  UISplitViewController()
                 let rootViewController2 = PadTimelinesViewController()
                 let rootNavigationController2 = UINavigationController(rootViewController: rootViewController2)
-                
-                
+
+
                 splitViewController2.viewControllers = [rootNavigationController2]
                 splitViewController2.preferredPrimaryColumnWidthFraction = 0.5
                 splitViewController2.preferredDisplayMode = .allVisible
-                
+
                 splitViewController.viewControllers = [rootViewController, splitViewController2]
                 splitViewController.minimumPrimaryColumnWidth = 80
                 splitViewController.maximumPrimaryColumnWidth = 80
                 splitViewController.preferredDisplayMode = .allVisible
-                
+
                 splitViewController.view.backgroundColor = Colours.white
                 splitViewController2.view.backgroundColor = Colours.white
                 rootNavigationController2.view.backgroundColor = Colours.white
                 self.window!.rootViewController = splitViewController
                 self.window!.makeKeyAndVisible()
-                
-                
+
+
                 UINavigationBar.appearance().shadowImage = UIImage()
                 UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
                 UINavigationBar.appearance().backgroundColor = Colours.white
@@ -656,54 +713,54 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
-    
+
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-    
-    
-    
+
+
+
     func biometricAuthenticationClicked(_ sender: Any) {
-        
+
         let win = window
         blurEffectViewMain.frame = UIScreen.main.bounds
         blurEffectViewMain.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         win!.addSubview(blurEffectViewMain)
-        
+
         blurEffect0 = UIBlurEffect(style: UIBlurEffect.Style.dark)
         blurEffectView0 = UIVisualEffectView(effect: blurEffect0)
         blurEffectView0.frame = UIScreen.main.bounds
         blurEffectView0.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         win!.addSubview(blurEffectView0)
-        
+
         BioMetricAuthenticator.authenticateWithBioMetrics(reason: "", success: {
-            
+
             self.blurEffectViewMain.removeFromSuperview()
             self.blurEffectView0.removeFromSuperview()
-            
+
         }, failure: { [weak self] (error) in
             self?.showPasscodeAuthentication(message: "Error")
         })
     }
     func showPasscodeAuthentication(message: String) {
         BioMetricAuthenticator.authenticateWithPasscode(reason: message, success: {
-            
+
             self.blurEffectViewMain.removeFromSuperview()
             self.blurEffectView0.removeFromSuperview()
-            
+
         }) { (error) in
             print(error.message())
             self.biometricAuthenticationClicked(self)
         }
     }
-    
+
     func reloadTint() {
         window?.tintColor = Colours.tabSelected
     }
-    
+
     func reloadApplication() {
-        
-        
+
+
         do {
             StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)use.json", from: .documents, as: Account.self)
             StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
@@ -711,19 +768,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
             StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
             StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
-            
+
             StoreStruct.gapLastHomeStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)homestat.json", from: .documents, as: Status.self)
             StoreStruct.gapLastLocalStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)localstat.json", from: .documents, as: Status.self)
             StoreStruct.gapLastFedStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fedstat.json", from: .documents, as: Status.self)
         } catch {
             print("Couldn't load")
         }
-        
+
         if UIApplication.shared.isSplitOrSlideOver {
             self.window?.rootViewController = ViewController()
             self.window?.makeKeyAndVisible()
         } else {
-            
+
             let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
             switch (deviceIdiom) {
             case .phone:
@@ -732,30 +789,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             case .pad:
                 self.window = UIWindow(frame: UIScreen.main.bounds)
                 self.window!.backgroundColor = Colours.white
-                
+
                 let splitViewController =  UISplitViewController()
                 let rootViewController = PadViewController()
-                
+
                 let splitViewController2 =  UISplitViewController()
                 let rootViewController2 = PadTimelinesViewController()
                 let rootNavigationController2 = UINavigationController(rootViewController: rootViewController2)
-                
+
                 splitViewController2.viewControllers = [rootNavigationController2]
                 splitViewController2.preferredPrimaryColumnWidthFraction = 0.5
                 splitViewController2.preferredDisplayMode = .allVisible
-                
+
                 splitViewController.viewControllers = [rootViewController, splitViewController2]
                 splitViewController.minimumPrimaryColumnWidth = 80
                 splitViewController.maximumPrimaryColumnWidth = 80
                 splitViewController.preferredDisplayMode = .allVisible
-                
+
                 splitViewController.view.backgroundColor = Colours.white
                 splitViewController2.view.backgroundColor = Colours.white
                 rootNavigationController2.view.backgroundColor = Colours.white
                 self.window!.rootViewController = splitViewController
                 self.window!.makeKeyAndVisible()
-                
-                
+
+
                 UINavigationBar.appearance().shadowImage = UIImage()
                 UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
                 UINavigationBar.appearance().backgroundColor = Colours.white
@@ -775,7 +832,7 @@ extension UIApplication {
         guard let w = self.delegate?.window, let window = w else { return false }
         return !window.frame.equalTo(window.screen.bounds)
     }
-    
+
     public func isRunningInFullScreen() -> Bool {
         if let w = self.keyWindow {
             let maxScreenSize = max(UIScreen.main.bounds.size.width, UIScreen.main.bounds.size.height)
@@ -787,4 +844,3 @@ extension UIApplication {
         return true
     }
 }
-

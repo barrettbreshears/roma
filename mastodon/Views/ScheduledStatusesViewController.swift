@@ -252,8 +252,10 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
                             photo.shouldCachePhotoURLImage = true
                             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                                 photo.caption = sto[indexPath.row].params.text
-                            } else {
+                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                                 photo.caption = y.description ?? ""
+                            } else {
+                                photo.caption = ""
                             }
                             images.append(photo)
                         } else {
@@ -261,8 +263,10 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
                             photo.shouldCachePhotoURLImage = true
                             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                                 photo.caption = sto[indexPath.row].params.text
-                            } else {
+                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                                 photo.caption = y.description ?? ""
+                            } else {
+                                photo.caption = ""
                             }
                             images.append(photo)
                         }

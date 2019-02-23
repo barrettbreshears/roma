@@ -234,8 +234,8 @@ class DetailCell: UITableViewCell {
             
         }
         
-        let z = status.reblog?.application?.name ?? status.application?.name ?? ""
-        let da = status.reblog?.createdAt.toString(dateStyle: .medium, timeStyle: .medium) ?? status.createdAt.toString(dateStyle: .medium, timeStyle: .medium)
+        let z = status.application?.name ?? ""
+        let da = status.createdAt.toString(dateStyle: .medium, timeStyle: .medium)
         if z == "" {
             fromClient.text = da
         } else {

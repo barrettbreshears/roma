@@ -197,7 +197,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         let addB = UIButton()
         addB.frame = CGRect(x: self.view.bounds.width - 50, y: 4, width: 30, height: 30)
-        addB.setImage(UIImage(named: "addac1"), for: .normal)
+        addB.setImage(UIImage(named: "addac1")?.maskWithColor(color: Colours.grayDark), for: .normal)
         addB.backgroundColor = UIColor.clear
         addB.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
         vw.addSubview(addB)

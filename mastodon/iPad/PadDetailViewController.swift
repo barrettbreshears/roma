@@ -1225,8 +1225,10 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
                 photo.shouldCachePhotoURLImage = true
                 if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                     photo.caption = sto[0].reblog?.content.stripHTML() ?? sto[0].content.stripHTML()
-                } else {
+                } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                     photo.caption = y.description ?? ""
+                } else {
+                    photo.caption = ""
                 }
                 images.append(photo)
             }
@@ -1994,8 +1996,10 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                         photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
-                    } else {
+                    } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                         photo.caption = y.description ?? ""
+                    } else {
+                        photo.caption = ""
                     }
                     images.append(photo)
                 }
@@ -2018,8 +2022,10 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                         photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
-                    } else {
+                    } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                         photo.caption = y.description ?? ""
+                    } else {
+                        photo.caption = ""
                     }
                     images.append(photo)
                 }
@@ -2066,8 +2072,10 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                         photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
-                    } else {
+                    } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                         photo.caption = y.description ?? ""
+                    } else {
+                        photo.caption = ""
                     }
                     images.append(photo)
                 }
@@ -2090,8 +2098,10 @@ class PadDetailViewController: UIViewController, UITableViewDelegate, UITableVie
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                         photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
-                    } else {
+                    } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                         photo.caption = y.description ?? ""
+                    } else {
+                        photo.caption = ""
                     }
                     images.append(photo)
                 }

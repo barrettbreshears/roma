@@ -14,15 +14,10 @@ import StatusAlert
 import SAConfettiView
 import ReactiveSSE
 import ReactiveSwift
-import OneSignal
 import AVKit
 import AVFoundation
 
-class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, OSSubscriptionObserver {
-    
-    func onOSSubscriptionChanged(_ stateChanges: OSSubscriptionStateChanges!) {
-        print("state changed")
-    }
+class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate {
     
     var newUpdatesB1 = UIButton()
     var newUpdatesB2 = UIButton()
@@ -48,6 +43,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     var currentIndex = 1
     var doOnce = false
     var doOnce2 = false
+    private var crownControl: CrownControl!
+    private var crownControl2: CrownControl!
+    private var crownControl3: CrownControl!
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
@@ -522,7 +520,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         NotificationCenter.default.post(name: Notification.Name(rawValue: "touchList"), object: nil)
     }
     
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         if self.currentIndex == 0 {
             UserDefaults.standard.set(self.tableView2.contentOffset.y, forKey: "savedRowNotif")
         } else if self.currentIndex == 5 {
@@ -537,6 +535,19 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         super.didReceiveMemoryWarning()
     }
     
+    
+    @objc func goToIDNoti() {
+        let request = Notifications.notification(id: StoreStruct.curIDNoti)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                DispatchQueue.main.async {
+                    let controller = DetailViewController()
+                    controller.mainStatus.append(stat.status!)
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        }
+    }
     
     @objc func goToID() {
         sleep(2)
@@ -589,6 +600,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshgraph), name: NSNotification.Name(rawValue: "refrefref"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid2"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goToIDNoti), name: NSNotification.Name(rawValue: "gotoidnoti2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goMembers), name: NSNotification.Name(rawValue: "goMembers2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goInstance), name: NSNotification.Name(rawValue: "goInstance2"), object: nil)
@@ -909,6 +921,56 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             registerForPreviewing(with: self, sourceView: self.tableView2)
             registerForPreviewing(with: self, sourceView: self.tableView3)
         }
+        
+        if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+            self.crownScroll()
+            self.crownScroll2()
+            self.crownScroll3()
+        }
+    }
+    
+    func crownScroll() {
+        var attributes = CrownAttributes(scrollView: self.tableView, scrollAxis: .vertical)
+        attributes.backgroundStyle.content = .gradient(gradient: .init(colors: [UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0), UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.backgroundStyle.border = .value(color: UIColor(red: 34/255.0, green: 34/255.0, blue: 35/255.0, alpha: 1.0), width: 1)
+        attributes.foregroundStyle.content = .gradient(gradient: .init(colors: [Colours.tabSelected, Colours.tabSelected], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.foregroundStyle.border = .value(color: UIColor(red: 200/255.0, green: 200/255.0, blue: 200/255.0, alpha: 1.0), width: 0)
+        attributes.feedback.leading.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        attributes.feedback.trailing.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        let verticalConstraint = CrownAttributes.AxisConstraint(crownEdge: .bottom, anchorView: self.tableView, anchorViewEdge: .bottom, offset: -50)
+        let horizontalConstraint = CrownAttributes.AxisConstraint(crownEdge: .trailing, anchorView: self.tableView, anchorViewEdge: .trailing, offset: -50)
+        crownControl = CrownControl(attributes: attributes, delegate: self)
+        crownControl.layout(in: view, horizontalConstaint: horizontalConstraint, verticalConstraint: verticalConstraint)
+    }
+    
+    func crownScroll2() {
+        var attributes = CrownAttributes(scrollView: self.tableView3, scrollAxis: .vertical)
+        attributes.backgroundStyle.content = .gradient(gradient: .init(colors: [UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0), UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.backgroundStyle.border = .value(color: UIColor(red: 34/255.0, green: 34/255.0, blue: 35/255.0, alpha: 1.0), width: 1)
+        attributes.foregroundStyle.content = .gradient(gradient: .init(colors: [Colours.tabSelected, Colours.tabSelected], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.foregroundStyle.border = .value(color: UIColor(red: 200/255.0, green: 200/255.0, blue: 200/255.0, alpha: 1.0), width: 0)
+        attributes.feedback.leading.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        attributes.feedback.trailing.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        let verticalConstraint = CrownAttributes.AxisConstraint(crownEdge: .bottom, anchorView: self.tableView3, anchorViewEdge: .bottom, offset: -50)
+        let horizontalConstraint = CrownAttributes.AxisConstraint(crownEdge: .trailing, anchorView: self.tableView3, anchorViewEdge: .trailing, offset: -50)
+        crownControl2 = CrownControl(attributes: attributes, delegate: self)
+        crownControl2.layout(in: view, horizontalConstaint: horizontalConstraint, verticalConstraint: verticalConstraint)
+        crownControl2.hideCrown()
+    }
+    
+    func crownScroll3() {
+        var attributes = CrownAttributes(scrollView: self.tableView2, scrollAxis: .vertical)
+        attributes.backgroundStyle.content = .gradient(gradient: .init(colors: [UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0), UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.backgroundStyle.border = .value(color: UIColor(red: 34/255.0, green: 34/255.0, blue: 35/255.0, alpha: 1.0), width: 1)
+        attributes.foregroundStyle.content = .gradient(gradient: .init(colors: [Colours.tabSelected, Colours.tabSelected], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
+        attributes.foregroundStyle.border = .value(color: UIColor(red: 200/255.0, green: 200/255.0, blue: 200/255.0, alpha: 1.0), width: 0)
+        attributes.feedback.leading.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        attributes.feedback.trailing.backgroundFlash = .active(color: .clear, fadeDuration: 0)
+        let verticalConstraint = CrownAttributes.AxisConstraint(crownEdge: .bottom, anchorView: self.tableView2, anchorViewEdge: .bottom, offset: -50)
+        let horizontalConstraint = CrownAttributes.AxisConstraint(crownEdge: .trailing, anchorView: self.tableView2, anchorViewEdge: .trailing, offset: -50)
+        crownControl3 = CrownControl(attributes: attributes, delegate: self)
+        crownControl3.layout(in: view, horizontalConstaint: horizontalConstraint, verticalConstraint: verticalConstraint)
+        crownControl3.hideCrown()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -1012,11 +1074,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         self.streamDataNoti()
         }
         
-        OneSignal.add(self as OSSubscriptionObserver)
-        OneSignal.promptForPushNotifications(userResponse: { accepted in
-            print("User accepted notifications: \(accepted)")
-        })
-        
         if (UserDefaults.standard.object(forKey: "mentdef2") == nil) || (UserDefaults.standard.object(forKey: "mentdef2") as! Int == 0) {
             
         } else {
@@ -1064,6 +1121,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
         if self.currentIndex == 1 {
+            
+            
+            if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+                crownControl?.spinToMatchScrollViewOffset()
+            }
             
             
             
@@ -1114,6 +1176,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             
             
             
+            if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+                crownControl2?.spinToMatchScrollViewOffset()
+            }
+            
+            
             let indexPath1 = IndexPath(row: self.countcount5 - 1, section: 1)
             if self.tableView3.indexPathsForVisibleRows?.contains(indexPath1) ?? false {
                 if self.countcount5 == 0 {
@@ -1158,6 +1225,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             }
             
         } else {
+            
+            
+            if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+                crownControl3?.spinToMatchScrollViewOffset()
+            }
             
             
             
@@ -1420,6 +1492,12 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         }
         if toIndex == 0 {
             
+            if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+                crownControl.showCrown()
+                crownControl2.hideCrown()
+                crownControl3.hideCrown()
+            }
+            
             if self.countcount1 == 0 {
                 self.newUpdatesB1.alpha = 0
                 self.newUpdatesB2.alpha = 0
@@ -1493,6 +1571,13 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         
         if toIndex == 1 {
             
+            if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+                crownControl.hideCrown()
+                crownControl2.showCrown()
+                crownControl3.hideCrown()
+            }
+            
+            
             if self.countcount2 == 0 {
                 self.newUpdatesB1.alpha = 0
                 self.newUpdatesB2.alpha = 0
@@ -1527,6 +1612,13 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         
         
         if toIndex == 2 {
+            
+            if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+                crownControl.hideCrown()
+                crownControl2.hideCrown()
+                crownControl3.showCrown()
+            }
+            
             
             if self.countcount2 == 0 {
                 self.newUpdatesB1.alpha = 0
@@ -1638,6 +1730,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         
         if tableView == self.tableView3 {
             if StoreStruct.notificationsDirect.count == 0 || indexPath.row >= StoreStruct.notificationsDirect.count {
+                
+                self.fetchMoreNotifications()
                 
                 self.ai.stopAnimating()
                 self.ai.removeFromSuperview()
@@ -2675,6 +2769,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         }
         
         
+        StoreStruct.currentImageURL = sto[sender.tag].status!.reblog?.url ?? sto[sender.tag].status!.url
+        
         if sto[sender.tag].status?.mediaAttachments[0].type == .video || sto[sender.tag].status?.mediaAttachments[0].type == .gifv {
             
             let videoURL = URL(string: sto[sender.tag].status!.mediaAttachments[0].url)!
@@ -2707,8 +2803,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                         photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                    } else {
+                    } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                         photo.caption = y.description ?? ""
+                    } else {
+                        photo.caption = ""
                     }
                     images.append(photo)
                 } else {
@@ -2716,9 +2814,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 photo.shouldCachePhotoURLImage = true
                 if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                     photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                } else {
+                } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                     photo.caption = y.description ?? ""
-                }
+                } else {
+                    photo.caption = ""
+                    }
                 images.append(photo)
                 }
                 coun += 1
@@ -2744,8 +2844,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             photo.shouldCachePhotoURLImage = true
                             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                                 photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                            } else {
+                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                                 photo.caption = y.description ?? ""
+                            } else {
+                                photo.caption = ""
                             }
                             images.append(photo)
                         } else {
@@ -2753,8 +2855,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             photo.shouldCachePhotoURLImage = true
                             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                                 photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                            } else {
+                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                                 photo.caption = y.description ?? ""
+                            } else {
+                                photo.caption = ""
                             }
                             images.append(photo)
                         }
@@ -2779,8 +2883,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             photo.shouldCachePhotoURLImage = true
                             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                                 photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                            } else {
+                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                                 photo.caption = y.description ?? ""
+                            } else {
+                                photo.caption = ""
                             }
                             images.append(photo)
                         } else {
@@ -2788,8 +2894,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             photo.shouldCachePhotoURLImage = true
                             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                                 photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                            } else {
+                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                                 photo.caption = y.description ?? ""
+                            } else {
+                                photo.caption = ""
                             }
                             images.append(photo)
                         }
@@ -2840,6 +2948,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             indexPath = IndexPath(row: sender.tag, section: 1)
         }
         
+        StoreStruct.currentImageURL = sto[sender.tag].status!.reblog?.url ?? sto[sender.tag].status!.url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].status?.mediaAttachments[0].type == .video || sto[sender.tag].status?.mediaAttachments[0].type == .gifv {
@@ -2847,7 +2957,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             } else {
                 
 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 for y in sto[indexPath.row].status!.mediaAttachments {
@@ -2856,8 +2966,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2865,8 +2977,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -2913,6 +3027,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             indexPath = IndexPath(row: sender.tag, section: 1)
         }
         
+        StoreStruct.currentImageURL = sto[sender.tag].status!.reblog?.url ?? sto[sender.tag].status!.url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].status?.mediaAttachments[0].type == .video || sto[sender.tag].status?.mediaAttachments[0].type == .gifv {
@@ -2920,7 +3036,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             } else {
                 
 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 for y in sto[indexPath.row].status!.mediaAttachments {
@@ -2929,8 +3045,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -2938,8 +3056,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -2987,6 +3107,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             indexPath = IndexPath(row: sender.tag, section: 1)
         }
         
+        StoreStruct.currentImageURL = sto[sender.tag].status!.reblog?.url ?? sto[sender.tag].status!.url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].status?.mediaAttachments[0].type == .video || sto[sender.tag].status?.mediaAttachments[0].type == .gifv {
@@ -2994,7 +3116,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             } else {
                 
 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 for y in sto[indexPath.row].status!.mediaAttachments {
@@ -3003,8 +3125,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -3012,8 +3136,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -3062,6 +3188,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             indexPath = IndexPath(row: sender.tag, section: 1)
         }
         
+        StoreStruct.currentImageURL = sto[sender.tag].status!.reblog?.url ?? sto[sender.tag].status!.url
+        
         if sto.count < 1 {} else {
             
             if sto[sender.tag].status?.mediaAttachments[0].type == .video || sto[sender.tag].status?.mediaAttachments[0].type == .gifv {
@@ -3069,7 +3197,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             } else {
                 
 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 for y in sto[indexPath.row].status!.mediaAttachments {
@@ -3078,8 +3206,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     } else {
@@ -3087,8 +3217,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                        } else {
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
                         }
                         images.append(photo)
                     }
@@ -4458,7 +4590,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         DispatchQueue.main.async {
 //            self.tableView3.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowDirect") == nil) {} else {
-                if StoreStruct.notificationsDirect.count > 5 {
+                if StoreStruct.notificationsDirect.count > 0 {
                     self.tableView3.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowDirect") as! CGFloat), animated: false)
                 }
             }
@@ -4466,7 +4598,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         DispatchQueue.main.async {
 //            self.tableView2.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowNotif") == nil) {} else {
-                if StoreStruct.notifications.count > 5 {
+                if StoreStruct.notifications.count > 0 {
                     self.tableView2.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowNotif") as! CGFloat), animated: false)
                 }
             }
@@ -4474,7 +4606,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         DispatchQueue.main.async {
 //            self.tableView.reloadData()
             if (UserDefaults.standard.object(forKey: "savedRowMent") == nil) {} else {
-                if StoreStruct.notificationsMentions.count > 5 {
+                if StoreStruct.notificationsMentions.count > 0 {
                     self.tableView.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowMent") as! CGFloat), animated: false)
                 }
             }
@@ -4526,6 +4658,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     }
     
     var lastThing = ""
+    var tempFetchedDirect = false
     func fetchMoreNotifications() {
         let request = Notifications.all(range: .max(id: StoreStruct.notifications.last?.id ?? "", limit: 5000))
         StoreStruct.client.run(request) { (statuses) in
@@ -4542,6 +4675,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     if x.type == .mention {
                         StoreStruct.notificationsMentions.append(x)
                         if x.status?.visibility == .direct {
+                            self.tempFetchedDirect = true
                             StoreStruct.notificationsDirect.append(x)
                         }
                     }
@@ -4564,6 +4698,12 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     } else {
                         self.tableView2.reloadData()
                     }
+                    
+                    if StoreStruct.notificationsDirect.isEmpty || self.tempFetchedDirect == false {
+                        self.fetchMoreNotifications()
+                    }
+                    
+                    self.tempFetchedDirect = false
                     
                 }
                     

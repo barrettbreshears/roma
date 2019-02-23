@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "989ABAFEAFD58A011DA0C2E11B949496"
+               BlueprintIdentifier = "F64EE4C9BF025EB60D9C97DA846868C7"
                BlueprintName = "SJFluidSegmentedControl"
                ReferencedContainer = "container:Pods.xcodeproj"
                BuildableName = "SJFluidSegmentedControl.framework">

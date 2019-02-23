@@ -9,7 +9,7 @@ target 'mastodon' do
 
 pod 'SJFluidSegmentedControl'
 pod 'PINRemoteImage'
-pod 'Regift’
+pod 'Regift'
 pod 'ReactiveSSE'
 pod 'ReactiveSwift'
 pod 'TinyConstraints'
@@ -24,11 +24,6 @@ pod 'SwiftyGiphy'
 pod 'Firebase/Core'
 pod 'Fabric'
 pod 'Crashlytics'
+pod 'QuickLayout'
 
-
-end
-
-target 'OneSignalNotificationServiceExtension' do
-  use_frameworks!
-  pod 'OneSignal'
 end

@@ -106,6 +106,7 @@ struct StoreStruct {
     static var typeOfSearch = 0
     
     static var curID = ""
+    static var curIDNoti = ""
     static var doOnce = true
     static var isSplit = false
     
@@ -126,4 +127,7 @@ struct StoreStruct {
     
     static var hexCol = UIColor.white
     static var historyBool = false
+    
+    static var currentInstanceDetails: [Instance] = []
+    static var currentImageURL = URL(string: "www.google.com")
 }

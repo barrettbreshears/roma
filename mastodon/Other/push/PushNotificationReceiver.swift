@@ -73,9 +73,9 @@ extension PushNotificationReceiver {
 		let secondSaltInfo = "Content-Encoding: auth\0".data(using: .utf8)!
 		let secondSalt = deriveKey(firstSalt: authentication, secondSalt: sharedSecret, info: secondSaltInfo, length: 32)
 
-        
-        
-        
+
+
+
 		let keyInfo = info(type: "aesgcm", clientPublicKey: publicKeyData, serverPublicKey: serverPublicKeyData)
 		let key = deriveKey(firstSalt: salt, secondSalt: secondSalt, info: keyInfo, length: 16)
 
@@ -84,7 +84,7 @@ extension PushNotificationReceiver {
 
 		let gcm = try SwiftGCM(key: key, nonce: nonce, tagSize: 16)
 		let clearText = try gcm.decrypt(auth: nil, ciphertext: payload)
-        
+
         print(sharedSecret)
         print(secondSalt)
         print(key)
@@ -149,10 +149,10 @@ extension PushNotificationReceiver {
 
 		return info
 	}
-    
-    
+
+
     static func setState(state:PushNotificationState) {
-        
+
         if let userDefaults = UserDefaults(suiteName: "group.com.vm.roma.wormhole" ) {
             guard let statedata = try? JSONEncoder().encode(state) else{
                 return
@@ -160,28 +160,28 @@ extension PushNotificationReceiver {
             userDefaults.set(statedata, forKey: "PushNotificationState")
             userDefaults.synchronize()
         }
-        
+
     }
-    
+
     static func getSate() -> PushNotificationState? {
          if let userDefaults = UserDefaults(suiteName: "group.com.vm.roma.wormhole" ) {
-            
-            
-            
+
+
+
             guard let state = userDefaults.data(forKey: "PushNotificationState"),  let theState = try? JSONDecoder().decode(PushNotificationState.self, from: state) else {
                return nil
             }
             return theState
         }
-        
+
         return nil
-        
+
     }
-    
+
     static func getReciver() -> PushNotificationReceiver? {
-        
-        
-        
+
+
+
         guard let reciver = UserDefaults.standard.data(forKey: "PushNotificationReceiver"),  let theReciver = try? JSONDecoder().decode(PushNotificationReceiver.self, from: reciver) else {
             if let reciever = try? PushNotificationReceiver() {
                 PushNotificationReceiver.setReciver(reciver: reciever)
@@ -189,22 +189,22 @@ extension PushNotificationReceiver {
             }else {
                 return nil
             }
-            
+
         }
-        
+
         return theReciver
-        
-        
+
+
     }
-    
+
     static func setReciver(reciver:PushNotificationReceiver) {
-        
+
         guard let reciverData = try? JSONEncoder().encode(reciver) else{
             return
         }
         UserDefaults.standard.set(reciverData, forKey: "PushNotificationReceiver")
     }
-    
+
 }
 
 enum PushNotificationReceiverErrorType: Error {

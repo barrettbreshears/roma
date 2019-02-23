@@ -81,19 +81,19 @@
 			<key>orderHint</key>
 			<integer>11</integer>
 		</dict>
-		<key>Pods-OneSignalNotificationServiceExtension.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>13</integer>
-		</dict>
 		<key>Pods-mastodon.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>12</integer>
+		</dict>
+		<key>QuickLayout.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+			<key>orderHint</key>
+			<integer>13</integer>
 		</dict>
 		<key>ReactiveSSE.xcscheme</key>
 		<dict>

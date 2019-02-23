@@ -1462,7 +1462,8 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
         tootLabel.setTitle("Post", for: .normal)
         tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
+//        tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
+        tootLabel.setTitleColor(Colours.tabSelected, for: .normal)
         tootLabel.contentHorizontalAlignment = .right
         tootLabel.addTarget(self, action: #selector(didTouchUpInsideTootButton), for: .touchUpInside)
         self.view.addSubview(tootLabel)
@@ -2406,7 +2407,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     
     @objc func didTouchUpInsideTootButton(_ sender: AnyObject) {
         
-        if self.textView.text == "" { return }
+        if self.textView.text == "" && self.selectedImage1.image == nil { return }
         
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
         let impact = UIImpactFeedbackGenerator()
@@ -2487,6 +2488,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
                                     }
+                                    StoreStruct.savedComposeText = ""
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Toot Toot!".localized
@@ -2522,6 +2524,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     let notification = UINotificationFeedbackGenerator()
                                     notification.notificationOccurred(.success)
                                 }
+                                StoreStruct.savedComposeText = ""
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Status Posted!".localized
@@ -2625,6 +2628,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                                 let notification = UINotificationFeedbackGenerator()
                                                                 notification.notificationOccurred(.success)
                                                             }
+                                                            StoreStruct.savedComposeText = ""
                                                             let statusAlert = StatusAlert()
                                                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                                             statusAlert.title = "Toot Toot!".localized
@@ -2660,6 +2664,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                             let notification = UINotificationFeedbackGenerator()
                                                             notification.notificationOccurred(.success)
                                                         }
+                                                        StoreStruct.savedComposeText = ""
                                                         let statusAlert = StatusAlert()
                                                         statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                                         statusAlert.title = "Status Posted!".localized
@@ -2751,6 +2756,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                         let notification = UINotificationFeedbackGenerator()
                                                         notification.notificationOccurred(.success)
                                                     }
+                                                    StoreStruct.savedComposeText = ""
                                                     let statusAlert = StatusAlert()
                                                     statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                                     statusAlert.title = "Toot Toot!".localized
@@ -2786,6 +2792,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                     let notification = UINotificationFeedbackGenerator()
                                                     notification.notificationOccurred(.success)
                                                 }
+                                                StoreStruct.savedComposeText = ""
                                             let statusAlert = StatusAlert()
                                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                             statusAlert.title = "Status Posted!".localized
@@ -2864,6 +2871,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                 let notification = UINotificationFeedbackGenerator()
                                                 notification.notificationOccurred(.success)
                                             }
+                                            StoreStruct.savedComposeText = ""
                                             let statusAlert = StatusAlert()
                                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                             statusAlert.title = "Toot Toot!".localized
@@ -2899,6 +2907,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             let notification = UINotificationFeedbackGenerator()
                                             notification.notificationOccurred(.success)
                                         }
+                                        StoreStruct.savedComposeText = ""
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Status Posted".localized
@@ -2961,6 +2970,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
                                     }
+                                    StoreStruct.savedComposeText = ""
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Toot Toot!".localized
@@ -2996,6 +3006,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     let notification = UINotificationFeedbackGenerator()
                                     notification.notificationOccurred(.success)
                                 }
+                                StoreStruct.savedComposeText = ""
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Status Posted".localized
@@ -3045,6 +3056,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 let notification = UINotificationFeedbackGenerator()
                                 notification.notificationOccurred(.success)
                             }
+                            StoreStruct.savedComposeText = ""
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Toot Toot!".localized
@@ -3080,6 +3092,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             let notification = UINotificationFeedbackGenerator()
                             notification.notificationOccurred(.success)
                         }
+                        StoreStruct.savedComposeText = ""
                     let statusAlert = StatusAlert()
                     statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                     statusAlert.title = "Status Posted".localized

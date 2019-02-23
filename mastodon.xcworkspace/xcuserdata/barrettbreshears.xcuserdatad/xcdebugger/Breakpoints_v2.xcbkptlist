@@ -241,38 +241,6 @@
             endingLineNumber = "1491"
             landmarkName = "tableView(_:editActionsForRowAt:for:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "mastodon.ViewController.tableView(_: __C.UITableView, editActionsForRowAt: Foundation.IndexPath, for: mastodon.SwipeActionsOrientation) -&gt; Swift.Optional&lt;Swift.Array&lt;mastodon.SwipeAction&gt;&gt;"
-                  moduleName = "mastodon"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/barrettbreshears/Development/roma-ios/mastodon/Views/ViewController.swift"
-                  timestampString = "572468831.855809"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1492"
-                  endingLineNumber = "1492"
-                  offsetFromSymbolStart = "1888">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #3 (mastodon.SwipeAction, Foundation.IndexPath) -&gt; () in mastodon.ViewController.tableView(_: __C.UITableView, editActionsForRowAt: Foundation.IndexPath, for: mastodon.SwipeActionsOrientation) -&gt; Swift.Optional&lt;Swift.Array&lt;mastodon.SwipeAction&gt;&gt;"
-                  moduleName = "mastodon"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/barrettbreshears/Development/roma-ios/mastodon/Views/ViewController.swift"
-                  timestampString = "572468831.857177"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "1493"
-                  endingLineNumber = "1493"
-                  offsetFromSymbolStart = "76">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -294,31 +262,31 @@
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (mastodon.SwipeAction, Foundation.IndexPath) -&gt; () in mastodon.ViewController.tableView(_: __C.UITableView, editActionsForRowAt: Foundation.IndexPath, for: mastodon.SwipeActionsOrientation) -&gt; Swift.Optional&lt;Swift.Array&lt;mastodon.SwipeAction&gt;&gt;"
+                  symbolName = "closure #3 (mastodon.SwipeAction, Foundation.IndexPath) -&gt; () in mastodon.ViewController.tableView(_: __C.UITableView, editActionsForRowAt: Foundation.IndexPath, for: mastodon.SwipeActionsOrientation) -&gt; Swift.Optional&lt;Swift.Array&lt;mastodon.SwipeAction&gt;&gt;"
                   moduleName = "mastodon"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/barrettbreshears/Development/roma-ios/mastodon/Views/ViewController.swift"
-                  timestampString = "572468831.860288"
+                  timestampString = "572644306.2346179"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "1467"
                   endingLineNumber = "1467"
-                  offsetFromSymbolStart = "2096">
+                  offsetFromSymbolStart = "1973">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (__C.UIAlertAction, Swift.Int) -&gt; () in closure #2 (mastodon.SwipeAction, Foundation.IndexPath) -&gt; () in mastodon.ViewController.tableView(_: __C.UITableView, editActionsForRowAt: Foundation.IndexPath, for: mastodon.SwipeActionsOrientation) -&gt; Swift.Optional&lt;Swift.Array&lt;mastodon.SwipeAction&gt;&gt;"
+                  symbolName = "closure #1 (__C.UIAlertAction, Swift.Int) -&gt; () in closure #3 (mastodon.SwipeAction, Foundation.IndexPath) -&gt; () in mastodon.ViewController.tableView(_: __C.UITableView, editActionsForRowAt: Foundation.IndexPath, for: mastodon.SwipeActionsOrientation) -&gt; Swift.Optional&lt;Swift.Array&lt;mastodon.SwipeAction&gt;&gt;"
                   moduleName = "mastodon"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/barrettbreshears/Development/roma-ios/mastodon/Views/ViewController.swift"
-                  timestampString = "572468831.861645"
+                  timestampString = "572644306.237"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "1468"
                   endingLineNumber = "1468"
-                  offsetFromSymbolStart = "40">
+                  offsetFromSymbolStart = "72">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -378,7 +346,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/FirstViewController.swift"
-            timestampString = "571975241.229224"
+            timestampString = "572644497.003019"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1438"
@@ -394,45 +362,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/FirstViewController.swift"
-            timestampString = "571975241.229334"
+            timestampString = "572644497.003094"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "219"
             endingLineNumber = "219"
-            landmarkName = "goMembers()"
+            landmarkName = "goInstance()"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "mastodon.FirstViewController.goMembers() -&gt; ()"
-                  moduleName = "mastodon"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/barrettbreshears/Development/roma-ios/mastodon/Views/FirstViewController.swift"
-                  timestampString = "572468831.910169"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "219"
-                  endingLineNumber = "219"
-                  offsetFromSymbolStart = "132">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (mastodon.Result&lt;Swift.Array&lt;mastodon.Account&gt;&gt;) -&gt; () in mastodon.FirstViewController.goMembers() -&gt; ()"
-                  moduleName = "mastodon"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/barrettbreshears/Development/roma-ios/mastodon/Views/FirstViewController.swift"
-                  timestampString = "572468831.911554"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "220"
-                  endingLineNumber = "220"
-                  offsetFromSymbolStart = "44">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -442,11 +378,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/AppDelegate.swift"
-            timestampString = "572468744.796916"
+            timestampString = "572644497.003143"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "158"
-            endingLineNumber = "158"
+            startingLineNumber = "157"
+            endingLineNumber = "157"
             landmarkName = "application(_:didRegisterForRemoteNotificationsWithDeviceToken:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -554,11 +490,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/AppDelegate.swift"
-            timestampString = "572469630.294538"
+            timestampString = "572644497.005034"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
+            startingLineNumber = "199"
+            endingLineNumber = "199"
             landmarkName = "application(_:didRegisterForRemoteNotificationsWithDeviceToken:)"
             landmarkType = "7">
          </BreakpointContent>

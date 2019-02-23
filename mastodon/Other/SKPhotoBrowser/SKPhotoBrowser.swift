@@ -706,7 +706,38 @@ open class SKPhotoBrowser: UIViewController, UIScrollViewDelegate {
                 }
             }
             
-            self.longShare()
+            Alertift.actionSheet(title: nil, message: nil)
+                .backgroundColor(Colours.white)
+                .titleTextColor(Colours.grayDark)
+                .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                .messageTextAlignment(.left)
+                .titleTextAlignment(.left)
+                .action(.default("View Toot".localized), image: UIImage(named: "share")) { (action, ind) in
+                    self.openURL("com.shi.mastodon://id=\(StoreStruct.newIDtoGoTo)")
+                    self.determineAndClose()
+                }
+                .action(.default("Share Toot".localized), image: UIImage(named: "share")) { (action, ind) in
+                    
+                    if let myWebsite = StoreStruct.currentImageURL {
+                        let objectsToShare = [myWebsite]
+                        let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                        vc.previewNumberOfLines = 5
+                        vc.previewFont = UIFont.systemFont(ofSize: 14)
+                        self.present(vc, animated: true, completion: nil)
+                    }
+                    
+                }
+                .action(.default("Share Image".localized), image: UIImage(named: "share")) { (action, ind) in
+                    self.longShare()
+                }
+                .action(.cancel("Dismiss"))
+                .finally { action, index in
+                    if action.style == .cancel {
+                        return
+                    }
+                }
+                .show(on: self)
+            
         }
     }
     

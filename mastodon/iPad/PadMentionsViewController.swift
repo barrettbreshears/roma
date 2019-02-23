@@ -13,15 +13,10 @@ import StatusAlert
 import SAConfettiView
 import ReactiveSSE
 import ReactiveSwift
-import OneSignal
 import AVKit
 import AVFoundation
 
-class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, OSSubscriptionObserver {
-    
-    func onOSSubscriptionChanged(_ stateChanges: OSSubscriptionStateChanges!) {
-        print("state changed")
-    }
+class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate {
     
     var newUpdatesB1 = UIButton()
     var newUpdatesB2 = UIButton()
@@ -454,6 +449,19 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
         super.didReceiveMemoryWarning()
     }
     
+    @objc func goToIDNoti() {
+        let request = Notifications.notification(id: StoreStruct.curIDNoti)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                DispatchQueue.main.async {
+                    let controller = DetailViewController()
+                    controller.mainStatus.append(stat.status!)
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        }
+    }
+    
     
     @objc func goToID() {
         sleep(2)
@@ -496,6 +504,7 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goMembers), name: NSNotification.Name(rawValue: "goMembers2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists2"), object: nil)
@@ -799,11 +808,6 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
         if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
             self.streamDataNoti()
         }
-        
-        OneSignal.add(self as OSSubscriptionObserver)
-        OneSignal.promptForPushNotifications(userResponse: { accepted in
-            print("User accepted notifications: \(accepted)")
-        })
         
         
     }
@@ -1832,8 +1836,10 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                         photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                    } else {
+                    } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                         photo.caption = y.description ?? ""
+                    } else {
+                        photo.caption = ""
                     }
                     images.append(photo)
                 }
@@ -1855,8 +1861,10 @@ class PadMentionsViewController: UIViewController, UITableViewDelegate, UITableV
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                         photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
-                    } else {
+                    } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                         photo.caption = y.description ?? ""
+                    } else {
+                        photo.caption = ""
                     }
                     images.append(photo)
                 }

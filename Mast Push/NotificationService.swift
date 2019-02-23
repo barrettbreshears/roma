@@ -7,6 +7,7 @@
 //
 
 import UserNotifications
+import UIKit
 
 class NotificationService: UNNotificationServiceExtension {
     
@@ -25,17 +26,16 @@ class NotificationService: UNNotificationServiceExtension {
                 return
             }
             
-            do {
-                let content = try bestAttemptContent.decrypt(state: storedState)
-            } catch let error as Error {
-                print(error)
-            }
-            
             if let content = try? bestAttemptContent.decrypt(state: storedState) {
+                if content.notificationType == .follow {} else {
+                    if let userDefaults = UserDefaults(suiteName: "group.com.shi.Mast.wormhole") {
+                        userDefaults.set(content.notificationId, forKey: "notidpush")
+                    }
+                }
                 
                 // Mark the message as still encrypted.
                 bestAttemptContent.title = content.title
-                bestAttemptContent.body = content.body
+                bestAttemptContent.body = content.body.replacingOccurrences(of: "&#39;", with: "'").replacingOccurrences(of: "&lt;", with: "<").replacingOccurrences(of: "&gt;", with: ">").replacingOccurrences(of: "&amp;", with: "&").replacingOccurrences(of: "&quot;", with: "\"")
                 
             }
             contentHandler(bestAttemptContent)
@@ -45,7 +45,7 @@ class NotificationService: UNNotificationServiceExtension {
     override func serviceExtensionTimeWillExpire() {
         // Called just before the extension will be terminated by the system.
         // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
-        if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
+        if let contentHandler = contentHandler, let bestAttemptContent = bestAttemptContent {
             contentHandler(bestAttemptContent)
         }
     }

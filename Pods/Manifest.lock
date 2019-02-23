@@ -67,6 +67,7 @@ PODS:
   - PINRemoteImage/FLAnimatedImage (2.1.4):
     - FLAnimatedImage (>= 1.0)
     - PINRemoteImage/Core
+  - QuickLayout (2.1.1)
   - ReactiveSSE (0.1.0):
     - FootlessParser (~> 0.4)
     - ReactiveSwift (~> 3.0)
@@ -98,6 +99,7 @@ DEPENDENCIES:
   - NextLevel
   - OneSignal
   - PINRemoteImage
+  - QuickLayout
   - ReactiveSSE
   - ReactiveSwift
   - Regift
@@ -129,6 +131,7 @@ SPEC REPOS:
     - OneSignal
     - PINCache
     - PINRemoteImage
+    - QuickLayout
     - ReactiveSSE
     - ReactiveSwift
     - Regift
@@ -161,6 +164,7 @@ SPEC CHECKSUMS:
   OneSignal: 5143194173b05027f89ce5c4481943ce000c87cd
   PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
   PINRemoteImage: 4ac4011c5caefd6befd99758e09becede05d3226
+  QuickLayout: 9af2b7fd89a6552828f51a5aba28d1bcdb8b340c
   ReactiveSSE: 1a9bb744c8b2b2c14da6bb0dfb5007b133b04394
   ReactiveSwift: d9fe0db33c1aaabecb092e8de83cf52875c0de6f
   Regift: 43c5e057949a9e2b16de0bcf0a221a5dbd033211
@@ -173,6 +177,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
   TinyConstraints: 4721a4b303c799328867078ade6560e152df54d1
 
-PODFILE CHECKSUM: be3dda0e855212191fbf17e17bb2080fbb150c30
+PODFILE CHECKSUM: 148a9a35af3e4baa555cc37061dee26bf63fc4fa
 
 COCOAPODS: 1.5.3

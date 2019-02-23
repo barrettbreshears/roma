@@ -11,19 +11,19 @@ import UIKit
 import SJFluidSegmentedControl
 import SafariServices
 import StatusAlert
-import OneSignal
 import SAConfettiView
 import StoreKit
+import UserNotifications
 
-class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate, UIGestureRecognizerDelegate, SKProductsRequestDelegate, SKPaymentTransactionObserver {
-    
+class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate, UIGestureRecognizerDelegate, SKProductsRequestDelegate, SKPaymentTransactionObserver, UNUserNotificationCenterDelegate {
+
     var tap: UITapGestureRecognizer!
     var safariVC: SFSafariViewController?
     var segmentedControl: SJFluidSegmentedControl!
     var tableView = UITableView()
     var currentIndex = 0
     var vc: ViewController?
-    
+
     var productID = ""
     var productsRequest = SKProductsRequest()
     var iapProducts = [SKProduct]()
@@ -31,43 +31,43 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     var price2 = ""
     var price3 = ""
     var price4 = ""
-    
+
     @objc func load() {
         DispatchQueue.main.async {
             self.loadLoadLoad()
         }
     }
-    
+
     @objc func search() {
         let controller = DetailViewController()
         controller.mainStatus.append(StoreStruct.statusSearch[StoreStruct.searchIndex])
         self.navigationController?.pushViewController(controller, animated: true)
     }
-    
-    
+
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
     func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
         for transaction:AnyObject in transactions {
             if let trans = transaction as? SKPaymentTransaction {
                 switch trans.transactionState {
-                    
+
                 case .purchased:
                     SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
-                    
+
                     let array = ["May a thousand kittens bless your day.", "Your generosity knows no bounds.", "You're as awesome as they come.", "All the kittens love you."]
                     UIAlertView(title: "Thank you!",
                                 message: array.randomElement(),
                                 delegate: nil,
                                 cancelButtonTitle: "Dismiss").show()
-                    
+
                     let confettiView = SAConfettiView(frame: self.view.bounds)
                     confettiView.isUserInteractionEnabled = true
                     self.view.addSubview(confettiView)
@@ -79,35 +79,35 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                             confettiView.removeFromSuperview()
                         }
                     }
-                    
-                    
+
+
                     break
-                    
+
                 case .failed:
                     SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
                     break
                 case .restored:
                     SKPaymentQueue.default().finishTransaction(transaction as! SKPaymentTransaction)
                     break
-                    
+
                 default: break
                 }}}
     }
-    
-    
-    
-    
+
+
+
+
     func canMakePurchases() -> Bool {  return SKPaymentQueue.canMakePayments()  }
     func purchaseMyProduct(product: SKProduct) {
         if self.canMakePurchases() {
             let payment = SKPayment(product: product)
             SKPaymentQueue.default().add(self)
             SKPaymentQueue.default().add(payment)
-            
+
             print("PRODUCT TO PURCHASE: \(product.productIdentifier)")
             productID = product.productIdentifier
-            
-            
+
+
             // IAP Purchases dsabled on the Device
         } else {
             UIAlertView(title: "Oops!",
@@ -115,44 +115,44 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         delegate: nil, cancelButtonTitle: "Dismiss").show()
         }
     }
-    
+
     func productsRequest (_ request:SKProductsRequest, didReceive response:SKProductsResponse) {
         if (response.products.count > 0) {
             iapProducts = response.products
-            
+
             let firstProduct = response.products[0] as SKProduct
             let numberFormatter = NumberFormatter()
             numberFormatter.formatterBehavior = .behavior10_4
             numberFormatter.numberStyle = .currency
             numberFormatter.locale = firstProduct.priceLocale
             self.price1 = numberFormatter.string(from: firstProduct.price) ?? ""
-            
+
             let secondProd = response.products[1] as SKProduct
             numberFormatter.locale = secondProd.priceLocale
             self.price2 = numberFormatter.string(from: secondProd.price) ?? ""
-            
+
             let thirdProd = response.products[2] as SKProduct
             numberFormatter.locale = thirdProd.priceLocale
             self.price3 = numberFormatter.string(from: thirdProd.price) ?? ""
-            
+
             let fourthProd = response.products[3] as SKProduct
             numberFormatter.locale = fourthProd.priceLocale
             self.price4 = numberFormatter.string(from: fourthProd.price) ?? ""
-            
+
             self.tableView.reloadData()
         }
     }
-    
-    
+
+
     func fetchAvailableProducts()  {
-        
+
         let productIdentifiers = NSSet(objects: "com.vm.roma.calf", "com.vm.roma.elephant", "com.vm.roma.mammoth", "com.vm.roma.mastodon")
-        
+
         productsRequest = SKProductsRequest(productIdentifiers: productIdentifiers as! Set<String>)
         productsRequest.delegate = self
         productsRequest.start()
     }
-    
+
     @objc func hexNew() {
         Alertift.actionSheet(title: nil, message: nil)
             .backgroundColor(Colours.white)
@@ -178,19 +178,19 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             .show(on: self)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         NotificationCenter.default.addObserver(self, selector: #selector(self.hexNew), name: NSNotification.Name(rawValue: "hexnew"), object: nil)
         //NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.search), name: NSNotification.Name(rawValue: "search"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.load), name: NSNotification.Name(rawValue: "load"), object: nil)
-        
+
         self.view.backgroundColor = Colours.white
-        
+
         self.fetchAvailableProducts()
-        
+
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
         if UIDevice().userInterfaceIdiom == .phone {
@@ -204,7 +204,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 tabHeight = Int(UITabBarController().tabBar.frame.size.height)
             }
         }
-        
+
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
@@ -230,6 +230,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse099367")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse0993678")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse099309")
+        self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse0993091")
+        self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse0993092")
+        self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse0993093")
         self.tableView.register(AddInstanceCell.self, forCellReuseIdentifier: "addInstanceCell")
         self.tableView.alpha = 1
         self.tableView.delegate = self
@@ -241,19 +244,19 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         self.tableView.estimatedRowHeight = 89
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
-        
+
         self.loadLoadLoad()
-        
+
     }
-    
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        
+
 //        self.navigationController?.navigationBar.tintColor = Colours.tabUnselected
 //        self.navigationController?.navigationBar.barTintColor = Colours.tabUnselected
         self.navigationController?.navigationItem.backBarButtonItem?.tintColor = Colours.tabUnselected
-        
-        
+
+
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
@@ -263,24 +266,24 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         default:
             print("nothing")
         }
-        
+
         tap = UITapGestureRecognizer(target: self, action: #selector(onTap(sender:)))
         tap.numberOfTapsRequired = 1
         tap.numberOfTouchesRequired = 1
         tap.cancelsTouchesInView = false
         tap.delegate = self
         self.view.window?.addGestureRecognizer(tap)
-        
+
         StoreStruct.currentPage = 90
     }
-    
+
     internal func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         return true
     }
-    
+
     internal func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         let location = touch.location(in: self.view)
-        
+
         if self.view.point(inside: location, with: nil) {
             return false
         }
@@ -288,22 +291,22 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             return true
         }
     }
-    
+
     @objc private func onTap(sender: UITapGestureRecognizer) {
-        
+
         self.view.window?.removeGestureRecognizer(sender)
         self.dismiss(animated: true, completion: nil)
     }
-    
-    
+
+
     // Table stuff
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return 5
     }
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
+
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
@@ -317,9 +320,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         default:
             return 40
         }
-        
+
     }
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
@@ -340,26 +343,26 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         vw.addSubview(title)
         vw.backgroundColor = Colours.white
-        
+
         return vw
     }
-    
-    var generalArray = ["Realtime Updates", "Notifications", "Haptic Feedback", "Always Display Sensitive Content", "Default Status Privacy", "Default Keyboard Style", "Long-Hold Anywhere Action", "Image Upload Quality", "Post Load Position", "Default Video Container", "Long Swipe Selection", "Swipe Action Order", "Default Mentions Tab", "Activity Graph", "Activity Graph Animation", "Status Actions Placement", "Display Reposts in Profiles", "Shake Gesture", "Initial Timeline", "User Search Scope", "Keyboard Haptics", "Jump to Top With New Toot"]
-    var generalArrayDesc = ["No need to refresh manually, you'll get the latest posts and notifications pushed to you.", "Realtime push notifications for mentions/follows/reposts/likes.", "Get a responsive little vibration when tapping buttons and other on-screen elements.", "Sensitive content will always be displayed without a content warning overlay.", "Select a default privacy state for you statuses, from public (everyone can see), unlisted (local timelines can see), private (followers can see), and direct (only to the mentioned user).", "Choose from a convenient social keyboard that puts the @ and # keys front and centre, or the default keyboard with a return key.", "Select what happens when you long-hold anywhere in the app.", "Pick the quality of images uploaded when composing statuses. A higher quality image may take longer to upload.", "Choose whether to retain the timeline scroll position when streaming and pulling to refresh, or to scroll to the top.", "Choose whether to show videos and GIFs in a custom Picture-in-Picture container which can be swiped down to keep the view around, or in the stock media player, where swiping down dismisses the content.", "Swipe all the way left or right on a status to select the action on the edge.", "Select the order of swipe action elements.", "Switch to either show mentions or activity by default.", "Display an activity graph showing recent activity in the mentions tab.", "Animate the activity graph when showing it.", "Choose whether to display status actions on the post cell or behind a swipe. This will require restarting the app to take effect.", "Display reposted status in the Status & Replies section of user profiles.", "Select whether to hide sensitive content, rain confetti, or do nothing when shaking your device.", "Pick the initial timeline to be displayed, whether it's home, local, or federated.", "Pick whether searching for users is across all of Mastodon or just local.", "Set haptic feedback for key presses on the keyboard.", "Pick whether posting a new toot jumps the timeline to the top."]
-    var generalArrayIm = ["setreal", "notifs", "sethap", "setsensitivec", "priv", "keybse", "holdse", "comse", "posse", "setvid", "swipeact", "swipeact3", "actdef", "setgraph", "setgraph2", "like", "repost", "setshake", "segse", "searchscope", "keyhap", "jumptop"]
-    
-    var appearanceArray = ["", "Theme", "Text Size", "Profiles Corner Radius", "Images Corner Radius", "Hide Images in Timelines", "Full Usernames", "Confetti", "Gallery Grid Size", "Time Style", "Profile Header Background", "Segments Size", "Segments Transition Style", "Subtle Activity Notifications", "Profile Display Picture Border", "Pinch Background Theme", "Media Captions", "Status Progress Indicator", "Highlight Direct Messages", "Status Bar Hue", "Activity Graph Hue", "Segments Hue", "Instances and Lists Icon", "Profile Display Picture in Toot Composition", "Popup Alerts"]
-    var appearanceArrayDesc = ["", "Select from a white day theme, a dark dusk theme, an even darker night theme, or a truly black OLED-friendly theme.", "Always be able to read posts with adjustable text sizing.", "Circle or square, your choice.", "Rounded or not, your choice.", "Timelines with some plain old text, for a distraction-free browsing experience.", "Display the user's full username, with the instance, in posts.", "Add some fun to posting statuses, following users, reposting statuses, and liking statuses.", "Set the amount of columns in the status composition section's photo picker gallery.", "Pick between absolute or relative time to display in timelines.", "Change the style of the profile header background.", "Choose from larger home and notification screen segments, or tinier ones.", "Pick between a static and linear transition, or a playful liquid one.", "Dims activity notifications, while keeping mentions untouched.", "Select a size for the border around profile view display pictures.", "Select a theme for the background when pinching to post a screenshot.", "Pick whether to display the status text or the image's alt text in media captions.", "Choose whether to show the status progress indicator or not.", "Highlight direct messages in timelines with a subtle background.", "Select the hue for the keyboard bar when composing statuses.", "Select the hue for the activity graph columns.", "Select the hue for segments. This may require restarting the app to take effect.", "Select an icon to use for the top-left instances and list section icon.", "Choose whether to display the current account's display picture in the top-left when composing toots.", "Pick whether to display popup alerts for a variety of actions including tooting, liking, and boosting."]
+
+    var generalArray = ["Realtime Updates", "Push Notifications", "Haptic Feedback", "Always Display Sensitive Content", "Default Post Privacy", "Default Keyboard Style", "Long-Hold Anywhere Action", "Image Upload Quality", "Post Load Position", "Default Video Container", "Long Swipe Selection", "Swipe Action Order", "Default Mentions Tab", "Activity Graph", "Activity Graph Animation", "Post Actions Placement", "Display Boosts in Profiles", "Shake Gesture", "Initial Timeline", "User Search Scope", "Keyboard Haptics", "Jump to Top With New Status", "Thumb Scroller", "Link Previews", "Load More Order", "Automatically Load Gaps", "Default Profile Secondary Button", "Recent Media Swipe Type"]
+    var generalArrayDesc = ["No need to refresh manually, you'll get the latest posts and notifications pushed to you.", "Realtime push notifications for mentions/follows/reposts/likes. Select which type of activities you'd like to receive notifications for.", "Get a responsive little vibration when tapping buttons and other on-screen elements.", "Sensitive content will always be displayed without a content warning overlay.", "Select a default privacy state for your posts, from public (everyone can see), unlisted (local timelines can see), private (followers can see), and direct (only to the mentioned user).", "Choose from a convenient social keyboard that puts the @ and # keys front and center, or the default keyboard with a return key.", "Select what happens when you long-hold anywhere in the app.", "Pick the quality of images uploaded when composing statuses. A higher quality image may take longer to upload.", "Choose whether to retain the timeline scroll position when streaming and pulling to refresh, or to scroll to the top.", "Choose whether to show videos and GIFs in a custom Picture-in-Picture container which can be swiped down to keep the view around, or in the stock media player, where swiping down dismisses the content.", "Swipe all the way left or right on a post to select the action on the edge.", "Select the order of swipe action elements.", "Switch to either show mentions or activity by default.", "Display an activity graph showing recent activity in the mentions tab.", "Animate the activity graph when showing it.", "Choose whether to display status actions on the status cell or behind a swipe. This will require restarting the app to take effect.", "Display boosted posts in the Posts & Replies section of user profiles.", "Select whether to hide sensitive content, rain confetti, or do nothing when shaking your device.", "Pick the initial timeline to be displayed, whether it's home, local, or federated.", "Pick whether searching for users is across all of Mastodon or just local.", "Set haptic feedback for key presses on the keyboard.", "Pick whether posting a new status jumps the timeline to the top.", "Display a circular thumb scroller on timelines, which allows you to rotate the scroller with your thumb to navigate through timelines without lifting a finger. This will require restarting the app to take effect.", "Choose whether to display link preview cards in status details for all links within the status.", "Select whether tapping the 'load more' button in timelines retains the current scroll position (allowing the new posts to be read downwards), or whether it shifts you to just below the newly loaded posts (allowing the new posts to be read upwards).", "Automatically fetch gaps in between timelines, removing the need to tap the 'load more' buttons.", "Select what action the secondary profile button (on the left of the profile image) should do: View liked statuses or view pinned statuses.", "Pick whether swiping enlarged recent media images scrolls through all attached media in the specified post and does nothing if there's a single image, or whether it scrolls through all recent media."]
+    var generalArrayIm = ["setreal", "notifs", "sethap", "setsensitivec", "priv", "keybse", "holdse", "comse", "posse", "setvid", "swipeact", "swipeact3", "actdef", "setgraph", "setgraph2", "like", "boost", "setshake", "segse", "searchscope", "keyhap", "jumptop", "circscroll", "linkcard", "lmore", "autol", "likepin", "comse"]
+
+    var appearanceArray = ["", "Theme", "Text Size", "Profiles Corner Radius", "Images Corner Radius", "Hide Images in Timelines", "Full Usernames", "Confetti", "Gallery Grid Size", "Time Style", "Profile Header Background", "Segments Size", "Segments Transition Style", "Subtle Activity Notifications", "Profile Display Picture Border", "Pinch Background Theme", "Media Captions", "Status Progress Indicator", "Highlight Direct Messages", "Status Bar Hue", "Activity Graph Hue", "Segments Hue", "Instances and Lists Icon", "Profile Display Picture in Post Composition", "Popup Alerts"]
+    var appearanceArrayDesc = ["", "Select from a white day theme, a dark dusk theme, an even darker night theme, or a truly black OLED-friendly theme.", "Always be able to read posts with adjustable text sizing.", "Circle or square, your choice.", "Rounded or not, your choice.", "Timelines with some plain old text, for a distraction-free browsing experience.", "Display the user's full username, with the instance, in posts.", "Add some fun to posting statuses, following users, reposting statuses, and liking statuses.", "Set the amount of columns in the status composition section's photo picker gallery.", "Pick between absolute or relative time to display in timelines.", "Change the style of the profile header background.", "Choose from larger home and notification screen segments, or tinier ones.", "Pick between a static and linear transition, or a playful liquid one.", "Dims activity notifications, while keeping mentions untouched.", "Select a size for the border around profile view display pictures.", "Select a theme for the background when pinching to post a screenshot.", "Pick whether to display the status text or the image's alt text in media captions.", "Choose whether to show the status progress indicator or not.", "Highlight direct messages in timelines with a subtle background.", "Select the hue for the keyboard bar when composing statuses.", "Select the hue for the activity graph columns.", "Select the hue for segments. This may require restarting the app to take effect.", "Select an icon to use for the top-left instances and list section icon.", "Choose whether to display the current account's display picture in the top-left when composing posts.", "Pick whether to display popup alerts for a variety of actions including posting, liking, and boosting."]
     var appearanceArrayIm = ["", "setnight", "settext", "setpro", "setima", "setima2", "userat", "confett", "gridse", "timese", "headbgse", "segse", "segse2", "subtleno" , "bordset", "pinchset", "heavyse", "indic", "direct2", "barcol", "acthue", "seghue", "barcol10", "compav", "popupset"]
-    
+
     var bioArray = ["Lock App", "Lock Notifications"]
     var bioArrayDesc = ["Add a biometric lock to the app.", "Add a biometric lock to the notifications section."]
     var bioArrayIm = ["biolock1", "biolock2"]
-    
+
     var aboutArray = ["Roma \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "")", "Review Roma", "Get in Touch", "URL Schemes"]
     var aboutArrayDesc = ["Let us tell you a little bit about ourselves.", "If you enjoy using Roma, please consider leaving a review on the App Store.", "Keep in touch, and get progress updates about what we're up to.", "Use these to do specific actions within the app from outside the app."]
     var aboutArrayIm = ["setmas", "like", "intouch", "schemes"]
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 1
@@ -373,10 +376,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             return InstanceData.getAllInstances().count + 1
         }
     }
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 0 {
-            
+
             let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
             switch (deviceIdiom) {
             case .phone:
@@ -386,7 +389,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             default:
                 return 130
             }
-            
+
         } else {
             if indexPath.section == 2 && indexPath.row == 0 {
                 return 105
@@ -395,8 +398,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
         }
     }
-    
-    
+
+
     @objc func handleToggleStream(sender: UISwitch) {
         if sender.isOn {
             UserDefaults.standard.set(0, forKey: "streamToggle")
@@ -416,10 +419,6 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             UIApplication.shared.registerForRemoteNotifications()
         } else {
             sender.setOn(false, animated: true)
-            let center = UNUserNotificationCenter.current()
-            center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
-                // Enable or disable features based on authorization.
-            }
             UIApplication.shared.unregisterForRemoteNotifications()
         }
     }
@@ -453,9 +452,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     @objc func handleToggleSubtle1(sender: UISwitch) {
-        
+
         print("in subtle tog")
-        
+
         if sender.isOn {
             UserDefaults.standard.set(1, forKey: "subtleToggle")
             sender.setOn(true, animated: true)
@@ -465,11 +464,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
     }
-    
+
     @objc func handleToggleDM(sender: UISwitch) {
-        
+
         print("in dm tog")
-        
+
         if sender.isOn {
             UserDefaults.standard.set(1, forKey: "dmTog")
             sender.setOn(true, animated: true)
@@ -479,9 +478,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
     }
-    
+
     @objc func handleToggleCompav(sender: UISwitch) {
-        
+
         if sender.isOn {
             UserDefaults.standard.set(1, forKey: "compav")
             sender.setOn(true, animated: true)
@@ -490,22 +489,22 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             sender.setOn(false, animated: true)
         }
     }
-    
+
     @objc func handleTogglePopupset(sender: UISwitch) {
-        
+
         if sender.isOn {
-            UserDefaults.standard.set(1, forKey: "popupset")
+            UserDefaults.standard.set(0, forKey: "popupset")
             sender.setOn(true, animated: true)
         } else {
-            UserDefaults.standard.set(0, forKey: "popupset")
+            UserDefaults.standard.set(1, forKey: "popupset")
             sender.setOn(false, animated: true)
         }
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     @objc func handleToggleBio(sender: UISwitch) {
         if sender.isOn {
             UserDefaults.standard.set(1, forKey: "biometrics")
@@ -515,7 +514,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             sender.setOn(false, animated: true)
         }
     }
-    
+
     @objc func handleToggleBioNot(sender: UISwitch) {
         if sender.isOn {
             UserDefaults.standard.set(1, forKey: "biometricsnot")
@@ -525,11 +524,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             sender.setOn(false, animated: true)
         }
     }
-    
-    
-    
-    
-    
+
+
+
+
+
     @objc func handleToggleSensitiveMain(sender: UISwitch) {
         if sender.isOn {
             UserDefaults.standard.set(1, forKey: "senseTog")
@@ -599,13 +598,40 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             sender.setOn(false, animated: true)
         }
     }
-    
-    
-    
+    @objc func handleToggleThumbsc(sender: UISwitch) {
+        if sender.isOn {
+            UserDefaults.standard.set(1, forKey: "thumbsc")
+            sender.setOn(true, animated: true)
+        } else {
+            UserDefaults.standard.set(0, forKey: "thumbsc")
+            sender.setOn(false, animated: true)
+        }
+    }
+    @objc func handleToggleLinkcards(sender: UISwitch) {
+        if sender.isOn {
+            UserDefaults.standard.set(0, forKey: "linkcards")
+            sender.setOn(true, animated: true)
+        } else {
+            UserDefaults.standard.set(1, forKey: "linkcards")
+            sender.setOn(false, animated: true)
+        }
+    }
+    @objc func handleToggleAutol(sender: UISwitch) {
+        if sender.isOn {
+            UserDefaults.standard.set(1, forKey: "autol1")
+            sender.setOn(true, animated: true)
+        } else {
+            UserDefaults.standard.set(0, forKey: "autol1")
+            sender.setOn(false, animated: true)
+        }
+    }
+
+
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "appcell", for: indexPath) as! AppIconsCells
-            
+
             let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
             switch (deviceIdiom) {
             case .phone:
@@ -616,7 +642,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             default:
                 cell.configure()
             }
-            
+
             cell.backgroundColor = Colours.white
             let bgColorView = UIView()
             bgColorView.backgroundColor = Colours.white
@@ -625,8 +651,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             cell.frame.size.height = 60
             return cell
         } else if indexPath.section == 1 {
-            
-            if indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9 || indexPath.row == 11 || indexPath.row == 12 || indexPath.row == 15 || indexPath.row == 17 || indexPath.row == 18 || indexPath.row == 19 || indexPath.row == 20 {
+
+            if indexPath.row == 1 || indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9 || indexPath.row == 11 || indexPath.row == 12 || indexPath.row == 15 || indexPath.row == 17 || indexPath.row == 18 || indexPath.row == 19 || indexPath.row == 20 || indexPath.row == 24 || indexPath.row == 26 || indexPath.row == 27 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
                 cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
                 cell.backgroundColor = Colours.white
@@ -638,8 +664,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.selectedBackgroundView = bgColorView
                 return cell
             }  else {
-                
-                
+
+
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellse25", for: indexPath) as! SettingsCellToggle
                 cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
                 cell.backgroundColor = Colours.white
@@ -658,20 +684,16 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     }
                     cell.switchView.addTarget(self, action: #selector(self.handleToggleStream), for: .touchUpInside)
                 }
-                if indexPath.row == 1 {
-                    // notifs
-                    
-                    let center = UNUserNotificationCenter.current()
-                    center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
-                        // Enable or disable features based on authorization.
-                    }
-                    if UIApplication.shared.isRegisteredForRemoteNotifications {
-                        cell.switchView.setOn(true, animated: false)
-                    } else {
-                        cell.switchView.setOn(false, animated: false)
-                    }
-                    cell.switchView.addTarget(self, action: #selector(self.handleNotifsStream), for: .touchUpInside)
-                }
+//                if indexPath.row == 1 {
+//                    // notifs
+//
+//                    if UIApplication.shared.isRegisteredForRemoteNotifications {
+//                        cell.switchView.setOn(true, animated: false)
+//                    } else {
+//                        cell.switchView.setOn(false, animated: false)
+//                    }
+//                    cell.switchView.addTarget(self, action: #selector(self.handleNotifsStream), for: .touchUpInside)
+//                }
                 if indexPath.row == 2 {
                     // haptics
                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -692,7 +714,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 }
                 if indexPath.row == 10 {
                     // select swipe
-                    
+
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cellse099", for: indexPath) as! SettingsCellToggle
                     cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
                     cell.backgroundColor = Colours.white
@@ -712,7 +734,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 }
                 if indexPath.row == 13 {
                     // select graph
-                    
+
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cellse0991", for: indexPath) as! SettingsCellToggle
                     cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
                     cell.backgroundColor = Colours.white
@@ -732,7 +754,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 }
                 if indexPath.row == 14 {
                     // select graph animation
-                    
+
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cellse0992", for: indexPath) as! SettingsCellToggle
                     cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
                     cell.backgroundColor = Colours.white
@@ -752,7 +774,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 }
                 if indexPath.row == 16 {
                     // select boost
-                    
+
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cellse0993", for: indexPath) as! SettingsCellToggle
                     cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
                     cell.backgroundColor = Colours.white
@@ -772,7 +794,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 }
                 if indexPath.row == 21 {
                     // select jump top
-                    
+
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cellse099309", for: indexPath) as! SettingsCellToggle
                     cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
                     cell.backgroundColor = Colours.white
@@ -790,13 +812,73 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     cell.switchView.addTarget(self, action: #selector(self.handleToggleSelectJump), for: .touchUpInside)
                     return cell
                 }
+                if indexPath.row == 22 {
+                    // thumb scroller
+
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellse0993091", for: indexPath) as! SettingsCellToggle
+                    cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
+                    cell.backgroundColor = Colours.white
+                    cell.userName.textColor = Colours.black
+                    cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                    cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.white
+                    cell.selectedBackgroundView = bgColorView
+                    if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {
+                        cell.switchView.setOn(false, animated: false)
+                    } else {
+                        cell.switchView.setOn(true, animated: false)
+                    }
+                    cell.switchView.addTarget(self, action: #selector(self.handleToggleThumbsc), for: .touchUpInside)
+                    return cell
+                }
+                if indexPath.row == 23 {
+                    // link cards
+
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellse0993092", for: indexPath) as! SettingsCellToggle
+                    cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
+                    cell.backgroundColor = Colours.white
+                    cell.userName.textColor = Colours.black
+                    cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                    cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.white
+                    cell.selectedBackgroundView = bgColorView
+                    if (UserDefaults.standard.object(forKey: "linkcards") == nil) || (UserDefaults.standard.object(forKey: "linkcards") as! Int == 0) {
+                        cell.switchView.setOn(true, animated: false)
+                    } else {
+                        cell.switchView.setOn(false, animated: false)
+                    }
+                    cell.switchView.addTarget(self, action: #selector(self.handleToggleLinkcards), for: .touchUpInside)
+                    return cell
+                }
+                if indexPath.row == 25 {
+                    // auto load
+
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellse0993093", for: indexPath) as! SettingsCellToggle
+                    cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
+                    cell.backgroundColor = Colours.white
+                    cell.userName.textColor = Colours.black
+                    cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                    cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.white
+                    cell.selectedBackgroundView = bgColorView
+                    if (UserDefaults.standard.object(forKey: "autol1") == nil) || (UserDefaults.standard.object(forKey: "autol1") as! Int == 0) {
+                        cell.switchView.setOn(false, animated: false)
+                    } else {
+                        cell.switchView.setOn(true, animated: false)
+                    }
+                    cell.switchView.addTarget(self, action: #selector(self.handleToggleAutol), for: .touchUpInside)
+                    return cell
+                }
                 return cell
-                
+
             }
         } else if indexPath.section == 2 {
-            
+
             if indexPath.row == 0 {
-                
+
                 let cell = tableView.dequeueReusableCell(withIdentifier: "colcell", for: indexPath) as! ColourCells
                 cell.configure()
                 cell.backgroundColor = Colours.white
@@ -807,8 +889,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.frame.size.height = 60
                 return cell
             } else {
-                
-                
+
+
                 if indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 13 || indexPath.row == 23 || indexPath.row == 24 {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cellse2", for: indexPath) as! SettingsCellToggle
                     cell.configure(status: self.appearanceArray[indexPath.row], status2: self.appearanceArrayDesc[indexPath.row], image: self.appearanceArrayIm[indexPath.row])
@@ -819,7 +901,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     let bgColorView = UIView()
                     bgColorView.backgroundColor = Colours.white
                     cell.selectedBackgroundView = bgColorView
-                    
+
                     if indexPath.row == 5 {
                         // realtime stream
                         if (UserDefaults.standard.object(forKey: "sensitiveToggle") == nil) || (UserDefaults.standard.object(forKey: "sensitiveToggle") as! Int == 0) {
@@ -858,14 +940,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         let bgColorView = UIView()
                         bgColorView.backgroundColor = Colours.white
                         cell.selectedBackgroundView = bgColorView
-                        
+
                         if (UserDefaults.standard.object(forKey: "subtleToggle") == nil) || (UserDefaults.standard.object(forKey: "subtleToggle") as! Int == 0) {
                             cell.switchView.setOn(false, animated: false)
                         } else {
                             cell.switchView.setOn(true, animated: false)
                         }
                         cell.switchView.addTarget(self, action: #selector(self.handleToggleSubtle1), for: .touchUpInside)
-                        
+
                         return cell
                     }
 //                    if indexPath.row == 18 {
@@ -900,14 +982,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         let bgColorView = UIView()
                         bgColorView.backgroundColor = Colours.white
                         cell.selectedBackgroundView = bgColorView
-                        
+
                         if (UserDefaults.standard.object(forKey: "compav") == nil) || (UserDefaults.standard.object(forKey: "compav") as! Int == 0) {
                             cell.switchView.setOn(false, animated: false)
                         } else {
                             cell.switchView.setOn(true, animated: false)
                         }
                         cell.switchView.addTarget(self, action: #selector(self.handleToggleCompav), for: .touchUpInside)
-                        
+
                         return cell
                     }
                     if indexPath.row == 24 {
@@ -921,17 +1003,17 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         let bgColorView = UIView()
                         bgColorView.backgroundColor = Colours.white
                         cell.selectedBackgroundView = bgColorView
-                        
+
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                             cell.switchView.setOn(true, animated: false)
                         } else {
                             cell.switchView.setOn(false, animated: false)
                         }
                         cell.switchView.addTarget(self, action: #selector(self.handleTogglePopupset), for: .touchUpInside)
-                        
+
                         return cell
                     }
-                    
+
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
@@ -945,12 +1027,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     cell.selectedBackgroundView = bgColorView
                     return cell
                 }
-                
+
             }
-            
-            
+
+
         } else if indexPath.section == 3 {
-            
+
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellse2", for: indexPath) as! SettingsCellToggle
             cell.configure(status: self.bioArray[indexPath.row], status2: self.bioArrayDesc[indexPath.row], image: self.bioArrayIm[indexPath.row])
             cell.backgroundColor = Colours.white
@@ -960,7 +1042,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             let bgColorView = UIView()
             bgColorView.backgroundColor = Colours.white
             cell.selectedBackgroundView = bgColorView
-            
+
             if indexPath.row == 0 {
                 if (UserDefaults.standard.object(forKey: "biometrics") == nil) || (UserDefaults.standard.object(forKey: "biometrics") as! Int == 0) {
                     cell.switchView.setOn(false, animated: false)
@@ -976,11 +1058,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 }
                 cell.switchView.addTarget(self, action: #selector(self.handleToggleBioNot), for: .touchUpInside)
             }
-            
+
             return cell
 
         } else if indexPath.section == 4 {
-            
+
             if indexPath.row == InstanceData.getAllInstances().count  {
 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
@@ -1002,7 +1084,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 let account = z1[indexPath.row]
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
                 let instanceAndAccount = "\(instance.returnedText) "
-                
+
                 let instances = InstanceData.getAllInstances()
                 let curr = InstanceData.getCurrentInstance()
                 if curr?.clientID == instances[indexPath.row].clientID {
@@ -1023,7 +1105,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.selectedBackgroundView = bgColorView
                 return cell
             }
-            
+
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
             cell.configure(status: self.aboutArray[indexPath.row], status2: self.aboutArrayDesc[indexPath.row], image: self.aboutArrayIm[indexPath.row])
@@ -1035,22 +1117,103 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             bgColorView.backgroundColor = Colours.white
             cell.selectedBackgroundView = bgColorView
             return cell
-        } 
-        
+        }
+
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath)
         self.tableView.deselectRow(at: indexPath, animated: true)
-        
-        
-        
-        
-        
-        
+
         if indexPath.section == 1 {
+
+            if indexPath.row == 1 {
+
+                var filledSet1 = UIImage(named: "unfilledset")
+                var filledSet2 = UIImage(named: "unfilledset")
+                var filledSet3 = UIImage(named: "unfilledset")
+                var filledSet4 = UIImage(named: "unfilledset")
+                if (UserDefaults.standard.object(forKey: "pnmentions") == nil) || (UserDefaults.standard.object(forKey: "pnmentions") as! Bool == true) {
+                    filledSet1 = UIImage(named: "filledset")
+                } else {
+                    filledSet1 = UIImage(named: "unfilledset")
+                }
+                if (UserDefaults.standard.object(forKey: "pnlikes") == nil) || (UserDefaults.standard.object(forKey: "pnlikes") as! Bool == true) {
+                    filledSet2 = UIImage(named: "filledset")
+                } else {
+                    filledSet2 = UIImage(named: "unfilledset")
+                }
+                if (UserDefaults.standard.object(forKey: "pnboosts") == nil) || (UserDefaults.standard.object(forKey: "pnboosts") as! Bool == true) {
+                    filledSet3 = UIImage(named: "filledset")
+                } else {
+                    filledSet3 = UIImage(named: "unfilledset")
+                }
+                if (UserDefaults.standard.object(forKey: "pnfollows") == nil) || (UserDefaults.standard.object(forKey: "pnfollows") as! Bool == true) {
+                    filledSet4 = UIImage(named: "filledset")
+                } else {
+                    filledSet4 = UIImage(named: "unfilledset")
+                }
+
+
+                // push not
+                Alertift.actionSheet(title: title, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("Mentions".localized), image: filledSet1) { (action, ind) in
+                        print(action, ind)
+                        if (UserDefaults.standard.object(forKey: "pnmentions") == nil) || (UserDefaults.standard.object(forKey: "pnmentions") as! Bool == true) {
+                            UserDefaults.standard.set(false, forKey: "pnmentions")
+                            UIApplication.shared.registerForRemoteNotifications()
+                        } else {
+                            UserDefaults.standard.set(true, forKey: "pnmentions")
+                            UIApplication.shared.registerForRemoteNotifications()
+                        }
+                    }
+                    .action(.default("Likes".localized), image: filledSet2) { (action, ind) in
+                        print(action, ind)
+                        if (UserDefaults.standard.object(forKey: "pnlikes") == nil) || (UserDefaults.standard.object(forKey: "pnlikes") as! Bool == true) {
+                            UserDefaults.standard.set(false, forKey: "pnlikes")
+                            UIApplication.shared.registerForRemoteNotifications()
+                        } else {
+                            UserDefaults.standard.set(true, forKey: "pnlikes")
+                            UIApplication.shared.registerForRemoteNotifications()
+                        }
+                    }
+                    .action(.default("Boosts".localized), image: filledSet3) { (action, ind) in
+                        print(action, ind)
+                        if (UserDefaults.standard.object(forKey: "pnboosts") == nil) || (UserDefaults.standard.object(forKey: "pnboosts") as! Bool == true) {
+                            UserDefaults.standard.set(false, forKey: "pnboosts")
+                            UIApplication.shared.registerForRemoteNotifications()
+                        } else {
+                            UserDefaults.standard.set(true, forKey: "pnboosts")
+                            UIApplication.shared.registerForRemoteNotifications()
+                        }
+                    }
+                    .action(.default("Follows".localized), image: filledSet4) { (action, ind) in
+                        print(action, ind)
+                        if (UserDefaults.standard.object(forKey: "pnfollows") == nil) || (UserDefaults.standard.object(forKey: "pnfollows") as! Bool == true) {
+                            UserDefaults.standard.set(false, forKey: "pnfollows")
+                            UIApplication.shared.registerForRemoteNotifications()
+                        } else {
+                            UserDefaults.standard.set(true, forKey: "pnfollows")
+                            UIApplication.shared.registerForRemoteNotifications()
+                        }
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+
             if indexPath.row == 4 {
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
@@ -1076,8 +1239,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet3 = UIImage(named: "unfilledset")
                     filledSet4 = UIImage(named: "filledset")
                 }
-                
-                
+
+
                 // privacy
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
@@ -1110,12 +1273,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
                     .show(on: self)
             }
-            
+
             if indexPath.row == 5 {
                 // keyboard
-                
-                
-                
+
+
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "keyb") == nil) || (UserDefaults.standard.object(forKey: "keyb") as! Int == 0) {
@@ -1125,9 +1288,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
-                
-                
+
+
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1153,8 +1316,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 6 {
                 // long
-                
-                
+
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
@@ -1204,8 +1367,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet5 = UIImage(named: "unfilledset")
                     filledSet6 = UIImage(named: "filledset")
                 }
-                
-                
+
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1247,8 +1410,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 7 {
                 // quality
-                
-                
+
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
@@ -1265,9 +1428,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "filledset")
                 }
-                
-                
-                
+
+
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1306,7 +1469,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1341,14 +1504,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
                     .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
-                    .action(.default("Stock".localized), image: filledSet2) { (action, ind) in
+                    .action(.default("Stock Video Player".localized), image: filledSet2) { (action, ind) in
                         print(action, ind)
                         UserDefaults.standard.set(1, forKey: "vidgif")
                     }
@@ -1416,7 +1579,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet5 = UIImage(named: "unfilledset")
                     filledSet6 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1467,7 +1630,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1493,7 +1656,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 15 {
                 // toot action placement
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
@@ -1503,7 +1666,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1531,7 +1694,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 17 {
                 // shake gesture
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
@@ -1548,7 +1711,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1578,7 +1741,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 18 {
                 // initial timeline
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
@@ -1595,7 +1758,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1628,7 +1791,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 19 {
                 // search scope
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "searchsco") == nil) || (UserDefaults.standard.object(forKey: "searchsco") as! Int == 0) {
@@ -1638,7 +1801,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1666,7 +1829,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 20 {
                 // key haptics
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
@@ -1683,7 +1846,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1711,14 +1874,124 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
                     .show(on: self)
             }
-            
-            
+            if indexPath.row == 24 {
+                // load more
+
+                var filledSet1 = UIImage(named: "unfilledset")
+                var filledSet2 = UIImage(named: "unfilledset")
+                if (UserDefaults.standard.object(forKey: "lmore1") == nil) || (UserDefaults.standard.object(forKey: "lmore1") as! Int == 0) {
+                    filledSet1 = UIImage(named: "filledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "lmore1") as! Int == 1) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "filledset")
+                }
+
+                Alertift.actionSheet(title: title, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("Retain Scroll".localized), image: filledSet1) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(0, forKey: "lmore1")
+                    }
+                    .action(.default("Jump Below New Toots".localized), image: filledSet2) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(1, forKey: "lmore1")
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+            if indexPath.row == 26 {
+                // profile secondary button
+
+                var filledSet1 = UIImage(named: "unfilledset")
+                var filledSet2 = UIImage(named: "unfilledset")
+                if (UserDefaults.standard.object(forKey: "likepin") == nil) || (UserDefaults.standard.object(forKey: "likepin") as! Int == 0) {
+                    filledSet1 = UIImage(named: "filledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "likepin") as! Int == 1) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "filledset")
+                }
+
+                Alertift.actionSheet(title: title, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("Liked".localized), image: filledSet1) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(0, forKey: "likepin")
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
+                    }
+                    .action(.default("Pinned".localized), image: filledSet2) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(1, forKey: "likepin")
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+            if indexPath.row == 27 {
+                // swipe recent media
+
+                var filledSet1 = UIImage(named: "unfilledset")
+                var filledSet2 = UIImage(named: "unfilledset")
+                if (UserDefaults.standard.object(forKey: "swrece") == nil) || (UserDefaults.standard.object(forKey: "swrece") as! Int == 0) {
+                    filledSet1 = UIImage(named: "filledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "swrece") as! Int == 1) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "filledset")
+                }
+
+                Alertift.actionSheet(title: title, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("Swipe Attached Images".localized), image: filledSet1) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(0, forKey: "swrece")
+                    }
+                    .action(.default("Swipe Recent Media".localized), image: filledSet2) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(1, forKey: "swrece")
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+
+
         }
-        
+
         if indexPath.section == 2 {
             if indexPath.row == 1 {
                 // theme
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
@@ -1755,8 +2028,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet4 = UIImage(named: "unfilledset")
                     filledSet5 = UIImage(named: "filledset")
                 }
-                
-                
+
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1794,8 +2067,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 2 {
                 // text size
-                
-                
+
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
@@ -1877,8 +2150,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet7 = UIImage(named: "unfilledset")
                     filledSet8 = UIImage(named: "filledset")
                 }
-                
-                
+
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1943,9 +2216,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 3 {
                 // profile radius
-                
-                
-                
+
+
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
@@ -1962,8 +2235,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "filledset")
                 }
-                
-                
+
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2005,7 +2278,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2033,7 +2306,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 8 {
                 // gallery size
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
@@ -2050,7 +2323,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2089,7 +2362,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2133,7 +2406,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2166,7 +2439,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 11 {
                 // segments size
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
@@ -2176,7 +2449,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2213,7 +2486,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2241,9 +2514,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 14 {
                 // border
-                
-                
-                
+
+
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
@@ -2260,9 +2533,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "filledset")
                 }
-                
-                
-                
+
+
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2295,8 +2568,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 15 {
                 // pinch
-                
-                
+
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
@@ -2333,8 +2606,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet4 = UIImage(named: "unfilledset")
                     filledSet5 = UIImage(named: "filledset")
                 }
-                
-                
+
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2372,18 +2645,25 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 16 {
                 // caption
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
+                var filledSet3 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                     filledSet1 = UIImage(named: "filledset")
                     filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "captionset") as! Int == 1) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "captionset") as! Int == 2) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "filledset")
                 }
-                
-                
+
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2398,6 +2678,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         print(action, ind)
                         UserDefaults.standard.set(1, forKey: "captionset")
                     }
+                    .action(.default("No Caption".localized), image: filledSet3) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(2, forKey: "captionset")
+                    }
                     .action(.cancel("Dismiss"))
                     .finally { action, index in
                         if action.style == .cancel {
@@ -2409,7 +2693,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 17 {
                 // progress
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "progprogprogprog") == nil) || (UserDefaults.standard.object(forKey: "progprogprogprog") as! Int == 0) {
@@ -2419,7 +2703,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2445,7 +2729,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 18 {
                 // dmtog
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
@@ -2471,7 +2755,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet3 = UIImage(named: "unfilledset")
                     filledSet4 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2505,7 +2789,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 19 {
                 // bar hue
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "barhue1") == nil) || (UserDefaults.standard.object(forKey: "barhue1") as! Int == 0) {
@@ -2515,7 +2799,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2541,7 +2825,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 20 {
                 // activity hue
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "acthue1") == nil) || (UserDefaults.standard.object(forKey: "acthue1") as! Int == 0) {
@@ -2551,7 +2835,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2577,7 +2861,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 21 {
                 // segments hue
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "seghue1") == nil) || (UserDefaults.standard.object(forKey: "seghue1") as! Int == 0) {
@@ -2587,7 +2871,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2613,7 +2897,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
             if indexPath.row == 22 {
                 // instance icon
-                
+
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
@@ -2623,7 +2907,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
                 }
-                
+
                 Alertift.actionSheet(title: title, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2648,24 +2932,24 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .show(on: self)
             }
         }
-        
-        
-       
-        
+
+
+
+
         if indexPath.section == 4 {
             let instances = InstanceData.getAllInstances()
             if indexPath.row == instances.count {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut2"), object: nil)
             } else {
-                
+
                 //bhere3
-                
-                
+
+
                 let curr = InstanceData.getCurrentInstance()
                 if curr?.clientID == instances[indexPath.row].clientID {
-                    
-                    
-                    
+
+
+
                     Alertift.actionSheet(title: "Already selected", message: "Pick another account, or add a new one.")
                         .backgroundColor(Colours.white)
                         .titleTextColor(Colours.grayDark)
@@ -2679,11 +2963,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                             }
                         }
                         .show(on: self)
-                    
-                    
+
+
                 } else {
-                
-                
+
+
                 Alertift.actionSheet(title: nil, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -2692,31 +2976,31 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .titleTextAlignment(.left)
                     .action(.default("Switch".localized), image: UIImage(named: "profile")) { (action, ind) in
                         print(action, ind)
-                        
-                        
+
+
                         InstanceData.setCurrentInstance(instance: instances[indexPath.row])
-                        
+
                         DispatchQueue.main.async {
-                            
+
                             let appDelegate = UIApplication.shared.delegate as! AppDelegate
                             appDelegate.reloadApplication()
-                            
-                            
+
+
                         }
-                        
+
                     }
                     .action(.default("Remove".localized), image: UIImage(named: "block")) { (action, ind) in
                         print(action, ind)
-                        
+
                         var instance = InstanceData.getAllInstances()
                         var account = Account.getAccounts()
                         account.remove(at: indexPath.row)
                         UserDefaults.standard.set(try? PropertyListEncoder().encode(account), forKey:"allAccounts")
                         instance.remove(at: indexPath.row)
                         UserDefaults.standard.set(try? PropertyListEncoder().encode(instance), forKey:"instances")
-                        
+
                         self.tableView.reloadSections([5], with: .none)
-                        
+
                     }
                     .action(.cancel("Dismiss"))
                     .finally { action, index in
@@ -2725,17 +3009,17 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         }
                     }
                     .show(on: self)
-                    
-                    
+
+
                 }
-                
-                
+
+
             }
         }
-        
+
     }
-    
-    
+
+
     func loadLoadLoad() {
         if (UserDefaults.standard.object(forKey: "theme") == nil || UserDefaults.standard.object(forKey: "theme") as! Int == 0) {
             Colours.white = UIColor.white
@@ -2806,9 +3090,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
-        
+
         self.view.backgroundColor = Colours.white
-        
+
         if (UserDefaults.standard.object(forKey: "systemText") == nil) || (UserDefaults.standard.object(forKey: "systemText") as! Int == 0) {
             Colours.fontSize1 = CGFloat(UIFont.systemFontSize)
             Colours.fontSize3 = CGFloat(UIFont.systemFontSize)
@@ -2855,7 +3139,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 Colours.fontSize3 = 14
             }
         }
-        
+
         self.tableView.backgroundColor = Colours.white
         self.tableView.separatorColor = Colours.cellQuote
         self.tableView.reloadData()
@@ -2873,10 +3157,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         //        self.collectionView.backgroundColor = Colours.white
         //        self.removeTabbarItemsText()
     }
-    
-    
-    
+
+
+
 }
-
-
-
