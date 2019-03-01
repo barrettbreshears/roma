@@ -25,12 +25,6 @@ class NotificationService: UNNotificationServiceExtension {
                 return
             }
             
-            do {
-                let content = try bestAttemptContent.decrypt(state: storedState)
-            } catch let error as Error {
-                print(error)
-            }
-            
             if let content = try? bestAttemptContent.decrypt(state: storedState) {
                 
                 // Mark the message as still encrypted.
