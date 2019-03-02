@@ -133,7 +133,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         if self.currentIndex == 1 {
             
             DispatchQueue.main.async {
-                if StoreStruct.notifications.count > 0 {
+                if StoreStruct.notificationsMentions.count > 0 {
                     let indexPath = IndexPath(row: 0, section: 0)
                     self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
                 }
@@ -595,6 +595,15 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         }
     }
     
+    @objc func searchPro() {
+        let controller = ThirdViewController()
+        if StoreStruct.statusSearch[StoreStruct.searchIndex].account.username == StoreStruct.currentUser.username {} else {
+            controller.fromOtherUser = true
+        }
+        controller.userIDtoUse = StoreStruct.statusSearch[StoreStruct.searchIndex].account.id
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -605,6 +614,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goInstance), name: NSNotification.Name(rawValue: "goInstance2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.search), name: NSNotification.Name(rawValue: "search2"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.searchPro), name: NSNotification.Name(rawValue: "searchPro2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.searchUser), name: NSNotification.Name(rawValue: "searchUser2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.load), name: NSNotification.Name(rawValue: "load"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTop2), name: NSNotification.Name(rawValue: "scrollTop2"), object: nil)
@@ -1811,15 +1821,23 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             }
                             if url.absoluteString.hasPrefix(".") {
                                 let z = URL(string: String(url.absoluteString.dropFirst()))!
-                                self.safariVC = SFSafariViewController(url: z)
-                                self.safariVC?.preferredBarTintColor = Colours.white
-                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                self.present(self.safariVC!, animated: true, completion: nil)
+                                UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                    if !success {
+                                        self.safariVC = SFSafariViewController(url: z)
+                                        self.safariVC?.preferredBarTintColor = Colours.white
+                                        self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                        self.present(self.safariVC!, animated: true, completion: nil)
+                                    }
+                                }
                             } else {
-                                self.safariVC = SFSafariViewController(url: url)
-                                self.safariVC?.preferredBarTintColor = Colours.white
-                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                self.present(self.safariVC!, animated: true, completion: nil)
+                                UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                    if !success {
+                                        self.safariVC = SFSafariViewController(url: url)
+                                        self.safariVC?.preferredBarTintColor = Colours.white
+                                        self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                        self.present(self.safariVC!, animated: true, completion: nil)
+                                    }
+                                }
                             }
                         }
                         cell.toot.handleHashtagTap { (string) in
@@ -1914,15 +1932,23 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             }
                             if url.absoluteString.hasPrefix(".") {
                                 let z = URL(string: String(url.absoluteString.dropFirst()))!
-                                self.safariVC = SFSafariViewController(url: z)
-                                self.safariVC?.preferredBarTintColor = Colours.white
-                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                self.present(self.safariVC!, animated: true, completion: nil)
+                                UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                    if !success {
+                                        self.safariVC = SFSafariViewController(url: z)
+                                        self.safariVC?.preferredBarTintColor = Colours.white
+                                        self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                        self.present(self.safariVC!, animated: true, completion: nil)
+                                    }
+                                }
                             } else {
-                                self.safariVC = SFSafariViewController(url: url)
-                                self.safariVC?.preferredBarTintColor = Colours.white
-                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                self.present(self.safariVC!, animated: true, completion: nil)
+                                UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                    if !success {
+                                        self.safariVC = SFSafariViewController(url: url)
+                                        self.safariVC?.preferredBarTintColor = Colours.white
+                                        self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                        self.present(self.safariVC!, animated: true, completion: nil)
+                                    }
+                                }
                             }
                         }
                         cell.toot.handleHashtagTap { (string) in
@@ -2006,15 +2032,23 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         }
                         if url.absoluteString.hasPrefix(".") {
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
-                            self.safariVC = SFSafariViewController(url: z)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: z)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         } else {
-                            self.safariVC = SFSafariViewController(url: url)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: url)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         }
                     }
                     cell.toot.handleHashtagTap { (string) in
@@ -2058,9 +2092,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 
                 let cell = tableView2.dequeueReusableCell(withIdentifier: "cellG02", for: indexPath) as! GraphCell
                 if (UserDefaults.standard.object(forKey: "setGraph") == nil) || (UserDefaults.standard.object(forKey: "setGraph") as! Int == 0) {
-                                cell.configure()
-                                cell.backgroundColor = Colours.white
-                                cell.graphView.dataPointSpacing = (self.view.bounds.width / 5)
+                    cell.configure()
+                    cell.backgroundColor = Colours.white
+                    cell.graphView.dataPointSpacing = (self.view.bounds.width / 5)
                     cell.graphView.alpha = 1
                 } else {
                     cell.graphView.alpha = 0
@@ -2155,15 +2189,23 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 }
                                 if url.absoluteString.hasPrefix(".") {
                                     let z = URL(string: String(url.absoluteString.dropFirst()))!
-                                    self.safariVC = SFSafariViewController(url: z)
-                                    self.safariVC?.preferredBarTintColor = Colours.white
-                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                    UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                        if !success {
+                                            self.safariVC = SFSafariViewController(url: z)
+                                            self.safariVC?.preferredBarTintColor = Colours.white
+                                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                            self.present(self.safariVC!, animated: true, completion: nil)
+                                        }
+                                    }
                                 } else {
-                                    self.safariVC = SFSafariViewController(url: url)
-                                    self.safariVC?.preferredBarTintColor = Colours.white
-                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                    UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                        if !success {
+                                            self.safariVC = SFSafariViewController(url: url)
+                                            self.safariVC?.preferredBarTintColor = Colours.white
+                                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                            self.present(self.safariVC!, animated: true, completion: nil)
+                                        }
+                                    }
                                 }
                             }
                             cell.toot.handleHashtagTap { (string) in
@@ -2258,15 +2300,23 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 }
                                 if url.absoluteString.hasPrefix(".") {
                                     let z = URL(string: String(url.absoluteString.dropFirst()))!
-                                    self.safariVC = SFSafariViewController(url: z)
-                                    self.safariVC?.preferredBarTintColor = Colours.white
-                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                    UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                        if !success {
+                                            self.safariVC = SFSafariViewController(url: z)
+                                            self.safariVC?.preferredBarTintColor = Colours.white
+                                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                            self.present(self.safariVC!, animated: true, completion: nil)
+                                        }
+                                    }
                                 } else {
-                                    self.safariVC = SFSafariViewController(url: url)
-                                    self.safariVC?.preferredBarTintColor = Colours.white
-                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                    UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                        if !success {
+                                            self.safariVC = SFSafariViewController(url: url)
+                                            self.safariVC?.preferredBarTintColor = Colours.white
+                                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                            self.present(self.safariVC!, animated: true, completion: nil)
+                                        }
+                                    }
                                 }
                             }
                             cell.toot.handleHashtagTap { (string) in
@@ -2352,15 +2402,23 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             }
                             if url.absoluteString.hasPrefix(".") {
                                 let z = URL(string: String(url.absoluteString.dropFirst()))!
-                                self.safariVC = SFSafariViewController(url: z)
-                                self.safariVC?.preferredBarTintColor = Colours.white
-                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                self.present(self.safariVC!, animated: true, completion: nil)
+                                UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                    if !success {
+                                        self.safariVC = SFSafariViewController(url: z)
+                                        self.safariVC?.preferredBarTintColor = Colours.white
+                                        self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                        self.present(self.safariVC!, animated: true, completion: nil)
+                                    }
+                                }
                             } else {
-                                self.safariVC = SFSafariViewController(url: url)
-                                self.safariVC?.preferredBarTintColor = Colours.white
-                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                self.present(self.safariVC!, animated: true, completion: nil)
+                                UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                    if !success {
+                                        self.safariVC = SFSafariViewController(url: url)
+                                        self.safariVC?.preferredBarTintColor = Colours.white
+                                        self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                        self.present(self.safariVC!, animated: true, completion: nil)
+                                    }
+                                }
                             }
                         }
                         cell.toot.handleHashtagTap { (string) in
@@ -2477,15 +2535,23 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             }
                             if url.absoluteString.hasPrefix(".") {
                                 let z = URL(string: String(url.absoluteString.dropFirst()))!
-                                self.safariVC = SFSafariViewController(url: z)
-                                self.safariVC?.preferredBarTintColor = Colours.white
-                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                self.present(self.safariVC!, animated: true, completion: nil)
+                                UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                    if !success {
+                                        self.safariVC = SFSafariViewController(url: z)
+                                        self.safariVC?.preferredBarTintColor = Colours.white
+                                        self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                        self.present(self.safariVC!, animated: true, completion: nil)
+                                    }
+                                }
                             } else {
-                                self.safariVC = SFSafariViewController(url: url)
-                                self.safariVC?.preferredBarTintColor = Colours.white
-                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                self.present(self.safariVC!, animated: true, completion: nil)
+                                UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                    if !success {
+                                        self.safariVC = SFSafariViewController(url: url)
+                                        self.safariVC?.preferredBarTintColor = Colours.white
+                                        self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                        self.present(self.safariVC!, animated: true, completion: nil)
+                                    }
+                                }
                             }
                         }
                         cell.toot.handleHashtagTap { (string) in
@@ -2580,15 +2646,23 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             }
                             if url.absoluteString.hasPrefix(".") {
                                 let z = URL(string: String(url.absoluteString.dropFirst()))!
-                                self.safariVC = SFSafariViewController(url: z)
-                                self.safariVC?.preferredBarTintColor = Colours.white
-                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                self.present(self.safariVC!, animated: true, completion: nil)
+                                UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                    if !success {
+                                        self.safariVC = SFSafariViewController(url: z)
+                                        self.safariVC?.preferredBarTintColor = Colours.white
+                                        self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                        self.present(self.safariVC!, animated: true, completion: nil)
+                                    }
+                                }
                             } else {
-                                self.safariVC = SFSafariViewController(url: url)
-                                self.safariVC?.preferredBarTintColor = Colours.white
-                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                                self.present(self.safariVC!, animated: true, completion: nil)
+                                UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                    if !success {
+                                        self.safariVC = SFSafariViewController(url: url)
+                                        self.safariVC?.preferredBarTintColor = Colours.white
+                                        self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                        self.present(self.safariVC!, animated: true, completion: nil)
+                                    }
+                                }
                             }
                         }
                         cell.toot.handleHashtagTap { (string) in
@@ -2672,15 +2746,23 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         }
                         if url.absoluteString.hasPrefix(".") {
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
-                            self.safariVC = SFSafariViewController(url: z)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: z)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         } else {
-                            self.safariVC = SFSafariViewController(url: url)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: url)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         }
                     }
                     cell.toot.handleHashtagTap { (string) in
@@ -3646,7 +3728,18 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         }
                     }
                     
-                    Alertift.actionSheet(title: nil, message: nil)
+                    let wordsInThis = (sto[indexPath.row].status?.content.stripHTML() ?? "").components(separatedBy: .punctuationCharacters).joined().components(separatedBy: " ").filter{!$0.isEmpty}.count
+                    let newSeconds = Double(wordsInThis) * 0.38
+                    var newSecondsText = "\(Int(newSeconds)) seconds average reading time"
+                    if newSeconds >= 60 {
+                        if Int(newSeconds) % 60 == 0 {
+                            newSecondsText = "\(Int(newSeconds/60)) minutes average reading time"
+                        } else {
+                            newSecondsText = "\(Int(newSeconds/60)) minutes and \(Int(newSeconds) % 60) seconds average reading time"
+                        }
+                    }
+                    
+                    Alertift.actionSheet(title: nil, message: newSecondsText)
                         .backgroundColor(Colours.white)
                         .titleTextColor(Colours.grayDark)
                         .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
@@ -3895,6 +3988,15 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             }
                             task.resume()
                         }
+                        .action(.default("Duplicate Toot".localized), image: UIImage(named: "addac1")) { (action, ind) in
+                            print(action, ind)
+                            
+                            let controller = ComposeViewController()
+                            controller.inReply = []
+                            controller.inReplyText = ""
+                            controller.filledTextFieldText = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                            self.present(controller, animated: true, completion: nil)
+                        }
                         .action(.default("Share".localized), image: UIImage(named: "share")) { (action, ind) in
                             print(action, ind)
                             
@@ -4025,7 +4127,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     }
                                     cell.hideSwipe(animated: true)
                                 } else {
-                                    let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
+                                    if let cell = theTable.cellForRow(at: indexPath) as? NotificationCellImage {
                                     if sto[indexPath.row].status!.favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].status?.id ?? "" ) {
                                         cell.moreImage.image = nil
                                         cell.moreImage.image = UIImage(named: "fifty")
@@ -4033,6 +4135,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                         cell.moreImage.image = UIImage(named: "boost")
                                     }
                                     cell.hideSwipe(animated: true)
+                                    }
                                 }
                             }
                         }
@@ -4238,7 +4341,18 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         }
                     }
                     
-                    Alertift.actionSheet(title: nil, message: nil)
+                    let wordsInThis = (sto[indexPath.row].status?.content.stripHTML() ?? "").components(separatedBy: .punctuationCharacters).joined().components(separatedBy: " ").filter{!$0.isEmpty}.count
+                    let newSeconds = Double(wordsInThis) * 0.38
+                    var newSecondsText = "\(Int(newSeconds)) seconds average reading time"
+                    if newSeconds >= 60 {
+                        if Int(newSeconds) % 60 == 0 {
+                            newSecondsText = "\(Int(newSeconds/60)) minutes average reading time"
+                        } else {
+                            newSecondsText = "\(Int(newSeconds/60)) minutes and \(Int(newSeconds) % 60) seconds average reading time"
+                        }
+                    }
+                    
+                    Alertift.actionSheet(title: nil, message: newSecondsText)
                         .backgroundColor(Colours.white)
                         .titleTextColor(Colours.grayDark)
                         .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
@@ -4486,6 +4600,15 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 }
                             }
                             task.resume()
+                        }
+                        .action(.default("Duplicate Toot".localized), image: UIImage(named: "addac1")) { (action, ind) in
+                            print(action, ind)
+                            
+                            let controller = ComposeViewController()
+                            controller.inReply = []
+                            controller.inReplyText = ""
+                            controller.filledTextFieldText = sto[indexPath.row].status?.content.stripHTML() ?? ""
+                            self.present(controller, animated: true, completion: nil)
                         }
                         .action(.default("Share".localized), image: UIImage(named: "share")) { (action, ind) in
                             print(action, ind)
@@ -4722,6 +4845,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     var newestC3 = StoreStruct.notificationsDirect.count
                     
                     StoreStruct.notifications = stat + StoreStruct.notifications
+                    StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
                     var co = 0
                     for x in stat {
                         if x.type == .mention {

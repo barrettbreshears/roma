@@ -67,7 +67,6 @@ class GraphCell: UITableViewCell, ScrollableGraphViewDataSource {
         
         self.graphView.removeFromSuperview()
         self.graphView = ScrollableGraphView(frame: CGRect(x: 0, y: 20, width: CGFloat(UIScreen.main.bounds.width), height: 200), dataSource: self)
-        
         self.graphView.isScrollEnabled = false
         if (UserDefaults.standard.object(forKey: "setGraph2") == nil) || (UserDefaults.standard.object(forKey: "setGraph2") as! Int == 0) {
             self.graphView.shouldAnimateOnStartup = true
@@ -80,7 +79,6 @@ class GraphCell: UITableViewCell, ScrollableGraphViewDataSource {
         self.graphView.alpha = 1
         
         let barPlot = BarPlot(identifier: "bar")
-        
         barPlot.barWidth = 34
         barPlot.barLineWidth = 1
         if (UserDefaults.standard.object(forKey: "acthue1") == nil) || (UserDefaults.standard.object(forKey: "acthue1") as! Int == 0) {
@@ -95,13 +93,10 @@ class GraphCell: UITableViewCell, ScrollableGraphViewDataSource {
         barPlot.adaptAnimationType = ScrollableGraphViewAnimationType.easeOut
         barPlot.animationDuration = 1.5
         
-        
         let referenceLines = ReferenceLines()
-        
         referenceLines.referenceLineLabelFont = UIFont.boldSystemFont(ofSize: 8)
         referenceLines.referenceLineColor = Colours.black.withAlphaComponent(0.06)
         referenceLines.referenceLineLabelColor = Colours.black.withAlphaComponent(0.5)
-        
         referenceLines.dataPointLabelColor = Colours.black.withAlphaComponent(0.5)
         
         graphView.backgroundFillColor = Colours.clear

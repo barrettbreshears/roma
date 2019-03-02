@@ -29,13 +29,13 @@ class MainFeedCell: UITableViewCell {
         toot.translatesAutoresizingMaskIntoConstraints = false
         moreImage.translatesAutoresizingMaskIntoConstraints = false
         
-        if (UserDefaults.standard.object(forKey: "proCorner") == nil || UserDefaults.standard.object(forKey: "proCorner") as! Int == 0) {
+        if (UserDefaults.standard.object(forKey: "proCorner") == nil || UserDefaults.standard.object(forKey: "proCorner") as? Int == 0) {
             profileImageView.layer.cornerRadius = 20
         }
-        if (UserDefaults.standard.object(forKey: "proCorner") != nil && UserDefaults.standard.object(forKey: "proCorner") as! Int == 1) {
+        if (UserDefaults.standard.object(forKey: "proCorner") != nil && UserDefaults.standard.object(forKey: "proCorner") as? Int == 1) {
             profileImageView.layer.cornerRadius = 8
         }
-        if (UserDefaults.standard.object(forKey: "proCorner") != nil && UserDefaults.standard.object(forKey: "proCorner") as! Int == 2) {
+        if (UserDefaults.standard.object(forKey: "proCorner") != nil && UserDefaults.standard.object(forKey: "proCorner") as? Int == 2) {
             profileImageView.layer.cornerRadius = 0
         }
         profileImageView.layer.masksToBounds = true
@@ -100,13 +100,13 @@ class MainFeedCell: UITableViewCell {
         profileImageView.layer.masksToBounds = true
         profileImageView.layer.borderColor = UIColor.black.cgColor
         profileImageView.layer.borderWidth = 0.2
-        if (UserDefaults.standard.object(forKey: "proCorner") == nil || UserDefaults.standard.object(forKey: "proCorner") as! Int == 0) {
+        if (UserDefaults.standard.object(forKey: "proCorner") == nil || UserDefaults.standard.object(forKey: "proCorner") as? Int == 0) {
             profileImageView.layer.cornerRadius = 20
         }
-        if (UserDefaults.standard.object(forKey: "proCorner") != nil && UserDefaults.standard.object(forKey: "proCorner") as! Int == 1) {
+        if (UserDefaults.standard.object(forKey: "proCorner") != nil && UserDefaults.standard.object(forKey: "proCorner") as? Int == 1) {
             profileImageView.layer.cornerRadius = 8
         }
-        if (UserDefaults.standard.object(forKey: "proCorner") != nil && UserDefaults.standard.object(forKey: "proCorner") as! Int == 2) {
+        if (UserDefaults.standard.object(forKey: "proCorner") != nil && UserDefaults.standard.object(forKey: "proCorner") as? Int == 2) {
             profileImageView.layer.cornerRadius = 0
         }
         

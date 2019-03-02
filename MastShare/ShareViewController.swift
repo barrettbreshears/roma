@@ -83,7 +83,7 @@ class ShareViewController: SLComposeServiceViewController {
                             }
                             
                         } else {
-                            let z = url as! UIImage
+                            if let z = url as? UIImage {
                             let request = Media.upload(media: .jpeg(z.pngData()))
                             client.run(request) { (statuses) in
                                 if let stat = (statuses.value) {
@@ -99,6 +99,17 @@ class ShareViewController: SLComposeServiceViewController {
                                         }
                                     }
                                 }
+                            }
+                            } else {
+                                itemProvider.loadItem(forTypeIdentifier: "public.url", options: nil, completionHandler: { (url, error) -> Void in
+                                    if let shareURL = url as? NSURL {
+                                        let request0 = Statuses.create(status: "\(self.contentText!)\n\n\(shareURL)", replyToID: nil, mediaIDs: [], sensitive: false, spoilerText: nil, visibility: .public)
+                                        client.run(request0) { (statuses) in
+                                            self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+                                        }
+                                    }
+                                    
+                                })
                             }
                         }
                         

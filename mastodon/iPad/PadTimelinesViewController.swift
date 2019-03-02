@@ -772,6 +772,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         NotificationCenter.default.addObserver(self, selector: #selector(self.fetchAllNewest), name: NSNotification.Name(rawValue: "fetchAllNewest"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeSeg), name: NSNotification.Name(rawValue: "changeSeg"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.segTheme), name: NSNotification.Name(rawValue: "segTheme"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.activateCrown), name: NSNotification.Name(rawValue: "activateCrown"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.loadagain), name: NSNotification.Name(rawValue: "light"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.loadagain), name: NSNotification.Name(rawValue: "night"), object: nil)
@@ -828,6 +829,12 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             segmentedControl.transitionStyle = .slide
             segmentedControl.delegate = self
             self.navigationController?.view.addSubview(segmentedControl)
+        }
+        
+        if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
+            self.crownScroll()
+            self.crownScroll2()
+            self.crownScroll3()
         }
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
@@ -928,13 +935,12 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         //        }
         
         self.restoreScroll()
-        
-        
-        if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
-            self.crownScroll()
-            self.crownScroll2()
-            self.crownScroll3()
-        }
+    }
+    
+    @objc func activateCrown() {
+        self.crownScroll()
+        self.crownScroll2()
+        self.crownScroll3()
     }
     
     func crownScroll() {
@@ -949,6 +955,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
         let horizontalConstraint = CrownAttributes.AxisConstraint(crownEdge: .trailing, anchorView: self.tableView, anchorViewEdge: .trailing, offset: -50)
         crownControl = CrownControl(attributes: attributes, delegate: self)
         crownControl.layout(in: view, horizontalConstaint: horizontalConstraint, verticalConstraint: verticalConstraint)
+        crownControl.showCrown()
     }
     
     func crownScroll2() {
@@ -1066,126 +1073,126 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
             newSize = offset + 15
         }
         
-        segmentedControl.removeFromSuperview()
-        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
-            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(30), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
-            segmentedControl.dataSource = self
-            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
-                segmentedControl.shapeStyle = .roundedRect
-            } else {
-                segmentedControl.shapeStyle = .liquid
-            }
-            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
-            segmentedControl.cornerRadius = 12
-            segmentedControl.shadowsEnabled = false
-            segmentedControl.transitionStyle = .slide
-            segmentedControl.delegate = self
-            self.navigationController?.view.addSubview(segmentedControl)
-            
-            self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
-            self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
-            self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellmore")
-            self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
-            self.tableView.alpha = 1
-            self.tableView.delegate = self
-            self.tableView.dataSource = self
-            self.tableView.separatorStyle = .singleLine
-            self.tableView.backgroundColor = Colours.white
-            self.tableView.separatorColor = Colours.cellQuote
-            self.tableView.layer.masksToBounds = true
-            self.tableView.estimatedRowHeight = 89
-            self.tableView.rowHeight = UITableView.automaticDimension
-            self.view.addSubview(self.tableView)
-            
-            self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
-            self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
-            self.tableViewL.register(SettingsCell.self, forCellReuseIdentifier: "cellmore1")
-            self.tableViewL.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
-            self.tableViewL.alpha = 0
-            self.tableViewL.delegate = self
-            self.tableViewL.dataSource = self
-            self.tableViewL.separatorStyle = .singleLine
-            self.tableViewL.backgroundColor = Colours.white
-            self.tableViewL.separatorColor = Colours.cellQuote
-            self.tableViewL.layer.masksToBounds = true
-            self.tableViewL.estimatedRowHeight = 89
-            self.tableViewL.rowHeight = UITableView.automaticDimension
-            self.view.addSubview(self.tableViewL)
-            
-            self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
-            self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
-            self.tableViewF.register(SettingsCell.self, forCellReuseIdentifier: "cellmore2")
-            self.tableViewF.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
-            self.tableViewF.alpha = 0
-            self.tableViewF.delegate = self
-            self.tableViewF.dataSource = self
-            self.tableViewF.separatorStyle = .singleLine
-            self.tableViewF.backgroundColor = Colours.white
-            self.tableViewF.separatorColor = Colours.cellQuote
-            self.tableViewF.layer.masksToBounds = true
-            self.tableViewF.estimatedRowHeight = 89
-            self.tableViewF.rowHeight = UITableView.automaticDimension
-            self.view.addSubview(self.tableViewF)
-        } else {
-            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
-            segmentedControl.dataSource = self
-            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
-                segmentedControl.shapeStyle = .roundedRect
-            } else {
-                segmentedControl.shapeStyle = .liquid
-            }
-            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
-            segmentedControl.cornerRadius = 12
-            segmentedControl.shadowsEnabled = false
-            segmentedControl.transitionStyle = .slide
-            segmentedControl.delegate = self
-            self.navigationController?.view.addSubview(segmentedControl)
-            
-            self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
-            self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
-            self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellmore")
-            self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
-            self.tableView.alpha = 1
-            self.tableView.delegate = self
-            self.tableView.dataSource = self
-            self.tableView.separatorStyle = .singleLine
-            self.tableView.backgroundColor = Colours.white
-            self.tableView.separatorColor = Colours.cellQuote
-            self.tableView.layer.masksToBounds = true
-            self.tableView.estimatedRowHeight = 89
-            self.tableView.rowHeight = UITableView.automaticDimension
-            self.view.addSubview(self.tableView)
-            
-            self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
-            self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
-            self.tableViewL.register(SettingsCell.self, forCellReuseIdentifier: "cellmore1")
-            self.tableViewL.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
-            self.tableViewL.alpha = 0
-            self.tableViewL.delegate = self
-            self.tableViewL.dataSource = self
-            self.tableViewL.separatorStyle = .singleLine
-            self.tableViewL.backgroundColor = Colours.white
-            self.tableViewL.separatorColor = Colours.cellQuote
-            self.tableViewL.layer.masksToBounds = true
-            self.tableViewL.estimatedRowHeight = 89
-            self.tableViewL.rowHeight = UITableView.automaticDimension
-            self.view.addSubview(self.tableViewL)
-            
-            self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
-            self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
-            self.tableViewF.register(SettingsCell.self, forCellReuseIdentifier: "cellmore2")
-            self.tableViewF.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
-            self.tableViewF.alpha = 0
-            self.tableViewF.delegate = self
-            self.tableViewF.dataSource = self
-            self.tableViewF.separatorStyle = .singleLine
-            self.tableViewF.backgroundColor = Colours.white
-            self.tableViewF.separatorColor = Colours.cellQuote
-            self.tableViewF.layer.masksToBounds = true
-            self.tableViewF.estimatedRowHeight = 89
-            self.tableViewF.rowHeight = UITableView.automaticDimension
-            self.view.addSubview(self.tableViewF)
-        }
+//        segmentedControl.removeFromSuperview()
+//        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
+//            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(30), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
+//            segmentedControl.dataSource = self
+//            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
+//                segmentedControl.shapeStyle = .roundedRect
+//            } else {
+//                segmentedControl.shapeStyle = .liquid
+//            }
+//            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+//            segmentedControl.cornerRadius = 12
+//            segmentedControl.shadowsEnabled = false
+//            segmentedControl.transitionStyle = .slide
+//            segmentedControl.delegate = self
+//            self.navigationController?.view.addSubview(segmentedControl)
+//
+//            self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
+//            self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+//            self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellmore")
+//            self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
+//            self.tableView.alpha = 1
+//            self.tableView.delegate = self
+//            self.tableView.dataSource = self
+//            self.tableView.separatorStyle = .singleLine
+//            self.tableView.backgroundColor = Colours.white
+//            self.tableView.separatorColor = Colours.cellQuote
+//            self.tableView.layer.masksToBounds = true
+//            self.tableView.estimatedRowHeight = 89
+//            self.tableView.rowHeight = UITableView.automaticDimension
+//            self.view.addSubview(self.tableView)
+//
+//            self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
+//            self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
+//            self.tableViewL.register(SettingsCell.self, forCellReuseIdentifier: "cellmore1")
+//            self.tableViewL.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
+//            self.tableViewL.alpha = 0
+//            self.tableViewL.delegate = self
+//            self.tableViewL.dataSource = self
+//            self.tableViewL.separatorStyle = .singleLine
+//            self.tableViewL.backgroundColor = Colours.white
+//            self.tableViewL.separatorColor = Colours.cellQuote
+//            self.tableViewL.layer.masksToBounds = true
+//            self.tableViewL.estimatedRowHeight = 89
+//            self.tableViewL.rowHeight = UITableView.automaticDimension
+//            self.view.addSubview(self.tableViewL)
+//
+//            self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
+//            self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
+//            self.tableViewF.register(SettingsCell.self, forCellReuseIdentifier: "cellmore2")
+//            self.tableViewF.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
+//            self.tableViewF.alpha = 0
+//            self.tableViewF.delegate = self
+//            self.tableViewF.dataSource = self
+//            self.tableViewF.separatorStyle = .singleLine
+//            self.tableViewF.backgroundColor = Colours.white
+//            self.tableViewF.separatorColor = Colours.cellQuote
+//            self.tableViewF.layer.masksToBounds = true
+//            self.tableViewF.estimatedRowHeight = 89
+//            self.tableViewF.rowHeight = UITableView.automaticDimension
+//            self.view.addSubview(self.tableViewF)
+//        } else {
+//            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+//            segmentedControl.dataSource = self
+//            if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
+//                segmentedControl.shapeStyle = .roundedRect
+//            } else {
+//                segmentedControl.shapeStyle = .liquid
+//            }
+//            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+//            segmentedControl.cornerRadius = 12
+//            segmentedControl.shadowsEnabled = false
+//            segmentedControl.transitionStyle = .slide
+//            segmentedControl.delegate = self
+//            self.navigationController?.view.addSubview(segmentedControl)
+//
+//            self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
+//            self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
+//            self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellmore")
+//            self.tableView.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
+//            self.tableView.alpha = 1
+//            self.tableView.delegate = self
+//            self.tableView.dataSource = self
+//            self.tableView.separatorStyle = .singleLine
+//            self.tableView.backgroundColor = Colours.white
+//            self.tableView.separatorColor = Colours.cellQuote
+//            self.tableView.layer.masksToBounds = true
+//            self.tableView.estimatedRowHeight = 89
+//            self.tableView.rowHeight = UITableView.automaticDimension
+//            self.view.addSubview(self.tableView)
+//
+//            self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
+//            self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
+//            self.tableViewL.register(SettingsCell.self, forCellReuseIdentifier: "cellmore1")
+//            self.tableViewL.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
+//            self.tableViewL.alpha = 0
+//            self.tableViewL.delegate = self
+//            self.tableViewL.dataSource = self
+//            self.tableViewL.separatorStyle = .singleLine
+//            self.tableViewL.backgroundColor = Colours.white
+//            self.tableViewL.separatorColor = Colours.cellQuote
+//            self.tableViewL.layer.masksToBounds = true
+//            self.tableViewL.estimatedRowHeight = 89
+//            self.tableViewL.rowHeight = UITableView.automaticDimension
+//            self.view.addSubview(self.tableViewL)
+//
+//            self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
+//            self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
+//            self.tableViewF.register(SettingsCell.self, forCellReuseIdentifier: "cellmore2")
+//            self.tableViewF.frame = CGRect(x: 0, y: Int(80), width: Int(self.view.bounds.width - 0), height: Int(self.view.bounds.height) - 80)
+//            self.tableViewF.alpha = 0
+//            self.tableViewF.delegate = self
+//            self.tableViewF.dataSource = self
+//            self.tableViewF.separatorStyle = .singleLine
+//            self.tableViewF.backgroundColor = Colours.white
+//            self.tableViewF.separatorColor = Colours.cellQuote
+//            self.tableViewF.layer.masksToBounds = true
+//            self.tableViewF.estimatedRowHeight = 89
+//            self.tableViewF.rowHeight = UITableView.automaticDimension
+//            self.view.addSubview(self.tableViewF)
+//        }
         
         
         
@@ -2050,15 +2057,23 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         
                         if url.absoluteString.hasPrefix(".") {
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
-                            self.safariVC = SFSafariViewController(url: z)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: z)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         } else {
-                            self.safariVC = SFSafariViewController(url: url)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: url)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         }
                     }
                     cell.toot.handleHashtagTap { (string) in
@@ -2150,15 +2165,23 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         
                         if url.absoluteString.hasPrefix(".") {
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
-                            self.safariVC = SFSafariViewController(url: z)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: z)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         } else {
-                            self.safariVC = SFSafariViewController(url: url)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: url)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         }
                     }
                     cell.toot.handleHashtagTap { (string) in
@@ -2279,15 +2302,23 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         
                         if url.absoluteString.hasPrefix(".") {
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
-                            self.safariVC = SFSafariViewController(url: z)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: z)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         } else {
-                            self.safariVC = SFSafariViewController(url: url)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: url)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         }
                     }
                     cell.toot.handleHashtagTap { (string) in
@@ -2379,15 +2410,23 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         
                         if url.absoluteString.hasPrefix(".") {
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
-                            self.safariVC = SFSafariViewController(url: z)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: z)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         } else {
-                            self.safariVC = SFSafariViewController(url: url)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: url)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         }
                     }
                     cell.toot.handleHashtagTap { (string) in
@@ -2509,15 +2548,23 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         
                         if url.absoluteString.hasPrefix(".") {
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
-                            self.safariVC = SFSafariViewController(url: z)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: z)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         } else {
-                            self.safariVC = SFSafariViewController(url: url)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: url)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         }
                     }
                     cell.toot.handleHashtagTap { (string) in
@@ -2609,15 +2656,23 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                         
                         if url.absoluteString.hasPrefix(".") {
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
-                            self.safariVC = SFSafariViewController(url: z)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: z)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         } else {
-                            self.safariVC = SFSafariViewController(url: url)
-                            self.safariVC?.preferredBarTintColor = Colours.white
-                            self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                            self.present(self.safariVC!, animated: true, completion: nil)
+                            UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: url)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
                         }
                     }
                     cell.toot.handleHashtagTap { (string) in
@@ -4262,7 +4317,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 self.refreshControl.endRefreshing()
                                 if newestC == 0 {
                                     
-                                } else {
+                                } else if StoreStruct.statusesHome.count >= newestC + 1 {
                                     self.tableView.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
                                 }
                                 UIView.setAnimationsEnabled(true)
@@ -4334,7 +4389,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 self.refreshControl.endRefreshing()
                                 if newestC == 0 {
                                     
-                                } else {
+                                } else if StoreStruct.statusesLocal.count >= newestC + 1 {
                                     self.tableViewL.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
                                 }
                                 UIView.setAnimationsEnabled(true)
@@ -4409,7 +4464,7 @@ class PadTimelinesViewController: UIViewController, SJFluidSegmentedControlDataS
                                 self.refreshControl.endRefreshing()
                                 if newestC == 0 {
                                     
-                                } else {
+                                } else if StoreStruct.statusesFederated.count >= newestC + 1 {
                                     self.tableViewF.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
                                 }
                                 UIView.setAnimationsEnabled(true)

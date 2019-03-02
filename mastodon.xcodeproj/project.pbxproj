@@ -702,6 +702,7 @@
 		53E6F2B5216CDDF800912B83 /* StoreStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E6F2B3216CDDF800912B83 /* StoreStruct.swift */; };
 		53E6F2B7216CDE7D00912B83 /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E6F2B6216CDE7D00912B83 /* DetailController.swift */; };
 		53EBE6B52220030A000D007E /* UIImageColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EBE6B42220030A000D007E /* UIImageColors.swift */; };
+		53EBE6BB22283FF9000D007E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EBE6BA22283FF9000D007E /* SearchViewController.swift */; };
 		6DA99281E87A79F0A97A9727 /* Pods_OneSignalNotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 225E59B831453EAA30848ED9 /* Pods_OneSignalNotificationServiceExtension.framework */; };
 		7806850921CC222F00072C41 /* ProCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7806850821CC222F00072C41 /* ProCells.swift */; };
 		A910C7FE2221DA730023AD76 /* CrownAttributes+Sizes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A910C7E32221DA730023AD76 /* CrownAttributes+Sizes.swift */; };
@@ -1584,6 +1585,7 @@
 		53E6F2B3216CDDF800912B83 /* StoreStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreStruct.swift; sourceTree = "<group>"; };
 		53E6F2B6216CDE7D00912B83 /* DetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailController.swift; sourceTree = "<group>"; };
 		53EBE6B42220030A000D007E /* UIImageColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageColors.swift; sourceTree = "<group>"; };
+		53EBE6BA22283FF9000D007E /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
 		7806850821CC222F00072C41 /* ProCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProCells.swift; sourceTree = "<group>"; };
 		7806850A21CC227100072C41 /* CollectionProCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionProCells.swift; sourceTree = "<group>"; };
 		78F6FFEAB47575DB49E46173 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
@@ -2806,6 +2808,7 @@
 				5373C9F12151956300676F3D /* ThirdViewController.swift */,
 				5373C9F32151957200676F3D /* FourthViewController.swift */,
 				5373CB4721565FFB00676F3D /* DetailViewController.swift */,
+				53EBE6BA22283FF9000D007E /* SearchViewController.swift */,
 				5315ECE721FE1A0B00A3F1A9 /* ScheduledStatusesViewController.swift */,
 				5373CB492156602900676F3D /* ComposeViewController.swift */,
 				5351B98D2167ADF400002069 /* NewListViewController.swift */,
@@ -3248,7 +3251,7 @@
 		};
 		5322D7D92167659900B952F5 /* OneSignalNotificationServiceExtension */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 5322D7E22167659900B952F5 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
+			buildConfigurationList = 5322D7E22167659900B952F5 /* Build configuration list for <deleted target> */;
 			buildPhases = (
 				5322D7D62167659900B952F5 /* Sources */,
 				5322D7D72167659900B952F5 /* Frameworks */,
@@ -4173,6 +4176,7 @@
 				5316C88E219D94A00003AB97 /* GiphyImageSet.swift in Sources */,
 				A9594D9B221F258400AF7A0E /* MisterFusionExtension.swift in Sources */,
 				5320581D215D287700ED0C36 /* FontAwesomeTextRepresentable.swift in Sources */,
+				53EBE6BB22283FF9000D007E /* SearchViewController.swift in Sources */,
 				5354BAC6216577FD0094C545 /* UIColorExtension.swift in Sources */,
 				5373CAA52152C68000676F3D /* URLRequest.swift in Sources */,
 				5354BAC8216577FD0094C545 /* RamotionAnimator.swift in Sources */,
@@ -5020,7 +5024,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		5322D7E22167659900B952F5 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */ = {
+		5322D7E22167659900B952F5 /* Build configuration list for <deleted target> */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				5322D7E32167659900B952F5 /* Debug */,

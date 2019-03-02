@@ -58,7 +58,6 @@ PODS:
   - NextLevel (0.9.2)
   - NSTimer-Blocks (0.0.1)
   - ObjectMapper (3.3.0)
-  - OneSignal (2.6.1)
   - PINCache (2.3)
   - PINRemoteImage (2.1.4):
     - PINRemoteImage/FLAnimatedImage (= 2.1.4)
@@ -97,7 +96,6 @@ DEPENDENCIES:
   - Fabric
   - Firebase/Core
   - NextLevel
-  - OneSignal
   - PINRemoteImage
   - QuickLayout
   - ReactiveSSE
@@ -128,7 +126,6 @@ SPEC REPOS:
     - NextLevel
     - NSTimer-Blocks
     - ObjectMapper
-    - OneSignal
     - PINCache
     - PINRemoteImage
     - QuickLayout
@@ -161,7 +158,6 @@ SPEC CHECKSUMS:
   NextLevel: 6a40968816dc1ae737944559378343cf2057dece
   NSTimer-Blocks: 88faf9aef5f250ead087f3f67ae642517083bf36
   ObjectMapper: b612bf8c8e99c4dc0bb6013a51f7c27966ed5da9
-  OneSignal: 5143194173b05027f89ce5c4481943ce000c87cd
   PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
   PINRemoteImage: 4ac4011c5caefd6befd99758e09becede05d3226
   QuickLayout: 9af2b7fd89a6552828f51a5aba28d1bcdb8b340c
@@ -177,6 +173,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
   TinyConstraints: 4721a4b303c799328867078ade6560e152df54d1
 
-PODFILE CHECKSUM: 148a9a35af3e4baa555cc37061dee26bf63fc4fa
+PODFILE CHECKSUM: f9cb29f11669ec3b30ff7b33b6ccf77690da4d64
 
 COCOAPODS: 1.5.3

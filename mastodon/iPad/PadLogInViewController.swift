@@ -319,7 +319,7 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
                             
                             DispatchQueue.main.async {
                                 StoreStruct.shared.newInstance?.redirect = "com.vm.roma://addNewInstance".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                                let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&scope=read%20write%20follow&client_id=\(application.clientID)")!
+                                let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
                                 self.safariVC = SFSafariViewController(url: queryURL)
                                 self.present(self.safariVC!, animated: true, completion: nil)
                             }
@@ -357,9 +357,13 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
                             
                             DispatchQueue.main.async {
                                 StoreStruct.shared.currentInstance.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                                let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&scope=read%20write%20follow&client_id=\(application.clientID)")!
-                                self.safariVC = SFSafariViewController(url: queryURL)
-                                self.present(self.safariVC!, animated: true, completion: nil)
+                                let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
+                                UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
+                                    if !success {
+                                        self.safariVC = SFSafariViewController(url: queryURL)
+                                        self.present(self.safariVC!, animated: true, completion: nil)
+                                    }
+                                }
                             }
                         }
                     }

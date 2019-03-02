@@ -431,7 +431,7 @@ class DetailCellImage: UITableViewCell {
                 self.smallImage3.layer.borderColor = UIColor.black.cgColor
                 self.smallImage3.alpha = 1
                 self.mainImageView.addSubview(self.smallImage3)
-            } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count == 4 {
+            } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count >= 4 {
                 self.smallImage1.frame = CGRect(x: -2, y: -2, width: (UIScreen.main.bounds.width)/2, height: 120)
                 self.smallImage1.contentMode = .scaleAspectFill
                 self.smallImage1.imageView?.contentMode = .scaleAspectFill

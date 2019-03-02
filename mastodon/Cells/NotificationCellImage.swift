@@ -294,12 +294,27 @@ class NotificationCellImage: SwipeTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func prepareForReuse() {
+        self.profileImageView.imageView?.image = nil
+        self.mainImageView.imageView?.image = nil
+        self.smallImage1.imageView?.image = nil
+        self.smallImage2.imageView?.image = nil
+        self.smallImage3.imageView?.image = nil
+        self.smallImage4.imageView?.image = nil
+    }
+    
     func configure(_ status: Notificationt) {
         
         rep1.setImage(UIImage(named: "reply3")?.maskWithColor(color: Colours.gray), for: .normal)
         like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
         boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
         more1.setImage(UIImage(named: "more")?.maskWithColor(color: Colours.gray), for: .normal)
+        if status.status?.reblogged ?? false {
+            boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
+        }
+        if status.status?.favourited ?? false {
+            like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
+        }
         
         
         toot.mentionColor = Colours.tabSelected
@@ -580,7 +595,7 @@ class NotificationCellImage: SwipeTableViewCell {
                 self.smallImage3.layer.borderColor = UIColor.black.cgColor
                 self.smallImage3.alpha = 1
                 self.mainImageView.addSubview(self.smallImage3)
-            } else if status.status?.reblog?.mediaAttachments.count ?? status.status?.mediaAttachments.count == 4 {
+            } else if status.status?.reblog?.mediaAttachments.count ?? status.status?.mediaAttachments.count ?? 0 >= 4 {
                 self.smallImage1.frame = CGRect(x: -2, y: -2, width: (UIScreen.main.bounds.width - 127)/2, height: 80)
                 self.smallImage1.contentMode = .scaleAspectFill
                 self.smallImage1.imageView?.contentMode = .scaleAspectFill

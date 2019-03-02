@@ -12,7 +12,7 @@ import SafariServices
 import StatusAlert
 import SAConfettiView
 
-class PadViewController: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate {
+class PadViewController: UIViewController, UITextFieldDelegate, UIGestureRecognizerDelegate, UIPencilInteractionDelegate {
     
     var curr = 0
     var unselectCol = UIColor(red: 75/255.0, green: 75/255.0, blue: 85/255.0, alpha: 1.0)
@@ -711,6 +711,14 @@ class PadViewController: UIViewController, UITextFieldDelegate, UIGestureRecogni
         NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
     }
     
+    @available(iOS 12.1, *)
+    func pencilInteractionDidTap(_ interaction: UIPencilInteraction) {
+        let controller = ComposeViewController()
+        controller.inReply = []
+        controller.inReplyText = ""
+        self.present(controller, animated: true, completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -768,6 +776,12 @@ class PadViewController: UIViewController, UITextFieldDelegate, UIGestureRecogni
         statusBarView.frame = UIApplication.shared.statusBarFrame
         statusBarView.backgroundColor = Colours.white
         view.addSubview(statusBarView)
+        
+        if #available(iOS 12.1, *) {
+            let pencilInteraction = UIPencilInteraction()
+            pencilInteraction.delegate = self
+            view.addInteraction(pencilInteraction)
+        }
         
         if (UserDefaults.standard.object(forKey: "themeaccent") == nil) || (UserDefaults.standard.object(forKey: "themeaccent") as! Int == 0) {
             Colours.tabSelected = StoreStruct.colArray[0]

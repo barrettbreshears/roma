@@ -373,7 +373,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         } else if section == 3 {
             return self.bioArray.count
         } else {
-            return InstanceData.getAllInstances().count + 1
+            let z1 = Account.getAccounts().count
+            let z2 = InstanceData.getAllInstances().count
+            
+            if z1 == z2 {
+                return InstanceData.getAllInstances().count + 1
+            } else {
+                return 1
+            }
         }
     }
 
@@ -602,6 +609,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         if sender.isOn {
             UserDefaults.standard.set(1, forKey: "thumbsc")
             sender.setOn(true, animated: true)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "activateCrown"), object: self)
         } else {
             UserDefaults.standard.set(0, forKey: "thumbsc")
             sender.setOn(false, animated: true)
@@ -1094,11 +1102,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     cell.userTag.textColor = Colours.tabSelected
                     cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 } else {
-                cell.configure(status: account.username, status2:instanceAndAccount, image: "", imageURL:account.avatarStatic )
-                cell.backgroundColor = Colours.white
-                cell.userName.textColor = Colours.black
-                cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
-                cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                    cell.configure(status: account.username, status2:instanceAndAccount, image: "", imageURL:account.avatarStatic )
+                    cell.backgroundColor = Colours.white
+                    cell.userName.textColor = Colours.black
+                    cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                    cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 }
                 let bgColorView = UIView()
                 bgColorView.backgroundColor = Colours.white

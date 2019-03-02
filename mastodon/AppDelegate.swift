@@ -90,25 +90,25 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         UIApplication.shared.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
-
-        let request = Notifications.all(range: .default)
-        StoreStruct.client.run(request) { (statuses) in
-            if let stat = (statuses.value) {
-                StoreStruct.notifications = stat
-
-                for x in StoreStruct.notifications {
-                    if x.type == .mention {
-                        StoreStruct.notificationsMentions.append(x)
-                        DispatchQueue.main.async {
-                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
-                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "loadNewest"), object: nil)
-                        }
-                    }
-                }
-
-            }
-        }
+        
+//        let request = Notifications.all(range: .default)
+//        StoreStruct.client.run(request) { (statuses) in
+//            if let stat = (statuses.value) {
+//                StoreStruct.notifications = stat
+//
+//                for x in StoreStruct.notifications {
+//                    if x.type == .mention {
+//                        StoreStruct.notificationsMentions.append(x)
+//                        DispatchQueue.main.async {
+//                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
+//                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
+//                            NotificationCenter.default.post(name: Notification.Name(rawValue: "loadNewest"), object: nil)
+//                        }
+//                    }
+//                }
+//
+//            }
+//        }
     }
 
     func application(
@@ -165,7 +165,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let jsonString = String(data: jsonData, encoding: .utf8)
 
             request.httpBody = jsonData
-            print("JSON String : " + jsonString!)
         }
         catch {
             print(error.localizedDescription)

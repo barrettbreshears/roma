@@ -30,14 +30,17 @@ public class DLTagView: UIScrollView {
     // MARK: - Layout
     // --------------
     
-    public override func layoutSubviews() {
-        super.layoutSubviews()
+    func viewDidLoad() {
         self.isScrollEnabled = true
-        self.showsHorizontalScrollIndicator = false
-//        self.showsVerticalScrollIndicator = false
         self.bounces = true
         self.alwaysBounceHorizontal = true
         rearrangeButtons()
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        self.showsHorizontalScrollIndicator = false
+        self.showsVerticalScrollIndicator = false
     }
     
     // --------------
@@ -110,7 +113,7 @@ public class DLTagView: UIScrollView {
     
     private func rearrangeButtons() {
         var currentX = padding.left
-        var currentY = padding.top
+        let currentY = padding.top
         
         var previousView: UIView? = nil
         

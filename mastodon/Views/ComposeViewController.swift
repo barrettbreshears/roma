@@ -1124,10 +1124,140 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if action == #selector(self.paste(_:)) {
             return UIPasteboard.general.string != nil || UIPasteboard.general.image != nil
-            //if you want to do this for specific textView add && [yourTextView isFirstResponder] to if statement
         }
         
+        let menuController = UIMenuController.shared
+        menuController.menuItems = [
+            UIMenuItem(
+                title: "Bold",
+                action: #selector(self.bText)
+            ),
+            UIMenuItem(
+                title: "Italics",
+                action: #selector(self.iText)
+            ),
+            UIMenuItem(
+                title: "Monospace",
+                action: #selector(self.mText)
+            ),
+            UIMenuItem(
+                title: "Handwritten",
+                action: #selector(self.hText)
+            ),
+            UIMenuItem(
+                title: "Fraktur",
+                action: #selector(self.fText)
+            ),
+            UIMenuItem(
+                title: "Bubble",
+                action: #selector(self.b2Text)
+            ),
+            UIMenuItem(
+                title: "Filled Bubble",
+                action: #selector(self.fbText)
+            ),
+            UIMenuItem(
+                title: "Double Stroke",
+                action: #selector(self.dsText)
+            )
+        ]
         return super.canPerformAction(action, withSender: sender)
+    }
+    
+    @objc func bText() {
+        if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
+            if selectedText == "" {
+                let boldT = self.boldTheText(string: self.textView.text)
+                self.textView.text = boldT
+            } else {
+                let boldT = self.boldTheText(string: selectedText)
+                self.textView.text = self.textView.text.replacingOccurrences(of: selectedText, with: boldT)
+            }
+        }
+    }
+    
+    @objc func iText() {
+        if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
+            if selectedText == "" {
+                let itaT = self.italicsTheText(string: self.textView.text)
+                self.textView.text = itaT
+            } else {
+                let itaT = self.italicsTheText(string: selectedText)
+                self.textView.text = self.textView.text.replacingOccurrences(of: selectedText, with: itaT)
+            }
+        }
+    }
+    
+    @objc func mText() {
+        if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
+            if selectedText == "" {
+                let monoT = self.monoTheText(string: self.textView.text)
+                self.textView.text = monoT
+            } else {
+                let monoT = self.monoTheText(string: selectedText)
+                self.textView.text = self.textView.text.replacingOccurrences(of: selectedText, with: monoT)
+            }
+        }
+    }
+    
+    @objc func hText() {
+        if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
+            if selectedText == "" {
+                let monoT = self.handwriteTheText(string: self.textView.text)
+                self.textView.text = monoT
+            } else {
+                let monoT = self.handwriteTheText(string: selectedText)
+                self.textView.text = self.textView.text.replacingOccurrences(of: selectedText, with: monoT)
+            }
+        }
+    }
+    
+    @objc func fText() {
+        if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
+            if selectedText == "" {
+                let monoT = self.frakturTheText(string: self.textView.text)
+                self.textView.text = monoT
+            } else {
+                let monoT = self.frakturTheText(string: selectedText)
+                self.textView.text = self.textView.text.replacingOccurrences(of: selectedText, with: monoT)
+            }
+        }
+    }
+    
+    @objc func b2Text() {
+        if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
+            if selectedText == "" {
+                let monoT = self.bubbleTheText(string: self.textView.text)
+                self.textView.text = monoT
+            } else {
+                let monoT = self.bubbleTheText(string: selectedText)
+                self.textView.text = self.textView.text.replacingOccurrences(of: selectedText, with: monoT)
+            }
+        }
+    }
+    
+    @objc func fbText() {
+        if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
+            if selectedText == "" {
+                let monoT = self.bubbleTheText2(string: self.textView.text)
+                self.textView.text = monoT
+            } else {
+                let monoT = self.bubbleTheText2(string: selectedText)
+                self.textView.text = self.textView.text.replacingOccurrences(of: selectedText, with: monoT)
+            }
+        }
+    }
+    
+    @objc func dsText() {
+        if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
+            if selectedText == "" {
+                let monoT = self.doubleTheText(string: self.textView.text)
+                self.textView.text = monoT
+            } else {
+                let monoT = self.doubleTheText(string: selectedText)
+                self.textView.text = self.textView.text.replacingOccurrences(of: selectedText, with: monoT)
+            }
+        }
     }
     
     @objc override func paste(_ sender: Any?) {
@@ -2024,6 +2154,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             self.tableViewEmoti.alpha = 0
         })
     }
+    
     @objc func didTouchUpInsideEmotiButton(_ sender: AnyObject) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
         let impact = UIImpactFeedbackGenerator()

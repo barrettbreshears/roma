@@ -382,15 +382,23 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     
                     if url.absoluteString.hasPrefix(".") {
                         let z = URL(string: String(url.absoluteString.dropFirst()))!
-                        self.safariVC = SFSafariViewController(url: z)
-                        self.safariVC?.preferredBarTintColor = Colours.white
-                        self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                        self.present(self.safariVC!, animated: true, completion: nil)
+                        UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                            if !success {
+                                self.safariVC = SFSafariViewController(url: z)
+                                self.safariVC?.preferredBarTintColor = Colours.white
+                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                self.present(self.safariVC!, animated: true, completion: nil)
+                            }
+                        }
                     } else {
-                        self.safariVC = SFSafariViewController(url: url)
-                        self.safariVC?.preferredBarTintColor = Colours.white
-                        self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                        self.present(self.safariVC!, animated: true, completion: nil)
+                        UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                            if !success {
+                                self.safariVC = SFSafariViewController(url: url)
+                                self.safariVC?.preferredBarTintColor = Colours.white
+                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                self.present(self.safariVC!, animated: true, completion: nil)
+                            }
+                        }
                     }
                 }
                 cell.toot.handleHashtagTap { (string) in
@@ -486,15 +494,23 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     
                     if url.absoluteString.hasPrefix(".") {
                         let z = URL(string: String(url.absoluteString.dropFirst()))!
-                        self.safariVC = SFSafariViewController(url: z)
-                        self.safariVC?.preferredBarTintColor = Colours.white
-                        self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                        self.present(self.safariVC!, animated: true, completion: nil)
+                        UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                            if !success {
+                                self.safariVC = SFSafariViewController(url: z)
+                                self.safariVC?.preferredBarTintColor = Colours.white
+                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                self.present(self.safariVC!, animated: true, completion: nil)
+                            }
+                        }
                     } else {
-                        self.safariVC = SFSafariViewController(url: url)
-                        self.safariVC?.preferredBarTintColor = Colours.white
-                        self.safariVC?.preferredControlTintColor = Colours.tabSelected
-                        self.present(self.safariVC!, animated: true, completion: nil)
+                        UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                            if !success {
+                                self.safariVC = SFSafariViewController(url: url)
+                                self.safariVC?.preferredBarTintColor = Colours.white
+                                self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                self.present(self.safariVC!, animated: true, completion: nil)
+                            }
+                        }
                     }
                 }
                 cell.toot.handleHashtagTap { (string) in
@@ -1137,7 +1153,18 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     
                     
                     
-                    Alertift.actionSheet(title: nil, message: nil)
+                    let wordsInThis = sto[indexPath.row].content.stripHTML().components(separatedBy: .punctuationCharacters).joined().components(separatedBy: " ").filter{!$0.isEmpty}.count
+                    let newSeconds = Double(wordsInThis) * 0.38
+                    var newSecondsText = "\(Int(newSeconds)) seconds average reading time"
+                    if newSeconds >= 60 {
+                        if Int(newSeconds) % 60 == 0 {
+                            newSecondsText = "\(Int(newSeconds/60)) minutes average reading time"
+                        } else {
+                            newSecondsText = "\(Int(newSeconds/60)) minutes and \(Int(newSeconds) % 60) seconds average reading time"
+                        }
+                    }
+                    
+                    Alertift.actionSheet(title: nil, message: newSecondsText)
                         .backgroundColor(Colours.white)
                         .titleTextColor(Colours.grayDark)
                         .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
@@ -1217,6 +1244,68 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                     //self.tableView.reloadData()
                                 }
                             }
+                        }
+                        .action(.default("Translate".localized), image: UIImage(named: "translate")) { (action, ind) in
+                            print(action, ind)
+                            
+                            let unreserved = "-._~/?"
+                            let allowed = NSMutableCharacterSet.alphanumeric()
+                            allowed.addCharacters(in: unreserved)
+                            let bodyText = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            print("0001")
+                            print(bodyText)
+                            let unreservedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~"
+                            let unreservedCharset = NSCharacterSet(charactersIn: unreservedChars)
+                            var trans = bodyText.addingPercentEncoding(withAllowedCharacters: unreservedCharset as CharacterSet)
+                            trans = trans!.replacingOccurrences(of: "\n\n", with: "%20")
+                            print("0002")
+                            print(trans)
+                            let langStr = Locale.current.languageCode
+                            let urlString = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=\(langStr ?? "en")&dt=t&q=\(trans!)&ie=UTF-8&oe=UTF-8"
+                            guard let requestUrl = URL(string:urlString) else {
+                                return
+                            }
+                            let request = URLRequest(url:requestUrl)
+                            let task = URLSession.shared.dataTask(with: request) {
+                                (data, response, error) in
+                                if error == nil, let usableData = data {
+                                    do {
+                                        let json = try JSONSerialization.jsonObject(with: usableData, options: .mutableContainers) as! [Any]
+                                        
+                                        var translatedText = ""
+                                        for i in (json[0] as! [Any]) {
+                                            translatedText = translatedText + ((i as! [Any])[0] as? String ?? "")
+                                        }
+                                        
+                                        Alertift.actionSheet(title: nil, message: translatedText as? String ?? "Could not translate tweet")
+                                            .backgroundColor(Colours.white)
+                                            .titleTextColor(Colours.grayDark)
+                                            .messageTextColor(Colours.grayDark)
+                                            .messageTextAlignment(.left)
+                                            .titleTextAlignment(.left)
+                                            .action(.cancel("Dismiss"))
+                                            .finally { action, index in
+                                                if action.style == .cancel {
+                                                    return
+                                                }
+                                            }
+                                            .show(on: self)
+                                    } catch let error as NSError {
+                                        print(error)
+                                    }
+                                    
+                                }
+                            }
+                            task.resume()
+                        }
+                        .action(.default("Duplicate Toot".localized), image: UIImage(named: "addac1")) { (action, ind) in
+                            print(action, ind)
+                            
+                            let controller = ComposeViewController()
+                            controller.inReply = []
+                            controller.inReplyText = ""
+                            controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
+                            self.present(controller, animated: true, completion: nil)
                         }
                         .action(.default("Share".localized), image: UIImage(named: "share")) { (action, ind) in
                             print(action, ind)
@@ -1301,7 +1390,18 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     
                     
                     
-                    Alertift.actionSheet(title: nil, message: nil)
+                    let wordsInThis = sto[indexPath.row].content.stripHTML().components(separatedBy: .punctuationCharacters).joined().components(separatedBy: " ").filter{!$0.isEmpty}.count
+                    let newSeconds = Double(wordsInThis) * 0.38
+                    var newSecondsText = "\(Int(newSeconds)) seconds average reading time"
+                    if newSeconds >= 60 {
+                        if Int(newSeconds) % 60 == 0 {
+                            newSecondsText = "\(Int(newSeconds/60)) minutes average reading time"
+                        } else {
+                            newSecondsText = "\(Int(newSeconds/60)) minutes and \(Int(newSeconds) % 60) seconds average reading time"
+                        }
+                    }
+                    
+                    Alertift.actionSheet(title: nil, message: newSecondsText)
                         .backgroundColor(Colours.white)
                         .titleTextColor(Colours.grayDark)
                         .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
@@ -1549,6 +1649,15 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                 }
                             }
                             task.resume()
+                        }
+                        .action(.default("Duplicate Toot".localized), image: UIImage(named: "addac1")) { (action, ind) in
+                            print(action, ind)
+                            
+                            let controller = ComposeViewController()
+                            controller.inReply = []
+                            controller.inReplyText = ""
+                            controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
+                            self.present(controller, animated: true, completion: nil)
                         }
                         .action(.default("Share".localized), image: UIImage(named: "share")) { (action, ind) in
                             print(action, ind)

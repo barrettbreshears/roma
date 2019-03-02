@@ -13,13 +13,9 @@ import StatusAlert
 import SAConfettiView
 import ReactiveSSE
 import ReactiveSwift
-import OneSignal
 
-class PadActivityViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, OSSubscriptionObserver {
+class PadActivityViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate {
     
-    func onOSSubscriptionChanged(_ stateChanges: OSSubscriptionStateChanges!) {
-        print("state changed")
-    }
     
     var newUpdatesB2 = UIButton()
     var countcount1 = 0
@@ -626,10 +622,6 @@ class PadActivityViewController: UIViewController, UITableViewDelegate, UITableV
         self.streamDataNoti()
         }
         
-        OneSignal.add(self as OSSubscriptionObserver)
-        OneSignal.promptForPushNotifications(userResponse: { accepted in
-            print("User accepted notifications: \(accepted)")
-        })
     }
     
     
