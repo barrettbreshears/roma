@@ -117,7 +117,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.openURL("com.shi.mastodon://id=\(self.allStats[indexPath.row].id)")
+        self.openURL("com.vm.roma://id=\(self.allStats[indexPath.row].id)")
     }
     
     @objc func openURL(_ url: String) -> Bool {

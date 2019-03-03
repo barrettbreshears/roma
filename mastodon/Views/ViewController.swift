@@ -2265,7 +2265,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 let request = Clients.register(
                     clientName: "Roma",
                     redirectURI: "com.vm.roma://addNewInstance",
-                    scopes: [.read, .write, .follow],
+                    scopes: [.read, .write, .follow, .push],
                     website: "https://pleroma.com"
                 )
                 StoreStruct.shared.newClient.run(request) { (application) in
@@ -2292,7 +2292,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         StoreStruct.shared.newInstance?.redirect = "com.vm.roma://addNewInstance".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                         let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&scope=read%20write%20follow&client_id=\(application.clientID)")!
                         DispatchQueue.main.async {
-                            StoreStruct.shared.newInstance?.redirect = "com.shi.mastodon://addNewInstance".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                            StoreStruct.shared.newInstance?.redirect = "com.vm.roma://addNewInstance".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                             let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
                             UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
@@ -2308,7 +2308,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 let request = Clients.register(
                     clientName: "Roma",
                     redirectURI: "com.vm.roma://success",
-                    scopes: [.read, .write, .follow],
+                    scopes: [.read, .write, .follow, .push],
                     website: "https://pleroma.com"
                 )
                 StoreStruct.client.run(request) { (application) in
@@ -2334,7 +2334,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         StoreStruct.shared.currentInstance.returnedText = returnedText
 
                         DispatchQueue.main.async {
-                            StoreStruct.shared.currentInstance.redirect = "com.shi.mastodon://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                            StoreStruct.shared.currentInstance.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                             let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
                             UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {

@@ -195,7 +195,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
         let request = Clients.register(
             clientName: "Roma",
             redirectURI: "com.vm.roma://success",
-            scopes: [.read, .write, .follow],
+            scopes: [.read, .write, .follow, .push],
             website: "https://twitter.com/jpeguin"
         )
         StoreStruct.client.run(request) { (application) in

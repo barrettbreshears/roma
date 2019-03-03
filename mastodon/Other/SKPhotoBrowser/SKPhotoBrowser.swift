@@ -449,7 +449,7 @@ open class SKPhotoBrowser: UIViewController, UIScrollViewDelegate {
             impact.impactOccurred()
         }
         
-        self.openURL("com.shi.mastodon://id=\(StoreStruct.newIDtoGoTo)")
+        self.openURL("com.vm.roma://id=\(StoreStruct.newIDtoGoTo)")
         self.determineAndClose()
     }
     
@@ -712,11 +712,11 @@ open class SKPhotoBrowser: UIViewController, UIScrollViewDelegate {
                 .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
                 .messageTextAlignment(.left)
                 .titleTextAlignment(.left)
-                .action(.default("View Toot".localized), image: UIImage(named: "share")) { (action, ind) in
-                    self.openURL("com.shi.mastodon://id=\(StoreStruct.newIDtoGoTo)")
+                .action(.default("View Post".localized), image: UIImage(named: "share")) { (action, ind) in
+                    self.openURL("com.vm.roma://id=\(StoreStruct.newIDtoGoTo)")
                     self.determineAndClose()
                 }
-                .action(.default("Share Toot".localized), image: UIImage(named: "share")) { (action, ind) in
+                .action(.default("Share Post".localized), image: UIImage(named: "share")) { (action, ind) in
                     
                     if let myWebsite = StoreStruct.currentImageURL {
                         let objectsToShare = [myWebsite]

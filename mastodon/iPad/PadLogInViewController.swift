@@ -292,7 +292,7 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
                     let request = Clients.register(
                         clientName: "Roma",
                         redirectURI: "com.vm.roma://addNewInstance",
-                        scopes: [.read, .write, .follow],
+                        scopes: [.read, .write, .follow, .push],
                         website: "https://twitter.com/jpeguin"
                     )
                     StoreStruct.shared.newClient.run(request) { (application) in
@@ -330,7 +330,7 @@ class PadLogInViewController: UIViewController, UITextFieldDelegate {
                     let request = Clients.register(
                         clientName: "Mast",
                         redirectURI: "com.vm.roma://success",
-                        scopes: [.read, .write, .follow],
+                        scopes: [.read, .write, .follow, .push],
                         website: "https://twitter.com/jpeguin"
                     )
                     StoreStruct.client.run(request) { (application) in
