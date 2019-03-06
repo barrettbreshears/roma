@@ -1245,7 +1245,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         springWithDelay(duration: 0.37, delay: 0, animations: {
             self.searcherView.alpha = 0
         })
-    }
+    } 
     
     @objc func dismissOverlaySearch(button: UIButton) {
         dismissOverlayProperSearch()
