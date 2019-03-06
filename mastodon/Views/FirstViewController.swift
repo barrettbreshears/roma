@@ -21,7 +21,6 @@ import AVFoundation
 
 class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, URLSessionDataDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate {
     
-    
     var socket: WebSocket!
     var lsocket: WebSocket!
     var fsocket: WebSocket!
