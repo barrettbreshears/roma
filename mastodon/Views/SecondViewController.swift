@@ -4715,8 +4715,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         }
         
         
-        
-        
         if toIndex == 1 {
             
             if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
@@ -4947,9 +4945,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         }
     }
     
-    
-    
-    
     // MARK: - Crown
     
     func crownScroll() {
@@ -5041,29 +5036,4 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             }
         }
     }
-    
-    
- 
- 
-    
-   
-    
-
-
-    
-    
-    
- 
-    
-    
-    
- 
-    
-    
-    
-    
-    
- 
-    
-    
 }
