@@ -1141,6 +1141,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     
     
     // MARK: - Gestures
+    
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
         if self.currentIndex == 1 {
