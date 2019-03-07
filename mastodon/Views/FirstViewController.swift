@@ -1390,6 +1390,981 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
     }
     
+
+    
+    // MARK: - Notification Triggerred
+    
+    @objc func createNoti() {
+        
+        let request0 = Notifications.all(range: .min(id: StoreStruct.notifications.first?.id ?? "", limit: nil))
+        //DispatchQueue.global(qos: .userInitiated).async {
+        print("002")
+        StoreStruct.client.run(request0) { (statuses) in
+            print("003")
+            print(statuses.value)
+            if let stat = (statuses.value) {
+                print("004")
+                StoreStruct.notifications = stat + StoreStruct.notifications
+                
+                let st = stat.reversed()
+                //DispatchQueue.main.async {
+                for x in st {
+                    print("005")
+                    if x.type == .mention {
+                        print("006")
+                        
+                        let content = UNMutableNotificationContent()
+                        content.title =  "\(x.account.displayName) mentioned you"
+                        content.body = x.status!.content.stripHTML()
+                        let request = UNNotificationRequest(
+                            identifier: UUID().uuidString,
+                            content: content,
+                            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                        )
+                        UNUserNotificationCenter.current().add(request)
+                        
+                    }
+                    if x.type == .follow {
+                        print("007")
+                        
+                        let content = UNMutableNotificationContent()
+                        content.title =  "\(x.account.displayName) followed you"
+                        content.body = x.account.note.stripHTML()
+                        let request = UNNotificationRequest(
+                            identifier: UUID().uuidString,
+                            content: content,
+                            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                        )
+                        UNUserNotificationCenter.current().add(request)
+                        
+                    }
+                    if x.type == .reblog {
+                        print("008")
+                        
+                        let content = UNMutableNotificationContent()
+                        content.title = "\(x.account.displayName) reposted your status"
+                        content.body = x.status!.content.stripHTML()
+                        let request = UNNotificationRequest(
+                            identifier: UUID().uuidString,
+                            content: content,
+                            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                        )
+                        UNUserNotificationCenter.current().add(request)
+                        
+                    }
+                    if x.type == .favourite {
+                        print("009")
+                        
+                        let content = UNMutableNotificationContent()
+                        content.title = "\(x.account.displayName) liked your status"
+                        content.body = x.status!.content.stripHTML()
+                        let request = UNNotificationRequest(
+                            identifier: UUID().uuidString,
+                            content: content,
+                            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
+                        )
+                        UNUserNotificationCenter.current().add(request)
+                        
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    @objc func goToIDNoti() {
+        let request = Notifications.notification(id: StoreStruct.curIDNoti)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                DispatchQueue.main.async {
+                    let controller = DetailViewController()
+                    controller.mainStatus.append(stat.status!)
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        }
+    }
+    
+    @objc func goToID() {
+        sleep(2)
+        let request = Statuses.status(id: StoreStruct.curID)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                DispatchQueue.main.async {
+                    let controller = DetailViewController()
+                    controller.mainStatus.append(stat)
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        }
+    }
+    
+    @objc func goLists() {
+        DispatchQueue.main.async {
+            let controller = ListViewController()
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+    }
+    
+    @objc func goInstance() {
+        let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: nil))
+        let testClient = Client(
+            baseURL: "https://\(StoreStruct.instanceText)",
+            accessToken: StoreStruct.shared.currentInstance.accessToken ?? ""
+        )
+        testClient.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                StoreStruct.newInstanceTags = stat
+                DispatchQueue.main.async {
+                    let controller = InstanceViewController()
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        }
+    }
+    
+    @objc func goMembers() {
+        let request = Lists.accounts(id: StoreStruct.allListRelID)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                DispatchQueue.main.async {
+                    let controller = ListMembersViewController()
+                    controller.currentTagTitle = "List Members".localized
+                    controller.currentTags = stat
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        }
+    }
+    
+    @objc func search() {
+        let controller = DetailViewController()
+        controller.mainStatus.append(StoreStruct.statusSearch[StoreStruct.searchIndex])
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    @objc func searchUser() {
+        let controller = ThirdViewController()
+        controller.fromOtherUser = true
+        controller.userIDtoUse = StoreStruct.statusSearchUser[StoreStruct.searchIndex].id
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    @objc func savedComposePresent() {
+        DispatchQueue.main.async {
+            
+            Alertift.actionSheet(title: nil, message: "Oops! Looks like the app was quit while you were in the middle of a great toot. Would you like to get back to composing it?")
+                .backgroundColor(Colours.white)
+                .titleTextColor(Colours.grayDark)
+                .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                .messageTextAlignment(.left)
+                .titleTextAlignment(.left)
+                .action(.default("Resume Composing Toot".localized), image: nil) { (action, ind) in
+                    let controller = ComposeViewController()
+                    controller.inReply = []
+                    controller.inReplyText = StoreStruct.savedInReplyText
+                    controller.filledTextFieldText = StoreStruct.savedComposeText
+                    self.present(controller, animated: true, completion: nil)
+                    StoreStruct.savedComposeText = ""
+                    UserDefaults.standard.set(StoreStruct.savedComposeText, forKey: "composeSaved")
+                    StoreStruct.savedInReplyText = ""
+                    UserDefaults.standard.set(StoreStruct.savedInReplyText, forKey: "savedInReplyText")
+                }
+                .action(.cancel("Dismiss")) { (action, ind) in
+                    StoreStruct.savedComposeText = ""
+                    UserDefaults.standard.set(StoreStruct.savedComposeText, forKey: "composeSaved")
+                    StoreStruct.savedInReplyText = ""
+                    UserDefaults.standard.set(StoreStruct.savedInReplyText, forKey: "savedInReplyText")
+                }
+                .finally { action, index in
+                    if action.style == .cancel {
+                        return
+                    }
+                }
+                .popover(anchorView: self.view)
+                .show(on: self)
+            
+        }
+    }
+    
+    @objc func searchPro() {
+        let controller = ThirdViewController()
+        if StoreStruct.statusSearch[StoreStruct.searchIndex].account.username == StoreStruct.currentUser.username {} else {
+            controller.fromOtherUser = true
+        }
+        controller.userIDtoUse = StoreStruct.statusSearch[StoreStruct.searchIndex].account.id
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    @objc func startStream() {
+        self.streamDataHome()
+        self.streamDataLocal()
+        self.streamDataFed()
+    }
+    
+    @objc func fetchAllNewest() {
+        self.refreshCont()
+    }
+    
+    // MARK: - Button Actions
+    
+    @objc func didTouchBoost(sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
+        
+        var theTable = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            theTable = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            theTable = self.tableViewL
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            theTable = self.tableViewF
+        }
+        
+        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+            StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
+            let request2 = Statuses.unreblog(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
+            StoreStruct.client.run(request2) { (statuses) in
+                DispatchQueue.main.async {
+                    if let cell = theTable.cellForRow(at:IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
+                        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "like")
+                        } else {
+                            cell.moreImage.image = nil
+                        }
+                        cell.hideSwipe(animated: true)
+                    } else {
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
+                        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "like")
+                        } else {
+                            cell.moreImage.image = nil
+                        }
+                        cell.hideSwipe(animated: true)
+                    }
+                }
+            }
+        } else {
+            StoreStruct.allBoosts.append(sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
+            let request2 = Statuses.reblog(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
+            StoreStruct.client.run(request2) { (statuses) in
+                DispatchQueue.main.async {
+                    
+                    if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreateRe"), object: nil)
+                    }
+                    
+                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
+                        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "fifty")
+                        } else {
+                            cell.moreImage.image = UIImage(named: "boost")
+                        }
+                        cell.hideSwipe(animated: true)
+                    } else {
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
+                        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "fifty")
+                        } else {
+                            cell.moreImage.image = UIImage(named: "boost")
+                        }
+                        cell.hideSwipe(animated: true)
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
+    @objc func didTouchLike(sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
+        
+        var theTable = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            theTable = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            theTable = self.tableViewL
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            theTable = self.tableViewF
+        }
+        
+        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+            StoreStruct.allLikes = StoreStruct.allLikes.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
+            let request2 = Statuses.unfavourite(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
+            StoreStruct.client.run(request2) { (statuses) in
+                DispatchQueue.main.async {
+                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
+                        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "boost")
+                        } else {
+                            cell.moreImage.image = nil
+                        }
+                        cell.hideSwipe(animated: true)
+                    } else {
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
+                        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "boost")
+                        } else {
+                            cell.moreImage.image = nil
+                        }
+                        cell.hideSwipe(animated: true)
+                    }
+                }
+            }
+        } else {
+            StoreStruct.allLikes.append(sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
+            let request2 = Statuses.favourite(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
+            StoreStruct.client.run(request2) { (statuses) in
+                DispatchQueue.main.async {
+                    if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreateLi"), object: nil)
+                    }
+                    
+                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
+                        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "fifty")
+                        } else {
+                            cell.moreImage.image = UIImage(named: "like")
+                        }
+                        cell.hideSwipe(animated: true)
+                    } else {
+                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
+                        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.moreImage.image = nil
+                            cell.moreImage.image = UIImage(named: "fifty")
+                        } else {
+                            cell.moreImage.image = UIImage(named: "like")
+                        }
+                        cell.hideSwipe(animated: true)
+                    }
+                }
+            }
+        }
+    }
+    
+    
+    
+    @objc func didTouchReply(sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
+        
+        var theTable = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            theTable = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            theTable = self.tableViewL
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            theTable = self.tableViewF
+        }
+        
+        let controller = ComposeViewController()
+        StoreStruct.spoilerText = sto[sender.tag].reblog?.spoilerText ?? sto[sender.tag].spoilerText
+        controller.inReply = [sto[sender.tag].reblog ?? sto[sender.tag]]
+        controller.prevTextReply = sto[sender.tag].reblog?.content.stripHTML() ?? sto[sender.tag].content.stripHTML()
+        controller.inReplyText = sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username
+        print(sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username)
+        self.present(controller, animated: true, completion: nil)
+    }
+    
+    @objc func didTouchProfile(sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+        }
+        
+        let controller = ThirdViewController()
+        if sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username == StoreStruct.currentUser?.username {} else {
+            controller.fromOtherUser = true
+        }
+        if self.currentIndex == 0 {
+            controller.userIDtoUse = sto[sender.tag].reblog?.account.id ?? sto[sender.tag].account.id
+            self.navigationController?.pushViewController(controller, animated: true)
+        } else if self.currentIndex == 1 {
+            controller.userIDtoUse = sto[sender.tag].reblog?.account.id ?? sto[sender.tag].account.id
+            self.navigationController?.pushViewController(controller, animated: true)
+        } else {
+            controller.userIDtoUse = sto[sender.tag].reblog?.account.id ?? sto[sender.tag].account.id
+            self.navigationController?.pushViewController(controller, animated: true)
+        }
+    }
+    
+    // Settings button tapped
+    @objc func touchList() {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "touchList"), object: nil)
+    }
+    
+    @objc func tappedImage(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+        }
+        
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+                
+                let videoURL = URL(string: sto[sender.tag].reblog?.mediaAttachments[0].url ?? sto[sender.tag].mediaAttachments[0].url)!
+                if (UserDefaults.standard.object(forKey: "vidgif") == nil) || (UserDefaults.standard.object(forKey: "vidgif") as! Int == 0) {
+                    XPlayer.play(videoURL)
+                } else {
+                    self.player = AVPlayer(url: videoURL)
+                    let playerViewController = AVPlayerViewController()
+                    playerViewController.player = self.player
+                    self.present(playerViewController, animated: true) {
+                        playerViewController.player!.play()
+                    }
+                }
+                
+            } else {
+                
+                
+                if self.currentIndex == 0 {
+                    
+                    let indexPath = IndexPath(row: sender.tag, section: 0)
+                    let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                    var images = [SKPhoto]()
+                    var coun = 0
+                    for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                        if coun == 0 {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                                photo.caption = y.description ?? ""
+                            } else {
+                                photo.caption = ""
+                            }
+                            images.append(photo)
+                        } else {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                                photo.caption = y.description ?? ""
+                            } else {
+                                photo.caption = ""
+                            }
+                            images.append(photo)
+                        }
+                        coun += 1
+                    }
+                    let originImage = sender.currentImage
+                    if originImage != nil {
+                        let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
+                        browser.displayToolbar = true
+                        browser.displayAction = true
+                        browser.delegate = self
+                        browser.initializePageIndex(0)
+                        present(browser, animated: true, completion: nil)
+                    }
+                    
+                } else if self.currentIndex == 1 {
+                    
+                    let indexPath = IndexPath(row: sender.tag, section: 0)
+                    let cell = tableViewL.cellForRow(at: indexPath) as! MainFeedCellImage
+                    var images = [SKPhoto]()
+                    var coun = 0
+                    for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                        if coun == 0 {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                                photo.caption = y.description ?? ""
+                            } else {
+                                photo.caption = ""
+                            }
+                            images.append(photo)
+                        } else {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                                photo.caption = y.description ?? ""
+                            } else {
+                                photo.caption = ""
+                            }
+                            images.append(photo)
+                        }
+                        coun += 1
+                    }
+                    let originImage = sender.currentImage
+                    if originImage != nil {
+                        let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
+                        browser.displayToolbar = true
+                        browser.displayAction = true
+                        browser.delegate = self
+                        browser.initializePageIndex(0)
+                        present(browser, animated: true, completion: nil)
+                    }
+                    
+                } else {
+                    
+                    let indexPath = IndexPath(row: sender.tag, section: 0)
+                    let cell = tableViewF.cellForRow(at: indexPath) as! MainFeedCellImage
+                    var images = [SKPhoto]()
+                    var coun = 0
+                    for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                        if coun == 0 {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                                photo.caption = y.description ?? ""
+                            } else {
+                                photo.caption = ""
+                            }
+                            images.append(photo)
+                        } else {
+                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                            photo.shouldCachePhotoURLImage = true
+                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                                photo.caption = y.description ?? ""
+                            } else {
+                                photo.caption = ""
+                            }
+                            images.append(photo)
+                        }
+                        coun += 1
+                    }
+                    let originImage = sender.currentImage
+                    if originImage != nil {
+                        let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
+                        browser.displayToolbar = true
+                        browser.displayAction = true
+                        browser.delegate = self
+                        browser.initializePageIndex(0)
+                        present(browser, animated: true, completion: nil)
+                    }
+                    
+                }
+                
+            }
+            
+        }
+    }
+    
+    
+    
+    
+    @objc func tappedImageS1(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var tab = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewL
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewF
+        }
+        
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage1.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                            photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                            photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(0)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
+    
+    @objc func tappedImageS2(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var tab = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewL
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewF
+        }
+        
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage2.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                            photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                            photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage2)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(1)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
+    
+    
+    @objc func tappedImageS3(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var tab = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewL
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewF
+        }
+        
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage3.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                            photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                            photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage3)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(2)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
+    
+    
+    
+    @objc func tappedImageS4(_ sender: UIButton) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
+        
+        var tab = self.tableView
+        var sto = StoreStruct.statusesHome
+        if self.currentIndex == 0 {
+            sto = StoreStruct.statusesHome
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableView
+        } else if self.currentIndex == 1 {
+            sto = StoreStruct.statusesLocal
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewL
+        } else if self.currentIndex == 2 {
+            sto = StoreStruct.statusesFederated
+            StoreStruct.newIDtoGoTo = sto[sender.tag].id
+            tab = self.tableViewF
+        }
+        
+        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
+        
+        if sto.count < 1 {} else {
+            
+            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
+                
+            } else {
+                
+                let indexPath = IndexPath(row: sender.tag, section: 0)
+                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                var images = [SKPhoto]()
+                var coun = 0
+                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
+                    if coun == 0 {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage4.currentImage ?? nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                            photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
+                        }
+                        images.append(photo)
+                    } else {
+                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        photo.shouldCachePhotoURLImage = true
+                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
+                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
+                            photo.caption = y.description ?? ""
+                        } else {
+                            photo.caption = ""
+                        }
+                        images.append(photo)
+                    }
+                    coun += 1
+                }
+                let originImage = sender.currentImage
+                if originImage != nil {
+                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage4)
+                    browser.displayToolbar = true
+                    browser.displayAction = true
+                    browser.delegate = self
+                    browser.initializePageIndex(3)
+                    present(browser, animated: true, completion: nil)
+                }
+                
+            }
+            
+        }
+    }
+    
+    
+    
+// MARK: - Gestures
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        
+        let detailVC = DetailViewController()
+        detailVC.isPeeking = true
+
+        if self.currentIndex == 0 {
+            
+            guard let indexPath = self.tableView.indexPathForRow(at: location) else { return nil }
+            guard let cell = self.tableView.cellForRow(at: indexPath) else { return nil }
+            detailVC.mainStatus.append(StoreStruct.statusesHome[indexPath.row])
+            previewingContext.sourceRect = cell.frame
+            return detailVC
+            
+        } else if self.currentIndex == 1 {
+            
+            guard let indexPath = self.tableViewL.indexPathForRow(at: location) else { return nil }
+            guard let cell = self.tableViewL.cellForRow(at: indexPath) else { return nil }
+            detailVC.mainStatus.append(StoreStruct.statusesLocal[indexPath.row])
+            previewingContext.sourceRect = cell.frame
+            return detailVC
+            
+        } else {
+            
+            guard let indexPath = self.tableViewF.indexPathForRow(at: location) else { return nil }
+            guard let cell = self.tableViewF.cellForRow(at: indexPath) else { return nil }
+            detailVC.mainStatus.append(StoreStruct.statusesFederated[indexPath.row])
+            previewingContext.sourceRect = cell.frame
+            return detailVC
+            
+        }
+    }
+    
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
+        show(viewControllerToCommit, sender: self)
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
+                if self.currentIndex == 0 {
+                    self.tableView.reloadData()
+                } else if self.currentIndex == 1 {
+                    self.tableViewL.reloadData()
+                } else {
+                    self.tableViewF.reloadData()
+                }
+            } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+            } else {
+                
+            }
+        }
+    }
+    
     // MARK: - Table View
     
     func firstRowHeight() -> CGFloat {
@@ -1680,7 +2655,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 cell.selectedBackgroundView = bgColorView
                 return cell
             } else {
-            
+                
                 if StoreStruct.statusesLocal[indexPath.row].id == "loadmorehere" {
                     
                     if (UserDefaults.standard.object(forKey: "autol1") == nil) || (UserDefaults.standard.object(forKey: "autol1") as! Int == 0) {} else {
@@ -3168,979 +4143,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
     }
     
-    
-    // MARK: - Notification Triggerred
-    
-    @objc func createNoti() {
-        
-        let request0 = Notifications.all(range: .min(id: StoreStruct.notifications.first?.id ?? "", limit: nil))
-        //DispatchQueue.global(qos: .userInitiated).async {
-        print("002")
-        StoreStruct.client.run(request0) { (statuses) in
-            print("003")
-            print(statuses.value)
-            if let stat = (statuses.value) {
-                print("004")
-                StoreStruct.notifications = stat + StoreStruct.notifications
-                
-                let st = stat.reversed()
-                //DispatchQueue.main.async {
-                for x in st {
-                    print("005")
-                    if x.type == .mention {
-                        print("006")
-                        
-                        let content = UNMutableNotificationContent()
-                        content.title =  "\(x.account.displayName) mentioned you"
-                        content.body = x.status!.content.stripHTML()
-                        let request = UNNotificationRequest(
-                            identifier: UUID().uuidString,
-                            content: content,
-                            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                        )
-                        UNUserNotificationCenter.current().add(request)
-                        
-                    }
-                    if x.type == .follow {
-                        print("007")
-                        
-                        let content = UNMutableNotificationContent()
-                        content.title =  "\(x.account.displayName) followed you"
-                        content.body = x.account.note.stripHTML()
-                        let request = UNNotificationRequest(
-                            identifier: UUID().uuidString,
-                            content: content,
-                            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                        )
-                        UNUserNotificationCenter.current().add(request)
-                        
-                    }
-                    if x.type == .reblog {
-                        print("008")
-                        
-                        let content = UNMutableNotificationContent()
-                        content.title = "\(x.account.displayName) reposted your status"
-                        content.body = x.status!.content.stripHTML()
-                        let request = UNNotificationRequest(
-                            identifier: UUID().uuidString,
-                            content: content,
-                            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                        )
-                        UNUserNotificationCenter.current().add(request)
-                        
-                    }
-                    if x.type == .favourite {
-                        print("009")
-                        
-                        let content = UNMutableNotificationContent()
-                        content.title = "\(x.account.displayName) liked your status"
-                        content.body = x.status!.content.stripHTML()
-                        let request = UNNotificationRequest(
-                            identifier: UUID().uuidString,
-                            content: content,
-                            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 1, repeats: false)
-                        )
-                        UNUserNotificationCenter.current().add(request)
-                        
-                    }
-                }
-            }
-        }
-        
-    }
-    
-    @objc func goToIDNoti() {
-        let request = Notifications.notification(id: StoreStruct.curIDNoti)
-        StoreStruct.client.run(request) { (statuses) in
-            if let stat = (statuses.value) {
-                DispatchQueue.main.async {
-                    let controller = DetailViewController()
-                    controller.mainStatus.append(stat.status!)
-                    self.navigationController?.pushViewController(controller, animated: true)
-                }
-            }
-        }
-    }
-    
-    @objc func goToID() {
-        sleep(2)
-        let request = Statuses.status(id: StoreStruct.curID)
-        StoreStruct.client.run(request) { (statuses) in
-            if let stat = (statuses.value) {
-                DispatchQueue.main.async {
-                    let controller = DetailViewController()
-                    controller.mainStatus.append(stat)
-                    self.navigationController?.pushViewController(controller, animated: true)
-                }
-            }
-        }
-    }
-    
-    @objc func goLists() {
-        DispatchQueue.main.async {
-            let controller = ListViewController()
-            self.navigationController?.pushViewController(controller, animated: true)
-        }
-    }
-    
-    @objc func goInstance() {
-        let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: nil))
-        let testClient = Client(
-            baseURL: "https://\(StoreStruct.instanceText)",
-            accessToken: StoreStruct.shared.currentInstance.accessToken ?? ""
-        )
-        testClient.run(request) { (statuses) in
-            if let stat = (statuses.value) {
-                StoreStruct.newInstanceTags = stat
-                DispatchQueue.main.async {
-                    let controller = InstanceViewController()
-                    self.navigationController?.pushViewController(controller, animated: true)
-                }
-            }
-        }
-    }
-    
-    @objc func goMembers() {
-        let request = Lists.accounts(id: StoreStruct.allListRelID)
-        StoreStruct.client.run(request) { (statuses) in
-            if let stat = (statuses.value) {
-                DispatchQueue.main.async {
-                    let controller = ListMembersViewController()
-                    controller.currentTagTitle = "List Members".localized
-                    controller.currentTags = stat
-                    self.navigationController?.pushViewController(controller, animated: true)
-                }
-            }
-        }
-    }
-    
-    @objc func search() {
-        let controller = DetailViewController()
-        controller.mainStatus.append(StoreStruct.statusSearch[StoreStruct.searchIndex])
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    @objc func searchUser() {
-        let controller = ThirdViewController()
-        controller.fromOtherUser = true
-        controller.userIDtoUse = StoreStruct.statusSearchUser[StoreStruct.searchIndex].id
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    @objc func savedComposePresent() {
-        DispatchQueue.main.async {
-            
-            Alertift.actionSheet(title: nil, message: "Oops! Looks like the app was quit while you were in the middle of a great toot. Would you like to get back to composing it?")
-                .backgroundColor(Colours.white)
-                .titleTextColor(Colours.grayDark)
-                .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
-                .messageTextAlignment(.left)
-                .titleTextAlignment(.left)
-                .action(.default("Resume Composing Toot".localized), image: nil) { (action, ind) in
-                    let controller = ComposeViewController()
-                    controller.inReply = []
-                    controller.inReplyText = StoreStruct.savedInReplyText
-                    controller.filledTextFieldText = StoreStruct.savedComposeText
-                    self.present(controller, animated: true, completion: nil)
-                    StoreStruct.savedComposeText = ""
-                    UserDefaults.standard.set(StoreStruct.savedComposeText, forKey: "composeSaved")
-                    StoreStruct.savedInReplyText = ""
-                    UserDefaults.standard.set(StoreStruct.savedInReplyText, forKey: "savedInReplyText")
-                }
-                .action(.cancel("Dismiss")) { (action, ind) in
-                    StoreStruct.savedComposeText = ""
-                    UserDefaults.standard.set(StoreStruct.savedComposeText, forKey: "composeSaved")
-                    StoreStruct.savedInReplyText = ""
-                    UserDefaults.standard.set(StoreStruct.savedInReplyText, forKey: "savedInReplyText")
-                }
-                .finally { action, index in
-                    if action.style == .cancel {
-                        return
-                    }
-                }
-                .popover(anchorView: self.view)
-                .show(on: self)
-            
-        }
-    }
-    
-    @objc func searchPro() {
-        let controller = ThirdViewController()
-        if StoreStruct.statusSearch[StoreStruct.searchIndex].account.username == StoreStruct.currentUser.username {} else {
-            controller.fromOtherUser = true
-        }
-        controller.userIDtoUse = StoreStruct.statusSearch[StoreStruct.searchIndex].account.id
-        self.navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    @objc func startStream() {
-        self.streamDataHome()
-        self.streamDataLocal()
-        self.streamDataFed()
-    }
-    
-    @objc func fetchAllNewest() {
-        self.refreshCont()
-    }
-    
-    // MARK: - Button Actions
-    
-    @objc func didTouchBoost(sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
-            impact.impactOccurred()
-        }
-        
-        var theTable = self.tableView
-        var sto = StoreStruct.statusesHome
-        if self.currentIndex == 0 {
-            sto = StoreStruct.statusesHome
-            theTable = self.tableView
-        } else if self.currentIndex == 1 {
-            sto = StoreStruct.statusesLocal
-            theTable = self.tableViewL
-        } else if self.currentIndex == 2 {
-            sto = StoreStruct.statusesFederated
-            theTable = self.tableViewF
-        }
-        
-        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-            StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
-            let request2 = Statuses.unreblog(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
-            StoreStruct.client.run(request2) { (statuses) in
-                DispatchQueue.main.async {
-                    if let cell = theTable.cellForRow(at:IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
-                        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "like")
-                        } else {
-                            cell.moreImage.image = nil
-                        }
-                        cell.hideSwipe(animated: true)
-                    } else {
-                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
-                        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "like")
-                        } else {
-                            cell.moreImage.image = nil
-                        }
-                        cell.hideSwipe(animated: true)
-                    }
-                }
-            }
-        } else {
-            StoreStruct.allBoosts.append(sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
-            let request2 = Statuses.reblog(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
-            StoreStruct.client.run(request2) { (statuses) in
-                DispatchQueue.main.async {
-                    
-                    if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreateRe"), object: nil)
-                    }
-                    
-                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
-                        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
-                        } else {
-                            cell.moreImage.image = UIImage(named: "boost")
-                        }
-                        cell.hideSwipe(animated: true)
-                    } else {
-                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
-                        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
-                        } else {
-                            cell.moreImage.image = UIImage(named: "boost")
-                        }
-                        cell.hideSwipe(animated: true)
-                    }
-                }
-            }
-        }
-    }
-    
-    
-    
-    @objc func didTouchLike(sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
-            impact.impactOccurred()
-        }
-        
-        var theTable = self.tableView
-        var sto = StoreStruct.statusesHome
-        if self.currentIndex == 0 {
-            sto = StoreStruct.statusesHome
-            theTable = self.tableView
-        } else if self.currentIndex == 1 {
-            sto = StoreStruct.statusesLocal
-            theTable = self.tableViewL
-        } else if self.currentIndex == 2 {
-            sto = StoreStruct.statusesFederated
-            theTable = self.tableViewF
-        }
-        
-        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-            StoreStruct.allLikes = StoreStruct.allLikes.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
-            let request2 = Statuses.unfavourite(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
-            StoreStruct.client.run(request2) { (statuses) in
-                DispatchQueue.main.async {
-                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
-                        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "boost")
-                        } else {
-                            cell.moreImage.image = nil
-                        }
-                        cell.hideSwipe(animated: true)
-                    } else {
-                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
-                        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "boost")
-                        } else {
-                            cell.moreImage.image = nil
-                        }
-                        cell.hideSwipe(animated: true)
-                    }
-                }
-            }
-        } else {
-            StoreStruct.allLikes.append(sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
-            let request2 = Statuses.favourite(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
-            StoreStruct.client.run(request2) { (statuses) in
-                DispatchQueue.main.async {
-                    if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreateLi"), object: nil)
-                    }
-                    
-                    if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
-                        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
-                        } else {
-                            cell.moreImage.image = UIImage(named: "like")
-                        }
-                        cell.hideSwipe(animated: true)
-                    } else {
-                        let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
-                        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
-                        } else {
-                            cell.moreImage.image = UIImage(named: "like")
-                        }
-                        cell.hideSwipe(animated: true)
-                    }
-                }
-            }
-        }
-    }
-    
-    
-    
-    @objc func didTouchReply(sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
-            impact.impactOccurred()
-        }
-        
-        var theTable = self.tableView
-        var sto = StoreStruct.statusesHome
-        if self.currentIndex == 0 {
-            sto = StoreStruct.statusesHome
-            theTable = self.tableView
-        } else if self.currentIndex == 1 {
-            sto = StoreStruct.statusesLocal
-            theTable = self.tableViewL
-        } else if self.currentIndex == 2 {
-            sto = StoreStruct.statusesFederated
-            theTable = self.tableViewF
-        }
-        
-        let controller = ComposeViewController()
-        StoreStruct.spoilerText = sto[sender.tag].reblog?.spoilerText ?? sto[sender.tag].spoilerText
-        controller.inReply = [sto[sender.tag].reblog ?? sto[sender.tag]]
-        controller.prevTextReply = sto[sender.tag].reblog?.content.stripHTML() ?? sto[sender.tag].content.stripHTML()
-        controller.inReplyText = sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username
-        print(sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username)
-        self.present(controller, animated: true, completion: nil)
-    }
-    
-    @objc func didTouchProfile(sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
-        var sto = StoreStruct.statusesHome
-        if self.currentIndex == 0 {
-            sto = StoreStruct.statusesHome
-        } else if self.currentIndex == 1 {
-            sto = StoreStruct.statusesLocal
-        } else if self.currentIndex == 2 {
-            sto = StoreStruct.statusesFederated
-        }
-        
-        let controller = ThirdViewController()
-        if sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username == StoreStruct.currentUser?.username {} else {
-            controller.fromOtherUser = true
-        }
-        if self.currentIndex == 0 {
-            controller.userIDtoUse = sto[sender.tag].reblog?.account.id ?? sto[sender.tag].account.id
-            self.navigationController?.pushViewController(controller, animated: true)
-        } else if self.currentIndex == 1 {
-            controller.userIDtoUse = sto[sender.tag].reblog?.account.id ?? sto[sender.tag].account.id
-            self.navigationController?.pushViewController(controller, animated: true)
-        } else {
-            controller.userIDtoUse = sto[sender.tag].reblog?.account.id ?? sto[sender.tag].account.id
-            self.navigationController?.pushViewController(controller, animated: true)
-        }
-    }
-    
-    // Settings button tapped
-    @objc func touchList() {
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "touchList"), object: nil)
-    }
-    
-    @objc func tappedImage(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
-        
-        
-        var sto = StoreStruct.statusesHome
-        if self.currentIndex == 0 {
-            sto = StoreStruct.statusesHome
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-        } else if self.currentIndex == 1 {
-            sto = StoreStruct.statusesLocal
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-        } else if self.currentIndex == 2 {
-            sto = StoreStruct.statusesFederated
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-        }
-        
-        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
-        
-        if sto.count < 1 {} else {
-            
-            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
-                
-                let videoURL = URL(string: sto[sender.tag].reblog?.mediaAttachments[0].url ?? sto[sender.tag].mediaAttachments[0].url)!
-                if (UserDefaults.standard.object(forKey: "vidgif") == nil) || (UserDefaults.standard.object(forKey: "vidgif") as! Int == 0) {
-                    XPlayer.play(videoURL)
-                } else {
-                    self.player = AVPlayer(url: videoURL)
-                    let playerViewController = AVPlayerViewController()
-                    playerViewController.player = self.player
-                    self.present(playerViewController, animated: true) {
-                        playerViewController.player!.play()
-                    }
-                }
-                
-            } else {
-                
-                
-                if self.currentIndex == 0 {
-                    
-                    let indexPath = IndexPath(row: sender.tag, section: 0)
-                    let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
-                    var images = [SKPhoto]()
-                    var coun = 0
-                    for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
-                        if coun == 0 {
-                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
-                            photo.shouldCachePhotoURLImage = true
-                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                                photo.caption = y.description ?? ""
-                            } else {
-                                photo.caption = ""
-                            }
-                            images.append(photo)
-                        } else {
-                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
-                            photo.shouldCachePhotoURLImage = true
-                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                                photo.caption = y.description ?? ""
-                            } else {
-                                photo.caption = ""
-                            }
-                            images.append(photo)
-                        }
-                        coun += 1
-                    }
-                    let originImage = sender.currentImage
-                    if originImage != nil {
-                        let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                        browser.displayToolbar = true
-                        browser.displayAction = true
-                        browser.delegate = self
-                        browser.initializePageIndex(0)
-                        present(browser, animated: true, completion: nil)
-                    }
-                    
-                } else if self.currentIndex == 1 {
-                    
-                    let indexPath = IndexPath(row: sender.tag, section: 0)
-                    let cell = tableViewL.cellForRow(at: indexPath) as! MainFeedCellImage
-                    var images = [SKPhoto]()
-                    var coun = 0
-                    for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
-                        if coun == 0 {
-                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
-                            photo.shouldCachePhotoURLImage = true
-                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                                photo.caption = y.description ?? ""
-                            } else {
-                                photo.caption = ""
-                            }
-                            images.append(photo)
-                        } else {
-                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
-                            photo.shouldCachePhotoURLImage = true
-                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                                photo.caption = y.description ?? ""
-                            } else {
-                                photo.caption = ""
-                            }
-                            images.append(photo)
-                        }
-                        coun += 1
-                    }
-                    let originImage = sender.currentImage
-                    if originImage != nil {
-                        let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                        browser.displayToolbar = true
-                        browser.displayAction = true
-                        browser.delegate = self
-                        browser.initializePageIndex(0)
-                        present(browser, animated: true, completion: nil)
-                    }
-                    
-                } else {
-                    
-                    let indexPath = IndexPath(row: sender.tag, section: 0)
-                    let cell = tableViewF.cellForRow(at: indexPath) as! MainFeedCellImage
-                    var images = [SKPhoto]()
-                    var coun = 0
-                    for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
-                        if coun == 0 {
-                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
-                            photo.shouldCachePhotoURLImage = true
-                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                                photo.caption = y.description ?? ""
-                            } else {
-                                photo.caption = ""
-                            }
-                            images.append(photo)
-                        } else {
-                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
-                            photo.shouldCachePhotoURLImage = true
-                            if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                                photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                            } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                                photo.caption = y.description ?? ""
-                            } else {
-                                photo.caption = ""
-                            }
-                            images.append(photo)
-                        }
-                        coun += 1
-                    }
-                    let originImage = sender.currentImage
-                    if originImage != nil {
-                        let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                        browser.displayToolbar = true
-                        browser.displayAction = true
-                        browser.delegate = self
-                        browser.initializePageIndex(0)
-                        present(browser, animated: true, completion: nil)
-                    }
-                    
-                }
-                
-            }
-            
-        }
-    }
-    
-    
-    
-    
-    @objc func tappedImageS1(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
-        
-        var tab = self.tableView
-        var sto = StoreStruct.statusesHome
-        if self.currentIndex == 0 {
-            sto = StoreStruct.statusesHome
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-            tab = self.tableView
-        } else if self.currentIndex == 1 {
-            sto = StoreStruct.statusesLocal
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-            tab = self.tableViewL
-        } else if self.currentIndex == 2 {
-            sto = StoreStruct.statusesFederated
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-            tab = self.tableViewF
-        }
-        
-        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
-        
-        if sto.count < 1 {} else {
-            
-            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
-                
-            } else {
-                
-                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
-                var images = [SKPhoto]()
-                var coun = 0
-                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
-                    if coun == 0 {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage1.currentImage ?? nil)
-                        photo.shouldCachePhotoURLImage = true
-                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
-                        } else {
-                            photo.caption = ""
-                        }
-                        images.append(photo)
-                    } else {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
-                        photo.shouldCachePhotoURLImage = true
-                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
-                        } else {
-                            photo.caption = ""
-                        }
-                        images.append(photo)
-                    }
-                    coun += 1
-                }
-                let originImage = sender.currentImage
-                if originImage != nil {
-                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
-                    browser.delegate = self
-                    browser.initializePageIndex(0)
-                    present(browser, animated: true, completion: nil)
-                }
-                
-            }
-            
-        }
-    }
-    
-    @objc func tappedImageS2(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
-        
-        var tab = self.tableView
-        var sto = StoreStruct.statusesHome
-        if self.currentIndex == 0 {
-            sto = StoreStruct.statusesHome
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-            tab = self.tableView
-        } else if self.currentIndex == 1 {
-            sto = StoreStruct.statusesLocal
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-            tab = self.tableViewL
-        } else if self.currentIndex == 2 {
-            sto = StoreStruct.statusesFederated
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-            tab = self.tableViewF
-        }
-        
-        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
-        
-        if sto.count < 1 {} else {
-            
-            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
-                
-            } else {
-                
-                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
-                var images = [SKPhoto]()
-                var coun = 0
-                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
-                    if coun == 0 {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage2.currentImage ?? nil)
-                        photo.shouldCachePhotoURLImage = true
-                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
-                        } else {
-                            photo.caption = ""
-                        }
-                        images.append(photo)
-                    } else {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
-                        photo.shouldCachePhotoURLImage = true
-                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
-                        } else {
-                            photo.caption = ""
-                        }
-                        images.append(photo)
-                    }
-                    coun += 1
-                }
-                let originImage = sender.currentImage
-                if originImage != nil {
-                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage2)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
-                    browser.delegate = self
-                    browser.initializePageIndex(1)
-                    present(browser, animated: true, completion: nil)
-                }
-                
-            }
-            
-        }
-    }
-    
-    
-    @objc func tappedImageS3(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
-        
-        var tab = self.tableView
-        var sto = StoreStruct.statusesHome
-        if self.currentIndex == 0 {
-            sto = StoreStruct.statusesHome
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-            tab = self.tableView
-        } else if self.currentIndex == 1 {
-            sto = StoreStruct.statusesLocal
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-            tab = self.tableViewL
-        } else if self.currentIndex == 2 {
-            sto = StoreStruct.statusesFederated
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-            tab = self.tableViewF
-        }
-        
-        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
-        
-        if sto.count < 1 {} else {
-            
-            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
-                
-            } else {
-                
-                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
-                var images = [SKPhoto]()
-                var coun = 0
-                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
-                    if coun == 0 {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage3.currentImage ?? nil)
-                        photo.shouldCachePhotoURLImage = true
-                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
-                        } else {
-                            photo.caption = ""
-                        }
-                        images.append(photo)
-                    } else {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
-                        photo.shouldCachePhotoURLImage = true
-                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
-                        } else {
-                            photo.caption = ""
-                        }
-                        images.append(photo)
-                    }
-                    coun += 1
-                }
-                let originImage = sender.currentImage
-                if originImage != nil {
-                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage3)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
-                    browser.delegate = self
-                    browser.initializePageIndex(2)
-                    present(browser, animated: true, completion: nil)
-                }
-                
-            }
-            
-        }
-    }
-    
-    
-    
-    @objc func tappedImageS4(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
-        
-        var tab = self.tableView
-        var sto = StoreStruct.statusesHome
-        if self.currentIndex == 0 {
-            sto = StoreStruct.statusesHome
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-            tab = self.tableView
-        } else if self.currentIndex == 1 {
-            sto = StoreStruct.statusesLocal
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-            tab = self.tableViewL
-        } else if self.currentIndex == 2 {
-            sto = StoreStruct.statusesFederated
-            StoreStruct.newIDtoGoTo = sto[sender.tag].id
-            tab = self.tableViewF
-        }
-        
-        StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
-        
-        if sto.count < 1 {} else {
-            
-            if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
-                
-            } else {
-                
-                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
-                var images = [SKPhoto]()
-                var coun = 0
-                for y in sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments {
-                    if coun == 0 {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage4.currentImage ?? nil)
-                        photo.shouldCachePhotoURLImage = true
-                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
-                        } else {
-                            photo.caption = ""
-                        }
-                        images.append(photo)
-                    } else {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
-                        photo.shouldCachePhotoURLImage = true
-                        if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                        } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
-                        } else {
-                            photo.caption = ""
-                        }
-                        images.append(photo)
-                    }
-                    coun += 1
-                }
-                let originImage = sender.currentImage
-                if originImage != nil {
-                    let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage4)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
-                    browser.delegate = self
-                    browser.initializePageIndex(3)
-                    present(browser, animated: true, completion: nil)
-                }
-                
-            }
-            
-        }
-    }
-    
-    
-    
-// MARK: - Gestures
-    
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        
-        let detailVC = DetailViewController()
-        detailVC.isPeeking = true
-
-        if self.currentIndex == 0 {
-            
-            guard let indexPath = self.tableView.indexPathForRow(at: location) else { return nil }
-            guard let cell = self.tableView.cellForRow(at: indexPath) else { return nil }
-            detailVC.mainStatus.append(StoreStruct.statusesHome[indexPath.row])
-            previewingContext.sourceRect = cell.frame
-            return detailVC
-            
-        } else if self.currentIndex == 1 {
-            
-            guard let indexPath = self.tableViewL.indexPathForRow(at: location) else { return nil }
-            guard let cell = self.tableViewL.cellForRow(at: indexPath) else { return nil }
-            detailVC.mainStatus.append(StoreStruct.statusesLocal[indexPath.row])
-            previewingContext.sourceRect = cell.frame
-            return detailVC
-            
-        } else {
-            
-            guard let indexPath = self.tableViewF.indexPathForRow(at: location) else { return nil }
-            guard let cell = self.tableViewF.cellForRow(at: indexPath) else { return nil }
-            detailVC.mainStatus.append(StoreStruct.statusesFederated[indexPath.row])
-            previewingContext.sourceRect = cell.frame
-            return detailVC
-            
-        }
-    }
-    
-    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
-        show(viewControllerToCommit, sender: self)
-    }
-    
-    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if motion == .motionShake {
-            if (UserDefaults.standard.object(forKey: "shakegest") == nil) || (UserDefaults.standard.object(forKey: "shakegest") as! Int == 0) {
-                if self.currentIndex == 0 {
-                    self.tableView.reloadData()
-                } else if self.currentIndex == 1 {
-                    self.tableViewL.reloadData()
-                } else {
-                    self.tableViewF.reloadData()
-                }
-            } else if (UserDefaults.standard.object(forKey: "shakegest") as! Int == 1) {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
-            } else {
-                
-            }
-        }
-    }
     
     // MARK: - Scrolling
     
