@@ -18,6 +18,7 @@ import SAConfettiView
 import Disk
 import AVKit
 import AVFoundation
+import UserNotifications
 
 class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, URLSessionDataDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate {
     
@@ -1100,7 +1101,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
+            // Enable or disable features based on authorization.
+            DispatchQueue.main.async {
+                UIApplication.shared.registerForRemoteNotifications()
+            }
+        }
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88

@@ -9,9 +9,10 @@
 import UIKit
 import Disk
 import Firebase
+import MessageUI
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, MFMailComposeViewControllerDelegate {
 
     var window: UIWindow?
     let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
@@ -115,6 +116,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
         ) {
+        
+        var debugString:String = ""
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
         print("Device Token: \(token)")
@@ -125,7 +128,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             state = storedState
         } else {
             let reciver = try! PushNotificationReceiver()
-            let subScription = PushNotificationSubscription(endpoint: URL(string:"https://pushrelay-roma1.your.org/relay-to/production/\(token)")!, alerts: PushNotificationAlerts.all)
+            // https://rails-toot-test.herokuapp.com/push/12
+            let subScription = PushNotificationSubscription(endpoint: URL(string:"https://rails-toot-test.herokuapp.com/push/\(token)")!, alerts: PushNotificationAlerts.all)
+            // let subScription = PushNotificationSubscription(endpoint: URL(string:"https://pushrelay-roma1.your.org/relay-to/production/\(token)")!, alerts: PushNotificationAlerts.all)
+            
             let deviceToken = PushNotificationDeviceToken(deviceToken: deviceToken)
             state = PushNotificationState(receiver: reciver, subscription: subScription, deviceToken: deviceToken)
             PushNotificationReceiver.setState(state: state)
@@ -133,18 +139,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
 
+        
         guard StoreStruct.shared.currentInstance.returnedText != "" else {
             return
         }
         let receiver = try! PushNotificationReceiver()
-        let subscription = PushNotificationSubscription(endpoint: URL(string:"https://pushrelay-roma1.your.org/relay-to/production/\(token)")!, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
+//        let subscription = PushNotificationSubscription(endpoint: URL(string:"https://pushrelay-roma1.your.org/relay-to/production/\(token)")!, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
+        let subscription = PushNotificationSubscription(endpoint: URL(string:"https://rails-toot-test.herokuapp.com/push/\(token)")!, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
+        // let subscription = PushNotificationSubscription(endpoint: URL(string:"https://pushrelay-roma1.your.org/relay-to/production/\(token)")!, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
         let deviceToken = PushNotificationDeviceToken(deviceToken: deviceToken)
         state = PushNotificationState(receiver: receiver, subscription: subscription, deviceToken: deviceToken)
         PushNotificationReceiver.setState(state: state)
 
         // change following when pushing to App Store or for local dev
-        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-roma1.your.org/relay-to/production/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
-//        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-mast1-dev.your.org/relay-to/development/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
+        // let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-roma1.your.org/relay-to/production/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
+        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://rails-toot-test.herokuapp.com/push/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
 
         //create the url with URL
         let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
@@ -159,15 +168,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 
-        let jsonEncoder = JSONEncoder()
+        let postdata:[String:Any] = ["data":
+            ["alerts":
+                ["favourite":true,
+                 "follow":true,
+                 "mention":true,
+                 "reblog":true
+                ]
+            ],
+                                     "subscription":
+                                        ["keys":
+                                            ["p256dh":"BBEUVi7Ehdzzpe_ZvlzzkQnhujNJuBKH1R0xYg7XdAKNFKQG9Gpm0TSGRGSuaU7LUFKX-uz8YW0hAshifDCkPuE",
+                                             "auth":"iRdmDrOS6eK6xvG1H6KshQ"
+                                            ],
+                                         "endpoint":"https://rails-toot-test.herokuapp.com/push/fe6c0a6172368a86b472c08e30ddb2be02cdf372bf665cd3a7a231a86b0872ab"
+            ]
+        ]
+        
+        
         do {
-            let jsonData = try jsonEncoder.encode(requestParams)
-            let jsonString = String(data: jsonData, encoding: .utf8)
+            let jsonData = try JSONSerialization.data(withJSONObject: postdata, options: .prettyPrinted)
+            // here "jsonData" is the dictionary encoded in JSON data
 
+            let jsonString = String(data: jsonData, encoding: .utf8)
+            debugString += "Delete body:\n" +
+            "\(jsonString!)" +
+            "\n";
             request.httpBody = jsonData
         }
         catch {
-            print(error.localizedDescription)
+            debugString += "\(error.localizedDescription) Error 0 \n"
+            print("\(error.localizedDescription) Error 0")
         }
         request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -176,7 +207,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //create dataTask using the session object to send data to the server
         let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
 
-            let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-roma1.your.org/relay-to/production/\(token)", receiver: state.receiver, alerts: state.subscription.alerts)
+            if let httpResponse = response as? HTTPURLResponse {
+                debugString += "Delete http response: \(httpResponse.statusCode)  \n"
+                // user doesn't have push scope
+                if httpResponse.statusCode == 403 {
+                    DispatchQueue.main.async {
+                        
+                        if let app = UIApplication.shared.delegate as? AppDelegate, let window = app.window {
+                            
+                            let alert = UIAlertController(title: "Error", message: "Looks like we hit an issue with authroization. Please sign in again and verify push access is selected to continue.", preferredStyle: .alert)
+                            let ok = UIAlertAction(title: "Ok", style: .default, handler: { (_) in
+                                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                switch (deviceIdiom) {
+                                case .phone:
+                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut"), object: nil)
+                                case .pad:
+                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "logBackOut"), object: nil)
+                                default:
+                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut"), object: nil)
+                                }
+                            })
+                            
+                            alert.addAction(ok)
+                            if let app = UIApplication.shared.delegate as? AppDelegate, let window = app.window?.rootViewController {
+                                window.present(alert, animated: false, completion: nil)
+                            }
+                            
+                            
+                            
+                        }
+                        
+                    }
+                    return
+                }
+            }
+            
+          //  let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-roma1.your.org/relay-to/production/\(token)", receiver: state.receiver, alerts: state.subscription.alerts)
+            let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://rails-toot-test.herokuapp.com/push/\(token)", receiver: state.receiver, alerts: state.subscription.alerts)
 
             //create the url with URL
             let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
@@ -191,16 +258,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 
-            let jsonEncoder = JSONEncoder()
+            let postdata:[String:Any] = ["data":
+                ["alerts":
+                    ["favourite":true,
+                     "follow":true,
+                     "mention":true,
+                     "reblog":true
+                    ]
+                ],
+                                         "subscription":
+                                            ["keys":
+                                                ["p256dh":"BBEUVi7Ehdzzpe_ZvlzzkQnhujNJuBKH1R0xYg7XdAKNFKQG9Gpm0TSGRGSuaU7LUFKX-uz8YW0hAshifDCkPuE",
+                                                 "auth":"iRdmDrOS6eK6xvG1H6KshQ"
+                                                ],
+                                             "endpoint":"https://rails-toot-test.herokuapp.com/push/fe6c0a6172368a86b472c08e30ddb2be02cdf372bf665cd3a7a231a86b0872ab"
+                ]
+            ]
+            
+            
+            
             do {
-                let jsonData = try jsonEncoder.encode(requestParams)
+                let jsonData = try JSONSerialization.data(withJSONObject: postdata, options: .prettyPrinted)
+                // here "jsonData" is the dictionary encoded in JSON data
+                
                 let jsonString = String(data: jsonData, encoding: .utf8)
-
+                debugString += "Delete body:\n" +
+                    "\(jsonString!)" +
+                "\n";
                 request.httpBody = jsonData
-                print("JSON String : " + jsonString!)
             }
             catch {
-                print(error.localizedDescription)
+                debugString += "\(error.localizedDescription) Error 1"
+                print("\(error.localizedDescription) Error 1")
             }
             request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -209,7 +298,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //create dataTask using the session object to send data to the server
             let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
 
+                
+                
+                if let httpResponse = response as? HTTPURLResponse {
+                    debugString += "POST http response: \(httpResponse.statusCode)  \n"
+                }
+                
                 guard error == nil else {
+                    debugString += "POST error: \(error!.localizedDescription)  \n"
+                    self.sendDebug(debugString: debugString)
                     return
                 }
 
@@ -220,12 +317,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 do {
                     //create json object from data
                     if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                        print(json)
+                        debugString += "POST RETURNED JSON: \(json)  \n"
+                        if let error = json["error"] as? String {
+                            if error == "Insufficient permissions: push." {
+                                
+                            }
+                        }
                         // handle json...
                     }
                 } catch let error {
-                    print(error.localizedDescription)
+                     debugString += "\(error.localizedDescription) Error 2  \n"
+                    print("\(error.localizedDescription) Error 2")
                 }
+                
+                self.sendDebug(debugString: debugString)
             })
             task.resume()
 
@@ -233,6 +338,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         task.resume()
 
     }
+    
+    func sendDebug(debugString:String){
+        
+        let alert = UIAlertController(title: "Debugging Info", message: "Debug info is ready.", preferredStyle: .alert)
+        let ok = UIAlertAction(title: "Send Email", style: .default, handler: { (_) in
+            var emailTitle = "Subscription Debug"
+            var messageBody = debugString
+            var toRecipents = ["barrettbreshears@gmail.com"]
+            var mc: MFMailComposeViewController = MFMailComposeViewController()
+            mc.mailComposeDelegate = self
+            mc.setSubject(emailTitle)
+            mc.setMessageBody(messageBody, isHTML: false)
+            mc.setToRecipients(toRecipents)
+            
+            if let app = UIApplication.shared.delegate as? AppDelegate, let window = app.window?.rootViewController {
+                window.present(mc, animated: false, completion: nil)
+            }
+        })
+        
+        alert.addAction(ok)
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addAction(cancel)
+        if let app = UIApplication.shared.delegate as? AppDelegate, let window = app.window?.rootViewController {
+            window.present(alert, animated: false, completion: nil)
+        }
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+   
 
     func application(
         _ application: UIApplication,
