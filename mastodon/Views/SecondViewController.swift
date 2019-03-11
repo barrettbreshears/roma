@@ -26,6 +26,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     var countcount2 = 0
     var countcount5 = 0
     
+    var maybeDoOnce = false
+    var searchButton = MNGExpandedTouchAreaButton()
     var settingsButton = UIButton(type: .custom)
     var blurEffectViewMain = UIView()
     var blurEffect0 = UIBlurEffect()
@@ -191,9 +193,20 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     }
     
     @objc func search() {
+            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+            switch (deviceIdiom) {
+            case .phone :
         let controller = DetailViewController()
         controller.mainStatus.append(StoreStruct.statusSearch[StoreStruct.searchIndex])
         self.navigationController?.pushViewController(controller, animated: true)
+            case .pad:
+                let controller = DetailViewController()
+                controller.mainStatus.append(StoreStruct.statusSearch[StoreStruct.searchIndex])
+                self.splitViewController?.showDetailViewController(controller, sender: self)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+            default:
+                print("nothing")
+            }
     }
     
     @objc func searchUser() {
@@ -374,9 +387,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.loadLoadLoad()
         } else {
             if UIApplication.shared.isSplitOrSlideOver {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 110), y: CGFloat(30), width: CGFloat(220), height: CGFloat(40)))
             } else {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(newoff), width: CGFloat(240), height: CGFloat(40)))
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 110), y: CGFloat(newoff), width: CGFloat(220), height: CGFloat(40)))
             }
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
@@ -604,6 +617,16 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
+    @objc func goToSettings() {
+        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {} else {
+            springWithDelay(duration: 0.4, delay: 0, animations: {
+                self.segmentedControl.alpha = 0
+            })
+        }
+        let controller = SettingsViewController()
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -622,6 +645,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeSeg), name: NSNotification.Name(rawValue: "changeSeg"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.segTheme), name: NSNotification.Name(rawValue: "segTheme"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.startStream), name: NSNotification.Name(rawValue: "startStream"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goToSettings), name: NSNotification.Name(rawValue: "goToSettings"), object: nil)
         
         self.view.backgroundColor = Colours.white
         
@@ -713,9 +737,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.view.addSubview(self.tableView2)
         } else {
             if UIApplication.shared.isSplitOrSlideOver {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 110), y: CGFloat(30), width: CGFloat(220), height: CGFloat(40)))
             } else {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(newoff), width: CGFloat(240), height: CGFloat(40)))
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 110), y: CGFloat(newoff), width: CGFloat(220), height: CGFloat(40)))
             }
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
@@ -854,23 +878,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         
                     }
                     
-//                    for x in stat {
-//                        if x.type == .mention {
-//                            StoreStruct.notificationsMentions.append(x)
-//                            DispatchQueue.main.async {
-//                                StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
-//                                StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-//
-//                                self.ai.alpha = 0
-//                                self.ai.removeFromSuperview()
-//
-//                                self.tableView.reloadData()
-//                                self.tableView2.reloadData()
-//
-//                            }
-//                        }
-//                    }
-                    
                 }
             }
         } else {
@@ -905,24 +912,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 self.tableView3.reloadData()
                 
             }
-            
-            
-//            for x in StoreStruct.notifications {
-//                if x.type == .mention {
-//                    StoreStruct.notificationsMentions.append(x)
-//                    DispatchQueue.main.async {
-//                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
-//                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-//
-//                        self.ai.alpha = 0
-//                        self.ai.removeFromSuperview()
-//
-//                        self.tableView.reloadData()
-//                        self.tableView2.reloadData()
-//
-//                    }
-//                }
-//            }
         }
         
         
@@ -983,6 +972,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         crownControl3.hideCrown()
     }
     
+    @objc func search9() {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "searchthething"), object: self)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
@@ -1029,6 +1022,31 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             newSize = offset + 15
         }
         
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone:
+            print("nothing")
+        case .pad:
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "segTheme"), object: self)
+            if self.maybeDoOnce == false {
+                self.searchButton = MNGExpandedTouchAreaButton()
+                self.searchButton.setImage(UIImage(named: "search")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+                self.searchButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+                self.searchButton.adjustsImageWhenHighlighted = false
+                self.searchButton.addTarget(self, action: #selector(search9), for: .touchUpInside)
+                self.navigationController?.view.addSubview(self.searchButton)
+                self.maybeDoOnce = true
+                
+                self.searchButton.translatesAutoresizingMaskIntoConstraints = false
+                self.searchButton.widthAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
+                self.searchButton.heightAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
+                self.searchButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+                self.searchButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
+            }
+        default:
+            print("nothing")
+        }
         
         
         if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
@@ -1444,10 +1462,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.ai.removeFromSuperview()
         }
         if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {} else {
-//            springWithDelay(duration: 0.4, delay: 0, animations: {
+            springWithDelay(duration: 0.4, delay: 0, animations: {
                 self.segmentedControl.alpha = 0
-                //            self.tableView.alpha = 0
-//            })
+            })
         }
         if self.currentIndex == 0 {
             UserDefaults.standard.set(self.tableView2.contentOffset.y, forKey: "savedRowNotif")
@@ -1517,7 +1534,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             }
             
             self.currentIndex = 1
-            //self.tableView.reloadData()
             self.tableView.alpha = 1
             self.tableView2.alpha = 0
             self.tableView3.alpha = 0
@@ -1550,23 +1566,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             
                         }
                         
-                        
-                        
-//                        for x in stat {
-//                            if x.type == .mention {
-//                                StoreStruct.notificationsMentions.append(x)
-//                                DispatchQueue.main.async {
-//                                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
-//                                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-//
-//                                    self.ai.alpha = 0
-//                                    self.ai.removeFromSuperview()
-//
-//                                    self.tableView.reloadData()
-//                                }
-//                            }
-//                        }
-                        
                     }
                 }
             } else {
@@ -1597,7 +1596,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             }
             
             self.currentIndex = 5
-            //self.tableView2.reloadData()
             self.tableView.alpha = 0
             self.tableView2.alpha = 0
             self.tableView3.alpha = 1
@@ -1639,7 +1637,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             }
             
             self.currentIndex = 0
-            //self.tableView2.reloadData()
             self.tableView.alpha = 0
             self.tableView2.alpha = 1
             self.tableView3.alpha = 0
@@ -3368,6 +3365,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         } else {
                             cell.moreImage.image = nil
                         }
+                        cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as! NotificationCellImage
@@ -3377,6 +3376,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         } else {
                             cell.moreImage.image = nil
                         }
+                        cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -3392,18 +3393,26 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? NotificationCell {
                         if sto[sender.tag].status!.favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].status?.id ?? "" ) {
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
                             cell.moreImage.image = UIImage(named: "boost")
                         }
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as! NotificationCellImage
                         if sto[sender.tag].status!.favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].status?.id ?? "" ) {
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
                             cell.moreImage.image = UIImage(named: "boost")
                         }
                         cell.hideSwipe(animated: true)
@@ -3451,6 +3460,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         } else {
                             cell.moreImage.image = nil
                         }
+                        cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as! NotificationCellImage
@@ -3460,6 +3471,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         } else {
                             cell.moreImage.image = nil
                         }
+                        cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -3474,18 +3487,26 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     }
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? NotificationCell {
                         if sto[sender.tag].status!.reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].status?.id ?? "" ) {
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
                             cell.moreImage.image = UIImage(named: "like")
                         }
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as! NotificationCellImage
                         if sto[sender.tag].status!.reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].status?.id ?? "" ) {
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
                             cell.moreImage.image = UIImage(named: "like")
                         }
                         cell.hideSwipe(animated: true)
@@ -3935,6 +3956,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                         return
                                     }
                                 }
+                                .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: indexPath.section))?.contentView ?? self.view)
                                 .show(on: self)
                             
                             
@@ -3979,6 +4001,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                                     return
                                                 }
                                             }
+                                            .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: indexPath.section))?.contentView ?? self.view)
                                             .show(on: self)
                                     } catch let error as NSError {
                                         print(error)
@@ -4044,6 +4067,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                         return
                                     }
                                 }
+                                .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: indexPath.section))?.contentView ?? self.view)
                                 .show(on: self)
                             
                             
@@ -4056,6 +4080,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 return
                             }
                         }
+                        .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: indexPath.section))?.contentView ?? self.view)
                         .show(on: self)
                     
                     
@@ -4548,6 +4573,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                         return
                                     }
                                 }
+                                .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: indexPath.section))?.contentView ?? self.view)
                                 .show(on: self)
                             
                             
@@ -4592,6 +4618,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                                     return
                                                 }
                                             }
+                                            .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: indexPath.section))?.contentView ?? self.view)
                                             .show(on: self)
                                     } catch let error as NSError {
                                         print(error)
@@ -4657,6 +4684,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                         return
                                     }
                                 }
+                                .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: indexPath.section))?.contentView ?? self.view)
                                 .show(on: self)
                             
                             
@@ -4669,6 +4697,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 return
                             }
                         }
+                        .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: indexPath.section))?.contentView ?? self.view)
                         .show(on: self)
                     
                     
@@ -4752,6 +4781,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowMent")
         }
         
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone :
         if self.currentIndex == 0 {
             if indexPath.section == 1 {
                 if StoreStruct.notifications[indexPath.row].type == .follow {
@@ -4768,15 +4800,44 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 }
             }
         } else if self.currentIndex == 5 {
-            
             let controller = DetailViewController()
             controller.mainStatus.append(StoreStruct.notificationsDirect[indexPath.row].status!)
             self.navigationController?.pushViewController(controller, animated: true)
         } else {
-            
             let controller = DetailViewController()
             controller.mainStatus.append(StoreStruct.notificationsMentions[indexPath.row].status!)
             self.navigationController?.pushViewController(controller, animated: true)
+        }
+        case .pad:
+            if self.currentIndex == 0 {
+                if indexPath.section == 1 {
+                    if StoreStruct.notifications[indexPath.row].type == .follow {
+                        let controller = ThirdViewController()
+                        if StoreStruct.notifications[indexPath.row].account.username == StoreStruct.currentUser.username {} else {
+                            controller.fromOtherUser = true
+                        }
+                        controller.userIDtoUse = StoreStruct.notifications[indexPath.row].account.id
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    } else {
+                        let controller = DetailViewController()
+                        controller.mainStatus.append(StoreStruct.notifications[indexPath.row].status!)
+                        self.splitViewController?.showDetailViewController(controller, sender: self)
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+                    }
+                }
+            } else if self.currentIndex == 5 {
+                let controller = DetailViewController()
+                controller.mainStatus.append(StoreStruct.notificationsDirect[indexPath.row].status!)
+                self.splitViewController?.showDetailViewController(controller, sender: self)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+            } else {
+                let controller = DetailViewController()
+                controller.mainStatus.append(StoreStruct.notificationsMentions[indexPath.row].status!)
+                self.splitViewController?.showDetailViewController(controller, sender: self)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+            }
+        default:
+            print("nothing")
         }
     }
     
@@ -4786,9 +4847,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         let request = Notifications.all(range: .max(id: StoreStruct.notifications.last?.id ?? "", limit: 5000))
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
-                
-                
-                
                 
                 if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
                     self.lastThing = stat.first?.id ?? ""
@@ -4813,7 +4871,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
                     StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                     
-                    
                     if self.currentIndex == 1 {
                         self.tableView.reloadData()
                     } else if self.currentIndex == 5 {
@@ -4823,11 +4880,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     }
                     
                     if StoreStruct.notificationsDirect.isEmpty || self.tempFetchedDirect == false {
-                        self.fetchMoreNotifications()
+                        self.fetchMoreNotificationsD()
                     }
                     
                     self.tempFetchedDirect = false
-                    
                 }
                     
                 }
@@ -4835,11 +4891,53 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         }
     }
     
+    func fetchMoreNotificationsD() {
+        let request = Notifications.all(range: .max(id: StoreStruct.notifications.last?.id ?? "", limit: 5000))
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                
+                if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
+                    self.lastThing = stat.first?.id ?? ""
+                    StoreStruct.notifications = StoreStruct.notifications + stat
+                    
+                    for x in stat {
+                        if x.type == .mention {
+                            if x.status?.visibility == .direct {
+                                self.tempFetchedDirect = true
+                                StoreStruct.notificationsDirect.append(x)
+                            }
+                        }
+                    }
+                    
+                    DispatchQueue.main.async {
+                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.sorted(by: { $0.createdAt > $1.createdAt })
+                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
+                        
+                        if self.currentIndex == 5 {
+                            self.tableView3.reloadData()
+                        }
+                        
+                        if StoreStruct.notificationsDirect.isEmpty || self.tempFetchedDirect == false {
+                            self.fetchMoreNotificationsD()
+                        }
+                        
+                        self.tempFetchedDirect = false
+                    }
+                    
+    
+            }
+        }
+    }
+    }
+    
     @objc func refreshCont() {
         let request = Notifications.all(range: .min(id: StoreStruct.notifications.first?.id ?? "", limit: 5000))
         DispatchQueue.global(qos: .userInitiated).async {
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
+                    StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
+                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
+                    StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                     var newestC = StoreStruct.notifications.count
                     var newestC2 = StoreStruct.notificationsMentions.count
                     var newestC3 = StoreStruct.notificationsDirect.count
@@ -4868,12 +4966,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         newestC = StoreStruct.notifications.count - newestC
                         newestC2 = StoreStruct.notificationsMentions.count - newestC2
                         newestC3 = StoreStruct.notificationsDirect.count - newestC3
-//                        self.tableView.reloadData()
-//                        self.tableView2.reloadData()
-//
-//                        self.refreshControl.endRefreshing()
-                        
-                        
                         
                         if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                         
@@ -4913,7 +5005,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             
                         }
                         
-                        UIView.setAnimationsEnabled(false)
+//                        UIView.setAnimationsEnabled(false)
                         self.tableView.reloadData()
                         self.tableView2.reloadData()
                             self.tableView3.reloadData()
@@ -4927,12 +5019,12 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 self.tableView3.scrollToRow(at: IndexPath(row: newestC3, section: 0), at: .top, animated: false)
                             }
                         } else {
-                            if StoreStruct.notifications.count > newestC {
-                                self.tableView2.scrollToRow(at: IndexPath(row: newestC, section: 1), at: .top, animated: false)
-                            }
+//                            if StoreStruct.notifications.count > newestC {
+//                                self.tableView2.scrollToRow(at: IndexPath(row: newestC, section: 1), at: .top, animated: false)
+//                            }
                         }
 //                        self.restoreScroll()
-                        UIView.setAnimationsEnabled(true)
+//                        UIView.setAnimationsEnabled(true)
                             
                         } else {
                             self.tableView.reloadData()
@@ -5130,12 +5222,32 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             segmentedControl.transitionStyle = .slide
             segmentedControl.delegate = self
             view.addSubview(segmentedControl)
-        } else {
-            if UIApplication.shared.isSplitOrSlideOver {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
-            } else {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(newoff), width: CGFloat(240), height: CGFloat(40)))
+            
+            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+            switch (deviceIdiom) {
+            case .pad:
+                self.tableView.translatesAutoresizingMaskIntoConstraints = false
+                self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+                
+                self.tableView3.translatesAutoresizingMaskIntoConstraints = false
+                self.tableView3.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableView3.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableView3.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableView3.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+                
+                self.tableView2.translatesAutoresizingMaskIntoConstraints = false
+                self.tableView2.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableView2.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableView2.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableView2.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+            default:
+                print("nothing")
             }
+        } else {
+            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
                 segmentedControl.shapeStyle = .roundedRect
@@ -5148,6 +5260,30 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             segmentedControl.transitionStyle = .slide
             segmentedControl.delegate = self
             self.navigationController?.view.addSubview(segmentedControl)
+            
+            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+            switch (deviceIdiom) {
+            case .pad:
+                self.tableView.translatesAutoresizingMaskIntoConstraints = false
+                self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                
+                self.tableView3.translatesAutoresizingMaskIntoConstraints = false
+                self.tableView3.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableView3.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableView3.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableView3.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                
+                self.tableView2.translatesAutoresizingMaskIntoConstraints = false
+                self.tableView2.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableView2.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableView2.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableView2.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+            default:
+                print("nothing")
+            }
         }
         
     }

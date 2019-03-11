@@ -76,6 +76,7 @@ public struct Statuses {
     ///   - sensitive: Marks the status as NSFW.
     ///   - spoilerText: the text to be shown as a warning before the actual content.
     ///   - scheduledAt: the timestamp for scheduled toots.
+    ///   - poll: the poll to attach.
     ///   - visibility: The status' visibility.
     /// - Returns: Request for `Status`.
     public static func create(status: String,
@@ -84,8 +85,9 @@ public struct Statuses {
                               sensitive: Bool? = nil,
                               spoilerText: String? = nil,
                               scheduledAt: String? = nil,
+                              poll: [Any]? = nil,
                               visibility: Visibility = .public) -> Request<Status> {
-        let parameters = [
+        var parameters = [
             Parameter(name: "status", value: status),
             Parameter(name: "in_reply_to_id", value: replyToID),
             Parameter(name: "sensitive", value: sensitive.flatMap(trueOrNil)),
@@ -93,6 +95,19 @@ public struct Statuses {
             Parameter(name: "scheduled_at", value: scheduledAt),
             Parameter(name: "visibility", value: visibility.rawValue)
             ] + mediaIDs.map(toArrayOfParameters(withName: "media_ids"))
+        
+        if poll?.isEmpty ?? false {
+            
+        } else {
+            if let poll = poll {
+                let newParams = [
+                    Parameter(name: "poll[expires_in]", value: String(poll[1] as! Int)),
+                    Parameter(name: "poll[multiple]", value: (poll[2] as? Bool).flatMap(trueOrNil)),
+                    Parameter(name: "poll[hide_totals]", value: (poll[3] as? Bool).flatMap(trueOrNil))
+                    ] + (poll[0] as! [String]).map(toArrayOfParameters(withName: "poll[options]"))
+                parameters = parameters + newParams
+            }
+        }
 
         let method = HTTPMethod.post(.parameters(parameters))
         return Request<Status>(path: "/api/v1/statuses", method: method)

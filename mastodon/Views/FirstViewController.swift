@@ -19,7 +19,7 @@ import Disk
 import AVKit
 import AVFoundation
 
-class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, URLSessionDataDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate {
+class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, URLSessionDataDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate, UIPencilInteractionDelegate {
     
     var socket: WebSocket!
     var lsocket: WebSocket!
@@ -35,6 +35,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     var countcount2 = 0
     var countcount3 = 0
     
+    var maybeDoOnce = false
+    var searchButton = MNGExpandedTouchAreaButton()
     var settingsButton = MNGExpandedTouchAreaButton()
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .circleStrokeSpin, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
@@ -193,9 +195,20 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     }
     
     @objc func search() {
+            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+            switch (deviceIdiom) {
+            case .phone :
         let controller = DetailViewController()
         controller.mainStatus.append(StoreStruct.statusSearch[StoreStruct.searchIndex])
         self.navigationController?.pushViewController(controller, animated: true)
+            case .pad:
+                let controller = DetailViewController()
+                controller.mainStatus.append(StoreStruct.statusSearch[StoreStruct.searchIndex])
+                self.splitViewController?.showDetailViewController(controller, sender: self)
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+            default:
+                print("nothing")
+            }
     }
     
     @objc func searchUser() {
@@ -751,6 +764,24 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
+    @available(iOS 12.1, *)
+    func pencilInteractionDidTap(_ interaction: UIPencilInteraction) {
+        let controller = ComposeViewController()
+        controller.inReply = []
+        controller.inReplyText = ""
+        self.present(controller, animated: true, completion: nil)
+    }
+    
+    @objc func goToSettings() {
+        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {} else {
+            springWithDelay(duration: 0.4, delay: 0, animations: {
+                self.segmentedControl.alpha = 0
+            })
+        }
+        let controller = SettingsViewController()
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -772,6 +803,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeSeg), name: NSNotification.Name(rawValue: "changeSeg"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.segTheme), name: NSNotification.Name(rawValue: "segTheme"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.activateCrown), name: NSNotification.Name(rawValue: "activateCrown"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goToSettings), name: NSNotification.Name(rawValue: "goToSettings"), object: nil)
         
         self.view.backgroundColor = Colours.white
         
@@ -780,6 +812,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self?.player.play()
         }
         
+        if #available(iOS 12.1, *) {
+            let pencilInteraction = UIPencilInteraction()
+            pencilInteraction.delegate = self
+            view.addInteraction(pencilInteraction)
+        }
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -862,9 +899,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.view.addSubview(self.tableViewF)
         } else {
             if UIApplication.shared.isSplitOrSlideOver {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(30), width: CGFloat(200), height: CGFloat(40)))
             } else {
-            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(newoff), width: CGFloat(240), height: CGFloat(40)))
+            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(newoff), width: CGFloat(200), height: CGFloat(40)))
             }
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
@@ -1086,7 +1123,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         super.viewWillDisappear(true)
         
         if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {} else {
+            springWithDelay(duration: 0.4, delay: 0, animations: {
                 self.segmentedControl.alpha = 0
+            })
         }
         
         UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowHome1")
@@ -1095,6 +1134,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         
         
         self.settingsButton.removeFromSuperview()
+    }
+    
+    @objc func search9() {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "searchthething"), object: self)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -1127,6 +1170,34 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             newSize = offset + 65
         } else {
             newSize = offset + 15
+        }
+        
+        self.restoreScroll()
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "segTheme"), object: self)
+            if self.maybeDoOnce == false {
+                self.searchButton = MNGExpandedTouchAreaButton()
+                self.searchButton.setImage(UIImage(named: "search")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+                self.searchButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+                self.searchButton.adjustsImageWhenHighlighted = false
+                self.searchButton.addTarget(self, action: #selector(search9), for: .touchUpInside)
+                self.navigationController?.view.addSubview(self.searchButton)
+                
+                
+                self.searchButton.translatesAutoresizingMaskIntoConstraints = false
+                self.searchButton.widthAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
+                self.searchButton.heightAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
+                self.searchButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+                self.searchButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
+                
+                
+                self.maybeDoOnce = true
+            }
+        default:
+            print("nothing")
         }
         
         if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
@@ -1467,10 +1538,28 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         DispatchQueue.main.async {
                             //self.tableView.reloadData()
                             
+                            if self.hMod.count == 1 {
+                                return
+                            }
                             
                             if self.tableView.contentOffset.y == 0 {
-                                StoreStruct.statusesHome = self.hMod.reversed() + StoreStruct.statusesHome
-                                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                                self.hMod = self.hMod.reversed()
+                                if let st = self.hMod.last {
+                                    if StoreStruct.statusesHome.contains(st) {
+                                        StoreStruct.statusesHome = self.hMod + StoreStruct.statusesHome
+                                        StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                                    } else {
+                                        StoreStruct.gapLastHomeID = self.hMod.last?.id ?? ""
+                                        let z = st
+                                        z.id = "loadmorehere"
+                                        StoreStruct.gapLastHomeStat = z
+                                        StoreStruct.statusesHome = self.hMod + StoreStruct.statusesHome
+                                        StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                                    }
+                                } else {
+                                    StoreStruct.statusesHome = self.hMod + StoreStruct.statusesHome
+                                    StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                                }
                                 
                                 if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                     self.newUpdatesB1.setTitle("\(self.hMod.count)  ", for: .normal)
@@ -1493,6 +1582,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     self.tableView.reloadData()
                                     self.refreshControl.endRefreshing()
                                     
+                                }
+                                
+                                do {
+                                    try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                    try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                    try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
+                                } catch {
+                                    print("Couldn't save")
                                 }
                                 
                                 self.hMod = []
@@ -1545,11 +1642,28 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         DispatchQueue.main.async {
                             //self.tableView.reloadData()
                             
+                            if self.lMod.count == 1 {
+                                return
+                            }
                             
                             if self.tableViewL.contentOffset.y == 0 {
-                                StoreStruct.statusesLocal = self.lMod.reversed() + StoreStruct.statusesLocal
-                                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
-                                
+                                self.lMod = self.lMod.reversed()
+                                if let st = self.lMod.last {
+                                    if StoreStruct.statusesLocal.contains(st) {
+                                        StoreStruct.statusesLocal = self.lMod + StoreStruct.statusesLocal
+                                        StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                                    } else {
+                                        StoreStruct.gapLastLocalID = self.lMod.last?.id ?? ""
+                                        let z = st
+                                        z.id = "loadmorehere"
+                                        StoreStruct.gapLastLocalStat = z
+                                        StoreStruct.statusesLocal = self.lMod + StoreStruct.statusesLocal
+                                        StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                                    }
+                                } else {
+                                    StoreStruct.statusesLocal = self.lMod + StoreStruct.statusesLocal
+                                    StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                                }
                                 
                                 if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                     self.newUpdatesB2.setTitle("\(self.lMod.count)  ", for: .normal)
@@ -1573,6 +1687,15 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     self.refreshControl.endRefreshing()
                                     
                                 }
+                                
+                                do {
+                                    try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                    try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                    try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
+                                } catch {
+                                    print("Couldn't save")
+                                }
+                                
                                 self.lMod = []
                             }
                             
@@ -1626,10 +1749,28 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         
                         DispatchQueue.main.async {
                             
+                            if self.fMod.count == 1 {
+                                return
+                            }
                             
                             if self.tableViewF.contentOffset.y == 0 {
-                                StoreStruct.statusesFederated = self.fMod.reversed() + StoreStruct.statusesFederated
-                                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                                self.fMod = self.fMod.reversed()
+                                if let st = self.fMod.last {
+                                    if StoreStruct.statusesFederated.contains(st) {
+                                        StoreStruct.statusesFederated = self.fMod + StoreStruct.statusesFederated
+                                        StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                                    } else {
+                                        StoreStruct.gapLastFedID = self.fMod.last?.id ?? ""
+                                        let z = st
+                                        z.id = "loadmorehere"
+                                        StoreStruct.gapLastFedStat = z
+                                        StoreStruct.statusesFederated = self.fMod + StoreStruct.statusesFederated
+                                        StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                                    }
+                                } else {
+                                    StoreStruct.statusesFederated = self.fMod + StoreStruct.statusesFederated
+                                    StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                                }
                                 
                                 
                                 if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
@@ -1657,6 +1798,15 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     
                                 }
                                 
+                                
+                                do {
+                                    try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                    try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                    try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
+                                } catch {
+                                    print("Couldn't save")
+                                }
+                                
                                 self.fMod = []
                             }
                             
@@ -1678,37 +1828,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
     }
     
-    //    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    //        if scrollView.contentOffset.y == 0 {
-    //            if self.currentIndex == 0 {
-    //
-    ////                if self.tableView.contentOffset.y == 0 {
-    ////                    StoreStruct.statusesHome = self.hMod.reversed() + StoreStruct.statusesHome
-    ////                    StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
-    ////                    self.tableView.reloadData()
-    ////                    self.hMod = []
-    ////                }
-    //            } else if self.currentIndex == 1 {
-    //
-    //                if self.tableViewL.contentOffset.y == 0 {
-    //                    StoreStruct.statusesLocal = self.lMod.reversed() + StoreStruct.statusesLocal
-    //                    StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
-    //                    self.tableViewL.reloadData()
-    //                    self.lMod = []
-    //                }
-    //            } else {
-    //
-    //                if self.tableViewF.contentOffset.y == 0 {
-    //                    StoreStruct.statusesFederated = self.fMod.reversed() + StoreStruct.statusesFederated
-    //                    StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
-    //                    self.tableViewF.reloadData()
-    //                    self.fMod = []
-    //                }
-    //            }
-    //        }
-    //    }
-    
-    
     func firstRowHeight() -> CGFloat {
         return tableView(tableView, heightForRowAt: IndexPath(row: 0, section: 0))
     }
@@ -1723,11 +1842,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         } else if index == 1 {
             return "Local".localized
         } else {
-            if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
-                return "Federated".localized
-            } else {
-                return "Fed".localized
-            }
+            return "All"
         }
     }
     
@@ -3233,6 +3348,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         } else {
                             cell.moreImage.image = nil
                         }
+                        cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
@@ -3242,6 +3359,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         } else {
                             cell.moreImage.image = nil
                         }
+                        cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -3258,18 +3377,26 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
                             cell.moreImage.image = UIImage(named: "boost")
                         }
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
                             cell.moreImage.image = UIImage(named: "boost")
                         }
                         cell.hideSwipe(animated: true)
@@ -3312,6 +3439,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         } else {
                             cell.moreImage.image = nil
                         }
+                        cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
@@ -3321,6 +3450,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         } else {
                             cell.moreImage.image = nil
                         }
+                        cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -3336,18 +3467,26 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
                             cell.moreImage.image = UIImage(named: "like")
                         }
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
                             cell.moreImage.image = UIImage(named: "like")
                         }
                         cell.hideSwipe(animated: true)
@@ -3447,8 +3586,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     cell.moreImage.image = nil
                                 }
                                 cell.hideSwipe(animated: true)
-                            } else {
-                                let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                            } else if let cell = theTable.cellForRow(at: indexPath) as? MainFeedCellImage {
                                 if sto[indexPath.row].reblog?.favourited! ?? sto[indexPath.row].favourited! || StoreStruct.allLikes.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
                                     cell.moreImage.image = UIImage(named: "like")
@@ -3477,8 +3615,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     cell.moreImage.image = UIImage(named: "boost")
                                 }
                                 cell.hideSwipe(animated: true)
-                            } else {
-                                let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                            } else if let cell = theTable.cellForRow(at: indexPath) as? MainFeedCellImage {
                                 if sto[indexPath.row].reblog?.favourited ?? sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
                                     cell.moreImage.image = UIImage(named: "fifty")
@@ -3529,8 +3666,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     cell.moreImage.image = nil
                                 }
                                 cell.hideSwipe(animated: true)
-                            } else {
-                                let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                            } else if let cell = theTable.cellForRow(at: indexPath) as? MainFeedCellImage {
                                 if sto[indexPath.row].reblog?.reblogged! ?? sto[indexPath.row].reblogged! || StoreStruct.allBoosts.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
                                     cell.moreImage.image = UIImage(named: "boost")
@@ -3558,8 +3694,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     cell.moreImage.image = UIImage(named: "like")
                                 }
                                 cell.hideSwipe(animated: true)
-                            } else {
-                                let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                            } else if let cell = theTable.cellForRow(at: indexPath) as? MainFeedCellImage {
                                 if sto[indexPath.row].reblog?.reblogged ?? sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
                                     cell.moreImage.image = UIImage(named: "fifty")
@@ -3623,8 +3758,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 
                 if let cell = theTable.cellForRow(at: indexPath) as? MainFeedCell {
                     cell.hideSwipe(animated: true)
-                } else {
-                    let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
+                } else if let cell = theTable.cellForRow(at: indexPath) as? MainFeedCellImage {
                     cell.hideSwipe(animated: true)
                 }
             }
@@ -3873,6 +4007,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                                     return
                                                 }
                                             }
+                                            .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
                                             .show(on: self)
                                     } catch let error as NSError {
                                         print(error)
@@ -3940,6 +4075,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                         return
                                     }
                                 }
+                                .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
                                 .show(on: self)
                             
                             
@@ -3952,6 +4088,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 return
                             }
                         }
+                        .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
                         .show(on: self)
                     
                     
@@ -4165,6 +4302,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                         return
                                     }
                                 }
+                                .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
                                 .show(on: self)
                             
                             
@@ -4213,6 +4351,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                                     return
                                                 }
                                             }
+                                            .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
                                             .show(on: self)
                                     } catch let error as NSError {
                                         print(error)
@@ -4277,6 +4416,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                         return
                                     }
                                 }
+                                .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
                                 .show(on: self)
                             
                             
@@ -4289,6 +4429,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 return
                             }
                         }
+                        .popover(anchorView: theTable.cellForRow(at: IndexPath(row: indexPath.row, section: 0))?.contentView ?? self.view)
                         .show(on: self)
                     
                 }
@@ -4354,29 +4495,64 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         self.tableViewL.deselectRow(at: indexPath, animated: true)
         self.tableViewF.deselectRow(at: indexPath, animated: true)
         
-        let controller = DetailViewController()
-        if self.currentIndex == 0 {
-            if StoreStruct.statusesHome[indexPath.row].id == "loadmorehere" {
-                self.fetchGap()
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone :
+            let controller = DetailViewController()
+            if self.currentIndex == 0 {
+                if StoreStruct.statusesHome[indexPath.row].id == "loadmorehere" {
+                    self.fetchGap()
+                } else {
+                    controller.mainStatus.append(StoreStruct.statusesHome[indexPath.row])
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+            } else if self.currentIndex == 1 {
+                if StoreStruct.statusesLocal[indexPath.row].id == "loadmorehere" {
+                    self.fetchGap()
+                } else {
+                    controller.mainStatus.append(StoreStruct.statusesLocal[indexPath.row])
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
             } else {
-                controller.mainStatus.append(StoreStruct.statusesHome[indexPath.row])
-                self.navigationController?.pushViewController(controller, animated: true)
+                if StoreStruct.statusesFederated[indexPath.row].id == "loadmorehere" {
+                    self.fetchGap()
+                } else {
+                    controller.mainStatus.append(StoreStruct.statusesFederated[indexPath.row])
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
             }
-        } else if self.currentIndex == 1 {
-            if StoreStruct.statusesLocal[indexPath.row].id == "loadmorehere" {
-                self.fetchGap()
+        case .pad:
+            let controller = DetailViewController()
+            if self.currentIndex == 0 {
+                if StoreStruct.statusesHome[indexPath.row].id == "loadmorehere" {
+                    self.fetchGap()
+                } else {
+                    controller.mainStatus.append(StoreStruct.statusesHome[indexPath.row])
+                    self.splitViewController?.showDetailViewController(controller, sender: self)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+                }
+            } else if self.currentIndex == 1 {
+                if StoreStruct.statusesLocal[indexPath.row].id == "loadmorehere" {
+                    self.fetchGap()
+                } else {
+                    controller.mainStatus.append(StoreStruct.statusesLocal[indexPath.row])
+                    self.splitViewController?.showDetailViewController(controller, sender: self)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+                }
             } else {
-                controller.mainStatus.append(StoreStruct.statusesLocal[indexPath.row])
-                self.navigationController?.pushViewController(controller, animated: true)
+                if StoreStruct.statusesFederated[indexPath.row].id == "loadmorehere" {
+                    self.fetchGap()
+                } else {
+                    controller.mainStatus.append(StoreStruct.statusesFederated[indexPath.row])
+                    self.splitViewController?.showDetailViewController(controller, sender: self)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+                }
             }
-        } else {
-            if StoreStruct.statusesFederated[indexPath.row].id == "loadmorehere" {
-                self.fetchGap()
-            } else {
-                controller.mainStatus.append(StoreStruct.statusesFederated[indexPath.row])
-                self.navigationController?.pushViewController(controller, animated: true)
-            }
+        default:
+            print("nothing")
         }
+        
         
         if self.currentIndex == 0 {
             UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedRowHome1")
@@ -4402,9 +4578,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         
                         if stat.isEmpty {} else {
                             
-                            let y = StoreStruct.statusesHome.split(separator: StoreStruct.gapLastHomeStat!)
+                            let y = StoreStruct.statusesHome.split(separator: StoreStruct.gapLastHomeStat ?? StoreStruct.statusesHome.last!)
                             print(y)
-                            if StoreStruct.statusesHome.count >= y.first!.count + 1 {
+                            if StoreStruct.statusesHome.count > y.first!.count + 1 {
                             StoreStruct.statusesHome.remove(at: y.first!.count + 1)
                             }
                             
@@ -4440,7 +4616,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                         
                                     } else {
                                         if (UserDefaults.standard.object(forKey: "lmore1") == nil) || (UserDefaults.standard.object(forKey: "lmore1") as! Int == 0) {} else {
-                                            self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                            if newestC >= 0 && StoreStruct.statusesHome.count >= 0 {
+                                                self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                            }
                                             
                                             do {
                                                 try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
@@ -4474,10 +4652,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     if let stat = (statuses.value) {
                         
                         if stat.isEmpty {} else {
-                            let y = StoreStruct.statusesLocal.split(separator: StoreStruct.gapLastLocalStat!)
+                            let y = StoreStruct.statusesLocal.split(separator: StoreStruct.gapLastLocalStat ?? StoreStruct.statusesLocal.last!)
                             print(y)
                             
-                            if StoreStruct.statusesLocal.count >= y.first!.count + 1 {
+                            if StoreStruct.statusesLocal.count > y.first!.count + 1 {
                             StoreStruct.statusesLocal.remove(at: y.first!.count + 1)
                             }
                             
@@ -4513,7 +4691,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                         
                                     } else {
                                         if (UserDefaults.standard.object(forKey: "lmore1") == nil) || (UserDefaults.standard.object(forKey: "lmore1") as! Int == 0) {} else {
-                                            self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                            if newestC >= 0 && StoreStruct.statusesLocal.count >= 0 {
+                                                self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                            }
                                             
                                             do {
                                                 try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
@@ -4546,11 +4726,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     if let stat = (statuses.value) {
                         
                         if stat.isEmpty {} else {
-                            let y = StoreStruct.statusesFederated.split(separator: StoreStruct.gapLastFedStat!)
+                            let y = StoreStruct.statusesFederated.split(separator: StoreStruct.gapLastFedStat ?? StoreStruct.statusesFederated.last!)
                             print("testing")
                             print(y.first?.count ?? 0)
                             print(y.last?.count ?? 0)
-                            if StoreStruct.statusesFederated.count >= y.first!.count + 1 {
+                            if StoreStruct.statusesFederated.count > y.first!.count + 1 {
                             StoreStruct.statusesFederated.remove(at: y.first!.count + 1)
                             }
                             
@@ -4586,7 +4766,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                         
                                     } else {
                                         if (UserDefaults.standard.object(forKey: "lmore1") == nil) || (UserDefaults.standard.object(forKey: "lmore1") as! Int == 0) {} else {
-                                            self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                            if newestC >= 0 && StoreStruct.statusesFederated.count >= 0 {
+                                                self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                            }
                                             
                                             do {
                                                 try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
@@ -4709,6 +4891,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
                         
+                        StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                         var newestC = StoreStruct.statusesHome.count
                         print("need30 \(StoreStruct.statusesHome.count)")
                         
@@ -4751,15 +4934,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 })
                                 self.countcount1 = newestC
                                 
-                                UIView.setAnimationsEnabled(false)
+//                                UIView.setAnimationsEnabled(false)
                                 self.tableView.reloadData()
                                 self.refreshControl.endRefreshing()
                                 if newestC == 0 {
                                     
-                                } else if StoreStruct.statusesHome.count >= newestC + 1 {
-                                    self.tableView.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
+                                } else if StoreStruct.statusesHome.count > newestC + 1 && (newestC + 1 >= 0) {
+                                    if StoreStruct.statusesHome.count == 0 {
+                                        
+                                    } else {
+                                        self.tableView.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
+                                    }
                                 }
-                                UIView.setAnimationsEnabled(true)
+//                                UIView.setAnimationsEnabled(true)
                             } else {
                                 self.tableView.reloadData()
                                 self.refreshControl.endRefreshing()
@@ -4781,6 +4968,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
+                        
+                        StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                         var newestC = StoreStruct.statusesLocal.count
                         
                         if (newestC == 0){
@@ -4830,15 +5019,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 })
                                 self.countcount2 = newestC
                                 
-                                UIView.setAnimationsEnabled(false)
+//                                UIView.setAnimationsEnabled(false)
                                 self.tableViewL.reloadData()
                                 self.refreshControl.endRefreshing()
                                 if newestC == 0 {
                                     
-                                } else if StoreStruct.statusesLocal.count >= newestC + 1 {
-                                    self.tableViewL.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
+                                } else if StoreStruct.statusesLocal.count > newestC + 1 && (newestC + 1 >= 0) {
+                                    if StoreStruct.statusesLocal.count == 0 {
+                                        
+                                    } else {
+                                        self.tableViewL.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
+                                    }
                                 }
-                                UIView.setAnimationsEnabled(true)
+//                                UIView.setAnimationsEnabled(true)
                             } else {
                                 
                                 self.tableViewL.reloadData()
@@ -4848,7 +5041,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             
                             do {
-//                                self.restoreScroll()
                                 try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
                                 try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
                                 try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
@@ -4865,6 +5057,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
+                        
+                        StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                         var newestC = StoreStruct.statusesFederated.count
                         
                         if let st = stat.last {
@@ -4907,15 +5101,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 })
                                 self.countcount3 = newestC
                                 
-                                UIView.setAnimationsEnabled(false)
+//                                UIView.setAnimationsEnabled(false)
                                 self.tableViewF.reloadData()
                                 self.refreshControl.endRefreshing()
                                 if newestC == 0 {
                                     
-                                } else if StoreStruct.statusesFederated.count >= newestC + 1 {
-                                    self.tableViewF.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
+                                } else if StoreStruct.statusesFederated.count > newestC + 1 && (newestC + 1 >= 0) {
+                                    if StoreStruct.statusesFederated.count == 0 {
+                                        
+                                    } else {
+                                        self.tableViewF.scrollToRow(at: IndexPath(row: newestC + 1, section: 0), at: .top, animated: false)
+                                    }
                                 }
-                                UIView.setAnimationsEnabled(true)
+//                                UIView.setAnimationsEnabled(true)
                                 
                             } else {
                                 
@@ -5150,12 +5348,32 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             segmentedControl.transitionStyle = .slide
             segmentedControl.delegate = self
             view.addSubview(segmentedControl)
-        } else {
-            if UIApplication.shared.isSplitOrSlideOver {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
-            } else {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(newoff), width: CGFloat(240), height: CGFloat(40)))
+            
+            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+            switch (deviceIdiom) {
+            case .pad:
+                self.tableView.translatesAutoresizingMaskIntoConstraints = false
+                self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+                
+                self.tableViewL.translatesAutoresizingMaskIntoConstraints = false
+                self.tableViewL.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableViewL.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableViewL.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableViewL.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+                
+                self.tableViewF.translatesAutoresizingMaskIntoConstraints = false
+                self.tableViewF.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableViewF.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableViewF.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableViewF.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+            default:
+                print("nothing")
             }
+        } else {
+            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(30), width: CGFloat(200), height: CGFloat(40)))
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
                 segmentedControl.shapeStyle = .roundedRect
@@ -5168,6 +5386,30 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             segmentedControl.transitionStyle = .slide
             segmentedControl.delegate = self
             self.navigationController?.view.addSubview(segmentedControl)
+            
+            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+            switch (deviceIdiom) {
+            case .pad:
+                self.tableView.translatesAutoresizingMaskIntoConstraints = false
+                self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                
+                self.tableViewL.translatesAutoresizingMaskIntoConstraints = false
+                self.tableViewL.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableViewL.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableViewL.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableViewL.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                
+                self.tableViewF.translatesAutoresizingMaskIntoConstraints = false
+                self.tableViewF.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableViewF.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableViewF.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableViewF.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+            default:
+                print("nothing")
+            }
         }
         
     }

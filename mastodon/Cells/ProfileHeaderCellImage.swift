@@ -95,6 +95,22 @@ class ProfileHeaderCellImage: UITableViewCell, UICollectionViewDelegate, UIColle
                 cell.bgImage.layer.shadowOffset = CGSize(width:0, height:8)
                 cell.bgImage.layer.shadowRadius = 12
                 cell.bgImage.layer.shadowOpacity = 0.22
+                
+                if self.profileStatusesHasImage[indexPath.item].reblog?.mediaAttachments[0].type ?? self.profileStatusesHasImage[indexPath.item].mediaAttachments[0].type == .video {
+                    cell.imageCountTag.setTitle("\u{25b6}", for: .normal)
+                    cell.imageCountTag.backgroundColor = Colours.tabSelected
+                    cell.imageCountTag.alpha = 1
+                } else if self.profileStatusesHasImage[indexPath.item].reblog?.mediaAttachments[0].type ?? self.profileStatusesHasImage[indexPath.item].mediaAttachments[0].type == .gifv {
+                    cell.imageCountTag.setTitle("GIF", for: .normal)
+                    cell.imageCountTag.backgroundColor = Colours.tabSelected
+                    cell.imageCountTag.alpha = 1
+                } else if self.profileStatusesHasImage[indexPath.item].reblog?.mediaAttachments.count ?? self.profileStatusesHasImage[indexPath.item].mediaAttachments.count > 1 {
+                    cell.imageCountTag.setTitle("\(self.profileStatusesHasImage[indexPath.item].reblog?.mediaAttachments.count ?? self.profileStatusesHasImage[indexPath.item].mediaAttachments.count)", for: .normal)
+                    cell.imageCountTag.backgroundColor = Colours.tabSelected
+                    cell.imageCountTag.alpha = 1
+                } else {
+                    cell.imageCountTag.alpha = 0
+                }
             }
         }
         

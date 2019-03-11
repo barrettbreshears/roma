@@ -22,6 +22,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
     var typeOfSearch = 0
     var newestText = ""
     var safariVC: SFSafariViewController?
+    var searchIcon = UIImageView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -67,7 +68,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
         searchTextField.layer.cornerRadius = 10
         searchTextField.alpha = 1
         searchTextField.attributedPlaceholder = NSAttributedString(string: "Search...".localized,
-                                                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor(red:110/250, green: 113/250, blue: 121/250, alpha: 1.0)])
+                                                                   attributes: [NSAttributedString.Key.foregroundColor: Colours.tabUnselected])
         searchTextField.returnKeyType = .search
         searchTextField.delegate = self
         searchTextField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
@@ -75,6 +76,14 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
         searchTextField.keyboardAppearance = Colours.keyCol
         self.view.addSubview(searchTextField)
         
+        self.searchIcon.frame = CGRect(x: 15, y: 10, width: 20, height: 20)
+        self.searchIcon.backgroundColor = UIColor.clear
+        self.searchIcon.image = UIImage(named: "search")?.maskWithColor(color: Colours.tabUnselected)
+        self.searchTextField.addSubview(self.searchIcon)
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone:
         segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: 20, y: Int(offset + 60), width: Int(wid), height: Int(40)))
         segmentedControl.dataSource = self
         segmentedControl.shapeStyle = .roundedRect
@@ -84,6 +93,50 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
         segmentedControl.transitionStyle = .slide
         segmentedControl.delegate = self
         self.view.addSubview(segmentedControl)
+        default:
+            print("nothing")
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
+        var offset = 88
+        if UIDevice().userInterfaceIdiom == .phone {
+            switch UIScreen.main.nativeBounds.height {
+            case 2688:
+                offset = 88
+            case 2436, 1792:
+                offset = 88
+            default:
+                offset = 64
+                tabHeight = Int(UITabBarController().tabBar.frame.size.height)
+            }
+        }
+        
+        let wid = self.view.bounds.width - 20
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            self.segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: 20, y: Int(offset + 60), width: Int(wid), height: Int(40)))
+            segmentedControl.dataSource = self
+            segmentedControl.shapeStyle = .roundedRect
+            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.cornerRadius = 12
+            segmentedControl.shadowsEnabled = false
+            segmentedControl.transitionStyle = .slide
+            segmentedControl.delegate = self
+            self.view.addSubview(segmentedControl)
+            
+            self.tableView.translatesAutoresizingMaskIntoConstraints = false
+            self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+            self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 110)).isActive = true
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+        default:
+            print("nothing")
+        }
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
@@ -1439,6 +1492,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                                                     return
                                                 }
                                             }
+                                            .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: indexPath.section))?.contentView ?? self.view)
                                             .show(on: self)
                                     } catch let error as NSError {
                                         print(error)
@@ -2099,7 +2153,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
 
 
 class SearchField: UITextField {
-    let padding = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+    let padding = UIEdgeInsets(top: 0, left: 45, bottom: 0, right: 15)
     
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.inset(by: padding)

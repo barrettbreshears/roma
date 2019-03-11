@@ -11,7 +11,7 @@ import UIKit
 import PINRemoteImage
 
 class RepliesCellImage: SwipeTableViewCell {
-    
+
     var profileImageView = UIButton()
     var userName = UILabel()
     var userTag = UILabel()
@@ -21,18 +21,18 @@ class RepliesCellImage: SwipeTableViewCell {
     var mainImageViewBG = UIView()
     var moreImage = UIImageView()
     var imageCountTag = UIButton()
-    
+
     var smallImage1 = UIButton()
     var smallImage2 = UIButton()
     var smallImage3 = UIButton()
     var smallImage4 = UIButton()
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         profileImageView.backgroundColor = Colours.white
         moreImage.backgroundColor = Colours.clear
-        
+
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         mainImageView.translatesAutoresizingMaskIntoConstraints = false
         mainImageViewBG.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +41,7 @@ class RepliesCellImage: SwipeTableViewCell {
         date.translatesAutoresizingMaskIntoConstraints = false
         toot.translatesAutoresizingMaskIntoConstraints = false
         moreImage.translatesAutoresizingMaskIntoConstraints = false
-        
+
         if (UserDefaults.standard.object(forKey: "proCorner") == nil || UserDefaults.standard.object(forKey: "proCorner") as! Int == 0) {
             profileImageView.layer.cornerRadius = 20
         }
@@ -52,7 +52,7 @@ class RepliesCellImage: SwipeTableViewCell {
             profileImageView.layer.cornerRadius = 0
         }
         profileImageView.layer.masksToBounds = true
-        
+
         if (UserDefaults.standard.object(forKey: "imCorner") == nil || UserDefaults.standard.object(forKey: "imCorner") as! Int == 0) {
             mainImageView.layer.cornerRadius = 10
         }
@@ -68,26 +68,26 @@ class RepliesCellImage: SwipeTableViewCell {
         mainImageViewBG.layer.shadowRadius = 10
         mainImageViewBG.layer.shadowOpacity = 0.22
         mainImageViewBG.layer.masksToBounds = false
-        
+
         userName.numberOfLines = 0
         userTag.numberOfLines = 0
         toot.numberOfLines = 0
-        
+
         userName.textColor = Colours.black
         userTag.textColor = Colours.black.withAlphaComponent(0.6)
         date.textColor = Colours.black.withAlphaComponent(0.6)
         toot.textColor = Colours.black
-        
+
         userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
         userTag.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
-        
+
         toot.enabledTypes = [.mention, .hashtag, .url]
         toot.mentionColor = Colours.tabSelected
         toot.hashtagColor = Colours.tabSelected
         toot.URLColor = Colours.tabSelected
-        
+
         contentView.addSubview(profileImageView)
         contentView.addSubview(mainImageViewBG)
         contentView.addSubview(mainImageView)
@@ -96,7 +96,7 @@ class RepliesCellImage: SwipeTableViewCell {
         contentView.addSubview(date)
         contentView.addSubview(toot)
         contentView.addSubview(moreImage)
-        
+
         imageCountTag.backgroundColor = Colours.clear
         imageCountTag.translatesAutoresizingMaskIntoConstraints = false
         imageCountTag.layer.cornerRadius = 7
@@ -107,7 +107,7 @@ class RepliesCellImage: SwipeTableViewCell {
         imageCountTag.layer.shadowOpacity = 0.22
         imageCountTag.layer.masksToBounds = false
         mainImageView.addSubview(imageCountTag)
-        
+
         let viewsDict = [
             "image" : profileImageView,
             "mainImage" : mainImageView,
@@ -119,9 +119,7 @@ class RepliesCellImage: SwipeTableViewCell {
             "more" : moreImage,
             "countTag" : imageCountTag,
             ]
-        
-        if UIApplication.shared.isSplitOrSlideOver || UIDevice.current.userInterfaceIdiom == .phone {
-            
+
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[image(40)]-13-[name]-(>=5)-[date]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[image(40)]-13-[artist]-(>=5)-[more(16)]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
@@ -129,59 +127,40 @@ class RepliesCellImage: SwipeTableViewCell {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-136-[mainImageBG]-30-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[date]-2-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(180)]-23-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(180)]-23-|", options: [], metrics: nil, views: viewsDict))
-        
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(210)]-23-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(210)]-23-|", options: [], metrics: nil, views: viewsDict))
+
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
-        } else {
-            
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-173-[image(40)]-13-[name]-(>=5)-[date]-120-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-173-[image(40)]-13-[artist]-(>=5)-[more(16)]-120-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-173-[image(40)]-13-[episodes]-120-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-226-[mainImage]-120-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-236-[mainImageBG]-130-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[date]-2-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(500)]-23-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(500)]-23-|", options: [], metrics: nil, views: viewsDict))
-            
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
-        
-        }
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func configure(_ status: Status) {
-        
+
         toot.mentionColor = Colours.tabSelected
         toot.hashtagColor = Colours.tabSelected
         toot.URLColor = Colours.tabSelected
-        
+
         userName.text = status.reblog?.account.displayName ?? status.account.displayName
         if (UserDefaults.standard.object(forKey: "mentionToggle") == nil || UserDefaults.standard.object(forKey: "mentionToggle") as! Int == 0) {
             userTag.text = "@\(status.reblog?.account.acct ?? status.account.acct)"
         } else {
             userTag.text = "@\(status.reblog?.account.username ?? status.account.username)"
         }
-        
+
         if (UserDefaults.standard.object(forKey: "timerel") == nil) || (UserDefaults.standard.object(forKey: "timerel") as! Int == 0) {
             date.text = status.reblog?.createdAt.toStringWithRelativeTime() ?? status.createdAt.toStringWithRelativeTime()
         } else {
             date.text = status.reblog?.createdAt.toString(dateStyle: .short, timeStyle: .short) ?? status.createdAt.toString(dateStyle: .short, timeStyle: .short)
         }
-        
+
         if status.reblog?.content.stripHTML() != nil {
-//            toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.username) reposted"
             
-            
-            
-            
-       
+
+
             if status.reblog!.emojis.isEmpty {
                 toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
             } else {
@@ -194,15 +173,15 @@ class RepliesCellImage: SwipeTableViewCell {
                     while attributedString.mutableString.contains(":\(y.shortcode):") {
                         let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
-                        
+
                     }
                 }
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
             }
-            
-            
-            
+
+
+
             if status.reblog?.account.emojis.isEmpty ?? true {
                 userName.text = status.reblog?.account.displayName.stripHTML()
             } else {
@@ -220,14 +199,12 @@ class RepliesCellImage: SwipeTableViewCell {
                 self.userName.attributedText = attributedString
                 self.reloadInputViews()
             }
-            
-            
-            
-            
+
+
+
+
         } else {
-//            toot.text = status.content.stripHTML()
-            
-            
+
             if status.emojis.isEmpty {
                 toot.text = status.content.stripHTML()
             } else {
@@ -240,15 +217,15 @@ class RepliesCellImage: SwipeTableViewCell {
                     while attributedString.mutableString.contains(":\(y.shortcode):") {
                         let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
-                        
+
                     }
                 }
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
             }
-            
-            
-            
+
+
+
             if status.account.emojis.isEmpty {
                 userName.text = status.account.displayName.stripHTML()
             } else {
@@ -266,15 +243,15 @@ class RepliesCellImage: SwipeTableViewCell {
                 self.userName.attributedText = attributedString
                 self.reloadInputViews()
             }
-            
-            
+
+
         }
-        
+
         userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
         userTag.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
-        
+
         DispatchQueue.global(qos: .userInitiated).async {
         self.profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
         self.profileImageView.pin_updateWithProgress = true
@@ -292,13 +269,13 @@ class RepliesCellImage: SwipeTableViewCell {
         if (UserDefaults.standard.object(forKey: "proCorner") != nil && UserDefaults.standard.object(forKey: "proCorner") as! Int == 2) {
             profileImageView.layer.cornerRadius = 0
         }
-        
+
         mainImageView.contentMode = .scaleAspectFill
         mainImageView.imageView?.contentMode = .scaleAspectFill
 //        DispatchQueue.global(qos: .userInitiated).async {
         self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
         self.mainImageView.pin_updateWithProgress = true
-        self.mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].url ?? status.mediaAttachments[0].url)"))
+        self.mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].remoteURL ?? status.mediaAttachments[0].remoteURL!)"))
 //        }
         mainImageView.layer.masksToBounds = true
         mainImageView.layer.borderColor = UIColor.black.cgColor
@@ -309,7 +286,7 @@ class RepliesCellImage: SwipeTableViewCell {
             mainImageView.layer.cornerRadius = 0
         }
         //mainImageView.layer.borderWidth = 0.2
-        
+
         if (status.reblog?.favourited ?? status.favourited ?? false) && (status.reblog?.reblogged ?? status.reblogged ?? false) {
             self.moreImage.image = UIImage(named: "fifty")
         } else if status.reblog?.reblogged ?? status.reblogged ?? false {
@@ -319,9 +296,9 @@ class RepliesCellImage: SwipeTableViewCell {
         } else {
             self.moreImage.image = nil
         }
-        
-        
-        
+
+
+
         imageCountTag.isUserInteractionEnabled = false
         if status.reblog?.mediaAttachments[0].type ?? status.mediaAttachments[0].type == .video {
             imageCountTag.setTitle("\u{25b6}", for: .normal)
@@ -339,8 +316,7 @@ class RepliesCellImage: SwipeTableViewCell {
             imageCountTag.backgroundColor = Colours.clear
             imageCountTag.alpha = 0
         }
-        
-    }
-    
-}
 
+    }
+
+}

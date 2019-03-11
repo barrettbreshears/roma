@@ -14,6 +14,7 @@ class CollectionProCells: UICollectionViewCell {
     var account:Account?
     var bgImage = UIImageView()
     var image = UIImageView()
+    var name = UILabel()
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,23 +26,26 @@ class CollectionProCells: UICollectionViewCell {
         // Set the cell's imageView's image to nil
         self.bgImage.image = nil
         self.image.image = nil
-        
+        self.name.text = ""
     }
     
     public func configure() {
         self.bgImage.backgroundColor = Colours.clear
-        self.bgImage.frame = CGRect(x: 0, y: 0, width: 55, height: 55)
+        self.bgImage.frame = CGRect(x: 0, y: 5, width: 55, height: 55)
         self.bgImage.layer.cornerRadius = 27.5
         contentView.addSubview(bgImage)
         
-        self.image.frame.origin.x = 0
-        self.image.frame.origin.y = 0
-        self.image.frame.size.width = 55
-        self.image.frame.size.height = 55
+        self.image.frame = CGRect(x: 0, y: 5, width: 55, height: 55)
         self.image.backgroundColor = UIColor.clear
         self.image.layer.cornerRadius = 27.5
         self.image.image = nil
         contentView.addSubview(image)
+        
+        self.name.frame = CGRect(x: 0, y: 63, width: 55, height: 20)
+        self.name.font = UIFont.boldSystemFont(ofSize: 12)
+        self.name.textColor = Colours.grayDark2.withAlphaComponent(0.35)
+        self.name.textAlignment = .center
+        contentView.addSubview(name)
     }
     
     func setImageFromAccount(account:Account){

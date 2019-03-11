@@ -130,4 +130,17 @@ struct StoreStruct {
     
     static var currentInstanceDetails: [Instance] = []
     static var currentImageURL = URL(string: "www.google.com")
+    
+    static var containsPoll = false
+    static var pollHeight = 0
+    static var currentPollSelection: [Int] = []
+    static var currentPollSelectionTitle = ""
+    
+    static var newPollPost: [Any]? = []
+    
+    static var currentOptions: [String] = []
+    static var expiresIn = 86400
+    static var allowsMultiple = false
+    static var totalsHidden = false
+    static var pollPickerDate = Date()
 }

@@ -23,15 +23,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var oneTime = false
 
-    //    func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-    //        if 1 == 1 {
-    //            NotificationCenter.default.post(name: Notification.Name(rawValue: "createNoti"), object: self)
-    //            completionHandler(.newData)
-    //        } else {
-    //            completionHandler(.failed)
-    //        }
-    //    }
-
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         if let tabBarController = window?.rootViewController as? UITabBarController {
             if let tabBarViewControllers = tabBarController.viewControllers {
@@ -73,42 +64,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if application.applicationState == .inactive {
             if let userDefaults = UserDefaults(suiteName: "group.com.shi.Mast.wormhole") {
                 if userDefaults.value(forKey: "notidpush") != nil {
-                    let id = userDefaults.value(forKey: "notidpush") as? Int64 ?? 0
-                    StoreStruct.curIDNoti = "\(id)"
-                    if UIDevice.current.userInterfaceIdiom == .pad {
-                        let viewController0 = window?.rootViewController as! UISplitViewController
-                        let viewController = viewController0.viewControllers[0] as! PadViewController
-                        viewController.gotoIDNoti()
-                    } else {
-                        let viewController = window?.rootViewController as! ViewController
-                        viewController.gotoIDNoti()
+                    if let id = userDefaults.value(forKey: "notidpush") as? Int64 {
+                        StoreStruct.curIDNoti = "\(id)"
+                        if StoreStruct.currentPage == 0 {
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti"), object: self)
+                        } else if StoreStruct.currentPage == 1 {
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti2"), object: self)
+                        } else {
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti3"), object: self)
+                        }
                     }
-
                     userDefaults.set(nil, forKey: "notidpush")
                 }
             }
         }
 
         UIApplication.shared.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
-        
-//        let request = Notifications.all(range: .default)
-//        StoreStruct.client.run(request) { (statuses) in
-//            if let stat = (statuses.value) {
-//                StoreStruct.notifications = stat
-//
-//                for x in StoreStruct.notifications {
-//                    if x.type == .mention {
-//                        StoreStruct.notificationsMentions.append(x)
-//                        DispatchQueue.main.async {
-//                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
-//                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-//                            NotificationCenter.default.post(name: Notification.Name(rawValue: "loadNewest"), object: nil)
-//                        }
-//                    }
-//                }
-//
-//            }
-//        }
     }
 
     func application(
@@ -258,103 +229,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
 
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            if url.host == "light" {
-                let viewController0 = window?.rootViewController as! UISplitViewController
-                let viewController = viewController0.viewControllers[0] as! PadViewController
-                viewController.siriLight()
-                return true
-            } else if url.host == "dark" {
-                let viewController0 = window?.rootViewController as! UISplitViewController
-                let viewController = viewController0.viewControllers[0] as! PadViewController
-                viewController.siriDark()
-                return true
-            } else if url.host == "darker" {
-                let viewController0 = window?.rootViewController as! UISplitViewController
-                let viewController = viewController0.viewControllers[0] as! PadViewController
-                viewController.siriDark2()
-                return true
-            } else if url.host == "black" {
-                let viewController0 = window?.rootViewController as! UISplitViewController
-                let viewController = viewController0.viewControllers[0] as! PadViewController
-                viewController.siriOled()
-                return true
-            } else if url.host == "blue" {
-                let viewController0 = window?.rootViewController as! UISplitViewController
-                let viewController = viewController0.viewControllers[0] as! PadViewController
-                viewController.siriBlue()
-                return true
-            } else if url.host == "confetti" {
-                let viewController0 = window?.rootViewController as! UISplitViewController
-                let viewController = viewController0.viewControllers[0] as! PadViewController
-                viewController.siriConfetti()
-                return true
-            } else if url.host == "onboard" {
-//                let viewController = window?.rootViewController as! PadViewController
-//                viewController.presentIntro()
-                return true
-            } else if url.absoluteString.contains("id=") {
-                let x = url.absoluteString
-                let y = x.split(separator: "=")
-                StoreStruct.curID = y[1].description
-                let viewController0 = window?.rootViewController as! UISplitViewController
-                let viewController = viewController0.viewControllers[0] as! PadViewController
-                viewController.gotoID()
-                return true
-            } else if url.absoluteString.contains("instance=") {
-                let x = url.absoluteString
-                let y = x.split(separator: "=")
-                self.tempGotoInstance(y[1].description)
-                return true
-            } else if url.host == "home" {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "switch11"), object: self)
-                return true
-            } else if url.host == "mentions" {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "switch22"), object: self)
-                return true
-            } else if url.host == "profile" {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "switch33"), object: self)
-                return true
-            } else if url.host == "toot" {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "switch44"), object: self)
-                return true
-            } else if url.host == "addNewInstance" {
-                print("Response ==> \(url.absoluteString)")
-                let x = url.absoluteString
-                let y = x.split(separator: "=")
-                StoreStruct.shared.newInstance!.authCode = y[1].description
-                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-                switch (deviceIdiom) {
-                case .phone:
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged"), object: nil)
-                case .pad:
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged2"), object: nil)
-                default:
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged"), object: nil)
-                }
-                return true
-            } else if url.host == "success" {
-                print("Response ==> \(url.absoluteString)")
-                let x = url.absoluteString
-                let y = x.split(separator: "=")
-                StoreStruct.shared.currentInstance.authCode = y[1].description
-                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-                switch (deviceIdiom) {
-                case .phone:
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
-                case .pad:
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "logged2"), object: nil)
-                default:
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
-                }
-                return true
-            } else {
-                return true
-            }
-
-
-
-        } else {
             if url.host == "light" {
                 let viewController = window?.rootViewController as! ViewController
                 viewController.siriLight()
@@ -412,35 +286,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let x = url.absoluteString
                 let y = x.split(separator: "=")
                 StoreStruct.shared.newInstance!.authCode = y.last?.description ?? ""
-                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-                switch (deviceIdiom) {
-                case .phone:
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged"), object: nil)
-                case .pad:
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged2"), object: nil)
-                default:
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged"), object: nil)
-                }
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged"), object: nil)
                 return true
             } else if url.host == "success" {
                 print("Response ==> \(url.absoluteString)")
                 let x = url.absoluteString
                 let y = x.split(separator: "=")
                 StoreStruct.shared.currentInstance.authCode = y[1].description
-                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-                switch (deviceIdiom) {
-                case .phone:
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
-                case .pad:
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "logged2"), object: nil)
-                default:
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
-                }
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
                 return true
             } else {
                 return true
             }
-        }
     }
 
     func tempGotoInstance(_ text: String) {
@@ -487,53 +344,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.window?.rootViewController = ViewController()
             self.window?.makeKeyAndVisible()
         } else {
+            self.window = UIWindow(frame: UIScreen.main.bounds)
+            self.window!.backgroundColor = Colours.white
 
-            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-            switch (deviceIdiom) {
-            case .phone:
-                //            self.window?.rootViewController = ViewController()
-                //            self.window?.makeKeyAndVisible()
-                print("nothing")
-            case .pad:
-                self.window = UIWindow(frame: UIScreen.main.bounds)
-                self.window!.backgroundColor = Colours.white
+            let splitViewController =  UISplitViewController()
+            let rootViewController = ViewController()
+            let detailViewController = DetailViewController()
+            splitViewController.viewControllers = [rootViewController, detailViewController]
+            splitViewController.preferredDisplayMode = .allVisible
+            splitViewController.preferredPrimaryColumnWidthFraction = 0.4
+            let minimumWidth = min(splitViewController.view.bounds.width, splitViewController.view.bounds.height)
+            splitViewController.minimumPrimaryColumnWidth = minimumWidth/5*2
+            splitViewController.maximumPrimaryColumnWidth = minimumWidth
+            self.window!.rootViewController = splitViewController
+            self.window!.makeKeyAndVisible()
 
-                let splitViewController =  UISplitViewController()
-                let rootViewController = PadViewController()
-
-                let splitViewController2 =  UISplitViewController()
-                let rootViewController2 = PadTimelinesViewController()
-                let rootNavigationController2 = UINavigationController(rootViewController: rootViewController2)
-
-
-                splitViewController2.viewControllers = [rootNavigationController2]
-                splitViewController2.preferredPrimaryColumnWidthFraction = 0.5
-                splitViewController2.preferredDisplayMode = .allVisible
-
-                splitViewController.viewControllers = [rootViewController, splitViewController2]
-                splitViewController.minimumPrimaryColumnWidth = 80
-                splitViewController.maximumPrimaryColumnWidth = 80
-                splitViewController.preferredDisplayMode = .allVisible
-
-                splitViewController.view.backgroundColor = Colours.white
-                splitViewController2.view.backgroundColor = Colours.white
-                rootNavigationController2.view.backgroundColor = Colours.white
-                self.window!.rootViewController = splitViewController
-                self.window!.makeKeyAndVisible()
-
-
-                UINavigationBar.appearance().shadowImage = UIImage()
-                UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-                UINavigationBar.appearance().backgroundColor = Colours.white
-                UINavigationBar.appearance().barTintColor = Colours.black
-                UINavigationBar.appearance().tintColor = Colours.black
-                UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
-            default:
-                //            self.window?.rootViewController = ViewController()
-                //            self.window?.makeKeyAndVisible()
-                print("nothing")
-            }
-
+            UINavigationBar.appearance().shadowImage = UIImage()
+            UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+            UINavigationBar.appearance().backgroundColor = Colours.white
+            UINavigationBar.appearance().barTintColor = Colours.black
+            UINavigationBar.appearance().tintColor = Colours.black
+            UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
         }
 
         SwiftyGiphyAPI.shared.apiKey = SwiftyGiphyAPI.publicBetaKey
@@ -676,28 +507,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.window!.backgroundColor = Colours.white
 
                 let splitViewController =  UISplitViewController()
-                let rootViewController = PadViewController()
-
-                let splitViewController2 =  UISplitViewController()
-                let rootViewController2 = PadTimelinesViewController()
-                let rootNavigationController2 = UINavigationController(rootViewController: rootViewController2)
-
-
-                splitViewController2.viewControllers = [rootNavigationController2]
-                splitViewController2.preferredPrimaryColumnWidthFraction = 0.5
-                splitViewController2.preferredDisplayMode = .allVisible
-
-                splitViewController.viewControllers = [rootViewController, splitViewController2]
-                splitViewController.minimumPrimaryColumnWidth = 80
-                splitViewController.maximumPrimaryColumnWidth = 80
+                let rootViewController = ViewController()
+                let detailViewController = DetailViewController()
+                splitViewController.viewControllers = [rootViewController, detailViewController]
                 splitViewController.preferredDisplayMode = .allVisible
-
-                splitViewController.view.backgroundColor = Colours.white
-                splitViewController2.view.backgroundColor = Colours.white
-                rootNavigationController2.view.backgroundColor = Colours.white
+                splitViewController.preferredPrimaryColumnWidthFraction = 0.4
+                let minimumWidth = min(splitViewController.view.bounds.width, splitViewController.view.bounds.height)
+                splitViewController.minimumPrimaryColumnWidth = minimumWidth/5*2
+                splitViewController.maximumPrimaryColumnWidth = minimumWidth
                 self.window!.rootViewController = splitViewController
                 self.window!.makeKeyAndVisible()
-
 
                 UINavigationBar.appearance().shadowImage = UIImage()
                 UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
@@ -716,8 +535,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-
-
 
     func biometricAuthenticationClicked(_ sender: Any) {
 
@@ -758,8 +575,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func reloadApplication() {
-
-
         do {
             StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)use.json", from: .documents, as: Account.self)
             StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
@@ -790,27 +605,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.window!.backgroundColor = Colours.white
 
                 let splitViewController =  UISplitViewController()
-                let rootViewController = PadViewController()
-
-                let splitViewController2 =  UISplitViewController()
-                let rootViewController2 = PadTimelinesViewController()
-                let rootNavigationController2 = UINavigationController(rootViewController: rootViewController2)
-
-                splitViewController2.viewControllers = [rootNavigationController2]
-                splitViewController2.preferredPrimaryColumnWidthFraction = 0.5
-                splitViewController2.preferredDisplayMode = .allVisible
-
-                splitViewController.viewControllers = [rootViewController, splitViewController2]
-                splitViewController.minimumPrimaryColumnWidth = 80
-                splitViewController.maximumPrimaryColumnWidth = 80
+                let rootViewController = ViewController()
+                let detailViewController = DetailViewController()
+                splitViewController.viewControllers = [rootViewController, detailViewController]
                 splitViewController.preferredDisplayMode = .allVisible
-
-                splitViewController.view.backgroundColor = Colours.white
-                splitViewController2.view.backgroundColor = Colours.white
-                rootNavigationController2.view.backgroundColor = Colours.white
+                splitViewController.preferredPrimaryColumnWidthFraction = 0.4
+                let minimumWidth = min(splitViewController.view.bounds.width, splitViewController.view.bounds.height)
+                splitViewController.minimumPrimaryColumnWidth = minimumWidth/5*2
+                splitViewController.maximumPrimaryColumnWidth = minimumWidth
                 self.window!.rootViewController = splitViewController
                 self.window!.makeKeyAndVisible()
-
 
                 UINavigationBar.appearance().shadowImage = UIImage()
                 UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
