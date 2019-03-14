@@ -9,9 +9,12 @@
 import UIKit
 import Disk
 import Firebase
+import FirebaseInstanceID
+import FirebaseMessaging
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 
     var window: UIWindow?
     let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
@@ -119,118 +122,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let token = tokenParts.joined()
         print("Device Token: \(token)")
 
-        var state:PushNotificationState!
-
-        if let storedState = PushNotificationReceiver.getSate() {
-            state = storedState
-        } else {
-            let reciver = try! PushNotificationReceiver()
-            let subScription = PushNotificationSubscription(endpoint: URL(string:"https://pushrelay-roma1.your.org/relay-to/production/\(token)")!, alerts: PushNotificationAlerts.all)
-            let deviceToken = PushNotificationDeviceToken(deviceToken: deviceToken)
-            state = PushNotificationState(receiver: reciver, subscription: subScription, deviceToken: deviceToken)
-            PushNotificationReceiver.setState(state: state)
-
-        }
-
-
-        guard StoreStruct.shared.currentInstance.returnedText != "" else {
-            return
-        }
-        let receiver = try! PushNotificationReceiver()
-        let subscription = PushNotificationSubscription(endpoint: URL(string:"https://pushrelay-roma1.your.org/relay-to/production/\(token)")!, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
-        let deviceToken = PushNotificationDeviceToken(deviceToken: deviceToken)
-        state = PushNotificationState(receiver: receiver, subscription: subscription, deviceToken: deviceToken)
-        PushNotificationReceiver.setState(state: state)
-
-        // change following when pushing to App Store or for local dev
-        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-roma1.your.org/relay-to/production/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
-//        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-mast1-dev.your.org/relay-to/development/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
-
-        //create the url with URL
-        let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
-
-        //create the session object
-        let session = URLSession.shared
-
-        //now create the URLRequest object using the url object
-        var request = URLRequest(url: url)
-
-        request.httpMethod = "DELETE"// "POST" //set http method as POST
-
-
-
-        let jsonEncoder = JSONEncoder()
-        do {
-            let jsonData = try jsonEncoder.encode(requestParams)
-            let jsonString = String(data: jsonData, encoding: .utf8)
-
-            request.httpBody = jsonData
-        }
-        catch {
-            print(error.localizedDescription)
-        }
-        request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-
-        //create dataTask using the session object to send data to the server
-        let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-
-            let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-roma1.your.org/relay-to/production/\(token)", receiver: state.receiver, alerts: state.subscription.alerts)
-
-            //create the url with URL
-            let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
-
-            //create the session object
-            let session = URLSession.shared
-
-            //now create the URLRequest object using the url object
-            var request = URLRequest(url: url)
-
-            request.httpMethod = "POST"// "POST" //set http method as POST
-
-
-
-            let jsonEncoder = JSONEncoder()
-            do {
-                let jsonData = try jsonEncoder.encode(requestParams)
-                let jsonString = String(data: jsonData, encoding: .utf8)
-
-                request.httpBody = jsonData
-                print("JSON String : " + jsonString!)
+        Messaging.messaging().apnsToken = deviceToken
+        
+        InstanceID.instanceID().instanceID { (result, error) in
+            
+            
+            if let error = error {
+                print("Error fetching remote instance ID: \(error)")
+            } else if let result = result {
+                
+                self.createSubscription(fcmToken: result.token)
+                
             }
-            catch {
-                print(error.localizedDescription)
-            }
-            request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-
-            //create dataTask using the session object to send data to the server
-            let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-
-                guard error == nil else {
-                    return
-                }
-
-                guard let data = data else {
-                    return
-                }
-
-                do {
-                    //create json object from data
-                    if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                        print(json)
-                        // handle json...
-                    }
-                } catch let error {
-                    print(error.localizedDescription)
-                }
-            })
-            task.resume()
-
-        })
-        task.resume()
+        }
 
     }
 
@@ -483,6 +387,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
         FirebaseApp.configure()
+        Messaging.messaging().delegate = self
+        
         if UIApplication.shared.isSplitOrSlideOver {
             self.window?.rootViewController = ViewController()
             self.window?.makeKeyAndVisible()
@@ -824,6 +730,98 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+    
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        
+        createSubscription(fcmToken:fcmToken)
+        
+    }
+    
+    func createSubscription(fcmToken: String){
+        //create the url with URL
+        let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
+        //create the session object
+        let session = URLSession.shared
+        //now create the URLRequest object using the url object
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"// "POST" //set http method as POST
+        request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        //create dataTask using the session object to send data to the server
+        let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
+            
+            //create the url with URL
+            let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
+            
+            //create the session object
+            let session = URLSession.shared
+            
+            //now create the URLRequest object using the url object
+            var request = URLRequest(url: url)
+            
+            request.httpMethod = "POST"// "POST" //set http method as POST
+            
+            let data = ["data":
+                ["alerts":
+                    ["favourite":true,
+                     "follow":true,
+                     "mention":true,
+                     "reblog":true]
+                ],
+                        "subscription":
+                            ["keys":
+                                ["p256dh":"BEpPCn0cfs3P0E0fY-gyOuahx5dW5N8quUowlrPyfXlMa6tABLqqcSpOpMnC1-o_UB_s4R8NQsqMLbASjnqSbqw=",
+                                 "auth":"T5bhIIyre5TDC1LyX4mFAQ=="
+                                ],
+                             "endpoint":"https://pushrelay-roma1-fcm.your.org/push/\(fcmToken)"
+                ]
+            ]
+            
+            do {
+                let jsonData = try JSONSerialization.data(
+                    withJSONObject: data,
+                    options: [])
+                let jsonString = String(data: jsonData, encoding: .utf8)
+                
+                request.httpBody = jsonData
+                print("JSON String : " + jsonString!)
+            }
+            catch {
+                print(error.localizedDescription)
+            }
+            request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            
+            //create dataTask using the session object to send data to the server
+            let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
+                
+                guard error == nil else {
+                    return
+                }
+                
+                guard let data = data else {
+                    return
+                }
+                
+                do {
+                    //create json object from data
+                    if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                        print(json)
+                        // handle json...
+                    }
+                } catch let error {
+                    print(error.localizedDescription)
+                }
+            })
+            task.resume()
+            
+        })
+        task.resume()
+    }
+    
 }
 
 extension UIApplication {

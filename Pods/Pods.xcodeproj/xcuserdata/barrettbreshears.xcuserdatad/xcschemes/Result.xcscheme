@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C52C392DBFB5D8CE2CED3FCE8A8560AC"
+               BlueprintIdentifier = "6A12A75FF97296E3C6F7143E545129A9"
+               BuildableName = "Result.framework"
                BlueprintName = "Result"
-               ReferencedContainer = "container:Pods.xcodeproj"
-               BuildableName = "Result.framework">
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

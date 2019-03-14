@@ -24,5 +24,8 @@ pod 'Firebase/Core'
 pod 'Fabric'
 pod 'Crashlytics'
 pod 'QuickLayout'
+pod 'Firebase/Core'
+pod 'Firebase/Messaging'
+
 
 end
