@@ -40,14 +40,14 @@ class DetailCellLink: UITableViewCell {
         containerView.addSubview(image1)
         
         name.text = ""
-        name.frame = CGRect(x: 85, y: 5, width: UIScreen.main.bounds.width - 135, height: 25)
+        name.frame = CGRect(x: 85, y: 5, width: UIScreen.main.bounds.width - 140, height: 25)
         name.textColor = Colours.grayDark
         name.font = UIFont.boldSystemFont(ofSize: 16)
         name.isUserInteractionEnabled = false
         containerView.addSubview(name)
         
         name2.text = ""
-        name2.frame = CGRect(x: 85, y: 26, width: UIScreen.main.bounds.width - 135, height: 40)
+        name2.frame = CGRect(x: 85, y: 26, width: UIScreen.main.bounds.width - 140, height: 40)
         name2.textColor = Colours.grayDark.withAlphaComponent(0.6)
         name2.font = UIFont.systemFont(ofSize: 12)
         name2.isUserInteractionEnabled = false

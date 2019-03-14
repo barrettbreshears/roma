@@ -26,7 +26,9 @@ class SettingsBundleHelper {
             let defaults = UserDefaults.standard
             let dictionary = defaults.dictionaryRepresentation()
             dictionary.keys.forEach { key in
-                defaults.removeObject(forKey: key)
+                if key == "PushNotificationState" || key == "PushNotificationReceiver" {} else {
+                    defaults.removeObject(forKey: key)
+                }
             }
             UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
             UserDefaults.standard.synchronize()

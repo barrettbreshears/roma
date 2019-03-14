@@ -390,6 +390,13 @@
             </objects>
             <point key="canvasLocation" x="468" y="48"/>
         </scene>
+        <!--FlickType-->
+        <scene sceneID="D5S-Gl-sf0">
+            <objects>
+                <controllerPlaceholder referencedIdentifier="FlickType" id="d9v-st-cMa"/>
+            </objects>
+            <point key="canvasLocation" x="686" y="-90"/>
+        </scene>
         <!--ProfileController-->
         <scene sceneID="RCE-2a-rdc">
             <objects>

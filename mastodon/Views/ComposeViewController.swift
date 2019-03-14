@@ -602,6 +602,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     var isScheduled = false
     var scheduleTime: String?
     var boosterText = ""
+    var isPollAdded = false
     
     @objc func actOnSpecialNotificationAuto() {
         //dothestuff
@@ -642,6 +643,44 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             selection.selectionChanged()
         }
         
+        if self.isPollAdded {
+            
+            Alertift.actionSheet(title: nil, message: nil)
+                .backgroundColor(Colours.white)
+                .titleTextColor(Colours.grayDark)
+                .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                .messageTextAlignment(.left)
+                .titleTextAlignment(.left)
+                .action(.default("Edit Poll"), image: UIImage(named: "list")) { (action, ind) in
+                    print(action, ind)
+                    let controller = NewPollViewController()
+                    self.present(controller, animated: true, completion: nil)
+                }
+                .action(.default("Remove Poll".localized), image: UIImage(named: "block")) { (action, ind) in
+                    print(action, ind)
+                    
+                    self.selectedImage1.image = nil
+                    self.selectedImage2.image = nil
+                    self.selectedImage3.image = nil
+                    self.selectedImage4.image = nil
+                    StoreStruct.currentOptions = []
+                    StoreStruct.expiresIn = 86400
+                    StoreStruct.allowsMultiple = false
+                    StoreStruct.totalsHidden = false
+                    StoreStruct.newPollPost = []
+                }
+                .action(.cancel("Dismiss"))
+                .finally { action, index in
+                    if action.style == .cancel {
+                        self.bringBackDrawer()
+                        return
+                    }
+                }
+                .popover(anchorView: self.selectedImage1)
+                .show(on: self)
+            
+        } else {
+        
         Alertift.actionSheet(title: nil, message: nil)
             .backgroundColor(Colours.white)
             .titleTextColor(Colours.grayDark)
@@ -680,7 +719,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             .popover(anchorView: self.selectedImage1)
             .show(on: self)
         
-        
+        }
     }
     @objc func tappedImageView2(_ sender: AnyObject) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -816,6 +855,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     
     
     @objc func panButton1(pan: UIPanGestureRecognizer) {
+        if self.isPollAdded {} else {
         if pan.state == .began {
             buttonCenter = self.selectedImage1.center
             self.view.bringSubviewToFront(self.selectedImage1)
@@ -859,6 +899,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             springWithDelay(duration: 0.6, delay: 0, animations: {
                 self.selectedImage1.center = location
             })
+        }
         }
     }
     
@@ -1060,6 +1101,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
         // images
         
+        if self.isPollAdded {} else {
         self.selectedImage1.frame = CGRect(x:15, y:Int(self.view.bounds.height) - 50 - Int(self.keyHeight) - 55, width: 40, height: 40)
         self.selectedImage1.backgroundColor = Colours.clear
         self.selectedImage1.layer.cornerRadius = 8
@@ -1071,6 +1113,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 let pan1 = UIPanGestureRecognizer(target: self, action: #selector(self.panButton1(pan:)))
                 self.selectedImage1.addGestureRecognizer(pan1)
         self.view.addSubview(self.selectedImage1)
+        }
         
         self.selectedImage2.frame = CGRect(x:70, y:Int(self.view.bounds.height) - 50 - Int(self.keyHeight) - 55, width: 40, height: 40)
         self.selectedImage2.backgroundColor = Colours.clear
@@ -1305,13 +1348,31 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.textView.becomeFirstResponder()
     }
     
+    @objc func addedPoll() {
+        self.isPollAdded = true
+        self.selectedImage1.isUserInteractionEnabled = true
+        self.selectedImage1.contentMode = .scaleAspectFit
+        self.selectedImage1.layer.masksToBounds = true
+        self.selectedImage1.image = UIImage(named: "list")
+        self.selectedImage2.image = nil
+        self.selectedImage3.image = nil
+        self.selectedImage4.image = nil
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         StoreStruct.spoilerText = ""
         
+        StoreStruct.currentOptions = []
+        StoreStruct.expiresIn = 86400
+        StoreStruct.allowsMultiple = false
+        StoreStruct.totalsHidden = false
+        StoreStruct.newPollPost = []
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.doneDate), name: NSNotification.Name(rawValue: "doneDate"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.actOnSpecialNotificationAuto), name: NSNotification.Name(rawValue: "cpick"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.addedPoll), name: NSNotification.Name(rawValue: "addedPoll"), object: nil)
         
         self.view.backgroundColor = Colours.white
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -2323,6 +2384,12 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 
                 
             }
+            .action(.default(" Add Poll"), image: UIImage(named: "list")) { (action, ind) in
+                print(action, ind)
+                
+                let controller = NewPollViewController()
+                self.present(controller, animated: true, completion: nil)
+            }
             .action(.default("  Add Now Playing"), image: UIImage(named: "music")) { (action, ind) in
                 print(action, ind)
                 
@@ -2591,6 +2658,112 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
         
         
+        
+        
+        
+        if self.isPollAdded {
+            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, poll: StoreStruct.newPollPost, visibility: self.visibility)
+            DispatchQueue.global(qos: .userInitiated).async {
+                StoreStruct.client.run(request0) { (statuses) in
+                    print(statuses)
+                    
+                    DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "stopindi"), object: self)
+                    }
+                    
+                    if statuses.isError && self.scheduleTime != nil {
+                        
+                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
+                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+                        
+                        DispatchQueue.main.async {
+                            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                let notification = UINotificationFeedbackGenerator()
+                                notification.notificationOccurred(.success)
+                            }
+                            StoreStruct.savedComposeText = ""
+                            let statusAlert = StatusAlert()
+                            statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
+                            statusAlert.title = "Toot Toot!".localized
+                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.message = "Successfully \(successMessage)"
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                statusAlert.show()
+                            }
+                            
+                            StoreStruct.caption1 = ""
+                            StoreStruct.caption2 = ""
+                            StoreStruct.caption3 = ""
+                            StoreStruct.caption4 = ""
+                        }
+                    } else if statuses.isError {
+                        DispatchQueue.main.async {
+                            let statusAlert = StatusAlert()
+                            statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
+                            statusAlert.title = "Could not Toot".localized
+                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.message = "Saved to drafts"
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                statusAlert.show()
+                            }
+                        }
+                    } else {
+                        
+                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
+                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+                        
+                        DispatchQueue.main.async {
+                            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                let notification = UINotificationFeedbackGenerator()
+                                notification.notificationOccurred(.success)
+                            }
+                            StoreStruct.savedComposeText = ""
+                            let statusAlert = StatusAlert()
+                            statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
+                            statusAlert.title = "Toot Toot!".localized
+                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.message = "Successfully \(successMessage)"
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                statusAlert.show()
+                            }
+                            
+                            StoreStruct.caption1 = ""
+                            StoreStruct.caption2 = ""
+                            StoreStruct.caption3 = ""
+                            StoreStruct.caption4 = ""
+                            
+                            if (UserDefaults.standard.object(forKey: "juto") == nil) || (UserDefaults.standard.object(forKey: "juto") as! Int == 0) {
+                                
+                            } else {
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
+                                //                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+                            }
+                            if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+                            }
+                        }
+                    }
+                }
+            }
+            DispatchQueue.main.async {
+                if (UserDefaults.standard.object(forKey: "progprogprogprog") == nil || UserDefaults.standard.object(forKey: "progprogprogprog") as! Int == 0) {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "startindi"), object: self)
+                }
+                self.textView.resignFirstResponder()
+                self.dismiss(animated: true, completion: nil)
+            }
+            return
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         if self.gifVidData != nil || self.isGifVid {
             print("gifvidnotnil")
             
@@ -2674,7 +2847,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     
                                 } else {
                                     NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
-                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+//                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
                                 }
                                 if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
                                     NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
@@ -2814,7 +2987,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                             
                                                         } else {
                                                             NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
-                                                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+//                                                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
                                                         }
                                                         if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
                                                             NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
@@ -2942,7 +3115,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                     
                                                 } else {
                                                     NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
-                                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+//                                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
                                                 }
                                                 if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
                                                     NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
@@ -3057,7 +3230,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             
                                         } else {
                                             NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
-                                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+//                                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
                                         }
                                         if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
                                             NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
@@ -3156,7 +3329,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     
                                 } else {
                                     NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
-                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+//                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
                                 }
                                 if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
                                     NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
@@ -3168,7 +3341,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 }
             }
         } else if self.selectedImage1.image == nil {
-            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
+            let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, poll: StoreStruct.newPollPost, visibility: self.visibility)
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request0) { (statuses) in
                     print(statuses)
@@ -3242,7 +3415,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             
                         } else {
                             NotificationCenter.default.post(name: Notification.Name(rawValue: "fetchAllNewest"), object: nil)
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
+//                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refreshCont"), object: nil)
                         }
                         if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
                             NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)

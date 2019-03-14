@@ -187,16 +187,7 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .phone:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
-        case .pad:
-            self.title = "Liked"
-            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
-        default:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
-        }
+        self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
         
         self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
         self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
@@ -213,23 +204,24 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
         //        refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
         //        self.tableView.addSubview(refreshControl)
         
+        self.currentTags = StoreStruct.tempLiked
+        
+        let request = Favourites.all()
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                self.currentTags = stat
+                DispatchQueue.main.async {
+                    self.loadLoadLoad()
+                }
+            }
+        }
+        
         self.loadLoadLoad()
         
         
         if (traitCollection.forceTouchCapability == .available) {
             registerForPreviewing(with: self, sourceView: self.tableView)
         }
-    }
-    
-    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        print("newsize")
-        print(size)
-        
-        super.viewWillTransition(to: size, with: coordinator)
-//        coordinator.animate(alongsideTransition: nil, completion: {
-//            _ in
-            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(size.width), height: Int(size.height))
-//        })
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -255,50 +247,39 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .phone:
-            print("n")
-        case .pad:
-            self.title = "Liked"
-            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
-        default:
-            print("n")
-        }
-        
-        self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
-        self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
-        self.tableView.alpha = 1
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
-        self.tableView.separatorStyle = .singleLine
-        self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
-        self.tableView.layer.masksToBounds = true
-        self.tableView.estimatedRowHeight = 89
-        self.tableView.rowHeight = UITableView.automaticDimension
-        self.view.addSubview(self.tableView)
-        self.loadLoadLoad()
         
         switch (deviceIdiom) {
         case .phone:
             print("nothing")
         case .pad:
-            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.frame.width), height: Int(self.view.frame.height))
-            self.currentTags = StoreStruct.tempLiked
-            print("testcurrent01")
-            print(self.currentTags)
-            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.frame.width), height: Int(self.view.frame.height))
-            tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
-                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                    let selection = UISelectionFeedbackGenerator()
-                    selection.selectionChanged()
+            
+                self.tableView.translatesAutoresizingMaskIntoConstraints = false
+                self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+            
+                let request = Favourites.all()
+                StoreStruct.client.run(request) { (statuses) in
+                    if let stat = (statuses.value) {
+                        self.currentTags = stat
+                        DispatchQueue.main.async {
+                            self.loadLoadLoad()
+                        }
+                    }
                 }
-                self?.refreshCont()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                    self?.tableView.cr.endHeaderRefresh()
-                })
-            }
-            self.tableView.reloadData()
+            
+//            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.frame.width), height: Int(self.view.frame.height))
+//            tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+//                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//                    let selection = UISelectionFeedbackGenerator()
+//                    selection.selectionChanged()
+//                }
+//                self?.refreshCont()
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+//                    self?.tableView.cr.endHeaderRefresh()
+//                })
+//            }
         default:
             print("nothing")
         }
@@ -955,6 +936,8 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         } else {
                             cell.moreImage.image = nil
                         }
+                        cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
@@ -964,6 +947,8 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         } else {
                             cell.moreImage.image = nil
                         }
+                        cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -980,18 +965,26 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
                             cell.moreImage.image = UIImage(named: "boost")
                         }
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
                             cell.moreImage.image = UIImage(named: "boost")
                         }
                         cell.hideSwipe(animated: true)
@@ -1024,6 +1017,8 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         } else {
                             cell.moreImage.image = nil
                         }
+                        cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
@@ -1033,6 +1028,8 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         } else {
                             cell.moreImage.image = nil
                         }
+                        cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -1048,18 +1045,26 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
                             cell.moreImage.image = UIImage(named: "like")
                         }
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
                             cell.moreImage.image = UIImage(named: "like")
                         }
                         cell.hideSwipe(animated: true)
@@ -1556,6 +1561,7 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                                     return
                                                 }
                                             }
+                                            .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: indexPath.section))?.contentView ?? self.view)
                                             .show(on: self)
                                     } catch let error as NSError {
                                         print(error)
@@ -2069,9 +2075,20 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
         print(indexPath)
         self.tableView.deselectRow(at: indexPath, animated: true)
         
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone :
         let controller = DetailViewController()
         controller.mainStatus.append(self.currentTags[indexPath.row])
         self.navigationController?.pushViewController(controller, animated: true)
+        case .pad:
+            let controller = DetailViewController()
+            controller.mainStatus.append(self.currentTags[indexPath.row])
+            self.splitViewController?.showDetailViewController(controller, sender: self)
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+        default:
+            print("nothing")
+        }
     }
     
     var lastThing = ""

@@ -34,7 +34,6 @@ public struct FilterToots {
     public static func create(phrase: String, context: [Context2]) -> Request<Filters> {
         let parameters = [
             Parameter(name: "phrase", value: phrase),
-//            Parameter(name: "context", value: context.map(toString).joined(separator: " ")),
             Parameter(name: "irreversible", value: nil),
             Parameter(name: "whole_word", value: nil),
             Parameter(name: "expires_in", value: nil),

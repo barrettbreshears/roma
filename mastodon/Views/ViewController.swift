@@ -52,7 +52,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     var segmentedControl: SJFluidSegmentedControl!
     var typeOfSearch = 0
     var newestText = ""
-    var accountClient = Client(baseURL: "")
+    var searchIcon = UIImageView()
 
     var tabOne = SAHistoryNavigationViewController()
     var tabTwo = SAHistoryNavigationViewController()
@@ -77,7 +77,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     var safariVC: SFSafariViewController?
 
     var searcherView = UIView()
-    var searchTextField = UITextField()
+    var searchTextField = SearchField()
     var backgroundView = UIButton()
     var tableView = UITableView()
     var tableViewLists = UITableView()
@@ -280,7 +280,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         //self.volumeBar.start()
                         //self.volumeBar.showInitial()
                     }
-                    StoreStruct.shared.currentInstance.accessToken = (json["access_token"] as! String)
+                    StoreStruct.shared.currentInstance.accessToken = (json["access_token"] as? String ?? "")
                     StoreStruct.client.accessToken = StoreStruct.shared.currentInstance.accessToken
 
 
@@ -647,14 +647,53 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         }
     }
 
-    func gotoIDNoti() {
-        if StoreStruct.currentPage == 0 {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti"), object: self)
-        } else if StoreStruct.currentPage == 1 {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti2"), object: self)
-        } else {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti3"), object: self)
-        }
+    override var keyCommands: [UIKeyCommand]? {
+        //shortkeys
+        let op1 = UIKeyCommand(input: "1", modifierFlags: .control, action: #selector(b1Touched), discoverabilityTitle: "Home Timelines")
+        let op2 = UIKeyCommand(input: "2", modifierFlags: .control, action: #selector(b2Touched), discoverabilityTitle: "Notification Timelines")
+        let op3 = UIKeyCommand(input: "3", modifierFlags: .control, action: #selector(b3Touched), discoverabilityTitle: "Profile Timelines")
+        let listThing = UIKeyCommand(input: "l", modifierFlags: .control, action: #selector(b56Touched), discoverabilityTitle: "Lists")
+        let searchThing = UIKeyCommand(input: "f", modifierFlags: .command, action: #selector(b4Touched), discoverabilityTitle: "Search")
+        let newToot = UIKeyCommand(input: "n", modifierFlags: .command, action: #selector(switch44), discoverabilityTitle: "New Toot")
+        let settings = UIKeyCommand(input: ";", modifierFlags: .command, action: #selector(goToSettings), discoverabilityTitle: "Settings")
+        let esca = UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(dismissDetail), discoverabilityTitle: "Close Detail")
+        return [
+            op1, op2, op3, listThing, searchThing, newToot, settings, esca
+        ]
+    }
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+
+    @objc func goToSettings() {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "goToSettings"), object: self)
+    }
+
+    @objc func dismissDetail() {
+        let controller = DetailViewController()
+        controller.mainStatus = []
+        self.splitViewController?.showDetailViewController(controller, sender: self)
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+    }
+
+    @objc func b1Touched() {
+        self.selectedIndex = 0
+    }
+
+    @objc func b2Touched() {
+        self.selectedIndex = 1
+    }
+
+    @objc func b3Touched() {
+        self.selectedIndex = 2
+    }
+
+    @objc func b56Touched() {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "touchList"), object: nil)
+    }
+
+    @objc func b4Touched() {
+        self.tSearch()
     }
 
     override func viewDidLoad() {
@@ -683,6 +722,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         NotificationCenter.default.addObserver(self, selector: #selector(self.touchList), name: NSNotification.Name(rawValue: "touchList"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.signOut), name: NSNotification.Name(rawValue: "signOut"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.signOutNewInstance), name: NSNotification.Name(rawValue: "signOut2"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.didTouchSearch), name: NSNotification.Name(rawValue: "searchthething"), object: nil)
 
 
 
@@ -704,11 +744,19 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.reloadTint()
         }
-        
+
         if (UserDefaults.standard.object(forKey: "autol1") == nil) {
             UserDefaults.standard.set(1, forKey: "autol1")
         }
-        
+
+        if (UserDefaults.standard.object(forKey: "bord") == nil) {
+            UserDefaults.standard.set(1, forKey: "bord")
+        }
+
+        if (UserDefaults.standard.object(forKey: "segsize") == nil) {
+            UserDefaults.standard.set(1, forKey: "segsize")
+        }
+
         if (UserDefaults.standard.object(forKey: "instancesLocal") == nil) {
 
         } else {
@@ -1016,16 +1064,46 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
 
 
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if tableView == self.tableView {
+            return 0
+        } else {
+            if section == 1 {
+                return 0
+            } else {
+                return 34
+            }
+        }
+    }
 
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let vw = UIView()
+        vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 34)
+        let title = UILabel()
+        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 26)
+        if section == 0 {
+            title.text = "Your Accounts"
+        } else if section == 2 {
+            title.text = "Your Lists"
+        } else if section == 3 {
+            title.text = "Your Instances"
+        }
+        title.textColor = Colours.grayDark2.withAlphaComponent(0.35)
+        title.font = UIFont.systemFont(ofSize: 16, weight: .heavy)
+        vw.addSubview(title)
+        vw.backgroundColor = Colours.grayDark3
+
+        return vw
+    }
 
     func numberOfSections(in tableView: UITableView) -> Int {
         if tableView == self.tableView {
             return 1
         } else {
             if StoreStruct.instanceLocalToAdd.count > 0 {
-                return 3
+                return 4
             } else {
-                return 2
+                return 3
             }
         }
     }
@@ -1041,7 +1119,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             if section == 0 {
                 return 1
             } else if section == 1 {
-                return StoreStruct.allLists.count + 2
+                return 3
+            } else if section == 2 {
+                return StoreStruct.allLists.count
             } else {
                 return StoreStruct.instanceLocalToAdd.count
             }
@@ -1051,7 +1131,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if tableView == self.tableViewLists {
             if indexPath.section == 0 {
-                return 90
+                return 100
             } else {
                 return UITableView.automaticDimension
             }
@@ -1150,7 +1230,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 bgColorView.backgroundColor = Colours.white
                 cell.selectedBackgroundView = bgColorView
                 cell.frame.size.width = 60
-                cell.frame.size.height = 60
+                cell.frame.size.height = 80
                 return cell
 
             } else if indexPath.section == 1 {
@@ -1174,15 +1254,24 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     return cell
                 } else {
                     let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as! ListCell
-                    cell.delegate = self
-                    cell.configure(StoreStruct.allLists[indexPath.row - 2])
+                    cell.userName.text = "Go to App Settings"
                     cell.backgroundColor = Colours.grayDark3
-                    cell.userName.textColor = UIColor.white
+                    cell.userName.textColor = Colours.tabSelected
                     let bgColorView = UIView()
                     bgColorView.backgroundColor = Colours.grayDark3
                     cell.selectedBackgroundView = bgColorView
                     return cell
                 }
+            } else if indexPath.section == 2 {
+                let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as! ListCell
+                cell.delegate = self
+                cell.configure(StoreStruct.allLists[indexPath.row])
+                cell.backgroundColor = Colours.grayDark3
+                cell.userName.textColor = UIColor.white
+                let bgColorView = UIView()
+                bgColorView.backgroundColor = Colours.grayDark3
+                cell.selectedBackgroundView = bgColorView
+                return cell
             } else {
 
                 let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l2", for: indexPath) as! ListCell2
@@ -1307,16 +1396,16 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         }
           */
     }
-    
-    
+
+
     @objc func didTouchProfile(sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
             let selection = UISelectionFeedbackGenerator()
             selection.selectionChanged()
         }
-        
+
         self.dismissOverlayProperSearch()
-        
+
         StoreStruct.searchIndex = sender.tag
         if StoreStruct.currentPage == 0 {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "searchPro"), object: self)
@@ -1326,7 +1415,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             NotificationCenter.default.post(name: Notification.Name(rawValue: "searchPro3"), object: self)
         }
     }
-    
+
     func members(ind: Int) {
         self.dismissOverlayProper()
     }
@@ -1354,13 +1443,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 .action(.default("Edit List Name".localized), image: UIImage(named: "list")) { (action, ind) in
                     print(action, ind)
                     let controller = NewListViewController()
-                    controller.listID = StoreStruct.allLists[indexPath.row - 2].id
-                    controller.editListName = StoreStruct.allLists[indexPath.row - 2].title
+                    controller.listID = StoreStruct.allLists[indexPath.row].id
+                    controller.editListName = StoreStruct.allLists[indexPath.row].title
                     self.present(controller, animated: true, completion: nil)
                 }
                 .action(.default("View List Members".localized), image: UIImage(named: "profile")) { (action, ind) in
                     print(action, ind)
-                    StoreStruct.allListRelID = StoreStruct.allLists[indexPath.row - 2].id
+                    StoreStruct.allListRelID = StoreStruct.allLists[indexPath.row].id
                     self.dismissOverlayProper()
                     if StoreStruct.currentPage == 0 {
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "goMembers"), object: self)
@@ -1382,15 +1471,15 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                     statusAlert.title = "Deleted".localized
                     statusAlert.contentColor = Colours.grayDark
-                    statusAlert.message = StoreStruct.allLists[indexPath.row - 2].title
+                    statusAlert.message = StoreStruct.allLists[indexPath.row].title
                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
                         statusAlert.show()
                     }
 
-                    let request = Lists.delete(id: StoreStruct.allLists[indexPath.row - 2].id)
+                    let request = Lists.delete(id: StoreStruct.allLists[indexPath.row].id)
                     StoreStruct.client.run(request) { (statuses) in
                         DispatchQueue.main.async {
-                            StoreStruct.allLists.remove(at: indexPath.row - 2)
+                            StoreStruct.allLists.remove(at: indexPath.row)
                             self.tableViewLists.reloadData()
                         }
                     }
@@ -1441,15 +1530,15 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Removed".localized
                         statusAlert.contentColor = Colours.grayDark
-                        statusAlert.message = StoreStruct.allLists[indexPath.row - 2].title
+                        statusAlert.message = StoreStruct.allLists[indexPath.row].title
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
                             statusAlert.show()
                         }
 
-                        let request = Lists.delete(id: StoreStruct.allLists[indexPath.row - 2].id)
+                        let request = Lists.delete(id: StoreStruct.allLists[indexPath.row].id)
                         StoreStruct.client.run(request) { (statuses) in
                             DispatchQueue.main.async {
-                                StoreStruct.allLists.remove(at: indexPath.row - 2)
+                                StoreStruct.allLists.remove(at: indexPath.row)
                                 self.tableViewLists.reloadData()
                             }
                         }
@@ -1580,7 +1669,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             if indexPath.section == 0 {
 
             } else if indexPath.section == 1 {
-
                 if indexPath.row == 0 {
                     // other instance
                     let controller = NewInstanceViewController()
@@ -1591,32 +1679,36 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     let controller = NewListViewController()
                     self.present(controller, animated: true, completion: nil)
                 } else {
-                    // go to list
-                    StoreStruct.currentList = []
-                    let request = Lists.accounts(id: StoreStruct.allLists[indexPath.row - 2].id)
-                    //let request = Lists.list(id: StoreStruct.allLists[indexPath.row - 2].id)
-                    StoreStruct.client.run(request) { (statuses) in
-                        if let stat = (statuses.value) {
-                            for z in stat {
+                    // go to settings
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "goToSettings"), object: self)
+                }
+            } else if indexPath.section == 2 {
 
-                                let request1 = Accounts.statuses(id: z.id)
-                                StoreStruct.client.run(request1) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        StoreStruct.currentList = StoreStruct.currentList + stat
-                                        StoreStruct.currentList = StoreStruct.currentList.sorted(by: { $0.createdAt > $1.createdAt })
-                                        StoreStruct.currentListTitle = StoreStruct.allLists[indexPath.row - 2].title
-                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
-                                    }
+                // go to list
+                StoreStruct.currentList = []
+                let request = Lists.accounts(id: StoreStruct.allLists[indexPath.row].id)
+                //let request = Lists.list(id: StoreStruct.allLists[indexPath.row - 2].id)
+                StoreStruct.client.run(request) { (statuses) in
+                    if let stat = (statuses.value) {
+                        for z in stat {
 
+                            let request1 = Accounts.statuses(id: z.id)
+                            StoreStruct.client.run(request1) { (statuses) in
+                                if let stat = (statuses.value) {
+                                    StoreStruct.currentList = StoreStruct.currentList + stat
+                                    StoreStruct.currentList = StoreStruct.currentList.sorted(by: { $0.createdAt > $1.createdAt })
+                                    StoreStruct.currentListTitle = StoreStruct.allLists[indexPath.row].title
+                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                                 }
+
                             }
-                            if StoreStruct.currentPage == 0 {
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists"), object: self)
-                            } else if StoreStruct.currentPage == 1 {
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists2"), object: self)
-                            } else {
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists3"), object: self)
-                            }
+                        }
+                        if StoreStruct.currentPage == 0 {
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists"), object: self)
+                        } else if StoreStruct.currentPage == 1 {
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists2"), object: self)
+                        } else {
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists3"), object: self)
                         }
                     }
                 }
@@ -2514,11 +2606,18 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.searcherView.transform = CGAffineTransform(scaleX: 1, y: 1)
         })
 
-        var maxHe = (Int(52) * Int(StoreStruct.allLists.count + 2)) + (Int(52) * Int(StoreStruct.instanceLocalToAdd.count))
+        var maxHe = (Int(52) * Int(StoreStruct.allLists.count + 3)) + (Int(52) * Int(StoreStruct.instanceLocalToAdd.count))
         if maxHe > 364 {
             maxHe = Int(364)
         }
-        maxHe += 90
+        maxHe += 134
+
+        if StoreStruct.instanceLocalToAdd.count > 0 {
+            maxHe += 34
+        }
+        if StoreStruct.allLists.count > 0 {
+            maxHe += 34
+        }
 
         self.searcherView.frame = CGRect(x: 10, y: fromTop, width: Int(wid), height: 60)
         springWithDelay(duration: 0.5, delay: 0, animations: {
@@ -2584,7 +2683,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         searchTextField.layer.cornerRadius = 10
         searchTextField.alpha = 1
         searchTextField.attributedPlaceholder = NSAttributedString(string: "Search...".localized,
-                                                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor(red:110/250, green: 113/250, blue: 121/250, alpha: 1.0)])
+                                                                   attributes: [NSAttributedString.Key.foregroundColor: Colours.tabUnselected])
         searchTextField.becomeFirstResponder()
         searchTextField.returnKeyType = .search
         searchTextField.delegate = self
@@ -2594,6 +2693,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         searchTextField.keyboardAppearance = UIKeyboardAppearance.dark
         self.searcherView.addSubview(searchTextField)
 
+        self.searchIcon.frame = CGRect(x: 15, y: 10, width: 20, height: 20)
+        self.searchIcon.backgroundColor = UIColor.clear
+        self.searchIcon.image = UIImage(named: "search")?.maskWithColor(color: Colours.tabUnselected)
+        self.searchTextField.addSubview(self.searchIcon)
 
         segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: 20, y: 60, width: Int(wid - 40), height: Int(40)))
         segmentedControl.dataSource = self

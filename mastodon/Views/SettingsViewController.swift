@@ -258,11 +258,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
 
 
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+
         switch (deviceIdiom) {
-        case .phone:
-            print("nothing")
         case .pad:
-            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
+            self.tableView.translatesAutoresizingMaskIntoConstraints = false
+            self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+            self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
         default:
             print("nothing")
         }
@@ -375,7 +378,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         } else {
             let z1 = Account.getAccounts().count
             let z2 = InstanceData.getAllInstances().count
-            
+
             if z1 == z2 {
                 return InstanceData.getAllInstances().count + 1
             } else {
@@ -1095,14 +1098,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
 
                 let instances = InstanceData.getAllInstances()
                 let curr = InstanceData.getCurrentInstance()
-                if curr?.clientID == instances[indexPath.row].clientID {
-                    cell.configure(status: "• \(account.username)", status2: instanceAndAccount, image: "", imageURL:account.avatarStatic )
+                if curr?.clientID == z2[indexPath.row].clientID {
+                    cell.configure(status: "• \(account.username ?? "")", status2: instanceAndAccount, image: "", imageURL: account.avatarStatic ?? "")
                     cell.backgroundColor = Colours.white
                     cell.userName.textColor = Colours.black
                     cell.userTag.textColor = Colours.tabSelected
                     cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 } else {
-                    cell.configure(status: account.username, status2:instanceAndAccount, image: "", imageURL:account.avatarStatic )
+                    cell.configure(status: account.username ?? "", status2: instanceAndAccount, image: "", imageURL: account.avatarStatic ?? "")
                     cell.backgroundColor = Colours.white
                     cell.userName.textColor = Colours.black
                     cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
@@ -1783,7 +1786,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         StoreStruct.initTimeline = false
                         UserDefaults.standard.set(1, forKey: "inittimeline")
                     }
-                    .action(.default("Federated".localized), image: filledSet3) { (action, ind) in
+                    .action(.default("All".localized), image: filledSet3) { (action, ind) in
                         print(action, ind)
                         StoreStruct.initTimeline = false
                         UserDefaults.standard.set(2, forKey: "inittimeline")

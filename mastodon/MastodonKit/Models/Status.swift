@@ -51,10 +51,12 @@ public class Status: Codable {
     public let application: Application?
     /// The detected language for the status.
     public let language: String?
-    /// The reblogged Status
+    /// The reblogged Status.
     public let reblog: Status?
     /// Whether this is the pinned status for the account that posted it.
     public let pinned: Bool?
+    /// The status poll.
+    public let poll: Poll?
 
     private enum CodingKeys: String, CodingKey {
         case id
@@ -80,6 +82,7 @@ public class Status: Codable {
         case language
         case reblog
         case pinned
+        case poll
     }
 }
 

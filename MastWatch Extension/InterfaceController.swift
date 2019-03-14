@@ -9,6 +9,7 @@
 import WatchKit
 import Foundation
 import WatchConnectivity
+import FlickTypeKit
 
 class InterfaceController: WKInterfaceController, WCSessionDelegate {
 
@@ -18,7 +19,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     @IBAction func tappedNewToot() {
         let textChoices = ["Yes","No","Maybe","I love Mast"]
-        presentTextInputController(withSuggestions: textChoices, allowedInputMode: WKTextInputMode.allowEmoji, completion: {(results) -> Void in
+        presentTextInputController(withSuggestions: textChoices, allowedInputMode: WKTextInputMode.allowEmoji, flickTypeMode: .ask, completion: {(results) -> Void in
             if results != nil && results!.count > 0 {
                 let aResult = results?[0] as? String
                 print(aResult!)
@@ -123,7 +124,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         super.willActivate()
         self.setTitle("Home")
         StoreStruct.fromWhere = 0
-        
+        FlickType.startDownloadingInBackground()
     }
         
     override func awake(withContext context: Any?) {

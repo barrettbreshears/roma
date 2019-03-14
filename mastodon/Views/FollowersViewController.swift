@@ -181,7 +181,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
             view.addSubview(segmentedControl)
             
             self.tableView.register(FollowersCell.self, forCellReuseIdentifier: "cellf")
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 65)
+//            self.tableView.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 65)
             self.tableView.alpha = 1
             self.tableView.delegate = self
             self.tableView.dataSource = self
@@ -192,6 +192,18 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
             self.tableView.estimatedRowHeight = 89
             self.tableView.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView)
+            
+            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+            switch (deviceIdiom) {
+            case .pad:
+                self.tableView.translatesAutoresizingMaskIntoConstraints = false
+                self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+            default:
+                print("nothing")
+            }
         } else {
             if UIApplication.shared.isSplitOrSlideOver {
                 segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
@@ -212,7 +224,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
             self.navigationController?.view.addSubview(segmentedControl)
             
             self.tableView.register(FollowersCell.self, forCellReuseIdentifier: "cellf")
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 15)
+//            self.tableView.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 15)
             self.tableView.alpha = 1
             self.tableView.delegate = self
             self.tableView.dataSource = self
@@ -223,32 +235,25 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
             self.tableView.estimatedRowHeight = 89
             self.tableView.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView)
+            
+            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+            switch (deviceIdiom) {
+            case .pad:
+                self.tableView.translatesAutoresizingMaskIntoConstraints = false
+                self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+            default:
+                print("nothing")
+            }
         }
         
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .phone:
-            print("nothing")
-        case .pad:
-            self.title = "Follows"
-        default:
-            print("nothing")
-        }
         
         self.loadLoadLoad()
         
-    }
-    
-    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        print("newsize")
-        print(size)
-        
-        super.viewWillTransition(to: size, with: coordinator)
-//        coordinator.animate(alongsideTransition: nil, completion: {
-//            _ in
-            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(size.width), height: Int(size.height))
-//        })
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -256,10 +261,12 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
-        case .phone:
-            print("nothing")
         case .pad:
-            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.frame.width), height: Int(self.view.frame.height))
+            self.tableView.translatesAutoresizingMaskIntoConstraints = false
+            self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+            self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
         default:
             print("nothing")
         }

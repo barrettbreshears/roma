@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "D7F79DA7D92E5A49C3885D6246798345"
+               BlueprintIdentifier = "A2141DCAABDE003DA6012F528F422AF1"
+               BuildableName = "FootlessParser.framework"
                BlueprintName = "FootlessParser"
-               ReferencedContainer = "container:Pods.xcodeproj"
-               BuildableName = "FootlessParser.framework">
+               ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

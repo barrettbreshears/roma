@@ -1012,7 +1012,7 @@ open class SKPhotoBrowser: UIViewController, UIScrollViewDelegate {
             
             let imageFromView = (senderOriginImage ?? getImageFromView(sender)).rotateImageByOrientation()
             let imageRatio = imageFromView.size.width / imageFromView.size.height
-            let finalImageViewFrame:CGRect
+            var finalImageViewFrame:CGRect = CGRect()
 
             resizableImageView = UIImageView(image: imageFromView)
             resizableImageView.frame = senderViewOriginalFrame

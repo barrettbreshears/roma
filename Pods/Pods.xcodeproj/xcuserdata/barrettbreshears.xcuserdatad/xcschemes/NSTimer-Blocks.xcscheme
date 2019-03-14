@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "709966B1BFA09B44CB6714F797CD977D"
+               BlueprintIdentifier = "31827025F47504BFE59139CCD06FD05D"
                BuildableName = "NSTimer_Blocks.framework"
                BlueprintName = "NSTimer-Blocks"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -45,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "709966B1BFA09B44CB6714F797CD977D"
+            BlueprintIdentifier = "31827025F47504BFE59139CCD06FD05D"
             BuildableName = "NSTimer_Blocks.framework"
             BlueprintName = "NSTimer-Blocks"
             ReferencedContainer = "container:Pods.xcodeproj">
