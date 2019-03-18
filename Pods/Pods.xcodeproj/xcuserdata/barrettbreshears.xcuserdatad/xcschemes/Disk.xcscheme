@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BC5384739586103B9AD48B2F48B56AA5"
-               BuildableName = "Disk.framework"
+               BlueprintIdentifier = "6CDC6F0CAFAE1779F0B239ED6E2B769B"
                BlueprintName = "Disk"
-               ReferencedContainer = "container:Pods.xcodeproj">
+               ReferencedContainer = "container:Pods.xcodeproj"
+               BuildableName = "Disk.framework">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

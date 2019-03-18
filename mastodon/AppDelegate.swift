@@ -775,7 +775,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                                 ["p256dh":"BEpPCn0cfs3P0E0fY-gyOuahx5dW5N8quUowlrPyfXlMa6tABLqqcSpOpMnC1-o_UB_s4R8NQsqMLbASjnqSbqw=",
                                  "auth":"T5bhIIyre5TDC1LyX4mFAQ=="
                                 ],
-                             "endpoint":"https://pushrelay-roma1-fcm.your.org/push/\(fcmToken)"
+                             "endpoint":"https://pushrelay-roma1-fcm.your.org/push/\(fcmToken)?account=test&server=server"
                 ]
             ]
             
