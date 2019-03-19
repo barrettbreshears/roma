@@ -251,8 +251,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
 
         } else {
-
-            print("herer")
+            
             Alertift.actionSheet(title: nil, message: StoreStruct.tappedTag)
                 .backgroundColor(Colours.white)
                 .titleTextColor(Colours.grayDark)
@@ -646,7 +645,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         case .phone:
             self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
         case .pad:
-            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
+            print("nothing")
+//            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
         default:
             self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
         }
@@ -1021,25 +1021,24 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
 
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .phone:
-            print("nothing")
-        case .pad:
-            self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.frame.width), height: Int(self.view.frame.height))
-            tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
-                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                    let selection = UISelectionFeedbackGenerator()
-                    selection.selectionChanged()
-                }
-                self?.refreshCont()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                    self?.tableView.cr.endHeaderRefresh()
-                })
-            }
-        default:
-            print("nothing")
-        }
-
+//        switch (deviceIdiom) {
+//        case .phone:
+//            print("nothing")
+//        case .pad:
+//            tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+//                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//                    let selection = UISelectionFeedbackGenerator()
+//                    selection.selectionChanged()
+//                }
+//                self?.refreshCont()
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+//                    self?.tableView.cr.endHeaderRefresh()
+//                })
+//            }
+//        default:
+//            print("nothing")
+//        }
+        
         switch (deviceIdiom) {
         case .pad:
             self.ai.startAnimating()
@@ -1800,6 +1799,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
                             let objectsToShare = [self.chosenUser.url]
                             let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                            vc.popoverPresentationController?.sourceView = self.view
                             vc.previewNumberOfLines = 5
                             vc.previewFont = UIFont.systemFont(ofSize: 14)
                             self.present(vc, animated: true, completion: nil)
@@ -1996,7 +1996,15 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
                 .action(.default("Instance Details".localized), image: UIImage(named: "instats")) { (action, ind) in
                     print(action, ind)
+                    var instImage = UIImage()
+                    if StoreStruct.currentInstanceDetails.first?.thumbnail != nil {
+                        if let url = URL(string: StoreStruct.currentInstanceDetails.first?.thumbnail ?? "https://mastodon.social/") {
+                            let data = try? Data(contentsOf: url)
+                            instImage = UIImage(data: data!) ?? UIImage()
+                        }
+                    }
                     Alertift.actionSheet(title: "\(StoreStruct.currentInstanceDetails.first?.title.stripHTML() ?? "Instance") (\(StoreStruct.currentInstanceDetails.first?.version ?? "1.0.0"))", message: "\(StoreStruct.currentInstanceDetails.first?.stats.userCount ?? 0) users\n\(StoreStruct.currentInstanceDetails.first?.stats.statusCount ?? 0) statuses\n\(StoreStruct.currentInstanceDetails.first?.stats.domainCount ?? 0) domains\n\n\(StoreStruct.currentInstanceDetails.first?.description.stripHTML() ?? "")")
+                        .image(instImage)
                         .backgroundColor(Colours.white)
                         .titleTextColor(Colours.grayDark)
                         .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
@@ -2210,6 +2218,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
                             let objectsToShare = [self.chosenUser.url]
                             let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                            vc.popoverPresentationController?.sourceView = self.view
                             vc.previewNumberOfLines = 5
                             vc.previewFont = UIFont.systemFont(ofSize: 14)
                             self.present(vc, animated: true, completion: nil)
@@ -4391,6 +4400,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                                 self.present(vc, animated: true, completion: nil)
                                             } else {
                                                 let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                                                vc.popoverPresentationController?.sourceView = self.view
                                                 vc.previewNumberOfLines = 5
                                                 vc.previewFont = UIFont.systemFont(ofSize: 14)
                                                 self.present(vc, animated: true, completion: nil)
@@ -4412,6 +4422,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                             self.present(vc, animated: true, completion: nil)
                                         } else {
                                             let vc = VisualActivityViewController(text: bodyText)
+                                            vc.popoverPresentationController?.sourceView = self.view
                                             vc.previewNumberOfLines = 5
                                             vc.previewFont = UIFont.systemFont(ofSize: 14)
                                             self.present(vc, animated: true, completion: nil)
@@ -4750,6 +4761,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                                 self.present(vc, animated: true, completion: nil)
                                             } else {
                                                 let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                                                vc.popoverPresentationController?.sourceView = self.view
                                                 vc.previewNumberOfLines = 5
                                                 vc.previewFont = UIFont.systemFont(ofSize: 14)
                                                 self.present(vc, animated: true, completion: nil)
@@ -4768,6 +4780,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                             self.present(vc, animated: true, completion: nil)
                                         } else {
                                             let vc = VisualActivityViewController(text: bodyText)
+                                            vc.popoverPresentationController?.sourceView = self.view
                                             vc.previewNumberOfLines = 5
                                             vc.previewFont = UIFont.systemFont(ofSize: 14)
                                             self.present(vc, animated: true, completion: nil)

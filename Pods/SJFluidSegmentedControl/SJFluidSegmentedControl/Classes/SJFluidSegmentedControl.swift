@@ -1128,8 +1128,8 @@ public class SJFluidSegmentedControl: UIView, UIGestureRecognizerDelegate {
         }
         switch transitionStyle {
         case .fade:
-            selectedSegmentViewContainers[index].alpha = 1 - fabs(percent)
-            segmentViewContainers[index].alpha = fabs(percent)
+            selectedSegmentViewContainers[index].alpha = 1 - abs(percent)
+            segmentViewContainers[index].alpha = abs(percent)
         case .slide:
             let segmentView = selectedSegmentViewContainers[index]
             if segmentView.layer.mask == nil {

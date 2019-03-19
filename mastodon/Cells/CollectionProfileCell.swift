@@ -53,6 +53,7 @@ class CollectionProfileCell: UICollectionViewCell {
         
 //        imageCountTag.translatesAutoresizingMaskIntoConstraints = false
         imageCountTag.isUserInteractionEnabled = false
+        imageCountTag.setTitle("", for: .normal)
         imageCountTag.backgroundColor = Colours.clear
         imageCountTag.translatesAutoresizingMaskIntoConstraints = false
         imageCountTag.layer.cornerRadius = 7
@@ -62,7 +63,7 @@ class CollectionProfileCell: UICollectionViewCell {
         imageCountTag.layer.shadowRadius = 10
         imageCountTag.layer.shadowOpacity = 0.22
         imageCountTag.layer.masksToBounds = false
-        imageCountTag.alpha = 0
+        imageCountTag.alpha = 1
         contentView.addSubview(imageCountTag)
         
         let viewsDict = [

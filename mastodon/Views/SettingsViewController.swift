@@ -229,6 +229,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse09936")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse099367")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse0993678")
+        self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse09936781")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse099309")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse0993091")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse0993092")
@@ -636,9 +637,19 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             sender.setOn(false, animated: true)
         }
     }
-
-
-
+    
+    @objc func handleToggleBoostusern(sender: UISwitch) {
+        if sender.isOn {
+            UserDefaults.standard.set(1, forKey: "boostusern")
+            sender.setOn(true, animated: true)
+        } else {
+            UserDefaults.standard.set(0, forKey: "boostusern")
+            sender.setOn(false, animated: true)
+        }
+    }
+    
+    
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "appcell", for: indexPath) as! AppIconsCells
@@ -900,9 +911,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.frame.size.height = 60
                 return cell
             } else {
-
-
-                if indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 13 || indexPath.row == 23 || indexPath.row == 24 {
+                
+                
+                if indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 13 || indexPath.row == 23 || indexPath.row == 24 || indexPath.row == 25 {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cellse2", for: indexPath) as! SettingsCellToggle
                     cell.configure(status: self.appearanceArray[indexPath.row], status2: self.appearanceArrayDesc[indexPath.row], image: self.appearanceArrayIm[indexPath.row])
                     cell.backgroundColor = Colours.white
@@ -1024,7 +1035,28 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
 
                         return cell
                     }
-
+                    if indexPath.row == 25 {
+                        // boost username
+                        let cell = tableView.dequeueReusableCell(withIdentifier: "cellse09936781", for: indexPath) as! SettingsCellToggle
+                        cell.configure(status: self.appearanceArray[indexPath.row], status2: self.appearanceArrayDesc[indexPath.row], image: self.appearanceArrayIm[indexPath.row])
+                        cell.backgroundColor = Colours.white
+                        cell.userName.textColor = Colours.black
+                        cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                        cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                        let bgColorView = UIView()
+                        bgColorView.backgroundColor = Colours.white
+                        cell.selectedBackgroundView = bgColorView
+                        
+                        if (UserDefaults.standard.object(forKey: "boostusern") == nil) || (UserDefaults.standard.object(forKey: "boostusern") as! Int == 0) {
+                            cell.switchView.setOn(false, animated: false)
+                        } else {
+                            cell.switchView.setOn(true, animated: false)
+                        }
+                        cell.switchView.addTarget(self, action: #selector(self.handleToggleBoostusern), for: .touchUpInside)
+                        
+                        return cell
+                    }
+                    
                     return cell
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
@@ -2948,6 +2980,148 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
 
 
         if indexPath.section == 4 {
+            if indexPath.row == 0 {
+                // about
+                Alertift.actionSheet(title: "Mast \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "")", message: "A beautiful Mastodon client\nMade with the intention to be reliant\nIt's fast, it's fluid, it's fun\nBut most of all, it's built with love for everyone\n\nDesigned and created by @JPEG@mastodon.technology".localized)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 4))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+            if indexPath.row == 1 {
+                SKStoreReviewController.requestReview()
+            }
+            if indexPath.row == 2 {
+                // follow
+                Alertift.actionSheet(title: title, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("Developer Mastodon".localized)) { (action, ind) in
+                        print(action, ind)
+                        
+                        
+//                        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//                            let notification = UINotificationFeedbackGenerator()
+//                            notification.notificationOccurred(.success)
+//                        }
+//                        let statusAlert = StatusAlert()
+//                        statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
+//                        statusAlert.title = "Followed".localized
+//                        statusAlert.contentColor = Colours.grayDark
+//                        statusAlert.message = "Mastodon Developer"
+//                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+//                        statusAlert.show()
+//                    }
+//
+//                        if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
+//                            NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+//                        }
+                        
+                        let controller = ThirdViewController()
+                        controller.fromOtherUser = true
+                        controller.userIDtoUse = "107304"
+                        self.navigationController?.pushViewController(controller, animated: true)
+                        
+//                        let request = Accounts.follow(id: "107304")
+//                        StoreStruct.client.run(request) { (statuses) in
+//                            if let _ = (statuses.value) {
+//                                print("followed")
+//                            }
+//                        }
+                    }
+                    .action(.default("Developer Twitter".localized)) { (action, ind) in
+                        print(action, ind)
+                        let twUrl = URL(string: "twitter://user?screen_name=JPEGuin")!
+                        let twUrlWeb = URL(string: "https://www.twitter.com/JPEGuin")!
+                        if UIApplication.shared.canOpenURL(twUrl) {
+                            UIApplication.shared.open(twUrl, options: [:], completionHandler: nil)
+                        } else {
+                            UIApplication.shared.open(twUrlWeb, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: twUrlWeb)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
+                        }
+                    }
+                    .action(.default("Mast Twitter".localized)) { (action, ind) in
+                        print(action, ind)
+                        let twUrl = URL(string: "twitter://user?screen_name=TheMastApp")!
+                        let twUrlWeb = URL(string: "https://www.twitter.com/TheMastApp")!
+                        if UIApplication.shared.canOpenURL(twUrl) {
+                            UIApplication.shared.open(twUrl, options: [:], completionHandler: nil)
+                        } else {
+                            UIApplication.shared.open(twUrlWeb, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: twUrlWeb)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
+                        }
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 4))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+            if indexPath.row == 3 {
+                // schemes
+                Alertift.actionSheet(title: nil, message: "com.shi.mastodon://light : Switch to the light white theme\n\ncom.shi.mastodon://dark : Switch to the dark theme\n\ncom.shi.mastodon://darker : Switch to the darker theme\n\ncom.shi.mastodon://black : Switch to the black OLED theme\n\ncom.shi.mastodon://blue : Switch to the midnight blue theme\n\ncom.shi.mastodon://confetti : Make it rain confetti\n\ncom.shi.mastodon://onboard : Present the onboarding pop-up again\n\ncom.shi.mastodon://home : Switch to the home tab\n\ncom.shi.mastodon://mentions : Switch to the mentions tab\n\ncom.shi.mastodon://profile : Switch to the profile tab\n\ncom.shi.mastodon://toot : Present the toot composer screen\n\ncom.shi.mastodon://settings : Present the settings section\n\ncom.shi.mastodon://toot=hello : Post a toot with the text 'hello'\n\ncom.shi.mastodon://id=123 : Go to a toot with the ID 123\n\ncom.shi.mastodon://instance=mastodon.technology : Go to an instance with the url mastodon.technology")
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 4))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+        }
+        
+        
+        //tjar
+        
+        if indexPath.section == 6 {
+            if indexPath.row == 0 {
+                purchaseMyProduct(product: iapProducts[0])
+            }
+            if indexPath.row == 1 {
+                purchaseMyProduct(product: iapProducts[1])
+            }
+            if indexPath.row == 2 {
+                purchaseMyProduct(product: iapProducts[2])
+            }
+            if indexPath.row == 3 {
+                purchaseMyProduct(product: iapProducts[3])
+            }
+        }
+        
+        if indexPath.section == 5 {
             let instances = InstanceData.getAllInstances()
             if indexPath.row == instances.count {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut2"), object: nil)

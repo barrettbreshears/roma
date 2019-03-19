@@ -47,7 +47,7 @@ class FedTimelineController: WKInterfaceController {
     override func willActivate() {
         // This method is called when watch view controller is about to be visible to user
         super.willActivate()
-        self.setTitle("Federated")
+        self.setTitle("All")
     }
     
     override func awake(withContext context: Any?) {

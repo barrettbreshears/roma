@@ -171,9 +171,7 @@ class MainFeedCell: SwipeTableViewCell {
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-15-[more1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[rep1(20)]-24-[like1(40)]-15-[boost1(40)]-24-[more1(20)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
             }
-
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-71-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-54-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
+        
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -250,7 +248,21 @@ class MainFeedCell: SwipeTableViewCell {
         } else {
             date.text = status.reblog?.createdAt.toString(dateStyle: .short, timeStyle: .short) ?? status.createdAt.toString(dateStyle: .short, timeStyle: .short)
         }
-
+        
+        
+        
+        let viewsDict = [
+            "warning" : warningB,
+            ]
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-71-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
+        if status.reblog?.content.stripHTML() != nil {
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-44-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
+        } else {
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-54-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
+        }
+        
+        
+        
         if status.reblog?.content.stripHTML() != nil {
 
 
@@ -273,9 +285,14 @@ class MainFeedCell: SwipeTableViewCell {
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
             }
-
-
-
+            
+            var theUsernameTag = status.account.displayName
+            if (UserDefaults.standard.object(forKey: "boostusern") == nil) || (UserDefaults.standard.object(forKey: "boostusern") as! Int == 0) {
+                
+            } else {
+                theUsernameTag = "@\(status.account.acct)"
+            }
+            
             if status.reblog?.account.emojis.isEmpty ?? true {
                 let imageAttachment = NSTextAttachment()
                 imageAttachment.image = UIImage(named:"boost")
@@ -283,7 +300,7 @@ class MainFeedCell: SwipeTableViewCell {
                 let attachmentString = NSAttributedString(attachment: imageAttachment)
                 let completeText = NSMutableAttributedString(string: "")
                 completeText.append(attachmentString)
-                let textAfterIcon = NSMutableAttributedString(string: " \(status.account.displayName) boosted\n\n\(status.reblog?.account.displayName.stripHTML() ?? "")")
+                let textAfterIcon = NSMutableAttributedString(string: " \(theUsernameTag) boosted\n\n\(status.reblog?.account.displayName.stripHTML() ?? "")")
                 completeText.append(textAfterIcon)
                 userName.attributedText = completeText
             } else {
@@ -293,7 +310,7 @@ class MainFeedCell: SwipeTableViewCell {
                 let attachmentString = NSAttributedString(attachment: imageAttachment)
                 let completeText = NSMutableAttributedString(string: "")
                 completeText.append(attachmentString)
-                let attributedString = NSMutableAttributedString(string: " \(status.account.displayName) boosted\n\n\(status.reblog?.account.displayName.stripHTML() ?? "")")
+                let attributedString = NSMutableAttributedString(string: " \(theUsernameTag) boosted\n\n\(status.reblog?.account.displayName.stripHTML() ?? "")")
                 for y in status.reblog?.account.emojis ?? [] {
                     let textAttachment = NSTextAttachment()
                     textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)

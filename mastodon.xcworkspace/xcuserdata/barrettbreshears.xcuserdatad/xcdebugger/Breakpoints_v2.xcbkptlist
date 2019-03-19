@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "mastodon/Views/ComposeViewController.swift"
-            timestampString = "565476542.0257111"
+            timestampString = "574644034.81247"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2563"
-            endingLineNumber = "2563"
+            startingLineNumber = "2562"
+            endingLineNumber = "2562"
             landmarkName = "didTouchUpInsideTootButton(_:)"
             landmarkType = "7">
          </BreakpointContent>

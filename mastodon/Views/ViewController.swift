@@ -82,7 +82,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     var tableView = UITableView()
     var tableViewLists = UITableView()
     let volumeBar = VolumeBar.shared
-
+    let reachability = Reachability()!
+    
     func siriLight() {
         UIApplication.shared.statusBarStyle = .default
         Colours.keyCol = UIKeyboardAppearance.dark
@@ -251,7 +252,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     }
 
     @objc func logged() {
-
+        
+        StoreStruct.tappedSignInCheck = false
+        
         self.loginBG.removeFromSuperview()
         self.loginLogo.removeFromSuperview()
         self.loginLabel.removeFromSuperview()
@@ -335,8 +338,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
 
     @objc func newInstanceLogged(){
-
-        var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.newInstance!.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.newInstance!.authCode)&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&client_id=\(StoreStruct.shared.newInstance!.clientID)&client_secret=\(StoreStruct.shared.newInstance!.clientSecret)")!)
+        
+        StoreStruct.tappedSignInCheck = false
+        
+        var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.newInstance!.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.newInstance!.authCode)&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&client_id=\(StoreStruct.shared.newInstance!.clientID)&client_secret=\(StoreStruct.shared.newInstance!.clientSecret)&scope=read%20write%20follow%20push")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -695,7 +700,44 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     @objc func b4Touched() {
         self.tSearch()
     }
-
+    
+    @objc func reachabilityChanged(note: Notification) {
+        let reachability = note.object as! Reachability
+        switch reachability.connection {
+        case .wifi:
+            print("Reachable via WiFi")
+        case .cellular:
+            print("Reachable via Cellular")
+        case .none:
+            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                let warning = UINotificationFeedbackGenerator()
+                warning.notificationOccurred(.warning)
+            }
+            let label = ToppingLabel(text: "No Connection")
+            let biscuit = BiscuitViewController(title: "Oops!", toppings: [label], timeout: 2)
+            self.present(biscuit, animated: true, completion: nil)
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        NotificationCenter.default.addObserver(self, selector: #selector(reachabilityChanged(note:)), name: .reachabilityChanged, object: reachability)
+        do {
+            try reachability.startNotifier()
+        } catch {
+            print("couldn't start network checker")
+        }
+    }
+    
+    func composedToot() {
+        let request0 = Statuses.create(status: StoreStruct.composedTootText, replyToID: nil, mediaIDs: [], sensitive: false, spoilerText: nil, scheduledAt: nil, poll: nil, visibility: .public)
+        DispatchQueue.global(qos: .userInitiated).async {
+            StoreStruct.client.run(request0) { (statuses) in
+                print(statuses)
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Colours.white
@@ -1225,9 +1267,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "colcell2", for: indexPath) as! ProCells
                 cell.configure()
-                cell.backgroundColor = Colours.white
+                cell.backgroundColor = Colours.grayDark3
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark3
                 cell.selectedBackgroundView = bgColorView
                 cell.frame.size.width = 60
                 cell.frame.size.height = 80
@@ -1286,115 +1328,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             }
         }
-
-
-
-
-
-
-
-
-        /*
-        if tableView == self.tableView {
-//        if StoreStruct.statusSearch[indexPath.row].mediaAttachments.isEmpty {
-
-            if self.typeOfSearch == 2 {
-                print("oomp")
-            if StoreStruct.statusSearchUser.count > 0 {
-                print("oomp1")
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cellfs", for: indexPath) as! FollowersCell
-                cell.configure(StoreStruct.statusSearchUser[indexPath.row])
-                cell.profileImageView.tag = indexPath.row
-                //cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
-                cell.backgroundColor = Colours.grayDark3
-                cell.userName.textColor = UIColor.white
-                cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
-                cell.toot.textColor = UIColor.white
-                let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.grayDark3
-                cell.selectedBackgroundView = bgColorView
-                return cell
-            } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! MainFeedCell
-                cell.profileImageView.tag = indexPath.row
-                cell.backgroundColor = Colours.grayDark3
-                cell.userName.textColor = UIColor.white
-                cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
-                cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
-                cell.toot.textColor = UIColor.white
-                let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.grayDark3
-                cell.selectedBackgroundView = bgColorView
-                return cell
-                }
-            } else {
-
-            if StoreStruct.statusSearch.count > 0 {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! MainFeedCell
-                    cell.configure(StoreStruct.statusSearch[indexPath.row])
-                    cell.profileImageView.tag = indexPath.row
-                    cell.backgroundColor = Colours.grayDark3
-                    cell.userName.textColor = UIColor.white
-                    cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
-                    cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
-                    cell.toot.textColor = UIColor.white
-                    let bgColorView = UIView()
-                    bgColorView.backgroundColor = Colours.grayDark3
-                    cell.selectedBackgroundView = bgColorView
-                    return cell
-            } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! MainFeedCell
-                cell.profileImageView.tag = indexPath.row
-                cell.backgroundColor = Colours.grayDark3
-                cell.userName.textColor = UIColor.white
-                cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
-                cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
-                cell.toot.textColor = UIColor.white
-                let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.grayDark3
-                cell.selectedBackgroundView = bgColorView
-                return cell
-            }
-            }
-        } else {
-            if indexPath.section == 0 {
-            if indexPath.row == 0 {
-                let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as! ListCell
-                cell.userName.text = "Your instances"
-                cell.backgroundColor = Colours.grayDark3
-                cell.userName.textColor = Colours.tabSelected
-                let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.grayDark3
-                cell.selectedBackgroundView = bgColorView
-                return cell
-            }  else {
-                let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as! ListCell
-                cell.delegate = self
-                let instance = InstanceData.getAllInstances()[indexPath.row - 1]
-                let account = Account.getAccounts()[indexPath.row - 1]
-                cell.configureInstance(instanceName: "\(account.username)@\(instance.returnedText)")
-                cell.backgroundColor = Colours.grayDark3
-                cell.userName.textColor = UIColor.white
-                let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.grayDark3
-                cell.selectedBackgroundView = bgColorView
-                return cell
-            }
-            } else {
-
-                let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l2", for: indexPath) as! ListCell2
-                cell.delegate = self
-                cell.configure(StoreStruct.instanceLocalToAdd[indexPath.row])
-                cell.backgroundColor = Colours.grayDark3
-                cell.userName.textColor = UIColor.white
-                let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.grayDark3
-                cell.selectedBackgroundView = bgColorView
-                return cell
-
-            }
-        }
-          */
     }
 
 

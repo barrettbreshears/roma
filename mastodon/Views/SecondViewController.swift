@@ -1023,12 +1023,71 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         }
         
         
+        
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
             print("nothing")
         case .pad:
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "segTheme"), object: self)
+            
+            segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+            segmentedControl.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+            segmentedControl.heightAnchor.constraint(equalToConstant: CGFloat(40)).isActive = true
+            if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
+                self.segmentedControl.widthAnchor.constraint(equalToConstant: CGFloat(self.view.bounds.width - 40)).isActive = true
+                self.segmentedControl.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 5)).isActive = true
+            } else {
+                self.segmentedControl.widthAnchor.constraint(equalToConstant: CGFloat(220)).isActive = true
+                self.segmentedControl.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(30)).isActive = true
+            }
+            
+            
+            
+            
+            if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
+                self.tableView.translatesAutoresizingMaskIntoConstraints = false
+                    self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                    self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                    self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
+                    self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+                    
+                    self.tableView3.translatesAutoresizingMaskIntoConstraints = false
+                    self.tableView3.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                    self.tableView3.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                    self.tableView3.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
+                    self.tableView3.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+                    
+                    self.tableView2.translatesAutoresizingMaskIntoConstraints = false
+                    self.tableView2.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                    self.tableView2.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                    self.tableView2.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
+                    self.tableView2.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+
+            } else {
+                self.tableView.translatesAutoresizingMaskIntoConstraints = false
+                    self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                    self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                    self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+                    self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                    
+                    self.tableView3.translatesAutoresizingMaskIntoConstraints = false
+                    self.tableView3.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                    self.tableView3.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                    self.tableView3.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+                    self.tableView3.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                    
+                    self.tableView2.translatesAutoresizingMaskIntoConstraints = false
+                    self.tableView2.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                    self.tableView2.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                    self.tableView2.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+                    self.tableView2.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                
+            }
+            
+            
+            
+            
+            
             if self.maybeDoOnce == false {
                 self.searchButton = MNGExpandedTouchAreaButton()
                 self.searchButton.setImage(UIImage(named: "search")?.maskWithColor(color: Colours.grayLight2), for: .normal)
@@ -4038,6 +4097,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     if let myWebsite = sto[indexPath.row].status?.url {
                                         let objectsToShare = [myWebsite]
                                         let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                                        vc.popoverPresentationController?.sourceView = self.view
                                         vc.previewNumberOfLines = 5
                                         vc.previewFont = UIFont.systemFont(ofSize: 14)
                                         self.present(vc, animated: true, completion: nil)
@@ -4048,6 +4108,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     
                                     let bodyText = sto[indexPath.row].status?.content.stripHTML()
                                     let vc = VisualActivityViewController(text: bodyText ?? "")
+                                    vc.popoverPresentationController?.sourceView = self.view
                                     vc.previewNumberOfLines = 5
                                     vc.previewFont = UIFont.systemFont(ofSize: 14)
                                     self.present(vc, animated: true, completion: nil)
@@ -4655,6 +4716,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     if let myWebsite = sto[indexPath.row].status?.url {
                                         let objectsToShare = [myWebsite]
                                         let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                                        vc.popoverPresentationController?.sourceView = self.view
                                         vc.previewNumberOfLines = 5
                                         vc.previewFont = UIFont.systemFont(ofSize: 14)
                                         self.present(vc, animated: true, completion: nil)
@@ -4665,6 +4727,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     
                                     let bodyText = sto[indexPath.row].status?.content.stripHTML()
                                     let vc = VisualActivityViewController(text: bodyText ?? "")
+                                    vc.popoverPresentationController?.sourceView = self.view
                                     vc.previewNumberOfLines = 5
                                     vc.previewFont = UIFont.systemFont(ofSize: 14)
                                     self.present(vc, animated: true, completion: nil)

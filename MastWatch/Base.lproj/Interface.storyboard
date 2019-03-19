@@ -61,7 +61,7 @@
                                     <action selector="tappedLocal" destination="AgC-eL-Hgc" id="37e-RV-U4Q"/>
                                 </connections>
                             </menuItem>
-                            <menuItem title="Federated" image="list" id="bsX-1j-3b0">
+                            <menuItem title="All" image="list" id="bsX-1j-3b0">
                                 <connections>
                                     <action selector="tappedFederated" destination="AgC-eL-Hgc" id="Dgf-7u-buO"/>
                                 </connections>

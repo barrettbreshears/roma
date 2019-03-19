@@ -1369,6 +1369,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                             self.present(vc, animated: true, completion: nil)
                                         } else {
                                         let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                                            vc.popoverPresentationController?.sourceView = self.view
                                         vc.previewNumberOfLines = 5
                                         vc.previewFont = UIFont.systemFont(ofSize: 14)
                                         self.present(vc, animated: true, completion: nil)
@@ -1387,6 +1388,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                         self.present(vc, animated: true, completion: nil)
                                     } else {
                                     let vc = VisualActivityViewController(text: bodyText)
+                                        vc.popoverPresentationController?.sourceView = self.view
                                     vc.previewNumberOfLines = 5
                                     vc.previewFont = UIFont.systemFont(ofSize: 14)
                                     self.present(vc, animated: true, completion: nil)
@@ -1725,6 +1727,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                             self.present(vc, animated: true, completion: nil)
                                         } else {
                                         let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                                            vc.popoverPresentationController?.sourceView = self.view
                                         vc.previewNumberOfLines = 5
                                         vc.previewFont = UIFont.systemFont(ofSize: 14)
                                         self.present(vc, animated: true, completion: nil)
@@ -1743,6 +1746,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                         self.present(vc, animated: true, completion: nil)
                                     } else {
                                     let vc = VisualActivityViewController(text: bodyText)
+                                        vc.popoverPresentationController?.sourceView = self.view
                                     vc.previewNumberOfLines = 5
                                     vc.previewFont = UIFont.systemFont(ofSize: 14)
                                     self.present(vc, animated: true, completion: nil)

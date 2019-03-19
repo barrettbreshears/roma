@@ -23,6 +23,8 @@ public class Instance: Codable {
     public let max_toot_chars: Int?
     /// Further instance stats
     public let stats: Stats
+    /// The instance thumbnail.
+    public let thumbnail: String?
 }
 
 public class Stats: Codable {

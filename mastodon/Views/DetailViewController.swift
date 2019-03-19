@@ -27,7 +27,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var likeButton = UIButton()
     var boostButton = UIButton()
     var moreButton = UIButton()
-
+    var splitButton = UIButton()
+    
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard let indexPath = self.tableView.indexPathForRow(at: location) else { return nil }
         guard let cell = self.tableView.cellForRow(at: indexPath) else { return nil }
@@ -110,7 +111,113 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
     }
-
+    
+    @objc func didTouchSplit() {
+        
+        Alertift.actionSheet(title: "Split Ratio", message: nil)
+            .backgroundColor(Colours.white)
+            .titleTextColor(Colours.grayDark)
+            .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+            .messageTextAlignment(.left)
+            .titleTextAlignment(.left)
+            .action(.default("25 : 75".localized), image: nil) { (action, ind) in
+                print(action, ind)
+                UserDefaults.standard.set(1, forKey: "splitra")
+                self.splitViewController?.preferredPrimaryColumnWidthFraction = 0.25
+                let minimumWidth = min(self.splitViewController?.view.bounds.width ?? 0, self.splitViewController?.view.bounds.height ?? 0)
+                self.splitViewController?.minimumPrimaryColumnWidth = (minimumWidth/4)
+                self.splitViewController?.maximumPrimaryColumnWidth = minimumWidth
+            }
+            .action(.default("30 : 70".localized), image: nil) { (action, ind) in
+                print(action, ind)
+                UserDefaults.standard.set(2, forKey: "splitra")
+                self.splitViewController?.preferredPrimaryColumnWidthFraction = 0.3
+                let minimumWidth = min(self.splitViewController?.view.bounds.width ?? 0, self.splitViewController?.view.bounds.height ?? 0)
+                self.splitViewController?.minimumPrimaryColumnWidth = (minimumWidth/10)*3
+                self.splitViewController?.maximumPrimaryColumnWidth = minimumWidth
+            }
+            .action(.default("35 : 65".localized), image: nil) { (action, ind) in
+                print(action, ind)
+                UserDefaults.standard.set(3, forKey: "splitra")
+                self.splitViewController?.preferredPrimaryColumnWidthFraction = 0.35
+                let minimumWidth = min(self.splitViewController?.view.bounds.width ?? 0, self.splitViewController?.view.bounds.height ?? 0)
+                self.splitViewController?.minimumPrimaryColumnWidth = (minimumWidth/20)*7
+                self.splitViewController?.maximumPrimaryColumnWidth = minimumWidth
+            }
+            .action(.default("40 : 60".localized), image: nil) { (action, ind) in
+                print(action, ind)
+                UserDefaults.standard.set(4, forKey: "splitra")
+                self.splitViewController?.preferredPrimaryColumnWidthFraction = 0.4
+                let minimumWidth = min(self.splitViewController?.view.bounds.width ?? 0, self.splitViewController?.view.bounds.height ?? 0)
+                self.splitViewController?.minimumPrimaryColumnWidth = (minimumWidth/5)*2
+                self.splitViewController?.maximumPrimaryColumnWidth = minimumWidth
+            }
+            .action(.default("45 : 55".localized), image: nil) { (action, ind) in
+                print(action, ind)
+                UserDefaults.standard.set(5, forKey: "splitra")
+                self.splitViewController?.preferredPrimaryColumnWidthFraction = 0.45
+                let minimumWidth = min(self.splitViewController?.view.bounds.width ?? 0, self.splitViewController?.view.bounds.height ?? 0)
+                self.splitViewController?.minimumPrimaryColumnWidth = (minimumWidth/20)*9
+                self.splitViewController?.maximumPrimaryColumnWidth = minimumWidth
+            }
+            .action(.default("50 : 50".localized), image: nil) { (action, ind) in
+                print(action, ind)
+                UserDefaults.standard.set(0, forKey: "splitra")
+                self.splitViewController?.preferredPrimaryColumnWidthFraction = 0.5
+                let minimumWidth = min(self.splitViewController?.view.bounds.width ?? 0, self.splitViewController?.view.bounds.height ?? 0)
+                self.splitViewController?.minimumPrimaryColumnWidth = minimumWidth/2
+                self.splitViewController?.maximumPrimaryColumnWidth = minimumWidth
+            }
+            .action(.default("55 : 45".localized), image: nil) { (action, ind) in
+                print(action, ind)
+                UserDefaults.standard.set(6, forKey: "splitra")
+                self.splitViewController?.preferredPrimaryColumnWidthFraction = 0.55
+                let minimumWidth = min(self.splitViewController?.view.bounds.width ?? 0, self.splitViewController?.view.bounds.height ?? 0)
+                self.splitViewController?.minimumPrimaryColumnWidth = (minimumWidth/20)*11
+                self.splitViewController?.maximumPrimaryColumnWidth = minimumWidth
+            }
+            .action(.default("60 : 40".localized), image: nil) { (action, ind) in
+                print(action, ind)
+                UserDefaults.standard.set(7, forKey: "splitra")
+                self.splitViewController?.preferredPrimaryColumnWidthFraction = 0.6
+                let minimumWidth = min(self.splitViewController?.view.bounds.width ?? 0, self.splitViewController?.view.bounds.height ?? 0)
+                self.splitViewController?.minimumPrimaryColumnWidth = (minimumWidth/5)*4
+                self.splitViewController?.maximumPrimaryColumnWidth = minimumWidth
+            }
+            .action(.default("65 : 35".localized), image: nil) { (action, ind) in
+                print(action, ind)
+                UserDefaults.standard.set(8, forKey: "splitra")
+                self.splitViewController?.preferredPrimaryColumnWidthFraction = 0.65
+                let minimumWidth = min(self.splitViewController?.view.bounds.width ?? 0, self.splitViewController?.view.bounds.height ?? 0)
+                self.splitViewController?.minimumPrimaryColumnWidth = (minimumWidth/20)*13
+                self.splitViewController?.maximumPrimaryColumnWidth = minimumWidth
+            }
+            .action(.default("70 : 30".localized), image: nil) { (action, ind) in
+                print(action, ind)
+                UserDefaults.standard.set(9, forKey: "splitra")
+                self.splitViewController?.preferredPrimaryColumnWidthFraction = 0.7
+                let minimumWidth = min(self.splitViewController?.view.bounds.width ?? 0, self.splitViewController?.view.bounds.height ?? 0)
+                self.splitViewController?.minimumPrimaryColumnWidth = (minimumWidth/10)*7
+                self.splitViewController?.maximumPrimaryColumnWidth = minimumWidth
+            }
+            .action(.default("75 : 25".localized), image: nil) { (action, ind) in
+                print(action, ind)
+                UserDefaults.standard.set(10, forKey: "splitra")
+                self.splitViewController?.preferredPrimaryColumnWidthFraction = 0.75
+                let minimumWidth = min(self.splitViewController?.view.bounds.width ?? 0, self.splitViewController?.view.bounds.height ?? 0)
+                self.splitViewController?.minimumPrimaryColumnWidth = (minimumWidth/4)*3
+                self.splitViewController?.maximumPrimaryColumnWidth = minimumWidth
+            }
+            .action(.cancel("Dismiss"))
+            .finally { action, index in
+                if action.style == .cancel {
+                    return
+                }
+            }
+            .popover(anchorView: self.splitButton)
+            .show(on: self)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
 
@@ -141,9 +248,22 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
             self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
             self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-
+            
+            splitButton.backgroundColor = Colours.white
+            splitButton.layer.masksToBounds = true
+            splitButton.setImage(UIImage(named: "splitRatio")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+            splitButton.addTarget(self, action: #selector(self.didTouchSplit), for: .touchUpInside)
+            self.view.addSubview(self.splitButton)
+            
+            self.splitButton.translatesAutoresizingMaskIntoConstraints = false
+            self.splitButton.widthAnchor.constraint(equalToConstant: 28).isActive = true
+            self.splitButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
+            self.splitButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
+            self.splitButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 9).isActive = true
+            
             if self.mainStatus.isEmpty {
-
+                
+                self.tableView.alpha = 0
                 let introLogo = UIImageView()
                 introLogo.contentMode = .scaleAspectFit
                 self.view.addSubview(introLogo)
@@ -155,7 +275,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 introLogo.image = UIImage(named: "launcgLogo")?.maskWithColor(color: Colours.tabUnselected.withAlphaComponent(0.2))
 
             } else {
-
+                
+                self.tableView.alpha = 1
                 replyButton.backgroundColor = Colours.white
                 likeButton.backgroundColor = Colours.white
                 boostButton.backgroundColor = Colours.white
@@ -334,7 +455,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
     }
-
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(true)
+        self.mainStatus = []
+        self.allPrevious = []
+        self.allReplies = []
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -402,43 +530,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell900")
         self.tableView.register(RepliesCellImage.self, forCellReuseIdentifier: "cell90")
         self.tableView.register(PollCell.self, forCellReuseIdentifier: "PollCell")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink")
         self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink0")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink1")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink2")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink3")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink4")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink5")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink6")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink7")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink8")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink9")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink10")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink11")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink12")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink13")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink14")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink15")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink16")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink17")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink18")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink19")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink20")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink21")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink22")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink23")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink24")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink25")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink26")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink27")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink28")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink29")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink30")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink31")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink32")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink33")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink34")
-        self.tableView.register(DetailCellLink.self, forCellReuseIdentifier: "DetailCellLink35")
         self.tableView.alpha = 1
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -449,25 +541,28 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.tableView.estimatedRowHeight = 89
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
-
-
-        refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
-
-        self.loadLoadLoad()
-
-        tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
-            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                let selection = UISelectionFeedbackGenerator()
-                selection.selectionChanged()
-            }
-            self?.refreshCont()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                self?.tableView.cr.endHeaderRefresh()
-            })
-        }
-        //tableView.cr.beginHeaderRefresh()
-
+        
+        
         if self.mainStatus.isEmpty {} else {
+            
+            
+            refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
+            
+            self.loadLoadLoad()
+            
+            tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                    let selection = UISelectionFeedbackGenerator()
+                    selection.selectionChanged()
+                }
+                self?.refreshCont()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                    self?.tableView.cr.endHeaderRefresh()
+                })
+            }
+            
+            
+            
             let request = Statuses.context(id: self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id)
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
@@ -533,7 +628,12 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             if self.allReplies.isEmpty {
                 return nil
             } else {
-                title.text = "All Replies".localized
+                let repC = self.mainStatus[0].repliesCount
+                if repC == 0 || repC == 1 {
+                    title.text = "1 Reply".localized
+                } else {
+                    title.text = "\(repC) Replies".localized
+                }
             }
         }
         title.textColor = Colours.grayDark2
@@ -572,12 +672,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             if self.mainStatus.isEmpty {
                 return 0
             } else {
-                let newCont = "\(self.mainStatus[0].content) "
                 if (UserDefaults.standard.object(forKey: "linkcards") == nil) || (UserDefaults.standard.object(forKey: "linkcards") as! Int == 0) {
-                    let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
-                    let matches = detector.matches(in: newCont, options: [], range: NSRange(location: 0, length: newCont.utf16.count))
-                    if matches.count > 0 && !matches.description.contains("@") && matches.description != "https://www" {
-                        return matches.count
+                    if self.mainStatus[0].card?.authorUrl != nil {
+                        return 1
+                    } else {
+                        return 0
                     }
                 } else {
                     return 0
@@ -588,7 +687,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         } else {
             return self.allReplies.count
         }
-        return 0
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -684,7 +782,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         if let stat = (statuses.value) {
                             controller.currentTags = stat
                             DispatchQueue.main.async {
-                                self.navigationController?.pushViewController(controller, animated: true)
+                                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                switch (deviceIdiom) {
+                                case .phone :
+                                    self.navigationController?.pushViewController(controller, animated: true)
+                                case .pad:
+                                    if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                        if StoreStruct.currentPage == 0 {
+                                            nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                        }
+                                        if StoreStruct.currentPage == 1 {
+                                            nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                        }
+                                        if StoreStruct.currentPage == 2 {
+                                            nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                        }
+                                    }
+                                default:
+                                    print("nothing")
+                                }
                             }
                         }
                     }
@@ -741,7 +857,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 if stat.count > 0 {
                                     controller.userIDtoUse = stat[0].id
                                     DispatchQueue.main.async {
-                                        self.navigationController?.pushViewController(controller, animated: true)
+                                        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                        switch (deviceIdiom) {
+                                        case .phone :
+                                            self.navigationController?.pushViewController(controller, animated: true)
+                                        case .pad:
+                                            if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                                if StoreStruct.currentPage == 0 {
+                                                    nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                                if StoreStruct.currentPage == 1 {
+                                                    nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                                if StoreStruct.currentPage == 2 {
+                                                    nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                            }
+                                        default:
+                                            print("nothing")
+                                        }
                                     }
                                 }
                             }
@@ -787,7 +921,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             if let stat = (statuses.value) {
                                 controller.currentTags = stat
                                 DispatchQueue.main.async {
-                                    self.navigationController?.pushViewController(controller, animated: true)
+                                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                    switch (deviceIdiom) {
+                                    case .phone :
+                                        self.navigationController?.pushViewController(controller, animated: true)
+                                    case .pad:
+                                        if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                            if StoreStruct.currentPage == 0 {
+                                                nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                            if StoreStruct.currentPage == 1 {
+                                                nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                            if StoreStruct.currentPage == 2 {
+                                                nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                        }
+                                    default:
+                                        print("nothing")
+                                    }
                                 }
                             }
                         }
@@ -851,7 +1003,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 if stat.count > 0 {
                                     controller.userIDtoUse = stat[0].id
                                     DispatchQueue.main.async {
-                                        self.navigationController?.pushViewController(controller, animated: true)
+                                        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                        switch (deviceIdiom) {
+                                        case .phone :
+                                            self.navigationController?.pushViewController(controller, animated: true)
+                                        case .pad:
+                                            if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                                if StoreStruct.currentPage == 0 {
+                                                    nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                                if StoreStruct.currentPage == 1 {
+                                                    nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                                if StoreStruct.currentPage == 2 {
+                                                    nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                            }
+                                        default:
+                                            print("nothing")
+                                        }
                                     }
                                 }
                             }
@@ -897,7 +1067,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             if let stat = (statuses.value) {
                                 controller.currentTags = stat
                                 DispatchQueue.main.async {
-                                    self.navigationController?.pushViewController(controller, animated: true)
+                                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                    switch (deviceIdiom) {
+                                    case .phone :
+                                        self.navigationController?.pushViewController(controller, animated: true)
+                                    case .pad:
+                                        if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                            if StoreStruct.currentPage == 0 {
+                                                nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                            if StoreStruct.currentPage == 1 {
+                                                nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                            if StoreStruct.currentPage == 2 {
+                                                nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                        }
+                                    default:
+                                        print("nothing")
+                                    }
                                 }
                             }
                         }
@@ -962,7 +1150,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             if stat.count > 0 {
                                 controller.userIDtoUse = stat[0].id
                                 DispatchQueue.main.async {
-                                    self.navigationController?.pushViewController(controller, animated: true)
+                                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                    switch (deviceIdiom) {
+                                    case .phone :
+                                        self.navigationController?.pushViewController(controller, animated: true)
+                                    case .pad:
+                                        if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                            if StoreStruct.currentPage == 0 {
+                                                nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                            if StoreStruct.currentPage == 1 {
+                                                nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                            if StoreStruct.currentPage == 2 {
+                                                nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                        }
+                                    default:
+                                        print("nothing")
+                                    }
                                 }
                             }
                         }
@@ -1010,7 +1216,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         if let stat = (statuses.value) {
                             controller.currentTags = stat
                             DispatchQueue.main.async {
-                                self.navigationController?.pushViewController(controller, animated: true)
+                                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                switch (deviceIdiom) {
+                                case .phone :
+                                    self.navigationController?.pushViewController(controller, animated: true)
+                                case .pad:
+                                    if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                        if StoreStruct.currentPage == 0 {
+                                            nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                        }
+                                        if StoreStruct.currentPage == 1 {
+                                            nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                        }
+                                        if StoreStruct.currentPage == 2 {
+                                            nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                        }
+                                    }
+                                default:
+                                    print("nothing")
+                                }
                             }
                         }
                     }
@@ -1069,7 +1293,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             if stat.count > 0 {
                                 controller.userIDtoUse = stat[0].id
                                 DispatchQueue.main.async {
-                                    self.navigationController?.pushViewController(controller, animated: true)
+                                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                    switch (deviceIdiom) {
+                                    case .phone :
+                                        self.navigationController?.pushViewController(controller, animated: true)
+                                    case .pad:
+                                        if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                            if StoreStruct.currentPage == 0 {
+                                                nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                            if StoreStruct.currentPage == 1 {
+                                                nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                            if StoreStruct.currentPage == 2 {
+                                                nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                        }
+                                    default:
+                                        print("nothing")
+                                    }
                                 }
                             }
                         }
@@ -1115,7 +1357,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         if let stat = (statuses.value) {
                             controller.currentTags = stat
                             DispatchQueue.main.async {
-                                self.navigationController?.pushViewController(controller, animated: true)
+                                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                switch (deviceIdiom) {
+                                case .phone :
+                                    self.navigationController?.pushViewController(controller, animated: true)
+                                case .pad:
+                                    if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                        if StoreStruct.currentPage == 0 {
+                                            nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                        }
+                                        if StoreStruct.currentPage == 1 {
+                                            nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                        }
+                                        if StoreStruct.currentPage == 2 {
+                                            nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                        }
+                                    }
+                                default:
+                                    print("nothing")
+                                }
                             }
                         }
                     }
@@ -1148,13 +1408,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         } else if indexPath.section == 3 {
 
             let cell = tableView.dequeueReusableCell(withIdentifier: "DetailCellLink\(indexPath.row)", for: indexPath) as! DetailCellLink
-            let detector = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
-            let matches = detector.matches(in: self.mainStatus[0].content, options: [], range: NSRange(location: 0, length: self.mainStatus[0].content.utf16.count))
-            if matches.count > 0 && !matches.description.contains("@") && matches.description != "https://www" {
-                if let range = Range(matches[indexPath.row].range, in: self.mainStatus[0].content) {
-                    let url = self.mainStatus[0].content[range]
-                    cell.configure(String(url))
-                }
+            if self.mainStatus[0].card?.authorUrl != nil {
+                cell.configure(self.mainStatus[0].card!)
             }
             cell.backgroundColor = Colours.white
             let bgColorView = UIView()
@@ -1305,7 +1560,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         if let stat = (statuses.value) {
                             controller.currentTags = stat
                             DispatchQueue.main.async {
-                                self.navigationController?.pushViewController(controller, animated: true)
+                                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                switch (deviceIdiom) {
+                                case .phone :
+                                    self.navigationController?.pushViewController(controller, animated: true)
+                                case .pad:
+                                    if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                        if StoreStruct.currentPage == 0 {
+                                            nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                        }
+                                        if StoreStruct.currentPage == 1 {
+                                            nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                        }
+                                        if StoreStruct.currentPage == 2 {
+                                            nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                        }
+                                    }
+                                default:
+                                    print("nothing")
+                                }
                             }
                         }
                     }
@@ -1360,7 +1633,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     if stat.count > 0 {
                                         controller.userIDtoUse = stat[0].id
                                         DispatchQueue.main.async {
-                                            self.navigationController?.pushViewController(controller, animated: true)
+                                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                            switch (deviceIdiom) {
+                                            case .phone :
+                                                self.navigationController?.pushViewController(controller, animated: true)
+                                            case .pad:
+                                                if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                                    if StoreStruct.currentPage == 0 {
+                                                        nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                                    }
+                                                    if StoreStruct.currentPage == 1 {
+                                                        nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                                    }
+                                                    if StoreStruct.currentPage == 2 {
+                                                        nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                                    }
+                                                }
+                                            default:
+                                                print("nothing")
+                                            }
                                         }
                                     }
                                 }
@@ -1406,7 +1697,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 if let stat = (statuses.value) {
                                     controller.currentTags = stat
                                     DispatchQueue.main.async {
-                                        self.navigationController?.pushViewController(controller, animated: true)
+                                        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                        switch (deviceIdiom) {
+                                        case .phone :
+                                            self.navigationController?.pushViewController(controller, animated: true)
+                                        case .pad:
+                                            if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                                if StoreStruct.currentPage == 0 {
+                                                    nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                                if StoreStruct.currentPage == 1 {
+                                                    nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                                if StoreStruct.currentPage == 2 {
+                                                    nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                            }
+                                        default:
+                                            print("nothing")
+                                        }
                                     }
                                 }
                             }
@@ -1450,7 +1759,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     if stat.count > 0 {
                                         controller.userIDtoUse = stat[0].id
                                         DispatchQueue.main.async {
-                                            self.navigationController?.pushViewController(controller, animated: true)
+                                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                            switch (deviceIdiom) {
+                                            case .phone :
+                                                self.navigationController?.pushViewController(controller, animated: true)
+                                            case .pad:
+                                                if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                                    if StoreStruct.currentPage == 0 {
+                                                        nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                                    }
+                                                    if StoreStruct.currentPage == 1 {
+                                                        nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                                    }
+                                                    if StoreStruct.currentPage == 2 {
+                                                        nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                                    }
+                                                }
+                                            default:
+                                                print("nothing")
+                                            }
                                         }
                                     }
                                 }
@@ -1496,7 +1823,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 if let stat = (statuses.value) {
                                     controller.currentTags = stat
                                     DispatchQueue.main.async {
-                                        self.navigationController?.pushViewController(controller, animated: true)
+                                        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                        switch (deviceIdiom) {
+                                        case .phone :
+                                            self.navigationController?.pushViewController(controller, animated: true)
+                                        case .pad:
+                                            if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                                if StoreStruct.currentPage == 0 {
+                                                    nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                                if StoreStruct.currentPage == 1 {
+                                                    nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                                if StoreStruct.currentPage == 2 {
+                                                    nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                            }
+                                        default:
+                                            print("nothing")
+                                        }
                                     }
                                 }
                             }
@@ -1561,7 +1906,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     if stat.count > 0 {
                                         controller.userIDtoUse = stat[0].id
                                         DispatchQueue.main.async {
-                                            self.navigationController?.pushViewController(controller, animated: true)
+                                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                            switch (deviceIdiom) {
+                                            case .phone :
+                                                self.navigationController?.pushViewController(controller, animated: true)
+                                            case .pad:
+                                                if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                                    if StoreStruct.currentPage == 0 {
+                                                        nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                                    }
+                                                    if StoreStruct.currentPage == 1 {
+                                                        nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                                    }
+                                                    if StoreStruct.currentPage == 2 {
+                                                        nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                                    }
+                                                }
+                                            default:
+                                                print("nothing")
+                                            }
                                         }
                                     }
                                 }
@@ -1607,7 +1970,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 if let stat = (statuses.value) {
                                     controller.currentTags = stat
                                     DispatchQueue.main.async {
-                                        self.navigationController?.pushViewController(controller, animated: true)
+                                        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                        switch (deviceIdiom) {
+                                        case .phone :
+                                            self.navigationController?.pushViewController(controller, animated: true)
+                                        case .pad:
+                                            if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                                if StoreStruct.currentPage == 0 {
+                                                    nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                                if StoreStruct.currentPage == 1 {
+                                                    nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                                if StoreStruct.currentPage == 2 {
+                                                    nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                            }
+                                        default:
+                                            print("nothing")
+                                        }
                                     }
                                 }
                             }
@@ -1662,7 +2043,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     if stat.count > 0 {
                                         controller.userIDtoUse = stat[0].id
                                         DispatchQueue.main.async {
-                                            self.navigationController?.pushViewController(controller, animated: true)
+                                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                            switch (deviceIdiom) {
+                                            case .phone :
+                                                self.navigationController?.pushViewController(controller, animated: true)
+                                            case .pad:
+                                                if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                                    if StoreStruct.currentPage == 0 {
+                                                        nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                                    }
+                                                    if StoreStruct.currentPage == 1 {
+                                                        nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                                    }
+                                                    if StoreStruct.currentPage == 2 {
+                                                        nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                                    }
+                                                }
+                                            default:
+                                                print("nothing")
+                                            }
                                         }
                                     }
                                 }
@@ -1708,7 +2107,25 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 if let stat = (statuses.value) {
                                     controller.currentTags = stat
                                     DispatchQueue.main.async {
-                                        self.navigationController?.pushViewController(controller, animated: true)
+                                        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                        switch (deviceIdiom) {
+                                        case .phone :
+                                            self.navigationController?.pushViewController(controller, animated: true)
+                                        case .pad:
+                                            if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                                if StoreStruct.currentPage == 0 {
+                                                    nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                                if StoreStruct.currentPage == 1 {
+                                                    nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                                if StoreStruct.currentPage == 2 {
+                                                    nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                                }
+                                            }
+                                        default:
+                                            print("nothing")
+                                        }
                                     }
                                 }
                             }
@@ -2173,8 +2590,27 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     controller.statusLiked = stat
                                     controller.statusBoosted = stat0
                                     controller.profileStatus = self.mainStatus[0].reblog?.account.id ?? self.mainStatus[0].account.id ?? ""
-                                    self.navigationController?.pushViewController(controller, animated: true)
-
+                                    
+                                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                    switch (deviceIdiom) {
+                                    case .phone :
+                                        self.navigationController?.pushViewController(controller, animated: true)
+                                    case .pad:
+                                        if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                                            if StoreStruct.currentPage == 0 {
+                                                nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                            if StoreStruct.currentPage == 1 {
+                                                nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                            if StoreStruct.currentPage == 2 {
+                                                nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                                            }
+                                        }
+                                    default:
+                                        print("nothing")
+                                    }
+                                    
                                 }
 
                             }
@@ -2593,6 +3029,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             if let myWebsite = self.mainStatus[0].url {
                                 let objectsToShare = [myWebsite]
                                 let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                                vc.popoverPresentationController?.sourceView = self.view
                                 vc.previewNumberOfLines = 5
                                 vc.previewFont = UIFont.systemFont(ofSize: 14)
                                 self.present(vc, animated: true, completion: nil)
@@ -2603,6 +3040,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
                             let bodyText = self.mainStatus[0].content.stripHTML()
                             let vc = VisualActivityViewController(text: bodyText)
+                            vc.popoverPresentationController?.sourceView = self.view
                             vc.previewNumberOfLines = 5
                             vc.previewFont = UIFont.systemFont(ofSize: 14)
                             self.present(vc, animated: true, completion: nil)
@@ -2930,6 +3368,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             if let myWebsite = self.mainStatus[0].reblog?.url ?? self.mainStatus[0].url {
                                 let objectsToShare = [myWebsite]
                                 let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                                vc.popoverPresentationController?.sourceView = self.view
                                 vc.previewNumberOfLines = 5
                                 vc.previewFont = UIFont.systemFont(ofSize: 14)
                                 self.present(vc, animated: true, completion: nil)
@@ -2940,6 +3379,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
                             let bodyText = self.mainStatus[0].reblog?.content.stripHTML() ?? self.mainStatus[0].content.stripHTML()
                             let vc = VisualActivityViewController(text: bodyText)
+                            vc.popoverPresentationController?.sourceView = self.view
                             vc.previewNumberOfLines = 5
                             vc.previewFont = UIFont.systemFont(ofSize: 14)
                             self.present(vc, animated: true, completion: nil)
@@ -2991,8 +3431,27 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
 
         controller.userIDtoUse = self.mainStatus[0].reblog?.account.id ?? self.mainStatus[0].account.id
-        self.navigationController?.pushViewController(controller, animated: true)
-
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone :
+            self.navigationController?.pushViewController(controller, animated: true)
+        case .pad:
+            if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                if StoreStruct.currentPage == 0 {
+                    nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                }
+                if StoreStruct.currentPage == 1 {
+                    nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                }
+                if StoreStruct.currentPage == 2 {
+                    nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        default:
+            print("nothing")
+        }
+        
     }
 
     @objc func didTouchProfileP(sender: UIButton) {
@@ -3000,17 +3459,33 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let selection = UISelectionFeedbackGenerator()
             selection.selectionChanged()
         }
-
-        print("pp1")
-
+        
         let controller = ThirdViewController()
         if self.allPrevious[sender.tag].account.username == StoreStruct.currentUser.username {} else {
             controller.fromOtherUser = true
         }
 
         controller.userIDtoUse = self.allPrevious[sender.tag].account.id
-        self.navigationController?.pushViewController(controller, animated: true)
-
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone :
+            self.navigationController?.pushViewController(controller, animated: true)
+        case .pad:
+            if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                if StoreStruct.currentPage == 0 {
+                    nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                }
+                if StoreStruct.currentPage == 1 {
+                    nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                }
+                if StoreStruct.currentPage == 2 {
+                    nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        default:
+            print("nothing")
+        }
     }
 
     @objc func didTouchProfile(sender: UIButton) {
@@ -3027,8 +3502,26 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
 
         controller.userIDtoUse = self.allReplies[sender.tag].account.id
-        self.navigationController?.pushViewController(controller, animated: true)
-
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone :
+            self.navigationController?.pushViewController(controller, animated: true)
+        case .pad:
+            if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                if StoreStruct.currentPage == 0 {
+                    nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                }
+                if StoreStruct.currentPage == 1 {
+                    nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                }
+                if StoreStruct.currentPage == 2 {
+                    nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        default:
+            print("nothing")
+        }
     }
 
     @objc func tappedImagePrev(_ sender: UIButton) {
@@ -4383,6 +4876,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     if let myWebsite = sto[indexPath.row].url {
                                         let objectsToShare = [myWebsite]
                                         let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                                        vc.popoverPresentationController?.sourceView = self.view
                                         vc.previewNumberOfLines = 5
                                         vc.previewFont = UIFont.systemFont(ofSize: 14)
                                         self.present(vc, animated: true, completion: nil)
@@ -4393,6 +4887,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
                                     let bodyText = sto[indexPath.row].content.stripHTML()
                                     let vc = VisualActivityViewController(text: bodyText)
+                                    vc.popoverPresentationController?.sourceView = self.view
                                     vc.previewNumberOfLines = 5
                                     vc.previewFont = UIFont.systemFont(ofSize: 14)
                                     self.present(vc, animated: true, completion: nil)
@@ -4723,6 +5218,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     if let myWebsite = sto[indexPath.row].url {
                                         let objectsToShare = [myWebsite]
                                         let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                                        vc.popoverPresentationController?.sourceView = self.view
                                         vc.previewNumberOfLines = 5
                                         vc.previewFont = UIFont.systemFont(ofSize: 14)
                                         self.present(vc, animated: true, completion: nil)
@@ -4733,6 +5229,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
                                     let bodyText = sto[indexPath.row].content.stripHTML()
                                     let vc = VisualActivityViewController(text: bodyText)
+                                    vc.popoverPresentationController?.sourceView = self.view
                                     vc.previewNumberOfLines = 5
                                     vc.previewFont = UIFont.systemFont(ofSize: 14)
                                     self.present(vc, animated: true, completion: nil)
@@ -4810,16 +5307,53 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(indexPath)
         self.tableView.deselectRow(at: indexPath, animated: true)
-
-        if indexPath.section == 0 {
-            let controller = DetailViewController()
-            controller.mainStatus.append(self.allPrevious[indexPath.row])
-            self.navigationController?.pushViewController(controller, animated: true)
-        }
-        if indexPath.section == 5 {
-            let controller = DetailViewController()
-            controller.mainStatus.append(self.allReplies[indexPath.row])
-            self.navigationController?.pushViewController(controller, animated: true)
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone :
+            if indexPath.section == 0 {
+                let controller = DetailViewController()
+                controller.mainStatus.append(self.allPrevious[indexPath.row])
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
+            if indexPath.section == 5 {
+                let controller = DetailViewController()
+                controller.mainStatus.append(self.allReplies[indexPath.row])
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
+        case .pad:
+            if indexPath.section == 0 {
+                let controller = DetailViewController()
+                controller.mainStatus.append(self.allPrevious[indexPath.row])
+                if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                    if StoreStruct.currentPage == 0 {
+                        nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                    }
+                    if StoreStruct.currentPage == 1 {
+                        nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                    }
+                    if StoreStruct.currentPage == 2 {
+                        nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                    }
+                }
+            }
+            if indexPath.section == 5 {
+                let controller = DetailViewController()
+                controller.mainStatus.append(self.allReplies[indexPath.row])
+                if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                    if StoreStruct.currentPage == 0 {
+                        nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                    }
+                    if StoreStruct.currentPage == 1 {
+                        nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                    }
+                    if StoreStruct.currentPage == 2 {
+                        nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                    }
+                }
+            }
+        default:
+            print("nothing")
         }
     }
 

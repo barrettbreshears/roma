@@ -27,6 +27,8 @@ public class Status: Codable {
     public let createdAt: Date
     /// An array of Emoji.
     public let emojis: [Emoji]
+    /// The number of replies for the status.
+    public let repliesCount: Int
     /// The number of reblogs for the status.
     public let reblogsCount: Int
     /// The number of favourites for the status.
@@ -47,6 +49,8 @@ public class Status: Codable {
     public let mentions: [Mention]
     /// An array of tags.
     public let tags: [Tag]
+    /// A card.
+    public let card: Card?
     /// Application from which the status was posted.
     public let application: Application?
     /// The detected language for the status.
@@ -68,6 +72,7 @@ public class Status: Codable {
         case content
         case createdAt = "created_at"
         case emojis
+        case repliesCount = "replies_count"
         case reblogsCount = "reblogs_count"
         case favouritesCount = "favourites_count"
         case reblogged
@@ -78,6 +83,7 @@ public class Status: Codable {
         case mediaAttachments = "media_attachments"
         case mentions
         case tags
+        case card
         case application
         case language
         case reblog

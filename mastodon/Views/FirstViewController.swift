@@ -60,13 +60,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             guard let indexPath = self.tableView.indexPathForRow(at: location) else { return nil }
             guard let cell = self.tableView.cellForRow(at: indexPath) else { return nil }
             let detailVC = DetailViewController()
-            if self.currentIndex == 0 {
-                detailVC.mainStatus.append(StoreStruct.statusesHome[indexPath.row])
-            } else if self.currentIndex == 1 {
-                detailVC.mainStatus.append(StoreStruct.statusesLocal[indexPath.row])
-            } else {
-                detailVC.mainStatus.append(StoreStruct.statusesFederated[indexPath.row])
-            }
+            detailVC.mainStatus.append(StoreStruct.statusesHome[indexPath.row])
             detailVC.isPeeking = true
             previewingContext.sourceRect = cell.frame
             return detailVC
@@ -77,13 +71,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             guard let indexPath = self.tableViewL.indexPathForRow(at: location) else { return nil }
             guard let cell = self.tableViewL.cellForRow(at: indexPath) else { return nil }
             let detailVC = DetailViewController()
-            if self.currentIndex == 0 {
-                detailVC.mainStatus.append(StoreStruct.statusesHome[indexPath.row])
-            } else if self.currentIndex == 1 {
-                detailVC.mainStatus.append(StoreStruct.statusesLocal[indexPath.row])
-            } else {
-                detailVC.mainStatus.append(StoreStruct.statusesFederated[indexPath.row])
-            }
+            detailVC.mainStatus.append(StoreStruct.statusesLocal[indexPath.row])
             detailVC.isPeeking = true
             previewingContext.sourceRect = cell.frame
             return detailVC
@@ -95,13 +83,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             guard let indexPath = self.tableViewF.indexPathForRow(at: location) else { return nil }
             guard let cell = self.tableViewF.cellForRow(at: indexPath) else { return nil }
             let detailVC = DetailViewController()
-            if self.currentIndex == 0 {
-                detailVC.mainStatus.append(StoreStruct.statusesHome[indexPath.row])
-            } else if self.currentIndex == 1 {
-                detailVC.mainStatus.append(StoreStruct.statusesLocal[indexPath.row])
-            } else {
-                detailVC.mainStatus.append(StoreStruct.statusesFederated[indexPath.row])
-            }
+            detailVC.mainStatus.append(StoreStruct.statusesFederated[indexPath.row])
             detailVC.isPeeking = true
             previewingContext.sourceRect = cell.frame
             return detailVC
@@ -496,42 +478,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
         }
     }
-    
-    
-    
-    
-    
-    //    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    //        var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
-    //        var offset = 88
-    //        if UIDevice().userInterfaceIdiom == .phone {
-    //            switch UIScreen.main.nativeBounds.height {
-    //            case 2688:
-    //                offset = 88
-    //            case 2436, 1792:
-    //                offset = 88
-    //            default:
-    //                offset = 64
-    //                tabHeight = Int(UITabBarController().tabBar.frame.size.height)
-    //            }
-    //        }
-    //        let scrollDiff = scrollView.contentOffset.y - self.previousScrollOffset
-    //
-    //        if scrollDiff > 0 {
-    //            // scrolling down
-    //            springWithDelay(duration: 1.1, delay: 0, animations: {
-    //                self.segmentedControl.frame.size.height = 0
-    //                self.tableView.frame = CGRect(x: 0, y: Int(offset + 20), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 25)
-    //            })
-    //        } else {
-    //            // scrolling up
-    //            springWithDelay(duration: 1.1, delay: 0, animations: {
-    //                self.segmentedControl.frame.size.height = 40
-    //                self.tableView.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 65)
-    //            })
-    //        }
-    //        self.previousScrollOffset = scrollView.contentOffset.y
-    //    }
     
     @objc func changeSeg() {
         
@@ -1177,7 +1123,62 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .pad:
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "segTheme"), object: self)
+            
+            segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+            segmentedControl.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+            segmentedControl.heightAnchor.constraint(equalToConstant: CGFloat(40)).isActive = true
+            if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
+                self.segmentedControl.widthAnchor.constraint(equalToConstant: CGFloat(self.view.bounds.width - 40)).isActive = true
+                self.segmentedControl.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 5)).isActive = true
+            } else {
+                self.segmentedControl.widthAnchor.constraint(equalToConstant: CGFloat(200)).isActive = true
+                self.segmentedControl.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(30)).isActive = true
+            }
+            
+            if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
+            
+                self.tableView.translatesAutoresizingMaskIntoConstraints = false
+                self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+                
+                self.tableViewL.translatesAutoresizingMaskIntoConstraints = false
+                self.tableViewL.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableViewL.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableViewL.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableViewL.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+                
+                self.tableViewF.translatesAutoresizingMaskIntoConstraints = false
+                self.tableViewF.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableViewF.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableViewF.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableViewF.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+        
+            } else {
+            
+                self.tableView.translatesAutoresizingMaskIntoConstraints = false
+                self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                
+                self.tableViewL.translatesAutoresizingMaskIntoConstraints = false
+                self.tableViewL.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableViewL.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableViewL.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableViewL.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                
+                self.tableViewF.translatesAutoresizingMaskIntoConstraints = false
+                self.tableViewF.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+                self.tableViewF.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+                self.tableViewF.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableViewF.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+        
+            }
+            
+            
+            
             if self.maybeDoOnce == false {
                 self.searchButton = MNGExpandedTouchAreaButton()
                 self.searchButton.setImage(UIImage(named: "search")?.maskWithColor(color: Colours.grayLight2), for: .normal)
@@ -4043,6 +4044,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     if let myWebsite = sto[indexPath.row].url {
                                         let objectsToShare = [myWebsite]
                                         let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                                        vc.popoverPresentationController?.sourceView = self.view
                                         vc.previewNumberOfLines = 5
                                         vc.previewFont = UIFont.systemFont(ofSize: 14)
                                         self.present(vc, animated: true, completion: nil)
@@ -4053,6 +4055,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     
                                     let bodyText = sto[indexPath.row].content.stripHTML()
                                     let vc = VisualActivityViewController(text: bodyText)
+                                    vc.popoverPresentationController?.sourceView = self.view
                                     vc.previewNumberOfLines = 5
                                     vc.previewFont = UIFont.systemFont(ofSize: 14)
                                     self.present(vc, animated: true, completion: nil)
@@ -4387,6 +4390,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     if let myWebsite = sto[indexPath.row].reblog?.url ?? sto[indexPath.row].url {
                                         let objectsToShare = [myWebsite]
                                         let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                                        vc.popoverPresentationController?.sourceView = self.view
                                         vc.previewNumberOfLines = 5
                                         vc.previewFont = UIFont.systemFont(ofSize: 14)
                                         self.present(vc, animated: true, completion: nil)
@@ -4397,6 +4401,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     
                                     let bodyText = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
                                     let vc = VisualActivityViewController(text: bodyText)
+                                    vc.popoverPresentationController?.sourceView = self.view
                                     vc.previewNumberOfLines = 5
                                     vc.previewFont = UIFont.systemFont(ofSize: 14)
                                     self.present(vc, animated: true, completion: nil)

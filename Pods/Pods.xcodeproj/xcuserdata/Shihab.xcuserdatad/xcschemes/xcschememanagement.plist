@@ -77,16 +77,6 @@
 			<key>orderHint</key>
 			<integer>8</integer>
 		</dict>
-<<<<<<< HEAD
-		<key>Pods-OneSignalNotificationServiceExtension.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-			<key>orderHint</key>
-			<integer>10</integer>
-		</dict>
-=======
->>>>>>> upstream/master
 		<key>Pods-mastodon.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -134,93 +124,63 @@
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-<<<<<<< HEAD
-			<integer>16</integer>
-=======
 			<integer>17</integer>
->>>>>>> upstream/master
 		</dict>
 		<key>SAConfettiView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-<<<<<<< HEAD
-			<integer>15</integer>
-=======
 			<integer>16</integer>
->>>>>>> upstream/master
 		</dict>
 		<key>SDWebImage.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-<<<<<<< HEAD
-			<integer>17</integer>
-=======
 			<integer>18</integer>
->>>>>>> upstream/master
 		</dict>
 		<key>SJFluidSegmentedControl.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-<<<<<<< HEAD
-			<integer>18</integer>
-=======
 			<integer>19</integer>
->>>>>>> upstream/master
 		</dict>
 		<key>StatusAlert.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-<<<<<<< HEAD
-			<integer>19</integer>
-=======
-			<integer>20</integer>
->>>>>>> upstream/master
+			<integer>21</integer>
 		</dict>
 		<key>SwiftyGiphy.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-<<<<<<< HEAD
-			<integer>20</integer>
-=======
-			<integer>21</integer>
->>>>>>> upstream/master
+			<integer>22</integer>
 		</dict>
 		<key>SwiftyJSON.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-<<<<<<< HEAD
-			<integer>21</integer>
-=======
-			<integer>22</integer>
->>>>>>> upstream/master
+			<integer>23</integer>
 		</dict>
 		<key>TinyConstraints.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
-<<<<<<< HEAD
-			<integer>22</integer>
+			<integer>24</integer>
 		</dict>
-		<key>nanopb.xcscheme_^#shared#^_</key>
+		<key>XCDYouTubeKit.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
-			<integer>33</integer>
-=======
-			<integer>23</integer>
->>>>>>> upstream/master
+			<integer>25</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>

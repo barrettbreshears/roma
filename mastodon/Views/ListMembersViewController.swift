@@ -93,14 +93,6 @@ class ListMembersViewController: UIViewController, UITableViewDelegate, UITableV
         }
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .phone:
-            print("nothing")
-        case .pad:
-            self.title = "Members"
-        default:
-            print("nothing")
-        }
         
         self.tableView.register(FollowersCell.self, forCellReuseIdentifier: "cellf")
         self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
