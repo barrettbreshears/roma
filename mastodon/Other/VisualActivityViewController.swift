@@ -40,7 +40,7 @@ final class VisualActivityViewController: UIActivityViewController {
     var previewNumberOfLines: Int = 5
     
     /// The preview color for URL activity items
-    var previewLinkColor: UIColor = Colours.tabSelected
+    var previewLinkColor: UIColor = UIColor(red: 40/255.0, green: 40/255.0, blue: 40/255.0, alpha: 1.0)
     
     /// The font for the preview label
     var previewFont: UIFont = UIFont.systemFont(ofSize: 18)

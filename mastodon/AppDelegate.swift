@@ -9,9 +9,13 @@
 import UIKit
 import Disk
 import Firebase
+import FirebaseInstanceID
+import FirebaseMessaging
+import UserNotifications
+
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 
     var window: UIWindow?
     let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.dark)
@@ -81,127 +85,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         UIApplication.shared.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
     }
-
-    func application(
-        _ application: UIApplication,
-        didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
-        ) {
+    
+    func application(_ application: UIApplication, shouldSaveApplicationState coder: NSCoder) -> Bool {
+        return true
+    }
+    
+    func application(_ application: UIApplication, shouldRestoreApplicationState coder: NSCoder) -> Bool {
+        return true
+    }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
         print("Device Token: \(token)")
-
-        var state:PushNotificationState!
-
-        if let storedState = PushNotificationReceiver.getSate() {
-            state = storedState
-        } else {
-            let reciver = try! PushNotificationReceiver()
-            let subScription = PushNotificationSubscription(endpoint: URL(string:"https://pushrelay-roma1.your.org/relay-to/production/\(token)")!, alerts: PushNotificationAlerts.all)
-            let deviceToken = PushNotificationDeviceToken(deviceToken: deviceToken)
-            state = PushNotificationState(receiver: reciver, subscription: subScription, deviceToken: deviceToken)
-            PushNotificationReceiver.setState(state: state)
-
-        }
-
-
-        guard StoreStruct.shared.currentInstance.returnedText != "" else {
-            return
-        }
-        let receiver = try! PushNotificationReceiver()
-        let subscription = PushNotificationSubscription(endpoint: URL(string:"https://pushrelay-roma1.your.org/relay-to/production/\(token)")!, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
-        let deviceToken = PushNotificationDeviceToken(deviceToken: deviceToken)
-        state = PushNotificationState(receiver: receiver, subscription: subscription, deviceToken: deviceToken)
-        PushNotificationReceiver.setState(state: state)
-
-        // change following when pushing to App Store or for local dev
-        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-roma1.your.org/relay-to/production/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
-//        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-mast1-dev.your.org/relay-to/development/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
-
-        //create the url with URL
-        let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
-
-        //create the session object
-        let session = URLSession.shared
-
-        //now create the URLRequest object using the url object
-        var request = URLRequest(url: url)
-
-        request.httpMethod = "DELETE"// "POST" //set http method as POST
-
-
-
-        let jsonEncoder = JSONEncoder()
-        do {
-            let jsonData = try jsonEncoder.encode(requestParams)
-            let jsonString = String(data: jsonData, encoding: .utf8)
-
-            request.httpBody = jsonData
-        }
-        catch {
-            print(error.localizedDescription)
-        }
-        request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.addValue("application/json", forHTTPHeaderField: "Accept")
-
-        //create dataTask using the session object to send data to the server
-        let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-
-            let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-roma1.your.org/relay-to/production/\(token)", receiver: state.receiver, alerts: state.subscription.alerts)
-
-            //create the url with URL
-            let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
-
-            //create the session object
-            let session = URLSession.shared
-
-            //now create the URLRequest object using the url object
-            var request = URLRequest(url: url)
-
-            request.httpMethod = "POST"// "POST" //set http method as POST
-
-
-
-            let jsonEncoder = JSONEncoder()
-            do {
-                let jsonData = try jsonEncoder.encode(requestParams)
-                let jsonString = String(data: jsonData, encoding: .utf8)
-
-                request.httpBody = jsonData
-                print("JSON String : " + jsonString!)
+        
+        Messaging.messaging().apnsToken = deviceToken
+        
+        InstanceID.instanceID().instanceID { (result, error) in
+            
+            
+            if let error = error {
+                print("Error fetching remote instance ID: \(error)")
+            } else if let result = result {
+                
+                self.createSubscription(fcmToken: result.token)
+                
             }
-            catch {
-                print(error.localizedDescription)
-            }
-            request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            request.addValue("application/json", forHTTPHeaderField: "Accept")
-
-            //create dataTask using the session object to send data to the server
-            let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
-
-                guard error == nil else {
-                    return
-                }
-
-                guard let data = data else {
-                    return
-                }
-
-                do {
-                    //create json object from data
-                    if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                        print(json)
-                        // handle json...
-                    }
-                } catch let error {
-                    print(error.localizedDescription)
-                }
-            })
-            task.resume()
-
-        })
-        task.resume()
+        }
 
     }
 
@@ -230,43 +140,52 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
 
             if url.host == "light" {
-                let viewController = window?.rootViewController as! ViewController
-                viewController.siriLight()
+                if let viewController = window?.rootViewController as? ViewController {
+                    viewController.siriLight()
+                }
                 return true
             } else if url.host == "dark" {
-                let viewController = window?.rootViewController as! ViewController
-                viewController.siriDark()
+                if let viewController = window?.rootViewController as? ViewController {
+                    viewController.siriDark()
+                }
                 return true
             } else if url.host == "darker" {
-                let viewController = window?.rootViewController as! ViewController
-                viewController.siriDark2()
+                if let viewController = window?.rootViewController as? ViewController {
+                    viewController.siriDark2()
+                }
                 return true
             } else if url.host == "black" {
-                let viewController = window?.rootViewController as! ViewController
-                viewController.siriOled()
+                if let viewController = window?.rootViewController as? ViewController {
+                    viewController.siriOled()
+                }
                 return true
             } else if url.host == "blue" {
-                let viewController = window?.rootViewController as! ViewController
-                viewController.siriBlue()
+                if let viewController = window?.rootViewController as? ViewController {
+                    viewController.siriBlue()
+                }
                 return true
             } else if url.host == "confetti" {
-                let viewController = window?.rootViewController as! ViewController
-                viewController.siriConfetti()
+                if let viewController = window?.rootViewController as? ViewController {
+                    viewController.siriConfetti()
+                }
                 return true
             } else if url.host == "onboard" {
-                let viewController = window?.rootViewController as! ViewController
-                viewController.presentIntro()
+                if let viewController = window?.rootViewController as? ViewController {
+                    viewController.presentIntro()
+                }
                 return true
             } else if url.host == "settings" {
-                let viewController = window?.rootViewController as! ViewController
-                viewController.goToSettings()
+                if let viewController = window?.rootViewController as? ViewController {
+                    viewController.goToSettings()
+                }
                 return true
             } else if url.absoluteString.contains("id=") {
                 let x = url.absoluteString
                 let y = x.split(separator: "=")
                 StoreStruct.curID = y[1].description
-                let viewController = window?.rootViewController as! ViewController
-                viewController.gotoID()
+                if let viewController = window?.rootViewController as? ViewController {
+                    viewController.gotoID()
+                }
                 return true
             } else if url.absoluteString.contains("toot=") {
                 let x = url.absoluteString
@@ -296,16 +215,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let x = url.absoluteString
                 let y = x.split(separator: "=")
                 StoreStruct.shared.newInstance!.authCode = y.last?.description ?? ""
-                StoreStruct.tappedSignInCheck = true
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged"), object: nil)
+                if StoreStruct.tappedSignInCheck == false {
+                    StoreStruct.tappedSignInCheck = true
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged"), object: nil)
+                }
                 return true
             } else if url.host == "success" {
                 print("Response ==> \(url.absoluteString)")
                 let x = url.absoluteString
                 let y = x.split(separator: "=")
                 StoreStruct.shared.currentInstance.authCode = y[1].description
-                StoreStruct.tappedSignInCheck = true
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
+                if StoreStruct.tappedSignInCheck == false {
+                    StoreStruct.tappedSignInCheck = true
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
+                }
                 return true
             } else {
                 return true
@@ -772,6 +695,114 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 self.window?.makeKeyAndVisible()
             }
         }
+    }
+    
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        
+        createSubscription(fcmToken:fcmToken)
+        
+    }
+    
+    func createSubscription(fcmToken: String){
+        
+        let jsonObject = ["data":
+            ["alerts":
+                ["favourite":true,
+                 "follow":true,
+                 "mention":true,
+                 "reblog":true]
+            ],
+                    "subscription":
+                        ["keys":
+                            ["p256dh":"BEpPCn0cfs3P0E0fY-gyOuahx5dW5N8quUowlrPyfXlMa6tABLqqcSpOpMnC1-o_UB_s4R8NQsqMLbASjnqSbqw=",
+                             "auth":"T5bhIIyre5TDC1LyX4mFAQ=="
+                            ],
+                         "endpoint":"https://rails-toot-test.herokuapp.com//push/\(fcmToken)?account=test&server=server&device=iOS"
+            ]
+        ]
+        //create the url with URL
+        let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
+        //create the session object
+        let session = URLSession.shared
+        //now create the URLRequest object using the url object
+        var request = URLRequest(url: url)
+        
+        do {
+            let jsonData = try JSONSerialization.data(
+                withJSONObject: jsonObject,
+                options: [])
+            let jsonString = String(data: jsonData, encoding: .utf8)
+            
+            request.httpBody = jsonData
+            print("JSON String : " + jsonString!)
+        }
+        catch {
+            print(error.localizedDescription)
+        }
+        request.httpMethod = "DELETE"// "POST" //set http method as POST
+        request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        //create dataTask using the session object to send data to the server
+        let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
+            
+            //create the url with URL
+            let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
+            
+            //create the session object
+            let session = URLSession.shared
+            
+            //now create the URLRequest object using the url object
+            var request = URLRequest(url: url)
+            
+            request.httpMethod = "POST"// "POST" //set http method as POST
+            
+           
+            
+            // "https://pushrelay-roma1-fcm.your.org/push/\(fcmToken)?account=test&server=server"
+            
+            do {
+                let jsonData = try JSONSerialization.data(
+                    withJSONObject: jsonObject,
+                    options: [])
+                let jsonString = String(data: jsonData, encoding: .utf8)
+                
+                request.httpBody = jsonData
+                print("JSON String : " + jsonString!)
+            }
+            catch {
+                print(error.localizedDescription)
+            }
+            request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.addValue("application/json", forHTTPHeaderField: "Accept")
+            
+            //create dataTask using the session object to send data to the server
+            let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
+                
+                guard error == nil else {
+                    return
+                }
+                
+                guard let data = data else {
+                    return
+                }
+                
+                do {
+                    //create json object from data
+                    if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
+                        print(json)
+                        // handle json...
+                    }
+                } catch let error {
+                    print(error.localizedDescription)
+                }
+            })
+            task.resume()
+            
+        })
+        task.resume()
     }
 }
 

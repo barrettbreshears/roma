@@ -152,9 +152,9 @@ class MainFeedCell: SwipeTableViewCell {
             "boost1" : boost1,
             "more1" : more1,
             ]
-
-
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[name]-(>=5)-[date(30)]-20-|", options: [], metrics: nil, views: viewsDict))
+        
+        
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[name]-(>=5)-[date]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[image2(26)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[artist]-(>=5)-[more(16)]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
@@ -172,6 +172,8 @@ class MainFeedCell: SwipeTableViewCell {
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[rep1(20)]-24-[like1(40)]-15-[boost1(40)]-24-[more1(20)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
             }
         
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-71-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -251,15 +253,14 @@ class MainFeedCell: SwipeTableViewCell {
         
         
         
-        let viewsDict = [
-            "warning" : warningB,
-            ]
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-71-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
-        if status.reblog?.content.stripHTML() != nil {
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-44-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
-        } else {
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-54-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
-        }
+//        let viewsDict = [
+//            "warning" : warningB,
+//            ]
+//        if status.reblog?.content.stripHTML() != nil {
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-46-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
+//        } else {
+//            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-54-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
+//        }
         
         
         

@@ -1883,6 +1883,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             .action(.default("Direct - Post to mentioned users only".localized)) { (action, ind) in
                 print(action, ind)
                 
+                if (UserDefaults.standard.object(forKey: "divisib") == nil) || (UserDefaults.standard.object(forKey: "divisib") as! Int == 0) {
                 Alertift.actionSheet(title: "Direct Visibility", message: "Please note that all mentioned users will still see this message. Set direct visibility?")
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1904,6 +1905,12 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     }
                     .popover(anchorView: self.visibilityButton)
                     .show(on: self)
+                } else {
+                    self.visibility = .direct
+                    self.visibilityButton.setImage(UIImage(named: "direct"), for: .normal)
+                    self.bringBackDrawer()
+                }
+                
             }
             .action(.cancel("Dismiss"))
             .finally { action, index in

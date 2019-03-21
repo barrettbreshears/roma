@@ -67,11 +67,7 @@ class NewProfileViewController: UIViewController, UITextViewDelegate {
         self.view.addSubview(self.closeButton)
         
         tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(closeB), width: CGFloat(150), height: CGFloat(36))
-        if self.editListName == "" {
-            tootLabel.setTitle("Create", for: .normal)
-        } else {
-            tootLabel.setTitle("Update", for: .normal)
-        }
+        tootLabel.setTitle("Update", for: .normal)
         tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
         tootLabel.contentHorizontalAlignment = .right
@@ -79,11 +75,7 @@ class NewProfileViewController: UIViewController, UITextViewDelegate {
         self.view.addSubview(tootLabel)
         
         titleV.frame = CGRect(x: 24, y: offset + 6, width: Int(self.view.bounds.width), height: 30)
-        if self.editListName == "" {
-            titleV.text = "New List Title".localized
-        } else {
-            titleV.text = "Edit Display Name".localized
-        }
+        titleV.text = "Edit Display Name".localized
         titleV.textColor = Colours.grayDark2
         titleV.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         self.view.addSubview(titleV)
@@ -193,11 +185,6 @@ class NewProfileViewController: UIViewController, UITextViewDelegate {
         
         if self.textView.text == "" { return }
         
-        
-        
-        if self.editListName == "" {
-            
-        } else {
             
             let request = Accounts.updateCurrentUser(displayName: self.textView.text, note: nil, avatar: nil, header: nil, locked: nil)
             StoreStruct.client.run(request) { (statuses) in
@@ -223,8 +210,6 @@ class NewProfileViewController: UIViewController, UITextViewDelegate {
                 }
             }
             
-            
-        }
         
     }
 }

@@ -308,8 +308,10 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
         settings.backgroundColor = UIColor.white
         if (UserDefaults.standard.object(forKey: "likepin") == nil) || (UserDefaults.standard.object(forKey: "likepin") as! Int == 0) {
             settings.setImage(UIImage(named: "like2")?.maskWithColor(color: UIColor.darkGray), for: .normal)
-        } else {
+        } else if (UserDefaults.standard.object(forKey: "likepin") as! Int == 1) {
             settings.setImage(UIImage(named: "pinned")?.maskWithColor(color: UIColor.darkGray), for: .normal)
+        } else {
+            settings.setImage(UIImage(named: "profile")?.maskWithColor(color: UIColor.darkGray), for: .normal)
         }
         
         if status.locked {
@@ -579,8 +581,10 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
         settings.backgroundColor = UIColor.white
         if (UserDefaults.standard.object(forKey: "likepin") == nil) || (UserDefaults.standard.object(forKey: "likepin") as! Int == 0) {
             settings.setImage(UIImage(named: "like2")?.maskWithColor(color: UIColor.darkGray), for: .normal)
-        } else {
+        } else if (UserDefaults.standard.object(forKey: "likepin") as! Int == 1) {
             settings.setImage(UIImage(named: "pinned")?.maskWithColor(color: UIColor.darkGray), for: .normal)
+        } else {
+            settings.setImage(UIImage(named: "profile")?.maskWithColor(color: UIColor.darkGray), for: .normal)
         }
         
         if status.locked {
