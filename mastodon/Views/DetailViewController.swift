@@ -458,9 +458,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)
-        self.mainStatus = []
-        self.allPrevious = []
-        self.allReplies = []
+//        self.mainStatus = []
+//        self.allPrevious = []
+//        self.allReplies = []
     }
     
     override func viewDidLoad() {

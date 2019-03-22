@@ -169,7 +169,7 @@ class MainFeedCell: SwipeTableViewCell {
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-15-[like1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-15-[boost1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-15-[more1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[rep1(20)]-24-[like1(40)]-15-[boost1(40)]-24-[more1(20)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[rep1(36)]-24-[like1(40)]-15-[boost1(40)]-24-[more1(20)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
             }
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-71-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
@@ -201,6 +201,11 @@ class MainFeedCell: SwipeTableViewCell {
         }
 
         if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {} else {
+            rep1.setTitle("\(status.reblog?.repliesCount ?? status.repliesCount)", for: .normal)
+            rep1.setTitleColor(Colours.grayDark.withAlphaComponent(0.4), for: .normal)
+            rep1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            rep1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+            rep1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
             like1.setTitle("\(status.reblog?.favouritesCount ?? status.favouritesCount)", for: .normal)
             like1.setTitleColor(Colours.grayDark.withAlphaComponent(0.4), for: .normal)
             like1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)

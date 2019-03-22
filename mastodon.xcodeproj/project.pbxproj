@@ -727,6 +727,7 @@
 		53E826E62236C32D00153721 /* Toppable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E826D22236C32C00153721 /* Toppable.swift */; };
 		53E826E72236C32D00153721 /* BiscuitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E826D32236C32C00153721 /* BiscuitViewController.swift */; };
 		53E826E9223AA84000153721 /* CardType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E826E8223AA84000153721 /* CardType.swift */; };
+		53E827172243E04700153721 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5373C9DE215173F000676F3D /* Assets.xcassets */; };
 		53EBE6B52220030A000D007E /* UIImageColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EBE6B42220030A000D007E /* UIImageColors.swift */; };
 		53EBE6BB22283FF9000D007E /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EBE6BA22283FF9000D007E /* SearchViewController.swift */; };
 		53EBE6BD222E7C4D000D007E /* Polls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EBE6BC222E7C4D000D007E /* Polls.swift */; };
@@ -3685,6 +3686,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				53E827172243E04700153721 /* Assets.xcassets in Resources */,
 				5354BA1F2163F89E0094C545 /* MainInterface.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
