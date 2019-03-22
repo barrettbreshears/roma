@@ -738,11 +738,26 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         }
     }
     
+    override func encodeRestorableState(with coder: NSCoder) {
+        super.encodeRestorableState(with: coder)
+    }
+    
+    override func decodeRestorableState(with coder: NSCoder) {
+        super.decodeRestorableState(with: coder)
+    }
+    
+    override func applicationFinishedRestoringState() {
+        super.applicationFinishedRestoringState()
+        print("Finished restoring state")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Colours.white
-
-
+        
+        self.restorationIdentifier = "ViewController"
+        self.restorationClass = ViewController.self
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.logged), name: NSNotification.Name(rawValue: "logged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.newInstanceLogged), name: NSNotification.Name(rawValue: "newInstancelogged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.switch11), name: NSNotification.Name(rawValue: "switch11"), object: nil)
@@ -897,6 +912,18 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             )
 
 
+            
+            if Account.isPushSet(instance: StoreStruct.shared.currentInstance.returnedText) == false {
+                let center = UNUserNotificationCenter.current()
+                center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
+                    // Enable or disable features based on authorization.
+                    DispatchQueue.main.async {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    }
+                }
+
+            }
+            
 
             if StoreStruct.statusesHome.isEmpty {
             let request = Timelines.home()
@@ -2609,14 +2636,14 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.view.addSubview(self.searcherView)
 
         //text field
-
-        searchTextField.frame = CGRect(x: 10, y: 10, width: Int(Int(wid) - 20), height: 40)
+        
+        searchTextField.frame = CGRect(x: 0, y: 10, width: Int(Int(wid) - 20), height: 40)
         searchTextField.backgroundColor = Colours.grayDark3
         searchTextField.font = UIFont.systemFont(ofSize: 16)
         searchTextField.layer.cornerRadius = 10
         searchTextField.alpha = 1
         searchTextField.attributedPlaceholder = NSAttributedString(string: "Search...".localized,
-                                                                   attributes: [NSAttributedString.Key.foregroundColor: Colours.tabUnselected])
+                                                                   attributes: [NSAttributedString.Key.foregroundColor: UIColor(red: 67/255.0, green: 67/255.0, blue: 75/255.0, alpha: 1.0)])
         searchTextField.becomeFirstResponder()
         searchTextField.returnKeyType = .search
         searchTextField.delegate = self
@@ -2628,7 +2655,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
         self.searchIcon.frame = CGRect(x: 15, y: 10, width: 20, height: 20)
         self.searchIcon.backgroundColor = UIColor.clear
-        self.searchIcon.image = UIImage(named: "search")?.maskWithColor(color: Colours.tabUnselected)
+        self.searchIcon.image = UIImage(named: "search")?.maskWithColor(color: UIColor(red: 67/255.0, green: 67/255.0, blue: 75/255.0, alpha: 1.0))
         self.searchTextField.addSubview(self.searchIcon)
 
         segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: 20, y: 60, width: Int(wid - 40), height: Int(40)))
@@ -3191,5 +3218,12 @@ extension String {
 extension Date {
     var ticks: UInt64 {
         return UInt64((self.timeIntervalSince1970 + 62_135_596_800) * 10_000_000)
+    }
+}
+
+extension ViewController: UIViewControllerRestoration {
+    static func viewController(withRestorationIdentifierPath identifierComponents: [String], coder: NSCoder) -> UIViewController? {
+        let vc = ViewController()
+        return vc
     }
 }

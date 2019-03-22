@@ -374,7 +374,7 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 var newString = string
                 for z2 in self.currentTags[indexPath.row].mentions {
                     if z2.acct.contains(string) {
-                        newString = z2.acct
+                        newString = z2.id
                     }
                 }
                 
@@ -383,17 +383,10 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 if newString == StoreStruct.currentUser.username {} else {
                     controller.fromOtherUser = true
                 }
-                let request = Accounts.search(query: newString)
-                StoreStruct.client.run(request) { (statuses) in
-                    if let stat = (statuses.value) {
-                        if stat.count > 0 {
-                            controller.userIDtoUse = stat[0].id
-                            DispatchQueue.main.async {
-                                self.navigationController?.pushViewController(controller, animated: true)
-                            }
-                        }
-                    }
-                }
+                controller.userIDtoUse = newString
+//                DispatchQueue.main.async {
+                    self.navigationController?.pushViewController(controller, animated: true)
+//                }
             }
             cell.toot.handleURLTap { (url) in
                 // safari
@@ -486,7 +479,7 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 var newString = string
                 for z2 in self.currentTags[indexPath.row].mentions {
                     if z2.acct.contains(string) {
-                        newString = z2.acct
+                        newString = z2.id
                     }
                 }
                 
@@ -495,17 +488,10 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 if newString == StoreStruct.currentUser.username {} else {
                     controller.fromOtherUser = true
                 }
-                let request = Accounts.search(query: newString)
-                StoreStruct.client.run(request) { (statuses) in
-                    if let stat = (statuses.value) {
-                        if stat.count > 0 {
-                            controller.userIDtoUse = stat[0].id
-                            DispatchQueue.main.async {
-                                self.navigationController?.pushViewController(controller, animated: true)
-                            }
-                        }
-                    }
-                }
+                controller.userIDtoUse = newString
+//                DispatchQueue.main.async {
+                    self.navigationController?.pushViewController(controller, animated: true)
+//                }
             }
             cell.toot.handleURLTap { (url) in
                 // safari

@@ -223,7 +223,7 @@ class NotificationCellImage: SwipeTableViewCell {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
 
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-105-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-54-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
     }
 
     @objc func touchMore(button: UIButton) {
@@ -242,6 +242,7 @@ class NotificationCellImage: SwipeTableViewCell {
     override func prepareForReuse() {
         self.profileImageView.imageView?.image = nil
         self.mainImageView.imageView?.image = nil
+        self.mainImageView.imageView?.image = UIImage()
         self.smallImage1.imageView?.image = nil
         self.smallImage2.imageView?.image = nil
         self.smallImage3.imageView?.image = nil

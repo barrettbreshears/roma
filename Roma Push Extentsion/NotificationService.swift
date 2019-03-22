@@ -32,7 +32,9 @@ class NotificationService: UNNotificationServiceExtension {
                 bestAttemptContent.body = content.body
                 
             }
-            contentHandler(bestAttemptContent)
+            if (bestAttemptContent.body != "🎺") {
+                contentHandler(bestAttemptContent)
+            }
         }
     }
     

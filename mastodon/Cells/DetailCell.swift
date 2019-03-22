@@ -222,7 +222,7 @@ class DetailCell: UITableViewCell {
             
         }
         
-        let z = status.application?.name ?? ""
+        let z = status.reblog?.application?.name ?? status.application?.name ?? ""
         let da = status.createdAt.toString(dateStyle: .medium, timeStyle: .medium)
         if z == "" {
             fromClient.text = da

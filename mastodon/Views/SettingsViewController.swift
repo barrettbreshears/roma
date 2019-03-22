@@ -234,6 +234,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse0993091")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse0993092")
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse0993093")
+        self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse09930936")
         self.tableView.register(AddInstanceCell.self, forCellReuseIdentifier: "addInstanceCell")
         self.tableView.alpha = 1
         self.tableView.delegate = self
@@ -350,15 +351,15 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
 
         return vw
     }
-
-    var generalArray = ["Realtime Updates", "Push Notifications", "Haptic Feedback", "Always Display Sensitive Content", "Default Post Privacy", "Default Keyboard Style", "Long-Hold Anywhere Action", "Image Upload Quality", "Post Load Position", "Default Video Container", "Long Swipe Selection", "Swipe Action Order", "Default Mentions Tab", "Activity Graph", "Activity Graph Animation", "Post Actions Placement", "Display Boosts in Profiles", "Shake Gesture", "Initial Timeline", "User Search Scope", "Keyboard Haptics", "Jump to Top With New Status", "Thumb Scroller", "Link Previews", "Load More Order", "Automatically Load Gaps", "Default Profile Secondary Button", "Recent Media Swipe Type"]
-    var generalArrayDesc = ["No need to refresh manually, you'll get the latest posts and notifications pushed to you.", "Realtime push notifications for mentions/follows/reposts/likes. Select which type of activities you'd like to receive notifications for.", "Get a responsive little vibration when tapping buttons and other on-screen elements.", "Sensitive content will always be displayed without a content warning overlay.", "Select a default privacy state for your posts, from public (everyone can see), unlisted (local timelines can see), private (followers can see), and direct (only to the mentioned user).", "Choose from a convenient social keyboard that puts the @ and # keys front and center, or the default keyboard with a return key.", "Select what happens when you long-hold anywhere in the app.", "Pick the quality of images uploaded when composing statuses. A higher quality image may take longer to upload.", "Choose whether to retain the timeline scroll position when streaming and pulling to refresh, or to scroll to the top.", "Choose whether to show videos and GIFs in a custom Picture-in-Picture container which can be swiped down to keep the view around, or in the stock media player, where swiping down dismisses the content.", "Swipe all the way left or right on a post to select the action on the edge.", "Select the order of swipe action elements.", "Switch to either show mentions or activity by default.", "Display an activity graph showing recent activity in the mentions tab.", "Animate the activity graph when showing it.", "Choose whether to display status actions on the status cell or behind a swipe. This will require restarting the app to take effect.", "Display boosted posts in the Posts & Replies section of user profiles.", "Select whether to hide sensitive content, rain confetti, or do nothing when shaking your device.", "Pick the initial timeline to be displayed, whether it's home, local, or federated.", "Pick whether searching for users is across all of Mastodon or just local.", "Set haptic feedback for key presses on the keyboard.", "Pick whether posting a new status jumps the timeline to the top.", "Display a circular thumb scroller on timelines, which allows you to rotate the scroller with your thumb to navigate through timelines without lifting a finger. This will require restarting the app to take effect.", "Choose whether to display link preview cards in status details for all links within the status.", "Select whether tapping the 'load more' button in timelines retains the current scroll position (allowing the new posts to be read downwards), or whether it shifts you to just below the newly loaded posts (allowing the new posts to be read upwards).", "Automatically fetch gaps in between timelines, removing the need to tap the 'load more' buttons.", "Select what action the secondary profile button (on the left of the profile image) should do: View liked statuses or view pinned statuses.", "Pick whether swiping enlarged recent media images scrolls through all attached media in the specified post and does nothing if there's a single image, or whether it scrolls through all recent media."]
-    var generalArrayIm = ["setreal", "notifs", "sethap", "setsensitivec", "priv", "keybse", "holdse", "comse", "posse", "setvid", "swipeact", "swipeact3", "actdef", "setgraph", "setgraph2", "like", "boost", "setshake", "segse", "searchscope", "keyhap", "jumptop", "circscroll", "linkcard", "lmore", "autol", "likepin", "comse"]
-
-    var appearanceArray = ["", "Theme", "Text Size", "Profiles Corner Radius", "Images Corner Radius", "Hide Images in Timelines", "Full Usernames", "Confetti", "Gallery Grid Size", "Time Style", "Profile Header Background", "Segments Size", "Segments Transition Style", "Subtle Activity Notifications", "Profile Display Picture Border", "Pinch Background Theme", "Media Captions", "Status Progress Indicator", "Highlight Direct Messages", "Status Bar Hue", "Activity Graph Hue", "Segments Hue", "Instances and Lists Icon", "Profile Display Picture in Post Composition", "Popup Alerts"]
-    var appearanceArrayDesc = ["", "Select from a white day theme, a dark dusk theme, an even darker night theme, or a truly black OLED-friendly theme.", "Always be able to read posts with adjustable text sizing.", "Circle or square, your choice.", "Rounded or not, your choice.", "Timelines with some plain old text, for a distraction-free browsing experience.", "Display the user's full username, with the instance, in posts.", "Add some fun to posting statuses, following users, reposting statuses, and liking statuses.", "Set the amount of columns in the status composition section's photo picker gallery.", "Pick between absolute or relative time to display in timelines.", "Change the style of the profile header background.", "Choose from larger home and notification screen segments, or tinier ones.", "Pick between a static and linear transition, or a playful liquid one.", "Dims activity notifications, while keeping mentions untouched.", "Select a size for the border around profile view display pictures.", "Select a theme for the background when pinching to post a screenshot.", "Pick whether to display the status text or the image's alt text in media captions.", "Choose whether to show the status progress indicator or not.", "Highlight direct messages in timelines with a subtle background.", "Select the hue for the keyboard bar when composing statuses.", "Select the hue for the activity graph columns.", "Select the hue for segments. This may require restarting the app to take effect.", "Select an icon to use for the top-left instances and list section icon.", "Choose whether to display the current account's display picture in the top-left when composing posts.", "Pick whether to display popup alerts for a variety of actions including posting, liking, and boosting."]
-    var appearanceArrayIm = ["", "setnight", "settext", "setpro", "setima", "setima2", "userat", "confett", "gridse", "timese", "headbgse", "segse", "segse2", "subtleno" , "bordset", "pinchset", "heavyse", "indic", "direct2", "barcol", "acthue", "seghue", "barcol10", "compav", "popupset"]
-
+    
+    var generalArray = ["Realtime Updates", "Push Notifications", "Haptic Feedback", "Always Display Sensitive Content", "Default Post Privacy", "Default Keyboard Style", "Long-Hold Anywhere Action", "Image Upload Quality", "Post Load Position", "Default Video Container", "Long Swipe Selection", "Swipe Action Order", "Default Mentions Tab", "Activity Graph", "Activity Graph Animation", "Post Actions Placement", "Display Boosts in Profiles", "Shake Gesture", "Initial Timeline", "User Search Scope", "Keyboard Haptics", "Jump to Top With New Status", "Thumb Scroller", "Link Previews", "Load More Order", "Automatically Load Gaps", "Default Profile Secondary Button", "Recent Media Swipe Type", "Display Direct Visibility Alerts"]
+    var generalArrayDesc = ["No need to refresh manually, you'll get the latest posts and notifications pushed to you.", "Realtime push notifications for mentions/follows/reposts/likes. Select which type of activities you'd like to receive notifications for.", "Get a responsive little vibration when tapping buttons and other on-screen elements.", "Sensitive content will always be displayed without a content warning overlay.", "Select a default privacy state for you toots, from public (everyone can see), unlisted (local timelines can see), private (followers can see), and direct (only to the mentioned user).", "Choose from a convenient social keyboard that puts the @ and # keys front and centre, or the default keyboard with a return key.", "Select what happens when you long-hold anywhere in the app.", "Pick the quality of images uploaded when composing statuses. A higher quality image may take longer to upload.", "Choose whether to retain the timeline scroll position when streaming and pulling to refresh, or to scroll to the top.", "Choose whether to show videos and GIFs in a custom Picture-in-Picture container which can be swiped down to keep the view around, or in the stock media player, where swiping down dismisses the content.", "Swipe all the way left or right on a post to select the action on the edge.", "Select the order of swipe action elements.", "Switch to either show mentions or activity by default.", "Display an activity graph showing recent activity in the mentions tab.", "Animate the activity graph when showing it.", "Choose whether to display status actions on the status cell or behind a swipe. This will require restarting the app to take effect.", "Display boosted posts in the Posts & Replies section of user profiles.", "Select whether to hide sensitive content, rain confetti, or do nothing when shaking your device.", "Pick the initial timeline to be displayed, whether it's home, local, or all.", "Pick whether searching for users is across all of Mastodon or just local.", "Set haptic feedback for key presses on the keyboard.", "Pick whether posting a new status jumps the timeline to the top.", "Display a circular thumb scroller on timelines, which allows you to rotate the scroller with your thumb to navigate through timelines without lifting a finger. This may require restarting the app to take effect.", "Choose whether to display link preview cards in status details for all links within the status.", "Select whether tapping the 'load more' button in timelines retains the current scroll position (allowing the new posts to be read downwards), or whether it shifts you to just below the newly loaded posts (allowing the new posts to be read upwards).", "Automatically fetch gaps in between timelines, removing the need to tap the 'load more' buttons.", "Select what action the secondary profile button (on the left of the profile image) should do: View liked statuses or view pinned statuses.", "Pick whether swiping enlarged recent media images scrolls through all attached media in the specified post and does nothing if there's a single image, or whether it scrolls through all recent media.", "Display an alert every time you switch to the direct visibility option when composing status to explain that all mentioned users will be able to see your content."]
+    var generalArrayIm = ["setreal", "notifs", "sethap", "setsensitivec", "priv", "keybse", "holdse", "comse", "posse", "setvid", "swipeact", "swipeact3", "actdef", "setgraph", "setgraph2", "like", "boost", "setshake", "segse", "searchscope", "keyhap", "jumptop", "circscroll", "linkcard", "lmore", "autol", "likepin", "comse", "direct2"]
+    
+    var appearanceArray = ["", "Theme", "Text Size", "Profiles Corner Radius", "Images Corner Radius", "Hide Images in Timelines", "Full Usernames", "Confetti", "Gallery Grid Size", "Time Style", "Profile Header Background", "Segments Size", "Segments Transition Style", "Subtle Activity Notifications", "Profile Display Picture Border", "Pinch and History View Background Theme", "Media Captions", "Toot Progress Indicator", "Highlight Direct Messages", "Toot Bar Hue", "Activity Graph Hue", "Segments Hue", "Instances and Lists Icon", "Profile Display Picture in Toot Composition", "Popup Alerts", "Full Usernames in Boosts"]
+    var appearanceArrayDesc = ["", "Select from a white day theme, a dark dusk theme, an even darker night theme, or a truly black OLED-friendly theme.", "Always be able to read posts with adjustable text sizing.", "Circle or square, your choice.", "Rounded or not, your choice.", "Timelines with some plain old text, for a distraction-free browsing experience.", "Display the user's full username, with the instance, in toots.", "Add some fun to posting toots, following users, boosting toots, and liking toots.", "Set the amount of columns in the toot composition section's photo picker gallery.", "Pick between absolute or relative time to display in timelines.", "Change the style of the profile header background.", "Choose from larger home and notification screen segments, or tinier ones.", "Pick between a static and linear transition, or a playful liquid one.", "Dims activity notifications, while keeping mentions untouched.", "Select a size for the border around profile view display pictures.", "Select a theme for the background when pinching to toot a screenshot, or when long-holding a back button to enter the history view.", "Pick whether to display the toot text or the image's alt text in media captions.", "Choose whether to show the toot progress indicator or not.", "Highlight direct messages in timelines with a subtle, distinct, or theme background.", "Select the hue for the keyboard bar when composing toots.", "Select the hue for the activity graph columns.", "Select the hue for segments. This may require restarting the app to take effect.", "Select an icon to use for the top-left instances and list section icon.", "Choose whether to display the current account's display picture in the top-left when composing toots.", "Pick whether to display popup alerts for a variety of actions including tooting, liking, and boosting.", "Display the user's full username in boosts."]
+    var appearanceArrayIm = ["", "setnight", "settext", "setpro", "setima", "setima2", "userat", "confett", "gridse", "timese", "headbgse", "segse", "segse2", "subtleno" , "bordset", "pinchset", "heavyse", "indic", "direct2", "barcol", "acthue", "seghue", "barcol10", "compav", "popupset", "userat2"]
+    
     var bioArray = ["Lock App", "Lock Notifications"]
     var bioArrayDesc = ["Add a biometric lock to the app.", "Add a biometric lock to the notifications section."]
     var bioArrayIm = ["biolock1", "biolock2"]
@@ -637,13 +638,21 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             sender.setOn(false, animated: true)
         }
     }
-    
     @objc func handleToggleBoostusern(sender: UISwitch) {
         if sender.isOn {
             UserDefaults.standard.set(1, forKey: "boostusern")
             sender.setOn(true, animated: true)
         } else {
             UserDefaults.standard.set(0, forKey: "boostusern")
+            sender.setOn(false, animated: true)
+        }
+    }
+    @objc func handleToggleDivis(sender: UISwitch) {
+        if sender.isOn {
+            UserDefaults.standard.set(0, forKey: "divisib")
+            sender.setOn(true, animated: true)
+        } else {
+            UserDefaults.standard.set(1, forKey: "divisib")
             sender.setOn(false, animated: true)
         }
     }
@@ -892,6 +901,26 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         cell.switchView.setOn(true, animated: false)
                     }
                     cell.switchView.addTarget(self, action: #selector(self.handleToggleAutol), for: .touchUpInside)
+                    return cell
+                }
+                if indexPath.row == 28 {
+                    // direct visibility alert
+                    
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellse09930936", for: indexPath) as! SettingsCellToggle
+                    cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
+                    cell.backgroundColor = Colours.white
+                    cell.userName.textColor = Colours.black
+                    cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                    cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.white
+                    cell.selectedBackgroundView = bgColorView
+                    if (UserDefaults.standard.object(forKey: "divisib") == nil) || (UserDefaults.standard.object(forKey: "divisib") as! Int == 0) {
+                        cell.switchView.setOn(true, animated: false)
+                    } else {
+                        cell.switchView.setOn(false, animated: false)
+                    }
+                    cell.switchView.addTarget(self, action: #selector(self.handleToggleDivis), for: .touchUpInside)
                     return cell
                 }
                 return cell
@@ -1958,12 +1987,19 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
 
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
+                var filledSet3 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "likepin") == nil) || (UserDefaults.standard.object(forKey: "likepin") as! Int == 0) {
                     filledSet1 = UIImage(named: "filledset")
                     filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "likepin") as! Int == 1) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "likepin") as! Int == 2) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "filledset")
                 }
 
                 Alertift.actionSheet(title: title, message: nil)
@@ -1980,6 +2016,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .action(.default("Pinned".localized), image: filledSet2) { (action, ind) in
                         print(action, ind)
                         UserDefaults.standard.set(1, forKey: "likepin")
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
+                    }
+                    .action(.default("Edit Profile".localized), image: filledSet3) { (action, ind) in
+                        print(action, ind)
+                        UserDefaults.standard.set(2, forKey: "likepin")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
                     }
                     .action(.cancel("Dismiss"))

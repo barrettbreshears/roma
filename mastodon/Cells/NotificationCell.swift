@@ -172,7 +172,7 @@ class NotificationCell: SwipeTableViewCell {
             }
 
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-105-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-54-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
     }
 
     required init?(coder aDecoder: NSCoder) {

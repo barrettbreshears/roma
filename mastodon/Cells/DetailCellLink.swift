@@ -46,21 +46,21 @@ class DetailCellLink: UITableViewCell {
         containerView.addSubview(image1)
         
         name.text = ""
-        name.frame = CGRect(x: 105, y: 5, width: UIScreen.main.bounds.width - 160, height: 25)
+        name.frame = CGRect(x: 105, y: 6, width: UIScreen.main.bounds.width - 160, height: 25)
         name.textColor = Colours.grayDark
         name.font = UIFont.boldSystemFont(ofSize: 16)
         name.isUserInteractionEnabled = false
         containerView.addSubview(name)
         
         auth.text = ""
-        auth.frame = CGRect(x: 105, y: 26, width: UIScreen.main.bounds.width - 160, height: 25)
+        auth.frame = CGRect(x: 105, y: 27, width: UIScreen.main.bounds.width - 160, height: 25)
         auth.textColor = Colours.grayDark.withAlphaComponent(0.45)
         auth.font = UIFont.boldSystemFont(ofSize: 12)
         auth.isUserInteractionEnabled = false
         containerView.addSubview(auth)
         
         name2.text = ""
-        name2.frame = CGRect(x: 105, y: 42, width: UIScreen.main.bounds.width - 160, height: 40)
+        name2.frame = CGRect(x: 105, y: 45, width: UIScreen.main.bounds.width - 160, height: 40)
         name2.textColor = Colours.grayDark.withAlphaComponent(0.9)
         name2.font = UIFont.systemFont(ofSize: 12)
         name2.isUserInteractionEnabled = false
@@ -86,21 +86,27 @@ class DetailCellLink: UITableViewCell {
         self.currentURL = card.authorUrl ?? card.providerUrl ?? ""
         self.realURL = card.url
         
-        if self.name.text == "" {
-            self.name.text = "URL"
-            self.auth.text = ""
-            self.name2.text = self.currentURL
-            self.image1.pin_setPlaceholder(with: UIImage(named: "logo"))
-            self.image1.pin_updateWithProgress = true
-        }
-        
         self.name.text = card.title
         self.auth.text = card.authorName ?? card.providerName ?? "Tap to view"
+        if card.authorName == "" {
+            self.auth.text = card.providerName ?? "Tap to view"
+            if card.providerName == "" {
+                self.auth.text = "Tap to view"
+            }
+        }
         if card.description == "" {
             self.name2.text = card.url.absoluteString
         } else {
             self.name2.text = card.description
         }
+        
+        if self.name.text == "" {
+            self.name.text = "URL"
+            self.name2.text = self.currentURL
+            self.image1.pin_setPlaceholder(with: UIImage(named: "logo"))
+            self.image1.pin_updateWithProgress = true
+        }
+        
         self.image1.pin_setImage(from: card.image ?? nil)
         self.containerView.addTarget(self, action: #selector(self.didTouchLink), for: .touchUpInside)
     }

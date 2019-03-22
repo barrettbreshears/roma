@@ -143,68 +143,21 @@ class RepliesCellImage: SwipeTableViewCell {
         toot.mentionColor = Colours.tabSelected
         toot.hashtagColor = Colours.tabSelected
         toot.URLColor = Colours.tabSelected
-
-        userName.text = status.reblog?.account.displayName ?? status.account.displayName
+        
+        userName.text = status.account.displayName
         if (UserDefaults.standard.object(forKey: "mentionToggle") == nil || UserDefaults.standard.object(forKey: "mentionToggle") as! Int == 0) {
-            userTag.text = "@\(status.reblog?.account.acct ?? status.account.acct)"
+            userTag.text = "@\(status.account.acct)"
         } else {
-            userTag.text = "@\(status.reblog?.account.username ?? status.account.username)"
+            userTag.text = "@\(status.account.username)"
         }
 
         if (UserDefaults.standard.object(forKey: "timerel") == nil) || (UserDefaults.standard.object(forKey: "timerel") as! Int == 0) {
-            date.text = status.reblog?.createdAt.toStringWithRelativeTime() ?? status.createdAt.toStringWithRelativeTime()
+            date.text = status.createdAt.toStringWithRelativeTime()
         } else {
-            date.text = status.reblog?.createdAt.toString(dateStyle: .short, timeStyle: .short) ?? status.createdAt.toString(dateStyle: .short, timeStyle: .short)
+            date.text = status.createdAt.toString(dateStyle: .short, timeStyle: .short)
         }
-
-        if status.reblog?.content.stripHTML() != nil {
+        
             
-
-
-            if status.reblog!.emojis.isEmpty {
-                toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
-            } else {
-                let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted")
-                for y in status.reblog!.emojis {
-                    let textAttachment = NSTextAttachment()
-                    textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
-                    textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.toot.font.lineHeight), height: Int(self.toot.font.lineHeight))
-                    let attrStringWithImage = NSAttributedString(attachment: textAttachment)
-                    while attributedString.mutableString.contains(":\(y.shortcode):") {
-                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
-                        attributedString.replaceCharacters(in: range, with: attrStringWithImage)
-
-                    }
-                }
-                self.toot.attributedText = attributedString
-                self.reloadInputViews()
-            }
-
-
-
-            if status.reblog?.account.emojis.isEmpty ?? true {
-                userName.text = status.reblog?.account.displayName.stripHTML()
-            } else {
-                let attributedString = NSMutableAttributedString(string: status.reblog?.account.displayName.stripHTML() ?? "")
-                for y in status.reblog?.account.emojis ?? [] {
-                    let textAttachment = NSTextAttachment()
-                    textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
-                    textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.userName.font.lineHeight), height: Int(self.userName.font.lineHeight))
-                    let attrStringWithImage = NSAttributedString(attachment: textAttachment)
-                    while attributedString.mutableString.contains(":\(y.shortcode):") {
-                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
-                        attributedString.replaceCharacters(in: range, with: attrStringWithImage)
-                    }
-                }
-                self.userName.attributedText = attributedString
-                self.reloadInputViews()
-            }
-
-
-
-
-        } else {
-
             if status.emojis.isEmpty {
                 toot.text = status.content.stripHTML()
             } else {
@@ -243,10 +196,9 @@ class RepliesCellImage: SwipeTableViewCell {
                 self.userName.attributedText = attributedString
                 self.reloadInputViews()
             }
-
-
-        }
-
+            
+            
+        
         userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
         userTag.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
@@ -255,7 +207,7 @@ class RepliesCellImage: SwipeTableViewCell {
         DispatchQueue.global(qos: .userInitiated).async {
         self.profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
         self.profileImageView.pin_updateWithProgress = true
-        self.profileImageView.pin_setImage(from: URL(string: "\(status.reblog?.account.avatar ?? status.account.avatar)"))
+        self.profileImageView.pin_setImage(from: URL(string: "\(status.account.avatar)"))
         }
         profileImageView.layer.masksToBounds = true
         profileImageView.layer.borderColor = UIColor.black.cgColor
@@ -275,7 +227,7 @@ class RepliesCellImage: SwipeTableViewCell {
 //        DispatchQueue.global(qos: .userInitiated).async {
         self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
         self.mainImageView.pin_updateWithProgress = true
-        self.mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments[0].remoteURL ?? status.mediaAttachments[0].remoteURL!)"))
+        self.mainImageView.pin_setImage(from: URL(string: "\(status.mediaAttachments[0].remoteURL!)"))
 //        }
         mainImageView.layer.masksToBounds = true
         mainImageView.layer.borderColor = UIColor.black.cgColor
@@ -286,12 +238,12 @@ class RepliesCellImage: SwipeTableViewCell {
             mainImageView.layer.cornerRadius = 0
         }
         //mainImageView.layer.borderWidth = 0.2
-
-        if (status.reblog?.favourited ?? status.favourited ?? false) && (status.reblog?.reblogged ?? status.reblogged ?? false) {
+        
+        if (status.favourited ?? false) && (status.reblogged ?? false) {
             self.moreImage.image = UIImage(named: "fifty")
-        } else if status.reblog?.reblogged ?? status.reblogged ?? false {
+        } else if status.reblogged ?? false {
             self.moreImage.image = UIImage(named: "boost")
-        } else if (status.reblog?.favourited ?? status.favourited ?? false) || StoreStruct.allLikes.contains(status.reblog?.id ?? status.id) {
+        } else if (status.favourited ?? false) || StoreStruct.allLikes.contains(status.id) {
             self.moreImage.image = UIImage(named: "like")
         } else {
             self.moreImage.image = nil
@@ -300,16 +252,16 @@ class RepliesCellImage: SwipeTableViewCell {
 
 
         imageCountTag.isUserInteractionEnabled = false
-        if status.reblog?.mediaAttachments[0].type ?? status.mediaAttachments[0].type == .video {
+        if status.mediaAttachments[0].type == .video {
             imageCountTag.setTitle("\u{25b6}", for: .normal)
             imageCountTag.backgroundColor = Colours.tabSelected
             imageCountTag.alpha = 1
-        } else if status.reblog?.mediaAttachments[0].type ?? status.mediaAttachments[0].type == .gifv {
+        } else if status.mediaAttachments[0].type == .gifv {
             imageCountTag.setTitle("GIF", for: .normal)
             imageCountTag.backgroundColor = Colours.tabSelected
             imageCountTag.alpha = 1
-        } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count > 1 {
-            imageCountTag.setTitle("\(status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count)", for: .normal)
+        } else if status.mediaAttachments.count > 1 {
+            imageCountTag.setTitle("\(status.mediaAttachments.count)", for: .normal)
             imageCountTag.backgroundColor = Colours.tabSelected
             imageCountTag.alpha = 1
         } else {

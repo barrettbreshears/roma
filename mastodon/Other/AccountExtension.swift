@@ -41,4 +41,12 @@ extension Account: Equatable {
         return lhs.username == rhs.username && lhs.id == rhs.id
     }
     
+    static func isPushSet(instance:String) -> Bool {
+        return UserDefaults.standard.bool(forKey: "\(instance)pushSet")
+    }
+    
+    static func pushSetSuccess(instance:String) {
+        UserDefaults.standard.set(true, forKey: "\(instance)pushSet")
+    }
+    
 }

@@ -28,7 +28,7 @@ class ListCell: SwipeTableViewCell {
             "name" : userName,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[name]-20-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-24-[name]-24-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-16-[name]-16-|", options: [], metrics: nil, views: viewsDict))
     }
     
@@ -67,7 +67,7 @@ class ListCell2: SwipeTableViewCell {
             "name" : userName,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[name]-20-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-24-[name]-24-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-16-[name]-16-|", options: [], metrics: nil, views: viewsDict))
     }
     

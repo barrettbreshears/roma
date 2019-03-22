@@ -37,7 +37,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             detailVC.mainStatus.append(self.allPrevious[indexPath.row])
         } else if indexPath.section == 1 {
             detailVC.mainStatus.append(self.mainStatus[0])
-        } else if indexPath.section == 4 {
+        } else if indexPath.section == 5 {
             detailVC.mainStatus.append(self.allReplies[indexPath.row])
         }
         detailVC.isPeeking = true
@@ -545,23 +545,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         if self.mainStatus.isEmpty {} else {
             
-            
-            refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
-            
             self.loadLoadLoad()
-            
-            tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
-                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                    let selection = UISelectionFeedbackGenerator()
-                    selection.selectionChanged()
-                }
-                self?.refreshCont()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                    self?.tableView.cr.endHeaderRefresh()
-                })
-            }
-            
-            
             
             let request = Statuses.context(id: self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id)
             StoreStruct.client.run(request) { (statuses) in
@@ -572,7 +556,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         self.tableView.reloadData()
                         if self.allPrevious.count == 0 {} else {
                             self.tableView.scrollToRow(at: IndexPath(row: 0, section: 1), at: .top, animated: false)
-                            self.tableView.setContentOffset(CGPoint(x: 0, y: self.tableView.contentOffset.y + 1), animated: false)
+//                            self.tableView.setContentOffset(CGPoint(x: 0, y: self.tableView.contentOffset.y + 1), animated: false)
                         }
                     }
                 }
@@ -673,7 +657,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 return 0
             } else {
                 if (UserDefaults.standard.object(forKey: "linkcards") == nil) || (UserDefaults.standard.object(forKey: "linkcards") as! Int == 0) {
-                    if self.mainStatus[0].card?.authorUrl != nil {
+                    if self.mainStatus[0].reblog?.card?.authorUrl != nil || self.mainStatus[0].card?.authorUrl != nil {
                         return 1
                     } else {
                         return 0
@@ -842,7 +826,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         var newString = string
                         for z2 in self.allPrevious[indexPath.row].mentions {
                             if z2.acct.contains(string) {
-                                newString = z2.acct
+                                newString = z2.id
                             }
                         }
 
@@ -851,12 +835,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         if newString == StoreStruct.currentUser.username {} else {
                             controller.fromOtherUser = true
                         }
-                        let request = Accounts.search(query: newString)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                if stat.count > 0 {
-                                    controller.userIDtoUse = stat[0].id
-                                    DispatchQueue.main.async {
+                        
+                                    controller.userIDtoUse = newString
+//                                    DispatchQueue.main.async {
                                         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
                                         switch (deviceIdiom) {
                                         case .phone :
@@ -876,10 +857,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                         default:
                                             print("nothing")
                                         }
-                                    }
-                                }
-                            }
-                        }
+//                                    }
                     }
                     cell.toot.handleURLTap { (url) in
                         // safari
@@ -988,7 +966,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         var newString = string
                         for z2 in self.allPrevious[indexPath.row].mentions {
                             if z2.acct.contains(string) {
-                                newString = z2.acct
+                                newString = z2.id
                             }
                         }
 
@@ -997,12 +975,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         if newString == StoreStruct.currentUser.username {} else {
                             controller.fromOtherUser = true
                         }
-                        let request = Accounts.search(query: newString)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                if stat.count > 0 {
-                                    controller.userIDtoUse = stat[0].id
-                                    DispatchQueue.main.async {
+                                    controller.userIDtoUse = newString
+//                                    DispatchQueue.main.async {
                                         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
                                         switch (deviceIdiom) {
                                         case .phone :
@@ -1022,10 +996,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                         default:
                                             print("nothing")
                                         }
-                                    }
-                                }
-                            }
-                        }
+//                                    }
                     }
                     cell.toot.handleURLTap { (url) in
                         // safari
@@ -1135,7 +1106,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     var newString = string
                     for z2 in self.mainStatus[0].mentions {
                         if z2.acct.contains(string) {
-                            newString = z2.acct
+                            newString = z2.id
                         }
                     }
 
@@ -1144,12 +1115,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     if newString == StoreStruct.currentUser.username {} else {
                         controller.fromOtherUser = true
                     }
-                    let request = Accounts.search(query: newString)
-                    StoreStruct.client.run(request) { (statuses) in
-                        if let stat = (statuses.value) {
-                            if stat.count > 0 {
-                                controller.userIDtoUse = stat[0].id
-                                DispatchQueue.main.async {
+                                controller.userIDtoUse = newString
+//                                DispatchQueue.main.async {
                                     let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
                                     switch (deviceIdiom) {
                                     case .phone :
@@ -1169,10 +1136,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     default:
                                         print("nothing")
                                     }
-                                }
-                            }
-                        }
-                    }
+//                                }
                 }
                 cell.toot.handleURLTap { (url) in
                     // safari
@@ -1278,7 +1242,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     var newString = string
                     for z2 in self.mainStatus[0].mentions {
                         if z2.acct.contains(string) {
-                            newString = z2.acct
+                            newString = z2.id
                         }
                     }
 
@@ -1287,12 +1251,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     if newString == StoreStruct.currentUser.username {} else {
                         controller.fromOtherUser = true
                     }
-                    let request = Accounts.search(query: newString)
-                    StoreStruct.client.run(request) { (statuses) in
-                        if let stat = (statuses.value) {
-                            if stat.count > 0 {
-                                controller.userIDtoUse = stat[0].id
-                                DispatchQueue.main.async {
+                                controller.userIDtoUse = newString
+//                                DispatchQueue.main.async {
                                     let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
                                     switch (deviceIdiom) {
                                     case .phone :
@@ -1312,10 +1272,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     default:
                                         print("nothing")
                                     }
-                                }
-                            }
-                        }
-                    }
+//                                }
                 }
                 cell.toot.handleURLTap { (url) in
                     // safari
@@ -1408,8 +1365,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         } else if indexPath.section == 3 {
 
             let cell = tableView.dequeueReusableCell(withIdentifier: "DetailCellLink\(indexPath.row)", for: indexPath) as! DetailCellLink
-            if self.mainStatus[0].card?.authorUrl != nil {
-                cell.configure(self.mainStatus[0].card!)
+            if self.mainStatus[0].reblog?.card?.authorUrl != nil || self.mainStatus[0].card?.authorUrl != nil {
+                cell.configure(self.mainStatus[0].reblog?.card ?? self.mainStatus[0].card!)
             }
             cell.backgroundColor = Colours.white
             let bgColorView = UIView()
@@ -1618,7 +1575,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             var newString = string
                             for z2 in self.allReplies[indexPath.row].mentions {
                                 if z2.acct.contains(string) {
-                                    newString = z2.acct
+                                    newString = z2.id
                                 }
                             }
 
@@ -1627,12 +1584,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             if newString == StoreStruct.currentUser.username {} else {
                                 controller.fromOtherUser = true
                             }
-                            let request = Accounts.search(query: newString)
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    if stat.count > 0 {
-                                        controller.userIDtoUse = stat[0].id
-                                        DispatchQueue.main.async {
+                                        controller.userIDtoUse = newString
+//                                        DispatchQueue.main.async {
                                             let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
                                             switch (deviceIdiom) {
                                             case .phone :
@@ -1652,10 +1605,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                             default:
                                                 print("nothing")
                                             }
-                                        }
-                                    }
-                                }
-                            }
+//                                        }
                         }
                         cell.toot.handleURLTap { (url) in
                             // safari
@@ -1744,7 +1694,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             var newString = string
                             for z2 in self.allReplies[indexPath.row].mentions {
                                 if z2.acct.contains(string) {
-                                    newString = z2.acct
+                                    newString = z2.id
                                 }
                             }
 
@@ -1753,12 +1703,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             if newString == StoreStruct.currentUser.username {} else {
                                 controller.fromOtherUser = true
                             }
-                            let request = Accounts.search(query: newString)
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    if stat.count > 0 {
-                                        controller.userIDtoUse = stat[0].id
-                                        DispatchQueue.main.async {
+                                        controller.userIDtoUse = newString
+//                                        DispatchQueue.main.async {
                                             let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
                                             switch (deviceIdiom) {
                                             case .phone :
@@ -1778,10 +1724,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                             default:
                                                 print("nothing")
                                             }
-                                        }
-                                    }
-                                }
-                            }
+//                                        }
                         }
                         cell.toot.handleURLTap { (url) in
                             // safari
@@ -1891,7 +1834,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             var newString = string
                             for z2 in self.allReplies[indexPath.row].mentions {
                                 if z2.acct.contains(string) {
-                                    newString = z2.acct
+                                    newString = z2.id
                                 }
                             }
 
@@ -1900,12 +1843,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             if newString == StoreStruct.currentUser.username {} else {
                                 controller.fromOtherUser = true
                             }
-                            let request = Accounts.search(query: newString)
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    if stat.count > 0 {
-                                        controller.userIDtoUse = stat[0].id
-                                        DispatchQueue.main.async {
+                                        controller.userIDtoUse = newString
+//                                        DispatchQueue.main.async {
                                             let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
                                             switch (deviceIdiom) {
                                             case .phone :
@@ -1925,10 +1864,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                             default:
                                                 print("nothing")
                                             }
-                                        }
-                                    }
-                                }
-                            }
+//                                        }
                         }
                         cell.toot.handleURLTap { (url) in
                             // safari
@@ -2028,7 +1964,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             var newString = string
                             for z2 in self.allReplies[indexPath.row].mentions {
                                 if z2.acct.contains(string) {
-                                    newString = z2.acct
+                                    newString = z2.id
                                 }
                             }
 
@@ -2037,12 +1973,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             if newString == StoreStruct.currentUser.username {} else {
                                 controller.fromOtherUser = true
                             }
-                            let request = Accounts.search(query: newString)
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    if stat.count > 0 {
-                                        controller.userIDtoUse = stat[0].id
-                                        DispatchQueue.main.async {
+                                        controller.userIDtoUse = newString
+//                                        DispatchQueue.main.async {
                                             let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
                                             switch (deviceIdiom) {
                                             case .phone :
@@ -2062,10 +1994,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                             default:
                                                 print("nothing")
                                             }
-                                        }
-                                    }
-                                }
-                            }
+//                                        }
                         }
                         cell.toot.handleURLTap { (url) in
                             // safari
@@ -2159,7 +2088,27 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         controller.prevTextReply = sto[sender.tag].reblog?.content.stripHTML() ?? sto[sender.tag].content.stripHTML()
         controller.inReplyText = sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username
         print(sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username)
-        self.present(controller, animated: true, completion: nil)
+//        self.present(controller, animated: true, completion: nil)
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone :
+            self.navigationController?.pushViewController(controller, animated: true)
+        case .pad:
+            if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                if StoreStruct.currentPage == 0 {
+                    nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                }
+                if StoreStruct.currentPage == 1 {
+                    nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                }
+                if StoreStruct.currentPage == 2 {
+                    nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        default:
+            print("nothing")
+        }
     }
 
     @objc func didTouchFuRep(sender: UIButton) {
@@ -2636,8 +2585,27 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         controller.inReplyText = self.mainStatus[sender.tag].reblog?.account.username ?? self.mainStatus[sender.tag].account.username
         print(self.mainStatus[sender.tag].reblog?.account.username ?? self.mainStatus[sender.tag].account.username)
         controller.prevTextReply = self.mainStatus[sender.tag].reblog?.content.stripHTML() ?? self.mainStatus[sender.tag].content.stripHTML()
-        self.present(controller, animated: true, completion: nil)
-
+//        self.present(controller, animated: true, completion: nil)
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone :
+            self.navigationController?.pushViewController(controller, animated: true)
+        case .pad:
+            if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+                if StoreStruct.currentPage == 0 {
+                    nav.firstView.navigationController?.pushViewController(controller, animated: true)
+                }
+                if StoreStruct.currentPage == 1 {
+                    nav.secondView.navigationController?.pushViewController(controller, animated: true)
+                }
+                if StoreStruct.currentPage == 2 {
+                    nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        default:
+            print("nothing")
+        }
     }
 
     func refDetailCount() {
@@ -2645,8 +2613,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let request = Statuses.status(id: self.mainStatus[0].id)
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
-                    self.mainStatus = [stat]
                     DispatchQueue.main.async {
+                        self.mainStatus = [stat]
                         if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? DetailCell {
                             cell.configure(stat)
                             self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
@@ -2665,8 +2633,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let request = Statuses.status(id: self.mainStatus[0].id)
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
-                    self.mainStatus = [stat]
                     DispatchQueue.main.async {
+                        self.mainStatus = [stat]
                         if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as? PollCell {
                             if let poll = stat.poll {
                                 cell.configure(thePoll: poll, theOptions: poll.options)
@@ -2687,11 +2655,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if self.mainStatus[0].reblog?.favourited ?? self.mainStatus[0].favourited ?? false || StoreStruct.allLikes.contains(self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id) {
 
             if self.mainStatus[0].visibility == .direct {
-                let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell2
-                ce.likeButton.setImage(UIImage(named: "like0"), for: .normal)
+                if let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as? ActionButtonCell2 {
+                    ce.likeButton.setImage(UIImage(named: "like0"), for: .normal)
+                }
             } else {
-                let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell
-                ce.likeButton.setImage(UIImage(named: "like0"), for: .normal)
+                if let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as? ActionButtonCell {
+                    ce.likeButton.setImage(UIImage(named: "like0"), for: .normal)
+                }
             }
 
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -2716,11 +2686,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.refDetailCount()
         } else {
             if self.mainStatus[0].visibility == .direct {
-                let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell2
+                if let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as? ActionButtonCell2 {
                 ce.likeButton.setImage(UIImage(named: "like"), for: .normal)
+                }
             } else {
-                let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell
+                if let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as? ActionButtonCell {
                 ce.likeButton.setImage(UIImage(named: "like"), for: .normal)
+                }
             }
 
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -2759,9 +2731,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             impact.impactOccurred()
         }
         if self.mainStatus[0].reblog?.reblogged ?? self.mainStatus[0].reblogged ?? false || StoreStruct.allBoosts.contains(self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id) {
-            let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell
+            if let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as? ActionButtonCell {
             ce.boostButton.setImage(UIImage(named: "boost0"), for: .normal)
-
+            }
+            
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 let notification = UINotificationFeedbackGenerator()
                 notification.notificationOccurred(.success)
@@ -2783,9 +2756,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
             self.refDetailCount()
         } else {
-            let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell
+            if let ce = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as? ActionButtonCell {
             ce.boostButton.setImage(UIImage(named: "boost"), for: .normal)
-
+            }
+            
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 let notification = UINotificationFeedbackGenerator()
                 notification.notificationOccurred(.success)
@@ -3426,6 +3400,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
 
         let controller = ThirdViewController()
+        if self.mainStatus.isEmpty {} else {
         if self.mainStatus[0].reblog?.account.username ?? self.mainStatus[0].account.username == StoreStruct.currentUser.username {} else {
             controller.fromOtherUser = true
         }
@@ -3451,7 +3426,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         default:
             print("nothing")
         }
-        
+        }
     }
 
     @objc func didTouchProfileP(sender: UIButton) {
@@ -5359,13 +5334,15 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
 
     @objc func refreshCont() {
-        let request = Statuses.context(id: self.mainStatus[0].id)
-        StoreStruct.client.run(request) { (statuses) in
-            if let stat = (statuses.value) {
-                self.allReplies = (stat.descendants)
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                    self.refreshControl.endRefreshing()
+        if self.mainStatus.isEmpty {} else {
+            let request = Statuses.context(id: self.mainStatus[0].id)
+            StoreStruct.client.run(request) { (statuses) in
+                if let stat = (statuses.value) {
+                    self.allReplies = (stat.descendants)
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                        self.refreshControl.endRefreshing()
+                    }
                 }
             }
         }

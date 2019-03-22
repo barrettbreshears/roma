@@ -37,7 +37,15 @@ public struct Accounts {
                                          note: String? = nil,
                                          avatar: MediaAttachment? = nil,
                                          header: MediaAttachment? = nil,
-                                         locked: Bool? = nil) -> Request<Account> {
+                                         locked: Bool? = nil,
+                                         fieldName1: String? = nil,
+                                         fieldValue1: String? = nil,
+                                         fieldName2: String? = nil,
+                                         fieldValue2: String? = nil,
+                                         fieldName3: String? = nil,
+                                         fieldValue3: String? = nil,
+                                         fieldName4: String? = nil,
+                                         fieldValue4: String? = nil) -> Request<Account> {
         var lockText = "false"
         if locked == true {
             lockText = "true"
@@ -45,29 +53,29 @@ public struct Accounts {
             lockText = "false"
         }
         
-        
         let parameters = [
             Parameter(name: "display_name", value: displayName),
             Parameter(name: "note", value: note),
-            Parameter(name: "avatar", value: avatar?.base64EncondedString),
-            Parameter(name: "header", value: header?.base64EncondedString),
-            Parameter(name: "locked", value: lockText)
+            Parameter(name: "locked", value: lockText),
+            Parameter(name: "fields_attributes[0][name]", value: fieldName1),
+            Parameter(name: "fields_attributes[0][value]", value: fieldValue1),
+            Parameter(name: "fields_attributes[1][name]", value: fieldName2),
+            Parameter(name: "fields_attributes[1][value]", value: fieldValue2),
+            Parameter(name: "fields_attributes[2][name]", value: fieldName3),
+            Parameter(name: "fields_attributes[2][value]", value: fieldValue3),
+            Parameter(name: "fields_attributes[3][name]", value: fieldName4),
+            Parameter(name: "fields_attributes[3][value]", value: fieldValue4)
         ]
 
-//        let method = HTTPMethod.patch(.parameters(parameters))
-//        return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
-        
-        if avatar == nil && header == nil {
-            let method = HTTPMethod.patch(.parameters(parameters))
+        if avatar != nil {
+            let method = HTTPMethod.patch(.media(avatar!))
+            return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
+        } else if header != nil {
+            let method = HTTPMethod.patch(.media(header!))
             return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
         } else {
-            if avatar == nil {
-                let method = HTTPMethod.patch(.other(parameters))
-                return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
-            } else {
-                let method = HTTPMethod.patch(.other(parameters))
-                return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
-            }
+            let method = HTTPMethod.patch(.parameters(parameters))
+            return Request<Account>(path: "/api/v1/accounts/update_credentials", method: method)
         }
     }
 
