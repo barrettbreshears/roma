@@ -3020,7 +3020,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
 
 
 
-        if indexPath.section == 4 {
+        if indexPath.section == 5 {
             if indexPath.row == 0 {
                 // about
                 Alertift.actionSheet(title: "Mast \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "")", message: "A beautiful Mastodon client\nMade with the intention to be reliant\nIt's fast, it's fluid, it's fun\nBut most of all, it's built with love for everyone\n\nDesigned and created by @JPEG@mastodon.technology".localized)
@@ -3162,7 +3162,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
         }
         
-        if indexPath.section == 5 {
+        if indexPath.section == 4 {
             let instances = InstanceData.getAllInstances()
             if indexPath.row == instances.count {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut2"), object: nil)
