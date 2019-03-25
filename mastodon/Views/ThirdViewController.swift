@@ -1213,7 +1213,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 title.text = "No Statuses"
             }
 
-            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(46), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
+            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(20), y: CGFloat(10), width: CGFloat(self.view.bounds.width - 40), height: CGFloat(40)))
             segmentedControl.dataSource = self
             segmentedControl.shapeStyle = .roundedRect
             segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
