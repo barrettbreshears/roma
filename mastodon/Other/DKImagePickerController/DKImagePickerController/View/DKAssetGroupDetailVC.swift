@@ -295,7 +295,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
             }
         }
 
-		if let index = self.imagePickerController.selectedAssets.index(of: asset) {
+		if let index = self.imagePickerController.selectedAssets.firstIndex(of: asset) {
 			cell.isSelected = true
 			cell.index = index
 			self.collectionView!.selectItem(at: indexPath, animated: false, scrollPosition: [])
@@ -399,7 +399,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
         }
         
 		if let removedAsset = (collectionView.cellForItem(at: indexPath) as? DKAssetGroupDetailBaseCell)?.asset {
-			let removedIndex = self.imagePickerController.selectedAssets.index(of: removedAsset)!
+			let removedIndex = self.imagePickerController.selectedAssets.firstIndex(of: removedAsset)!
 			
 			/// Minimize the number of times.
 			let indexPathsForSelectedItems = collectionView.indexPathsForSelectedItems!
@@ -408,7 +408,7 @@ open class DKAssetGroupDetailVC: UIViewController, UICollectionViewDelegate, UIC
 			let intersect = Set(indexPathsForVisibleItems).intersection(Set(indexPathsForSelectedItems))
 			
 			for selectedIndexPath in intersect {
-                if let selectedCell = (collectionView.cellForItem(at: selectedIndexPath) as? DKAssetGroupDetailBaseCell), let selectedCellAsset = selectedCell.asset, let selectedIndex = self.imagePickerController.selectedAssets.index(of: selectedCellAsset) {
+                if let selectedCell = (collectionView.cellForItem(at: selectedIndexPath) as? DKAssetGroupDetailBaseCell), let selectedCellAsset = selectedCell.asset, let selectedIndex = self.imagePickerController.selectedAssets.firstIndex(of: selectedCellAsset) {
 					if selectedIndex > removedIndex {
 						selectedCell.index = selectedCell.index - 1
 					}

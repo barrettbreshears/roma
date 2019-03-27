@@ -2585,27 +2585,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         controller.inReplyText = self.mainStatus[sender.tag].reblog?.account.username ?? self.mainStatus[sender.tag].account.username
         print(self.mainStatus[sender.tag].reblog?.account.username ?? self.mainStatus[sender.tag].account.username)
         controller.prevTextReply = self.mainStatus[sender.tag].reblog?.content.stripHTML() ?? self.mainStatus[sender.tag].content.stripHTML()
-//        self.present(controller, animated: true, completion: nil)
-        
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .phone :
-            self.navigationController?.pushViewController(controller, animated: true)
-        case .pad:
-            if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
-                if StoreStruct.currentPage == 0 {
-                    nav.firstView.navigationController?.pushViewController(controller, animated: true)
-                }
-                if StoreStruct.currentPage == 1 {
-                    nav.secondView.navigationController?.pushViewController(controller, animated: true)
-                }
-                if StoreStruct.currentPage == 2 {
-                    nav.thirdView.navigationController?.pushViewController(controller, animated: true)
-                }
-            }
-        default:
-            print("nothing")
-        }
+        self.present(controller, animated: true, completion: nil)
     }
 
     func refDetailCount() {

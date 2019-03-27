@@ -131,7 +131,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
         }
     }
     
-    open let captureSession = AVCaptureSession()
+    public let captureSession = AVCaptureSession()
     open var previewLayer: AVCaptureVideoPreviewLayer!
     fileprivate let sessionQueue = DispatchQueue(label: "DKCamera_CaptureSession_Queue")
     fileprivate var beginZoomScale: CGFloat = 1.0
@@ -164,7 +164,7 @@ open class DKCamera: UIViewController, AVCaptureMetadataOutputObjectsDelegate {
     
     open var originalOrientation: UIDeviceOrientation!
     open var currentOrientation: UIDeviceOrientation!
-    open let motionManager = CMMotionManager()
+    public let motionManager = CMMotionManager()
     
     open lazy var flashButton: UIButton = {
         let flashButton = UIButton()

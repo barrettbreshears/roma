@@ -1,5 +1,4 @@
 // Proper nouns
-// Seems like we can't add this since "apple" already exists?
 Apple
 Eleftheriou
 TestFlight

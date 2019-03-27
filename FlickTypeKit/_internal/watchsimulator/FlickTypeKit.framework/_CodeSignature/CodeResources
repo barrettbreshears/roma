@@ -14,7 +14,7 @@
 		</data>
 		<key>Headers/FlickTypeKit-Swift.h</key>
 		<data>
-		4bTCHxrIMqIJzxxTw+zu5TS8gG4=
+		WmgPK0iQB8cSm78hCSQ/EhPbkV8=
 		</data>
 		<key>Headers/FlickTypeKit.h</key>
 		<data>
@@ -34,7 +34,7 @@
 		</data>
 		<key>Headers/ObjcUtilities.h</key>
 		<data>
-		xEeGypk7kWRfu+8tCMRYP/zsaIY=
+		WbGLdXk4V986W9I/9PmKdb82q04=
 		</data>
 		<key>Headers/RandomNumberGeneratorObjC.h</key>
 		<data>
@@ -42,15 +42,15 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		CRJmlcz+uLU52/wSlbe62Vi5H4g=
+		viwKv1zRx8fEAivkEPln2ubb8tA=
 		</data>
 		<key>Modules/FlickTypeKit.swiftmodule/i386.swiftdoc</key>
 		<data>
-		y8roQAKZgQICY1/K0PdJcnGsh/I=
+		EZIBHzhIOpbyBmhXXVQ8p7axkd0=
 		</data>
 		<key>Modules/FlickTypeKit.swiftmodule/i386.swiftmodule</key>
 		<data>
-		9uK4+R340O3A7MfXXWK9vOcGh7s=
+		4iGU/9vqKsq2i79EvdbmCOiNBX4=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -75,7 +75,7 @@
 		</data>
 		<key>preloaded-words.txt</key>
 		<data>
-		oTe5ajxvkBBMRAWn3Nv0G7l3F38=
+		qKACEcyq92xifiyLH3GGdJfWN2o=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -106,11 +106,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			4bTCHxrIMqIJzxxTw+zu5TS8gG4=
+			WmgPK0iQB8cSm78hCSQ/EhPbkV8=
 			</data>
 			<key>hash2</key>
 			<data>
-			vWMjLMNYZC90ZeYYbpPipZ0YjcP8x8fOzJ4huV33xNI=
+			uAHbW4nB9ilA0m53Bnn56G0b5bzT90XCIN6MJvMwxx4=
 			</data>
 		</dict>
 		<key>Headers/FlickTypeKit.h</key>
@@ -161,11 +161,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			xEeGypk7kWRfu+8tCMRYP/zsaIY=
+			WbGLdXk4V986W9I/9PmKdb82q04=
 			</data>
 			<key>hash2</key>
 			<data>
-			m4TaM656ArGz39jJtyX7qk+Wqg/7S5YTLws8+o+lofg=
+			kPakwt5pGkx0RzZygqYxTfxFWfWqrpQMNM3rqLFLK4s=
 			</data>
 		</dict>
 		<key>Headers/RandomNumberGeneratorObjC.h</key>
@@ -183,22 +183,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			y8roQAKZgQICY1/K0PdJcnGsh/I=
+			EZIBHzhIOpbyBmhXXVQ8p7axkd0=
 			</data>
 			<key>hash2</key>
 			<data>
-			5VGPoVjbteXBfP9C3WlTOxLnUY6LMQmcE6IuSAB7E9M=
+			3DxwdFHCB+IU7e79ArJL2NKW0YE+VubP9eOewt1Sl90=
 			</data>
 		</dict>
 		<key>Modules/FlickTypeKit.swiftmodule/i386.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			9uK4+R340O3A7MfXXWK9vOcGh7s=
+			4iGU/9vqKsq2i79EvdbmCOiNBX4=
 			</data>
 			<key>hash2</key>
 			<data>
-			ck8ysI8kJ0DkUybO7HeVaa6vq8gRYoJ2a1K6aJl4uNk=
+			YK4iLEPtXGJQZgNenZE/rmj/N/F8xMyEQGDoKZV5zGo=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -251,11 +251,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			oTe5ajxvkBBMRAWn3Nv0G7l3F38=
+			qKACEcyq92xifiyLH3GGdJfWN2o=
 			</data>
 			<key>hash2</key>
 			<data>
-			lSjACj1IxLFq6z9yubY+6LZX96CZKp+igcg8uojbzhE=
+			hppm0i3ZoL4/L1E6YnQO0Zz20ZCojoXYNAzNDuM0fGM=
 			</data>
 		</dict>
 	</dict>

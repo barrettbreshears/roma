@@ -546,7 +546,7 @@ open class SKPhotoBrowser: UIViewController, UIScrollViewDelegate {
         if displayCustomCloseButton == true {
             let closeImage = UIImage(named: "SKPhotoBrowser.bundle/images/btn_common_close_wh", in: bundle, compatibleWith: nil) ?? UIImage()
             customCloseButton = UIButton(type: .custom)
-            customCloseButton.addTarget(self, action: "closeButtonPressed:", for: .touchUpInside)
+            customCloseButton.addTarget(self, action: #selector(SKPhotoBrowser.closeButtonPressed(_:)), for: .touchUpInside)
             customCloseButton.backgroundColor = .clear
             // If another developer has not set their values
             if customCloseButtonImage != nil {
@@ -573,7 +573,7 @@ open class SKPhotoBrowser: UIViewController, UIScrollViewDelegate {
         if displayCustomDeleteButton == true {
             customDeleteButton = UIButton(type: .custom)
             customDeleteButton.backgroundColor = .clear
-            customDeleteButton.addTarget(self, action: "deleteButtonPressed:", for: .touchUpInside)
+            customDeleteButton.addTarget(self, action: #selector(SKPhotoBrowser.deleteButtonPressed(_:)), for: .touchUpInside)
             // If another developer has not set their values
             if customDeleteButtonShowFrame == nil && customDeleteButtonHideFrame == nil {
                 customDeleteButtonShowFrame = CGRect(x: view.frame.width - 60, y: buttonTopOffset, width: 44, height: 44)

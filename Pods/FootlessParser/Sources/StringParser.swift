@@ -70,7 +70,7 @@ public func string (_ s: String) -> Parser<Character, String> {
         guard input.startIndex < input.endIndex else {
             throw ParseError.Mismatch(input, s, "EOF")
         }
-        guard let endIndex = input.index(input.startIndex, offsetBy:Int64(count), limitedBy: input.endIndex) else {
+        guard let endIndex = input.index(input.startIndex, offsetBy:(count), limitedBy: input.endIndex) else {
             throw ParseError.Mismatch(input, s, String(input))
         }
         let next = input[input.startIndex..<endIndex]
@@ -105,7 +105,7 @@ public func noneOf(_ strings: [String]) -> Parser<Character, Character> {
         }
         for string in strings {
             guard string.first == next else { continue }
-            let offset = Int64(string.count)
+            let offset = (string.count)
             guard Int64(input.count) >= offset else { continue }
             let endIndex = input.index(input.startIndex, offsetBy: offset)
             guard endIndex <= input.endIndex else { continue }

@@ -634,7 +634,7 @@ extension NextLevelSession {
     /// - Parameter clip: Clip to be removed
     public func remove(clip: NextLevelClip) {
         self.executeClosureSyncOnSessionQueueIfNecessary {
-            if let idx = self._clips.index(of: clip) {
+            if let idx = self._clips.firstIndex(of: clip) {
                 self._clips.remove(at: idx)
                 self._duration = self._duration - clip.duration
             }

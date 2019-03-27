@@ -676,8 +676,6 @@
 		53865FCB216CE5540041E686 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53865FCA216CE5540041E686 /* Date.swift */; };
 		53865FCD216CF3540041E686 /* TootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53865FCC216CF3540041E686 /* TootController.swift */; };
 		53865FCF216CFFA40041E686 /* LocalTimelineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53865FCE216CFFA40041E686 /* LocalTimelineController.swift */; };
-		538B214B222BDF9C0034977E /* FlickTypeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 538B214A222BDF9B0034977E /* FlickTypeKit.framework */; };
-		538B214C222BDF9C0034977E /* FlickTypeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 538B214A222BDF9B0034977E /* FlickTypeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		538B2150222BE00A0034977E /* FlickType.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 538B214F222BE0090034977E /* FlickType.storyboard */; };
 		538B2152222BE01A0034977E /* keyboard.png in Resources */ = {isa = PBXBuildFile; fileRef = 538B2151222BE0190034977E /* keyboard.png */; };
 		539385862172A782002444FC /* NewProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 539385852172A782002444FC /* NewProfileViewController.swift */; };
@@ -700,6 +698,8 @@
 		53E1AE25221ADFEA00A6E1E6 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E1AE1D221ADFE900A6E1E6 /* Cache.swift */; };
 		53E1AE26221ADFEA00A6E1E6 /* StringExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E1AE1E221ADFE900A6E1E6 /* StringExtension.swift */; };
 		53E1AE27221ADFEA00A6E1E6 /* PreviewError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E1AE1F221ADFE900A6E1E6 /* PreviewError.swift */; };
+		53E3CE2F224A52B7000324D9 /* FlickTypeKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E3CE2E224A52B6000324D9 /* FlickTypeKit.framework */; };
+		53E3CE30224A52B7000324D9 /* FlickTypeKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 53E3CE2E224A52B6000324D9 /* FlickTypeKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		53E5039B2207153100FD5CF2 /* NewHexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E5039A2207153100FD5CF2 /* NewHexViewController.swift */; };
 		53E6F2B1216CCA9400912B83 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E6F2B0216CCA9400912B83 /* WatchSessionManager.swift */; };
 		53E6F2B2216CCA9400912B83 /* WatchSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E6F2B0216CCA9400912B83 /* WatchSessionManager.swift */; };
@@ -880,7 +880,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				538B214C222BDF9C0034977E /* FlickTypeKit.framework in Embed Frameworks */,
+				53E3CE30224A52B7000324D9 /* FlickTypeKit.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1603,7 +1603,6 @@
 		53865FCA216CE5540041E686 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		53865FCC216CF3540041E686 /* TootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TootController.swift; sourceTree = "<group>"; };
 		53865FCE216CFFA40041E686 /* LocalTimelineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalTimelineController.swift; sourceTree = "<group>"; };
-		538B214A222BDF9B0034977E /* FlickTypeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FlickTypeKit.framework; path = FlickTypeKit/FlickTypeKit.framework; sourceTree = "<group>"; };
 		538B214F222BE0090034977E /* FlickType.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = FlickType.storyboard; path = "FlickTypeKit/App Resources/FlickType.storyboard"; sourceTree = "<group>"; };
 		538B2151222BE0190034977E /* keyboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = keyboard.png; path = "FlickTypeKit/App Resources/keyboard.png"; sourceTree = "<group>"; };
 		539385852172A782002444FC /* NewProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProfileViewController.swift; sourceTree = "<group>"; };
@@ -1627,6 +1626,7 @@
 		53E1AE1D221ADFE900A6E1E6 /* Cache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		53E1AE1E221ADFE900A6E1E6 /* StringExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringExtension.swift; sourceTree = "<group>"; };
 		53E1AE1F221ADFE900A6E1E6 /* PreviewError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewError.swift; sourceTree = "<group>"; };
+		53E3CE2E224A52B6000324D9 /* FlickTypeKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FlickTypeKit.framework; path = FlickTypeKit/FlickTypeKit.framework; sourceTree = "<group>"; };
 		53E5039A2207153100FD5CF2 /* NewHexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHexViewController.swift; sourceTree = "<group>"; };
 		53E6F2B0216CCA9400912B83 /* WatchSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSessionManager.swift; sourceTree = "<group>"; };
 		53E6F2B3216CDDF800912B83 /* StoreStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreStruct.swift; sourceTree = "<group>"; };
@@ -1758,7 +1758,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				538B214B222BDF9C0034977E /* FlickTypeKit.framework in Frameworks */,
+				53E3CE2F224A52B7000324D9 /* FlickTypeKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2725,9 +2725,9 @@
 		5373C9CB215173EE00676F3D = {
 			isa = PBXGroup;
 			children = (
+				53E3CE2E224A52B6000324D9 /* FlickTypeKit.framework */,
 				538B2151222BE0190034977E /* keyboard.png */,
 				538B214F222BE0090034977E /* FlickType.storyboard */,
-				538B214A222BDF9B0034977E /* FlickTypeKit.framework */,
 				5373CA112151AC8D00676F3D /* Localizable.strings */,
 				5373C9D6215173EE00676F3D /* mastodon */,
 				5354BA1A2163F89E0094C545 /* MastShare */,
@@ -3568,8 +3568,13 @@
 					531B04B52171119D00D31715 = {
 						CreatedOnToolsVersion = 10.0;
 					};
+					531B61D0221960EC00DD3845 = {
+						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1020;
+					};
 					5354BA182163F89E0094C545 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -3578,6 +3583,7 @@
 					};
 					5354BAF021668D5A0094C545 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -3594,6 +3600,7 @@
 					};
 					536A4FCC216B843A00A3D483 = {
 						CreatedOnToolsVersion = 10.0;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -3602,7 +3609,7 @@
 					};
 					5373C9D3215173EE00676F3D = {
 						CreatedOnToolsVersion = 10.0;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
@@ -4824,7 +4831,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vm.roma.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_OBJC_BRIDGING_HEADER = "Mast Push/Mast Push-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -4845,7 +4853,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vm.roma.OneSignalNotificationServiceExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_OBJC_BRIDGING_HEADER = "Mast Push/Mast Push-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -4866,7 +4875,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vm.roma.RomaShare;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -4887,7 +4896,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vm.roma.RomaShare;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -4908,7 +4917,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vm.roma.RomaExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -4929,7 +4938,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.vm.roma.RomaExtension;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -4995,7 +5004,7 @@
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
@@ -5022,7 +5031,7 @@
 				PRODUCT_NAME = "${TARGET_NAME}";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
 				WATCHOS_DEPLOYMENT_TARGET = 4.0;
 			};
@@ -5167,8 +5176,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "mastodon/mastodon-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -5194,7 +5202,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "mastodon/mastodon-Bridging-Header.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

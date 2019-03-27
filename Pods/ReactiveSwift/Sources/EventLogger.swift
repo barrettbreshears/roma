@@ -60,22 +60,22 @@ extension Signal {
 	///   - logger: Logger that logs the events.
 	///
 	/// - returns: Signal that, when observed, logs the fired events.
-	public func logEvents(identifier: String = "", events: Set<LoggingEvent.Signal> = LoggingEvent.Signal.allEvents, fileName: String = #file, functionName: String = #function, lineNumber: Int = #line, logger: @escaping EventLogger = defaultEventLog) -> Signal<Value, Error> {
-		func log<T>(_ event: LoggingEvent.Signal) -> ((T) -> Void)? {
-			return event.logIfNeeded(events: events) { event in
-				logger(identifier, event, fileName, functionName, lineNumber)
-			}
-		}
-
-		return self.on(
-			failed: log(.failed),
-			completed: log(.completed) as ((()) -> Void)?,
-			interrupted: log(.interrupted) as ((()) -> Void)?,
-			terminated: log(.terminated) as ((()) -> Void)?,
-			disposed: log(.disposed) as ((()) -> Void)?,
-			value: log(.value)
-		)
-	}
+//    public func logEvents(identifier: String = "", events: Set<LoggingEvent.Signal> = LoggingEvent.Signal.allEvents, fileName: String = #file, functionName: String = #function, lineNumber: Int = #line, logger: @escaping EventLogger = defaultEventLog) -> Signal<Value, Error> {
+//        func log<T>(_ event: LoggingEvent.Signal) -> ((T) -> Void)? {
+//            return event.logIfNeeded(events: events) { event in
+//                logger(identifier, event, fileName, functionName, lineNumber)
+//            }
+//        }
+//
+//        return self.on(
+//            failed: log(.failed),
+//            completed: log(.completed) as ((()) -> Void)?,
+//            interrupted: log(.interrupted) as ((()) -> Void)?,
+//            terminated: log(.terminated) as ((()) -> Void)?,
+//            disposed: log(.disposed) as ((()) -> Void)?,
+//            value: log(.value)
+//        )
+//    }
 }
 
 extension SignalProducer {
@@ -92,30 +92,30 @@ extension SignalProducer {
 	///   - logger: Logger that logs the events.
 	///
 	/// - returns: Signal producer that, when started, logs the fired events.
-	public func logEvents(identifier: String = "",
-	                      events: Set<LoggingEvent.SignalProducer> = LoggingEvent.SignalProducer.allEvents,
-	                      fileName: String = #file,
-	                      functionName: String = #function,
-	                      lineNumber: Int = #line,
-	                      logger: @escaping EventLogger = defaultEventLog
-	) -> SignalProducer<Value, Error> {
-		func log<T>(_ event: LoggingEvent.SignalProducer) -> ((T) -> Void)? {
-			return event.logIfNeeded(events: events) { event in
-				logger(identifier, event, fileName, functionName, lineNumber)
-			}
-		}
-
-		return self.on(
-			starting: log(.starting) as ((()) -> Void)?,
-			started: log(.started) as ((()) -> Void)?,
-			failed: log(.failed),
-			completed: log(.completed) as ((()) -> Void)?,
-			interrupted: log(.interrupted) as ((()) -> Void)?,
-			terminated: log(.terminated) as ((()) -> Void)?,
-			disposed: log(.disposed) as ((()) -> Void)?,
-			value: log(.value)
-		)
-	}
+//    public func logEvents(identifier: String = "",
+//                          events: Set<LoggingEvent.SignalProducer> = LoggingEvent.SignalProducer.allEvents,
+//                          fileName: String = #file,
+//                          functionName: String = #function,
+//                          lineNumber: Int = #line,
+//                          logger: @escaping EventLogger = defaultEventLog
+//    ) -> SignalProducer<Value, Error> {
+//        func log<T>(_ event: LoggingEvent.SignalProducer) -> ((T) -> Void)? {
+//            return event.logIfNeeded(events: events) { event in
+//                logger(identifier, event, fileName, functionName, lineNumber)
+//            }
+//        }
+//
+//        return self.on(
+//            starting: log(.starting) as ((()) -> Void)?,
+//            started: log(.started) as ((()) -> Void)?,
+//            failed: log(.failed),
+//            completed: log(.completed) as ((()) -> Void)?,
+//            interrupted: log(.interrupted) as ((()) -> Void)?,
+//            terminated: log(.terminated) as ((()) -> Void)?,
+//            disposed: log(.disposed) as ((()) -> Void)?,
+//            value: log(.value)
+//        )
+//    }
 }
 
 private protocol LoggingEventProtocol: Hashable, RawRepresentable {}

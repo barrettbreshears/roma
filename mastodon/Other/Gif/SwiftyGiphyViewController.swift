@@ -267,7 +267,7 @@ public class SwiftyGiphyViewController: UIViewController {
             return
         }
 
-        guard let searchText = searchController.searchBar.text, searchText.characters.count > 0 else {
+        guard let searchText = searchController.searchBar.text, searchText.count > 0 else {
 
             self.searchCounter += 1
             self.currentGifs = combinedTrendingGifs

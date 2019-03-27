@@ -170,7 +170,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
             strongSelf.groups = groups
             strongSelf.selectedGroup = strongSelf.defaultAssetGroupOfAppropriate()
             if let selectedGroup = strongSelf.selectedGroup,
-                let row =  groups.index(of: selectedGroup)
+                let row =  groups.firstIndex(of: selectedGroup)
             {
                 strongSelf.tableView.selectRow(
                     at: IndexPath(row: row, section: 0),
@@ -266,7 +266,7 @@ class DKAssetGroupListVC: UITableViewController, DKGroupDataManagerObserver {
     }
     
     func groupDidRemove(_ groupId: String) {
-        guard let row = self.groups?.index(of: groupId) else { return }
+        guard let row = self.groups?.firstIndex(of: groupId) else { return }
         
         self.willChangeValue(forKey: "preferredContentSize")
         

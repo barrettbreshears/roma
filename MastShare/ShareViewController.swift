@@ -260,8 +260,8 @@ class ShareViewController: UIViewController, UITextViewDelegate {
         for y in extensionContext!.inputItems {
             if let inputItem = y as? NSExtensionItem {
                 for x in inputItem.attachments! {
-                    if x.hasItemConformingToTypeIdentifier(kUTTypeImage as! String) {
-                        x.loadItem(forTypeIdentifier: kUTTypeImage as! String) { [unowned self] (imageData, error) in
+                    if x.hasItemConformingToTypeIdentifier(kUTTypeImage as String) {
+                        x.loadItem(forTypeIdentifier: kUTTypeImage as String) { [unowned self] (imageData, error) in
                             DispatchQueue.main.async {
                                 if let item = imageData as? Data {
                                     self.selectedImage1.image = UIImage(data: item)
@@ -280,8 +280,8 @@ class ShareViewController: UIViewController, UITextViewDelegate {
                                 }
                             }
                         }
-                    } else if x.hasItemConformingToTypeIdentifier(kUTTypeURL as! String) {
-                        x.loadItem(forTypeIdentifier: kUTTypeURL as! String) { [unowned self] (url, error) in
+                    } else if x.hasItemConformingToTypeIdentifier(kUTTypeURL as String) {
+                        x.loadItem(forTypeIdentifier: kUTTypeURL as String) { [unowned self] (url, error) in
                             DispatchQueue.main.async {
                                 if let shareURL = url as? NSURL {
                                     self.textView.text = "\(theText)\n\n\(shareURL)"

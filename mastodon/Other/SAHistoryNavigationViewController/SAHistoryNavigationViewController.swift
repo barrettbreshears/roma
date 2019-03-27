@@ -93,7 +93,7 @@ open class SAHistoryNavigationViewController: UINavigationController {
     
     open override func popToViewController(_ viewController: UIViewController, animated: Bool) -> [UIViewController]? {
         let vcs = super.popToViewController(viewController, animated: animated)
-        if let index = viewControllers.index(of: viewController) {
+        if let index = viewControllers.firstIndex(of: viewController) {
             screenshots.removeSubrange(index..<screenshots.count)
         }
         return vcs
