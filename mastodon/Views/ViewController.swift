@@ -83,6 +83,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     var tableViewLists = UITableView()
     let volumeBar = VolumeBar.shared
     let reachability = Reachability()!
+    var keyHeight = 0
+    var tagListView = DLTagView()
     
     func siriLight() {
         UIApplication.shared.statusBarStyle = .default
@@ -751,6 +753,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         print("Finished restoring state")
     }
     
+    @objc func tappedOnTag() {
+        self.textField.text = StoreStruct.tappedTag
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Colours.white
@@ -758,6 +764,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.restorationIdentifier = "ViewController"
         self.restorationClass = ViewController.self
         
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.tappedOnTag), name: NSNotification.Name(rawValue: "tappedOnTag"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.logged), name: NSNotification.Name(rawValue: "logged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.newInstanceLogged), name: NSNotification.Name(rawValue: "newInstancelogged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.switch11), name: NSNotification.Name(rawValue: "switch11"), object: nil)
@@ -2198,18 +2207,44 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.textField.attributedPlaceholder = NSAttributedString(string: "mastodon.technology",
                                                                   attributes: [NSAttributedString.Key.foregroundColor: Colours.tabSelected])
         self.view.addSubview(self.textField)
-
-        self.termsButton.frame = CGRect(x: 40, y: textField.frame.origin.y + 200, width: self.view.bounds.width - 80, height: 50)
-        self.termsButton.backgroundColor = UIColor.black.withAlphaComponent(0.08)
-        self.termsButton.layer.cornerRadius = 10
-        self.termsButton.tintColor = UIColor.white.withAlphaComponent(0.6)
-        self.termsButton.titleLabel?.numberOfLines = 0
-        self.termsButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
-        self.termsButton.titleLabel?.lineBreakMode = .byWordWrapping
-        self.termsButton.setTitle("By using Roma you agree to our Terms of Service. Tap to review them.", for: .normal)
-        self.termsButton.addTarget(self, action: #selector(self.showTerms), for: .touchUpInside)
-        self.view.addSubview(self.termsButton)
-
+        
+        
+        tagListView.alpha = 1
+        tagListView.frame = CGRect(x: 0, y: Int(self.view.bounds.height) - self.keyHeight - 70, width: Int(self.view.bounds.width), height: 60)
+        self.view.addSubview(tagListView)
+        
+        let urlStr = "https://instances.social/api/1.0/instances/list?count=\(100)&include_closed=\(false)&include_down=\(false)"
+        let url: URL = URL(string: urlStr)!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("Bearer 8gVQzoU62VFjvlrdnBUyAW8slAekA5uyuwdMi0CBzwfWwyStkqQo80jTZemuSGO8QomSycdD1JYgdRUnJH0OVT3uYYUilPMenrRZupuMQLl9hVt6xnhV6bwdXVSAT1wR", forHTTPHeaderField: "Authorization")
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        let task = session.dataTask(with: request) { (data, response, err) in
+            do {
+                let json = try JSONDecoder().decode(tagInstances.self, from: data ?? Data())
+                for x in json.instances {
+                    DispatchQueue.main.async {
+                        var tag = DLTag(text: "\(x.name)")
+                        tag.fontSize = 15
+                        tag.backgroundColor = Colours.grayLight2.withAlphaComponent(0.3)
+                        tag.borderWidth = 0
+                        tag.textColor = UIColor.white
+                        tag.cornerRadius = 12
+                        tag.enabled = true
+                        tag.altText = "\(x.name)"
+                        tag.padding = UIEdgeInsets(top: 10, left: 14, bottom: 10, right: 14)
+                        self.tagListView.addTag(tag: tag)
+                        self.tagListView.singleLine = true
+                    }
+                }
+            } catch {
+                print("err")
+            }
+        }
+        task.resume()
     }
 
     @objc func showTerms(){
@@ -2306,12 +2341,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             DispatchQueue.main.async {
                 self.textField.resignFirstResponder()
-            }
-
-
+            
+            
             // Send off returnedText to client
-            if newInstance {
-
+            if self.newInstance {
+                
                 StoreStruct.shared.newInstance = InstanceData()
                 StoreStruct.shared.newClient = Client(baseURL: "https://\(returnedText)")
                 let request = Clients.register(
@@ -2321,13 +2355,15 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     website: "https://pleroma.com"
                 )
                 StoreStruct.shared.newClient.run(request) { (application) in
-
+                    
+                    DispatchQueue.main.async {
+                    
                     if application.value == nil {
 
                         DispatchQueue.main.async {
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
-                            statusAlert.title = "Not a valid Instance".localized
+                            statusAlert.title = "Not a valid Instance (may be closed or dead)".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Please enter an Instance name like mastodon.technology"
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
@@ -2336,6 +2372,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         }
 
                     } else {
+                        
+                        
+                        
                         let application = application.value!
 
                         StoreStruct.shared.newInstance?.clientID = application.clientID
@@ -2354,6 +2393,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                             }
                         }
                     }
+                    }
                 }
             } else {
                 StoreStruct.client = Client(baseURL: "https://\(returnedText)")
@@ -2364,13 +2404,14 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     website: "https://pleroma.com"
                 )
                 StoreStruct.client.run(request) { (application) in
-
+                    
+                    DispatchQueue.main.async {
                     if application.value == nil {
 
                         DispatchQueue.main.async {
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
-                            statusAlert.title = "Not a valid Instance".localized
+                            statusAlert.title = "Not a valid Instance (may be closed or dead)".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Please enter an Instance name like mastodon.technology"
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
@@ -2386,7 +2427,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         StoreStruct.shared.currentInstance.returnedText = returnedText
 
                         DispatchQueue.main.async {
-                            StoreStruct.shared.currentInstance.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                            
+                            self.tagListView.alpha = 0
+                            
+                            StoreStruct.shared.currentInstance.redirect = "com.shi.mastodon://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                             let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
                             UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
@@ -2396,6 +2440,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                             }
                         }
                     }
+                    }
+                }
                 }
             }
 
@@ -2414,14 +2460,27 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     func runNewCleint(){
 
     }
-
+    
+    @objc func keyboardWillShow(notification: Notification) {
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
+            self.keyHeight = Int(keyboardHeight)
+            self.tagListView.frame = CGRect(x: 0, y: Int(self.view.bounds.height) - self.keyHeight - 70, width: Int(self.view.bounds.width), height: 60)
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: Notification) {
+        self.keyHeight = Int(0)
+        self.tagListView.frame = CGRect(x: 0, y: Int(self.view.bounds.height) - self.keyHeight - 70, width: Int(self.view.bounds.width), height: 60)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
 
         super.viewDidAppear(true)
-        checkAccounts()
-
-        let request = Lists.all()
-        StoreStruct.client.run(request) { (statuses) in
+        
+        let request0 = Lists.all()
+        StoreStruct.client.run(request0) { (statuses) in
             if let stat = (statuses.value) {
                 StoreStruct.allLists = stat
                 DispatchQueue.main.async {

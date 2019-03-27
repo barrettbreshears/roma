@@ -41,3 +41,11 @@ public class Stats: Codable {
         case domainCount = "domain_count"
     }
 }
+
+public class tagInstances: Codable {
+    public let instances: [tagInstancesName]
+}
+
+public class tagInstancesName: Codable {
+    public let name: String
+}

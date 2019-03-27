@@ -20,7 +20,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
     var titleV = UILabel()
     var editListName = ""
     var listID = ""
-    
+    var tagListView = DLTagView()
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -30,6 +30,8 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         self.view.backgroundColor = Colours.white
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.tappedOnTag), name: NSNotification.Name(rawValue: "tappedOnTag"), object: nil)
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -73,7 +75,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
             tootLabel.setTitle("Go", for: .normal)
         }
         tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
+        tootLabel.setTitleColor(Colours.grayLight2, for: .normal)
         tootLabel.contentHorizontalAlignment = .right
         tootLabel.addTarget(self, action: #selector(didTouchUpInsideTootButton), for: .touchUpInside)
         self.view.addSubview(tootLabel)
@@ -110,8 +112,128 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
         swipeDown.direction = .down
         textView.addGestureRecognizer(swipeDown)
+        
+        self.tagListView.alpha = 0
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        tagListView.frame = CGRect(x: 0, y: Int(self.view.bounds.height) - self.keyHeight - 70, width: Int(self.view.bounds.width), height: 60)
+        self.view.addSubview(tagListView)
+        
+        let urlStr = "https://instances.social/api/1.0/instances/list?count=\(100)&include_closed=\(false)&include_down=\(false)"
+        let url: URL = URL(string: urlStr)!
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        request.setValue("Bearer 8gVQzoU62VFjvlrdnBUyAW8slAekA5uyuwdMi0CBzwfWwyStkqQo80jTZemuSGO8QomSycdD1JYgdRUnJH0OVT3uYYUilPMenrRZupuMQLl9hVt6xnhV6bwdXVSAT1wR", forHTTPHeaderField: "Authorization")
+        let sessionConfig = URLSessionConfiguration.default
+        let session = URLSession(configuration: sessionConfig)
+        let task = session.dataTask(with: request) { (data, response, err) in
+            do {
+                let json = try JSONDecoder().decode(tagInstances.self, from: data ?? Data())
+                for x in json.instances {
+                    DispatchQueue.main.async {
+                        var tag = DLTag(text: "\(x.name)")
+                        tag.fontSize = 15
+                        tag.backgroundColor = Colours.grayLight2
+                        tag.borderWidth = 0
+                        tag.textColor = UIColor.white
+                        tag.cornerRadius = 12
+                        tag.enabled = true
+                        tag.altText = "\(x.name)"
+                        tag.padding = UIEdgeInsets(top: 10, left: 14, bottom: 10, right: 14)
+                        self.tagListView.addTag(tag: tag)
+                        self.tagListView.singleLine = true
+                        springWithDelay(duration: 0.5, delay: 0, animations: {
+                            self.tagListView.alpha = 1
+                        })
+                    }
+                }
+            } catch {
+                print("err")
+            }
+        }
+        task.resume()
+    }
+    
+    @objc func tappedOnTag() {
+        
+        self.textView.text = StoreStruct.tappedTag
+        tootLabel.setTitleColor(Colours.tabSelected, for: .normal)
+        
+//        print(StoreStruct.tappedTag)
+//        StoreStruct.client = Client(baseURL: "http://\(StoreStruct.tappedTag)")
+//        let request = Clients.register(
+//            clientName: "Mast",
+//            redirectURI: "com.shi.mastodon://success",
+//            scopes: [.read, .write, .follow, .push],
+//            website: "https://twitter.com/jpeguin"
+//        )
+//        StoreStruct.client.run(request) { (application) in
+//
+//            print("the application: \(application)")
+//
+//            if application.value == nil {
+//
+//
+//                var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
+//                var offset = 88
+//                var newoff = 45
+//                if UIDevice().userInterfaceIdiom == .phone {
+//                    switch UIScreen.main.nativeBounds.height {
+//                    case 2688:
+//                        offset = 88
+//                        newoff = 45
+//                    case 2436, 1792:
+//                        offset = 88
+//                        newoff = 45
+//                    default:
+//                        offset = 64
+//                        newoff = 24
+//                        tabHeight = Int(UITabBarController().tabBar.frame.size.height)
+//                    }
+//                }
+//
+//
+//                DispatchQueue.main.async {
+//                    let statusAlert = StatusAlert()
+//                    statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
+//                    statusAlert.title = "Not a valid Instance".localized
+//                    statusAlert.contentColor = Colours.grayDark
+//                    statusAlert.message = "Please enter an Instance name like mastodon.technology"
+//                    statusAlert.show(in: self.view, withVerticalPosition: .top(offset: CGFloat(offset + 10)))
+//                }
+//
+//            } else {
+//
+//
+//                DispatchQueue.main.async {
+//                    // go to next view
+//                    StoreStruct.shared.currentInstance.instanceText = self.textView.text ?? ""
+//
+//                    if StoreStruct.instanceLocalToAdd.contains(StoreStruct.shared.currentInstance.instanceText.lowercased()) {} else {
+//                        StoreStruct.instanceLocalToAdd.append(StoreStruct.shared.currentInstance.instanceText.lowercased())
+//                        UserDefaults.standard.set(StoreStruct.instanceLocalToAdd, forKey: "instancesLocal")
+//                    }
+//                    self.textView.resignFirstResponder()
+//                    self.dismiss(animated: true, completion: nil)
+//
+//                    NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadLists"), object: nil)
+//                    if StoreStruct.currentPage == 0 {
+//                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance"), object: self)
+//                    } else if StoreStruct.currentPage == 1 {
+//                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance2"), object: self)
+//                    } else {
+//                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance3"), object: self)
+//                    }
+//                }
+//
+//            }
+//        }
+    }
     
     @objc func keyboardWillShow(notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
@@ -180,7 +302,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
         if (textView.text?.count)! > 0 {
             tootLabel.setTitleColor(Colours.tabSelected, for: .normal)
         } else {
-            tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
+            tootLabel.setTitleColor(Colours.grayLight2, for: .normal)
         }
     }
     
@@ -189,6 +311,10 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
         
         if self.textView.text == "" { return }
         
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
         
         
         StoreStruct.client = Client(baseURL: "https://\(self.textView.text!)")
@@ -199,6 +325,9 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
             website: "https://twitter.com/jpeguin"
         )
         StoreStruct.client.run(request) { (application) in
+            
+            
+            DispatchQueue.main.async {
             
             if application.value == nil {
                 
@@ -225,7 +354,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
                 DispatchQueue.main.async {
                     let statusAlert = StatusAlert()
                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
-                    statusAlert.title = "Not a valid Instance".localized
+                    statusAlert.title = "Not a valid Instance (may be closed or dead)".localized
                     statusAlert.contentColor = Colours.grayDark
                     statusAlert.message = "Please enter an Instance name like mastodon.technology"
                     statusAlert.show(in: self.view, withVerticalPosition: .top(offset: CGFloat(offset + 10)))
@@ -246,15 +375,17 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
                 self.dismiss(animated: true, completion: nil)
                 
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadLists"), object: nil)
-                if StoreStruct.currentPage == 0 {
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance"), object: self)
-                } else if StoreStruct.currentPage == 1 {
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance2"), object: self)
-                } else {
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance3"), object: self)
-                }
+                
+                    if StoreStruct.currentPage == 0 {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance"), object: self)
+                    } else if StoreStruct.currentPage == 1 {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance2"), object: self)
+                    } else {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance3"), object: self)
+                    }
                 }
                 
+            }
             }
         }
         

@@ -74,7 +74,7 @@ class NewCaptionViewController: UIViewController, UITextViewDelegate {
             tootLabel.setTitle("Add", for: .normal)
         }
         tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
+        tootLabel.setTitleColor(Colours.grayLight2, for: .normal)
         tootLabel.contentHorizontalAlignment = .right
         tootLabel.addTarget(self, action: #selector(didTouchUpInsideTootButton), for: .touchUpInside)
         self.view.addSubview(tootLabel)
@@ -185,13 +185,18 @@ class NewCaptionViewController: UIViewController, UITextViewDelegate {
         if (textView.text?.count)! > 0 {
             tootLabel.setTitleColor(Colours.tabSelected, for: .normal)
         } else {
-            tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
+            tootLabel.setTitleColor(Colours.grayLight2, for: .normal)
         }
     }
     
     
     @objc func didTouchUpInsideTootButton(_ sender: AnyObject) {
         if self.textView.text == "" { return }
+        
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
         
         if self.fromWhich == 0 {
             StoreStruct.caption1 = self.textView.text ?? ""

@@ -21,7 +21,6 @@ class NewListViewController: UIViewController, UITextFieldDelegate {
     var editListName = ""
     var listID = ""
     
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -73,7 +72,7 @@ class NewListViewController: UIViewController, UITextFieldDelegate {
             tootLabel.setTitle("Update", for: .normal)
         }
         tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
+        tootLabel.setTitleColor(Colours.grayLight2, for: .normal)
         tootLabel.contentHorizontalAlignment = .right
         tootLabel.addTarget(self, action: #selector(didTouchUpInsideTootButton), for: .touchUpInside)
         self.view.addSubview(tootLabel)
@@ -111,7 +110,6 @@ class NewListViewController: UIViewController, UITextFieldDelegate {
         swipeDown.direction = .down
         textView.addGestureRecognizer(swipeDown)
     }
-    
     
     @objc func keyboardWillShow(notification: Notification) {
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
@@ -180,7 +178,7 @@ class NewListViewController: UIViewController, UITextFieldDelegate {
         if (textView.text?.count)! > 0 {
             tootLabel.setTitleColor(Colours.tabSelected, for: .normal)
         } else {
-            tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
+            tootLabel.setTitleColor(Colours.grayLight2, for: .normal)
         }
     }
     
@@ -189,6 +187,10 @@ class NewListViewController: UIViewController, UITextFieldDelegate {
         
         if self.textView.text == "" { return }
         
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
         
         
         if self.editListName == "" {

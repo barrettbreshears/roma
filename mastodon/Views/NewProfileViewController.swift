@@ -69,7 +69,7 @@ class NewProfileViewController: UIViewController, UITextViewDelegate {
         tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(closeB), width: CGFloat(150), height: CGFloat(36))
         tootLabel.setTitle("Update", for: .normal)
         tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
+        tootLabel.setTitleColor(Colours.grayLight2, for: .normal)
         tootLabel.contentHorizontalAlignment = .right
         tootLabel.addTarget(self, action: #selector(didTouchUpInsideTootButton), for: .touchUpInside)
         self.view.addSubview(tootLabel)
@@ -176,7 +176,7 @@ class NewProfileViewController: UIViewController, UITextViewDelegate {
         if (textView.text?.count)! > 0 {
             tootLabel.setTitleColor(Colours.tabSelected, for: .normal)
         } else {
-            tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
+            tootLabel.setTitleColor(Colours.grayLight2, for: .normal)
         }
     }
     
@@ -185,6 +185,10 @@ class NewProfileViewController: UIViewController, UITextViewDelegate {
         
         if self.textView.text == "" { return }
         
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
             
             let request = Accounts.updateCurrentUser(displayName: self.textView.text, note: nil, avatar: nil, header: nil, locked: nil)
             StoreStruct.client.run(request) { (statuses) in

@@ -23,6 +23,7 @@ class ShareViewController: UIViewController, UITextViewDelegate {
     var currentVisibility: Visibility = .public
     var textField = UITextField()
     var selectedImage1 = UIImageView()
+    var isDoing = false
     
     override var preferredStatusBarStyle : UIStatusBarStyle {
         return .default
@@ -295,6 +296,8 @@ class ShareViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func didSelectCancel() {
+        let impact = UIImpactFeedbackGenerator()
+        impact.impactOccurred()
         textView.resignFirstResponder()
         UIView.animate(withDuration: 0.3,
                        delay: 0,
@@ -310,6 +313,13 @@ class ShareViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func didSelectPost() {
+        
+        if isDoing {
+            return
+        }
+        
+        let impact = UIImpactFeedbackGenerator()
+        impact.impactOccurred()
         
         var client = Client(baseURL: "")
         if let userDefaults = UserDefaults(suiteName: "group.com.vm.roma.wormhole") {
@@ -328,8 +338,9 @@ class ShareViewController: UIViewController, UITextViewDelegate {
             isSensitive = false
         }
         
-        let theTempText: NSExtensionItem = self.extensionContext?.inputItems.first as! NSExtensionItem
-        let theText = theTempText.attributedContentText?.string ?? ""
+        isDoing = true
+//        let theTempText: NSExtensionItem = self.extensionContext?.inputItems.first as! NSExtensionItem
+        let theText = self.textView.text!
         
         if let item = extensionContext?.inputItems.first as? NSExtensionItem {
             if let itemProvider = item.attachments?.first {
