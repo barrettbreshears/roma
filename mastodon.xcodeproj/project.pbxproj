@@ -3568,10 +3568,6 @@
 					531B04B52171119D00D31715 = {
 						CreatedOnToolsVersion = 10.0;
 					};
-					531B61D0221960EC00DD3845 = {
-						CreatedOnToolsVersion = 10.1;
-						LastSwiftMigration = 1020;
-					};
 					5354BA182163F89E0094C545 = {
 						CreatedOnToolsVersion = 10.0;
 						LastSwiftMigration = 1020;
@@ -3630,7 +3626,7 @@
 					};
 					A9296DDE22176F7C00BEE7A7 = {
 						CreatedOnToolsVersion = 10.1;
-						LastSwiftMigration = 1010;
+						LastSwiftMigration = 1020;
 						SystemCapabilities = {
 							com.apple.ApplicationGroups.iOS = {
 								enabled = 1;
