@@ -101,18 +101,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         
         Messaging.messaging().apnsToken = deviceToken
         
-        InstanceID.instanceID().instanceID { (result, error) in
-            
-            
-            if let error = error {
-                print("Error fetching remote instance ID: \(error)")
-            } else if let result = result {
-                
-                self.createSubscription(fcmToken: result.token)
-                
-            }
-        }
+//        InstanceID.instanceID().instanceID { (result, error) in
+//
+//
+//            if let error = error {
+//                print("Error fetching remote instance ID: \(error)")
+//            } else if let result = result {
+//
+//                self.createSubscription(fcmToken: result.token)
+//
+//            }
+//        }
 
+        createSubscription(fcmToken: token)
+        
     }
 
     func application(
@@ -705,23 +707,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
     
     func createSubscription(fcmToken: String){
         
-        let jsonObject = ["data":
-            ["alerts":
-                ["favourite":UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true,
-                 "follow":UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true,
-                 "mention": UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true,
-                 "reblog":UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true]
-            ],
-                    "subscription":
-                        ["keys":
-                            ["p256dh":"BEpPCn0cfs3P0E0fY-gyOuahx5dW5N8quUowlrPyfXlMa6tABLqqcSpOpMnC1-o_UB_s4R8NQsqMLbASjnqSbqw=",
-                             "auth":"T5bhIIyre5TDC1LyX4mFAQ=="
-                            ],
-                         "endpoint":"https://pushrelay-roma1-fcm.your.org/push/\(fcmToken)?account=test&server=server&device=iOS"
-            ]
-        ]
+//        let jsonObject = ["data":
+//            ["alerts":
+//                ["favourite":UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true,
+//                 "follow":UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true,
+//                 "mention": UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true,
+//                 "reblog":UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true]
+//            ],
+//                    "subscription":
+//                        ["keys":
+//                            ["p256dh":"BEpPCn0cfs3P0E0fY-gyOuahx5dW5N8quUowlrPyfXlMa6tABLqqcSpOpMnC1-o_UB_s4R8NQsqMLbASjnqSbqw=",
+//                             "auth":"T5bhIIyre5TDC1LyX4mFAQ=="
+//                            ],
+//                         "endpoint":"https://pushrelay-roma1-fcm.your.org/push/\(fcmToken)?account=test&server=server&device=iOS"
+//            ]
+//        ]
+
+        let jsonObject = [
+            "data":
+                ["alerts":
+                    ["favourite":UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true,
+                     "follow":UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true,
+                     "mention": UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true,
+                     "reblog":UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true]
+                ],
+            "device_id" : fcmToken,
+            "platform": "apns",
+            "host":"https://pleroma.ugroza.ru"
+            ] as [String : Any]
+
         //create the url with URL
-        let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
+        // let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
+        let url = URL(string: "https://roma.ugroza.ru/api/v1/push_subscriptions")!
         //create the session object
         let session = URLSession.shared
         //now create the URLRequest object using the url object
@@ -748,7 +765,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
             
             //create the url with URL
-            let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
+            let url = URL(string: "https://roma.ugroza.ru/api/v1/push_subscriptions")!
             
             //create the session object
             let session = URLSession.shared
