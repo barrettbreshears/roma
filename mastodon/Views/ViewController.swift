@@ -2209,6 +2209,17 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.view.addSubview(self.textField)
         
         
+        self.termsButton.frame = CGRect(x: 40, y: textField.frame.origin.y + 200, width: self.view.bounds.width - 80, height: 50)
+        self.termsButton.backgroundColor = UIColor.black.withAlphaComponent(0.08)
+        self.termsButton.layer.cornerRadius = 10
+        self.termsButton.tintColor = UIColor.white.withAlphaComponent(0.6)
+        self.termsButton.titleLabel?.numberOfLines = 0
+        self.termsButton.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+        self.termsButton.titleLabel?.lineBreakMode = .byWordWrapping
+        self.termsButton.setTitle("By using Roma you agree to our Terms of Service. Tap to review them.", for: .normal)
+        self.termsButton.addTarget(self, action: #selector(self.showTerms), for: .touchUpInside)
+        self.view.addSubview(self.termsButton)
+        
         tagListView.alpha = 1
         tagListView.frame = CGRect(x: 0, y: Int(self.view.bounds.height) - self.keyHeight - 70, width: Int(self.view.bounds.width), height: 60)
         self.view.addSubview(tagListView)
@@ -2430,7 +2441,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                             
                             self.tagListView.alpha = 0
                             
-                            StoreStruct.shared.currentInstance.redirect = "com.shi.mastodon://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                            StoreStruct.shared.currentInstance.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                             let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
                             UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {

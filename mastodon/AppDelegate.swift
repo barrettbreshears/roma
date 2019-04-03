@@ -239,9 +239,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         StoreStruct.client = Client(baseURL: "https://\(text)")
         let request = Clients.register(
             clientName: "Mast",
-            redirectURI: "com.shi.mastodon://success",
+            redirectURI: "com.vm.roma://success",
             scopes: [.read, .write, .follow, .push],
-            website: "https://twitter.com/jpeguin"
+            website: "https://pleroma.com"
         )
         StoreStruct.client.run(request) { (application) in
 

@@ -168,7 +168,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
 //        StoreStruct.client = Client(baseURL: "http://\(StoreStruct.tappedTag)")
 //        let request = Clients.register(
 //            clientName: "Mast",
-//            redirectURI: "com.shi.mastodon://success",
+//            redirectURI: "com.vm.roma://success",
 //            scopes: [.read, .write, .follow, .push],
 //            website: "https://twitter.com/jpeguin"
 //        )
