@@ -1342,7 +1342,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             if self.inReplyText == "" {
                 textView.text = self.filledTextFieldText
             } else {
-                textView.text = "\(self.filledTextFieldText) "
+                textView.text = "@\(self.inReplyText) \(self.filledTextFieldText) "
                 self.startRepText = textView.text
             }
         } else {
@@ -1882,35 +1882,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             }
             .action(.default("Direct - Post to mentioned users only".localized)) { (action, ind) in
                 print(action, ind)
-                
-                if (UserDefaults.standard.object(forKey: "divisib") == nil) || (UserDefaults.standard.object(forKey: "divisib") as! Int == 0) {
-                Alertift.actionSheet(title: "Direct Visibility", message: "Please note that all mentioned users will still see this message. Set direct visibility?")
-                    .backgroundColor(Colours.white)
-                    .titleTextColor(Colours.grayDark)
-                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
-                    .messageTextAlignment(.left)
-                    .titleTextAlignment(.left)
-                    .action(.default("Sure!".localized), image: nil) { (action, ind) in
-                        print(action, ind)
-                        self.visibility = .direct
-                        self.visibilityButton.setImage(UIImage(named: "direct"), for: .normal)
-                        self.bringBackDrawer()
-                    }
-                    .action(.cancel("Dismiss"))
-                    .finally { action, index in
-                        if action.style == .cancel {
-                            self.bringBackDrawer()
-                            return
-                        }
-                    }
-                    .popover(anchorView: self.visibilityButton)
-                    .show(on: self)
-                } else {
-                    self.visibility = .direct
-                    self.visibilityButton.setImage(UIImage(named: "direct"), for: .normal)
-                    self.bringBackDrawer()
-                }
-                
+                self.visibility = .direct
+                self.visibilityButton.setImage(UIImage(named: "direct"), for: .normal)
+                self.bringBackDrawer()
             }
             .action(.cancel("Dismiss"))
             .finally { action, index in

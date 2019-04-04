@@ -99,7 +99,7 @@ class NewHexViewController: UIViewController, UITextViewDelegate {
         
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
         swipeDown.direction = .down
-        textView.addGestureRecognizer(swipeDown)
+        self.view.addGestureRecognizer(swipeDown)
     }
     
     

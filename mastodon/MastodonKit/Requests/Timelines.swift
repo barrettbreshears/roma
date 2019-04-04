@@ -48,4 +48,15 @@ public struct Timelines {
 
         return Request<[Status]>(path: "/api/v1/timelines/tag/\(hashtag)", method: method)
     }
+    
+    /// Retrieves a conversation timeline.
+    ///
+    /// - Parameter range: The bounds used when requesting data from Mastodon.
+    /// - Returns: Request for `[Conversation]`.
+    public static func conversations(range: RequestRange = .default) -> Request<[Conversation]> {
+        let parameters = range.parameters(limit: between(1, and: 40, default: 20))
+        let method = HTTPMethod.get(.parameters(parameters))
+        
+        return Request<[Conversation]>(path: "/api/v1/conversations", method: method)
+    }
 }

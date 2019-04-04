@@ -111,7 +111,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
         
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
         swipeDown.direction = .down
-        textView.addGestureRecognizer(swipeDown)
+        self.view.addGestureRecognizer(swipeDown)
         
         self.tagListView.alpha = 0
     }

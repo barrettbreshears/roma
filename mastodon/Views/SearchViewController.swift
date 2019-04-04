@@ -458,7 +458,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                 cell.profileImageView.isUserInteractionEnabled = false
                 cell.backgroundColor = Colours.clear
                 cell.userName.textColor = UIColor.white
-                cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
+                cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                 cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                 cell.toot.textColor = UIColor.white
                 let bgColorView = UIView()
@@ -479,10 +479,12 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                     cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
                     cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
                     cell.profileImageView.tag = indexPath.row
+                    cell.userTag.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                    cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.backgroundColor = Colours.clear
                     cell.userName.textColor = UIColor.white
-                    cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                     cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                     cell.toot.textColor = UIColor.white
                     cell.delegate = self
@@ -570,7 +572,9 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                     cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
                     cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
                     cell.profileImageView.tag = indexPath.row
+                    cell.userTag.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                    cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
                     cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
                     cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
@@ -583,7 +587,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                     cell.smallImage4.tag = indexPath.row
                     cell.backgroundColor = Colours.clear
                     cell.userName.textColor = UIColor.white
-                    cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                     cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                     cell.toot.textColor = UIColor.white
                     cell.mainImageView.backgroundColor = Colours.white
@@ -669,7 +673,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                 cell.profileImageView.tag = indexPath.row
                 cell.backgroundColor = Colours.clear
                 cell.userName.textColor = UIColor.white
-                cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
+                cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                 cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                 cell.toot.textColor = UIColor.white
                 let bgColorView = UIView()
@@ -2030,7 +2034,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
             Colours.black = UIColor.black
             UIApplication.shared.statusBarStyle = .default
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 1) {
-            Colours.white = UIColor(red: 53/255.0, green: 53/255.0, blue: 64/255.0, alpha: 1.0)
+            Colours.white = UIColor(red: 46/255.0, green: 46/255.0, blue: 52/255.0, alpha: 1.0)
             Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white
@@ -2056,7 +2060,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 4) {
-            Colours.white = UIColor(red: 8/255.0, green: 28/255.0, blue: 88/255.0, alpha: 1.0)
+            Colours.white = UIColor(red: 41/255.0, green: 50/255.0, blue: 78/255.0, alpha: 1.0)
             Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white

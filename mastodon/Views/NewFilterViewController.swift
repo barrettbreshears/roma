@@ -106,7 +106,7 @@ class NewFilterViewController: UIViewController, UITextViewDelegate {
         
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
         swipeDown.direction = .down
-        textView.addGestureRecognizer(swipeDown)
+        self.view.addGestureRecognizer(swipeDown)
         
         context1.frame = CGRect(x: 15, y: offset + 100, width: 50, height: 50)
         context1.setImage(UIImage(named: "filledset")?.maskWithColor(color: Colours.tabSelected), for: .normal)

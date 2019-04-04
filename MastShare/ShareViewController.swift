@@ -160,9 +160,9 @@ class ShareViewController: UIViewController, UITextViewDelegate {
         textView.delegate = self
         viewBG.addSubview(textView)
         
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
-        swipeDown.direction = .down
-        textView.addGestureRecognizer(swipeDown)
+//        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
+//        swipeDown.direction = .down
+//        textView.addGestureRecognizer(swipeDown)
         
         self.selectedImage1.frame = CGRect(x: 15, y: Int(self.view.bounds.height) - 90 - Int(self.keyHeight) - 55, width: 80, height: 80)
         self.selectedImage1.backgroundColor = UIColor.clear
@@ -340,7 +340,7 @@ class ShareViewController: UIViewController, UITextViewDelegate {
         
         isDoing = true
 //        let theTempText: NSExtensionItem = self.extensionContext?.inputItems.first as! NSExtensionItem
-        let theText = self.textView.text!
+        let theText = self.textView.text ?? ""
         
         if let item = extensionContext?.inputItems.first as? NSExtensionItem {
             if let itemProvider = item.attachments?.first {

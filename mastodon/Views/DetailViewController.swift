@@ -723,7 +723,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfileP), for: .touchUpInside)
                 cell.backgroundColor = Colours.white
                 cell.userName.textColor = Colours.black
-                cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
+                cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                 cell.date.textColor = Colours.black.withAlphaComponent(0.6)
                 cell.toot.textColor = Colours.black
                 cell.toot.handleURLTap { (url) in
@@ -805,7 +805,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfileP), for: .touchUpInside)
                     cell.backgroundColor = Colours.white
                     cell.userName.textColor = Colours.black
-                    cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                     cell.date.textColor = Colours.black.withAlphaComponent(0.6)
                     cell.toot.textColor = Colours.black
 
@@ -953,7 +953,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
                     cell.backgroundColor = Colours.white
                     cell.userName.textColor = Colours.black
-                    cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                     cell.date.textColor = Colours.black.withAlphaComponent(0.6)
                     cell.toot.textColor = Colours.black
                     cell.mainImageView.backgroundColor = Colours.white
@@ -1471,10 +1471,12 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cell800", for: indexPath) as! MainFeedCell
                 cell.delegate = self
                 cell.profileImageView.tag = indexPath.row
+                cell.userTag.tag = indexPath.row
                 cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                 cell.backgroundColor = Colours.white
                 cell.userName.textColor = Colours.black
-                cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
+                cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                 cell.date.textColor = Colours.black.withAlphaComponent(0.6)
                 cell.toot.textColor = Colours.black
                 cell.toot.handleURLTap { (url) in
@@ -1560,10 +1562,12 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         cell.boost1.addTarget(self, action: #selector(self.didTouchFuBoost), for: .touchUpInside)
                         cell.configure(self.allReplies[indexPath.row])
                         cell.profileImageView.tag = indexPath.row
+                        cell.userTag.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                        cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.backgroundColor = Colours.white
                         cell.userName.textColor = Colours.black
-                        cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
+                        cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                         cell.date.textColor = Colours.black.withAlphaComponent(0.6)
                         cell.toot.textColor = Colours.black
                         cell.toot.handleMentionTap { (string) in
@@ -1679,10 +1683,12 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         cell.delegate = self
                         cell.configure(self.allReplies[indexPath.row])
                         cell.profileImageView.tag = indexPath.row
+                        cell.userTag.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                        cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.backgroundColor = Colours.white
                         cell.userName.textColor = Colours.black
-                        cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
+                        cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                         cell.date.textColor = Colours.black.withAlphaComponent(0.6)
                         cell.toot.textColor = Colours.black
                         cell.toot.handleMentionTap { (string) in
@@ -1802,7 +1808,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         cell.delegate = self
                         cell.configure(self.allReplies[indexPath.row])
                         cell.profileImageView.tag = indexPath.row
+                        cell.userTag.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                        cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
                         cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
                         cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
@@ -1821,7 +1829,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         cell.boost1.addTarget(self, action: #selector(self.didTouchFuBoost), for: .touchUpInside)
                         cell.backgroundColor = Colours.white
                         cell.userName.textColor = Colours.black
-                        cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
+                        cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                         cell.date.textColor = Colours.black.withAlphaComponent(0.6)
                         cell.toot.textColor = Colours.black
                         cell.mainImageView.backgroundColor = Colours.white
@@ -1938,7 +1946,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         cell.delegate = self
                         cell.configure(self.allReplies[indexPath.row])
                         cell.profileImageView.tag = indexPath.row
+                        cell.userTag.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                        cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
                         cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
                         cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
@@ -1951,7 +1961,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         cell.smallImage4.tag = indexPath.row
                         cell.backgroundColor = Colours.white
                         cell.userName.textColor = Colours.black
-                        cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
+                        cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                         cell.date.textColor = Colours.black.withAlphaComponent(0.6)
                         cell.toot.textColor = Colours.black
                         cell.mainImageView.backgroundColor = Colours.white
@@ -2137,8 +2147,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         var theTable = self.tableView
         var sto = self.allPrevious
-
-        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+        
+        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
             StoreStruct.allLikes = StoreStruct.allLikes.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
             let request2 = Statuses.unfavourite(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
             StoreStruct.client.run(request2) { (statuses) in
@@ -2155,7 +2165,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
-                        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "boost")
                         } else {
@@ -2215,14 +2225,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         var theTable = self.tableView
         var sto = self.allReplies
-
-        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+        
+        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
             StoreStruct.allLikes = StoreStruct.allLikes.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
             let request2 = Statuses.unfavourite(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
             StoreStruct.client.run(request2) { (statuses) in
                 DispatchQueue.main.async {
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
-                        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "boost")
                         } else {
@@ -2233,7 +2243,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
-                        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "boost")
                         } else {
@@ -2300,7 +2310,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             StoreStruct.client.run(request2) { (statuses) in
                 DispatchQueue.main.async {
                     if let cell = theTable.cellForRow(at:IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
-                        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "like")
                         } else {
@@ -2372,8 +2382,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         var theTable = self.tableView
         var sto = self.allReplies
-
-        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+        
+        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
             StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
             let request2 = Statuses.unreblog(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
             StoreStruct.client.run(request2) { (statuses) in
@@ -2597,10 +2607,14 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         self.mainStatus = [stat]
                         if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? DetailCell {
                             cell.configure(stat)
+                            self.tableView.beginUpdates()
                             self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                            self.tableView.endUpdates()
                         } else if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 1)) as? DetailCellImage {
                             cell.configure(stat)
+                            self.tableView.beginUpdates()
                             self.tableView.reloadRows(at: [IndexPath(row: 0, section: 1)], with: .none)
+                            self.tableView.endUpdates()
                         }
                     }
                 }
@@ -2618,7 +2632,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         if let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 2)) as? PollCell {
                             if let poll = stat.poll {
                                 cell.configure(thePoll: poll, theOptions: poll.options)
+                                self.tableView.beginUpdates()
                                 self.tableView.reloadRows(at: [IndexPath(row: 0, section: 2)], with: .none)
+                                self.tableView.endUpdates()
                             }
                         }
                     }
@@ -5348,7 +5364,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             Colours.black = UIColor.black
             UIApplication.shared.statusBarStyle = .default
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 1) {
-            Colours.white = UIColor(red: 53/255.0, green: 53/255.0, blue: 64/255.0, alpha: 1.0)
+            Colours.white = UIColor(red: 46/255.0, green: 46/255.0, blue: 52/255.0, alpha: 1.0)
             Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white
@@ -5374,7 +5390,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 4) {
-            Colours.white = UIColor(red: 8/255.0, green: 28/255.0, blue: 88/255.0, alpha: 1.0)
+            Colours.white = UIColor(red: 41/255.0, green: 50/255.0, blue: 78/255.0, alpha: 1.0)
             Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white

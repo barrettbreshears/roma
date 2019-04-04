@@ -19,7 +19,7 @@ class SettingsCell: SwipeTableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        profileImageView.backgroundColor = Colours.clear
+        profileImageView.backgroundColor = Colours.white
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         userName.translatesAutoresizingMaskIntoConstraints = false
