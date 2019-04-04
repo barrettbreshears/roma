@@ -203,55 +203,55 @@ public enum NoError: Swift.Error, Equatable {
 
 /// A type-erased error which wraps an arbitrary error instance. This should be
 /// useful for generic contexts.
-public struct AnyError: Swift.Error {
-	/// The underlying error.
-	public let error: Swift.Error
+//public struct AnyError: Swift.Error {
+//    /// The underlying error.
+//    public let error: Swift.Error
+//
+//    public init(_ error: Swift.Error) {
+//        if let anyError = error as? AnyError {
+//            self = anyError
+//        } else {
+//            self.error = error
+//        }
+//    }
+//}
 
-	public init(_ error: Swift.Error) {
-		if let anyError = error as? AnyError {
-			self = anyError
-		} else {
-			self.error = error
-		}
-	}
-}
+//extension AnyError: ErrorConvertible {
+//    public static func error(from error: Error) -> AnyError {
+//        return AnyError(error)
+//    }
+//}
+//
+//extension AnyError: CustomStringConvertible {
+//    public var description: String {
+//        return String(describing: error)
+//    }
+//}
+//
+//// There appears to be a bug in Foundation on Linux which prevents this from working:
+//// https://bugs.swift.org/browse/SR-3565
+//// Don't forget to comment the tests back in when removing this check when it's fixed!
+//#if !os(Linux)
+//
+//extension AnyError: LocalizedError {
+//    public var errorDescription: String? {
+//        return error.localizedDescription
+//    }
+//
+//    public var failureReason: String? {
+//        return (error as? LocalizedError)?.failureReason
+//    }
+//
+//    public var helpAnchor: String? {
+//        return (error as? LocalizedError)?.helpAnchor
+//    }
+//
+//    public var recoverySuggestion: String? {
+//        return (error as? LocalizedError)?.recoverySuggestion
+//    }
+//}
 
-extension AnyError: ErrorConvertible {
-	public static func error(from error: Error) -> AnyError {
-		return AnyError(error)
-	}
-}
-
-extension AnyError: CustomStringConvertible {
-	public var description: String {
-		return String(describing: error)
-	}
-}
-
-// There appears to be a bug in Foundation on Linux which prevents this from working:
-// https://bugs.swift.org/browse/SR-3565
-// Don't forget to comment the tests back in when removing this check when it's fixed!
-#if !os(Linux)
-
-extension AnyError: LocalizedError {
-	public var errorDescription: String? {
-		return error.localizedDescription
-	}
-
-	public var failureReason: String? {
-		return (error as? LocalizedError)?.failureReason
-	}
-
-	public var helpAnchor: String? {
-		return (error as? LocalizedError)?.helpAnchor
-	}
-
-	public var recoverySuggestion: String? {
-		return (error as? LocalizedError)?.recoverySuggestion
-	}
-}
-
-#endif
+// #endif
 
 // MARK: - migration support
 extension Result {

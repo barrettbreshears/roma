@@ -54,7 +54,7 @@ private struct Group {
 ///
 ///      // OR
 ///
-///      let trimmedRegift = Regift.createGIFFromSource(movieFileURL, startTime: 30, duration: 15, frameRate: 15) { (result) in
+///      let trimmedRegift = Regift.createGIFFromSource(movieFileURL, startTime: 30, duration: 15, frameRate: 15, loopCount: 0) { (result) in
 ///          print(result)
 ///      }
 ///
@@ -71,6 +71,7 @@ public struct Regift {
             - frameCount: The number of frames to include in the gif; each frame has the same duration and is spaced evenly over the video.
             - delayTime: The amount of time each frame exists for in the GIF.
             - loopCount: The number of times the GIF will repeat. This defaults to `0`, which means that the GIF will repeat infinitely.
+            - size: The maximum size of generated GIF. This defaults to `nil`, which specifies the asset’s unscaled dimensions. Setting size will not change the image aspect ratio.
             - completion: A block that will be called when the GIF creation is completed. The `result` parameter provides the path to the file, or will be `nil` if there was an error.
     */
     public static func createGIFFromSource(
@@ -79,13 +80,15 @@ public struct Regift {
         frameCount: Int,
         delayTime: Float,
         loopCount: Int = 0,
+        size: CGSize? = nil,
         completion: (_ result: URL?) -> Void) {
             let gift = Regift(
                 sourceFileURL: sourceFileURL,
                 destinationFileURL: destinationFileURL,
                 frameCount: frameCount,
                 delayTime: delayTime,
-                loopCount: loopCount
+                loopCount: loopCount,
+                size: size
             )
 
             completion(gift.createGif())
@@ -101,6 +104,7 @@ public struct Regift {
             - duration: The duration in seconds that you want to pull from the source material.
             - frameRate: The desired frame rate of the outputted GIF.
             - loopCount: The number of times the GIF will repeat. This defaults to `0`, which means that the GIF will repeat infinitely.
+            - size: The maximum size of generated GIF. This defaults to `nil`, which specifies the asset’s unscaled dimensions. Setting size will not change the image aspect ratio.
             - completion: A block that will be called when the GIF creation is completed. The `result` parameter provides the path to the file, or will be `nil` if there was an error.
     */
     public static func createGIFFromSource(
@@ -110,6 +114,7 @@ public struct Regift {
         duration: Float,
         frameRate: Int,
         loopCount: Int = 0,
+        size: CGSize? = nil,
         completion: (_ result: URL?) -> Void) {
             let gift = Regift(
                 sourceFileURL: sourceFileURL,
@@ -117,44 +122,48 @@ public struct Regift {
                 startTime: startTime,
                 duration: duration,
                 frameRate: frameRate,
-                loopCount: loopCount
+                loopCount: loopCount,
+                size: size
             )
 
             completion(gift.createGif())
     }
 
-    fileprivate struct Constants {
+    private struct Constants {
         static let FileName = "regift.gif"
         static let TimeInterval: Int32 = 600
         static let Tolerance = 0.01
     }
 
     /// A reference to the asset we are converting.
-    fileprivate var asset: AVAsset
+    private var asset: AVAsset
 
     /// The url for the source file.
-    fileprivate let sourceFileURL: URL
+    private let sourceFileURL: URL
 
     /// The point in time in the source which we will start from.
-    fileprivate var startTime: Float = 0
+    private var startTime: Float = 0
 
     /// The desired duration of the gif.
-    fileprivate var duration: Float
+    private var duration: Float
 
     /// The total length of the movie, in seconds.
-    fileprivate var movieLength: Float
+    private var movieLength: Float
 
     /// The number of frames we are going to use to create the gif.
-    fileprivate let frameCount: Int
+    private let frameCount: Int
 
     /// The amount of time each frame will remain on screen in the gif.
-    fileprivate let delayTime: Float
+    private let delayTime: Float
 
     /// The number of times the gif will loop (0 is infinite).
-    fileprivate let loopCount: Int
+    private let loopCount: Int
 
     /// The destination path for the generated file.
-    fileprivate var destinationFileURL: URL?
+    private var destinationFileURL: URL?
+    
+    /// The maximum width/height for the generated file.
+    fileprivate let size: CGSize?
     
     /**
         Create a GIF from a movie stored at the given URL. This converts the whole video to a GIF meeting the requested output parameters.
@@ -165,8 +174,10 @@ public struct Regift {
             - frameCount: The number of frames to include in the gif; each frame has the same duration and is spaced evenly over the video.
             - delayTime: The amount of time each frame exists for in the GIF.
             - loopCount: The number of times the GIF will repeat. This defaults to `0`, which means that the GIF will repeat infinitely.
+            - size: The maximum size of generated GIF. This defaults to `nil`, which specifies the asset’s unscaled dimensions. Setting size will not change the image aspect ratio.
+
      */
-    public init(sourceFileURL: URL, destinationFileURL: URL? = nil, frameCount: Int, delayTime: Float, loopCount: Int = 0) {
+    public init(sourceFileURL: URL, destinationFileURL: URL? = nil, frameCount: Int, delayTime: Float, loopCount: Int = 0, size: CGSize? = nil) {
         self.sourceFileURL = sourceFileURL
         self.asset = AVURLAsset(url: sourceFileURL, options: nil)
         self.movieLength = Float(asset.duration.value) / Float(asset.duration.timescale)
@@ -175,6 +186,7 @@ public struct Regift {
         self.loopCount = loopCount
         self.destinationFileURL = destinationFileURL
         self.frameCount = frameCount
+        self.size = size
     }
 
     /**
@@ -187,8 +199,10 @@ public struct Regift {
             - duration: The duration in seconds that you want to pull from the source material.
             - frameRate: The desired frame rate of the outputted GIF.
             - loopCount: The number of times the GIF will repeat. This defaults to `0`, which means that the GIF will repeat infinitely.
+            - size: The maximum size of generated GIF. This defaults to `nil`, which specifies the asset’s unscaled dimensions. Setting size will not change the image aspect ratio.
+
      */
-    public init(sourceFileURL: URL, destinationFileURL: URL? = nil, startTime: Float, duration: Float, frameRate: Int, loopCount: Int = 0) {
+    public init(sourceFileURL: URL, destinationFileURL: URL? = nil, startTime: Float, duration: Float, frameRate: Int, loopCount: Int = 0, size: CGSize? = nil) {
         self.sourceFileURL = sourceFileURL
         self.asset = AVURLAsset(url: sourceFileURL, options: nil)
         self.destinationFileURL = destinationFileURL
@@ -205,6 +219,7 @@ public struct Regift {
         self.movieLength = Float(asset.duration.value) / Float(asset.duration.timescale)
 
         self.loopCount = loopCount
+        self.size = size
     }
 
     /**
@@ -233,13 +248,13 @@ public struct Regift {
         
         for frameNumber in 0 ..< frameCount {
             let seconds: Float64 = Float64(startTime) + (Float64(increment) * Float64(frameNumber))
-            let time = CMTimeMakeWithSeconds(seconds, preferredTimescale: Constants.TimeInterval)
+            let time = CMTimeMakeWithSeconds(seconds, Constants.TimeInterval)
             
             timePoints.append(time)
         }
         
         do {
-            return try createGIFForTimePoints(timePoints, fileProperties: fileProperties as [String : AnyObject], frameProperties: frameProperties as [String : AnyObject], frameCount: frameCount)
+            return try createGIFForTimePoints(timePoints, fileProperties: fileProperties as [String : AnyObject], frameProperties: frameProperties as [String : AnyObject], frameCount: frameCount, size: size)
             
         } catch {
             return nil
@@ -254,12 +269,13 @@ public struct Regift {
             - fileProperties: The desired attributes of the resulting GIF.
             - frameProperties: The desired attributes of each frame in the resulting GIF.
             - frameCount: The desired number of frames for the GIF. *NOTE: This seems redundant to me, as `timePoints.count` should really be what we are after, but I'm hesitant to change the API here.*
+            - size: The maximum size of generated GIF. This defaults to `nil`, which specifies the asset’s unscaled dimensions. Setting size will not change the image aspect ratio.
 
         - returns: The path to the created GIF, or `nil` if there was an error creating it.
     */
-    public func createGIFForTimePoints(_ timePoints: [TimePoint], fileProperties: [String: AnyObject], frameProperties: [String: AnyObject], frameCount: Int) throws -> URL {
+    public func createGIFForTimePoints(_ timePoints: [TimePoint], fileProperties: [String: AnyObject], frameProperties: [String: AnyObject], frameCount: Int, size: CGSize? = nil) throws -> URL {
         // Ensure the source media is a valid file.
-        guard asset.tracks(withMediaCharacteristic: AVMediaCharacteristic.visual).count > 0 else {
+        guard asset.tracks(withMediaCharacteristic: .visual).count > 0 else {
             throw RegiftError.SourceFormatInvalid
         }
 
@@ -280,8 +296,11 @@ public struct Regift {
         let generator = AVAssetImageGenerator(asset: asset)
         
         generator.appliesPreferredTrackTransform = true
+        if let size = size {
+            generator.maximumSize = size
+        }
         
-        let tolerance = CMTimeMakeWithSeconds(Constants.Tolerance, preferredTimescale: Constants.TimeInterval)
+        let tolerance = CMTimeMakeWithSeconds(Constants.Tolerance, Constants.TimeInterval)
         generator.requestedTimeToleranceBefore = tolerance
         generator.requestedTimeToleranceAfter = tolerance
 
@@ -298,7 +317,7 @@ public struct Regift {
 
         generator.generateCGImagesAsynchronously(forTimes: times, completionHandler: { (requestedTime, image, actualTime, result, error) in
             guard let imageRef = image , error == nil else {
-                print("An error occurred: \(error), image is \(image)")
+                print("An error occurred: \(String(describing: error)), image is \(String(describing: image))")
                 dispatchError = true
                 gifGroup.leave()
                 return
