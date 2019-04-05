@@ -13,7 +13,7 @@ import StatusAlert
 
 class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource {
     
-    var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .circleStrokeSpin, color: Colours.tabSelected)
+    var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var segmentedControl: SJFluidSegmentedControl!
     var tableView = UITableView()
     var tableView2 = UITableView()
@@ -99,7 +99,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             self.tableView.backgroundColor = Colours.white
             self.tableView.separatorColor = Colours.cellQuote
             self.tableView.layer.masksToBounds = true
-            self.tableView.estimatedRowHeight = 89
+            self.tableView.estimatedRowHeight = UITableView.automaticDimension
             self.tableView.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView)
             
@@ -112,7 +112,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             self.tableView2.backgroundColor = Colours.white
             self.tableView2.separatorColor = Colours.cellQuote
             self.tableView2.layer.masksToBounds = true
-            self.tableView2.estimatedRowHeight = 89
+            self.tableView2.estimatedRowHeight = UITableView.automaticDimension
             self.tableView2.rowHeight = UITableView.automaticDimension
             self.tableView2.alpha = 0
             self.view.addSubview(self.tableView2)
@@ -144,7 +144,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             self.tableView.backgroundColor = Colours.white
             self.tableView.separatorColor = Colours.cellQuote
             self.tableView.layer.masksToBounds = true
-            self.tableView.estimatedRowHeight = 89
+            self.tableView.estimatedRowHeight = UITableView.automaticDimension
             self.tableView.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView)
             
@@ -157,7 +157,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             self.tableView2.backgroundColor = Colours.white
             self.tableView2.separatorColor = Colours.cellQuote
             self.tableView2.layer.masksToBounds = true
-            self.tableView2.estimatedRowHeight = 89
+            self.tableView2.estimatedRowHeight = UITableView.automaticDimension
             self.tableView2.rowHeight = UITableView.automaticDimension
             self.tableView2.alpha = 0
             self.view.addSubview(self.tableView2)
@@ -215,7 +215,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             self.tableView.backgroundColor = Colours.white
             self.tableView.separatorColor = Colours.cellQuote
             self.tableView.layer.masksToBounds = true
-            self.tableView.estimatedRowHeight = 89
+            self.tableView.estimatedRowHeight = UITableView.automaticDimension
             self.tableView.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView)
             
@@ -228,7 +228,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             self.tableView2.backgroundColor = Colours.white
             self.tableView2.separatorColor = Colours.cellQuote
             self.tableView2.layer.masksToBounds = true
-            self.tableView2.estimatedRowHeight = 89
+            self.tableView2.estimatedRowHeight = UITableView.automaticDimension
             self.tableView2.rowHeight = UITableView.automaticDimension
             self.tableView2.alpha = 0
             self.view.addSubview(self.tableView2)
@@ -260,7 +260,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             self.tableView.backgroundColor = Colours.white
             self.tableView.separatorColor = Colours.cellQuote
             self.tableView.layer.masksToBounds = true
-            self.tableView.estimatedRowHeight = 89
+            self.tableView.estimatedRowHeight = UITableView.automaticDimension
             self.tableView.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView)
             
@@ -273,7 +273,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             self.tableView2.backgroundColor = Colours.white
             self.tableView2.separatorColor = Colours.cellQuote
             self.tableView2.layer.masksToBounds = true
-            self.tableView2.estimatedRowHeight = 89
+            self.tableView2.estimatedRowHeight = UITableView.automaticDimension
             self.tableView2.rowHeight = UITableView.automaticDimension
             self.tableView2.alpha = 0
             self.view.addSubview(self.tableView2)
@@ -409,9 +409,9 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
         }
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return UITableView.automaticDimension
+//    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == self.tableView {
@@ -550,7 +550,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             Colours.black = UIColor.black
             UIApplication.shared.statusBarStyle = .default
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 1) {
-            Colours.white = UIColor(red: 53/255.0, green: 53/255.0, blue: 64/255.0, alpha: 1.0)
+            Colours.white = UIColor(red: 46/255.0, green: 46/255.0, blue: 52/255.0, alpha: 1.0)
             Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white
@@ -576,7 +576,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 4) {
-            Colours.white = UIColor(red: 8/255.0, green: 28/255.0, blue: 88/255.0, alpha: 1.0)
+            Colours.white = UIColor(red: 41/255.0, green: 50/255.0, blue: 78/255.0, alpha: 1.0)
             Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white

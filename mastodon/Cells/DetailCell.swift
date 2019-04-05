@@ -33,6 +33,11 @@ class DetailCell: UITableViewCell {
         fromClient.translatesAutoresizingMaskIntoConstraints = false
         faves.translatesAutoresizingMaskIntoConstraints = false
         
+        userName.adjustsFontForContentSizeCategory = true
+        userTag.adjustsFontForContentSizeCategory = true
+        date.adjustsFontForContentSizeCategory = true
+        toot.adjustsFontForContentSizeCategory = true
+        
         if (UserDefaults.standard.object(forKey: "proCorner") == nil || UserDefaults.standard.object(forKey: "proCorner") as! Int == 0) {
             profileImageView.layer.cornerRadius = 20
         }

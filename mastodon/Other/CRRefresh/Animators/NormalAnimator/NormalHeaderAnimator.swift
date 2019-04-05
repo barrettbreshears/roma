@@ -61,7 +61,12 @@ open class NormalHeaderAnimator: UIView, CRRefreshProtocol {
     }()
     
     fileprivate let indicatorView: UIActivityIndicatorView = {
-        let indicatorView = UIActivityIndicatorView.init(style: .gray)
+        var indicatorView = UIActivityIndicatorView.init(style: .gray)
+        if (UserDefaults.standard.object(forKey: "theme") == nil || UserDefaults.standard.object(forKey: "theme") as! Int == 0) {
+            
+        } else {
+            indicatorView = UIActivityIndicatorView.init(style: .white)
+        }
         indicatorView.isHidden = true
         return indicatorView
     }()

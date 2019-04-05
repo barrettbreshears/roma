@@ -54,7 +54,7 @@ class TodayViewController: UIViewController, NCWidgetProviding, UITableViewDeleg
         self.tableView.backgroundColor = UIColor.clear
         self.tableView.separatorColor = UIColor.clear
         self.tableView.layer.masksToBounds = true
-        self.tableView.estimatedRowHeight = 89
+        self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
         

@@ -88,7 +88,7 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
 
             cell.image.image = nil
             let instances = InstanceData.getAllInstances()
-            if instances.isEmpty {} else {
+            if instances.isEmpty || Account.getAccounts().isEmpty {} else {
                 let curr = InstanceData.getCurrentInstance()
                 if curr?.clientID == instances[indexPath.item].clientID {
                     cell.image.layer.borderWidth = 3.6
@@ -97,11 +97,9 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
                 }
                 cell.image.layer.borderColor = Colours.tabSelected.cgColor
                 
-                if Account.getAccounts().isEmpty {} else {
-                    let account = Account.getAccounts()[indexPath.item]
-                    cell.image.pin_setImage(from: URL(string: account.avatar))
-                    cell.name.text = account.username
-                }
+                let account = Account.getAccounts()[indexPath.item]
+                cell.image.pin_setImage(from: URL(string: account.avatar))
+                cell.name.text = account.username
                 
                 cell.image.backgroundColor = Colours.clear
             }

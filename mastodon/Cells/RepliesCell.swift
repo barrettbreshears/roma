@@ -14,7 +14,7 @@ class RepliesCell: SwipeTableViewCell {
     
     var profileImageView = UIButton()
     var userName = UILabel()
-    var userTag = UILabel()
+    var userTag = UIButton()
     var date = UILabel()
     var toot = ActiveLabel()
     var moreImage = UIImageView()
@@ -23,7 +23,12 @@ class RepliesCell: SwipeTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         profileImageView.backgroundColor = Colours.white
-        moreImage.backgroundColor = Colours.clear
+        moreImage.backgroundColor = Colours.white
+        
+        userName.adjustsFontForContentSizeCategory = true
+        userTag.titleLabel?.adjustsFontForContentSizeCategory = true
+        date.adjustsFontForContentSizeCategory = true
+        toot.adjustsFontForContentSizeCategory = true
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         userName.translatesAutoresizingMaskIntoConstraints = false
@@ -44,16 +49,15 @@ class RepliesCell: SwipeTableViewCell {
         profileImageView.layer.masksToBounds = true
         
         userName.numberOfLines = 0
-        userTag.numberOfLines = 0
         toot.numberOfLines = 0
         
         userName.textColor = Colours.black
-        userTag.textColor = Colours.black.withAlphaComponent(0.6)
+        userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
         date.textColor = Colours.black.withAlphaComponent(0.6)
         toot.textColor = Colours.black
         
         userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
-        userTag.font = UIFont.systemFont(ofSize: Colours.fontSize3)
+        userTag.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
         
@@ -99,9 +103,9 @@ class RepliesCell: SwipeTableViewCell {
         
         userName.text = status.reblog?.account.displayName ?? status.account.displayName
         if (UserDefaults.standard.object(forKey: "mentionToggle") == nil || UserDefaults.standard.object(forKey: "mentionToggle") as! Int == 0) {
-            userTag.text = "@\(status.reblog?.account.acct ?? status.account.acct)"
+            userTag.setTitle("@\(status.reblog?.account.acct ?? status.account.acct)", for: .normal)
         } else {
-            userTag.text = "@\(status.reblog?.account.username ?? status.account.username)"
+            userTag.setTitle("@\(status.reblog?.account.username ?? status.account.username)", for: .normal)
         }
         
         if (UserDefaults.standard.object(forKey: "timerel") == nil) || (UserDefaults.standard.object(forKey: "timerel") as! Int == 0) {
@@ -208,7 +212,7 @@ class RepliesCell: SwipeTableViewCell {
         }
         
         userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
-        userTag.font = UIFont.systemFont(ofSize: Colours.fontSize3)
+        userTag.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
         

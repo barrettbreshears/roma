@@ -139,7 +139,7 @@ class ShareViewController: UIViewController, UITextViewDelegate {
                             self.viewBG.frame = CGRect(x: 0, y: UIScreen.main.bounds.size.height, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
                             self.bgView.frame = CGRect(x: 0, y: Int(UIScreen.main.bounds.size.height), width: Int(UIScreen.main.bounds.size.width), height: Int(self.keyHeight) + 50)
             }, completion: { test in
-                self.extensionContext!.cancelRequest(withError: NSError())
+                self.extensionContext?.cancelRequest(withError: NSError())
             })
         }
     }
@@ -160,9 +160,9 @@ class ShareViewController: UIViewController, UITextViewDelegate {
         textView.delegate = self
         viewBG.addSubview(textView)
         
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
-        swipeDown.direction = .down
-        textView.addGestureRecognizer(swipeDown)
+//        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
+//        swipeDown.direction = .down
+//        textView.addGestureRecognizer(swipeDown)
         
         self.selectedImage1.frame = CGRect(x: 15, y: Int(self.view.bounds.height) - 90 - Int(self.keyHeight) - 55, width: 80, height: 80)
         self.selectedImage1.backgroundColor = UIColor.clear
@@ -308,7 +308,7 @@ class ShareViewController: UIViewController, UITextViewDelegate {
                         self.viewBG.frame = CGRect(x: 0, y: UIScreen.main.bounds.size.height, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
                         self.bgView.frame = CGRect(x: 0, y: Int(UIScreen.main.bounds.size.height), width: Int(UIScreen.main.bounds.size.width), height: Int(self.keyHeight) + 50)
         }, completion: { test in
-            self.extensionContext!.cancelRequest(withError: NSError())
+            self.extensionContext?.cancelRequest(withError: NSError())
         })
     }
     
@@ -340,7 +340,7 @@ class ShareViewController: UIViewController, UITextViewDelegate {
         
         isDoing = true
 //        let theTempText: NSExtensionItem = self.extensionContext?.inputItems.first as! NSExtensionItem
-        let theText = self.textView.text!
+        let theText = self.textView.text ?? ""
         
         if let item = extensionContext?.inputItems.first as? NSExtensionItem {
             if let itemProvider = item.attachments?.first {
@@ -350,7 +350,7 @@ class ShareViewController: UIViewController, UITextViewDelegate {
                             let request0 = Statuses.create(status: "\(theText)\n\n\(shareURL)", replyToID: nil, mediaIDs: [], sensitive: isSensitive, spoilerText: spoilers, visibility: self.currentVisibility)
                             client.run(request0) { (statuses) in
                                 print("06")
-                                self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+                                self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
                             }
                         }
                         
@@ -380,7 +380,7 @@ class ShareViewController: UIViewController, UITextViewDelegate {
                                     DispatchQueue.global(qos: .background).async {
                                         client.run(request0) { (statuses) in
                                             print("posted")
-                                            self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+                                            self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
                                         }
                                     }
                                 }
@@ -399,7 +399,7 @@ class ShareViewController: UIViewController, UITextViewDelegate {
                                         DispatchQueue.global(qos: .background).async {
                                             client.run(request0) { (statuses) in
                                                 print("posted")
-                                                self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+                                                self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
                                             }
                                         }
                                     }
@@ -407,9 +407,9 @@ class ShareViewController: UIViewController, UITextViewDelegate {
                             } else {
                                 itemProvider.loadItem(forTypeIdentifier: "public.url", options: nil, completionHandler: { (url, error) -> Void in
                                     if let shareURL = url as? NSURL {
-                                        let request0 = Statuses.create(status: "\(self.extensionContext!)\n\n\(shareURL)", replyToID: nil, mediaIDs: [], sensitive: isSensitive, spoilerText: spoilers, visibility: self.currentVisibility)
+                                        let request0 = Statuses.create(status: "\(theText)\n\n\(shareURL)", replyToID: nil, mediaIDs: [], sensitive: isSensitive, spoilerText: spoilers, visibility: self.currentVisibility)
                                         client.run(request0) { (statuses) in
-                                            self.extensionContext!.completeRequest(returningItems: [], completionHandler: nil)
+                                            self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
                                         }
                                     }
                                     

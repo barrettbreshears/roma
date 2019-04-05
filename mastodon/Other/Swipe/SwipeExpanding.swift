@@ -93,7 +93,7 @@ public struct ScaleAndAlphaExpansion: SwipeExpanding {
      
      - returns: The new `ScaleAndAlphaExpansion` instance.
      */
-    public init(duration: Double = 0.18, scale: CGFloat = 0.8, interButtonDelay: Double = 0.02) {
+    public init(duration: Double = 0.24, scale: CGFloat = 0.6, interButtonDelay: Double = 0.02) {
         self.duration = duration
         self.scale = scale
         self.interButtonDelay = interButtonDelay

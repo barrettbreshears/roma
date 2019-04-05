@@ -1086,7 +1086,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.tableView.backgroundColor = Colours.clear
         self.tableView.separatorColor = Colours.clear
         self.tableView.layer.masksToBounds = true
-        self.tableView.estimatedRowHeight = 89
+        self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.bgView.addSubview(self.tableView)
         
@@ -1104,7 +1104,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.tableViewDrafts.backgroundColor = Colours.clear
         self.tableViewDrafts.separatorColor = Colours.clear
         self.tableViewDrafts.layer.masksToBounds = true
-        self.tableViewDrafts.estimatedRowHeight = 89
+        self.tableViewDrafts.estimatedRowHeight = UITableView.automaticDimension
         self.tableViewDrafts.rowHeight = UITableView.automaticDimension
         self.tableViewDrafts.reloadData()
         self.bgView.addSubview(self.tableViewDrafts)
@@ -1118,7 +1118,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.tableViewASCII.backgroundColor = Colours.clear
         self.tableViewASCII.separatorColor = Colours.clear
         self.tableViewASCII.layer.masksToBounds = true
-        self.tableViewASCII.estimatedRowHeight = 89
+        self.tableViewASCII.estimatedRowHeight = UITableView.automaticDimension
         self.tableViewASCII.rowHeight = UITableView.automaticDimension
         self.tableViewASCII.reloadData()
         self.bgView.addSubview(self.tableViewASCII)
@@ -1132,7 +1132,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.tableViewEmoti.backgroundColor = Colours.clear
         self.tableViewEmoti.separatorColor = Colours.clear
         self.tableViewEmoti.layer.masksToBounds = true
-        self.tableViewEmoti.estimatedRowHeight = 89
+        self.tableViewEmoti.estimatedRowHeight = UITableView.automaticDimension
         self.tableViewEmoti.rowHeight = UITableView.automaticDimension
         self.tableViewEmoti.reloadData()
         self.bgView.addSubview(self.tableViewEmoti)
@@ -1342,7 +1342,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             if self.inReplyText == "" {
                 textView.text = self.filledTextFieldText
             } else {
-                textView.text = "\(self.filledTextFieldText) "
+                textView.text = "@\(self.inReplyText) \(self.filledTextFieldText) "
                 self.startRepText = textView.text
             }
         } else {
@@ -1856,7 +1856,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         })
         
         
-        Alertift.actionSheet(title: nil, message: nil)
+        Alertift.actionSheet(title: nil, message: "Public: Everyone can see\n\nUnlisted: Everyone apart from local and federated timelines can see\n\nPrivate: Followers and mentioned users can see\n\nDirect: Only the mentioned users can see")
             .backgroundColor(Colours.white)
             .titleTextColor(Colours.grayDark)
             .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
@@ -1882,35 +1882,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             }
             .action(.default("Direct - Post to mentioned users only".localized)) { (action, ind) in
                 print(action, ind)
-                
-                if (UserDefaults.standard.object(forKey: "divisib") == nil) || (UserDefaults.standard.object(forKey: "divisib") as! Int == 0) {
-                Alertift.actionSheet(title: "Direct Visibility", message: "Please note that all mentioned users will still see this message. Set direct visibility?")
-                    .backgroundColor(Colours.white)
-                    .titleTextColor(Colours.grayDark)
-                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
-                    .messageTextAlignment(.left)
-                    .titleTextAlignment(.left)
-                    .action(.default("Sure!".localized), image: nil) { (action, ind) in
-                        print(action, ind)
-                        self.visibility = .direct
-                        self.visibilityButton.setImage(UIImage(named: "direct"), for: .normal)
-                        self.bringBackDrawer()
-                    }
-                    .action(.cancel("Dismiss"))
-                    .finally { action, index in
-                        if action.style == .cancel {
-                            self.bringBackDrawer()
-                            return
-                        }
-                    }
-                    .popover(anchorView: self.visibilityButton)
-                    .show(on: self)
-                } else {
-                    self.visibility = .direct
-                    self.visibilityButton.setImage(UIImage(named: "direct"), for: .normal)
-                    self.bringBackDrawer()
-                }
-                
+                self.visibility = .direct
+                self.visibilityButton.setImage(UIImage(named: "direct"), for: .normal)
+                self.bringBackDrawer()
             }
             .action(.cancel("Dismiss"))
             .finally { action, index in
@@ -3650,6 +3624,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             self.tableView.deselectRow(at: indexPath, animated: true)
             
             self.textView.text = StoreStruct.drafts[indexPath.row]
+            
+            let newCount = StoreStruct.maxChars - (textView.text?.count)!
+            countLabel.text = "\(newCount)"
             
             StoreStruct.drafts.remove(at: indexPath.row)
             UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")

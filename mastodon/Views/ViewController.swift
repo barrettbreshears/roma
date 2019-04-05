@@ -56,11 +56,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
     var tabOne = SAHistoryNavigationViewController()
     var tabTwo = SAHistoryNavigationViewController()
+    var tabDM = SAHistoryNavigationViewController()
     var tabThree = SAHistoryNavigationViewController()
     var tabFour = SAHistoryNavigationViewController()
 
     var firstView = FirstViewController()
     var secondView = SecondViewController()
+    var dmView = DMViewController()
     var thirdView = ThirdViewController()
     var fourthView = FourthViewController()
 
@@ -129,6 +131,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
         self.firstView.loadLoadLoad()
         self.secondView.loadLoadLoad()
+        self.dmView.loadLoadLoad()
         self.thirdView.loadLoadLoad()
         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
 
@@ -138,11 +141,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
         self.tabBar.barTintColor = Colours.white
         self.tabBar.backgroundColor = Colours.white
-        self.tabBar.unselectedItemTintColor = Colours.tabUnselected
+        self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
         self.tabBar.tintColor = Colours.tabSelected
 
         self.firstView.view.backgroundColor = Colours.white
         self.secondView.view.backgroundColor = Colours.white
+        self.dmView.view.backgroundColor = Colours.white
         self.thirdView.view.backgroundColor = Colours.white
         self.fourthView.view.backgroundColor = Colours.white
 
@@ -150,6 +154,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.tabOne.navigationBar.barTintColor = Colours.white
         self.tabTwo.navigationBar.backgroundColor = Colours.white
         self.tabTwo.navigationBar.barTintColor = Colours.white
+        self.tabDM.navigationBar.backgroundColor = Colours.white
+        self.tabDM.navigationBar.barTintColor = Colours.white
         self.tabThree.navigationBar.backgroundColor = Colours.white
         self.tabThree.navigationBar.barTintColor = Colours.white
         self.tabFour.navigationBar.backgroundColor = Colours.white
@@ -357,9 +363,24 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                     print(json)
-
-                    guard let accessToken = json["access_token"] as? String else {
-                        return
+                    
+                    if let access1 = (json["access_token"] as? String) {
+                    
+                    newInsatnce.accessToken = access1
+                    
+                    InstanceData.setCurrentInstance(instance: newInsatnce)
+                    var instances = InstanceData.getAllInstances()
+                    instances.append(newInsatnce)
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
+                    
+                    
+                    let request = Timelines.home()
+                    StoreStruct.shared.newClient.run(request) { (statuses) in
+                        if let stat = (statuses.value) {
+                            StoreStruct.statusesHome = stat
+                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
+                        }
                     }
 
 
@@ -395,7 +416,28 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
                         }
                     }
-
+                    
+                    
+                    
+                    
+                    // onboarding
+                    if (UserDefaults.standard.object(forKey: "onb") == nil) || (UserDefaults.standard.object(forKey: "onb") as! Int == 0) {
+                        DispatchQueue.main.async {
+                            self.bulletinManager.prepare()
+                            self.bulletinManager.presentBulletin(above: self, animated: true, completion: nil)
+                        }
+                    }
+                    
+                    
+                    DispatchQueue.main.async {
+                        
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        appDelegate.reloadApplication()
+                        
+                    }
+                    
+                    }
+                    
                 }
             } catch let error {
                 print(error.localizedDescription)
@@ -553,8 +595,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     @objc func switch22() {
         self.viewControllers?.last?.tabBarController?.selectedIndex = 1
     }
-    @objc func switch33() {
+    @objc func switch222() {
         self.viewControllers?.last?.tabBarController?.selectedIndex = 2
+    }
+    @objc func switch33() {
+        self.viewControllers?.last?.tabBarController?.selectedIndex = 3
     }
     @objc func switch44() {
         let controller = ComposeViewController()
@@ -641,7 +686,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     }
 
     func switchTo3() {
-        self.tabBarController?.selectedIndex = 2
+        self.tabBarController?.selectedIndex = 3
     }
 
     func gotoID() {
@@ -658,14 +703,15 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         //shortkeys
         let op1 = UIKeyCommand(input: "1", modifierFlags: .control, action: #selector(b1Touched), discoverabilityTitle: "Home Timelines")
         let op2 = UIKeyCommand(input: "2", modifierFlags: .control, action: #selector(b2Touched), discoverabilityTitle: "Notification Timelines")
-        let op3 = UIKeyCommand(input: "3", modifierFlags: .control, action: #selector(b3Touched), discoverabilityTitle: "Profile Timelines")
+        let op3 = UIKeyCommand(input: "3", modifierFlags: .control, action: #selector(b22Touched), discoverabilityTitle: "Direct Messages")
+        let op4 = UIKeyCommand(input: "4", modifierFlags: .control, action: #selector(b3Touched), discoverabilityTitle: "Profile Timelines")
         let listThing = UIKeyCommand(input: "l", modifierFlags: .control, action: #selector(b56Touched), discoverabilityTitle: "Lists")
         let searchThing = UIKeyCommand(input: "f", modifierFlags: .command, action: #selector(b4Touched), discoverabilityTitle: "Search")
         let newToot = UIKeyCommand(input: "n", modifierFlags: .command, action: #selector(switch44), discoverabilityTitle: "New Toot")
         let settings = UIKeyCommand(input: ";", modifierFlags: .command, action: #selector(goToSettings), discoverabilityTitle: "Settings")
         let esca = UIKeyCommand(input: UIKeyCommand.inputEscape, modifierFlags: [], action: #selector(dismissDetail), discoverabilityTitle: "Close Detail")
         return [
-            op1, op2, op3, listThing, searchThing, newToot, settings, esca
+            op1, op2, op3, op4, listThing, searchThing, newToot, settings, esca
         ]
     }
     override var canBecomeFirstResponder: Bool {
@@ -690,11 +736,15 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     @objc func b2Touched() {
         self.selectedIndex = 1
     }
-
-    @objc func b3Touched() {
+    
+    @objc func b22Touched() {
         self.selectedIndex = 2
     }
-
+    
+    @objc func b3Touched() {
+        self.selectedIndex = 3
+    }
+    
     @objc func b56Touched() {
         NotificationCenter.default.post(name: Notification.Name(rawValue: "touchList"), object: nil)
     }
@@ -757,6 +807,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.textField.text = StoreStruct.tappedTag
     }
     
+    @objc func addBadge() {
+        self.tabBar.items?[1].badgeValue = "1"
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Colours.white
@@ -789,10 +843,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         NotificationCenter.default.addObserver(self, selector: #selector(self.signOut), name: NSNotification.Name(rawValue: "signOut"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.signOutNewInstance), name: NSNotification.Name(rawValue: "signOut2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.didTouchSearch), name: NSNotification.Name(rawValue: "searchthething"), object: nil)
-
-
-
-
+        NotificationCenter.default.addObserver(self, selector: #selector(self.addBadge), name: NSNotification.Name(rawValue: "addBadge"), object: nil)
+        
+        
+        
+        
         if (UserDefaults.standard.object(forKey: "themeaccent") == nil) || (UserDefaults.standard.object(forKey: "themeaccent") as! Int == 0) {
             Colours.tabSelected = StoreStruct.colArray[0]
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -837,7 +892,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.tabBar.barTintColor = Colours.white
         self.tabBar.backgroundColor = Colours.white
         self.tabBar.isTranslucent = false
-        self.tabBar.unselectedItemTintColor = Colours.tabUnselected
+        self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
         self.tabBar.tintColor = Colours.tabSelected
 
         statusBarView = UIView(frame: UIApplication.shared.statusBarFrame)
@@ -1241,7 +1296,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     cell.profileImageView.isUserInteractionEnabled = false
                     cell.backgroundColor = Colours.grayDark3
                     cell.userName.textColor = UIColor.white
-                    cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                     cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                     cell.toot.textColor = UIColor.white
                     let bgColorView = UIView()
@@ -1255,11 +1310,18 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     if StoreStruct.statusSearch[indexPath.row].mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! MainFeedCell
                     cell.configure(StoreStruct.statusSearch[indexPath.row])
+                    cell.warningB.backgroundColor = Colours.grayDark3
+                    cell.moreImage.backgroundColor = Colours.grayDark3
+                    cell.rep1.backgroundColor = Colours.grayDark3
+                    cell.like1.backgroundColor = Colours.grayDark3
+                    cell.boost1.backgroundColor = Colours.grayDark3
+                    cell.more1.backgroundColor = Colours.grayDark3
                     cell.profileImageView.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                        cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.backgroundColor = Colours.grayDark3
                     cell.userName.textColor = UIColor.white
-                    cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
+                        cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                     cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                     cell.toot.textColor = UIColor.white
                     let bgColorView = UIView()
@@ -1270,11 +1332,18 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         //bhere7
                         let cell = tableView.dequeueReusableCell(withIdentifier: "cell002", for: indexPath) as! MainFeedCellImage
                         cell.configure(StoreStruct.statusSearch[indexPath.row])
+                        cell.warningB.backgroundColor = Colours.grayDark3
+                        cell.moreImage.backgroundColor = Colours.grayDark3
+                        cell.rep1.backgroundColor = Colours.grayDark3
+                        cell.like1.backgroundColor = Colours.grayDark3
+                        cell.boost1.backgroundColor = Colours.grayDark3
+                        cell.more1.backgroundColor = Colours.grayDark3
                         cell.profileImageView.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                        cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.backgroundColor = Colours.grayDark3
                         cell.userName.textColor = UIColor.white
-                        cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
+                        cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                         cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                         cell.toot.textColor = UIColor.white
                         cell.mainImageView.backgroundColor = Colours.white
@@ -1289,7 +1358,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     cell.profileImageView.tag = indexPath.row
                     cell.backgroundColor = Colours.grayDark3
                     cell.userName.textColor = UIColor.white
-                    cell.userTag.textColor = UIColor.white.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                     cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                     cell.toot.textColor = UIColor.white
                     let bgColorView = UIView()
@@ -1767,6 +1836,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
                 self.firstView.loadLoadLoad()
                 self.secondView.loadLoadLoad()
+                self.dmView.loadLoadLoad()
                 self.thirdView.loadLoadLoad()
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
 
@@ -1776,11 +1846,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
                 self.tabBar.barTintColor = Colours.white
                 self.tabBar.backgroundColor = Colours.white
-                self.tabBar.unselectedItemTintColor = Colours.tabUnselected
+                self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
                 self.tabBar.tintColor = Colours.tabSelected
 
                 self.firstView.view.backgroundColor = Colours.white
                 self.secondView.view.backgroundColor = Colours.white
+                self.dmView.view.backgroundColor = Colours.white
                 self.thirdView.view.backgroundColor = Colours.white
                 self.fourthView.view.backgroundColor = Colours.white
 
@@ -1788,6 +1859,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 self.tabOne.navigationBar.barTintColor = Colours.white
                 self.tabTwo.navigationBar.backgroundColor = Colours.white
                 self.tabTwo.navigationBar.barTintColor = Colours.white
+                self.tabDM.navigationBar.backgroundColor = Colours.white
+                self.tabDM.navigationBar.barTintColor = Colours.white
                 self.tabThree.navigationBar.backgroundColor = Colours.white
                 self.tabThree.navigationBar.barTintColor = Colours.white
                 self.tabFour.navigationBar.backgroundColor = Colours.white
@@ -1848,6 +1921,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
                 self.firstView.loadLoadLoad()
                 self.secondView.loadLoadLoad()
+                self.dmView.loadLoadLoad()
                 self.thirdView.loadLoadLoad()
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
 
@@ -1857,11 +1931,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
                 self.tabBar.barTintColor = Colours.white
                 self.tabBar.backgroundColor = Colours.white
-                self.tabBar.unselectedItemTintColor = Colours.tabUnselected
+                self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
                 self.tabBar.tintColor = Colours.tabSelected
 
                 self.firstView.view.backgroundColor = Colours.white
                 self.secondView.view.backgroundColor = Colours.white
+                self.dmView.view.backgroundColor = Colours.white
                 self.thirdView.view.backgroundColor = Colours.white
                 self.fourthView.view.backgroundColor = Colours.white
 
@@ -1869,6 +1944,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 self.tabOne.navigationBar.barTintColor = Colours.white
                 self.tabTwo.navigationBar.backgroundColor = Colours.white
                 self.tabTwo.navigationBar.barTintColor = Colours.white
+                self.tabDM.navigationBar.backgroundColor = Colours.white
+                self.tabDM.navigationBar.barTintColor = Colours.white
                 self.tabThree.navigationBar.backgroundColor = Colours.white
                 self.tabThree.navigationBar.barTintColor = Colours.white
                 self.tabFour.navigationBar.backgroundColor = Colours.white
@@ -1890,6 +1967,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             self.firstView.loadLoadLoad()
             self.secondView.loadLoadLoad()
+            self.dmView.loadLoadLoad()
             self.thirdView.loadLoadLoad()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
 
@@ -1899,11 +1977,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             self.tabBar.barTintColor = Colours.white
             self.tabBar.backgroundColor = Colours.white
-            self.tabBar.unselectedItemTintColor = Colours.tabUnselected
+            self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
             self.tabBar.tintColor = Colours.tabSelected
 
             self.firstView.view.backgroundColor = Colours.white
             self.secondView.view.backgroundColor = Colours.white
+            self.dmView.view.backgroundColor = Colours.white
             self.thirdView.view.backgroundColor = Colours.white
             self.fourthView.view.backgroundColor = Colours.white
 
@@ -1911,6 +1990,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabOne.navigationBar.barTintColor = Colours.white
             self.tabTwo.navigationBar.backgroundColor = Colours.white
             self.tabTwo.navigationBar.barTintColor = Colours.white
+            self.tabDM.navigationBar.backgroundColor = Colours.white
+            self.tabDM.navigationBar.barTintColor = Colours.white
             self.tabThree.navigationBar.backgroundColor = Colours.white
             self.tabThree.navigationBar.barTintColor = Colours.white
             self.tabFour.navigationBar.backgroundColor = Colours.white
@@ -1932,6 +2013,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             self.firstView.loadLoadLoad()
             self.secondView.loadLoadLoad()
+            self.dmView.loadLoadLoad()
             self.thirdView.loadLoadLoad()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
 
@@ -1941,11 +2023,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             self.tabBar.barTintColor = Colours.white
             self.tabBar.backgroundColor = Colours.white
-            self.tabBar.unselectedItemTintColor = Colours.tabUnselected
+            self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
             self.tabBar.tintColor = Colours.tabSelected
 
             self.firstView.view.backgroundColor = Colours.white
             self.secondView.view.backgroundColor = Colours.white
+            self.dmView.view.backgroundColor = Colours.white
             self.thirdView.view.backgroundColor = Colours.white
             self.fourthView.view.backgroundColor = Colours.white
 
@@ -1953,6 +2036,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabOne.navigationBar.barTintColor = Colours.white
             self.tabTwo.navigationBar.backgroundColor = Colours.white
             self.tabTwo.navigationBar.barTintColor = Colours.white
+            self.tabDM.navigationBar.backgroundColor = Colours.white
+            self.tabDM.navigationBar.barTintColor = Colours.white
             self.tabThree.navigationBar.backgroundColor = Colours.white
             self.tabThree.navigationBar.barTintColor = Colours.white
             self.tabFour.navigationBar.backgroundColor = Colours.white
@@ -1974,6 +2059,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             self.firstView.loadLoadLoad()
             self.secondView.loadLoadLoad()
+            self.dmView.loadLoadLoad()
             self.thirdView.loadLoadLoad()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
 
@@ -1983,11 +2069,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             self.tabBar.barTintColor = Colours.white
             self.tabBar.backgroundColor = Colours.white
-            self.tabBar.unselectedItemTintColor = Colours.tabUnselected
+            self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
             self.tabBar.tintColor = Colours.tabSelected
 
             self.firstView.view.backgroundColor = Colours.white
             self.secondView.view.backgroundColor = Colours.white
+            self.dmView.view.backgroundColor = Colours.white
             self.thirdView.view.backgroundColor = Colours.white
             self.fourthView.view.backgroundColor = Colours.white
 
@@ -1995,6 +2082,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabOne.navigationBar.barTintColor = Colours.white
             self.tabTwo.navigationBar.backgroundColor = Colours.white
             self.tabTwo.navigationBar.barTintColor = Colours.white
+            self.tabDM.navigationBar.backgroundColor = Colours.white
+            self.tabDM.navigationBar.barTintColor = Colours.white
             self.tabThree.navigationBar.backgroundColor = Colours.white
             self.tabThree.navigationBar.barTintColor = Colours.white
             self.tabFour.navigationBar.backgroundColor = Colours.white
@@ -2017,6 +2106,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             self.firstView.loadLoadLoad()
             self.secondView.loadLoadLoad()
+            self.dmView.loadLoadLoad()
             self.thirdView.loadLoadLoad()
             NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
 
@@ -2026,11 +2116,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             self.tabBar.barTintColor = Colours.white
             self.tabBar.backgroundColor = Colours.white
-            self.tabBar.unselectedItemTintColor = Colours.tabUnselected
+            self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
             self.tabBar.tintColor = Colours.tabSelected
 
             self.firstView.view.backgroundColor = Colours.white
             self.secondView.view.backgroundColor = Colours.white
+            self.dmView.view.backgroundColor = Colours.white
             self.thirdView.view.backgroundColor = Colours.white
             self.fourthView.view.backgroundColor = Colours.white
 
@@ -2038,6 +2129,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabOne.navigationBar.barTintColor = Colours.white
             self.tabTwo.navigationBar.backgroundColor = Colours.white
             self.tabTwo.navigationBar.barTintColor = Colours.white
+            self.tabDM.navigationBar.backgroundColor = Colours.white
+            self.tabDM.navigationBar.barTintColor = Colours.white
             self.tabThree.navigationBar.backgroundColor = Colours.white
             self.tabThree.navigationBar.barTintColor = Colours.white
             self.tabFour.navigationBar.backgroundColor = Colours.white
@@ -2622,7 +2715,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.tableViewLists.backgroundColor = Colours.grayDark3
         self.tableViewLists.separatorColor = UIColor(red: 50/250, green: 53/250, blue: 63/250, alpha: 1.0)
         self.tableViewLists.layer.masksToBounds = true
-        self.tableViewLists.estimatedRowHeight = 89
+        self.tableViewLists.estimatedRowHeight = UITableView.automaticDimension
         self.tableViewLists.rowHeight = UITableView.automaticDimension
         self.searcherView.addSubview(self.tableViewLists)
 
@@ -2748,7 +2841,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.tableView.backgroundColor = Colours.grayDark3
         self.tableView.separatorColor = UIColor(red: 50/250, green: 53/250, blue: 63/250, alpha: 1.0)
         self.tableView.layer.masksToBounds = true
-        self.tableView.estimatedRowHeight = 89
+        self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.searcherView.addSubview(self.tableView)
 
@@ -3050,7 +3143,28 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabTwo.navigationBar.barTintColor = Colours.white
             self.tabTwo.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.tabTwo.tabBarItem.tag = 2
-
+            
+            // Create Tab DM
+            self.tabDM = SAHistoryNavigationViewController(rootViewController: self.dmView)
+            if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
+                self.tabDM.historyBackgroundColor = Colours.tabSelected
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
+                self.tabDM.historyBackgroundColor = UIColor(red: 53/250, green: 53/250, blue: 64/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
+                self.tabDM.historyBackgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
+                self.tabDM.historyBackgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
+                self.tabDM.historyBackgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
+            }
+            let tabDMBarItem2 = UITabBarItem(title: "", image: UIImage(named: "direct")?.maskWithColor(color: Colours.gray), selectedImage: UIImage(named: "direct")?.maskWithColor(color: Colours.gray))
+            tabDMBarItem2.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+            self.tabDM.tabBarItem = tabDMBarItem2
+            self.tabDM.navigationBar.backgroundColor = Colours.white
+            self.tabDM.navigationBar.barTintColor = Colours.white
+            self.tabDM.navigationBar.setBackgroundImage(UIImage(), for: .default)
+            self.tabDM.tabBarItem.tag = 2
+            
             // Create Tab three
             self.tabThree = SAHistoryNavigationViewController(rootViewController: self.thirdView)
             if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
@@ -3092,143 +3206,76 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabFour.navigationBar.barTintColor = Colours.white
             self.tabFour.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.tabFour.tabBarItem.tag = 4
-
-
-            //bh5
-            var tabHeight = CGFloat(UITabBarController().tabBar.frame.size.height) + CGFloat(34)
-            var backBit = self.view.bounds.width - 61
-            if UIDevice().userInterfaceIdiom == .phone {
-                switch UIScreen.main.nativeBounds.height {
-                case 2688:
-                    backBit = self.view.bounds.width - 66
-                    tabHeight = CGFloat(UITabBarController().tabBar.frame.size.height) + CGFloat(34)
-                case 2436:
-                    tabHeight = CGFloat(UITabBarController().tabBar.frame.size.height) + CGFloat(34)
-                case 1792:
-                    backBit = self.view.bounds.width - 64
-                    tabHeight = CGFloat(UITabBarController().tabBar.frame.size.height) + CGFloat(34)
-                case 1136:
-                    backBit = self.view.bounds.width - 54
-                    tabHeight = CGFloat(UITabBarController().tabBar.frame.size.height)
-                case 1920, 2208:
-                    backBit = self.view.bounds.width - 66
-                    tabHeight = CGFloat(UITabBarController().tabBar.frame.size.height)
-                default:
-                    tabHeight = CGFloat(UITabBarController().tabBar.frame.size.height)
-                }
-            }
-            self.ai = NVActivityIndicatorView(frame: CGRect(x: backBit, y: self.view.bounds.height - tabHeight + 11, width: 27, height: 27), type: .circleStrokeSpin, color: Colours.tabSelected)
-            self.ai.isUserInteractionEnabled = false
-            self.ai.alpha = 0
-            self.view.addSubview(self.ai)
-//            self.ai.startAnimating()
-
-            let viewControllerList = [self.tabOne, self.tabTwo, self.tabThree, self.tabFour]
-
+            
+            let viewControllerList = [self.tabOne, self.tabTwo, self.tabDM, self.tabThree, self.tabFour]
+            
             for x in viewControllerList {
 
                 if UIDevice().userInterfaceIdiom == .phone {
                     switch UIScreen.main.nativeBounds.height {
                     case 2688:
                         print("iPhone Xs Max")
-
-//                        self.bgView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 88)
-//                        self.bgView.backgroundColor = Colours.cellNorm
-//                        self.navigationController?.view.addSubview(self.bgView)
-
                         let topIcon = UIButton(frame:(CGRect(x: self.view.bounds.width/2 - 100, y: 50, width: 200, height: 30)))
-                        //topIcon.setImage(UIImage(named: "IconSmall"), for: .normal)
-                        //topIcon.setTitle(titleToGo, for: .normal)
                         topIcon.setTitleColor(Colours.grayDark, for: .normal)
                         topIcon.adjustsImageWhenHighlighted = false
-                        //topIcon.addTarget(self, action: #selector(self.didTouchMiddle), for: .touchUpInside)
-                        //let longPressRecognizer1 = UILongPressGestureRecognizer(target: self, action: #selector(self.recognizerFiredNav))
-                        //longPressRecognizer1.minimumPressDuration = 0.25
-                        //topIcon.addGestureRecognizer(longPressRecognizer1)
-//                        self.navigationController?.view.addSubview(topIcon)
-
                         self.searchButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: self.view.bounds.width - 50, y: 50, width: 32, height: 32)))
                         self.searchButton.setImage(UIImage(named: "search")?.maskWithColor(color: Colours.grayLight2), for: .normal)
                         self.searchButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
                         self.searchButton.adjustsImageWhenHighlighted = false
                         self.searchButton.addTarget(self, action: #selector(self.didTouchSearch), for: .touchUpInside)
-
-//                        x.view.addSubview(topIcon)
                         x.view.addSubview(self.searchButton)
-//                        self.firstView.navigationItem.setLeftBarButton(done, animated: true)
-//                        self.secondView.navigationItem.setLeftBarButton(done, animated: true)
-//                        self.thirdView.navigationItem.setLeftBarButton(done, animated: true)
-//                        self.fourthView.navigationItem.setLeftBarButton(done, animated: true)
-
-
                     case 2436, 1792:
                         print("iPhone X")
-
-//                        self.bgView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 88)
-//                        self.bgView.backgroundColor = Colours.cellNorm
-//                        self.navigationController?.view.addSubview(self.bgView)
-
                         let topIcon = UIButton(frame:(CGRect(x: self.view.bounds.width/2 - 100, y: 50, width: 200, height: 30)))
-                        //topIcon.setImage(UIImage(named: "IconSmall"), for: .normal)
-                        //topIcon.setTitle(titleToGo, for: .normal)
                         topIcon.setTitleColor(Colours.grayDark, for: .normal)
                         topIcon.adjustsImageWhenHighlighted = false
-                        //topIcon.addTarget(self, action: #selector(self.didTouchMiddle), for: .touchUpInside)
-                        //let longPressRecognizer1 = UILongPressGestureRecognizer(target: self, action: #selector(self.recognizerFiredNav))
-                        //longPressRecognizer1.minimumPressDuration = 0.25
-                        //topIcon.addGestureRecognizer(longPressRecognizer1)
-//                        self.navigationController?.view.addSubview(topIcon)
-
                         self.searchButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: self.view.bounds.width - 50, y: 50, width: 32, height: 32)))
                         self.searchButton.setImage(UIImage(named: "search")?.maskWithColor(color: Colours.grayLight2), for: .normal)
                         self.searchButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
                         self.searchButton.adjustsImageWhenHighlighted = false
                         self.searchButton.addTarget(self, action: #selector(self.didTouchSearch), for: .touchUpInside)
-
-
-//                        x.view.addSubview(topIcon)
                         x.view.addSubview(self.searchButton)
-//                        self.firstView.navigationItem.setLeftBarButton(done, animated: true)
-//                        self.secondView.navigationItem.setLeftBarButton(done, animated: true)
-//                        self.thirdView.navigationItem.setLeftBarButton(done, animated: true)
-//                        self.fourthView.navigationItem.setLeftBarButton(done, animated: true)
                     default:
-
-//                        self.bgView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 64)
-//                        self.bgView.backgroundColor = Colours.cellNorm
-//                        self.navigationController?.view.addSubview(self.bgView)
-
                         let topIcon = UIButton(frame:(CGRect(x: self.view.bounds.width/2 - 100, y: 26, width: 200, height: 30)))
-                        //topIcon.setImage(UIImage(named: "IconSmall"), for: .normal)
-                        //topIcon.setTitle(titleToGo, for: .normal)
                         topIcon.setTitleColor(Colours.grayDark, for: .normal)
                         topIcon.adjustsImageWhenHighlighted = false
-                        //topIcon.addTarget(self, action: #selector(self.didTouchMiddle), for: .touchUpInside)
-                        //let longPressRecognizer1 = UILongPressGestureRecognizer(target: self, action: #selector(self.recognizerFiredNav))
-                        //longPressRecognizer1.minimumPressDuration = 0.25
-                        //topIcon.addGestureRecognizer(longPressRecognizer1)
-//                        self.navigationController?.view.addSubview(topIcon)
-
                         self.searchButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: self.view.bounds.width - 50, y: 27, width: 32, height: 32)))
                         self.searchButton.setImage(UIImage(named: "search")?.maskWithColor(color: Colours.grayLight2), for: .normal)
                         self.searchButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
                         self.searchButton.adjustsImageWhenHighlighted = false
                         self.searchButton.addTarget(self, action: #selector(self.didTouchSearch), for: .touchUpInside)
-
-//                        x.view.addSubview(topIcon)
                         x.view.addSubview(self.searchButton)
-//                        self.firstView.navigationItem.setLeftBarButton(done, animated: true)
-//                        self.secondView.navigationItem.setLeftBarButton(done, animated: true)
-//                        self.thirdView.navigationItem.setLeftBarButton(done, animated: true)
-//                        self.fourthView.navigationItem.setLeftBarButton(done, animated: true)
-
                     }
                 }
 
             }
 
             self.viewControllers = viewControllerList
-
+            
+            var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
+            var offset = 88
+            var newoff = 45
+            if UIDevice().userInterfaceIdiom == .phone {
+                switch UIScreen.main.nativeBounds.height {
+                case 2688:
+                    offset = 88
+                    newoff = 45
+                case 2436, 1792:
+                    offset = 88
+                    newoff = 45
+                default:
+                    offset = 64
+                    newoff = 24
+                    tabHeight = Int(UITabBarController().tabBar.frame.size.height)
+                }
+            }
+            
+            self.ai = NVActivityIndicatorView(frame: CGRect(x: -100, y: self.view.bounds.height + 100, width: 27, height: 27), type: .circleStrokeSpin, color: Colours.tabSelected)
+            let xOffset = (self.view.bounds.width/10) * 9
+            self.ai.center = CGPoint(x: CGFloat(xOffset), y: CGFloat(self.view.bounds.height) - CGFloat(tabHeight) + 24)
+            self.ai.isUserInteractionEnabled = false
+            self.ai.alpha = 0
+            self.view.addSubview(self.ai)
         }
     }
 }

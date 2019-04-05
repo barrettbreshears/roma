@@ -228,13 +228,7 @@ public class SJFluidSegmentedControl: UIView, UIGestureRecognizerDelegate {
     }
     
     /// The index of the currently selected segment. It ranges from 0 to segmentsCount-1.
-    open var currentSegment: Int = 0 {
-        didSet {
-            if currentSegment != oldValue {
-                setCurrentSegmentIndex(currentSegment, animated: false)
-            }
-        }
-    }
+    open var currentSegment: Int = 0
     
     /// The number of segments in the segmented control. Default is `1`.
     fileprivate(set) public var segmentsCount: Int = 1
@@ -533,6 +527,9 @@ public class SJFluidSegmentedControl: UIView, UIGestureRecognizerDelegate {
     // MARK: - Setup Gesture Recognizers
     
     fileprivate func setupTapGestureRecogniers() {
+        let scrollTapRecognizer = UITapGestureRecognizer(target: self,
+                                                       action: #selector(self.tapWasRecognized2(_:)))
+        self.scrollView.addGestureRecognizer(scrollTapRecognizer)
         let leftTapRecognizer = UITapGestureRecognizer(target: self,
                                                        action: #selector(self.tapWasRecognized(_:)))
         leftLimiterView.addGestureRecognizer(leftTapRecognizer)
@@ -545,6 +542,11 @@ public class SJFluidSegmentedControl: UIView, UIGestureRecognizerDelegate {
         let point = recognizer.location(in: self)
         self.isUserInteractionEnabled = false
         setCurrentSegmentIndex(segmentFromTapPoint(point), animated: true)
+    }
+    
+    @objc fileprivate func tapWasRecognized2(_ recognizer: UITapGestureRecognizer) {
+        let indexDict: [String: Int] = ["index": self.currentSegment]
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "setCurrentSegmentIndex"), object: nil, userInfo: indexDict)
     }
     
     // MARK: - Setup Constraints

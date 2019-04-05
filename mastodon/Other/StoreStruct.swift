@@ -73,7 +73,7 @@ struct StoreStruct {
     
     static var notifications: [Notificationt] = []
     static var notificationsMentions: [Notificationt] = []
-    static var notificationsDirect: [Notificationt] = []
+    static var notificationsDirect: [Conversation] = []
     
     static var fromOtherUser = false
     static var userIDtoUse = ""
@@ -149,6 +149,7 @@ struct StoreStruct {
     static var holdOnTempText = ""
     
     static var tappedSignInCheck = false
+    static var markedReadIDs: [String] = []
 }
 
 class TextStyling {

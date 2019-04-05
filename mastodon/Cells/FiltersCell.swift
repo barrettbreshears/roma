@@ -18,6 +18,9 @@ class FiltersCell: SwipeTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        userName.adjustsFontForContentSizeCategory = true
+        toot.adjustsFontForContentSizeCategory = true
+        
         userName.translatesAutoresizingMaskIntoConstraints = false
         toot.translatesAutoresizingMaskIntoConstraints = false
         

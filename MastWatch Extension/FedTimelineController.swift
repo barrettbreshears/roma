@@ -52,6 +52,11 @@ class FedTimelineController: WKInterfaceController {
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
+        
+        if #available(watchOSApplicationExtension 5.1, *) {
+            self.tableView.curvesAtTop = true
+            self.tableView.curvesAtBottom = true
+        }
     
         self.indicator = EMTLoadingIndicator(interfaceController: self, interfaceImage: self.image,
                                              width: 40, height: 40, style: .line)

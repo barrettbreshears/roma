@@ -17,7 +17,7 @@ import AVFoundation
 
 class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate {
     
-    var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .circleStrokeSpin, color: Colours.tabSelected)
+    var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
     var segmentedControl: SJFluidSegmentedControl!
     var tableView = UITableView()
@@ -204,7 +204,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.tableView.backgroundColor = Colours.white
         self.tableView.separatorColor = Colours.cellQuote
         self.tableView.layer.masksToBounds = true
-        self.tableView.estimatedRowHeight = 89
+        self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
         
@@ -273,7 +273,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.tableView.backgroundColor = Colours.white
         self.tableView.separatorColor = Colours.cellQuote
         self.tableView.layer.masksToBounds = true
-        self.tableView.estimatedRowHeight = 89
+        self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
         self.loadLoadLoad()
@@ -314,9 +314,9 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         return self.currentTags.count
     }
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
-    }
+//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//        return UITableView.automaticDimension
+//    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -347,9 +347,11 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             cell.configure(self.currentTags[indexPath.row])
             cell.profileImageView.tag = indexPath.row
+            cell.userTag.tag = indexPath.row
             cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+            cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
             cell.userName.textColor = Colours.black
-            cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
+            cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
             cell.date.textColor = Colours.black.withAlphaComponent(0.6)
             cell.toot.textColor = Colours.black
             cell.toot.handleMentionTap { (string) in
@@ -440,7 +442,9 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             
             cell.configure(self.currentTags[indexPath.row])
             cell.profileImageView.tag = indexPath.row
+            cell.userTag.tag = indexPath.row
             cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+            cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
             cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
                     cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
                     cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
@@ -452,7 +456,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                     cell.smallImage3.tag = indexPath.row
                     cell.smallImage4.tag = indexPath.row
             cell.userName.textColor = Colours.black
-            cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
+            cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
             cell.date.textColor = Colours.black.withAlphaComponent(0.6)
             cell.toot.textColor = Colours.black
             cell.mainImageView.backgroundColor = Colours.white
@@ -2119,7 +2123,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             Colours.black = UIColor.black
             UIApplication.shared.statusBarStyle = .default
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 1) {
-            Colours.white = UIColor(red: 53/255.0, green: 53/255.0, blue: 64/255.0, alpha: 1.0)
+            Colours.white = UIColor(red: 46/255.0, green: 46/255.0, blue: 52/255.0, alpha: 1.0)
             Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white
@@ -2145,7 +2149,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 4) {
-            Colours.white = UIColor(red: 8/255.0, green: 28/255.0, blue: 88/255.0, alpha: 1.0)
+            Colours.white = UIColor(red: 41/255.0, green: 50/255.0, blue: 78/255.0, alpha: 1.0)
             Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white

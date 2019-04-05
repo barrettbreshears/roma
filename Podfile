@@ -24,6 +24,7 @@ pod 'Firebase/Core'
 pod 'Fabric'
 pod 'Crashlytics'
 pod 'QuickLayout'
-pod 'Firebase/Messaging'
+pod 'Sharaku'
+pod 'MessageKit'
 
 end

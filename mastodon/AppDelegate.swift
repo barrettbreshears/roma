@@ -81,9 +81,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                     userDefaults.set(nil, forKey: "notidpush")
                 }
             }
+        } else if application.applicationState == .active {
+            if (UserDefaults.standard.object(forKey: "badgeMent") == nil) || (UserDefaults.standard.object(forKey: "badgeMent") as! Int == 0) {
+                if StoreStruct.currentPage != 1 {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "addBadge"), object: nil)
+                }
+            }
         }
-
-        UIApplication.shared.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
+        
+        if application.applicationState == .inactive || application.applicationState == .background {
+            UIApplication.shared.applicationIconBadgeNumber = UIApplication.shared.applicationIconBadgeNumber + 1
+        }
     }
     
     func application(_ application: UIApplication, shouldSaveApplicationState coder: NSCoder) -> Bool {
@@ -190,7 +198,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
             } else if url.absoluteString.contains("toot=") {
                 let x = url.absoluteString
                 let y = x.split(separator: "=")
-                StoreStruct.composedTootText = y[1].description
+                StoreStruct.composedTootText = y[1].description.replace("%20", with: " ")
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "switch44"), object: self)
                 return true
             } else if url.absoluteString.contains("instance=") {
@@ -203,6 +211,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                 return true
             } else if url.host == "mentions" {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "switch22"), object: self)
+                return true
+            } else if url.host == "direct" {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "switch222"), object: self)
                 return true
             } else if url.host == "profile" {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "switch33"), object: self)
@@ -272,13 +283,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-
-
-        FirebaseApp.configure()
-        if UIApplication.shared.isSplitOrSlideOver {
-            self.window?.rootViewController = ViewController()
-            self.window?.makeKeyAndVisible()
-        } else {
+        
+//        if UIApplication.shared.isSplitOrSlideOver {
+//            self.window?.rootViewController = ViewController()
+//            self.window?.makeKeyAndVisible()
+//        } else {
             self.window = UIWindow(frame: UIScreen.main.bounds)
             self.window!.backgroundColor = Colours.white
 
@@ -344,8 +353,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
             UINavigationBar.appearance().barTintColor = Colours.black
             UINavigationBar.appearance().tintColor = Colours.black
             UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
-        }
-
+//        }
+        
         SwiftyGiphyAPI.shared.apiKey = SwiftyGiphyAPI.publicBetaKey
 
 
@@ -472,14 +481,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                 self.oneTime = true
             }
         }
-
-
-        if UIApplication.shared.isSplitOrSlideOver {
-            self.window?.rootViewController = ViewController()
-            self.window?.makeKeyAndVisible()
-            StoreStruct.isSplit = true
-        } else {
-            if StoreStruct.isSplit {
+        
+        
+//        if UIApplication.shared.isSplitOrSlideOver {
+//            self.window?.rootViewController = ViewController()
+//            self.window?.makeKeyAndVisible()
+//            StoreStruct.isSplit = true
+//        } else {
+//            if StoreStruct.isSplit {
             let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
             switch (deviceIdiom) {
             case .phone:
@@ -552,9 +561,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
             default:
                 print("nothing")
             }
-                StoreStruct.isSplit = false
-            }
-        }
+//                StoreStruct.isSplit = false
+//            }
+//        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -616,8 +625,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         }
 
         if UIApplication.shared.isSplitOrSlideOver {
-            self.window?.rootViewController = ViewController()
-            self.window?.makeKeyAndVisible()
+//            self.window?.rootViewController = ViewController()
+//            self.window?.makeKeyAndVisible()
         } else {
 
             let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom

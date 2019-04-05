@@ -35,7 +35,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     var hMod: [Notificationt] = []
     var fMod: [Notificationt] = []
     var nsocket: WebSocket!
-    var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .circleStrokeSpin, color: Colours.tabSelected)
+    var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
     var segmentedControl: SJFluidSegmentedControl!
     var tableView = UITableView()
@@ -76,18 +76,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 }
             } else {
                 detailVC.mainStatus.append(StoreStruct.notificationsMentions[indexPath.row].status!)
-            }
-            detailVC.isPeeking = true
-            previewingContext.sourceRect = cell.frame
-            return detailVC
-            
-        } else if self.currentIndex == 5 {
-            
-            guard let indexPath = self.tableView3.indexPathForRow(at: location) else { return nil }
-            guard let cell = self.tableView3.cellForRow(at: indexPath) else { return nil }
-            let detailVC = DetailViewController()
-            if self.currentIndex == 5 {
-                detailVC.mainStatus.append(StoreStruct.notificationsDirect[indexPath.row].status!)
             }
             detailVC.isPeeking = true
             previewingContext.sourceRect = cell.frame
@@ -143,12 +131,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             
         } else if self.currentIndex == 5 {
             
-            DispatchQueue.main.async {
-                if StoreStruct.notificationsDirect.count > 0 {
-                    let indexPath = IndexPath(row: 0, section: 0)
-                    self.tableView3.scrollToRow(at: indexPath, at: .top, animated: true)
-                }
-            }
             
         } else {
             
@@ -352,7 +334,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView.backgroundColor = Colours.white
             self.tableView.separatorColor = Colours.cellQuote
             self.tableView.layer.masksToBounds = true
-            self.tableView.estimatedRowHeight = 89
+            self.tableView.estimatedRowHeight = UITableView.automaticDimension
             self.tableView.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView)
             
@@ -366,7 +348,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView3.backgroundColor = Colours.white
             self.tableView3.separatorColor = Colours.cellQuote
             self.tableView3.layer.masksToBounds = true
-            self.tableView3.estimatedRowHeight = 89
+            self.tableView3.estimatedRowHeight = UITableView.automaticDimension
             self.tableView3.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView3)
             
@@ -381,15 +363,15 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView2.backgroundColor = Colours.white
             self.tableView2.separatorColor = Colours.cellQuote
             self.tableView2.layer.masksToBounds = true
-            self.tableView2.estimatedRowHeight = 89
+            self.tableView2.estimatedRowHeight = UITableView.automaticDimension
             self.tableView2.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView2)
             self.loadLoadLoad()
         } else {
             if UIApplication.shared.isSplitOrSlideOver {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 110), y: CGFloat(30), width: CGFloat(220), height: CGFloat(40)))
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(30), width: CGFloat(200), height: CGFloat(40)))
             } else {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 110), y: CGFloat(newoff), width: CGFloat(220), height: CGFloat(40)))
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(newoff), width: CGFloat(200), height: CGFloat(40)))
             }
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
@@ -407,7 +389,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView.register(GraphCell.self, forCellReuseIdentifier: "cellG")
             self.tableView.register(NotificationCell.self, forCellReuseIdentifier: "cell3")
             self.tableView.register(NotificationCellImage.self, forCellReuseIdentifier: "cell4")
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 0)
             self.tableView.alpha = 1
             self.tableView.delegate = self
             self.tableView.dataSource = self
@@ -415,13 +397,13 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView.backgroundColor = Colours.white
             self.tableView.separatorColor = Colours.cellQuote
             self.tableView.layer.masksToBounds = true
-            self.tableView.estimatedRowHeight = 89
+            self.tableView.estimatedRowHeight = UITableView.automaticDimension
             self.tableView.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView)
             
             self.tableView3.register(MainFeedCell.self, forCellReuseIdentifier: "cell444")
             self.tableView3.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell555")
-            self.tableView3.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 5)
+            self.tableView3.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 0)
             self.tableView3.alpha = 0
             self.tableView3.delegate = self
             self.tableView3.dataSource = self
@@ -429,14 +411,14 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView3.backgroundColor = Colours.white
             self.tableView3.separatorColor = Colours.cellQuote
             self.tableView3.layer.masksToBounds = true
-            self.tableView3.estimatedRowHeight = 89
+            self.tableView3.estimatedRowHeight = UITableView.automaticDimension
             self.tableView3.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView3)
             
             self.tableView2.register(GraphCell.self, forCellReuseIdentifier: "cellG02")
             self.tableView2.register(NotificationCell.self, forCellReuseIdentifier: "cell302")
             self.tableView2.register(NotificationCellImage.self, forCellReuseIdentifier: "cell402")
-            self.tableView2.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 5)
+            self.tableView2.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 0)
             self.tableView2.alpha = 0
             self.tableView2.delegate = self
             self.tableView2.dataSource = self
@@ -444,7 +426,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView2.backgroundColor = Colours.white
             self.tableView2.separatorColor = Colours.cellQuote
             self.tableView2.layer.masksToBounds = true
-            self.tableView2.estimatedRowHeight = 89
+            self.tableView2.estimatedRowHeight = UITableView.automaticDimension
             self.tableView2.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView2)
             self.loadLoadLoad()
@@ -464,27 +446,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         if (UserDefaults.standard.object(forKey: "biometricsnot") == nil) || (UserDefaults.standard.object(forKey: "biometricsnot") as! Int == 0) {} else {
             self.biometricAuthenticationClicked(self)
         }
-        
-        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
-            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 32, height: 32)
-            settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
-            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-            settingsButton.imageView?.layer.cornerRadius = 0
-            settingsButton.imageView?.contentMode = .scaleAspectFill
-            settingsButton.layer.masksToBounds = true
-        } else {
-            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
-            if StoreStruct.currentUser != nil {
-                settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
-            }
-            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            settingsButton.imageView?.layer.cornerRadius = 18
-            settingsButton.imageView?.contentMode = .scaleAspectFill
-            settingsButton.layer.masksToBounds = true
-        }
-        settingsButton.adjustsImageWhenHighlighted = false
-        settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
-        self.navigationController?.view.addSubview(settingsButton)
     }
     
     
@@ -627,9 +588,21 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
+    @objc func currentSegIndex(_ notification: NSNotification) {
+        if let index = notification.userInfo?["index"] as? Int {
+            if index == 0 {
+                self.tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            }
+            if index == 1 {
+                self.tableView2.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.currentSegIndex), name: NSNotification.Name(rawValue: "setCurrentSegmentIndex"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshgraph), name: NSNotification.Name(rawValue: "refrefref"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToIDNoti), name: NSNotification.Name(rawValue: "gotoidnoti2"), object: nil)
@@ -703,7 +676,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView.backgroundColor = Colours.white
             self.tableView.separatorColor = Colours.cellQuote
             self.tableView.layer.masksToBounds = true
-            self.tableView.estimatedRowHeight = 89
+            self.tableView.estimatedRowHeight = UITableView.automaticDimension
             self.tableView.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView)
             
@@ -717,7 +690,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView3.backgroundColor = Colours.white
             self.tableView3.separatorColor = Colours.cellQuote
             self.tableView3.layer.masksToBounds = true
-            self.tableView3.estimatedRowHeight = 89
+            self.tableView3.estimatedRowHeight = UITableView.automaticDimension
             self.tableView3.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView3)
             
@@ -732,14 +705,14 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView2.backgroundColor = Colours.white
             self.tableView2.separatorColor = Colours.cellQuote
             self.tableView2.layer.masksToBounds = true
-            self.tableView2.estimatedRowHeight = 89
+            self.tableView2.estimatedRowHeight = UITableView.automaticDimension
             self.tableView2.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView2)
         } else {
             if UIApplication.shared.isSplitOrSlideOver {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 110), y: CGFloat(30), width: CGFloat(220), height: CGFloat(40)))
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(30), width: CGFloat(200), height: CGFloat(40)))
             } else {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 110), y: CGFloat(newoff), width: CGFloat(220), height: CGFloat(40)))
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(newoff), width: CGFloat(200), height: CGFloat(40)))
             }
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
@@ -757,7 +730,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView.register(GraphCell.self, forCellReuseIdentifier: "cellG")
             self.tableView.register(NotificationCell.self, forCellReuseIdentifier: "cell3")
             self.tableView.register(NotificationCellImage.self, forCellReuseIdentifier: "cell4")
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 5 - tabHeight)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 0 - tabHeight)
             self.tableView.alpha = 1
             self.tableView.delegate = self
             self.tableView.dataSource = self
@@ -765,13 +738,13 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView.backgroundColor = Colours.white
             self.tableView.separatorColor = Colours.cellQuote
             self.tableView.layer.masksToBounds = true
-            self.tableView.estimatedRowHeight = 89
+            self.tableView.estimatedRowHeight = UITableView.automaticDimension
             self.tableView.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView)
             
             self.tableView3.register(MainFeedCell.self, forCellReuseIdentifier: "cell444")
             self.tableView3.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell555")
-            self.tableView3.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 5 - tabHeight)
+            self.tableView3.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 0 - tabHeight)
             self.tableView3.alpha = 0
             self.tableView3.delegate = self
             self.tableView3.dataSource = self
@@ -779,14 +752,14 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView3.backgroundColor = Colours.white
             self.tableView3.separatorColor = Colours.cellQuote
             self.tableView3.layer.masksToBounds = true
-            self.tableView3.estimatedRowHeight = 89
+            self.tableView3.estimatedRowHeight = UITableView.automaticDimension
             self.tableView3.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView3)
             
             self.tableView2.register(GraphCell.self, forCellReuseIdentifier: "cellG02")
             self.tableView2.register(NotificationCell.self, forCellReuseIdentifier: "cell302")
             self.tableView2.register(NotificationCellImage.self, forCellReuseIdentifier: "cell402")
-            self.tableView2.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 5 - tabHeight)
+            self.tableView2.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 0 - tabHeight)
             self.tableView2.alpha = 0
             self.tableView2.delegate = self
             self.tableView2.dataSource = self
@@ -794,7 +767,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView2.backgroundColor = Colours.white
             self.tableView2.separatorColor = Colours.cellQuote
             self.tableView2.layer.masksToBounds = true
-            self.tableView2.estimatedRowHeight = 89
+            self.tableView2.estimatedRowHeight = UITableView.automaticDimension
             self.tableView2.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView2)
         }
@@ -803,7 +776,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
         //self.tableView.addSubview(refreshControl)
         
-        tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+        tableView.cr.addHeadRefresh(animator: NormalHeaderAnimator()) { [weak self] in
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 let selection = UISelectionFeedbackGenerator()
                 selection.selectionChanged()
@@ -813,7 +786,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 self?.tableView.cr.endHeaderRefresh()
             })
         }
-        tableView2.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+        tableView2.cr.addHeadRefresh(animator: NormalHeaderAnimator()) { [weak self] in
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 let selection = UISelectionFeedbackGenerator()
                 selection.selectionChanged()
@@ -823,7 +796,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 self?.tableView2.cr.endHeaderRefresh()
             })
         }
-        tableView3.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+        tableView3.cr.addHeadRefresh(animator: NormalHeaderAnimator()) { [weak self] in
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 let selection = UISelectionFeedbackGenerator()
                 selection.selectionChanged()
@@ -836,10 +809,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         //tableView.cr.beginHeaderRefresh()
         
         
-        self.ai = NVActivityIndicatorView(frame: CGRect(x: self.view.bounds.width/2 - 20, y: self.view.bounds.height/2, width: 40, height: 40), type: .circleStrokeSpin, color: Colours.tabSelected)
+        self.ai = NVActivityIndicatorView(frame: CGRect(x: self.view.bounds.width/2 - 20, y: self.view.bounds.height/2, width: 40, height: 40), type: .ballRotateChase, color: Colours.tabSelected)
         self.view.addSubview(self.ai)
         self.loadLoadLoad()
         
+        self.fetchMoreNotifications()
         
         if StoreStruct.notifications.isEmpty {
             let request = Notifications.all(range: .default)
@@ -847,27 +821,17 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 if let stat = (statuses.value) {
                     StoreStruct.notifications = stat
                     
-                    StoreStruct.notificationsMentions = []
+//                    StoreStruct.notificationsMentions = []
                     
-                    StoreStruct.notificationsMentions = StoreStruct.notifications.filter({ (test) -> Bool in
+                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions + StoreStruct.notifications.filter({ (test) -> Bool in
                         test.type == .mention
                     })
                     
-                    
-                    StoreStruct.notificationsDirect = []
-                    
-                    
-                    StoreStruct.notificationsDirect = StoreStruct.notifications.filter({ (test) -> Bool in
-                        test.type == .mention && test.status?.visibility == .direct
-                    })
                     
                     
                     DispatchQueue.main.async {
                         StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
                         StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-                        
-                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.sorted(by: { $0.createdAt > $1.createdAt })
-                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                         
                         self.ai.alpha = 0
                         self.ai.removeFromSuperview()
@@ -881,28 +845,19 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 }
             }
         } else {
-            StoreStruct.notificationsMentions = []
+//            StoreStruct.notificationsMentions = []
             
             
-            StoreStruct.notificationsMentions = StoreStruct.notifications.filter({ (test) -> Bool in
+            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions + StoreStruct.notifications.filter({ (test) -> Bool in
                 test.type == .mention
             })
             
             
-            StoreStruct.notificationsDirect = []
-            
-            
-            StoreStruct.notificationsDirect = StoreStruct.notifications.filter({ (test) -> Bool in
-                test.type == .mention && test.status?.visibility == .direct
-            })
             
             
             DispatchQueue.main.async {
                 StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
                 StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-                
-                StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.sorted(by: { $0.createdAt > $1.createdAt })
-                StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                 
                 self.ai.alpha = 0
                 self.ai.removeFromSuperview()
@@ -981,6 +936,30 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        
+        
+        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
+            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 32, height: 32)
+            settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+            settingsButton.imageView?.layer.cornerRadius = 0
+            settingsButton.imageView?.contentMode = .scaleAspectFill
+            settingsButton.layer.masksToBounds = true
+        } else {
+            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
+            if StoreStruct.currentUser != nil {
+                settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            }
+            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            settingsButton.imageView?.layer.cornerRadius = 18
+            settingsButton.imageView?.contentMode = .scaleAspectFill
+            settingsButton.layer.masksToBounds = true
+        }
+        settingsButton.adjustsImageWhenHighlighted = false
+        settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
+        self.navigationController?.view.addSubview(settingsButton)
+        
+        self.tabBarController?.tabBar.items?[1].badgeValue = nil
         
         StoreStruct.currentPage = 1
 //        self.tableView.reloadData()
@@ -1182,9 +1161,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         for x in stat {
                             if x.type == .mention {
                                 StoreStruct.notificationsMentions.append(x)
-                                if x.status?.visibility == .direct {
-                                    StoreStruct.notificationsDirect.append(x)
-                                }
                             }
                         }
                         
@@ -1538,14 +1514,12 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     }
     
     func numberOfSegmentsInSegmentedControl(_ segmentedControl: SJFluidSegmentedControl) -> Int {
-        return 3
+        return 2
     }
     
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, titleForSegmentAtIndex index: Int) -> String? {
         if index == 0 {
             return "@You".localized
-        } else if index == 1 {
-            return "Direct".localized
         } else {
             return "Activity".localized
         }
@@ -1637,49 +1611,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         
         
         
-        
         if toIndex == 1 {
-            
-            if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
-                crownControl.hideCrown()
-                crownControl2.showCrown()
-                crownControl3.hideCrown()
-            }
-            
-            
-            if self.countcount2 == 0 {
-                self.newUpdatesB1.alpha = 0
-                self.newUpdatesB2.alpha = 0
-            } else {
-                self.newUpdatesB1.alpha = 0
-                self.newUpdatesB2.alpha = 1
-            }
-            
-            self.currentIndex = 5
-            self.tableView.alpha = 0
-            self.tableView2.alpha = 0
-            self.tableView3.alpha = 1
-            
-            
-            if StoreStruct.notifications.isEmpty {
-                let request = Notifications.all(range: .default)
-                StoreStruct.client.run(request) { (statuses) in
-                    if let stat = (statuses.value) {
-                        StoreStruct.notifications = stat
-                        self.tableView3.reloadData()
-                        
-                    }
-                }
-            } else {
-                self.tableView3.reloadData()
-            }
-            
-            
-        }
-        
-        
-        
-        if toIndex == 2 {
             
             if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
                 crownControl.hideCrown()
@@ -1743,7 +1675,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 return StoreStruct.notifications.count
             }
         } else if self.currentIndex == 5 {
-            return StoreStruct.notificationsDirect.count
+            return 0
         } else {
             return StoreStruct.notificationsMentions.count
         }
@@ -1811,15 +1743,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 return cell
             } else {
                 
-                
-                if indexPath.row == StoreStruct.notificationsDirect.count {
-                    self.fetchMoreNotifications()
-                }
                 if indexPath.row < 7 {
                     self.fetchMoreNotifications()
                 }
                 
-                if let hasStatus = StoreStruct.notificationsDirect[indexPath.row].status {
+                if let hasStatus = StoreStruct.notificationsDirect[indexPath.row].lastStatus {
                     
                     if hasStatus.mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
                         let cell = tableView.dequeueReusableCell(withIdentifier: "cell444", for: indexPath) as! MainFeedCell
@@ -1831,10 +1759,12 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
                         cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
                         
-                        cell.configure(StoreStruct.notificationsDirect[indexPath.row].status!)
+                        cell.configure(StoreStruct.notificationsDirect[indexPath.row].lastStatus!)
                         cell.moreImage.image = nil
                         cell.profileImageView.tag = indexPath.row
+                        cell.userTag.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                        cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.backgroundColor = Colours.white
                         //cell.userName.textColor = Colours.black
                         //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
@@ -1847,11 +1777,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             }
                             
                             var newString = string
-                            for z2 in StoreStruct.notificationsDirect[indexPath.row].status!.mentions {
-                                if z2.acct.contains(string) {
-                                    newString = z2.id
-                                }
-                            }
                             
                             
                             let controller = ThirdViewController()
@@ -1923,10 +1848,12 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
                         cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
                         
-                        cell.configure(StoreStruct.notificationsDirect[indexPath.row].status!)
+                        cell.configure(StoreStruct.notificationsDirect[indexPath.row].lastStatus!)
                         cell.moreImage.image = nil
                         cell.profileImageView.tag = indexPath.row
+                        cell.userTag.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                        cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
                     cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
                     cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
@@ -1951,11 +1878,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             }
                             
                             var newString = string
-                            for z2 in StoreStruct.notificationsDirect[indexPath.row].status!.mentions {
-                                if z2.acct.contains(string) {
-                                    newString = z2.id
-                                }
-                            }
                             
                             
                             let controller = ThirdViewController()
@@ -2030,7 +1952,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
                     cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
                     
-                    cell.configure(StoreStruct.notificationsDirect[indexPath.row].status!)
+                    cell.configure(StoreStruct.notificationsDirect[indexPath.row].lastStatus!)
                     cell.moreImage.image = nil
                     cell.backgroundColor = Colours.white
                     //cell.userName.textColor = Colours.black
@@ -2044,12 +1966,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         }
                         
                         var newString = string
-                        for z2 in StoreStruct.notificationsDirect[indexPath.row].status!.mentions {
-                            if z2.acct.contains(string) {
-                                newString = z2.id
-                            }
-                        }
-                        
                         
                         let controller = ThirdViewController()
                         if newString == StoreStruct.currentUser.username {} else {
@@ -2180,7 +2096,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             
                             cell.configure(StoreStruct.notifications[indexPath.row])
                             cell.profileImageView.tag = indexPath.row
+                            cell.userTag.tag = indexPath.row
                             cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                            cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                             cell.backgroundColor = Colours.white
                             //cell.userName.textColor = Colours.black
                             //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
@@ -2272,7 +2190,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             
                             cell.configure(StoreStruct.notifications[indexPath.row])
                             cell.profileImageView.tag = indexPath.row
+                            cell.userTag.tag = indexPath.row
                             cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                            cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                             cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
                     cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
                     cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
@@ -2505,7 +2425,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         
                         cell.configure(StoreStruct.notificationsMentions[indexPath.row])
                         cell.profileImageView.tag = indexPath.row
+                        cell.userTag.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                        cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.backgroundColor = Colours.white
                         //cell.userName.textColor = Colours.black
                         //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
@@ -2597,7 +2519,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         
                         cell.configure(StoreStruct.notificationsMentions[indexPath.row])
                         cell.profileImageView.tag = indexPath.row
+                        cell.userTag.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                        cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
                     cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
                     cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
@@ -2802,7 +2726,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             sto = StoreStruct.notifications
             print("880")
         } else if self.currentIndex == 5 {
-            sto = StoreStruct.notificationsDirect
         } else if self.currentIndex == 1 {
             print("8801")
             sto = StoreStruct.notificationsMentions
@@ -2835,7 +2758,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
             theTable = self.tableView2
         } else if self.currentIndex == 5 {
-            sto = StoreStruct.notificationsDirect
             StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
             theTable = self.tableView3
         } else if self.currentIndex == 1 {
@@ -3011,7 +2933,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
             theTable = self.tableView2
         } else if self.currentIndex == 5 {
-            sto = StoreStruct.notificationsDirect
             StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
             theTable = self.tableView3
         } else if self.currentIndex == 1 {
@@ -3090,7 +3011,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
             theTable = self.tableView2
         } else if self.currentIndex == 5 {
-            sto = StoreStruct.notificationsDirect
             StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
             theTable = self.tableView3
         } else if self.currentIndex == 1 {
@@ -3170,7 +3090,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
             theTable = self.tableView2
         } else if self.currentIndex == 5 {
-            sto = StoreStruct.notificationsDirect
             StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
             theTable = self.tableView3
         } else if self.currentIndex == 1 {
@@ -3251,7 +3170,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
             theTable = self.tableView2
         } else if self.currentIndex == 5 {
-            sto = StoreStruct.notificationsDirect
             StoreStruct.newIDtoGoTo = sto[sender.tag].status?.id ?? ""
             theTable = self.tableView3
         } else if self.currentIndex == 1 {
@@ -3338,7 +3256,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             sto = StoreStruct.notifications
             theTable = self.tableView2
         } else if self.currentIndex == 5 {
-            sto = StoreStruct.notificationsDirect
             theTable = self.tableView3
         } else if self.currentIndex == 1 {
             sto = StoreStruct.notificationsMentions
@@ -3433,7 +3350,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             sto = StoreStruct.notifications
             theTable = self.tableView2
         } else if self.currentIndex == 5 {
-            sto = StoreStruct.notificationsDirect
             theTable = self.tableView3
         } else if self.currentIndex == 1 {
             sto = StoreStruct.notificationsMentions
@@ -3527,7 +3443,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             sto = StoreStruct.notifications
             theTable = self.tableView2
         } else if self.currentIndex == 5 {
-            sto = StoreStruct.notificationsDirect
             theTable = self.tableView3
         } else if self.currentIndex == 1 {
             sto = StoreStruct.notificationsMentions
@@ -3561,7 +3476,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             sto = StoreStruct.notifications
             theTable = self.tableView2
         } else if self.currentIndex == 5 {
-            sto = StoreStruct.notificationsDirect
             theTable = self.tableView3
         } else if self.currentIndex == 1 {
             sto = StoreStruct.notificationsMentions
@@ -4742,11 +4656,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     func restoreScroll() {
         DispatchQueue.main.async {
 //            self.tableView3.reloadData()
-            if (UserDefaults.standard.object(forKey: "savedRowDirect") == nil) {} else {
-                if StoreStruct.notificationsDirect.count > 0 {
-                    self.tableView3.setContentOffset(CGPoint(x: 0, y: UserDefaults.standard.object(forKey: "savedRowDirect") as! CGFloat), animated: false)
-                }
-            }
         }
         DispatchQueue.main.async {
 //            self.tableView2.reloadData()
@@ -4794,20 +4703,38 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     }
                     controller.userIDtoUse = StoreStruct.notifications[indexPath.row].account.id
                     self.navigationController?.pushViewController(controller, animated: true)
+                } else if StoreStruct.notifications[indexPath.row].type == .mention && StoreStruct.notifications[indexPath.row].status?.visibility == .direct {
+                    if (UserDefaults.standard.object(forKey: "dmchats") == nil) || (UserDefaults.standard.object(forKey: "dmchats") as! Int == 0) {
+                        let controller = DMMessageViewController()
+                        controller.mainStatus.append(StoreStruct.notifications[indexPath.row].status!)
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    } else {
+                        let controller = DetailViewController()
+                        controller.mainStatus.append(StoreStruct.notifications[indexPath.row].status!)
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    }
                 } else {
                     let controller = DetailViewController()
                     controller.mainStatus.append(StoreStruct.notifications[indexPath.row].status!)
                     self.navigationController?.pushViewController(controller, animated: true)
                 }
             }
-        } else if self.currentIndex == 5 {
-            let controller = DetailViewController()
-            controller.mainStatus.append(StoreStruct.notificationsDirect[indexPath.row].status!)
-            self.navigationController?.pushViewController(controller, animated: true)
         } else {
-            let controller = DetailViewController()
-            controller.mainStatus.append(StoreStruct.notificationsMentions[indexPath.row].status!)
-            self.navigationController?.pushViewController(controller, animated: true)
+            if StoreStruct.notificationsMentions[indexPath.row].status?.visibility == .direct {
+                if (UserDefaults.standard.object(forKey: "dmchats") == nil) || (UserDefaults.standard.object(forKey: "dmchats") as! Int == 0) {
+                    let controller = DMMessageViewController()
+                    controller.mainStatus.append(StoreStruct.notificationsMentions[indexPath.row].status!)
+                    self.navigationController?.pushViewController(controller, animated: true)
+                } else {
+                    let controller = DetailViewController()
+                    controller.mainStatus.append(StoreStruct.notificationsMentions[indexPath.row].status!)
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+            } else {
+                let controller = DetailViewController()
+                controller.mainStatus.append(StoreStruct.notificationsMentions[indexPath.row].status!)
+                self.navigationController?.pushViewController(controller, animated: true)
+            }
         }
         case .pad:
             if self.currentIndex == 0 {
@@ -4819,6 +4746,18 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         }
                         controller.userIDtoUse = StoreStruct.notifications[indexPath.row].account.id
                         self.navigationController?.pushViewController(controller, animated: true)
+                    } else if StoreStruct.notifications[indexPath.row].type == .mention && StoreStruct.notifications[indexPath.row].status?.visibility == .direct {
+                        if (UserDefaults.standard.object(forKey: "dmchats") == nil) || (UserDefaults.standard.object(forKey: "dmchats") as! Int == 0) {
+                            let controller = DMMessageViewController()
+                            controller.mainStatus.append(StoreStruct.notifications[indexPath.row].status!)
+                            self.splitViewController?.showDetailViewController(controller, sender: self)
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+                        } else {
+                            let controller = DetailViewController()
+                            controller.mainStatus.append(StoreStruct.notifications[indexPath.row].status!)
+                            self.splitViewController?.showDetailViewController(controller, sender: self)
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+                        }
                     } else {
                         let controller = DetailViewController()
                         controller.mainStatus.append(StoreStruct.notifications[indexPath.row].status!)
@@ -4826,16 +4765,25 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
                     }
                 }
-            } else if self.currentIndex == 5 {
-                let controller = DetailViewController()
-                controller.mainStatus.append(StoreStruct.notificationsDirect[indexPath.row].status!)
-                self.splitViewController?.showDetailViewController(controller, sender: self)
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
             } else {
-                let controller = DetailViewController()
-                controller.mainStatus.append(StoreStruct.notificationsMentions[indexPath.row].status!)
-                self.splitViewController?.showDetailViewController(controller, sender: self)
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+                if StoreStruct.notificationsMentions[indexPath.row].status?.visibility == .direct {
+                    if (UserDefaults.standard.object(forKey: "dmchats") == nil) || (UserDefaults.standard.object(forKey: "dmchats") as! Int == 0) {
+                        let controller = DMMessageViewController()
+                        controller.mainStatus.append(StoreStruct.notificationsMentions[indexPath.row].status!)
+                        self.splitViewController?.showDetailViewController(controller, sender: self)
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+                    } else {
+                        let controller = DetailViewController()
+                        controller.mainStatus.append(StoreStruct.notificationsMentions[indexPath.row].status!)
+                        self.splitViewController?.showDetailViewController(controller, sender: self)
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+                    }
+                } else {
+                    let controller = DetailViewController()
+                    controller.mainStatus.append(StoreStruct.notificationsMentions[indexPath.row].status!)
+                    self.splitViewController?.showDetailViewController(controller, sender: self)
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+                }
             }
         default:
             print("nothing")
@@ -4845,10 +4793,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     var lastThing = ""
     var tempFetchedDirect = false
     func fetchMoreNotifications() {
-        let oldNot = StoreStruct.notifications
-        let oldNotMentions = StoreStruct.notificationsMentions
-        let oldNotDirect = StoreStruct.notificationsDirect
-        
         let request = Notifications.all(range: .max(id: StoreStruct.notifications.last?.id ?? "", limit: 5000))
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
@@ -4857,17 +4801,12 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     self.lastThing = stat.first?.id ?? ""
                 StoreStruct.notifications = StoreStruct.notifications + stat
                 
-                for x in stat {
-                    if x.type == .mention {
-                        StoreStruct.notificationsMentions.append(x)
-                        if x.status?.visibility == .direct {
-                            self.tempFetchedDirect = true
-                            StoreStruct.notificationsDirect.append(x)
+                    for x in stat {
+                        if x.type == .mention {
+                            StoreStruct.notificationsMentions.append(x)
                         }
                     }
-                }
                 
-                    StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.sorted(by: { $0.createdAt > $1.createdAt })
                     StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
                     StoreStruct.notifications = StoreStruct.notifications.sorted(by: { $0.createdAt > $1.createdAt })
 
@@ -4875,7 +4814,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     
                     StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
                     StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-                    StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                     
                     if self.currentIndex == 1 {
                         self.tableView.reloadData()
@@ -4889,10 +4827,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         self.fetchMoreNotifications()
                     }
                     
-                    if StoreStruct.notificationsDirect.isEmpty || self.tempFetchedDirect == false {
-                        self.fetchMoreNotificationsD()
-                    }
-                    
                     self.tempFetchedDirect = false
                 }
                     
@@ -4901,45 +4835,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         }
     }
     
-    func fetchMoreNotificationsD() {
-        let request = Notifications.all(range: .max(id: StoreStruct.notifications.last?.id ?? "", limit: 5000))
-        StoreStruct.client.run(request) { (statuses) in
-            if let stat = (statuses.value) {
-                
-                if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
-                    self.lastThing = stat.first?.id ?? ""
-                    StoreStruct.notifications = StoreStruct.notifications + stat
-                    
-                    for x in stat {
-                        if x.type == .mention {
-                            if x.status?.visibility == .direct {
-                                self.tempFetchedDirect = true
-                                StoreStruct.notificationsDirect.append(x)
-                            }
-                        }
-                    }
-                    
-                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.sorted(by: { $0.createdAt > $1.createdAt })
-
-                    DispatchQueue.main.async {
-                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
-                        
-                        if self.currentIndex == 5 {
-                            self.tableView3.reloadData()
-                        }
-                        
-                        if StoreStruct.notificationsDirect.isEmpty || self.tempFetchedDirect == false {
-                            self.fetchMoreNotificationsD()
-                        }
-                        
-                        self.tempFetchedDirect = false
-                    }
-                    
-    
-            }
-        }
-    }
-    }
     
     @objc func refreshCont() {
         let request = Notifications.all(range: .min(id: StoreStruct.notifications.first?.id ?? "", limit: 5000))
@@ -4948,10 +4843,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 if let stat = (statuses.value) {
                     StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
                     StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-                    StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                     var newestC = StoreStruct.notifications.count
                     var newestC2 = StoreStruct.notificationsMentions.count
-                    var newestC3 = StoreStruct.notificationsDirect.count
                     
                     StoreStruct.notifications = stat + StoreStruct.notifications
                     StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
@@ -4960,23 +4853,19 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         if x.type == .mention {
                             StoreStruct.notificationsMentions = [x] + StoreStruct.notificationsMentions
                             if x.status?.visibility == .direct {
-                                StoreStruct.notificationsDirect.append(x)
                             }
                             co = co + 1
                         }
                     }
                     
                     DispatchQueue.main.async {
-                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.sorted(by: { $0.createdAt > $1.createdAt })
                         StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
                         StoreStruct.notifications = StoreStruct.notifications.sorted(by: { $0.createdAt > $1.createdAt })
                         StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
                         StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                         
                         newestC = StoreStruct.notifications.count - newestC
                         newestC2 = StoreStruct.notificationsMentions.count - newestC2
-                        newestC3 = StoreStruct.notificationsDirect.count - newestC3
                         
                         if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                         
@@ -4992,15 +4881,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         })
                         self.countcount1 = co
                         } else if self.currentIndex == 5 {
-                            self.newUpdatesB3.setTitle("\(newestC3)  ", for: .normal)
-                            //                        self.newUpdatesB1.transform = CGAffineTransform(translationX: 120, y: 0)
-                            self.newUpdatesB3.frame.origin.x = CGFloat(self.view.bounds.width + 78)
-                            springWithDelay(duration: 0.5, delay: 0, animations: {
-                                self.newUpdatesB3.alpha = 1
-                                //                            self.newUpdatesB1.transform = CGAffineTransform(translationX: 0, y: 0)
-                                self.newUpdatesB3.frame.origin.x = CGFloat(self.view.bounds.width - 42)
-                            })
-                            self.countcount5 = co
+                            
                         } else {
                             
                             self.newUpdatesB2.setTitle("\(newestC)  ", for: .normal)
@@ -5011,35 +4892,36 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
 //                                self.newUpdatesB2.transform = CGAffineTransform(translationX: 0, y: 0)
                                 self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
                             })
-                            self.countcount2 = newestC
+                            self.countcount2 = stat.count
                             
                             
                         }
                         
-//                        UIView.setAnimationsEnabled(false)
-                        self.tableView.reloadData()
-                        self.tableView2.reloadData()
-                            self.tableView3.reloadData()
+                            if stat.count > 0 {
+                                self.tableView.reloadData()
+                                self.tableView2.reloadData()
+                                self.tableView3.reloadData()
+                            }
                         self.refreshControl.endRefreshing()
                         if self.currentIndex == 1 {
                             if StoreStruct.notificationsMentions.count > newestC2 {
-                                self.tableView.scrollToRow(at: IndexPath(row: newestC2, section: 0), at: .top, animated: false)
+                                var zCount = 0
+                                var zHeights: CGFloat = 0
+                                for _ in stat {
+                                    zHeights = CGFloat(zHeights) + CGFloat(self.tableView.rectForRow(at: IndexPath(row: zCount, section: 0)).height)
+                                    zCount += 1
+                                }
+                                self.tableView.setContentOffset(CGPoint(x: 0, y: zHeights), animated: false)
+//                                self.tableView.scrollToRow(at: IndexPath(row: newestC2, section: 0), at: .top, animated: false)
                             }
-                        } else if self.currentIndex == 5 {
-                            if StoreStruct.notificationsDirect.count > newestC2 {
-                                self.tableView3.scrollToRow(at: IndexPath(row: newestC3, section: 0), at: .top, animated: false)
-                            }
-                        } else {
-//                            if StoreStruct.notifications.count > newestC {
-//                                self.tableView2.scrollToRow(at: IndexPath(row: newestC, section: 1), at: .top, animated: false)
-//                            }
                         }
-//                        UIView.setAnimationsEnabled(true)
                             
                         } else {
-                            self.tableView.reloadData()
-                            self.tableView2.reloadData()
-                            self.tableView3.reloadData()
+                            if stat.count > 0 {
+                                self.tableView.reloadData()
+                                self.tableView2.reloadData()
+                                self.tableView3.reloadData()
+                            }
                             self.refreshControl.endRefreshing()
                         }
                         
@@ -5067,7 +4949,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             Colours.black = UIColor.black
             UIApplication.shared.statusBarStyle = .default
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 1) {
-            Colours.white = UIColor(red: 53/255.0, green: 53/255.0, blue: 64/255.0, alpha: 1.0)
+            Colours.white = UIColor(red: 46/255.0, green: 46/255.0, blue: 52/255.0, alpha: 1.0)
             Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white
@@ -5093,7 +4975,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 4) {
-            Colours.white = UIColor(red: 8/255.0, green: 28/255.0, blue: 88/255.0, alpha: 1.0)
+            Colours.white = UIColor(red: 41/255.0, green: 50/255.0, blue: 78/255.0, alpha: 1.0)
             Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white
@@ -5244,7 +5126,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 print("nothing")
             }
         } else {
-            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+            if UIApplication.shared.isSplitOrSlideOver {
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(30), width: CGFloat(200), height: CGFloat(40)))
+            } else {
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(newoff), width: CGFloat(200), height: CGFloat(40)))
+            }
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
                 segmentedControl.shapeStyle = .roundedRect

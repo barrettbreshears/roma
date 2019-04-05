@@ -35,6 +35,11 @@ class DetailCellImage: UITableViewCell {
         mainImageView.backgroundColor = Colours.white
         mainImageViewBG.backgroundColor = Colours.white
         
+        userName.adjustsFontForContentSizeCategory = true
+        userTag.adjustsFontForContentSizeCategory = true
+        date.adjustsFontForContentSizeCategory = true
+        toot.adjustsFontForContentSizeCategory = true
+        
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         mainImageView.translatesAutoresizingMaskIntoConstraints = false
         mainImageViewBG.translatesAutoresizingMaskIntoConstraints = false
@@ -63,9 +68,9 @@ class DetailCellImage: UITableViewCell {
         mainImageViewBG.layer.shadowRadius = 12
         mainImageViewBG.layer.shadowOpacity = 0.22
         mainImageViewBG.layer.masksToBounds = false
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            mainImageViewBG.alpha = 0
-        }
+//        if UIDevice.current.userInterfaceIdiom == .pad {
+//            mainImageViewBG.alpha = 0
+//        }
         
         userName.numberOfLines = 0
         userTag.numberOfLines = 0
@@ -352,6 +357,20 @@ class DetailCellImage: UITableViewCell {
             imageCountTag.backgroundColor = Colours.tabSelected
             imageCountTag.alpha = 1
         } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count > 1 {
+            
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                
+                imageCountTag.backgroundColor = Colours.clear
+                imageCountTag.alpha = 0
+                DispatchQueue.global(qos: .userInitiated).async {
+                    self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
+                    self.mainImageView.pin_updateWithProgress = true
+                    self.mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments.first?.previewURL ?? status.mediaAttachments.first?.previewURL ?? "")"))
+                }
+                
+            } else {
+            
+            
             self.mainImageView.setImage(UIImage(), for: .normal)
             if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count == 2 {
                 self.smallImage1.frame = CGRect(x: -2, y: 0, width: (UIScreen.main.bounds.width)/2, height: 240)
@@ -484,6 +503,8 @@ class DetailCellImage: UITableViewCell {
                 self.smallImage2.alpha = 0
                 self.smallImage3.alpha = 0
                 self.smallImage4.alpha = 0
+            }
+                
             }
         } else {
             imageCountTag.backgroundColor = Colours.clear

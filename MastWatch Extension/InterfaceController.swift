@@ -129,6 +129,11 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
+        
+        if #available(watchOSApplicationExtension 5.1, *) {
+            self.tableView.curvesAtTop = true
+            self.tableView.curvesAtBottom = true
+        }
             
         watchSession = WCSession.default
         
@@ -142,11 +147,11 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
         
             
 //            if StoreStruct.client.baseURL == "" {
-        self.client = Client(
-            baseURL: "https://\(UserDefaults.standard.object(forKey: "key2") ?? "")",
-            accessToken: UserDefaults.standard.object(forKey: "key1") as? String ?? ""
-        )
-        StoreStruct.client = self.client
+//        self.client = Client(
+//            baseURL: "https://\(UserDefaults.standard.object(forKey: "key2") ?? "")",
+//            accessToken: UserDefaults.standard.object(forKey: "key1") as? String ?? ""
+//        )
+//        StoreStruct.client = self.client
 //            }
         
         let request = Timelines.home()
@@ -254,7 +259,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                     controller.tootText.setText("\(StoreStruct.allStats[index].reblog?.content.stripHTML() ?? StoreStruct.allStats[index].content.stripHTML())")
                     
                     //DispatchQueue.global().async { [weak self] in
-                    self.getDataFromUrl(url: URL(string: StoreStruct.allStats[index].reblog?.account.avatar ?? StoreStruct.allStats[index].account.avatar ?? "")!) { data, response, error in
+                    self.getDataFromUrl(url: URL(string: StoreStruct.allStats[index].reblog?.account.avatar ?? StoreStruct.allStats[index].account.avatar ?? "") ?? URL(string: "google.com")!) { data, response, error in
                         guard let data = data, error == nil else { return }
                         //DispatchQueue.main.async() {
                         if self.isShowing {

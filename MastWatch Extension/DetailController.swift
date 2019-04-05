@@ -74,6 +74,11 @@ class DetailController: WKInterfaceController {
     
     override func awake(withContext context: Any?) {
         super.awake(withContext: context)
+        
+        if #available(watchOSApplicationExtension 5.1, *) {
+            self.tableView.curvesAtTop = true
+            self.tableView.curvesAtBottom = true
+        }
     }
     
     override func willActivate() {

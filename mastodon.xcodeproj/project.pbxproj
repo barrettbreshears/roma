@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2D83B0540BC7A32FFB4FB91C /* Pods_mastodon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF27AD0E7990D1A32A4F2E25 /* Pods_mastodon.framework */; };
+		5300CB262254A6BA00F4F776 /* Conversation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5300CB252254A6BA00F4F776 /* Conversation.swift */; };
 		530976A72179D8D900640D84 /* icon11@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530976862179D8D000640D84 /* icon11@3x.png */; };
 		530976A82179D8D900640D84 /* icon16@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530976872179D8D100640D84 /* icon16@2x.png */; };
 		530976A92179D8D900640D84 /* icon16@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 530976882179D8D100640D84 /* icon16@3x.png */; };
@@ -126,7 +127,23 @@
 		5317C7C021DA334500746197 /* LinePlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7AE21DA334500746197 /* LinePlot.swift */; };
 		5317C7C121DA334500746197 /* DotPlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5317C7AF21DA334500746197 /* DotPlot.swift */; };
 		5318D3E8220CCC1D00E5C41A /* Pulsator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5318D3E7220CCC1D00E5C41A /* Pulsator.swift */; };
+		531AEDAF224E2CA6004700C7 /* DMMessageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531AEDAE224E2CA6004700C7 /* DMMessageViewController.swift */; };
 		531B04B9217111A100D31715 /* Stickers.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 531B04B8217111A100D31715 /* Stickers.xcassets */; };
+		531B04BD217111A100D31715 /* MastStickers.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 531B04B62171119D00D31715 /* MastStickers.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		531B420B224E0FFB00D1B132 /* DMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B420A224E0FFB00D1B132 /* DMViewController.swift */; };
+		531B420D224E1AA100D1B132 /* DMFeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B420C224E1AA100D1B132 /* DMFeedCell.swift */; };
+		531B61C7221960B300DD3845 /* SwiftGCM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B61C1221960B200DD3845 /* SwiftGCM.swift */; };
+		531B61C8221960B300DD3845 /* DecryptNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B61C2221960B200DD3845 /* DecryptNotification.swift */; };
+		531B61CA221960B300DD3845 /* PushNotificationReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B61C4221960B200DD3845 /* PushNotificationReceiver.swift */; };
+		531B61CB221960B300DD3845 /* PushNotificationDataObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B61C5221960B200DD3845 /* PushNotificationDataObjects.swift */; };
+		531B61CC221960B300DD3845 /* Decode85.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B61C6221960B200DD3845 /* Decode85.swift */; };
+		531B61D4221960EC00DD3845 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B61D3221960EC00DD3845 /* NotificationService.swift */; };
+		531B61D8221960EC00DD3845 /* Mast Push.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 531B61D1221960EC00DD3845 /* Mast Push.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		531B61DE2219685D00DD3845 /* SwiftGCM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B61C1221960B200DD3845 /* SwiftGCM.swift */; };
+		531B61DF2219685D00DD3845 /* DecryptNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B61C2221960B200DD3845 /* DecryptNotification.swift */; };
+		531B61E02219685D00DD3845 /* PushNotificationReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B61C4221960B200DD3845 /* PushNotificationReceiver.swift */; };
+		531B61E12219685D00DD3845 /* PushNotificationDataObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B61C5221960B200DD3845 /* PushNotificationDataObjects.swift */; };
+		531B61E22219685D00DD3845 /* Decode85.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531B61C6221960B200DD3845 /* Decode85.swift */; };
 		531BD5FD2178D68400C1509D /* FollowRequestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531BD5FC2178D68400C1509D /* FollowRequestsViewController.swift */; };
 		531BD60421795D1F00C1509D /* SentimentAnalysisRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531BD60321795D1F00C1509D /* SentimentAnalysisRequest.swift */; };
 		531CCD3722072BC500A56145 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531CCD3622072BC500A56145 /* Filters.swift */; };
@@ -891,6 +908,7 @@
 		18E8B231A37A987D5C7ABAA0 /* Pods_mastodon.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_mastodon.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1CD4E15EAF9DBEC76AA1335A /* Pods-mastodon.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mastodon.release.xcconfig"; path = "Pods/Target Support Files/Pods-mastodon/Pods-mastodon.release.xcconfig"; sourceTree = "<group>"; };
 		246450A9A9CE237C7515FD83 /* Pods-mastodon.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mastodon.debug.xcconfig"; path = "Pods/Target Support Files/Pods-mastodon/Pods-mastodon.debug.xcconfig"; sourceTree = "<group>"; };
+		5300CB252254A6BA00F4F776 /* Conversation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conversation.swift; sourceTree = "<group>"; };
 		530976862179D8D000640D84 /* icon11@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon11@3x.png"; sourceTree = "<group>"; };
 		530976872179D8D100640D84 /* icon16@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon16@2x.png"; sourceTree = "<group>"; };
 		530976882179D8D100640D84 /* icon16@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon16@3x.png"; sourceTree = "<group>"; };
@@ -1009,9 +1027,22 @@
 		5317C7AE21DA334500746197 /* LinePlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinePlot.swift; sourceTree = "<group>"; };
 		5317C7AF21DA334500746197 /* DotPlot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DotPlot.swift; sourceTree = "<group>"; };
 		5318D3E7220CCC1D00E5C41A /* Pulsator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pulsator.swift; sourceTree = "<group>"; };
+		531AEDAE224E2CA6004700C7 /* DMMessageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMMessageViewController.swift; sourceTree = "<group>"; };
 		531B04B62171119D00D31715 /* MastStickers.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MastStickers.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		531B04B8217111A100D31715 /* Stickers.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Stickers.xcassets; sourceTree = "<group>"; };
 		531B04BA217111A100D31715 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		531B420A224E0FFB00D1B132 /* DMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMViewController.swift; sourceTree = "<group>"; };
+		531B420C224E1AA100D1B132 /* DMFeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DMFeedCell.swift; sourceTree = "<group>"; };
+		531B61C1221960B200DD3845 /* SwiftGCM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftGCM.swift; sourceTree = "<group>"; };
+		531B61C2221960B200DD3845 /* DecryptNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecryptNotification.swift; sourceTree = "<group>"; };
+		531B61C4221960B200DD3845 /* PushNotificationReceiver.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushNotificationReceiver.swift; sourceTree = "<group>"; };
+		531B61C5221960B200DD3845 /* PushNotificationDataObjects.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PushNotificationDataObjects.swift; sourceTree = "<group>"; };
+		531B61C6221960B200DD3845 /* Decode85.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Decode85.swift; sourceTree = "<group>"; };
+		531B61D1221960EC00DD3845 /* Mast Push.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Mast Push.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		531B61D3221960EC00DD3845 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		531B61D5221960EC00DD3845 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		531B61DC221961B700DD3845 /* Mast Push-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mast Push-Bridging-Header.h"; sourceTree = "<group>"; };
+		531B61DD221961B800DD3845 /* Mast Push.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Mast Push.entitlements"; sourceTree = "<group>"; };
 		531BD5FC2178D68400C1509D /* FollowRequestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowRequestsViewController.swift; sourceTree = "<group>"; };
 		531BD60321795D1F00C1509D /* SentimentAnalysisRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SentimentAnalysisRequest.swift; sourceTree = "<group>"; };
 		531CCD3622072BC500A56145 /* Filters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
@@ -2893,6 +2924,8 @@
 				5373C9D9215173EE00676F3D /* ViewController.swift */,
 				5373C9E92151753800676F3D /* FirstViewController.swift */,
 				5373C9EF2151953C00676F3D /* SecondViewController.swift */,
+				531B420A224E0FFB00D1B132 /* DMViewController.swift */,
+				531AEDAE224E2CA6004700C7 /* DMMessageViewController.swift */,
 				5373C9F12151956300676F3D /* ThirdViewController.swift */,
 				5373C9F32151957200676F3D /* FourthViewController.swift */,
 				5373CB4721565FFB00676F3D /* DetailViewController.swift */,
@@ -2935,6 +2968,7 @@
 			children = (
 				5373C9F521519EF800676F3D /* MainFeedCell.swift */,
 				5373CB1C21540F5D00676F3D /* MainFeedCellImage.swift */,
+				531B420C224E1AA100D1B132 /* DMFeedCell.swift */,
 				5315ECE921FE1B3400A3F1A9 /* ScheduledCell.swift */,
 				5315308521B95223007E5C00 /* SearchFeedCell.swift */,
 				5373CB3B2154E93500676F3D /* NotificationCell.swift */,
@@ -3020,6 +3054,7 @@
 				53E826E8223AA84000153721 /* CardType.swift */,
 				5373CA722152C67F00676F3D /* ClientApplication.swift */,
 				5373CA732152C67F00676F3D /* Context.swift */,
+				5300CB252254A6BA00F4F776 /* Conversation.swift */,
 				5373CA742152C67F00676F3D /* Emoji.swift */,
 				5373CA752152C67F00676F3D /* Empty.swift */,
 				531CCD3622072BC500A56145 /* Filters.swift */,
@@ -3873,7 +3908,7 @@
 				"${BUILT_PRODUCTS_DIR}/Disk/Disk.framework",
 				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework",
 				"${BUILT_PRODUCTS_DIR}/FootlessParser/FootlessParser.framework",
-				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
+				"${BUILT_PRODUCTS_DIR}/MessageKit/MessageKit.framework",
 				"${BUILT_PRODUCTS_DIR}/NSTimer-Blocks/NSTimer_Blocks.framework",
 				"${BUILT_PRODUCTS_DIR}/NextLevel/NextLevel.framework",
 				"${BUILT_PRODUCTS_DIR}/ObjectMapper/ObjectMapper.framework",
@@ -3900,7 +3935,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Disk.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FootlessParser.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MessageKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NSTimer_Blocks.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NextLevel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ObjectMapper.framework",
@@ -4303,6 +4338,7 @@
 				53E1AE20221ADFEA00A6E1E6 /* SwiftLinkPreview.swift in Sources */,
 				5373CABA2152C68000676F3D /* Report.swift in Sources */,
 				A9D80EED21B8F27A00020ECE /* InstanceData.swift in Sources */,
+				531B420D224E1AA100D1B132 /* DMFeedCell.swift in Sources */,
 				5315ECE421FE13CB00A3F1A9 /* ScheduledStatus.swift in Sources */,
 				5317C7BD21DA334500746197 /* GraphPointAnimation.swift in Sources */,
 				536A4FB9216B73D600A3D483 /* UIView+SafeAnchors.swift in Sources */,
@@ -4395,6 +4431,8 @@
 				531E0FAA216E2BA2003E8890 /* NVActivityIndicatorAnimationBallSpinFadeLoader.swift in Sources */,
 				531E0F94216E2BA2003E8890 /* NVActivityIndicatorAnimationLineSpinFadeLoader.swift in Sources */,
 				53E826E12236C32D00153721 /* BatteryIndicator.swift in Sources */,
+				53E1AE14221AB82200A6E1E6 /* CrownSurfaceController.swift in Sources */,
+				531B420B224E0FFB00D1B132 /* DMViewController.swift in Sources */,
 				53BC45C2215AE4F10092223F /* SettingsCellToggle.swift in Sources */,
 				5316C88E219D94A00003AB97 /* GiphyImageSet.swift in Sources */,
 				A9594D9B221F258400AF7A0E /* MisterFusionExtension.swift in Sources */,
@@ -4441,6 +4479,7 @@
 				5373CB522156884B00676F3D /* RepliesCell.swift in Sources */,
 				531E0F8A216E2BA2003E8890 /* NVActivityIndicatorPresenter.swift in Sources */,
 				5354BACB216577FD0094C545 /* SlackLoadingAnimator.swift in Sources */,
+				531AEDAF224E2CA6004700C7 /* DMMessageViewController.swift in Sources */,
 				531E0F9A216E2BA2003E8890 /* NVActivityIndicatorAnimationBallScaleRipple.swift in Sources */,
 				531E0F8D216E2BA2003E8890 /* NVActivityIndicatorView.swift in Sources */,
 				5373CB152152FCF300676F3D /* ActionHandlerBuilder.swift in Sources */,
@@ -4581,7 +4620,7 @@
 				5317C7B321DA334500746197 /* DotDrawingLayer.swift in Sources */,
 				5373CAAA2152C68000676F3D /* Account.swift in Sources */,
 				531E0FA3216E2BA2003E8890 /* NVActivityIndicatorAnimationBallGridBeat.swift in Sources */,
-				A910C8082221DA730023AD76 /* StyleView.swift in Sources */,
+				5300CB262254A6BA00F4F776 /* Conversation.swift in Sources */,
 				5329F3952174DBDF00C4A23C /* WebSocket.swift in Sources */,
 				535B33B2215C0EC6001A2A7F /* Utils.swift in Sources */,
 				531E0F8B216E2BA2003E8890 /* NVActivityIndicatorViewable.swift in Sources */,

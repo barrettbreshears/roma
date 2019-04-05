@@ -18,8 +18,8 @@ import SJFluidSegmentedControl
 import MessageUI
 
 class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, CrownControlDelegate, MFMailComposeViewControllerDelegate {
-
-    var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .circleStrokeSpin, color: Colours.tabSelected)
+    
+    var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
     var profileImageView = UIImageView()
     var tableView = UITableView()
@@ -215,14 +215,21 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     @objc func tappedOnTag() {
         print(StoreStruct.tappedTag)
-
-        if StoreStruct.tappedTag.contains("https") || StoreStruct.tappedTag.contains("http") {
-
-            if let ur = URL(string: String(StoreStruct.tappedTag)) {
-
-
-
-                Alertift.actionSheet(title: nil, message: StoreStruct.tappedTag)
+        
+        if StoreStruct.tappedTag.contains("https") || StoreStruct.tappedTag.contains("http") || StoreStruct.tappedTag.contains("www.") {
+            
+            var theUR = StoreStruct.tappedTag
+            if StoreStruct.tappedTag.contains("href=") {
+                var x = StoreStruct.tappedTag.split(separator: "\"")
+                theUR = String(x[1])
+            }
+            
+            
+            if let ur = URL(string: String(theUR)) {
+                
+                
+                
+                Alertift.actionSheet(title: nil, message: theUR)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
                     .messageTextColor(Colours.grayDark)
@@ -517,20 +524,41 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     @objc func goToSettings() {
         if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {} else {
-            springWithDelay(duration: 0.4, delay: 0, animations: { [unowned self] in
-                self.segmentedControl.alpha = 0
+            springWithDelay(duration: 0.4, delay: 0, animations: { [weak self] in
+                self?.segmentedControl.alpha = 0
             })
         }
         let controller = SettingsViewController()
         self.navigationController?.pushViewController(controller, animated: true)
     }
-
+    
+    @objc func currentSegIndex(_ notification: NSNotification) {
+        if let index = notification.userInfo?["index"] as? Int {
+            if index == 0 {
+                if self.profileStatuses.isEmpty {
+                    self.tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+                } else {
+                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: 2), at: .top, animated: true)
+                }
+            }
+            if index == 1 {
+                if self.profileStatuses2.isEmpty {
+                    self.tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
+                } else {
+                    self.tableView.scrollToRow(at: IndexPath(row: 0, section: 2), at: .top, animated: true)
+                }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         self.view.backgroundColor = Colours.white
-        self.title = ""
-
+        self.title = "Profile"
+        self.removeTabbarItemsText()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.currentSegIndex), name: NSNotification.Name(rawValue: "setCurrentSegmentIndex"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid3"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToIDNoti), name: NSNotification.Name(rawValue: "gotoidnoti3"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goMembers), name: NSNotification.Name(rawValue: "goMembers3"), object: nil)
@@ -615,11 +643,6 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         default:
             self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
         }
-        if UIApplication.shared.isSplitOrSlideOver {
-
-        } else {
-            self.title = ""
-        }
         self.tableView.register(ProfileHeaderCell.self, forCellReuseIdentifier: "ProfileHeaderCell")
         self.tableView.register(ProfileHeaderCellOwn.self, forCellReuseIdentifier: "ProfileHeaderCellOwn")
         self.tableView.register(ProfileHeaderCellOwn2.self, forCellReuseIdentifier: "ProfileHeaderCellOwn2")
@@ -633,14 +656,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.tableView.backgroundColor = Colours.white
         self.tableView.separatorColor = Colours.cellQuote
         self.tableView.layer.masksToBounds = true
-        self.tableView.estimatedRowHeight = 89
+        self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
 
         refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
         //self.tableView.addSubview(refreshControl)
-
-        self.ai = NVActivityIndicatorView(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 20), y: CGFloat(offset + 65), width: 40, height: 40), type: .circleStrokeSpin, color: Colours.tabSelected)
+        
+        self.ai = NVActivityIndicatorView(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 20), y: CGFloat(offset + 65), width: 40, height: 40), type: .ballRotateChase, color: Colours.tabSelected)
         self.view.addSubview(self.ai)
         self.loadLoadLoad()
 
@@ -648,7 +671,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         switch (deviceIdiom) {
         case .phone:
-            tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+            tableView.cr.addHeadRefresh(animator: NormalHeaderAnimator()) { [weak self] in
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                     let selection = UISelectionFeedbackGenerator()
                     selection.selectionChanged()
@@ -661,7 +684,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         case .pad:
             print("nothing")
         default:
-            tableView.cr.addHeadRefresh(animator: FastAnimator()) { [weak self] in
+            tableView.cr.addHeadRefresh(animator: NormalHeaderAnimator()) { [weak self] in
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                     let selection = UISelectionFeedbackGenerator()
                     selection.selectionChanged()
@@ -1162,13 +1185,17 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if toIndex == 0 {
             self.currentIndex = 0
             DispatchQueue.main.async {
-                self.tableView.reloadSections([2], with: .fade)
+                self.tableView.beginUpdates()
+                self.tableView.reloadSections([2], with: .none)
+                self.tableView.endUpdates()
             }
         }
         if toIndex == 1 {
             self.currentIndex = 1
             DispatchQueue.main.async {
-                self.tableView.reloadSections([2], with: .fade)
+                self.tableView.beginUpdates()
+                self.tableView.reloadSections([2], with: .none)
+                self.tableView.endUpdates()
             }
         }
     }
@@ -3062,7 +3089,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 //cell.configure(zzz[indexPath.row])
                 cell.backgroundColor = Colours.white
                 cell.userName.textColor = Colours.black
-                cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
+                cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                 cell.date.textColor = Colours.black.withAlphaComponent(0.6)
                 cell.toot.textColor = Colours.black
                 cell.toot.handleMentionTap { (string) in
@@ -3141,7 +3168,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 if indexPath.row == zzz.count - 14 {
                     self.fetchMoreProfile()
                 }
-
+                
+                if indexPath.row <= zzz.count {
+                
                 if zzz[indexPath.row].reblog?.mediaAttachments.isEmpty ?? zzz[indexPath.row].mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell5", for: indexPath) as! MainFeedCell
                     cell.delegate = self
@@ -3155,10 +3184,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
                     cell.configure(zzz[indexPath.row])
                     cell.profileImageView.tag = indexPath.row
+                    cell.userTag.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                    cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.backgroundColor = Colours.white
                     cell.userName.textColor = Colours.black
-                    cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                     cell.date.textColor = Colours.black.withAlphaComponent(0.6)
                     cell.toot.textColor = Colours.black
                     cell.toot.handleMentionTap { (string) in
@@ -3257,9 +3288,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.smallImage4.tag = indexPath.row
                     cell.backgroundColor = Colours.white
                     cell.profileImageView.tag = indexPath.row
+                    cell.userTag.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                    cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userName.textColor = Colours.black
-                    cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
                     cell.date.textColor = Colours.black.withAlphaComponent(0.6)
                     cell.toot.textColor = Colours.black
                     cell.mainImageView.backgroundColor = Colours.white
@@ -3337,7 +3370,112 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.selectedBackgroundView = bgColorView
                     return cell
                 }
-
+                } else {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell6", for: indexPath) as! MainFeedCellImage
+                    cell.delegate = self
+                    
+                    cell.rep1.tag = indexPath.row
+                    cell.like1.tag = indexPath.row
+                    cell.boost1.tag = indexPath.row
+                    cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                    cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                    cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                    
+                    cell.configure(zzz[indexPath.row])
+                    cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
+                    cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
+                    cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
+                    cell.smallImage3.addTarget(self, action: #selector(self.tappedImageS3(_:)), for: .touchUpInside)
+                    cell.smallImage4.addTarget(self, action: #selector(self.tappedImageS4(_:)), for: .touchUpInside)
+                    cell.mainImageView.tag = indexPath.row
+                    cell.smallImage1.tag = indexPath.row
+                    cell.smallImage2.tag = indexPath.row
+                    cell.smallImage3.tag = indexPath.row
+                    cell.smallImage4.tag = indexPath.row
+                    cell.backgroundColor = Colours.white
+                    cell.profileImageView.tag = indexPath.row
+                    cell.userTag.tag = indexPath.row
+                    cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                    cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                    cell.userName.textColor = Colours.black
+                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
+                    cell.date.textColor = Colours.black.withAlphaComponent(0.6)
+                    cell.toot.textColor = Colours.black
+                    cell.mainImageView.backgroundColor = Colours.white
+                    cell.mainImageViewBG.backgroundColor = Colours.white
+                    cell.toot.handleMentionTap { (string) in
+                        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                            let selection = UISelectionFeedbackGenerator()
+                            selection.selectionChanged()
+                        }
+                        
+                        var newString = string
+                        for z2 in zzz[indexPath.row].mentions {
+                            if z2.acct.contains(string) {
+                                newString = z2.id
+                            }
+                        }
+                        
+                        
+                        let controller = ThirdViewController()
+                        if newString == StoreStruct.currentUser.username {} else {
+                            controller.fromOtherUser = true
+                        }
+                        controller.userIDtoUse = newString
+                        //                        DispatchQueue.main.async {
+                        self.navigationController?.pushViewController(controller, animated: true)
+                        //                                    }
+                    }
+                    cell.toot.handleURLTap { (url) in
+                        // safari
+                        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                            let selection = UISelectionFeedbackGenerator()
+                            selection.selectionChanged()
+                        }
+                        if url.absoluteString.hasPrefix(".") {
+                            let z = URL(string: String(url.absoluteString.dropFirst()))!
+                            UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: z)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
+                        } else {
+                            UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
+                                if !success {
+                                    self.safariVC = SFSafariViewController(url: url)
+                                    self.safariVC?.preferredBarTintColor = Colours.white
+                                    self.safariVC?.preferredControlTintColor = Colours.tabSelected
+                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                }
+                            }
+                        }
+                    }
+                    cell.toot.handleHashtagTap { (string) in
+                        // hash
+                        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                            let selection = UISelectionFeedbackGenerator()
+                            selection.selectionChanged()
+                        }
+                        let controller = HashtagViewController()
+                        controller.currentTagTitle = string
+                        let request = Timelines.tag(string)
+                        StoreStruct.client.run(request) { (statuses) in
+                            if let stat = (statuses.value) {
+                                controller.currentTags = stat
+                                DispatchQueue.main.async {
+                                    self.navigationController?.pushViewController(controller, animated: true)
+                                }
+                            }
+                        }
+                    }
+                    let bgColorView = UIView()
+                    bgColorView.backgroundColor = Colours.white
+                    cell.selectedBackgroundView = bgColorView
+                    return cell
+                }
             }
         }
     }
@@ -3346,7 +3484,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @objc func didTouchProfile(sender: UIButton) {
 
         var sto = self.profileStatuses
-
+        if self.currentIndex == 0 {
+            sto = self.profileStatuses
+        } else {
+            sto = self.profileStatuses2
+        }
+        
         if sto[sender.tag].reblog?.account.username != nil {
 
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -3617,6 +3760,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
 
         var sto = self.profileStatuses
+        if self.currentIndex == 0 {
+            sto = self.profileStatuses
+        } else {
+            sto = self.profileStatuses2
+        }
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
 
         StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
@@ -3691,6 +3839,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
 
         var sto = self.profileStatuses
+        if self.currentIndex == 0 {
+            sto = self.profileStatuses
+        } else {
+            sto = self.profileStatuses2
+        }
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
 
         StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
@@ -3753,6 +3906,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
 
         var sto = self.profileStatuses
+        if self.currentIndex == 0 {
+            sto = self.profileStatuses
+        } else {
+            sto = self.profileStatuses2
+        }
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
 
         StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
@@ -3816,6 +3974,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
 
         var sto = self.profileStatuses
+        if self.currentIndex == 0 {
+            sto = self.profileStatuses
+        } else {
+            sto = self.profileStatuses2
+        }
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
 
         StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
@@ -3880,6 +4043,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
 
         var sto = self.profileStatuses
+        if self.currentIndex == 0 {
+            sto = self.profileStatuses
+        } else {
+            sto = self.profileStatuses2
+        }
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
 
         StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
@@ -3945,7 +4113,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         let theTable = self.tableView
         var sto = self.profileStatuses
-
+        if self.currentIndex == 0 {
+            sto = self.profileStatuses
+        } else {
+            sto = self.profileStatuses2
+        }
+        
         if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
             StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
             let request2 = Statuses.unreblog(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
@@ -4031,7 +4204,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         var theTable = self.tableView
         var sto = self.profileStatuses
-
+        if self.currentIndex == 0 {
+            sto = self.profileStatuses
+        } else {
+            sto = self.profileStatuses2
+        }
+        
         if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
             StoreStruct.allLikes = StoreStruct.allLikes.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
             let request2 = Statuses.unfavourite(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
@@ -4111,7 +4289,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         var theTable = self.tableView
         var sto = self.profileStatuses
-
+        if self.currentIndex == 0 {
+            sto = self.profileStatuses
+        } else {
+            sto = self.profileStatuses2
+        }
+        
         let controller = ComposeViewController()
         StoreStruct.spoilerText = sto[sender.tag].reblog?.spoilerText ?? sto[sender.tag].spoilerText
         controller.inReply = [sto[sender.tag].reblog ?? sto[sender.tag]]
@@ -5150,7 +5333,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     DispatchQueue.main.async {
 
                         self.profileStatuses = self.profileStatuses.removeDuplicates()
-                        self.tableView.reloadData()
+                        if stat.count > 0 {
+                            self.tableView.reloadData()
+                        }
                         self.refreshControl.endRefreshing()
                     }
                 }
@@ -5174,7 +5359,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     DispatchQueue.main.async {
 
                         self.profileStatuses2 = self.profileStatuses2.removeDuplicates()
-                        self.tableView.reloadData()
+                        if stat.count > 0 {
+                            self.tableView.reloadData()
+                        }
                         self.refreshControl.endRefreshing()
                     }
                 }
@@ -5202,7 +5389,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             Colours.black = UIColor.black
             UIApplication.shared.statusBarStyle = .default
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 1) {
-            Colours.white = UIColor(red: 53/255.0, green: 53/255.0, blue: 64/255.0, alpha: 1.0)
+            Colours.white = UIColor(red: 46/255.0, green: 46/255.0, blue: 52/255.0, alpha: 1.0)
             Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white
@@ -5228,7 +5415,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 4) {
-            Colours.white = UIColor(red: 8/255.0, green: 28/255.0, blue: 88/255.0, alpha: 1.0)
+            Colours.white = UIColor(red: 41/255.0, green: 50/255.0, blue: 78/255.0, alpha: 1.0)
             Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
             Colours.grayDark2 = UIColor.white
             Colours.cellNorm = Colours.white
@@ -5254,7 +5441,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
-
+        
+        self.navigationController?.navigationBar.barTintColor = Colours.grayDark
+        self.navigationController?.navigationBar.tintColor = Colours.grayDark
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.grayDark]
+        
         self.view.backgroundColor = Colours.white
 
         if (UserDefaults.standard.object(forKey: "systemText") == nil) || (UserDefaults.standard.object(forKey: "systemText") as! Int == 0) {
@@ -5328,5 +5519,18 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         //        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.grayDark]
         //        self.collectionView.backgroundColor = Colours.white
         //        self.removeTabbarItemsText()
+    }
+    
+    func removeTabbarItemsText() {
+        var offset: CGFloat = 6.0
+        if #available(iOS 11.0, *), traitCollection.horizontalSizeClass == .regular {
+            offset = 0.0
+        }
+        if let items = self.tabBarController?.tabBar.items {
+            for item in items {
+                item.title = ""
+                item.imageInsets = UIEdgeInsets(top: offset, left: 0, bottom: -offset, right: 0);
+            }
+        }
     }
 }
