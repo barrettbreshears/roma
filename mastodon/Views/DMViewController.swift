@@ -1662,8 +1662,11 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         case .pad:
             let controller = DMMessageViewController()
             controller.mainStatus.append(StoreStruct.notificationsDirect[indexPath.row].lastStatus!)
-            self.splitViewController?.showDetailViewController(controller, sender: self)
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+            self.navigationController?.pushViewController(controller, animated: true)
+//            let controller = DMMessageViewController()
+//            controller.mainStatus.append(StoreStruct.notificationsDirect[indexPath.row].lastStatus!)
+//            self.splitViewController?.showDetailViewController(controller, sender: self)
+//            NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
         default:
             print("nothing")
         }

@@ -232,15 +232,18 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         
         let sender = Sender(id: "1", displayName: "\(StoreStruct.currentUser.acct)")
         let x = MockMessage.init(text: self.messageInputBar.inputTextView.text.replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""), sender: sender, messageId: "18982", date: Date())
-        self.messages.append(x)
-        self.messagesCollectionView.reloadData()
-        self.messagesCollectionView.scrollToBottom()
-        self.messageInputBar.inputTextView.text = ""
         
         let request0 = Statuses.create(status: self.messageInputBar.inputTextView.text, replyToID: self.mainStatus[0].inReplyToID, mediaIDs: [], sensitive: self.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
-        DispatchQueue.global(qos: .userInitiated).async {
-            StoreStruct.client.run(request0) { (statuses) in
-                print(statuses)
+        StoreStruct.client.run(request0) { (statuses) in
+            print(statuses)
+            DispatchQueue.main.async {
+                if let stat = statuses.value {
+                    self.allPosts.append(stat)
+                    self.messages.append(x)
+                    self.messagesCollectionView.reloadData()
+                    self.messagesCollectionView.scrollToBottom()
+                    self.messageInputBar.inputTextView.text = ""
+                }
             }
         }
     }
@@ -266,23 +269,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
     }
     
     func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
-        
-        var avString = self.allPosts[0].account.avatar
-        if self.allPosts[0].account.avatar == StoreStruct.currentUser.avatar {
-            if self.allPosts.count > 1 {
-                avString = self.allPosts[1].account.avatar
-                if self.allPosts[1].account.avatar == StoreStruct.currentUser.avatar {
-                    if self.allPosts.count > 2 {
-                        avString = self.allPosts[2].account.avatar
-                        if self.allPosts[2].account.avatar == StoreStruct.currentUser.avatar {
-                            if self.allPosts.count > 3 {
-                                avString = self.allPosts[3].account.avatar
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        let avString = self.allPosts[indexPath.section].account.avatar
         let url = URL(string: avString)
         let imageData = try! Data(contentsOf: url!)
         let image1 = UIImage(data: imageData)

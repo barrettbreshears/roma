@@ -219,7 +219,8 @@
 		5320582E215D287700ED0C36 /* DKAssetGroupDetailImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320580A215D287600ED0C36 /* DKAssetGroupDetailImageCell.swift */; };
 		5320582F215D287700ED0C36 /* DKAssetGroupListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320580B215D287600ED0C36 /* DKAssetGroupListVC.swift */; };
 		53205831215D317900ED0C36 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53205830215D317800ED0C36 /* CameraViewController.swift */; };
-		5322D7DD2167659900B952F5 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5322D7DC2167659900B952F5 /* NotificationService.swift */; };
+		532429AE21923130002EEEAA /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 532429AD21923130002EEEAA /* StoreKit.framework */; };
+		53271356225A167D000DB75D /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53271355225A167D000DB75D /* GameViewController.swift */; };
 		5329F3842174B21F00C4A23C /* NewInstanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5329F3832174B21F00C4A23C /* NewInstanceViewController.swift */; };
 		5329F3862174B31400C4A23C /* InstanceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5329F3852174B31400C4A23C /* InstanceViewController.swift */; };
 		5329F3882174D0B900C4A23C /* ColourCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5329F3872174D0B900C4A23C /* ColourCells.swift */; };
@@ -1111,7 +1112,8 @@
 		5320580A215D287600ED0C36 /* DKAssetGroupDetailImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailImageCell.swift; sourceTree = "<group>"; };
 		5320580B215D287600ED0C36 /* DKAssetGroupListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupListVC.swift; sourceTree = "<group>"; };
 		53205830215D317800ED0C36 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
-		5322D7DC2167659900B952F5 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		532429AD21923130002EEEAA /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		53271355225A167D000DB75D /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		5329F3832174B21F00C4A23C /* NewInstanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewInstanceViewController.swift; sourceTree = "<group>"; };
 		5329F3852174B31400C4A23C /* InstanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceViewController.swift; sourceTree = "<group>"; };
 		5329F3872174D0B900C4A23C /* ColourCells.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColourCells.swift; sourceTree = "<group>"; };
@@ -2934,6 +2936,7 @@
 				5315ECE121FDF4AB00A3F1A9 /* EndorsedViewController.swift */,
 				535B339A215C0198001A2A7F /* BoostersViewController.swift */,
 				5352D08F215E48DE00901B60 /* ListMembersViewController.swift */,
+				53271355225A167D000DB75D /* GameViewController.swift */,
 				53BC45B9215AC7D30092223F /* SettingsViewController.swift */,
 				A968E8832207D418000EED23 /* TermsController.swift */,
 			);
@@ -4367,6 +4370,8 @@
 				530976D42179DBD700640D84 /* AuthenticationErrors.swift in Sources */,
 				530976D22179DBD700640D84 /* BiometricAuthenticationConstants.swift in Sources */,
 				5373CB3521541A0300676F3D /* SKDetectingView.swift in Sources */,
+				53E1AE01221AB82200A6E1E6 /* CrownAttributes+AnchorPosition.swift in Sources */,
+				53271356225A167D000DB75D /* GameViewController.swift in Sources */,
 				5329F3882174D0B900C4A23C /* ColourCells.swift in Sources */,
 				7806850921CC222F00072C41 /* ProCells.swift in Sources */,
 				536A4FBB216B73D600A3D483 /* BulletinDismissAnimationController.swift in Sources */,

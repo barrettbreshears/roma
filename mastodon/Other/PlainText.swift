@@ -10,8 +10,6 @@ import Foundation
 
 extension String {
     func stripHTML() -> String {
-        //z = z.replacingOccurrences(of: "<p>", with: "\n", options: NSString.CompareOptions.regularExpression, range: nil)
-        
         var z = self.replacingOccurrences(of: "</p><p>", with: "\n\n", options: NSString.CompareOptions.regularExpression, range: nil)
         z = z.replacingOccurrences(of: "<br>", with: "\n", options: NSString.CompareOptions.regularExpression, range: nil)
         z = z.replacingOccurrences(of: "<br />", with: "\n", options: NSString.CompareOptions.regularExpression, range: nil)

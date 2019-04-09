@@ -1145,7 +1145,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             
         } else {
             
-            self.segmentedControl.currentSegment = 2
+            self.segmentedControl.currentSegment = 1
             
             self.currentIndex = 0
             self.tableView.alpha = 0
@@ -1551,6 +1551,12 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             let selection = UISelectionFeedbackGenerator()
             selection.selectionChanged()
         }
+        
+        springWithDelay(duration: 0.5, delay: 0, animations: {
+            self.newUpdatesB1.alpha = 0
+            self.newUpdatesB2.alpha = 0
+        })
+        
         if toIndex == 0 {
             
             if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
@@ -4880,8 +4886,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
                         })
                         self.countcount1 = co
-                        } else if self.currentIndex == 5 {
-                            
                         } else {
                             
                             self.newUpdatesB2.setTitle("\(newestC)  ", for: .normal)
@@ -4904,15 +4908,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             }
                         self.refreshControl.endRefreshing()
                         if self.currentIndex == 1 {
-                            if StoreStruct.notificationsMentions.count > newestC2 {
-                                var zCount = 0
-                                var zHeights: CGFloat = 0
-                                for _ in stat {
-                                    zHeights = CGFloat(zHeights) + CGFloat(self.tableView.rectForRow(at: IndexPath(row: zCount, section: 0)).height)
-                                    zCount += 1
-                                }
-                                self.tableView.setContentOffset(CGPoint(x: 0, y: zHeights), animated: false)
-//                                self.tableView.scrollToRow(at: IndexPath(row: newestC2, section: 0), at: .top, animated: false)
+                            if newestC2 <= 0 {} else {
+                                self.tableView.scrollToRow(at: IndexPath(row: newestC2, section: 0), at: .top, animated: false)
                             }
                         }
                             

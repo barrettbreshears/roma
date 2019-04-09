@@ -523,11 +523,6 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     @objc func goToSettings() {
-        if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {} else {
-            springWithDelay(duration: 0.4, delay: 0, animations: { [weak self] in
-                self?.segmentedControl.alpha = 0
-            })
-        }
         let controller = SettingsViewController()
         self.navigationController?.pushViewController(controller, animated: true)
     }
@@ -1856,7 +1851,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     print(action, ind)
 
                     let controller = ComposeViewController()
-                    controller.inReplyText = self.chosenUser.username
+                    controller.inReplyText = self.chosenUser.acct
                     print(self.chosenUser.username)
                     self.present(controller, animated: true, completion: nil)
                 }
@@ -2320,7 +2315,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         self.navigationController?.pushViewController(controller, animated: true)
                     }
                 }
-                .action(.default("Follow Suggestions".localized), image: UIImage(named: "folsug")) { (action, ind) in
+                .action(.default(" Follow Suggestions".localized), image: UIImage(named: "folsug")) { (action, ind) in
                     print(action, ind)
 
                     let request = Accounts.followSuggestions()
@@ -2334,7 +2329,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     }
                 }
-                .action(.default("Endorsed Accounts".localized), image: UIImage(named: "endo")) { (action, ind) in
+                .action(.default(" Endorsed Accounts".localized), image: UIImage(named: "endo")) { (action, ind) in
                     print(action, ind)
 
                     let request = Accounts.allEndorsements()
@@ -2348,7 +2343,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     }
                 }
-                .action(.default("Instance Details".localized), image: UIImage(named: "instats")) { (action, ind) in
+                .action(.default(" Instance Details".localized), image: UIImage(named: "instats")) { (action, ind) in
                     print(action, ind)
                     var instImage = UIImage()
                     if StoreStruct.currentInstanceDetails.first?.thumbnail != nil {
@@ -2384,18 +2379,18 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         .popover(anchorView: self.view)
                         .show(on: self)
                 }
-                .action(.default("Edit Profile".localized), image: UIImage(named: "profile")) { (action, ind) in
+                .action(.default(" Edit Profile".localized), image: UIImage(named: "profile")) { (action, ind) in
                     print(action, ind)
                     
                         self.editProfileDetails()
                     
                 }
-                .action(.default("Add Account".localized), image: UIImage(named: "addac1")) { (action, ind) in
+                .action(.default(" Add Account".localized), image: UIImage(named: "addac1")) { (action, ind) in
                     print(action, ind)
 
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut2"), object: nil)
                 }
-                .action(.default("Share Profile".localized), image: UIImage(named: "share")) { (action, ind) in
+                .action(.default(" Share Profile".localized), image: UIImage(named: "share")) { (action, ind) in
                     print(action, ind)
 
 
@@ -2434,7 +2429,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
 
                 }
-                .action(.default("Log Out".localized), image: UIImage(named: "lout")) { (action, ind) in
+                .action(.default("Save Yourself!".localized), image: UIImage(named: "game")) { (action, ind) in
+                    print(action, ind)
+                    let vc = GameViewController()
+                    self.present(vc, animated: true, completion: nil)
+                }
+                .action(.default(" Log Out".localized), image: UIImage(named: "lout")) { (action, ind) in
                     print(action, ind)
 
                     let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom

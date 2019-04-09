@@ -106,8 +106,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
         print("Device Token: \(token)")
-        
         Messaging.messaging().apnsToken = deviceToken
+        guard StoreStruct.shared.currentInstance.returnedText != "" else {
+            return
+        }
+        var state: PushNotificationState!
+        let receiver = try! PushNotificationReceiver()
+        let subscription = PushNotificationSubscription(endpoint: URL(string:"https://pushrelay1.your.org/relay-to/production/\(token)")!, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
+        let deviceToken = PushNotificationDeviceToken(deviceToken: deviceToken)
+        state = PushNotificationState(receiver: receiver, subscription: subscription, deviceToken: deviceToken)
+        PushNotificationReceiver.setState(state: state)
+        
+        // change following when pushing to App Store or for local dev
+        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-mast1.your.org/relay-to/production/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
+//        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-mast1-dev.your.org/relay-to/development/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
+        
+        //create the url with URL
+        let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
+        
+        //create the session object
+        let session = URLSession.shared
+        
+        //now create the URLRequest object using the url object
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"// "POST" //set http method as POST
         
         InstanceID.instanceID().instanceID { (result, error) in
             
@@ -284,6 +306,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
+        FirebaseApp.configure()
+
 //        if UIApplication.shared.isSplitOrSlideOver {
 //            self.window?.rootViewController = ViewController()
 //            self.window?.makeKeyAndVisible()

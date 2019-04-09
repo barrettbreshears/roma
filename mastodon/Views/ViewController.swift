@@ -288,8 +288,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         customStyle.progressTintColor = Colours.grayDark
                         customStyle.backgroundColor = Colours.white
                         self.volumeBar.style = customStyle
-                        //self.volumeBar.start()
-                        //self.volumeBar.showInitial()
                     }
                     StoreStruct.shared.currentInstance.accessToken = (json["access_token"] as? String ?? "")
                     StoreStruct.client.accessToken = StoreStruct.shared.currentInstance.accessToken
@@ -304,22 +302,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     }
                     let request2 = Accounts.currentUser()
                     StoreStruct.client.run(request2) { (statuses) in
-                        if let account = (statuses.value) {
-
-                            UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
-                            InstanceData.setCurrentInstance(instance: currentInstance)
-                            let request = Timelines.home()
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                     DispatchQueue.main.async {
-                                        StoreStruct.currentUser = account
-                                        Account.addAccountToList(account: account)
-                                        StoreStruct.statusesHome = stat
-                                        StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
-                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
-                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
-                                    }
-                                }
+                        if let stat = (statuses.value) {
+                            DispatchQueue.main.async {
+                                StoreStruct.currentUser = stat
+                                Account.addAccountToList(account: stat)
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
                             }
 
                         }
@@ -357,7 +344,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         let task = URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
             guard error == nil else { print(error);return }
             guard let data = data else { return }
-            guard let newInsatnce = StoreStruct.shared.newInstance else {
+            guard let newInstance = StoreStruct.shared.newInstance else {
                 return
             }
             do {
@@ -366,11 +353,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     
                     if let access1 = (json["access_token"] as? String) {
                     
-                    newInsatnce.accessToken = access1
+                    newInstance.accessToken = access1
                     
-                    InstanceData.setCurrentInstance(instance: newInsatnce)
+                    InstanceData.setCurrentInstance(instance: newInstance)
                     var instances = InstanceData.getAllInstances()
-                    instances.append(newInsatnce)
+                    instances.append(newInstance)
                     UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
                     
                     
@@ -392,34 +379,15 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     StoreStruct.shared.newClient.run(request2) { (statuses) in
                         print("THIS IS THE STATUS \(statuses)")
                         if let stat = (statuses.value) {
-                            StoreStruct.currentUser = stat
-                            Account.addAccountToList(account: stat)
-
-                            let request = Timelines.home()
-                            StoreStruct.shared.newClient.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    StoreStruct.statusesHome = stat
-                                    StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
-                                    DispatchQueue.main.async {
-                                        InstanceData.setCurrentInstance(instance: newInsatnce)
-                                        var instances = InstanceData.getAllInstances()
-                                        instances.append(newInsatnce)
-                                        UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
-                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
-                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
-                                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                                        appDelegate.reloadApplication()
-                                    }
-
-                                }
+                            DispatchQueue.main.async {
+                                StoreStruct.currentUser = stat
+                                Account.addAccountToList(account: stat)
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
                             }
 
                         }
                     }
-                    
-                    
-                    
-                    
+                        
                     // onboarding
                     if (UserDefaults.standard.object(forKey: "onb") == nil) || (UserDefaults.standard.object(forKey: "onb") as! Int == 0) {
                         DispatchQueue.main.async {
@@ -428,12 +396,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         }
                     }
                     
-                    
                     DispatchQueue.main.async {
-                        
                         let appDelegate = UIApplication.shared.delegate as! AppDelegate
                         appDelegate.reloadApplication()
-                        
                     }
                     
                     }
@@ -988,19 +953,29 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             }
             
-
-            if StoreStruct.statusesHome.isEmpty {
-            let request = Timelines.home()
-            StoreStruct.client.run(request) { (statuses) in
-                if let stat = (statuses.value) {
-                    StoreStruct.statusesHome = stat
-                    StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
-                }
+            do {
+                StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
+                StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
+                StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
+                StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
+                StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
+            } catch {
+                print("Couldn't load")
             }
-            }
-
-
+            
+//            
+//            if StoreStruct.statusesHome.isEmpty {
+//            let request = Timelines.home()
+//            StoreStruct.client.run(request) { (statuses) in
+//                if let stat = (statuses.value) {
+//                    StoreStruct.statusesHome = stat + StoreStruct.statusesHome
+//                    StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+//                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
+//                }
+//            }
+//            }
+            
+            
             let request2 = Accounts.currentUser()
             StoreStruct.client.run(request2) { (statuses) in
                 if let stat = (statuses.value) {
