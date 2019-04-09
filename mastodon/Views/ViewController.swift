@@ -371,7 +371,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     }
 
 
-                    newInsatnce.accessToken = access1
+                    newInstance.accessToken = access1
                     StoreStruct.shared.newClient.accessToken = access1
 
 
