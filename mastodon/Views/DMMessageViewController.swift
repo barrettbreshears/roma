@@ -11,6 +11,7 @@ import UIKit
 import MessageKit
 import AVKit
 import AVFoundation
+import SafariServices
 
 class DMMessageViewController: MessagesViewController, MessagesDataSource, MessagesLayoutDelegate, MessagesDisplayDelegate, MessageCellDelegate, SKPhotoBrowserDelegate {
     
@@ -21,6 +22,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
     var allPosts: [Status] = []
     var player = AVPlayer()
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
+    var safariVC: SFSafariViewController?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -158,6 +160,14 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         print("Message tapped")
         let pos: CGPoint = cell.convert(CGPoint.zero, to: messagesCollectionView)
         let indexPath = messagesCollectionView.indexPathForItem(at: pos)
+        
+        if self.allPosts[indexPath?.section ?? 0].card?.url != nil {
+            self.safariVC = SFSafariViewController(url: self.allPosts[indexPath?.section ?? 0].card!.url)
+            self.safariVC?.preferredBarTintColor = Colours.white
+            self.safariVC?.preferredControlTintColor = Colours.tabSelected
+            self.present(self.safariVC!, animated: true, completion: nil)
+            return
+        }
         
         guard self.allPosts[indexPath?.section ?? 0].mediaAttachments.count > 0 else { return }
         

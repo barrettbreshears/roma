@@ -35,10 +35,10 @@ class ProfileHeaderCell: SwipeTableViewCell {
         settings.backgroundColor = UIColor.clear
         settings2.backgroundColor = UIColor.clear
         
-        userName.adjustsFontForContentSizeCategory = true
-        userTag.adjustsFontForContentSizeCategory = true
-        date.adjustsFontForContentSizeCategory = true
-        toot.adjustsFontForContentSizeCategory = true
+//        userName.adjustsFontForContentSizeCategory = true
+//        userTag.adjustsFontForContentSizeCategory = true
+//        date.adjustsFontForContentSizeCategory = true
+//        toot.adjustsFontForContentSizeCategory = true
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         headerImageView.translatesAutoresizingMaskIntoConstraints = false

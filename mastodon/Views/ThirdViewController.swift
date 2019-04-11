@@ -885,11 +885,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     }
 
                                 } else {
-
-                                    self.profileStatuses2 = stat
-                                    self.chosenUser = self.profileStatuses2[0].account
+                                    
                                     DispatchQueue.main.async {
-
+                                        self.profileStatuses2 = stat
+                                        self.chosenUser = self.profileStatuses2[0].account
+                                        
                                         self.ai.alpha = 0
                                         self.ai.removeFromSuperview()
                                         self.tableView.reloadData()
@@ -918,11 +918,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             }
 
                         } else {
-
-                            self.profileStatuses2 = stat
-                            self.chosenUser = self.profileStatuses2[0].account
+                            
                             DispatchQueue.main.async {
-
+                                self.profileStatuses2 = stat
+                                self.chosenUser = self.profileStatuses2[0].account
+                                
                                 self.ai.alpha = 0
                                 self.ai.removeFromSuperview()
                                 self.tableView.reloadData()
@@ -1853,6 +1853,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     let controller = ComposeViewController()
                     controller.inReplyText = self.chosenUser.acct
                     print(self.chosenUser.username)
+                    self.present(controller, animated: true, completion: nil)
+                }
+                .action(.default("Direct Message".localized), image: UIImage(named: "direct3")) { (action, ind) in
+                    print(action, ind)
+                    
+                    let controller = ComposeViewController()
+                    controller.inReplyText = self.chosenUser.acct
+                    controller.profileDirect = true
                     self.present(controller, animated: true, completion: nil)
                 }
                 .action(.default(fo), image: UIImage(named: "profile")) { (action, ind) in

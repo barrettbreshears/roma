@@ -42,10 +42,10 @@ class NotificationCellImage: SwipeTableViewCell {
         moreImage.backgroundColor = Colours.white
         warningB.backgroundColor = Colours.white
         
-        userName.adjustsFontForContentSizeCategory = true
-        userTag.titleLabel?.adjustsFontForContentSizeCategory = true
-        date.adjustsFontForContentSizeCategory = true
-        toot.adjustsFontForContentSizeCategory = true
+//        userName.adjustsFontForContentSizeCategory = true
+//        userTag.titleLabel?.adjustsFontForContentSizeCategory = true
+//        date.adjustsFontForContentSizeCategory = true
+//        toot.adjustsFontForContentSizeCategory = true
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         typeImage.translatesAutoresizingMaskIntoConstraints = false

@@ -3076,7 +3076,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .show(on: self)
             }
             if indexPath.row == 1 {
-                SKStoreReviewController.requestReview()
+//                SKStoreReviewController.requestReview()
+                if let reviewURL = URL(string: "itms-apps://itunes.apple.com/us/app/apple-store/1437429129?action=write-review&mt=8"), UIApplication.shared.canOpenURL(reviewURL) {
+                    if #available(iOS 10.0, *) {
+                        UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
+                    } else {
+                        UIApplication.shared.openURL(reviewURL)
+                    }
+                }
             }
             if indexPath.row == 2 {
                 // follow

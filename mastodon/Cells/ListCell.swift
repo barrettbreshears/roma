@@ -17,7 +17,7 @@ class ListCell: SwipeTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        userName.adjustsFontForContentSizeCategory = true
+//        userName.adjustsFontForContentSizeCategory = true
         
         userName.translatesAutoresizingMaskIntoConstraints = false
         userName.numberOfLines = 0

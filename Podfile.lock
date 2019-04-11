@@ -102,6 +102,7 @@ PODS:
     - ObjectMapper (~> 3.0)
     - SDWebImage/GIF
   - SwiftyJSON (4.2.0)
+  - TesseractOCRiOS (5.0.1)
   - TinyConstraints (3.1.0)
 
 DEPENDENCIES:
@@ -123,6 +124,7 @@ DEPENDENCIES:
   - StatusAlert
   - SwiftyGiphy
   - SwiftyJSON
+  - TesseractOCRiOS
   - TinyConstraints
 
 SPEC REPOS:
@@ -160,6 +162,7 @@ SPEC REPOS:
     - StatusAlert
     - SwiftyGiphy
     - SwiftyJSON
+    - TesseractOCRiOS
     - TinyConstraints
 
 SPEC CHECKSUMS:
@@ -196,8 +199,9 @@ SPEC CHECKSUMS:
   StatusAlert: 7f8a54b6031f7805bc3ac960cee531b61757ab2d
   SwiftyGiphy: 87930387b007b84c463bee2ec2a2d28d88b78b93
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
+  TesseractOCRiOS: 2c189465f86abb030d0c5141c90da9705b647854
   TinyConstraints: 4721a4b303c799328867078ade6560e152df54d1
 
-PODFILE CHECKSUM: 28952d5b06e5b1c4fb55c160d140c6eee00d333a
+PODFILE CHECKSUM: 06b1de22bf673744d318fc9ef21477a7df22e1d8
 
 COCOAPODS: 1.6.1

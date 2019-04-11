@@ -22,9 +22,9 @@ class SettingsCellToggle: SwipeTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         profileImageView.backgroundColor = Colours.white
         
-        userName.adjustsFontForContentSizeCategory = true
-        userTag.adjustsFontForContentSizeCategory = true
-        toot.adjustsFontForContentSizeCategory = true
+//        userName.adjustsFontForContentSizeCategory = true
+//        userTag.adjustsFontForContentSizeCategory = true
+//        toot.adjustsFontForContentSizeCategory = true
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         userName.translatesAutoresizingMaskIntoConstraints = false

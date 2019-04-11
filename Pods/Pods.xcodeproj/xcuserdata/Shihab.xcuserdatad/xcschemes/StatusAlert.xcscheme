@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6EF91F3D913DE6061E5BE52F4B0945BE"
+               BlueprintIdentifier = "561286E732B19C39E65193ABDA4BD20C"
                BlueprintName = "StatusAlert"
                ReferencedContainer = "container:Pods.xcodeproj"
                BuildableName = "StatusAlert.framework">

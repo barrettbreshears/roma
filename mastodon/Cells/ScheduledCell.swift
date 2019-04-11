@@ -21,8 +21,8 @@ class ScheduledCell: SwipeTableViewCell {
         userName.translatesAutoresizingMaskIntoConstraints = false
         toot.translatesAutoresizingMaskIntoConstraints = false
         
-        userName.adjustsFontForContentSizeCategory = true
-        toot.adjustsFontForContentSizeCategory = true
+//        userName.adjustsFontForContentSizeCategory = true
+//        toot.adjustsFontForContentSizeCategory = true
         
         userName.numberOfLines = 0
         toot.numberOfLines = 0

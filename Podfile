@@ -26,5 +26,6 @@ pod 'Crashlytics'
 pod 'Firebase/Core'
 pod 'Fabric'
 pod 'MessageKit'
+pod 'TesseractOCRiOS'
 
 end

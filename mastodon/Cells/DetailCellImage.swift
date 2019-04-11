@@ -35,10 +35,10 @@ class DetailCellImage: UITableViewCell {
         mainImageView.backgroundColor = Colours.white
         mainImageViewBG.backgroundColor = Colours.white
         
-        userName.adjustsFontForContentSizeCategory = true
-        userTag.adjustsFontForContentSizeCategory = true
-        date.adjustsFontForContentSizeCategory = true
-        toot.adjustsFontForContentSizeCategory = true
+//        userName.adjustsFontForContentSizeCategory = true
+//        userTag.adjustsFontForContentSizeCategory = true
+//        date.adjustsFontForContentSizeCategory = true
+//        toot.adjustsFontForContentSizeCategory = true
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         mainImageView.translatesAutoresizingMaskIntoConstraints = false

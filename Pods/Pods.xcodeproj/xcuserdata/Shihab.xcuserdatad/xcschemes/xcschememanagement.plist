@@ -227,17 +227,19 @@
 			<key>orderHint</key>
 			<integer>25</integer>
 		</dict>
-		<key>TinyConstraints.xcscheme</key>
+		<key>TesseractOCRiOS.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 			<key>orderHint</key>
 			<integer>26</integer>
 		</dict>
-		<key>nanopb.xcscheme_^#shared#^_</key>
+		<key>TinyConstraints.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
-			<integer>41</integer>
+			<integer>27</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>

@@ -4648,7 +4648,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             }
                             
                             
-                            let newestC = y.first!.count + stat.count
+                            let newestC = y.first!.count + stat.count - 1
                             
                             DispatchQueue.main.async {
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
@@ -4733,7 +4733,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             }
                             
                             
-                            let newestC = y.first!.count + stat.count
+                            let newestC = y.first!.count + stat.count - 1
                             
                             DispatchQueue.main.async {
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
@@ -4818,7 +4818,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             }
                             
                             
-                            let newestC = y.first!.count + stat.count
+                            let newestC = y.first!.count + stat.count - 1
                             
                             DispatchQueue.main.async {
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
