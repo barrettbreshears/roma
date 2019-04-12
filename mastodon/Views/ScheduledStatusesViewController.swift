@@ -236,32 +236,32 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
                     let cell = tableView.cellForRow(at: indexPath) as! ScheduledCellImage
                     var images = [SKPhoto]()
                     var coun = 0
-                    for y in sto[indexPath.row].mediaAttachments {
+                    sto[indexPath.row].mediaAttachments.map({
                         if coun == 0 {
-                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                            let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.mainImageView.currentImage ?? nil)
                             photo.shouldCachePhotoURLImage = true
                             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                                 photo.caption = sto[indexPath.row].params.text
                             } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                                photo.caption = y.description ?? ""
+                                photo.caption = $0.description ?? ""
                             } else {
                                 photo.caption = ""
                             }
                             images.append(photo)
                         } else {
-                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                            let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                             photo.shouldCachePhotoURLImage = true
                             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                                 photo.caption = sto[indexPath.row].params.text
                             } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                                photo.caption = y.description ?? ""
+                                photo.caption = $0.description ?? ""
                             } else {
                                 photo.caption = ""
                             }
                             images.append(photo)
                         }
                         coun += 1
-                    }
+                    })
                     let originImage = sender.currentImage
                     if originImage != nil {
                         let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)

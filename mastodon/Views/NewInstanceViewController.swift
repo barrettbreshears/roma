@@ -134,24 +134,22 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
         let task = session.dataTask(with: request) { (data, response, err) in
             do {
                 let json = try JSONDecoder().decode(tagInstances.self, from: data ?? Data())
-                for x in json.instances {
-                    DispatchQueue.main.async {
-                        var tag = DLTag(text: "\(x.name)")
+                json.instances.map({
+                        var tag = DLTag(text: "\($0.name)")
                         tag.fontSize = 15
                         tag.backgroundColor = Colours.grayLight2
                         tag.borderWidth = 0
                         tag.textColor = UIColor.white
                         tag.cornerRadius = 12
                         tag.enabled = true
-                        tag.altText = "\(x.name)"
+                        tag.altText = "\($0.name)"
                         tag.padding = UIEdgeInsets(top: 10, left: 14, bottom: 10, right: 14)
                         self.tagListView.addTag(tag: tag)
                         self.tagListView.singleLine = true
                         springWithDelay(duration: 0.5, delay: 0, animations: {
                             self.tagListView.alpha = 1
                         })
-                    }
-                }
+                })
             } catch {
                 print("err")
             }

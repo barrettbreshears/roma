@@ -120,23 +120,23 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                     self.allReplies = (stat.descendants)
                     
                     DispatchQueue.main.async {
-                        for z in self.allPrevious + self.mainStatus + self.allReplies {
+                        (self.allPrevious + self.mainStatus + self.allReplies).map({
                             var theType = "0"
-                            if z.account.acct == StoreStruct.currentUser.acct {
+                            if $0.account.acct == StoreStruct.currentUser.acct {
                                 theType = "1"
                             }
-                            let sender = Sender(id: theType, displayName: "\(z.account.displayName)")
-                            let x = MockMessage.init(text: z.content.stripHTML().replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""), sender: sender, messageId: z.id, date: Date())
+                            let sender = Sender(id: theType, displayName: "\($0.account.displayName)")
+                            let x = MockMessage.init(text: $0.content.stripHTML().replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""), sender: sender, messageId: $0.id, date: Date())
                             self.messages.append(x)
-                            self.allPosts.append(z)
+                            self.allPosts.append($0)
                             
-                            if z.mediaAttachments.isEmpty {} else {
-                                let url = URL(string: z.mediaAttachments.first?.previewURL ?? "")
+                            if $0.mediaAttachments.isEmpty {} else {
+                                let url = URL(string: $0.mediaAttachments.first?.previewURL ?? "")
                                 let imageData = try! Data(contentsOf: url!)
                                 let image1 = UIImage(data: imageData)
-                                let y = MockMessage.init(image: image1!, sender: sender, messageId: z.id, date: Date())
+                                let y = MockMessage.init(image: image1!, sender: sender, messageId: $0.id, date: Date())
                                 self.messages.append(y)
-                                self.allPosts.append(z)
+                                self.allPosts.append($0)
                             }
                             
                             self.ai.stopAnimating()
@@ -145,7 +145,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                             
                             self.messagesCollectionView.reloadData()
                             self.messagesCollectionView.scrollToBottom()
-                        }
+                        })
                     }
                 }
             }
@@ -192,32 +192,32 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
 
                     var images = [SKPhoto]()
                     var coun = 0
-                    for y in self.allPosts[indexPath?.section ?? 0].reblog?.mediaAttachments ?? self.allPosts[indexPath?.section ?? 0].mediaAttachments {
+                    (self.allPosts[indexPath?.section ?? 0].reblog?.mediaAttachments ?? self.allPosts[indexPath?.section ?? 0].mediaAttachments).map({
                         if coun == 0 {
-                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                            let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                             photo.shouldCachePhotoURLImage = true
                             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                                 photo.caption = self.allPosts[indexPath?.section ?? 0].reblog?.content.stripHTML() ?? self.allPosts[indexPath?.section ?? 0].content.stripHTML()
                             } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                                photo.caption = y.description ?? ""
+                                photo.caption = $0.description ?? ""
                             } else {
                                 photo.caption = ""
                             }
                             images.append(photo)
                         } else {
-                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                            let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                             photo.shouldCachePhotoURLImage = true
                             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                                 photo.caption = self.allPosts[indexPath?.section ?? 0].reblog?.content.stripHTML() ?? self.allPosts[indexPath?.section ?? 0].content.stripHTML()
                             } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                                photo.caption = y.description ?? ""
+                                photo.caption = $0.description ?? ""
                             } else {
                                 photo.caption = ""
                             }
                             images.append(photo)
                         }
                         coun += 1
-                    }
+                    })
 //                let originImage = sender.currentImage
 //                if originImage != nil {
                     let browser = SKPhotoBrowser(photos: images)

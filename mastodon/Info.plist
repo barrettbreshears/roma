@@ -560,7 +560,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>3</string>
+	<string>4</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>twitter</string>
@@ -583,7 +583,7 @@
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>Allow Roma to save images to your photo library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Allow Roma to access your photo library to display your recent pictures and videos for posting within statuses.</string>
+	<string>Allow Mast to access your photo library to display your recent pictures and videos for posting within toots.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Allow Mast to use speech recognition capabilities to convert video audio to text.</string>
 	<key>NSUserActivityTypes</key>

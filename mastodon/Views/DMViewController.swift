@@ -790,11 +790,11 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                             }
                             
                             var newString = string
-                            for z2 in StoreStruct.notificationsDirect[indexPath.row].lastStatus!.mentions {
-                                if z2.acct.contains(string) {
-                                    newString = z2.id
+                            StoreStruct.notificationsDirect[indexPath.row].lastStatus!.mentions.map({
+                                if $0.acct.contains(string) {
+                                    newString = $0.id
                                 }
-                            }
+                            })
                             
                             
                             let controller = ThirdViewController()
@@ -883,11 +883,11 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                         }
                         
                         var newString = string
-                        for z2 in StoreStruct.notificationsDirect[indexPath.row].lastStatus!.mentions {
-                            if z2.acct.contains(string) {
-                                newString = z2.id
+                        StoreStruct.notificationsDirect[indexPath.row].lastStatus!.mentions.map({
+                            if $0.acct.contains(string) {
+                                newString = $0.id
                             }
-                        }
+                        })
                         
                         
                         let controller = ThirdViewController()

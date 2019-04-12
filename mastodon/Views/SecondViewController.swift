@@ -618,7 +618,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeSeg), name: NSNotification.Name(rawValue: "changeSeg"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.segTheme), name: NSNotification.Name(rawValue: "segTheme"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.startStream), name: NSNotification.Name(rawValue: "startStream"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.goToSettings), name: NSNotification.Name(rawValue: "goToSettings"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goToSettings), name: NSNotification.Name(rawValue: "goToSettings2"), object: nil)
         
         self.view.backgroundColor = Colours.white
         
@@ -1158,11 +1158,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     if let stat = (statuses.value) {
                         StoreStruct.notifications = stat
                         
-                        for x in stat {
-                            if x.type == .mention {
-                                StoreStruct.notificationsMentions.append(x)
+                        stat.map({
+                            if $0.type == .mention {
+                                StoreStruct.notificationsMentions.append($0)
                             }
-                        }
+                        })
                         
                         DispatchQueue.main.async {
                             self.tableView2.reloadData()
@@ -2118,11 +2118,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 }
                                 
                                 var newString = string
-                                for z2 in StoreStruct.notifications[indexPath.row].status!.mentions {
-                                    if z2.acct.contains(string) {
-                                        newString = z2.id
+                                StoreStruct.notifications[indexPath.row].status!.mentions.map({
+                                    if $0.acct.contains(string) {
+                                        newString = $0.id
                                     }
-                                }
+                                })
                                 
                                 
                                 let controller = ThirdViewController()
@@ -2224,11 +2224,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 }
                                 
                                 var newString = string
-                                for z2 in StoreStruct.notifications[indexPath.row].status!.mentions {
-                                    if z2.acct.contains(string) {
-                                        newString = z2.id
+                                StoreStruct.notifications[indexPath.row].status!.mentions.map({
+                                    if $0.acct.contains(string) {
+                                        newString = $0.id
                                     }
-                                }
+                                })
                                 
                                 
                                 let controller = ThirdViewController()
@@ -2319,11 +2319,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             }
                             
                             var newString = string
-                            for z2 in StoreStruct.notifications[indexPath.row].status!.mentions {
-                                if z2.acct.contains(string) {
-                                    newString = z2.id
+                            StoreStruct.notifications[indexPath.row].status!.mentions.map({
+                                if $0.acct.contains(string) {
+                                    newString = $0.id
                                 }
-                            }
+                            })
                             
                             
                             let controller = ThirdViewController()
@@ -2447,11 +2447,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             }
                             
                             var newString = string
-                            for z2 in StoreStruct.notificationsMentions[indexPath.row].status!.mentions {
-                                if z2.acct.contains(string) {
-                                    newString = z2.id
+                            StoreStruct.notificationsMentions[indexPath.row].status!.mentions.map({
+                                if $0.acct.contains(string) {
+                                    newString = $0.id
                                 }
-                            }
+                            })
                             
                             
                             let controller = ThirdViewController()
@@ -2553,11 +2553,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             }
                             
                             var newString = string
-                            for z2 in StoreStruct.notificationsMentions[indexPath.row].status!.mentions {
-                                if z2.acct.contains(string) {
-                                    newString = z2.id
+                            StoreStruct.notificationsMentions[indexPath.row].status!.mentions.map({
+                                if $0.acct.contains(string) {
+                                    newString = $0.id
                                 }
-                            }
+                            })
                             
                             
                             let controller = ThirdViewController()
@@ -2646,11 +2646,11 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         }
                         
                         var newString = string
-                        for z2 in StoreStruct.notificationsMentions[indexPath.row].status!.mentions {
-                            if z2.acct.contains(string) {
-                                newString = z2.id
+                        StoreStruct.notificationsMentions[indexPath.row].status!.mentions.map({
+                            if $0.acct.contains(string) {
+                                newString = $0.id
                             }
-                        }
+                        })
                         
                         
                         let controller = ThirdViewController()
@@ -2801,32 +2801,32 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
             var images = [SKPhoto]()
                 var coun = 0
-            for y in sto[indexPath.row].status!.mediaAttachments {
+            sto[indexPath.row].status!.mediaAttachments.map({
                 if coun == 0 {
-                    let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                    let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.mainImageView.currentImage ?? nil)
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                         photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
                     } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                        photo.caption = y.description ?? ""
+                        photo.caption = $0.description ?? ""
                     } else {
                         photo.caption = ""
                     }
                     images.append(photo)
                 } else {
-                let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                 photo.shouldCachePhotoURLImage = true
                 if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                     photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
                 } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                    photo.caption = y.description ?? ""
+                    photo.caption = $0.description ?? ""
                 } else {
                     photo.caption = ""
                     }
                 images.append(photo)
                 }
                 coun += 1
-            }
+            })
             let originImage = sender.currentImage
             if originImage != nil {
                 let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
@@ -2842,32 +2842,32 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     let cell = theTable.cellForRow(at: indexPath) as! MainFeedCellImage
                     var images = [SKPhoto]()
                     var coun = 0
-                    for y in sto[indexPath.row].status!.mediaAttachments {
+                    sto[indexPath.row].status!.mediaAttachments.map({
                         if coun == 0 {
-                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                            let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.mainImageView.currentImage ?? nil)
                             photo.shouldCachePhotoURLImage = true
                             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                                 photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
                             } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                                photo.caption = y.description ?? ""
+                                photo.caption = $0.description ?? ""
                             } else {
                                 photo.caption = ""
                             }
                             images.append(photo)
                         } else {
-                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                            let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                             photo.shouldCachePhotoURLImage = true
                             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                                 photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
                             } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                                photo.caption = y.description ?? ""
+                                photo.caption = $0.description ?? ""
                             } else {
                                 photo.caption = ""
                             }
                             images.append(photo)
                         }
                         coun += 1
-                    }
+                    })
                     let originImage = sender.currentImage
                     if originImage != nil {
                         let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
@@ -2881,32 +2881,32 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
                     var images = [SKPhoto]()
                     var coun = 0
-                    for y in sto[indexPath.row].status!.mediaAttachments {
+                    sto[indexPath.row].status!.mediaAttachments.map({
                         if coun == 0 {
-                            let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.mainImageView.currentImage ?? nil)
+                            let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.mainImageView.currentImage ?? nil)
                             photo.shouldCachePhotoURLImage = true
                             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                                 photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
                             } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                                photo.caption = y.description ?? ""
+                                photo.caption = $0.description ?? ""
                             } else {
                                 photo.caption = ""
                             }
                             images.append(photo)
                         } else {
-                            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                            let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                             photo.shouldCachePhotoURLImage = true
                             if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                                 photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
                             } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                                photo.caption = y.description ?? ""
+                                photo.caption = $0.description ?? ""
                             } else {
                                 photo.caption = ""
                             }
                             images.append(photo)
                         }
                         coun += 1
-                    }
+                    })
                     let originImage = sender.currentImage
                     if originImage != nil {
                         let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
@@ -2963,32 +2963,32 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
                 var images = [SKPhoto]()
                 var coun = 0
-                for y in sto[indexPath.row].status!.mediaAttachments {
+                sto[indexPath.row].status!.mediaAttachments.map({
                     if coun == 0 {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage1.currentImage ?? nil)
+                        let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage1.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
+                            photo.caption = $0.description ?? ""
                         } else {
                             photo.caption = ""
                         }
                         images.append(photo)
                     } else {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
+                            photo.caption = $0.description ?? ""
                         } else {
                             photo.caption = ""
                         }
                         images.append(photo)
                     }
                     coun += 1
-                }
+                })
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
@@ -3041,32 +3041,32 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
                 var images = [SKPhoto]()
                 var coun = 0
-                for y in sto[indexPath.row].status!.mediaAttachments {
+                sto[indexPath.row].status!.mediaAttachments.map({
                     if coun == 0 {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage2.currentImage ?? nil)
+                        let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage2.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
+                            photo.caption = $0.description ?? ""
                         } else {
                             photo.caption = ""
                         }
                         images.append(photo)
                     } else {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
+                            photo.caption = $0.description ?? ""
                         } else {
                             photo.caption = ""
                         }
                         images.append(photo)
                     }
                     coun += 1
-                }
+                })
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage2)
@@ -3120,32 +3120,32 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
                 var images = [SKPhoto]()
                 var coun = 0
-                for y in sto[indexPath.row].status!.mediaAttachments {
+                sto[indexPath.row].status!.mediaAttachments.map({
                     if coun == 0 {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage3.currentImage ?? nil)
+                        let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage3.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
+                            photo.caption = $0.description ?? ""
                         } else {
                             photo.caption = ""
                         }
                         images.append(photo)
                     } else {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
+                            photo.caption = $0.description ?? ""
                         } else {
                             photo.caption = ""
                         }
                         images.append(photo)
                     }
                     coun += 1
-                }
+                })
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage3)
@@ -3200,32 +3200,32 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 let cell = theTable.cellForRow(at: indexPath) as! NotificationCellImage
                 var images = [SKPhoto]()
                 var coun = 0
-                for y in sto[indexPath.row].status!.mediaAttachments {
+                sto[indexPath.row].status!.mediaAttachments.map({
                     if coun == 0 {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.smallImage4.currentImage ?? nil)
+                        let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage4.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
+                            photo.caption = $0.description ?? ""
                         } else {
                             photo.caption = ""
                         }
                         images.append(photo)
                     } else {
-                        let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+                        let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
                             photo.caption = sto[indexPath.row].status?.content.stripHTML() ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
-                            photo.caption = y.description ?? ""
+                            photo.caption = $0.description ?? ""
                         } else {
                             photo.caption = ""
                         }
                         images.append(photo)
                     }
                     coun += 1
-                }
+                })
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage4)
@@ -4855,16 +4855,21 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     StoreStruct.notifications = stat + StoreStruct.notifications
                     StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
                     var co = 0
-                    for x in stat {
-                        if x.type == .mention {
-                            StoreStruct.notificationsMentions = [x] + StoreStruct.notificationsMentions
-                            if x.status?.visibility == .direct {
-                            }
-                            co = co + 1
-                        }
-                    }
+//                    for x in stat {
+//                        if x.type == .mention {
+//                            StoreStruct.notificationsMentions = [x] + StoreStruct.notificationsMentions
+//                            co = co + 1
+//                        }
+//                    }
                     
                     DispatchQueue.main.async {
+                        stat.map({
+                            if $0.type == .mention {
+                                StoreStruct.notificationsMentions = [$0] + StoreStruct.notificationsMentions
+                                co = co + 1
+                            }
+                        })
+                        
                         StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
                         StoreStruct.notifications = StoreStruct.notifications.sorted(by: { $0.createdAt > $1.createdAt })
                         StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()

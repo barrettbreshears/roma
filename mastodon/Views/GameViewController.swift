@@ -197,6 +197,7 @@ fileprivate extension GameViewController {
                 return
         }
         enemyTimer.invalidate()
+        self.removeEnemies()
     }
     
     func startDisplayLink() {
@@ -322,8 +323,8 @@ fileprivate extension GameViewController {
             .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
             .messageTextAlignment(.left)
             .titleTextAlignment(.left)
-            .action(.default("Share".localized), image: UIImage(named: "share")) { (action, ind) in
-                let bodyText = "I lasted for \(self.clockLabel.text ?? "0") minutes in the #Mast mini-game #SaveYourself!\n\nDo you think you can do better?\nhttps://itunes.apple.com/us/app/mast/id1437429129?mt=8"
+            .action(.default("Share Score".localized), image: UIImage(named: "share")) { (action, ind) in
+                let bodyText = "I lasted for \(self.clockLabel.text ?? "0") minutes in the #Mast mini-game #SaveYourself!\n\nDo you think you can beat my score?\nhttps://itunes.apple.com/us/app/mast/id1437429129?mt=8"
                 let vc = VisualActivityViewController(text: bodyText)
                 vc.popoverPresentationController?.sourceView = self.view
                 vc.previewNumberOfLines = 5

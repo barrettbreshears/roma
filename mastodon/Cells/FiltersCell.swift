@@ -52,13 +52,13 @@ class FiltersCell: SwipeTableViewCell {
     
     func configure(_ status: Filters) {
         var x = ""
-        for i in status.context {
+        status.context.map({
             if x == "" {
-                x = "\(i)"
+                x = "\($0)"
             } else {
-                x = "\(x) \(i)"
+                x = "\(x) \($0)"
             }
-        }
+        })
         
         userName.text = status.phrase
         toot.text = "Filtered in - \(x)"

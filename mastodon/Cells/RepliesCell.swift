@@ -126,17 +126,17 @@ class RepliesCell: SwipeTableViewCell {
                 toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
             } else {
                 let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted")
-                for y in status.reblog!.emojis {
+                status.reblog!.emojis.map({
                     let textAttachment = NSTextAttachment()
-                    textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
+                    textAttachment.loadImageUsingCache(withUrl: $0.url.absoluteString)
                     textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.toot.font.lineHeight), height: Int(self.toot.font.lineHeight))
                     let attrStringWithImage = NSAttributedString(attachment: textAttachment)
-                    while attributedString.mutableString.contains(":\(y.shortcode):") {
-                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
+                    while attributedString.mutableString.contains(":\($0.shortcode):") {
+                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\($0.shortcode):")
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
                         
                     }
-                }
+                })
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
             }
@@ -148,16 +148,16 @@ class RepliesCell: SwipeTableViewCell {
                 userName.text = status.reblog?.account.displayName.stripHTML()
             } else {
                 let attributedString = NSMutableAttributedString(string: status.reblog?.account.displayName.stripHTML() ?? "")
-                for y in status.reblog?.account.emojis ?? [] {
+                (status.reblog?.account.emojis ?? []).map({
                     let textAttachment = NSTextAttachment()
-                    textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
+                    textAttachment.loadImageUsingCache(withUrl: $0.url.absoluteString)
                     textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.userName.font.lineHeight), height: Int(self.userName.font.lineHeight))
                     let attrStringWithImage = NSAttributedString(attachment: textAttachment)
-                    while attributedString.mutableString.contains(":\(y.shortcode):") {
-                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
+                    while attributedString.mutableString.contains(":\($0.shortcode):") {
+                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\($0.shortcode):")
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
                     }
-                }
+                })
                 self.userName.attributedText = attributedString
                 self.reloadInputViews()
             }
@@ -174,17 +174,17 @@ class RepliesCell: SwipeTableViewCell {
                 toot.text = status.content.stripHTML()
             } else {
                 let attributedString = NSMutableAttributedString(string: status.content.stripHTML())
-                for y in status.emojis {
+                status.emojis.map({
                     let textAttachment = NSTextAttachment()
-                    textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
+                    textAttachment.loadImageUsingCache(withUrl: $0.url.absoluteString)
                     textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.toot.font.lineHeight), height: Int(self.toot.font.lineHeight))
                     let attrStringWithImage = NSAttributedString(attachment: textAttachment)
-                    while attributedString.mutableString.contains(":\(y.shortcode):") {
-                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
+                    while attributedString.mutableString.contains(":\($0.shortcode):") {
+                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\($0.shortcode):")
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
                         
                     }
-                }
+                })
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
             }
@@ -194,16 +194,16 @@ class RepliesCell: SwipeTableViewCell {
                 userName.text = status.account.displayName.stripHTML()
             } else {
                 let attributedString = NSMutableAttributedString(string: status.account.displayName.stripHTML())
-                for y in status.account.emojis {
+                status.account.emojis.map({
                     let textAttachment = NSTextAttachment()
-                    textAttachment.loadImageUsingCache(withUrl: y.url.absoluteString)
+                    textAttachment.loadImageUsingCache(withUrl: $0.url.absoluteString)
                     textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(self.userName.font.lineHeight), height: Int(self.userName.font.lineHeight))
                     let attrStringWithImage = NSAttributedString(attachment: textAttachment)
-                    while attributedString.mutableString.contains(":\(y.shortcode):") {
-                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\(y.shortcode):")
+                    while attributedString.mutableString.contains(":\($0.shortcode):") {
+                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\($0.shortcode):")
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
                     }
-                }
+                })
                 self.userName.attributedText = attributedString
                 self.reloadInputViews()
             }

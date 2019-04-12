@@ -142,35 +142,35 @@ class ProfileHeaderCellImage: UITableViewCell, UICollectionViewDelegate, UIColle
             var coun = 0
         
             if (UserDefaults.standard.object(forKey: "swrece") == nil) || (UserDefaults.standard.object(forKey: "swrece") as! Int == 0) {
-        for y in sto[indexPath.row].mediaAttachments {
+        sto[indexPath.row].mediaAttachments.map({
             if coun == 0 {
-                let photo = SKPhoto.photoWithImageURL(y.url, holder: cell.image.image)
+                let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.image.image)
                 photo.shouldCachePhotoURLImage = true
                 photo.caption = sto[indexPath.row].content.stripHTML()
                 images.append(photo)
             } else {
-            let photo = SKPhoto.photoWithImageURL(y.url, holder: nil)
+            let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
             photo.shouldCachePhotoURLImage = true
             photo.caption = sto[indexPath.row].content.stripHTML()
             images.append(photo)
             }
             coun += 1
-        }
+        })
             } else {
-                for y in self.profileStatusesHasImage {
+                self.profileStatusesHasImage.map({
                     if coun == 0 {
-                        let photo = SKPhoto.photoWithImageURL(y.mediaAttachments[0].url, holder: cell.image.image)
+                        let photo = SKPhoto.photoWithImageURL($0.mediaAttachments[0].url, holder: cell.image.image)
                         photo.shouldCachePhotoURLImage = true
-                        photo.caption = y.content.stripHTML()
+                        photo.caption = $0.content.stripHTML()
                         images.append(photo)
                     } else {
-                        let photo = SKPhoto.photoWithImageURL(y.mediaAttachments[0].url, holder: nil)
+                        let photo = SKPhoto.photoWithImageURL($0.mediaAttachments[0].url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
-                        photo.caption = y.content.stripHTML()
+                        photo.caption = $0.content.stripHTML()
                         images.append(photo)
                     }
                     coun += 1
-                }
+                })
             }
                 
         let originImage = cell.image.image
