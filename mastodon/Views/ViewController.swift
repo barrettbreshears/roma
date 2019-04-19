@@ -14,6 +14,8 @@ import SAConfettiView
 import WatchConnectivity
 import Disk
 import UserNotifications
+import ReactiveSSE
+import ReactiveSwift
 
 class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFieldDelegate, UIGestureRecognizerDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, WCSessionDelegate, UNUserNotificationCenterDelegate {
 
@@ -87,6 +89,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     let reachability = Reachability()!
     var keyHeight = 0
     var tagListView = DLTagView()
+    var closeButton = MNGExpandedTouchAreaButton()
+    var dStream = false
+    var dMod: [Notificationt] = []
+    var nsocket: WebSocket!
     
     func siriLight() {
         UIApplication.shared.statusBarStyle = .default
@@ -280,8 +286,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             guard let data = data else { return }
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                    print(json)
-
+                    
                     DispatchQueue.main.async {
                         var customStyle = VolumeBarStyle.likeInstagram
                         customStyle.trackTintColor = Colours.cellQuote
@@ -334,7 +339,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
     @objc func newInstanceLogged(){
         
-        StoreStruct.tappedSignInCheck = false
         
         var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.newInstance!.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.newInstance!.authCode)&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&client_id=\(StoreStruct.shared.newInstance!.clientID)&client_secret=\(StoreStruct.shared.newInstance!.clientSecret)&scope=read%20write%20follow%20push")!)
         request.httpMethod = "POST"
@@ -349,12 +353,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             }
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
-                    print(json)
                     
                     if let access1 = (json["access_token"] as? String) {
                     
                     newInstance.accessToken = access1
-                    
                     InstanceData.setCurrentInstance(instance: newInstance)
                     var instances = InstanceData.getAllInstances()
                     instances.append(newInstance)
@@ -377,7 +379,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
                     let request2 = Accounts.currentUser()
                     StoreStruct.shared.newClient.run(request2) { (statuses) in
-                        print("THIS IS THE STATUS \(statuses)")
                         if let stat = (statuses.value) {
                             DispatchQueue.main.async {
                                 StoreStruct.currentUser = stat
@@ -397,6 +398,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     }
                     
                     DispatchQueue.main.async {
+                        StoreStruct.tappedSignInCheck = false
                         let appDelegate = UIApplication.shared.delegate as! AppDelegate
                         appDelegate.reloadApplication()
                     }
@@ -750,7 +752,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         let request0 = Statuses.create(status: StoreStruct.composedTootText, replyToID: nil, mediaIDs: [], sensitive: false, spoilerText: nil, scheduledAt: nil, poll: nil, visibility: .public)
         DispatchQueue.global(qos: .userInitiated).async {
             StoreStruct.client.run(request0) { (statuses) in
-                print(statuses)
+                
             }
         }
     }
@@ -775,6 +777,65 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     @objc func addBadge() {
         self.tabBar.items?[1].badgeValue = "1"
     }
+    
+    func streamDataDirect() {
+        if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
+            
+            var sss = StoreStruct.client.baseURL.replacingOccurrences(of: "https", with: "wss")
+            sss = sss.replacingOccurrences(of: "http", with: "wss")
+            nsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/user?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=user")!)
+            nsocket.onConnect = {
+                print("websocket is connected")
+            }
+            //websocketDidDisconnect
+            nsocket.onDisconnect = { (error: Error?) in
+                print("websocket is disconnected")
+            }
+            //websocketDidReceiveMessage
+            nsocket.onText = { (text: String) in
+                
+                let data0 = text.data(using: .utf8)!
+                do {
+                    let jsonResult = try JSONSerialization.jsonObject(with: data0, options: JSONSerialization.ReadingOptions.mutableContainers) as? [String: Any]
+                    let re = jsonResult?["payload"]
+                    if jsonResult?["event"] as? String == "notification" {
+                        let te = SSEvent.init(type: "notification", data: re as! String)
+                        let data = te.data.data(using: .utf8)!
+                        guard let model = try? Notificationt.decode(data: data) else {
+                            return
+                        }
+                        
+                        if (model.status?.visibility)! == .direct {
+                            
+                            let request = Timelines.conversations(range: .since(id: StoreStruct.notificationsDirect.first?.id ?? "", limit: 5000))
+                            StoreStruct.client.run(request) { (statuses) in
+                                if let stat = (statuses.value) {
+                                    if stat.isEmpty {} else {
+                                        DispatchQueue.main.async {
+                                            self.tabBar.items?[2].badgeValue = "1"
+                                            StoreStruct.notificationsDirect = stat + StoreStruct.notificationsDirect
+                                            StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
+                                            NotificationCenter.default.post(name: Notification.Name(rawValue: "updateDM"), object: nil)
+                                        }
+                                    }
+                                }
+                            }
+                            
+                        }
+                    }
+                } catch {
+                    print("failfail")
+                    return
+                }
+            }
+            //websocketDidReceiveData
+            nsocket.onData = { (data: Data) in
+                print("got some data: \(data.count)")
+            }
+            nsocket.connect()
+        }
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -884,9 +945,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 self.volumeBar.showInitial()
             }
         }
-
-
-
+        
         self.tableView.register(FollowersCell.self, forCellReuseIdentifier: "cellfs")
         self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell00")
         self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell002")
@@ -954,26 +1013,24 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             }
             
             do {
-                StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
-                StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
-                StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
-                StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
-                StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
+                let st1 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
+                StoreStruct.statusesHome = StoreStruct.statusesHome + st1
+                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                let st2 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
+                StoreStruct.statusesLocal = StoreStruct.statusesLocal + st2
+                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                let st3 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
+                StoreStruct.statusesFederated = StoreStruct.statusesFederated + st3
+                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                let st4 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
+                StoreStruct.notifications = StoreStruct.notifications + st4
+                StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
+                let st5 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
+                StoreStruct.notificationsMentions = StoreStruct.notificationsMentions + st5
+                StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
             } catch {
                 print("Couldn't load")
             }
-            
-//            
-//            if StoreStruct.statusesHome.isEmpty {
-//            let request = Timelines.home()
-//            StoreStruct.client.run(request) { (statuses) in
-//                if let stat = (statuses.value) {
-//                    StoreStruct.statusesHome = stat + StoreStruct.statusesHome
-//                    StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
-//                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
-//                }
-//            }
-//            }
             
             
             let request2 = Accounts.currentUser()
@@ -994,11 +1051,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 DispatchQueue.main.async {
                     StoreStruct.emotiFace = stat
                 }
-
-                for y in stat {
-                    let attributedString = NSAttributedString(string: "    \(y.shortcode)")
+                
+                stat.map({
+                    let attributedString = NSAttributedString(string: "    \($0.shortcode)")
                     let textAttachment = NSTextAttachment()
-                    textAttachment.loadImageUsingCache(withUrl: y.staticURL.absoluteString)
+                    textAttachment.loadImageUsingCache(withUrl: $0.staticURL.absoluteString)
                     textAttachment.bounds = CGRect(x:0, y: Int(-9), width: Int(30), height: Int(30))
                     let attrStringWithImage = NSAttributedString(attachment: textAttachment)
                     let result = NSMutableAttributedString()
@@ -1006,7 +1063,22 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     result.append(attributedString)
 
                     StoreStruct.mainResult.append(result)
-                }
+                    
+                    let textAttachment1 = NSTextAttachment()
+                    textAttachment1.loadImageUsingCache(withUrl: $0.staticURL.absoluteString)
+                    textAttachment1.bounds = CGRect(x:0, y: Int(-9), width: Int(30), height: Int(30))
+                    let attrStringWithImage1 = NSAttributedString(attachment: textAttachment1)
+                    let result1 = NSMutableAttributedString()
+                    result1.append(attrStringWithImage1)
+                    
+                    StoreStruct.mainResult1.append(result1)
+                    
+                    let attributedString2 = NSAttributedString(string: "\($0.shortcode)")
+                    let result2 = NSMutableAttributedString()
+                    result2.append(attributedString2)
+                    
+                    StoreStruct.mainResult2.append(result)
+                })
             }
         }
 
@@ -1454,14 +1526,14 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 .messageTextAlignment(.left)
                 .titleTextAlignment(.left)
                 .action(.default("Edit List Name".localized), image: UIImage(named: "list")) { (action, ind) in
-                    print(action, ind)
+                     
                     let controller = NewListViewController()
                     controller.listID = StoreStruct.allLists[indexPath.row].id
                     controller.editListName = StoreStruct.allLists[indexPath.row].title
                     self.present(controller, animated: true, completion: nil)
                 }
                 .action(.default("View List Members".localized), image: UIImage(named: "profile")) { (action, ind) in
-                    print(action, ind)
+                     
                     StoreStruct.allListRelID = StoreStruct.allLists[indexPath.row].id
                     self.dismissOverlayProper()
                     if StoreStruct.currentPage == 0 {
@@ -1473,8 +1545,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     }
                 }
                 .action(.default("Delete List".localized), image: UIImage(named: "block")) { (action, ind) in
-                    print(action, ind)
-
+                     
+                    
                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                         let notification = UINotificationFeedbackGenerator()
                         notification.notificationOccurred(.success)
@@ -1532,8 +1604,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Remove".localized), image: UIImage(named: "block")) { (action, ind) in
-                        print(action, ind)
-
+                         
+                        
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let notification = UINotificationFeedbackGenerator()
                             notification.notificationOccurred(.success)
@@ -1593,8 +1665,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Remove".localized), image: UIImage(named: "block")) { (action, ind) in
-                        print(action, ind)
-
+                         
+                        
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let notification = UINotificationFeedbackGenerator()
                             notification.notificationOccurred(.success)
@@ -1652,7 +1724,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        
         if tableView == self.tableView {
             self.dismissOverlayProperSearch()
 
@@ -1739,7 +1811,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
                 } else {
                     StoreStruct.instanceLocalToAdd = UserDefaults.standard.object(forKey: "instancesLocal") as! [String]
-                    print(StoreStruct.instanceLocalToAdd)
                     StoreStruct.instanceText = StoreStruct.instanceLocalToAdd[indexPath.row]
                 }
 
@@ -1770,8 +1841,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
 
         if sender.state == .began {
-            print("long pressed")
-
+            
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
             let selection = UIImpactFeedbackGenerator()
             selection.impactOccurred()
@@ -2124,26 +2194,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
 
     @objc func signOutNewInstance() {
-
-        let instances = InstanceData.getAllInstances()
-//        if indexPath.row == instances.count {
-            // launch the sign in
-            let loginController = ViewController()
-            loginController.loadingAdditionalInstance = true
-            loginController.createLoginView(newInstance: true)
-        self.present(loginController, animated: true, completion: nil)
-//            self.navigationController?.pushViewController(loginController, animated: true)
-//        } else {
-//
-//            InstanceData.setCurrentInstance(instance: instances[indexPath.row])
-//
-//            DispatchQueue.main.async {
-//
-//                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-//                appDelegate.reloadApplication()
-//
-//            }
-//        }
+        let loginController = ViewController()
+        loginController.loadingAdditionalInstance = true
+        loginController.createLoginView(newInstance: true)
+        self.present(loginController, animated: true, completion: {
+            loginController.textField.becomeFirstResponder()
+        })
     }
 
 
@@ -2151,16 +2207,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     @objc func signOut() {
 
         UserDefaults.standard.set(nil, forKey: "accessToken")
-
-
-
-//        do {
-//            try Disk.clear(.documents)
-//        } catch {
-//            print("couldn't clear disk")
-//        }
-
-
+        
         self.textField.text = ""
 
         StoreStruct.client = Client(baseURL: "")
@@ -2181,6 +2228,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         StoreStruct.emotiSize = 16
         StoreStruct.emotiFace = []
         StoreStruct.mainResult = []
+        StoreStruct.mainResult1 = []
+        StoreStruct.mainResult2 = []
         StoreStruct.instanceLocalToAdd = []
 
         StoreStruct.statusesHome = []
@@ -2207,8 +2256,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         StoreStruct.allListRelID = ""
         StoreStruct.currentList = []
         StoreStruct.currentListTitle = ""
-        StoreStruct.drafts = []
-
+        
         StoreStruct.allLikes = []
         StoreStruct.allBoosts = []
         StoreStruct.allPins = []
@@ -2229,12 +2277,15 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.dismiss(animated: true, completion: nil)
         }
     }
-
-    @objc
-    func dismissNewLogin(){
+    
+    @objc func didTouchUpInsideCloseButton(_ sender: AnyObject) {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator()
+            impact.impactOccurred()
+        }
         self.dismiss(animated: true, completion: nil)
     }
-
+    
     func createLoginView(newInstance:Bool = false) {
 
 
@@ -2242,16 +2293,38 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.loginBG.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         self.loginBG.backgroundColor = Colours.tabSelected
         self.view.addSubview(self.loginBG)
-
-        if newInstance {
-            let cancelBtn = UIButton()
-            cancelBtn.setTitle("Cancel", for: .normal)
-            cancelBtn.tintColor = .white
-            cancelBtn.frame = CGRect(x: 10, y: 30, width: 70, height: 45)
-            cancelBtn.addTarget(self, action: #selector(dismissNewLogin), for: .touchUpInside)
-            self.view.addSubview(cancelBtn)
+        
+        if self.newInstance {
+            var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
+            var offset = 88
+            var closeB = 47
+            var botbot = 20
+            if UIDevice().userInterfaceIdiom == .phone {
+                switch UIScreen.main.nativeBounds.height {
+                case 2688:
+                    offset = 88
+                    closeB = 47
+                    botbot = 40
+                case 2436, 1792:
+                    offset = 88
+                    closeB = 47
+                    botbot = 40
+                default:
+                    offset = 64
+                    closeB = 24
+                    botbot = 20
+                    tabHeight = Int(UITabBarController().tabBar.frame.size.height)
+                }
+            }
+            self.closeButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 20, y: closeB, width: 32, height: 32)))
+            self.closeButton.setImage(UIImage(named: "block")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+            self.closeButton.alpha = 0.3
+            self.closeButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+            self.closeButton.adjustsImageWhenHighlighted = false
+            self.closeButton.addTarget(self, action: #selector(didTouchUpInsideCloseButton), for: .touchUpInside)
+            self.view.addSubview(self.closeButton)
         }
-
+        
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleGesture))
         swipeDown.direction = .down
         self.loginBG.addGestureRecognizer(swipeDown)
@@ -2263,7 +2336,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.view.addSubview(self.loginLogo)
 
         self.loginLabel.frame = CGRect(x: 50, y: self.view.bounds.height/2 - 57.5, width: self.view.bounds.width - 80, height: 35)
-        self.loginLabel.text = "Pleroma or mastodon instance:".localized
+        self.loginLabel.text = "Instance name:".localized
         self.loginLabel.textColor = UIColor.white.withAlphaComponent(0.6)
         self.loginLabel.font = UIFont.systemFont(ofSize: 14)
         self.view.addSubview(self.loginLabel)
@@ -2278,7 +2351,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.textField.autocorrectionType = .no
         self.textField.autocapitalizationType = .none
         self.textField.delegate = self
-        self.textField.attributedPlaceholder = NSAttributedString(string: "mastodon.technology",
+        self.textField.attributedPlaceholder = NSAttributedString(string: "mastodon.social",
                                                                   attributes: [NSAttributedString.Key.foregroundColor: Colours.tabSelected])
         self.view.addSubview(self.textField)
         
@@ -2310,19 +2383,21 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         let task = session.dataTask(with: request) { (data, response, err) in
             do {
                 let json = try JSONDecoder().decode(tagInstances.self, from: data ?? Data())
-                json.instances.map({
-                        var tag = DLTag(text: "\($0.name)")
+                for x in json.instances {
+                    DispatchQueue.main.async {
+                        var tag = DLTag(text: "\(x.name)")
                         tag.fontSize = 15
                         tag.backgroundColor = Colours.grayLight2.withAlphaComponent(0.3)
                         tag.borderWidth = 0
                         tag.textColor = UIColor.white
                         tag.cornerRadius = 12
                         tag.enabled = true
-                        tag.altText = "\($0.name)"
+                        tag.altText = "\(x.name)"
                         tag.padding = UIEdgeInsets(top: 10, left: 14, bottom: 10, right: 14)
                         self.tagListView.addTag(tag: tag)
                         self.tagListView.singleLine = true
-                })
+                    }
+                }
             } catch {
                 print("err")
             }
@@ -2444,14 +2519,39 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     if application.value == nil {
 
                         DispatchQueue.main.async {
-                            let statusAlert = StatusAlert()
-                            statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
-                            statusAlert.title = "Not a valid Instance (may be closed or dead)".localized
-                            statusAlert.contentColor = Colours.grayDark
-                            statusAlert.message = "Please enter an Instance name like mastodon.technology"
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
-                        statusAlert.show()
-                    }
+                            
+                            
+                            Alertift.actionSheet(title: "Not a valid instance (may be closed or dead)", message: "Please enter an instance name like mastodon.social or mastodon.technology, or use one from the list to get started. You can sign in if you already have an account registered with the instance, or you can choose to sign up with a new account.")
+                                .backgroundColor(Colours.white)
+                                .titleTextColor(Colours.grayDark)
+                                .messageTextColor(Colours.grayDark)
+                                .messageTextAlignment(.left)
+                                .titleTextAlignment(.left)
+                                .action(.default("Find out more".localized), image: UIImage(named: "share")) { (action, ind) in
+                                     
+                                    let queryURL = URL(string: "https://joinmastodon.org")!
+                                    UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
+                                        if !success {
+                                            if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
+                                            self.safariVC = SFSafariViewController(url: queryURL)
+                                            self.present(self.safariVC!, animated: true, completion: nil)
+                                            } else {
+                                                UIApplication.shared.open(queryURL)
+                                            }
+                                            
+                                        }
+                                    }
+                                }
+                                .action(.cancel("Dismiss"))
+                                .finally { action, index in
+                                    if action.style == .cancel {
+                                        return
+                                    }
+                                }
+                                .popover(anchorView: self.view)
+                                .show(on: self)
+                            
+                            
                         }
 
                     } else {
@@ -2470,8 +2570,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                             let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
                             UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: queryURL)
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(queryURL)
+                                    }
                                 }
                             }
                         }
@@ -2492,14 +2596,37 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     if application.value == nil {
 
                         DispatchQueue.main.async {
-                            let statusAlert = StatusAlert()
-                            statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
-                            statusAlert.title = "Not a valid Instance (may be closed or dead)".localized
-                            statusAlert.contentColor = Colours.grayDark
-                            statusAlert.message = "Please enter an Instance name like mastodon.technology"
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
-                        statusAlert.show()
-                    }
+                            
+                            
+                            Alertift.actionSheet(title: "Not a valid instance (may be closed or dead)", message: "Please enter an instance name like mastodon.social or mastodon.technology, or use one from the list to get started. You can sign in if you already have an account registered with the instance, or you can choose to sign up with a new account.")
+                                .backgroundColor(Colours.white)
+                                .titleTextColor(Colours.grayDark)
+                                .messageTextColor(Colours.grayDark)
+                                .messageTextAlignment(.left)
+                                .titleTextAlignment(.left)
+                                .action(.default("Find out more".localized), image: UIImage(named: "share")) { (action, ind) in
+                                     
+                                    let queryURL = URL(string: "https://joinmastodon.org")!
+                                    UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
+                                        if !success {
+                                            if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
+                                            self.safariVC = SFSafariViewController(url: queryURL)
+                                            self.present(self.safariVC!, animated: true, completion: nil)
+                                            } else {
+                                                UIApplication.shared.openURL(queryURL)
+                                            }
+                                        }
+                                    }
+                                }
+                                .action(.cancel("Dismiss"))
+                                .finally { action, index in
+                                    if action.style == .cancel {
+                                        return
+                                    }
+                                }
+                                .popover(anchorView: self.view)
+                                .show(on: self)
+                            
                         }
 
                     } else {
@@ -2517,8 +2644,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                             let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
                             UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: queryURL)
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(queryURL)
+                                    }
                                 }
                             }
                         }
@@ -2565,8 +2696,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         let request0 = Lists.all()
         StoreStruct.client.run(request0) { (statuses) in
             if let stat = (statuses.value) {
-                StoreStruct.allLists = stat
                 DispatchQueue.main.async {
+                    StoreStruct.allLists = stat
                     self.tableViewLists.reloadData()
                 }
             }
@@ -2595,12 +2726,17 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             userDefaults.set(StoreStruct.shared.currentInstance.returnedText, forKey: "key2")
             userDefaults.synchronize()
         }
-
-
-        if UserDefaults.standard.object(forKey: "accessToken") == nil {} else {
-
-
-
+        
+        
+        
+        if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
+            if self.dStream == false {
+                self.streamDataDirect()
+            }
+        }
+        
+        
+//        if UserDefaults.standard.object(forKey: "accessToken") == nil {} else {
 //            self.watchSession?.delegate = self
 //            self.watchSession?.activate()
 //            do {
@@ -2609,7 +2745,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 //            } catch {
 //                print("err")
 //            }
-        }
+//        }
     }
 
     func checkAccounts(){
@@ -2702,7 +2838,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.tableViewLists.reloadData()
 
         //animate
-        self.searcherView.transform = CGAffineTransform(scaleX: 0.65, y: 0.65)
+        self.searcherView.transform = CGAffineTransform(scaleX: 0.55, y: 0.55)
         springWithDelay(duration: 0.5, delay: 0, animations: {
             self.searcherView.alpha = 1
             self.searcherView.transform = CGAffineTransform(scaleX: 1, y: 1)
@@ -2825,8 +2961,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.searcherView.addSubview(self.tableView)
 
         //animate
-        self.searcherView.transform = CGAffineTransform(scaleX: 0.65, y: 0.65)
-        springWithDelay(duration: 0.5, delay: 0, animations: {
+        self.searcherView.transform = CGAffineTransform(scaleX: 0.35, y: 0.35)
+        springWithDelay(duration: 0.45, delay: 0, animations: {
             self.searcherView.alpha = 1
             self.searcherView.transform = CGAffineTransform(scaleX: 1, y: 1)
         })
@@ -3037,8 +3173,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.searchTextField.resignFirstResponder()
         self.searchTextField.text = ""
         self.searchTextField.alpha = 0
-
-        let wid = self.view.bounds.width
+        
         springWithDelay(duration: 0.37, delay: 0, animations: {
             self.searcherView.alpha = 0
         })
@@ -3068,9 +3203,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.searchTextField.resignFirstResponder()
         self.searchTextField.text = ""
         self.searchTextField.alpha = 0
-
-        let wid = self.view.bounds.width
-        springWithDelay(duration: 0.37, delay: 0, animations: {
+        
+        springWithDelay(duration: 0.4, delay: 0, animations: {
             self.searcherView.alpha = 0
         })
     }

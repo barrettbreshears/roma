@@ -168,9 +168,17 @@ public struct Accounts {
     /// Follows an account.
     ///
     /// - Parameter id: The account id.
+    /// - Parameter reblogs: Whether to display the account's reblogs on the home timeline.
     /// - Returns: Request for `Account`.
-    public static func follow(id: String) -> Request<Account> {
-        return Request<Account>(path: "/api/v1/accounts/\(id)/follow", method: .post(.empty))
+    public static func follow(id: String, reblogs: Bool) -> Request<Account> {
+        var reb = "true"
+        if reblogs == false {
+            reb = "false"
+        }
+        let parameter = [Parameter(name: "reblogs", value: reb)]
+        let method = HTTPMethod.post(.parameters(parameter))
+
+        return Request<Account>(path: "/api/v1/accounts/\(id)/follow", method: method)
     }
 
     /// Unfollow an account.

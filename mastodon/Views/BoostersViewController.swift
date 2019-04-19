@@ -478,7 +478,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        
         self.tableView.deselectRow(at: indexPath, animated: true)
         
         let controller = ThirdViewController()
@@ -504,10 +504,10 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
-                    self.lastThing = stat.first?.id ?? ""
-                    self.statusLiked = self.statusLiked + stat
-                    self.statusLiked = self.statusLiked.removeDuplicates()
                     DispatchQueue.main.async {
+                        self.lastThing = stat.first?.id ?? ""
+                        self.statusLiked = self.statusLiked + stat
+                        self.statusLiked = self.statusLiked.removeDuplicates()
                         self.tableView.reloadData()
                     }
                 }
@@ -521,10 +521,10 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty || self.lastThing2 == stat.first?.id ?? "" {} else {
-                    self.lastThing2 = stat.first?.id ?? ""
-                    self.statusBoosted = self.statusBoosted + stat
-                    self.statusBoosted = self.statusBoosted.removeDuplicates()
                     DispatchQueue.main.async {
+                        self.lastThing2 = stat.first?.id ?? ""
+                        self.statusBoosted = self.statusBoosted + stat
+                        self.statusBoosted = self.statusBoosted.removeDuplicates()
                         self.tableView2.reloadData()
                     }
                 }

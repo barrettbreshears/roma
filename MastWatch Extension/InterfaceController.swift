@@ -62,8 +62,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     func session(_ session: WCSession, didReceiveUserInfo userInfo: [String : Any] = [:]) {
         DispatchQueue.main.async {
-            print("herehere")
-            print(userInfo.first?.key)
             if let xy = userInfo.first?.key {
                 UserDefaults.standard.set(xy, forKey: "key1")
                 if let xy2 = userInfo.first?.value {
@@ -203,7 +201,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     override func interfaceOffsetDidScrollToBottom() {
         
-        print("scrolled to bottom")
         self.indicator?.showWait()
         let request = Timelines.home(range: .max(id: StoreStruct.allStats.last?.id ?? "", limit: nil))
         self.client.run(request) { (statuses) in
@@ -240,8 +237,6 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
     
     override func interfaceOffsetDidScrollToTop() {
         
-        print("scrolled to top")
-        
         let request = Timelines.home(range: .min(id: StoreStruct.allStats.first?.id ?? "", limit: nil))
         self.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
@@ -258,12 +253,15 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                     controller.imageView.setWidth(20)
                     controller.tootText.setText("\(StoreStruct.allStats[index].reblog?.content.stripHTML() ?? StoreStruct.allStats[index].content.stripHTML())")
                     
+                    var theUR = URL(string: StoreStruct.allStats[index].reblog?.account.avatar ?? StoreStruct.allStats[index].account.avatar ?? "") ?? URL(string: "google.com")!
                     //DispatchQueue.global().async { [weak self] in
-                    self.getDataFromUrl(url: URL(string: StoreStruct.allStats[index].reblog?.account.avatar ?? StoreStruct.allStats[index].account.avatar ?? "") ?? URL(string: "google.com")!) { data, response, error in
+                    self.getDataFromUrl(url: theUR) { data, response, error in
                         guard let data = data, error == nil else { return }
                         //DispatchQueue.main.async() {
                         if self.isShowing {
-                            controller.imageView.setImageData(data)
+                            if theUR == URL(string: "google.com")! {} else {
+                                controller.imageView.setImageData(data)
+                            }
                         }
                         //}
                     }

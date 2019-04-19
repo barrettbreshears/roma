@@ -222,7 +222,7 @@ class ListMembersViewController: UIViewController, UITableViewDelegate, UITableV
         let impact = UIImpactFeedbackGenerator(style: .medium)
         
         let more = SwipeAction(style: .default, title: nil) { action, indexPath in
-            print("boost")
+            
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 impact.impactOccurred()
             }
@@ -233,7 +233,7 @@ class ListMembersViewController: UIViewController, UITableViewDelegate, UITableV
                 .messageTextAlignment(.left)
                 .titleTextAlignment(.left)
                 .action(.default("Remove".localized), image: UIImage(named: "block")) { (action, ind) in
-                    print(action, ind)
+                     
                     
                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                         let notification = UINotificationFeedbackGenerator()
@@ -264,8 +264,8 @@ class ListMembersViewController: UIViewController, UITableViewDelegate, UITableV
 //                        }
 //
 //                        if let stat = (statuses.value) {
-//                            print("unblocked")
-//                            print(stat)
+//                            
+//                             
 //                        }
 //                    }
                     
@@ -308,7 +308,7 @@ class ListMembersViewController: UIViewController, UITableViewDelegate, UITableV
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        
         self.tableView.deselectRow(at: indexPath, animated: true)
         
         let controller = ThirdViewController()

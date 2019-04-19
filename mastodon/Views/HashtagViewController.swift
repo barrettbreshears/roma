@@ -388,19 +388,27 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                     let z = URL(string: String(url.absoluteString.dropFirst()))!
                     UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
                         if !success {
+                            if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                             self.safariVC = SFSafariViewController(url: z)
                             self.safariVC?.preferredBarTintColor = Colours.white
                             self.safariVC?.preferredControlTintColor = Colours.tabSelected
                             self.present(self.safariVC!, animated: true, completion: nil)
+                            } else {
+                                UIApplication.shared.openURL(z)
+                            }
                         }
                     }
                 } else {
                     UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
                         if !success {
+                            if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                             self.safariVC = SFSafariViewController(url: url)
                             self.safariVC?.preferredBarTintColor = Colours.white
                             self.safariVC?.preferredControlTintColor = Colours.tabSelected
                             self.present(self.safariVC!, animated: true, completion: nil)
+                            } else {
+                                UIApplication.shared.openURL(url)
+                            }
                         }
                     }
                 }
@@ -417,8 +425,8 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                 let request = Timelines.tag(string)
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
-                        controller.currentTags = stat
                         DispatchQueue.main.async {
+                            controller.currentTags = stat
                             self.navigationController?.pushViewController(controller, animated: true)
                         }
                     }
@@ -495,19 +503,27 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                     let z = URL(string: String(url.absoluteString.dropFirst()))!
                     UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
                         if !success {
+                            if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                             self.safariVC = SFSafariViewController(url: z)
                             self.safariVC?.preferredBarTintColor = Colours.white
                             self.safariVC?.preferredControlTintColor = Colours.tabSelected
                             self.present(self.safariVC!, animated: true, completion: nil)
+                            } else {
+                                UIApplication.shared.openURL(z)
+                            }
                         }
                     }
                 } else {
                     UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
                         if !success {
+                            if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                             self.safariVC = SFSafariViewController(url: url)
                             self.safariVC?.preferredBarTintColor = Colours.white
                             self.safariVC?.preferredControlTintColor = Colours.tabSelected
                             self.present(self.safariVC!, animated: true, completion: nil)
+                            } else {
+                                UIApplication.shared.openURL(url)
+                            }
                         }
                     }
                 }
@@ -524,8 +540,8 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                 let request = Timelines.tag(string)
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
-                        controller.currentTags = stat
                         DispatchQueue.main.async {
+                            controller.currentTags = stat
                             self.navigationController?.pushViewController(controller, animated: true)
                         }
                     }
@@ -587,7 +603,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         } else {
             
             let indexPath = IndexPath(row: sender.tag, section: 0)
-            let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+            guard let cell = tableView.cellForRow(at: indexPath) as? MainFeedCellImage else { return }
             var images = [SKPhoto]()
             var coun = 0
             sto[indexPath.row].mediaAttachments.map({
@@ -650,7 +666,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             } else {
                 
                 let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                guard let cell = self.tableView.cellForRow(at: indexPath) as? MainFeedCellImage else { return }
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -712,7 +728,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             } else {
                 
                 let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                guard let cell = self.tableView.cellForRow(at: indexPath) as? MainFeedCellImage else { return }
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -775,7 +791,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             } else {
                 
                 let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                guard let cell = self.tableView.cellForRow(at: indexPath) as? MainFeedCellImage else { return }
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -839,7 +855,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             } else {
                 
                 let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                guard let cell = self.tableView.cellForRow(at: indexPath) as? MainFeedCellImage else { return }
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -901,13 +917,13 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         var theTable = self.tableView
         var sto = self.currentTags
         
-        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
             StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
             let request2 = Statuses.unreblog(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
             StoreStruct.client.run(request2) { (statuses) in
                 DispatchQueue.main.async {
                     if let cell = theTable.cellForRow(at:IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
-                        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "like")
                         } else {
@@ -918,7 +934,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
-                        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "like")
                         } else {
@@ -942,7 +958,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                     
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
@@ -955,7 +971,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
@@ -982,13 +998,13 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         var theTable = self.tableView
         var sto = self.currentTags
         
-        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
             StoreStruct.allLikes = StoreStruct.allLikes.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
             let request2 = Statuses.unfavourite(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
             StoreStruct.client.run(request2) { (statuses) in
                 DispatchQueue.main.async {
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
-                        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "boost")
                         } else {
@@ -999,7 +1015,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
-                        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "boost")
                         } else {
@@ -1022,7 +1038,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                     
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
@@ -1035,7 +1051,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
@@ -1067,7 +1083,6 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         controller.inReply = [sto[sender.tag].reblog ?? sto[sender.tag]]
         controller.prevTextReply = sto[sender.tag].reblog?.content.stripHTML() ?? sto[sender.tag].content.stripHTML()
         controller.inReplyText = sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username
-        print(sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username)
         self.present(controller, animated: true, completion: nil)
     }
     
@@ -1095,7 +1110,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             let impact = UIImpactFeedbackGenerator(style: .medium)
             
             let boost = SwipeAction(style: .default, title: nil) { action, indexPath in
-                print("boost")
+                
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 impact.impactOccurred()
                 }
@@ -1105,13 +1120,13 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 
                 
-                if sto[indexPath.row].reblogged! || StoreStruct.allBoosts.contains(sto[indexPath.row].id) {
+                if sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].id) {
                     StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != sto[indexPath.row].id }
                     let request2 = Statuses.unreblog(id: sto[indexPath.row].id)
                     StoreStruct.client.run(request2) { (statuses) in
                         DispatchQueue.main.async {
                             if let cell = tableView.cellForRow(at: indexPath) as? MainFeedCell {
-                                if sto[indexPath.row].favourited! || StoreStruct.allLikes.contains(sto[indexPath.row].id) {
+                                if sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
                                     cell.moreImage.image = UIImage(named: "like")
                                 } else {
@@ -1120,7 +1135,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                 cell.hideSwipe(animated: true)
                             } else {
                                 let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
-                                if sto[indexPath.row].favourited! || StoreStruct.allLikes.contains(sto[indexPath.row].id) {
+                                if sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
                                     cell.moreImage.image = UIImage(named: "like")
                                 } else {
@@ -1180,7 +1195,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             boost.textColor = Colours.tabUnselected
             
             let like = SwipeAction(style: .default, title: nil) { action, indexPath in
-                print("like")
+                
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 impact.impactOccurred()
                 }
@@ -1190,13 +1205,13 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 
                 
-                if sto[indexPath.row].favourited! || StoreStruct.allLikes.contains(sto[indexPath.row].id) {
+                if sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].id) {
                     StoreStruct.allLikes = StoreStruct.allLikes.filter { $0 != sto[indexPath.row].id }
                     let request2 = Statuses.unfavourite(id: sto[indexPath.row].id)
                     StoreStruct.client.run(request2) { (statuses) in
                         DispatchQueue.main.async {
                             if let cell = tableView.cellForRow(at: indexPath) as? MainFeedCell {
-                                if sto[indexPath.row].reblogged! || StoreStruct.allBoosts.contains(sto[indexPath.row].id) {
+                                if sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
                                     cell.moreImage.image = UIImage(named: "boost")
                                 } else {
@@ -1205,7 +1220,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                 cell.hideSwipe(animated: true)
                             } else {
                                 let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
-                                if sto[indexPath.row].reblogged! || StoreStruct.allBoosts.contains(sto[indexPath.row].id) {
+                                if sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
                                     cell.moreImage.image = UIImage(named: "boost")
                                 } else {
@@ -1284,7 +1299,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             like.textColor = Colours.tabUnselected
             
             let reply = SwipeAction(style: .default, title: nil) { action, indexPath in
-                print("reply")
+                
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 impact.impactOccurred()
                 }
@@ -1292,7 +1307,6 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                 StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                 controller.inReply = [sto[indexPath.row]]
                 controller.inReplyText = sto[indexPath.row].account.username
-                print(sto[indexPath.row].account.username)
                 controller.prevTextReply = sto[indexPath.row].content.stripHTML()
                 self.present(controller, animated: true, completion: nil)
                 
@@ -1363,7 +1377,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             let impact = UIImpactFeedbackGenerator(style: .medium)
             
             let more = SwipeAction(style: .default, title: nil) { action, indexPath in
-                print("boost")
+                
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 impact.impactOccurred()
                 }
@@ -1419,7 +1433,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                         .messageTextAlignment(.left)
                         .titleTextAlignment(.left)
                         .action(.default("Pin/Unpin".localized), image: UIImage(named: "pinned")) { (action, ind) in
-                            print(action, ind)
+                             
                             if sto[indexPath.row].pinned ?? false || StoreStruct.allPins.contains(sto[indexPath.row].id) {
                                 StoreStruct.allPins = StoreStruct.allPins.filter { $0 != sto[indexPath.row].id }
                                 let request = Statuses.unpin(id: sto[indexPath.row].id)
@@ -1457,7 +1471,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             }
                         }
                         .action(.default("Delete and Redraft".localized), image: UIImage(named: "block")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             let controller = ComposeViewController()
                             StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
@@ -1467,7 +1481,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             
                         }
                         .action(.default("Delete".localized), image: UIImage(named: "block")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             
                                 self.currentTags = self.currentTags.filter { $0 != self.currentTags[indexPath.row] }
@@ -1476,7 +1490,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             
                             let request = Statuses.delete(id: sto[indexPath.row].id)
                             StoreStruct.client.run(request) { (statuses) in
-                                print("deleted")
+                                
                                 
                                 DispatchQueue.main.async {
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -1495,20 +1509,16 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             }
                         }
                         .action(.default("Translate".localized), image: UIImage(named: "translate")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             let unreserved = "-._~/?"
                             let allowed = NSMutableCharacterSet.alphanumeric()
                             allowed.addCharacters(in: unreserved)
                             let bodyText = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                            print("0001")
-                            print(bodyText)
                             let unreservedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~"
                             let unreservedCharset = NSCharacterSet(charactersIn: unreservedChars)
                             var trans = bodyText.addingPercentEncoding(withAllowedCharacters: unreservedCharset as CharacterSet)
                             trans = trans!.replacingOccurrences(of: "\n\n", with: "%20")
-                            print("0002")
-                            print(trans)
                             let langStr = Locale.current.languageCode
                             let urlString = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=\(langStr ?? "en")&dt=t&q=\(trans!)&ie=UTF-8&oe=UTF-8"
                             guard let requestUrl = URL(string:urlString) else {
@@ -1549,7 +1559,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             task.resume()
                         }
                         .action(.default("Duplicate Toot".localized), image: UIImage(named: "addac1")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             let controller = ComposeViewController()
                             controller.inReply = []
@@ -1558,7 +1568,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             self.present(controller, animated: true, completion: nil)
                         }
                         .action(.default("Share".localized), image: UIImage(named: "share")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             
                             
@@ -1569,7 +1579,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                 .messageTextAlignment(.left)
                                 .titleTextAlignment(.left)
                                 .action(.default("Share Link".localized), image: UIImage(named: "share")) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     
                                     if let myWebsite = sto[indexPath.row].url {
                                         let objectsToShare = [myWebsite]
@@ -1589,7 +1599,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                     }
                                 }
                                 .action(.default("Share Text".localized), image: UIImage(named: "share")) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     
                                     let bodyText = sto[indexPath.row].content.stripHTML()
                                     if UIDevice.current.userInterfaceIdiom == .pad {
@@ -1608,7 +1618,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                     
                                 }
                                 .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     
                                     let controller = NewQRViewController()
                                     controller.ur = sto[indexPath.row].url?.absoluteString ?? "https://www.thebluebird.app"
@@ -1661,7 +1671,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Mute/Unmute".localized), image: UIImage(named: "block")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         if isMuted == false {
                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -1680,8 +1690,8 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             let request = Accounts.mute(id: sto[indexPath.row].account.id)
                             StoreStruct.client.run(request) { (statuses) in
                                 if let stat = (statuses.value) {
-                                    print("muted")
-                                    print(stat)
+                                    
+                                     
                                 }
                             }
                         } else {
@@ -1701,15 +1711,15 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             let request = Accounts.unmute(id: sto[indexPath.row].account.id)
                             StoreStruct.client.run(request) { (statuses) in
                                 if let stat = (statuses.value) {
-                                    print("unmuted")
-                                    print(stat)
+                                    
+                                     
                                 }
                             }
                         }
                         
                     }
                     .action(.default("Block/Unblock".localized), image: UIImage(named: "block2")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         if isBlocked == false {
                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -1728,8 +1738,8 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             let request = Accounts.block(id: sto[indexPath.row].account.id)
                             StoreStruct.client.run(request) { (statuses) in
                                 if let stat = (statuses.value) {
-                                    print("blocked")
-                                    print(stat)
+                                    
+                                     
                                 }
                             }
                         } else {
@@ -1749,15 +1759,15 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             let request = Accounts.unblock(id: sto[indexPath.row].account.id)
                             StoreStruct.client.run(request) { (statuses) in
                                 if let stat = (statuses.value) {
-                                    print("unblocked")
-                                    print(stat)
+                                    
+                                     
                                 }
                             }
                         }
                         
                     }
                     .action(.default("Report".localized), image: UIImage(named: "report")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         Alertift.actionSheet()
                             .backgroundColor(Colours.white)
@@ -1766,7 +1776,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             .messageTextAlignment(.left)
                             .titleTextAlignment(.left)
                             .action(.default("Harassment"), image: nil) { (action, ind) in
-                                print(action, ind)
+                                 
                                 
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
@@ -1785,14 +1795,14 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                 let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Harassment")
                                 StoreStruct.client.run(request) { (statuses) in
                                     if let stat = (statuses.value) {
-                                        print("reported")
-                                        print(stat)
+                                        
+                                         
                                     }
                                 }
                                 
                             }
                             .action(.default("No Content Warning"), image: nil) { (action, ind) in
-                                print(action, ind)
+                                 
                                 
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
@@ -1811,14 +1821,14 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                 let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "No Content Warning")
                                 StoreStruct.client.run(request) { (statuses) in
                                     if let stat = (statuses.value) {
-                                        print("reported")
-                                        print(stat)
+                                        
+                                         
                                     }
                                 }
                                 
                             }
                             .action(.default("Spam"), image: nil) { (action, ind) in
-                                print(action, ind)
+                                 
                                 
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
@@ -1837,8 +1847,8 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                 let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Spam")
                                 StoreStruct.client.run(request) { (statuses) in
                                     if let stat = (statuses.value) {
-                                        print("reported")
-                                        print(stat)
+                                        
+                                         
                                     }
                                 }
                                 
@@ -1855,7 +1865,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                         
                     }
                     .action(.default("Translate".localized), image: UIImage(named: "translate")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         let unreserved = "-._~/?"
                         let allowed = NSMutableCharacterSet.alphanumeric()
@@ -1905,7 +1915,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                         task.resume()
                     }
                     .action(.default("Duplicate Toot".localized), image: UIImage(named: "addac1")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         let controller = ComposeViewController()
                         controller.inReply = []
@@ -1914,7 +1924,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                         self.present(controller, animated: true, completion: nil)
                     }
                     .action(.default("Share".localized), image: UIImage(named: "share")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         
                         
@@ -1925,7 +1935,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             .messageTextAlignment(.left)
                             .titleTextAlignment(.left)
                             .action(.default("Share Link".localized), image: UIImage(named: "share")) { (action, ind) in
-                                print(action, ind)
+                                 
                                 
                                 if let myWebsite = sto[indexPath.row].url {
                                     let objectsToShare = [myWebsite]
@@ -1945,7 +1955,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                 }
                             }
                             .action(.default("Share Text".localized), image: UIImage(named: "share")) { (action, ind) in
-                                print(action, ind)
+                                 
                                 
                                 let bodyText = sto[indexPath.row].content.stripHTML()
                                 if UIDevice.current.userInterfaceIdiom == .pad {
@@ -1964,7 +1974,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                 
                             }
                             .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
-                                print(action, ind)
+                                 
                                 
                                 let controller = NewQRViewController()
                                 controller.ur = sto[indexPath.row].url?.absoluteString ?? "https://www.thebluebird.app"
@@ -2051,7 +2061,6 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
         self.tableView.deselectRow(at: indexPath, animated: true)
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
@@ -2078,8 +2087,8 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
                     self.lastThing = stat.first?.id ?? ""
-                self.currentTags = self.currentTags + stat
                 DispatchQueue.main.async {
+                    self.currentTags = self.currentTags + stat
                     self.tableView.reloadData()
                 }
                 }

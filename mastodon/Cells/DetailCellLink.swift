@@ -157,10 +157,14 @@ class DetailCellLink: UITableViewCell {
         let url = self.realURL!
         UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
             if !success {
+                if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                 self.safariVC = SFSafariViewController(url: url)
                 self.safariVC?.preferredBarTintColor = Colours.white
                 self.safariVC?.preferredControlTintColor = Colours.tabSelected
                 appDelegate.window?.rootViewController?.present(self.safariVC!, animated: true, completion: nil)
+                } else {
+                    UIApplication.shared.openURL(url)
+                }
             }
         }
     }

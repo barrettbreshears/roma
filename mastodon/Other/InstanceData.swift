@@ -61,10 +61,6 @@ class InstanceData:Codable {
         }
         
         UserDefaults.standard.set(instanceData, forKey: "currentInstance")
-        
-    
-        
-       
         StoreStruct.client.accessToken = instance.accessToken
         
         UserDefaults.standard.set(instance.clientID, forKey: "clientID")

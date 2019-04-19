@@ -23,6 +23,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
     var player = AVPlayer()
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
+    var lastUser = ""
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -43,6 +44,8 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Colours.white
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateThread), name: NSNotification.Name(rawValue: "updateDM"), object: nil)
         
         self.ai = NVActivityIndicatorView(frame: CGRect(x: self.view.bounds.width/2 - 20, y: self.view.bounds.height/2, width: 40, height: 40), type: .ballRotateChase, color: Colours.tabSelected)
         self.view.addSubview(self.ai)
@@ -71,7 +74,6 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         messageInputBar.inputTextView.keyboardAppearance = Colours.keyCol
         messageInputBar.inputTextView.placeholderLabelInsets = UIEdgeInsets(top: 7, left: 16, bottom: 4, right: 16)
         messageInputBar.inputTextView.textContainerInset = UIEdgeInsets(top: 5, left: 9, bottom: 5, right: 9)
-        
         messageInputBar.setRightStackViewWidthConstant(to: 36, animated: false)
         messageInputBar.setLeftStackViewWidthConstant(to: 42, animated: false)
         messageInputBar.sendButton.imageView?.backgroundColor = UIColor.clear
@@ -81,6 +83,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         messageInputBar.sendButton.title = nil
         messageInputBar.sendButton.imageView?.layer.cornerRadius = 0
         messageInputBar.sendButton.addTarget(self, action: #selector(self.didTouchSend), for: .touchUpInside)
+        
         let charCountButton = InputBarButtonItem()
             .configure {
                 $0.title = "500"
@@ -116,17 +119,19 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
             let request = Statuses.context(id: self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id)
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
+                    DispatchQueue.main.async {
                     self.allPrevious = (stat.ancestors)
                     self.allReplies = (stat.descendants)
                     
-                    DispatchQueue.main.async {
                         (self.allPrevious + self.mainStatus + self.allReplies).map({
                             var theType = "0"
                             if $0.account.acct == StoreStruct.currentUser.acct {
                                 theType = "1"
                             }
-                            let sender = Sender(id: theType, displayName: "\($0.account.displayName)")
-                            let x = MockMessage.init(text: $0.content.stripHTML().replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""), sender: sender, messageId: $0.id, date: Date())
+                            self.lastUser = $0.account.acct
+                            
+                            let sender = Sender(id: theType, displayName: "\($0.account.acct)")
+                            let x = MockMessage.init(text: $0.content.stripHTML().replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""), sender: sender, messageId: $0.id, date: $0.createdAt)
                             self.messages.append(x)
                             self.allPosts.append($0)
                             
@@ -134,7 +139,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                                 let url = URL(string: $0.mediaAttachments.first?.previewURL ?? "")
                                 let imageData = try! Data(contentsOf: url!)
                                 let image1 = UIImage(data: imageData)
-                                let y = MockMessage.init(image: image1!, sender: sender, messageId: $0.id, date: Date())
+                                let y = MockMessage.init(image: image1!, sender: sender, messageId: $0.id, date: $0.createdAt)
                                 self.messages.append(y)
                                 self.allPosts.append($0)
                             }
@@ -152,20 +157,66 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         }
     }
     
+    @objc func updateThread() {
+        let request = Statuses.context(id: self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                DispatchQueue.main.async {
+                    self.allPrevious = (stat.ancestors)
+                    self.allReplies = (stat.descendants)
+                    
+                    self.messages = []
+                    self.allPosts = []
+                    
+                    (self.allPrevious + self.mainStatus + self.allReplies).map({
+                        var theType = "0"
+                        if $0.account.acct == StoreStruct.currentUser.acct {
+                            theType = "1"
+                        }
+                        self.lastUser = $0.account.acct
+                        
+                        let sender = Sender(id: theType, displayName: "\($0.account.acct)")
+                        let x = MockMessage.init(text: $0.content.stripHTML().replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""), sender: sender, messageId: $0.id, date: $0.createdAt)
+                        self.messages.append(x)
+                        self.allPosts.append($0)
+                        
+                        if $0.mediaAttachments.isEmpty {} else {
+                            let url = URL(string: $0.mediaAttachments.first?.previewURL ?? "")
+                            let imageData = try! Data(contentsOf: url!)
+                            let image1 = UIImage(data: imageData)
+                            let y = MockMessage.init(image: image1!, sender: sender, messageId: $0.id, date: $0.createdAt)
+                            self.messages.append(y)
+                            self.allPosts.append($0)
+                        }
+                        
+                        self.ai.stopAnimating()
+                        self.ai.alpha = 0
+                        self.ai.removeFromSuperview()
+                        
+                        self.messagesCollectionView.reloadData()
+                    })
+                }
+            }
+        }
+    }
+    
     func didTapAvatar(in cell: MessageCollectionViewCell) {
         print("Avatar tapped")
     }
     
     func didTapMessage(in cell: MessageCollectionViewCell) {
-        print("Message tapped")
         let pos: CGPoint = cell.convert(CGPoint.zero, to: messagesCollectionView)
         let indexPath = messagesCollectionView.indexPathForItem(at: pos)
         
         if self.allPosts[indexPath?.section ?? 0].card?.url != nil {
+            if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
             self.safariVC = SFSafariViewController(url: self.allPosts[indexPath?.section ?? 0].card!.url)
             self.safariVC?.preferredBarTintColor = Colours.white
             self.safariVC?.preferredControlTintColor = Colours.tabSelected
             self.present(self.safariVC!, animated: true, completion: nil)
+            } else {
+                UIApplication.shared.openURL(self.allPosts[indexPath?.section ?? 0].card!.url)
+            }
             return
         }
         
@@ -218,17 +269,12 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                         }
                         coun += 1
                     })
-//                let originImage = sender.currentImage
-//                if originImage != nil {
                     let browser = SKPhotoBrowser(photos: images)
-                
-//                let browser = SKPhotoBrowser(originImage: UIImage(named: "launcgLogo")!, photos: images, animatedFromView: cell.contentView)
                     browser.displayToolbar = true
                     browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
-//                }
 
             }
         
@@ -243,9 +289,9 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         let sender = Sender(id: "1", displayName: "\(StoreStruct.currentUser.acct)")
         let x = MockMessage.init(text: self.messageInputBar.inputTextView.text.replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""), sender: sender, messageId: "18982", date: Date())
         
-        let request0 = Statuses.create(status: self.messageInputBar.inputTextView.text, replyToID: self.mainStatus[0].inReplyToID, mediaIDs: [], sensitive: self.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
+        let request0 = Statuses.create(status: "@\(self.lastUser) \(String(describing: self.messageInputBar.inputTextView.text))", replyToID: self.mainStatus[0].inReplyToID, mediaIDs: [], sensitive: self.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
         StoreStruct.client.run(request0) { (statuses) in
-            print(statuses)
+             
             DispatchQueue.main.async {
                 if let stat = statuses.value {
                     self.allPosts.append(stat)
@@ -267,9 +313,8 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         let controller = ComposeViewController()
         StoreStruct.spoilerText = self.mainStatus[0].reblog?.spoilerText ?? self.mainStatus[0].spoilerText
         controller.inReply = [self.mainStatus[0]]
-        controller.inReplyText = self.mainStatus[0].account.username
+        controller.inReplyText = self.mainStatus[0].account.acct
         controller.prevTextReply = self.mainStatus[0].content.stripHTML()
-        print(self.mainStatus[0].account.username)
         self.present(controller, animated: true, completion: nil)
     }
     
@@ -293,7 +338,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
     }
     
     func currentSender() -> Sender {
-        return Sender(id: "1", displayName: "\(StoreStruct.currentUser.displayName)")
+        return Sender(id: "1", displayName: "\(StoreStruct.currentUser.acct)")
     }
     
     func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
@@ -304,6 +349,25 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         return messages[indexPath.section]
     }
     
+    func messageTopLabelHeight(for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) -> CGFloat {
+        if !isPreviousMessageSameSender(at: indexPath) {
+            return 20
+        }
+        return 0
+    }
+    
+    func isPreviousMessageSameSender(at indexPath: IndexPath) -> Bool {
+        guard indexPath.section - 1 >= 0 else { return false }
+        return messages[indexPath.section].sender == messages[indexPath.section - 1].sender
+    }
+    
+    func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
+        let dateString = MessageKitDateFormatter.shared.string(from: message.sentDate)
+        if !isPreviousMessageSameSender(at: indexPath) {
+            return NSAttributedString(string: dateString, attributes: [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .caption2), NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.4)])
+        }
+        return nil
+    }
 }
 
 struct MockMessage: MessageType {

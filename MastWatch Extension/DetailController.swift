@@ -22,10 +22,9 @@ class DetailController: WKInterfaceController {
     @IBAction func replyTap() {
         let textChoices = ["Yes","No","Maybe","I love Mast"]
         presentTextInputController(withSuggestions: textChoices, allowedInputMode: WKTextInputMode.allowEmoji, completion: {(results) -> Void in
-            if results != nil && results!.count > 0 {
-                let aResult = results?[0] as? String
-                print(aResult!)
-                StoreStruct.tootText = aResult!
+            if results != nil && results?.count ?? 0 > 0 {
+                let aResult = results?.first as? String
+                StoreStruct.tootText = aResult ?? ""
                 StoreStruct.replyID = self.allThings[StoreStruct.currentRow].reblog?.inReplyToID ?? self.allThings[StoreStruct.currentRow].inReplyToID ?? ""
                 self.presentController(withName: "TootController", context: nil)
             }
@@ -39,7 +38,7 @@ class DetailController: WKInterfaceController {
             }
             let request = Statuses.unfavourite(id: self.allThings[StoreStruct.currentRow].reblog?.id ?? self.allThings[StoreStruct.currentRow].id)
             StoreStruct.client.run(request) { (statuses) in
-                print("unliked")
+                
             }
         } else {
             DispatchQueue.main.async {
@@ -47,7 +46,7 @@ class DetailController: WKInterfaceController {
             }
             let request = Statuses.favourite(id: self.allThings[StoreStruct.currentRow].reblog?.id ?? self.allThings[StoreStruct.currentRow].id)
             StoreStruct.client.run(request) { (statuses) in
-                print("liked")
+                
             }
         }
     }
@@ -59,7 +58,7 @@ class DetailController: WKInterfaceController {
             }
             let request = Statuses.unreblog(id: self.allThings[StoreStruct.currentRow].reblog?.id ?? self.allThings[StoreStruct.currentRow].id)
             StoreStruct.client.run(request) { (statuses) in
-                print("unboosted")
+                
             }
         } else {
             DispatchQueue.main.async {
@@ -67,7 +66,7 @@ class DetailController: WKInterfaceController {
             }
             let request = Statuses.reblog(id: self.allThings[StoreStruct.currentRow].reblog?.id ?? self.allThings[StoreStruct.currentRow].id)
             StoreStruct.client.run(request) { (statuses) in
-                print("boosted")
+                
             }
         }
     }

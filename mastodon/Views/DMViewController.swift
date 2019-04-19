@@ -34,7 +34,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     var blurEffect0 = UIBlurEffect()
     var blurEffectView0 = UIVisualEffectView()
     var hMod: [Notificationt] = []
-    var fMod: [Notificationt] = []
+    var dMod: [Notificationt] = []
     var nsocket: WebSocket!
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
@@ -351,9 +351,14 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
+    @objc func updateDM() {
+        self.tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateDM), name: NSNotification.Name(rawValue: "updateDM"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToIDNoti), name: NSNotification.Name(rawValue: "gotoidnoti2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goMembers), name: NSNotification.Name(rawValue: "goMembers2"), object: nil)
@@ -404,7 +409,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         self.loadLoadLoad()
         
-        refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
+//        refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
         //self.tableView.addSubview(refreshControl)
         
         tableView.cr.addHeadRefresh(animator: NormalHeaderAnimator()) { [weak self] in
@@ -466,6 +471,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         StoreStruct.historyBool = false
         
+        self.tabBarController?.tabBar.items?[2].badgeValue = nil
         
         if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
             settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 32, height: 32)
@@ -513,7 +519,6 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         } else {
             newSize = offset + 15
         }
-        
         
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
@@ -573,6 +578,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     
     
+
     
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -816,19 +822,27 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 let z = URL(string: String(url.absoluteString.dropFirst()))!
                                 UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
                                     if !success {
+                                        if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                         self.safariVC = SFSafariViewController(url: z)
                                         self.safariVC?.preferredBarTintColor = Colours.white
                                         self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                         self.present(self.safariVC!, animated: true, completion: nil)
+                                        } else {
+                                            UIApplication.shared.openURL(z)
+                                        }
                                     }
                                 }
                             } else {
                                 UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
                                     if !success {
+                                        if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                         self.safariVC = SFSafariViewController(url: url)
                                         self.safariVC?.preferredBarTintColor = Colours.white
                                         self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                         self.present(self.safariVC!, animated: true, completion: nil)
+                                        } else {
+                                            UIApplication.shared.openURL(url)
+                                        }
                                     }
                                 }
                             }
@@ -844,8 +858,8 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                             let request = Timelines.tag(string)
                             StoreStruct.client.run(request) { (statuses) in
                                 if let stat = (statuses.value) {
-                                    controller.currentTags = stat
                                     DispatchQueue.main.async {
+                                        controller.currentTags = stat
                                         self.navigationController?.pushViewController(controller, animated: true)
                                     }
                                 }
@@ -909,19 +923,27 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
                             UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: z)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(z)
+                                    }
                                 }
                             }
                         } else {
                             UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: url)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(url)
+                                    }
                                 }
                             }
                         }
@@ -937,8 +959,8 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                         let request = Timelines.tag(string)
                         StoreStruct.client.run(request) { (statuses) in
                             if let stat = (statuses.value) {
-                                controller.currentTags = stat
                                 DispatchQueue.main.async {
+                                    controller.currentTags = stat
                                     self.navigationController?.pushViewController(controller, animated: true)
                                 }
                             }
@@ -993,13 +1015,13 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             rrr = 1
         }
         
-        if sto[sender.tag].lastStatus!.reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].lastStatus?.id ?? "" ) {
+        if sto[sender.tag].lastStatus?.reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].lastStatus?.id ?? "" ) {
             StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != sto[sender.tag].lastStatus?.id ?? ""  }
             let request2 = Statuses.unreblog(id: sto[sender.tag].lastStatus?.id ?? "" )
             StoreStruct.client.run(request2) { (statuses) in
                 DispatchQueue.main.async {
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? DMFeedCell {
-                        if sto[sender.tag].lastStatus!.favourited! || StoreStruct.allLikes.contains(sto[sender.tag].lastStatus?.id ?? "" ) {
+                        if sto[sender.tag].lastStatus?.favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].lastStatus?.id ?? "" ) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "like")
                         } else {
@@ -1055,13 +1077,13 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             rrr = 1
         }
         
-        if sto[sender.tag].lastStatus!.favourited! || StoreStruct.allLikes.contains(sto[sender.tag].lastStatus?.id ?? "" ) {
+        if sto[sender.tag].lastStatus?.favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].lastStatus?.id ?? "" ) {
             StoreStruct.allLikes = StoreStruct.allLikes.filter { $0 != sto[sender.tag].lastStatus?.id ?? "" }
             let request2 = Statuses.unfavourite(id: sto[sender.tag].lastStatus?.id ?? "" )
             StoreStruct.client.run(request2) { (statuses) in
                 DispatchQueue.main.async {
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? DMFeedCell {
-                        if sto[sender.tag].lastStatus!.reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].lastStatus?.id ?? "" ) {
+                        if sto[sender.tag].lastStatus?.reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].lastStatus?.id ?? "" ) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "boost")
                         } else {
@@ -1114,7 +1136,6 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         controller.inReply = [sto[sender.tag].lastStatus!]
         controller.inReplyText = sto[sender.tag].lastStatus!.account.username
         controller.prevTextReply = sto[sender.tag].lastStatus!.content.stripHTML()
-        print(sto[sender.tag].lastStatus!.account.username)
         self.present(controller, animated: true, completion: nil)
     }
     
@@ -1142,7 +1163,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 let impact = UIImpactFeedbackGenerator(style: .medium)
                 
                 let like = SwipeAction(style: .default, title: nil) { action, indexPath in
-                    print("like")
+                    
                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                         impact.impactOccurred()
                     }
@@ -1153,13 +1174,13 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     
                     
                     
-                    if sto[indexPath.row].lastStatus!.favourited! || StoreStruct.allLikes.contains(sto[indexPath.row].lastStatus?.id ?? "" ) {
+                    if sto[indexPath.row].lastStatus?.favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].lastStatus?.id ?? "" ) {
                         StoreStruct.allLikes = StoreStruct.allLikes.filter { $0 != sto[indexPath.row].lastStatus?.id ?? "" }
                         let request2 = Statuses.unfavourite(id: sto[indexPath.row].lastStatus?.id ?? "" )
                         StoreStruct.client.run(request2) { (statuses) in
                             DispatchQueue.main.async {
                                 if let cell = theTable.cellForRow(at: indexPath) as? DMFeedCell {
-                                    if sto[indexPath.row].lastStatus!.reblogged! || StoreStruct.allBoosts.contains(sto[indexPath.row].lastStatus?.id ?? "" ) {
+                                    if sto[indexPath.row].lastStatus?.reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].lastStatus?.id ?? "" ) {
                                         cell.moreImage.image = nil
                                         cell.moreImage.image = UIImage(named: "boost")
                                     } else {
@@ -1205,7 +1226,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 like.textColor = Colours.tabUnselected
                 
                 let reply = SwipeAction(style: .default, title: nil) { action, indexPath in
-                    print("reply")
+                    
                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                         impact.impactOccurred()
                     }
@@ -1214,7 +1235,6 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     controller.inReply = [sto[indexPath.row].lastStatus!]
                     controller.inReplyText = sto[indexPath.row].lastStatus!.account.username
                     controller.prevTextReply = sto[indexPath.row].lastStatus!.content.stripHTML()
-                    print(sto[indexPath.row].lastStatus!.account.username)
                     self.present(controller, animated: true, completion: nil)
                     
                     
@@ -1251,7 +1271,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 let impact = UIImpactFeedbackGenerator(style: .medium)
                 
                 let more = SwipeAction(style: .default, title: nil) { action, indexPath in
-                    print("boost")
+                    
                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                         impact.impactOccurred()
                     }
@@ -1300,7 +1320,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                         .messageTextAlignment(.left)
                         .titleTextAlignment(.left)
                         .action(.default("Mute/Unmute".localized), image: UIImage(named: "block")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             if isMuted == false {
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -1319,8 +1339,8 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 let request = Accounts.mute(id: sto[indexPath.row].lastStatus!.account.id)
                                 StoreStruct.client.run(request) { (statuses) in
                                     if let stat = (statuses.value) {
-                                        print("muted")
-                                        print(stat)
+                                        
+                                         
                                     }
                                 }
                             } else {
@@ -1340,15 +1360,15 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 let request = Accounts.unmute(id: sto[indexPath.row].lastStatus!.account.id)
                                 StoreStruct.client.run(request) { (statuses) in
                                     if let stat = (statuses.value) {
-                                        print("unmuted")
-                                        print(stat)
+                                        
+                                         
                                     }
                                 }
                             }
                             
                         }
                         .action(.default("Block/Unblock".localized), image: UIImage(named: "block2")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             if isBlocked == false {
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -1367,8 +1387,8 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 let request = Accounts.block(id: sto[indexPath.row].lastStatus!.account.id)
                                 StoreStruct.client.run(request) { (statuses) in
                                     if let stat = (statuses.value) {
-                                        print("blocked")
-                                        print(stat)
+                                        
+                                         
                                     }
                                 }
                             } else {
@@ -1388,15 +1408,15 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 let request = Accounts.unblock(id: sto[indexPath.row].lastStatus!.account.id)
                                 StoreStruct.client.run(request) { (statuses) in
                                     if let stat = (statuses.value) {
-                                        print("unblocked")
-                                        print(stat)
+                                        
+                                         
                                     }
                                 }
                             }
                             
                         }
                         .action(.default("Report".localized), image: UIImage(named: "report")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             
                             Alertift.actionSheet()
@@ -1406,7 +1426,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 .messageTextAlignment(.left)
                                 .titleTextAlignment(.left)
                                 .action(.default("Harassment"), image: nil) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -1425,14 +1445,14 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     let request = Reports.report(accountID: sto[indexPath.row].lastStatus!.account.id, statusIDs: [sto[indexPath.row].lastStatus?.id ?? ""], reason: "Harassment")
                                     StoreStruct.client.run(request) { (statuses) in
                                         if let stat = (statuses.value) {
-                                            print("reported")
-                                            print(stat)
+                                            
+                                             
                                         }
                                     }
                                     
                                 }
                                 .action(.default("No Content Warning"), image: nil) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -1451,14 +1471,14 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     let request = Reports.report(accountID: sto[indexPath.row].lastStatus!.account.id, statusIDs: [sto[indexPath.row].lastStatus?.id ?? ""], reason: "No Content Warning")
                                     StoreStruct.client.run(request) { (statuses) in
                                         if let stat = (statuses.value) {
-                                            print("reported")
-                                            print(stat)
+                                            
+                                             
                                         }
                                     }
                                     
                                 }
                                 .action(.default("Spam"), image: nil) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -1477,8 +1497,8 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     let request = Reports.report(accountID: sto[indexPath.row].lastStatus!.account.id, statusIDs: [sto[indexPath.row].lastStatus?.id ?? ""], reason: "Spam")
                                     StoreStruct.client.run(request) { (statuses) in
                                         if let stat = (statuses.value) {
-                                            print("reported")
-                                            print(stat)
+                                            
+                                             
                                         }
                                     }
                                     
@@ -1495,7 +1515,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                             
                         }
                         .action(.default("Translate".localized), image: UIImage(named: "translate")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             let unreserved = "-._~/?"
                             let allowed = NSMutableCharacterSet.alphanumeric()
@@ -1545,7 +1565,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                             task.resume()
                         }
                         .action(.default("Duplicate Toot".localized), image: UIImage(named: "addac1")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             let controller = ComposeViewController()
                             controller.inReply = []
@@ -1554,7 +1574,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                             self.present(controller, animated: true, completion: nil)
                         }
                         .action(.default("Share".localized), image: UIImage(named: "share")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             
                             
@@ -1566,7 +1586,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 .messageTextAlignment(.left)
                                 .titleTextAlignment(.left)
                                 .action(.default("Share Link".localized), image: UIImage(named: "share")) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     
                                     if let myWebsite = sto[indexPath.row].lastStatus?.url {
                                         let objectsToShare = [myWebsite]
@@ -1578,7 +1598,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     }
                                 }
                                 .action(.default("Share Text".localized), image: UIImage(named: "share")) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     
                                     let bodyText = sto[indexPath.row].lastStatus?.content.stripHTML()
                                     let vc = VisualActivityViewController(text: bodyText ?? "")
@@ -1589,7 +1609,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     
                                 }
                                 .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     
                                     let controller = NewQRViewController()
                                     controller.ur = sto[indexPath.row].lastStatus?.url?.absoluteString ?? "https://www.thebluebird.app"
@@ -1651,7 +1671,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        
         self.tableView.deselectRow(at: indexPath, animated: true)
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
@@ -1663,10 +1683,6 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             let controller = DMMessageViewController()
             controller.mainStatus.append(StoreStruct.notificationsDirect[indexPath.row].lastStatus!)
             self.navigationController?.pushViewController(controller, animated: true)
-//            let controller = DMMessageViewController()
-//            controller.mainStatus.append(StoreStruct.notificationsDirect[indexPath.row].lastStatus!)
-//            self.splitViewController?.showDetailViewController(controller, sender: self)
-//            NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
         default:
             print("nothing")
         }
@@ -1706,7 +1722,6 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                         StoreStruct.notificationsDirect = stat + StoreStruct.notificationsDirect
                         StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                         self.tableView.reloadData()
-                        self.refreshControl.endRefreshing()
                     }
                 }
             }

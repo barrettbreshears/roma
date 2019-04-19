@@ -347,7 +347,7 @@ class NewPollViewController: UIViewController, UITextFieldDelegate, UITableViewD
                 .messageTextAlignment(.left)
                 .titleTextAlignment(.left)
                 .action(.default("Remove Option".localized), image: UIImage(named: "block")) { (action, ind) in
-                    print(action, ind)
+                     
                     StoreStruct.currentOptions = StoreStruct.currentOptions.filter { $0 != StoreStruct.currentOptions[indexPath.row] }
                     self.tableView.reloadData()
                     if StoreStruct.currentOptions.count < 2 {

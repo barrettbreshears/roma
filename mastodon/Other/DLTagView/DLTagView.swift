@@ -48,11 +48,11 @@ public class DLTagView: UIScrollView {
     // --------------
     
     public func addTag(tag: TagInfo) {
-        let button = createTagButtonWithTag(tag: tag)
-        addSubview(button)
-        tagButtons.append(button)
-        tags.append(tag)
-        rearrangeButtons()
+        let button = self.createTagButtonWithTag(tag: tag)
+        self.addSubview(button)
+        self.tagButtons.append(button)
+        self.tags.append(tag)
+        self.rearrangeButtons()
     }
     
     public func insertTag(tag: TagInfo, atIndex index: Int) {

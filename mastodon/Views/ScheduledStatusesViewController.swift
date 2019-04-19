@@ -282,15 +282,7 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
         self.tableView.deselectRow(at: indexPath, animated: true)
-        
-//        let controller = ThirdViewController()
-//        controller.fromOtherUser = true
-//        controller.userIDtoUse = self.statuses[indexPath.row].id
-//        self.navigationController?.pushViewController(controller, animated: true)
-        
-        
         
         Alertift.actionSheet(title: nil, message: nil)
             .backgroundColor(Colours.white)
@@ -299,11 +291,11 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
             .messageTextAlignment(.left)
             .titleTextAlignment(.left)
             .action(.default("Delete".localized), image: UIImage(named: "block")) { (action, ind) in
-                print(action, ind)
+                 
                 
                 let request = Statuses.deleteScheduled(id: self.statuses[indexPath.row].id)
                 StoreStruct.client.run(request) { (statuses) in
-                    print(statuses)
+                     
 //                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
 //                        let notification = UINotificationFeedbackGenerator()
 //                        notification.notificationOccurred(.success)
@@ -319,7 +311,7 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
                     
                     let request0 = Statuses.allScheduled()
                     StoreStruct.client.run(request0) { (statuses) in
-                        print(statuses)
+                         
                         if let stat = (statuses.value) {
                             DispatchQueue.main.async {
                                 self.statuses = stat

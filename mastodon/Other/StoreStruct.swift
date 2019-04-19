@@ -65,6 +65,8 @@ struct StoreStruct {
     static var emotiSize = 16
     static var emotiFace: [Emoji] = []
     static var mainResult: [NSAttributedString] = []
+    static var mainResult1: [NSAttributedString] = []
+    static var mainResult2: [NSAttributedString] = []
     static var instanceLocalToAdd: [String] = []
     
     static var statusesHome: [Status] = []
@@ -97,7 +99,7 @@ struct StoreStruct {
     static var allListRelID: String = ""
     static var currentList: [Status] = []
     static var currentListTitle: String = ""
-    static var drafts: [String] = []
+//    static var drafts: [Any] = []
     
     static var allLikes: [String] = []
     static var allBoosts: [String] = []
@@ -150,6 +152,19 @@ struct StoreStruct {
     
     static var tappedSignInCheck = false
     static var markedReadIDs: [String] = []
+    
+    static var newdrafts: [Drafts] = []
+}
+
+struct Drafts: Codable {
+    var text: String
+    var image1: Data?
+    var image2: Data?
+    var image3: Data?
+    var image4: Data?
+    var isGifVid: Bool
+    var textVideoURL: String?
+    var gifVidData: Data?
 }
 
 class TextStyling {

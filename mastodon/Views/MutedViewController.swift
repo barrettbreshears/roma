@@ -241,7 +241,7 @@ class MutedViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let impact = UIImpactFeedbackGenerator(style: .medium)
             
             let more = SwipeAction(style: .default, title: nil) { action, indexPath in
-                print("boost")
+                
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 impact.impactOccurred()
                 }
@@ -252,7 +252,7 @@ class MutedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Unmute".localized), image: UIImage(named: "block")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let notification = UINotificationFeedbackGenerator()
@@ -276,8 +276,8 @@ class MutedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 }
                                 
                                 if let stat = (statuses.value) {
-                                    print("unmuted")
-                                    print(stat)
+                                    
+                                     
                                 }
                             }
                         
@@ -325,7 +325,7 @@ class MutedViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        
         self.tableView.deselectRow(at: indexPath, animated: true)
         
         let controller = ThirdViewController()

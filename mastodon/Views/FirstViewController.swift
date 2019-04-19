@@ -123,7 +123,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
             
             if self.tableViewL.alpha == 1 && StoreStruct.statusesLocal.count > 0 {
-                print("scrolllocal")
                 if StoreStruct.statusesLocal.count <= 0 {
                     
                 } else {
@@ -131,7 +130,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 }
             } else {
                 if StoreStruct.statusesFederated.count > 0 {
-                    print("scrollfed")
                     if StoreStruct.statusesFederated.count <= 0 {
                         
                     } else {
@@ -215,8 +213,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         )
         testClient.run(request) { (statuses) in
             if let stat = (statuses.value) {
-                StoreStruct.newInstanceTags = stat
                 DispatchQueue.main.async {
+                    StoreStruct.newInstanceTags = stat
                     let controller = InstanceViewController()
                     self.navigationController?.pushViewController(controller, animated: true)
                 }
@@ -938,7 +936,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         
         
         
-        refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
+//        refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
         //self.tableView.addSubview(refreshControl)
         
         tableView.cr.addHeadRefresh(animator: NormalHeaderAnimator()) { [weak self] in
@@ -1008,12 +1006,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
         
         
-//        do {
-//            StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
-//            StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
-//            StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
-//            StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
-//            StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
             DispatchQueue.main.async {
 //                self.tableView.beginUpdates()
                 self.restoreScroll()
@@ -1342,14 +1334,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 StoreStruct.notifications = stat
-                
-//                for x in StoreStruct.notifications {
-//                    if x.type == .mention {
-//                        StoreStruct.notificationsMentions.append(x)
-//                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
-//                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-//                    }
-//                }
                 StoreStruct.notifications.map({
                     if $0.type == .mention {
                         StoreStruct.notificationsMentions.append($0)
@@ -1377,8 +1361,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         let request4 = Instances.current()
         StoreStruct.client.run(request4) { (statuses) in
             if let stat = (statuses.value) {
-                print("max chars --")
-                print(stat.max_toot_chars)
                 StoreStruct.maxChars = stat.max_toot_chars ?? 500
                 StoreStruct.currentInstanceDetails = [stat]
             }
@@ -1434,8 +1416,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     let request = Timelines.public(local: true, range: .default)
                     StoreStruct.client.run(request) { (statuses) in
                         if let stat = (statuses.value) {
-                            StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
                             DispatchQueue.main.async {
+                                StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
                                 StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                                 self.tableViewL.reloadData()
                                 
@@ -1474,8 +1456,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     let request = Timelines.public(local: false, range: .default)
                     StoreStruct.client.run(request) { (statuses) in
                         if let stat = (statuses.value) {
-                            StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
                             DispatchQueue.main.async {
+                                StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
                                 StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                                 self.tableViewF.reloadData()
                                 
@@ -1510,20 +1492,15 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         
         let request0 = Notifications.all(range: .min(id: StoreStruct.notifications.first?.id ?? "", limit: nil))
         //DispatchQueue.global(qos: .userInitiated).async {
-        print("002")
         StoreStruct.client.run(request0) { (statuses) in
-            print("003")
-            print(statuses.value)
+             
             if let stat = (statuses.value) {
-                print("004")
                 StoreStruct.notifications = stat + StoreStruct.notifications
                 
                 let st = stat.reversed()
                 //DispatchQueue.main.async {
                 for x in st {
-                    print("005")
                     if x.type == .mention {
-                        print("006")
                         
                         let content = UNMutableNotificationContent()
                         content.title =  "\(x.account.displayName) mentioned you"
@@ -1537,7 +1514,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         
                     }
                     if x.type == .follow {
-                        print("007")
                         
                         let content = UNMutableNotificationContent()
                         content.title =  "\(x.account.displayName) followed you"
@@ -1551,7 +1527,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         
                     }
                     if x.type == .reblog {
-                        print("008")
                         
                         let content = UNMutableNotificationContent()
                         content.title = "\(x.account.displayName) reposted your status"
@@ -1565,7 +1540,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         
                     }
                     if x.type == .favourite {
-                        print("009")
                         
                         let content = UNMutableNotificationContent()
                         content.title = "\(x.account.displayName) liked your status"
@@ -1608,7 +1582,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
             //websocketDidReceiveMessage
             socket.onText = { (text: String) in
-                print("got some text: \(text)")
                 
                 let data0 = text.data(using: .utf8)!
                 do {
@@ -1660,13 +1633,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     
                                     UIView.setAnimationsEnabled(false)
                                     self.tableView.reloadData()
-                                    self.refreshControl.endRefreshing()
+//                                    self.refreshControl.endRefreshing()
                                     self.tableView.scrollToRow(at: IndexPath(row: self.hMod.count - 1, section: 0), at: .top, animated: false)
                                     UIView.setAnimationsEnabled(true)
                                 } else {
                                     
                                     self.tableView.reloadData()
-                                    self.refreshControl.endRefreshing()
+//                                    self.refreshControl.endRefreshing()
                                     
                                 }
                                 
@@ -1712,7 +1685,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
             //websocketDidReceiveMessage
             lsocket.onText = { (text: String) in
-                print("got some text: \(text)")
                 
                 let data0 = text.data(using: .utf8)!
                 do {
@@ -1764,13 +1736,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     
                                     UIView.setAnimationsEnabled(false)
                                     self.tableViewL.reloadData()
-                                    self.refreshControl.endRefreshing()
+//                                    self.refreshControl.endRefreshing()
                                     self.tableViewL.scrollToRow(at: IndexPath(row: self.lMod.count - 1, section: 0), at: .top, animated: false)
                                     UIView.setAnimationsEnabled(true)
                                 } else {
                                     
                                     self.tableViewL.reloadData()
-                                    self.refreshControl.endRefreshing()
+//                                    self.refreshControl.endRefreshing()
                                     
                                 }
                                 
@@ -1816,7 +1788,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
             //websocketDidReceiveMessage
             fsocket.onText = { (text: String) in
-                print("got some text: \(text)")
                 
                 let data0 = text.data(using: .utf8)!
                 do {
@@ -1873,14 +1844,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     
                                     UIView.setAnimationsEnabled(false)
                                     self.tableViewF.reloadData()
-                                    self.refreshControl.endRefreshing()
+//                                    self.refreshControl.endRefreshing()
                                     self.tableViewF.scrollToRow(at: IndexPath(row: self.fMod.count - 1, section: 0), at: .top, animated: false)
                                     UIView.setAnimationsEnabled(true)
                                     
                                 } else {
                                     
                                     self.tableViewF.reloadData()
-                                    self.refreshControl.endRefreshing()
+//                                    self.refreshControl.endRefreshing()
                                     
                                 }
                                 
@@ -1955,7 +1926,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             selection.selectionChanged()
         }
         
-        print("toindex:- \(toIndex)")
         if fromIndex == toIndex {
             return
         }
@@ -1985,7 +1955,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
 //            }
             
             self.currentIndex = 0
-            self.tableView.reloadData()
+//            self.tableView.reloadData()
             self.tableView.alpha = 1
             self.tableViewL.alpha = 0
             self.tableViewF.alpha = 0
@@ -2025,8 +1995,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 let request = Timelines.public(local: true, range: .default)
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
-                        StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
                         DispatchQueue.main.async {
+                            StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
                             StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             self.tableViewL.reloadData()
                             
@@ -2035,7 +2005,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 }
             } else {
                 //bbbhere
-                self.tableViewL.reloadData()
+//                self.tableViewL.reloadData()
             }
             
             // stream
@@ -2072,8 +2042,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 let request = Timelines.public(local: false, range: .default)
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
-                        StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
                         DispatchQueue.main.async {
+                            StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
                             StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             self.tableViewF.reloadData()
                             
@@ -2082,7 +2052,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 }
             } else {
                 ///bbhere
-                self.tableViewF.reloadData()
+//                self.tableViewF.reloadData()
             }
             // stream
             if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
@@ -2153,8 +2123,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 if indexPath.row == StoreStruct.statusesHome.count - 14 {
                     self.fetchMoreHome()
                 }
-                print(indexPath.row)
-                print(StoreStruct.statusesHome.count)
                 if StoreStruct.statusesHome[indexPath.row].reblog?.mediaAttachments.isEmpty ?? StoreStruct.statusesHome[indexPath.row].mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MainFeedCell
                     cell.delegate = self
@@ -2209,19 +2177,27 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
                             UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: z)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(z)
+                                    }
                                 }
                             }
                         } else {
                             UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: url)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(url)
+                                    }
                                 }
                             }
                         }
@@ -2238,8 +2214,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         let request = Timelines.tag(string)
                         StoreStruct.client.run(request) { (statuses) in
                             if let stat = (statuses.value) {
-                                controller.currentTags = stat
                                 DispatchQueue.main.async {
+                                    controller.currentTags = stat
                                     self.navigationController?.pushViewController(controller, animated: true)
                                 }
                             }
@@ -2322,19 +2298,27 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
                             UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: z)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(z)
+                                    }
                                 }
                             }
                         } else {
                             UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: url)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(url)
+                                    }
                                 }
                             }
                         }
@@ -2351,8 +2335,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         let request = Timelines.tag(string)
                         StoreStruct.client.run(request) { (statuses) in
                             if let stat = (statuses.value) {
-                                controller.currentTags = stat
                                 DispatchQueue.main.async {
+                                    controller.currentTags = stat
                                     self.navigationController?.pushViewController(controller, animated: true)
                                 }
                             }
@@ -2466,19 +2450,27 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
                             UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: z)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(z)
+                                    }
                                 }
                             }
                         } else {
                             UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: url)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(url)
+                                    }
                                 }
                             }
                         }
@@ -2495,8 +2487,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         let request = Timelines.tag(string)
                         StoreStruct.client.run(request) { (statuses) in
                             if let stat = (statuses.value) {
-                                controller.currentTags = stat
                                 DispatchQueue.main.async {
+                                    controller.currentTags = stat
                                     self.navigationController?.pushViewController(controller, animated: true)
                                 }
                             }
@@ -2573,19 +2565,27 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
                             UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: z)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(z)
+                                    }
                                 }
                             }
                         } else {
                             UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: url)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(url)
+                                    }
                                 }
                             }
                         }
@@ -2602,8 +2602,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         let request = Timelines.tag(string)
                         StoreStruct.client.run(request) { (statuses) in
                             if let stat = (statuses.value) {
-                                controller.currentTags = stat
                                 DispatchQueue.main.async {
+                                    controller.currentTags = stat
                                     self.navigationController?.pushViewController(controller, animated: true)
                                 }
                             }
@@ -2710,19 +2710,27 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
                             UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: z)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(z)
+                                    }
                                 }
                             }
                         } else {
                             UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: url)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(url)
+                                    }
                                 }
                             }
                         }
@@ -2739,8 +2747,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         let request = Timelines.tag(string)
                         StoreStruct.client.run(request) { (statuses) in
                             if let stat = (statuses.value) {
-                                controller.currentTags = stat
                                 DispatchQueue.main.async {
+                                    controller.currentTags = stat
                                     self.navigationController?.pushViewController(controller, animated: true)
                                 }
                             }
@@ -2817,19 +2825,27 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             let z = URL(string: String(url.absoluteString.dropFirst()))!
                             UIApplication.shared.open(z, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: z)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(z)
+                                    }
                                 }
                             }
                         } else {
                             UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: url)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(url)
+                                    }
                                 }
                             }
                         }
@@ -2846,8 +2862,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         let request = Timelines.tag(string)
                         StoreStruct.client.run(request) { (statuses) in
                             if let stat = (statuses.value) {
-                                controller.currentTags = stat
                                 DispatchQueue.main.async {
+                                    controller.currentTags = stat
                                     self.navigationController?.pushViewController(controller, animated: true)
                                 }
                             }
@@ -2938,7 +2954,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 if self.currentIndex == 0 {
                     
                     let indexPath = IndexPath(row: sender.tag, section: 0)
-                    let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                    guard let cell = tableView.cellForRow(at: indexPath) as? MainFeedCellImage else { return }
                     var images = [SKPhoto]()
                     var coun = 0
                     (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -2980,7 +2996,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 } else if self.currentIndex == 1 {
                     
                     let indexPath = IndexPath(row: sender.tag, section: 0)
-                    let cell = tableViewL.cellForRow(at: indexPath) as! MainFeedCellImage
+                    guard let cell = tableViewL.cellForRow(at: indexPath) as? MainFeedCellImage else { return }
                     var images = [SKPhoto]()
                     var coun = 0
                     (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -3022,7 +3038,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 } else {
                     
                     let indexPath = IndexPath(row: sender.tag, section: 0)
-                    let cell = tableViewF.cellForRow(at: indexPath) as! MainFeedCellImage
+                    guard let cell = tableViewF.cellForRow(at: indexPath) as? MainFeedCellImage else { return }
                     var images = [SKPhoto]()
                     var coun = 0
                     (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -3102,7 +3118,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             } else {
                 
                     let indexPath = IndexPath(row: sender.tag, section: 0)
-                    let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                guard let cell = tab.cellForRow(at: indexPath) as? MainFeedCellImage else { return }
                     var images = [SKPhoto]()
                     var coun = 0
                     (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -3177,7 +3193,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             } else {
                 
                 let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                guard let cell = tab.cellForRow(at: indexPath) as? MainFeedCellImage else { return }
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -3253,7 +3269,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             } else {
                 
                 let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                guard let cell = tab.cellForRow(at: indexPath) as? MainFeedCellImage else { return }
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -3330,7 +3346,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             } else {
                 
                 let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = tab.cellForRow(at: indexPath) as! MainFeedCellImage
+                guard let cell = tab.cellForRow(at: indexPath) as? MainFeedCellImage else { return }
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -3397,13 +3413,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             theTable = self.tableViewF
         }
         
-        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
             StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
             let request2 = Statuses.unreblog(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
             StoreStruct.client.run(request2) { (statuses) in
                 DispatchQueue.main.async {
                     if let cell = theTable.cellForRow(at:IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
-                        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "like")
                         } else {
@@ -3414,7 +3430,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
-                        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "like")
                         } else {
@@ -3438,7 +3454,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
@@ -3451,7 +3467,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
@@ -3488,13 +3504,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             theTable = self.tableViewF
         }
         
-        if sto[sender.tag].reblog?.favourited! ?? sto[sender.tag].favourited! || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+        if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
             StoreStruct.allLikes = StoreStruct.allLikes.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
             let request2 = Statuses.unfavourite(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
             StoreStruct.client.run(request2) { (statuses) in
                 DispatchQueue.main.async {
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
-                        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "boost")
                         } else {
@@ -3505,7 +3521,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
-                        if sto[sender.tag].reblog?.reblogged! ?? sto[sender.tag].reblogged! || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
+                        if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "boost")
                         } else {
@@ -3528,7 +3544,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
@@ -3541,7 +3557,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
@@ -3583,7 +3599,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         controller.inReply = [sto[sender.tag].reblog ?? sto[sender.tag]]
         controller.prevTextReply = sto[sender.tag].reblog?.content.stripHTML() ?? sto[sender.tag].content.stripHTML()
         controller.inReplyText = sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username
-        print(sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username)
         self.present(controller, animated: true, completion: nil)
     }
     
@@ -3622,7 +3637,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             let impact = UIImpactFeedbackGenerator(style: .medium)
             
             let boost = SwipeAction(style: .default, title: nil) { action, indexPath in
-                print("boost")
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                     impact.impactOccurred()
                 }
@@ -3634,13 +3648,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 
                 
                 
-                if sto[indexPath.row].reblog?.reblogged! ?? sto[indexPath.row].reblogged! || StoreStruct.allBoosts.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
+                if sto[indexPath.row].reblog?.reblogged ?? sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                     StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id }
                     let request2 = Statuses.unreblog(id: sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id)
                     StoreStruct.client.run(request2) { (statuses) in
                         DispatchQueue.main.async {
                             if let cell = theTable.cellForRow(at: indexPath) as? MainFeedCell {
-                                if sto[indexPath.row].reblog?.favourited! ?? sto[indexPath.row].favourited! || StoreStruct.allLikes.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
+                                if sto[indexPath.row].reblog?.favourited ?? sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
                                     cell.moreImage.image = UIImage(named: "like")
                                 } else {
@@ -3648,7 +3662,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 }
                                 cell.hideSwipe(animated: true)
                             } else if let cell = theTable.cellForRow(at: indexPath) as? MainFeedCellImage {
-                                if sto[indexPath.row].reblog?.favourited! ?? sto[indexPath.row].favourited! || StoreStruct.allLikes.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
+                                if sto[indexPath.row].reblog?.favourited ?? sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
                                     cell.moreImage.image = UIImage(named: "like")
                                 } else {
@@ -3708,7 +3722,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             boost.textColor = Colours.tabUnselected
             
             let like = SwipeAction(style: .default, title: nil) { action, indexPath in
-                print("like")
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                     impact.impactOccurred()
                 }
@@ -3720,7 +3733,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     StoreStruct.client.run(request2) { (statuses) in
                         DispatchQueue.main.async {
                             if let cell = theTable.cellForRow(at: indexPath) as? MainFeedCell {
-                                if sto[indexPath.row].reblog?.reblogged! ?? sto[indexPath.row].reblogged! || StoreStruct.allBoosts.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
+                                if sto[indexPath.row].reblog?.reblogged ?? sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
                                     cell.moreImage.image = UIImage(named: "boost")
                                 } else {
@@ -3728,7 +3741,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 }
                                 cell.hideSwipe(animated: true)
                             } else if let cell = theTable.cellForRow(at: indexPath) as? MainFeedCellImage {
-                                if sto[indexPath.row].reblog?.reblogged! ?? sto[indexPath.row].reblogged! || StoreStruct.allBoosts.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
+                                if sto[indexPath.row].reblog?.reblogged ?? sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
                                     cell.moreImage.image = UIImage(named: "boost")
                                 } else {
@@ -3804,7 +3817,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             like.textColor = Colours.tabUnselected
             
             let reply = SwipeAction(style: .default, title: nil) { action, indexPath in
-                print("reply")
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                     impact.impactOccurred()
                 }
@@ -3814,7 +3826,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 controller.inReply = [sto[indexPath.row].reblog ?? sto[indexPath.row]]
                 controller.prevTextReply = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
                 controller.inReplyText = sto[indexPath.row].reblog?.account.username ?? sto[indexPath.row].account.username
-                print(sto[indexPath.row].reblog?.account.username ?? sto[indexPath.row].account.username)
                 self.present(controller, animated: true, completion: nil)
                 
                 if let cell = theTable.cellForRow(at: indexPath) as? MainFeedCell {
@@ -3884,7 +3895,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             let impact = UIImpactFeedbackGenerator(style: .medium)
             
             let more = SwipeAction(style: .default, title: nil) { action, indexPath in
-                print("boost")
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                     impact.impactOccurred()
                 }
@@ -3940,7 +3950,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         .messageTextAlignment(.left)
                         .titleTextAlignment(.left)
                         .action(.default("Pin/Unpin".localized), image: UIImage(named: "pinned")) { (action, ind) in
-                            print(action, ind)
+                             
                             if sto[indexPath.row].pinned ?? false || StoreStruct.allPins.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                 StoreStruct.allPins = StoreStruct.allPins.filter { $0 != sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id }
                                 let request = Statuses.unpin(id: sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id)
@@ -3978,7 +3988,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             }
                         }
                         .action(.default("Delete and Redraft".localized), image: UIImage(named: "block")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             let controller = ComposeViewController()
                             StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
@@ -3988,7 +3998,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                         }
                         .action(.default("Delete".localized), image: UIImage(named: "block")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             if self.currentIndex == 0 {
                                 StoreStruct.statusesHome = StoreStruct.statusesHome.filter { $0 != StoreStruct.statusesHome[indexPath.row] }
@@ -4004,9 +4014,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             let theId = sto[indexPath.row].id
                             let request = Statuses.delete(id: theId)
                             StoreStruct.client.run(request) { (statuses) in
-                                print("deleted")
-                                
-                                
                                 DispatchQueue.main.async {
                                     
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -4025,20 +4032,16 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             }
                         }
                         .action(.default("Translate".localized), image: UIImage(named: "translate")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             let unreserved = "-._~/?"
                             let allowed = NSMutableCharacterSet.alphanumeric()
                             allowed.addCharacters(in: unreserved)
                             let bodyText = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                            print("0001")
-                            print(bodyText)
                             let unreservedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~"
                             let unreservedCharset = NSCharacterSet(charactersIn: unreservedChars)
                             var trans = bodyText.addingPercentEncoding(withAllowedCharacters: unreservedCharset as CharacterSet)
                             trans = trans!.replacingOccurrences(of: "\n\n", with: "%20")
-                            print("0002")
-                            print(trans)
                             let langStr = Locale.current.languageCode
                             let urlString = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=\(langStr ?? "en")&dt=t&q=\(trans!)&ie=UTF-8&oe=UTF-8"
                             guard let requestUrl = URL(string:urlString) else {
@@ -4079,7 +4082,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             task.resume()
                         }
                         .action(.default("Duplicate Toot".localized), image: UIImage(named: "addac1")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             let controller = ComposeViewController()
                             controller.inReply = []
@@ -4088,7 +4091,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             self.present(controller, animated: true, completion: nil)
                         }
                         .action(.default("Share".localized), image: UIImage(named: "share")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             
                             
@@ -4099,7 +4102,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 .messageTextAlignment(.left)
                                 .titleTextAlignment(.left)
                                 .action(.default("Share Link".localized), image: UIImage(named: "share")) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     
                                     if let myWebsite = sto[indexPath.row].url {
                                         let objectsToShare = [myWebsite]
@@ -4111,7 +4114,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     }
                                 }
                                 .action(.default("Share Text".localized), image: UIImage(named: "share")) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     
                                     let bodyText = sto[indexPath.row].content.stripHTML()
                                     let vc = VisualActivityViewController(text: bodyText)
@@ -4122,7 +4125,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     
                                 }
                                 .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     
                                     let controller = NewQRViewController()
                                     controller.ur = sto[indexPath.row].reblog?.url?.absoluteString ?? sto[indexPath.row].url?.absoluteString ?? "https://www.thebluebird.app"
@@ -4177,7 +4180,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         .messageTextAlignment(.left)
                         .titleTextAlignment(.left)
                         .action(.default("Mute/Unmute".localized), image: UIImage(named: "block")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             if isMuted == false {
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -4196,8 +4199,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 let request = Accounts.mute(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
                                     if let stat = (statuses.value) {
-                                        print("muted")
-                                        print(stat)
+                                        
                                     }
                                 }
                             } else {
@@ -4217,15 +4219,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 let request = Accounts.unmute(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
                                     if let stat = (statuses.value) {
-                                        print("unmuted")
-                                        print(stat)
+                                        
                                     }
                                 }
                             }
                             
                         }
                         .action(.default("Block/Unblock".localized), image: UIImage(named: "block2")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             if isBlocked == false {
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -4244,8 +4245,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 let request = Accounts.block(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
                                     if let stat = (statuses.value) {
-                                        print("blocked")
-                                        print(stat)
+                                        
                                     }
                                 }
                             } else {
@@ -4265,15 +4265,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 let request = Accounts.unblock(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
                                 StoreStruct.client.run(request) { (statuses) in
                                     if let stat = (statuses.value) {
-                                        print("unblocked")
-                                        print(stat)
+                                        
                                     }
                                 }
                             }
                             
                         }
                         .action(.default("Report".localized), image: UIImage(named: "report")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             Alertift.actionSheet()
                                 .backgroundColor(Colours.white)
@@ -4282,7 +4281,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 .messageTextAlignment(.left)
                                 .titleTextAlignment(.left)
                                 .action(.default("Harassment"), image: nil) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -4301,14 +4300,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Harassment")
                                     StoreStruct.client.run(request) { (statuses) in
                                         if let stat = (statuses.value) {
-                                            print("reported")
-                                            print(stat)
+                                            
                                         }
                                     }
                                     
                                 }
                                 .action(.default("No Content Warning"), image: nil) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -4327,14 +4325,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "No Content Warning")
                                     StoreStruct.client.run(request) { (statuses) in
                                         if let stat = (statuses.value) {
-                                            print("reported")
-                                            print(stat)
+                                            
                                         }
                                     }
                                     
                                 }
                                 .action(.default("Spam"), image: nil) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -4353,8 +4350,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Spam")
                                     StoreStruct.client.run(request) { (statuses) in
                                         if let stat = (statuses.value) {
-                                            print("reported")
-                                            print(stat)
+                                            
                                         }
                                     }
                                     
@@ -4371,20 +4367,16 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                         }
                         .action(.default("Translate".localized), image: UIImage(named: "translate")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             let unreserved = "-._~/?"
                             let allowed = NSMutableCharacterSet.alphanumeric()
                             allowed.addCharacters(in: unreserved)
                             let bodyText = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
-                            print("0001")
-                            print(bodyText)
                             let unreservedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~"
                             let unreservedCharset = NSCharacterSet(charactersIn: unreservedChars)
                             var trans = bodyText.addingPercentEncoding(withAllowedCharacters: unreservedCharset as CharacterSet)
                             trans = trans!.replacingOccurrences(of: "\n\n", with: "%20")
-                            print("0002")
-                            print(trans)
                             let langStr = Locale.current.languageCode
                             let urlString = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=\(langStr ?? "en")&dt=t&q=\(trans!)&ie=UTF-8&oe=UTF-8"
                             guard let requestUrl = URL(string:urlString) else {
@@ -4425,7 +4417,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             task.resume()
                         }
                         .action(.default("Duplicate Toot".localized), image: UIImage(named: "addac1")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             let controller = ComposeViewController()
                             controller.inReply = []
@@ -4434,7 +4426,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             self.present(controller, animated: true, completion: nil)
                         }
                         .action(.default("Share".localized), image: UIImage(named: "share")) { (action, ind) in
-                            print(action, ind)
+                             
                             
                             
                             
@@ -4445,7 +4437,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 .messageTextAlignment(.left)
                                 .titleTextAlignment(.left)
                                 .action(.default("Share Link".localized), image: UIImage(named: "share")) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     
                                     if let myWebsite = sto[indexPath.row].reblog?.url ?? sto[indexPath.row].url {
                                         let objectsToShare = [myWebsite]
@@ -4457,7 +4449,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     }
                                 }
                                 .action(.default("Share Text".localized), image: UIImage(named: "share")) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     
                                     let bodyText = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
                                     let vc = VisualActivityViewController(text: bodyText)
@@ -4468,7 +4460,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     
                                 }
                                 .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
-                                    print(action, ind)
+                                     
                                     
                                     let controller = NewQRViewController()
                                     controller.ur = sto[indexPath.row].reblog?.url?.absoluteString ?? sto[indexPath.row].url?.absoluteString ?? "https://www.thebluebird.app"
@@ -4555,7 +4547,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        
         self.tableView.deselectRow(at: indexPath, animated: true)
         self.tableViewL.deselectRow(at: indexPath, animated: true)
         self.tableViewF.deselectRow(at: indexPath, animated: true)
@@ -4633,9 +4625,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     if let stat = (statuses.value) {
                         
                         if stat.isEmpty {} else {
+                            DispatchQueue.main.async {
                             
                             let y = StoreStruct.statusesHome.split(separator: StoreStruct.gapLastHomeStat ?? StoreStruct.statusesHome.last!)
-                            print(y)
                             if StoreStruct.statusesHome.count > y.first!.count + 1 {
                             StoreStruct.statusesHome.remove(at: y.first!.count + 1)
                             }
@@ -4655,7 +4647,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             let newestC = y.first!.count + stat.count - 1
                             
-                            DispatchQueue.main.async {
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                 self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
                                 self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
@@ -4673,16 +4664,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     } else {
                                         if (UserDefaults.standard.object(forKey: "lmore1") == nil) || (UserDefaults.standard.object(forKey: "lmore1") as! Int == 0) {} else {
                                             if stat.count > 0 {
-//                                                var zCount = 0
-//                                                var zHeights: CGFloat = 0
-//                                                for _ in (y.first! + stat) {
-////                                                    if zCount == (y.first!.count + stat.count - 1) {} else {
-//                                                        zHeights = CGFloat(zHeights) + CGFloat(self.tableView.rectForRow(at: IndexPath(row: zCount, section: 0)).height)
-//                                                        zCount += 1
-////                                                    }
-//                                                }
-//                                                zHeights = CGFloat(zHeights) + CGFloat(self.tableView.rectForRow(at: IndexPath(row: zCount + 1, section: 0)).height)
-//                                                self.tableView.setContentOffset(CGPoint(x: 0, y: zHeights), animated: false)
                                                 self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
                                             }
                                             
@@ -4718,6 +4699,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     if let stat = (statuses.value) {
                         
                         if stat.isEmpty {} else {
+                            DispatchQueue.main.async {
                             let y = StoreStruct.statusesLocal.split(separator: StoreStruct.gapLastLocalStat ?? StoreStruct.statusesLocal.last!)
                             print(y)
                             
@@ -4739,8 +4721,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             
                             let newestC = y.first!.count + stat.count - 1
-                            
-                            DispatchQueue.main.async {
+    
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                 self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
                                 self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
@@ -4758,16 +4739,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     } else {
                                         if (UserDefaults.standard.object(forKey: "lmore1") == nil) || (UserDefaults.standard.object(forKey: "lmore1") as! Int == 0) {} else {
                                             if stat.count > 0 {
-//                                                var zCount = 0
-//                                                var zHeights: CGFloat = 0
-//                                                for _ in (y.first! + stat) {
-////                                                    if zCount == (y.first!.count + stat.count - 1) {} else {
-//                                                        zHeights = CGFloat(zHeights) + CGFloat(self.tableViewL.rectForRow(at: IndexPath(row: zCount, section: 0)).height)
-//                                                        zCount += 1
-////                                                    }
-//                                                }
-//                                                zHeights = CGFloat(zHeights) + CGFloat(self.tableViewL.rectForRow(at: IndexPath(row: zCount + 1, section: 0)).height)
-//                                                self.tableViewL.setContentOffset(CGPoint(x: 0, y: zHeights), animated: false)
                                                 self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
                                             }
                                             
@@ -4802,10 +4773,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     if let stat = (statuses.value) {
                         
                         if stat.isEmpty {} else {
+                            DispatchQueue.main.async {
                             let y = StoreStruct.statusesFederated.split(separator: StoreStruct.gapLastFedStat ?? StoreStruct.statusesFederated.last!)
-                            print("testing")
-                            print(y.first?.count ?? 0)
-                            print(y.last?.count ?? 0)
                             if StoreStruct.statusesFederated.count > y.first!.count + 1 {
                             StoreStruct.statusesFederated.remove(at: y.first!.count + 1)
                             }
@@ -4825,7 +4794,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             let newestC = y.first!.count + stat.count - 1
                             
-                            DispatchQueue.main.async {
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                 self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
                                 self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
@@ -4843,16 +4811,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     } else {
                                         if (UserDefaults.standard.object(forKey: "lmore1") == nil) || (UserDefaults.standard.object(forKey: "lmore1") as! Int == 0) {} else {
                                             if stat.count > 0 {
-//                                                var zCount = 0
-//                                                var zHeights: CGFloat = 0
-//                                                for _ in (y.first! + stat) {
-////                                                    if zCount == (y.first!.count + stat.count - 1) {} else {
-//                                                        zHeights = CGFloat(zHeights) + CGFloat(self.tableViewF.rectForRow(at: IndexPath(row: zCount, section: 0)).height)
-//                                                        zCount += 1
-////                                                    }
-//                                                }
-//                                                zHeights = CGFloat(zHeights) + CGFloat(self.tableViewF.rectForRow(at: IndexPath(row: zCount + 1, section: 0)).height)
-//                                                self.tableViewF.setContentOffset(CGPoint(x: 0, y: zHeights), animated: false)
                                                 self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
                                             }
                                             
@@ -4891,11 +4849,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 if let stat = (statuses.value) {
                     
                     if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
+                        DispatchQueue.main.async {
                         self.lastThing = stat.first?.id ?? ""
                         
                         StoreStruct.statusesHome = StoreStruct.statusesHome + stat
-                        DispatchQueue.main.async {
-                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                        StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             self.tableView.reloadData()
                             
                             do {
@@ -4921,10 +4879,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 if let stat = (statuses.value) {
                     
                     if stat.isEmpty || self.lastThing2 == stat.first?.id ?? "" {} else {
+                        DispatchQueue.main.async {
                         self.lastThing2 = stat.first?.id ?? ""
                         StoreStruct.statusesLocal = StoreStruct.statusesLocal + stat
-                        DispatchQueue.main.async {
-                            StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                        StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             self.tableViewL.reloadData()
                             
                             do {
@@ -4949,10 +4907,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 if let stat = (statuses.value) {
                     
                     if stat.isEmpty || self.lastThing3 == stat.first?.id ?? "" {} else {
+                        DispatchQueue.main.async {
                         self.lastThing3 = stat.first?.id ?? ""
                         StoreStruct.statusesFederated = StoreStruct.statusesFederated + stat
-                        DispatchQueue.main.async {
-                            StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                        StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             self.tableViewF.reloadData()
                             
                             do {
@@ -4976,10 +4934,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
+                        DispatchQueue.main.async {
                         
-                        StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                         var newestC = StoreStruct.statusesHome.count
-                        print("need30 \(StoreStruct.statusesHome.count)")
                         
                         
                         if let st = stat.last {
@@ -5001,14 +4958,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                         }
                         
-                        DispatchQueue.main.async {
-                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             
                             newestC = StoreStruct.statusesHome.count - newestC - 1
                             if newestC < 0 {
                                 newestC = 0
                             }
-                            print("newestC: \(newestC)")
                             
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                                 self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
@@ -5022,21 +4976,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if stat.count > 0 {
                                     self.tableView.reloadData()
                                 }
-                                self.refreshControl.endRefreshing()
+//                                self.refreshControl.endRefreshing()
                                 if stat.count == 0 {
                                     
                                 } else {
                                     if StoreStruct.statusesHome.count == 0 || stat.count == 0 {
                                         
                                     } else {
-//                                        var zCount = 0
-//                                        var zHeights: CGFloat = 0
-//                                        for _ in stat {
-//                                            zHeights = CGFloat(zHeights) + CGFloat(self.tableView.rectForRow(at: IndexPath(row: zCount, section: 0)).height)
-//                                            zCount += 1
-//                                        }
-//                                        self.tableView.setContentOffset(CGPoint(x: 0, y: zHeights), animated: false)
-                                        
                                         self.tableView.scrollToRow(at: IndexPath(row: stat.count, section: 0), at: .top, animated: false)
                                     }
                                 }
@@ -5044,7 +4990,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if stat.count > 0 {
                                     self.tableView.reloadData()
                                 }
-                                self.refreshControl.endRefreshing()
+//                                self.refreshControl.endRefreshing()
                             }
                             
                         }
@@ -5056,8 +5002,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
+                        DispatchQueue.main.async {
                         
-                        StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                         var newestC = StoreStruct.statusesLocal.count
                         
                         if (newestC == 0){
@@ -5087,8 +5033,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                         }
                         
-                        DispatchQueue.main.async {
-                            StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                             
                             newestC = StoreStruct.statusesLocal.count - newestC - 1
                             if newestC < 0 {
@@ -5107,21 +5051,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if stat.count > 0 {
                                     self.tableViewL.reloadData()
                                 }
-                                self.refreshControl.endRefreshing()
+//                                self.refreshControl.endRefreshing()
                                 if stat.count == 0 {
                                     
                                 } else {
                                     if StoreStruct.statusesLocal.count == 0 || stat.count == 0 {
                                         
                                     } else {
-//                                        var zCount = 0
-//                                        var zHeights: CGFloat = 0
-//                                        for _ in stat {
-//                                            zHeights = CGFloat(zHeights) + CGFloat(self.tableViewL.rectForRow(at: IndexPath(row: zCount, section: 0)).height)
-//                                            zCount += 1
-//                                        }
-//                                        self.tableViewL.setContentOffset(CGPoint(x: 0, y: zHeights), animated: false)
-                                        
                                         self.tableViewL.scrollToRow(at: IndexPath(row: stat.count, section: 0), at: .top, animated: false)
                                     }
                                 }
@@ -5130,7 +5066,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if stat.count > 0 {
                                     self.tableViewL.reloadData()
                                 }
-                                self.refreshControl.endRefreshing()
+//                                self.refreshControl.endRefreshing()
                                 
                             }
                             
@@ -5144,8 +5080,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
+                        DispatchQueue.main.async {
                         
-                        StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                         var newestC = StoreStruct.statusesFederated.count
                         
                         if let st = stat.last {
@@ -5159,7 +5095,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 let z = st
                                 z.id = "loadmorehere"
                                 StoreStruct.gapLastFedStat = z
-                                print(StoreStruct.gapLastFedID)
                                 StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
                                 StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             }
@@ -5168,8 +5103,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                         }
                         
-                        DispatchQueue.main.async {
-                            StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                             
                             newestC = StoreStruct.statusesFederated.count - newestC - 1
                             if newestC < 0 {
@@ -5188,21 +5121,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if stat.count > 0 {
                                     self.tableViewF.reloadData()
                                 }
-                                self.refreshControl.endRefreshing()
+//                                self.refreshControl.endRefreshing()
                                 if stat.count == 0 {
                                     
                                 } else {
                                     if StoreStruct.statusesFederated.count == 0 || stat.count == 0 {
                                         
                                     } else {
-//                                        var zCount = 0
-//                                        var zHeights: CGFloat = 0
-//                                        for _ in stat {
-//                                            zHeights = CGFloat(zHeights) + CGFloat(self.tableViewF.rectForRow(at: IndexPath(row: zCount, section: 0)).height)
-//                                            zCount += 1
-//                                        }
-//                                        self.tableViewF.setContentOffset(CGPoint(x: 0, y: zHeights), animated: false)
-                                        
                                         self.tableViewF.scrollToRow(at: IndexPath(row: stat.count, section: 0), at: .top, animated: false)
                                     }
                                 }
@@ -5212,7 +5137,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if stat.count > 0 {
                                     self.tableViewF.reloadData()
                                 }
-                                self.refreshControl.endRefreshing()
+//                                self.refreshControl.endRefreshing()
                                 
                             }
                             
@@ -5351,12 +5276,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 Colours.fontSize3 = 14
             }
         }
-        
-        
-        
-        //        UserDefaults.standard.set(self.tableView.contentOffset.y, forKey: "savedOffsetHome")
-        //        print("676767")
-        //        print((UserDefaults.standard.object(forKey: "savedOffsetHome") as! CGFloat))
         
         self.ai.alpha = 0
         self.ai.removeFromSuperview()

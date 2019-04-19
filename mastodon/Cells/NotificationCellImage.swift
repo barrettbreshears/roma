@@ -205,7 +205,7 @@ class NotificationCellImage: SwipeTableViewCell {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[artist]-(>=5)-[more(16)]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-107-[mainImage]-20-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-121-[mainImageBG]-30-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-117-[mainImageBG]-30-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[date]-2-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[type(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
@@ -215,11 +215,11 @@ class NotificationCellImage: SwipeTableViewCell {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(160)]-23-|", options: [], metrics: nil, views: viewsDict))
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(160)]-23-|", options: [], metrics: nil, views: viewsDict))
             } else {
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(160)]-23-[rep1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(160)]-23-[rep1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(160)]-23-[like1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(160)]-23-[boost1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(160)]-23-[more1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(160)]-23-[rep1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(160)]-23-[like1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(160)]-23-[boost1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(160)]-23-[more1(20)]-12-|", options: [], metrics: nil, views: viewsDict))
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-107-[rep1(36)]-20-[like1(40)]-15-[boost1(40)]-24-[more1(20)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
             }
 
@@ -247,6 +247,7 @@ class NotificationCellImage: SwipeTableViewCell {
         self.profileImageView.imageView?.image = nil
         self.mainImageView.imageView?.image = nil
         self.mainImageView.imageView?.image = UIImage()
+        self.mainImageView.pin_clearImages()
         self.smallImage1.imageView?.image = nil
         self.smallImage2.imageView?.image = nil
         self.smallImage3.imageView?.image = nil
@@ -486,9 +487,8 @@ class NotificationCellImage: SwipeTableViewCell {
         } else {
             self.moreImage.image = nil
         }
-
-
-
+        
+        
         self.smallImage1.alpha = 0
         self.smallImage2.alpha = 0
         self.smallImage3.alpha = 0
@@ -516,9 +516,10 @@ class NotificationCellImage: SwipeTableViewCell {
             imageCountTag.backgroundColor = Colours.tabSelected
             imageCountTag.alpha = 1
         } else if status.status?.reblog?.mediaAttachments.count ?? status.status?.mediaAttachments.count ?? 0 > 1 && (UIApplication.shared.isSplitOrSlideOver || UIDevice.current.userInterfaceIdiom == .phone) {
-            self.mainImageView.setImage(UIImage(), for: .normal)
+            self.mainImageView.imageView?.image = nil
+//            self.mainImageView.imageView?.image = UIImage()
             if status.status?.reblog?.mediaAttachments.count ?? status.status?.mediaAttachments.count == 2 {
-                self.smallImage1.frame = CGRect(x: -2, y: 0, width: (UIScreen.main.bounds.width - 127)/2, height: 200)
+                self.smallImage1.frame = CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 127)/2, height: 200)
                 self.smallImage1.contentMode = .scaleAspectFill
                 self.smallImage1.imageView?.contentMode = .scaleAspectFill
                 self.smallImage1.clipsToBounds = true
@@ -531,8 +532,8 @@ class NotificationCellImage: SwipeTableViewCell {
                 self.smallImage1.layer.borderColor = UIColor.black.cgColor
                 self.smallImage1.alpha = 1
                 self.mainImageView.addSubview(self.smallImage1)
-
-                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 127)/2 + 2, y: 0, width: (UIScreen.main.bounds.width - 127)/2, height: 200)
+                
+                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 127)/2, y: 0, width: (UIScreen.main.bounds.width - 127)/2, height: 200)
                 self.smallImage2.contentMode = .scaleAspectFill
                 self.smallImage2.imageView?.contentMode = .scaleAspectFill
                 self.smallImage2.clipsToBounds = true
@@ -546,7 +547,7 @@ class NotificationCellImage: SwipeTableViewCell {
                 self.smallImage2.alpha = 1
                 self.mainImageView.addSubview(self.smallImage2)
             } else if status.status?.reblog?.mediaAttachments.count ?? status.status?.mediaAttachments.count == 3 {
-                self.smallImage1.frame = CGRect(x: -2, y: 0, width: (UIScreen.main.bounds.width - 127)/2, height: 200)
+                self.smallImage1.frame = CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 127)/2, height: 200)
                 self.smallImage1.contentMode = .scaleAspectFill
                 self.smallImage1.imageView?.contentMode = .scaleAspectFill
                 self.smallImage1.clipsToBounds = true
@@ -559,8 +560,8 @@ class NotificationCellImage: SwipeTableViewCell {
                 self.smallImage1.layer.borderColor = UIColor.black.cgColor
                 self.smallImage1.alpha = 1
                 self.mainImageView.addSubview(self.smallImage1)
-
-                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 127)/2 + 2, y: -2, width: (UIScreen.main.bounds.width - 127)/2, height: 80)
+                
+                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 127)/2, y: 0, width: (UIScreen.main.bounds.width - 127)/2, height: 80)
                 self.smallImage2.contentMode = .scaleAspectFill
                 self.smallImage2.imageView?.contentMode = .scaleAspectFill
                 self.smallImage2.clipsToBounds = true
@@ -573,8 +574,8 @@ class NotificationCellImage: SwipeTableViewCell {
                 self.smallImage2.layer.borderColor = UIColor.black.cgColor
                 self.smallImage2.alpha = 1
                 self.mainImageView.addSubview(self.smallImage2)
-
-                self.smallImage3.frame = CGRect(x: (UIScreen.main.bounds.width - 127)/2 + 2, y: 82, width: (UIScreen.main.bounds.width - 127)/2, height: 80)
+                
+                self.smallImage3.frame = CGRect(x: (UIScreen.main.bounds.width - 127)/2, y: 80, width: (UIScreen.main.bounds.width - 127)/2, height: 80)
                 self.smallImage3.contentMode = .scaleAspectFill
                 self.smallImage3.imageView?.contentMode = .scaleAspectFill
                 self.smallImage3.clipsToBounds = true
@@ -588,7 +589,7 @@ class NotificationCellImage: SwipeTableViewCell {
                 self.smallImage3.alpha = 1
                 self.mainImageView.addSubview(self.smallImage3)
             } else if status.status?.reblog?.mediaAttachments.count ?? status.status?.mediaAttachments.count ?? 0 >= 4 {
-                self.smallImage1.frame = CGRect(x: -2, y: -2, width: (UIScreen.main.bounds.width - 127)/2, height: 80)
+                self.smallImage1.frame = CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 127)/2, height: 80)
                 self.smallImage1.contentMode = .scaleAspectFill
                 self.smallImage1.imageView?.contentMode = .scaleAspectFill
                 self.smallImage1.clipsToBounds = true
@@ -601,8 +602,8 @@ class NotificationCellImage: SwipeTableViewCell {
                 self.smallImage1.layer.borderColor = UIColor.black.cgColor
                 self.smallImage1.alpha = 1
                 self.mainImageView.addSubview(self.smallImage1)
-
-                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 127)/2 + 2, y: -2, width: (UIScreen.main.bounds.width - 127)/2, height: 80)
+                
+                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 127)/2, y: 0, width: (UIScreen.main.bounds.width - 127)/2, height: 80)
                 self.smallImage2.contentMode = .scaleAspectFill
                 self.smallImage2.imageView?.contentMode = .scaleAspectFill
                 self.smallImage2.clipsToBounds = true
@@ -615,8 +616,8 @@ class NotificationCellImage: SwipeTableViewCell {
                 self.smallImage2.layer.borderColor = UIColor.black.cgColor
                 self.smallImage2.alpha = 1
                 self.mainImageView.addSubview(self.smallImage2)
-
-                self.smallImage3.frame = CGRect(x: -2, y: 82, width: (UIScreen.main.bounds.width - 127)/2, height: 80)
+                
+                self.smallImage3.frame = CGRect(x: 0, y: 80, width: (UIScreen.main.bounds.width - 127)/2, height: 80)
                 self.smallImage3.contentMode = .scaleAspectFill
                 self.smallImage3.imageView?.contentMode = .scaleAspectFill
                 self.smallImage3.clipsToBounds = true
@@ -629,8 +630,8 @@ class NotificationCellImage: SwipeTableViewCell {
                 self.smallImage3.layer.borderColor = UIColor.black.cgColor
                 self.smallImage3.alpha = 1
                 self.mainImageView.addSubview(self.smallImage3)
-
-                self.smallImage4.frame = CGRect(x: (UIScreen.main.bounds.width - 127)/2 + 2, y: 82, width: (UIScreen.main.bounds.width - 127)/2, height: 80)
+                
+                self.smallImage4.frame = CGRect(x: (UIScreen.main.bounds.width - 127)/2, y: 80, width: (UIScreen.main.bounds.width - 127)/2, height: 80)
                 self.smallImage4.contentMode = .scaleAspectFill
                 self.smallImage4.imageView?.contentMode = .scaleAspectFill
                 self.smallImage4.clipsToBounds = true
@@ -649,6 +650,11 @@ class NotificationCellImage: SwipeTableViewCell {
                 self.smallImage3.alpha = 0
                 self.smallImage4.alpha = 0
             }
+        } else if status.status?.reblog?.mediaAttachments.count ?? status.status?.mediaAttachments.count ?? 0 > 1 {
+            imageCountTag.setTitle("\(status.status?.reblog?.mediaAttachments.count ?? status.status?.mediaAttachments.count ?? 0)", for: .normal)
+            imageCountTag.backgroundColor = Colours.tabSelected
+            imageCountTag.alpha = 1
+            imageCountTag.bringSubviewToFront(self)
         } else {
             imageCountTag.backgroundColor = Colours.clear
             imageCountTag.alpha = 0

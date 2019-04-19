@@ -198,7 +198,6 @@ class NewProfileNoteViewController: UIViewController, UITextViewDelegate {
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
                         self.textView.resignFirstResponder()
                         self.dismiss(animated: true, completion: nil)
-                        print("edited")
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let notification = UINotificationFeedbackGenerator()
                             notification.notificationOccurred(.success)

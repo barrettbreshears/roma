@@ -241,6 +241,7 @@ class MainFeedCellImage: SwipeTableViewCell {
         self.profileImageView2.imageView?.image = nil
         self.mainImageView.imageView?.image = nil
         self.mainImageView.imageView?.image = UIImage()
+        self.mainImageView.pin_clearImages()
         self.smallImage1.imageView?.image = nil
         self.smallImage2.imageView?.image = nil
         self.smallImage3.imageView?.image = nil
@@ -614,9 +615,10 @@ class MainFeedCellImage: SwipeTableViewCell {
             imageCountTag.backgroundColor = Colours.tabSelected
             imageCountTag.alpha = 1
         } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count > 1 && (UIApplication.shared.isSplitOrSlideOver || UIDevice.current.userInterfaceIdiom == .phone) {
-            self.mainImageView.setImage(UIImage(), for: .normal)
+            self.mainImageView.imageView?.image = nil
+//            self.mainImageView.imageView?.image = UIImage()
             if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count == 2 {
-                self.smallImage1.frame = CGRect(x: -2, y: 0, width: (UIScreen.main.bounds.width - 93)/2, height: 200)
+                self.smallImage1.frame = CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 93)/2, height: 200)
                 self.smallImage1.contentMode = .scaleAspectFill
                 self.smallImage1.imageView?.contentMode = .scaleAspectFill
                 self.smallImage1.clipsToBounds = true
@@ -629,8 +631,8 @@ class MainFeedCellImage: SwipeTableViewCell {
                 self.smallImage1.layer.borderColor = UIColor.black.cgColor
                 self.smallImage1.alpha = 1
                 self.mainImageView.addSubview(self.smallImage1)
-
-                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 93)/2 + 2, y: 0, width: (UIScreen.main.bounds.width - 93)/2, height: 200)
+                
+                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 93)/2, y: 0, width: (UIScreen.main.bounds.width - 93)/2, height: 200)
                 self.smallImage2.contentMode = .scaleAspectFill
                 self.smallImage2.imageView?.contentMode = .scaleAspectFill
                 self.smallImage2.clipsToBounds = true
@@ -644,7 +646,7 @@ class MainFeedCellImage: SwipeTableViewCell {
                 self.smallImage2.alpha = 1
                 self.mainImageView.addSubview(self.smallImage2)
             } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count == 3 {
-                self.smallImage1.frame = CGRect(x: -2, y: 0, width: (UIScreen.main.bounds.width - 93)/2, height: 200)
+                self.smallImage1.frame = CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 93)/2, height: 200)
                 self.smallImage1.contentMode = .scaleAspectFill
                 self.smallImage1.imageView?.contentMode = .scaleAspectFill
                 self.smallImage1.clipsToBounds = true
@@ -657,8 +659,8 @@ class MainFeedCellImage: SwipeTableViewCell {
                 self.smallImage1.layer.borderColor = UIColor.black.cgColor
                 self.smallImage1.alpha = 1
                 self.mainImageView.addSubview(self.smallImage1)
-
-                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 93)/2 + 2, y: -2, width: (UIScreen.main.bounds.width - 93)/2, height: 100)
+                
+                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 93)/2, y: 0, width: (UIScreen.main.bounds.width - 93)/2, height: 100)
                 self.smallImage2.contentMode = .scaleAspectFill
                 self.smallImage2.imageView?.contentMode = .scaleAspectFill
                 self.smallImage2.clipsToBounds = true
@@ -671,8 +673,8 @@ class MainFeedCellImage: SwipeTableViewCell {
                 self.smallImage2.layer.borderColor = UIColor.black.cgColor
                 self.smallImage2.alpha = 1
                 self.mainImageView.addSubview(self.smallImage2)
-
-                self.smallImage3.frame = CGRect(x: (UIScreen.main.bounds.width - 93)/2 + 2, y: 102, width: (UIScreen.main.bounds.width - 93)/2, height: 100)
+                
+                self.smallImage3.frame = CGRect(x: (UIScreen.main.bounds.width - 93)/2, y: 100, width: (UIScreen.main.bounds.width - 93)/2, height: 100)
                 self.smallImage3.contentMode = .scaleAspectFill
                 self.smallImage3.imageView?.contentMode = .scaleAspectFill
                 self.smallImage3.clipsToBounds = true
@@ -686,7 +688,7 @@ class MainFeedCellImage: SwipeTableViewCell {
                 self.smallImage3.alpha = 1
                 self.mainImageView.addSubview(self.smallImage3)
             } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count >= 4 {
-                self.smallImage1.frame = CGRect(x: -2, y: -2, width: (UIScreen.main.bounds.width - 93)/2, height: 100)
+                self.smallImage1.frame = CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 93)/2, height: 100)
                 self.smallImage1.contentMode = .scaleAspectFill
                 self.smallImage1.imageView?.contentMode = .scaleAspectFill
                 self.smallImage1.clipsToBounds = true
@@ -699,8 +701,8 @@ class MainFeedCellImage: SwipeTableViewCell {
                 self.smallImage1.layer.borderColor = UIColor.black.cgColor
                 self.smallImage1.alpha = 1
                 self.mainImageView.addSubview(self.smallImage1)
-
-                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 93)/2 + 2, y: -2, width: (UIScreen.main.bounds.width - 93)/2, height: 100)
+                
+                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 93)/2, y: 0, width: (UIScreen.main.bounds.width - 93)/2, height: 100)
                 self.smallImage2.contentMode = .scaleAspectFill
                 self.smallImage2.imageView?.contentMode = .scaleAspectFill
                 self.smallImage2.clipsToBounds = true
@@ -713,8 +715,8 @@ class MainFeedCellImage: SwipeTableViewCell {
                 self.smallImage2.layer.borderColor = UIColor.black.cgColor
                 self.smallImage2.alpha = 1
                 self.mainImageView.addSubview(self.smallImage2)
-
-                self.smallImage3.frame = CGRect(x: -2, y: 102, width: (UIScreen.main.bounds.width - 93)/2, height: 100)
+                
+                self.smallImage3.frame = CGRect(x: 0, y: 100, width: (UIScreen.main.bounds.width - 93)/2, height: 100)
                 self.smallImage3.contentMode = .scaleAspectFill
                 self.smallImage3.imageView?.contentMode = .scaleAspectFill
                 self.smallImage3.clipsToBounds = true
@@ -727,8 +729,8 @@ class MainFeedCellImage: SwipeTableViewCell {
                 self.smallImage3.layer.borderColor = UIColor.black.cgColor
                 self.smallImage3.alpha = 1
                 self.mainImageView.addSubview(self.smallImage3)
-
-                self.smallImage4.frame = CGRect(x: (UIScreen.main.bounds.width - 93)/2 + 2, y: 102, width: (UIScreen.main.bounds.width - 93)/2, height: 100)
+                
+                self.smallImage4.frame = CGRect(x: (UIScreen.main.bounds.width - 93)/2, y: 100, width: (UIScreen.main.bounds.width - 93)/2, height: 100)
                 self.smallImage4.contentMode = .scaleAspectFill
                 self.smallImage4.imageView?.contentMode = .scaleAspectFill
                 self.smallImage4.clipsToBounds = true
@@ -747,7 +749,11 @@ class MainFeedCellImage: SwipeTableViewCell {
                 self.smallImage3.alpha = 0
                 self.smallImage4.alpha = 0
             }
-
+        } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count > 1 {
+            imageCountTag.setTitle("\(status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count)", for: .normal)
+            imageCountTag.backgroundColor = Colours.tabSelected
+            imageCountTag.alpha = 1
+            imageCountTag.bringSubviewToFront(self)
         } else {
             imageCountTag.backgroundColor = Colours.clear
             imageCountTag.alpha = 0

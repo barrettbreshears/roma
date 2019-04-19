@@ -25,6 +25,8 @@ public class Relationship: Codable {
     public let requested: Bool
     /// Whether the user is currently blocking the user's domain.
     public let domainBlocking: Bool
+    /// Whether the user's reblogs are displayed on the home timeline.
+    public let showingReblogs: Bool
 
     private enum CodingKeys: String, CodingKey {
         case id
@@ -35,5 +37,6 @@ public class Relationship: Codable {
         case mutingNotifications = "muting_notifications"
         case requested
         case domainBlocking = "domain_blocking"
+        case showingReblogs = "showing_reblogs"
     }
 }

@@ -240,7 +240,7 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
         let impact = UIImpactFeedbackGenerator(style: .medium)
         
         let more = SwipeAction(style: .default, title: nil) { action, indexPath in
-            print("boost")
+            
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
             impact.impactOccurred()
             }
@@ -251,7 +251,7 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
                 .messageTextAlignment(.left)
                 .titleTextAlignment(.left)
                 .action(.default("Unblock".localized), image: UIImage(named: "block2")) { (action, ind) in
-                    print(action, ind)
+                     
                     
                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                         let notification = UINotificationFeedbackGenerator()
@@ -275,8 +275,8 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
                         }
                         
                         if let stat = (statuses.value) {
-                            print("unblocked")
-                            print(stat)
+                            
+                             
                         }
                     }
                     
@@ -319,7 +319,7 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        
         self.tableView.deselectRow(at: indexPath, animated: true)
         
         let controller = ThirdViewController()

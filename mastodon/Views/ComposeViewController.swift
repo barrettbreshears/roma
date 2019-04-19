@@ -17,40 +17,13 @@ import AVKit
 import AVFoundation
 import TesseractOCR
 import Speech
+import Disk
 
-class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SwiftyGiphyViewControllerDelegate, DateTimePickerDelegate, SHViewControllerDelegate, SFSpeechRecognizerDelegate {
+class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SwiftyGiphyViewControllerDelegate, DateTimePickerDelegate, SHViewControllerDelegate, SFSpeechRecognizerDelegate, SwipeTableViewCellDelegate {
     
     let gifCont = SwiftyGiphyViewController()
     var isGifVid = false
     var player = AVPlayer()
-    
-    func giphyControllerDidSelectGif(controller: SwiftyGiphyViewController, item: GiphyItem) {
-        print(item.fixedHeightStillImage)
-        print(item.contentURL ?? "")
-        
-        let videoURL = item.downsizedImage?.url as! NSURL
-        do {
-            self.isGifVid = true
-            self.gifVidData = try NSData(contentsOf: videoURL as URL, options: .mappedIfSafe) as Data
-        } catch {
-            print("err")
-        }
-        self.selectedImage1.pin_setImage(from: item.originalStillImage?.url)
-        self.selectedImage1.isUserInteractionEnabled = true
-        self.selectedImage1.contentMode = .scaleAspectFill
-        self.selectedImage1.layer.masksToBounds = true
-        
-        self.gifCont.dismiss(animated: true, completion: nil)
-    }
-    
-    func giphyControllerDidCancel(controller: SwiftyGiphyViewController) {
-        self.gifCont.dismiss(animated: true, completion: nil)
-    }
-    
-    func clearTheText() {
-        self.textView.text = StoreStruct.holdOnTempText
-    }
-    
     var closeButton = MNGExpandedTouchAreaButton()
     var avatarButton = MNGExpandedTouchAreaButton()
     var cameraButton = MNGExpandedTouchAreaButton()
@@ -75,7 +48,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     var photoNew = UIImage()
     var buttonCenter = CGPoint.zero
     var removeLabel = UILabel()
-    
     var inReply: [Status] = []
     var inReplyText: String = ""
     var prevTextReply: String? = nil
@@ -103,6 +75,35 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     var textFromIm = false
     var textVideoURL: NSURL = NSURL(string: "www.google.com")!
     let recognizer = SFSpeechRecognizer(locale: Locale.current)
+    var emotiLab = UIButton()
+    var currentEmot = ""
+    
+    func giphyControllerDidSelectGif(controller: SwiftyGiphyViewController, item: GiphyItem) {
+        print(item.fixedHeightStillImage)
+        print(item.contentURL ?? "")
+        
+        let videoURL = item.downsizedImage?.url as! NSURL
+        do {
+            self.isGifVid = true
+            self.gifVidData = try NSData(contentsOf: videoURL as URL, options: .mappedIfSafe) as Data
+        } catch {
+            print("err")
+        }
+        self.selectedImage1.pin_setImage(from: item.originalStillImage?.url)
+        self.selectedImage1.isUserInteractionEnabled = true
+        self.selectedImage1.contentMode = .scaleAspectFill
+        self.selectedImage1.layer.masksToBounds = true
+        
+        self.gifCont.dismiss(animated: true, completion: nil)
+    }
+    
+    func giphyControllerDidCancel(controller: SwiftyGiphyViewController) {
+        self.gifCont.dismiss(animated: true, completion: nil)
+    }
+    
+    func clearTheText() {
+        self.textView.text = StoreStruct.holdOnTempText
+    }
     
     func transcribeFile(url: URL) {
         guard let recognizer = self.recognizer else {
@@ -191,12 +192,12 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 .messageTextAlignment(.left)
                 .titleTextAlignment(.left)
                 .action(.default("Edit Poll"), image: UIImage(named: "list")) { (action, ind) in
-                    print(action, ind)
+                     
                     let controller = NewPollViewController()
                     self.present(controller, animated: true, completion: nil)
                 }
                 .action(.default("Remove Poll".localized), image: UIImage(named: "block")) { (action, ind) in
-                    print(action, ind)
+                     
                     
                     self.selectedImage1.image = nil
                     self.selectedImage2.image = nil
@@ -909,9 +910,22 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.removeLabel.alpha = 0
         self.bgView.addSubview(self.removeLabel)
         
+        self.emotiLab.frame = CGRect(x:Int(self.view.bounds.width) - 55, y:Int(self.view.bounds.height) - 40 - Int(self.keyHeight) - 55, width: 40, height: 30)
+        self.emotiLab.titleLabel?.textAlignment = .center
+        self.emotiLab.layer.masksToBounds = true
+        self.emotiLab.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+        self.emotiLab.setBackgroundColor(Colours.clear, forState: .normal)
+        self.emotiLab.alpha = 1
+        self.emotiLab.addTarget(self, action: #selector(self.didTouchEmoti), for: .touchUpInside)
+        self.view.addSubview(self.emotiLab)
     }
     
-    
+    @objc func didTouchEmoti() {
+        let size = self.textView.text.reversed().firstIndex(of: " ") ?? self.textView.text.count
+        let startWord = self.textView.text.index(self.textView.text.endIndex, offsetBy: -size)
+        let last = self.textView.text[startWord...]
+        self.textView.text = self.textView.text.replacingOccurrences(of: last, with:":\(self.currentEmot):")
+    }
     
     override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
         if action == #selector(self.paste(_:)) {
@@ -1063,10 +1077,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     @objc override func paste(_ sender: Any?) {
         let pasteboard = UIPasteboard.general
         if pasteboard.hasImages {
-            
-            print("has image")
-            print(pasteboard.image)
-            
             if self.selectedImage1.image == nil {
                 self.selectedImage1.image = pasteboard.image
                 self.selectedImage1.isUserInteractionEnabled = true
@@ -1182,12 +1192,14 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.tableView.rowHeight = UITableView.automaticDimension
         self.bgView.addSubview(self.tableView)
         
-        if UserDefaults.standard.object(forKey: "savedDrafts") != nil {
-            StoreStruct.drafts = UserDefaults.standard.object(forKey: "savedDrafts") as! [String]
-            print("dr1")
-            print(StoreStruct.drafts)
+        do {
+            StoreStruct.newdrafts = try Disk.retrieve("drafts1.json", from: .documents, as: [Drafts].self)
+        } catch {
+            print("err")
         }
-        self.tableViewDrafts.register(UITableViewCell.self, forCellReuseIdentifier: "TweetCellDraft")
+        
+        self.tableViewDrafts.register(ScheduledCell.self, forCellReuseIdentifier: "TweetCellDraft")
+        self.tableViewDrafts.register(ScheduledCellImage.self, forCellReuseIdentifier: "TweetCellDraftImage")
         self.tableViewDrafts.frame = CGRect(x: 0, y: 60, width: Int(self.view.bounds.width), height: Int(self.bgView.bounds.height - 60))
         self.tableViewDrafts.alpha = 0
         self.tableViewDrafts.delegate = self
@@ -1620,9 +1632,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         DispatchQueue.main.async {
             self.textView.becomeFirstResponder()
             
-            print("selected image123 = \(info[UIImagePickerController.InfoKey.mediaType] as? String)")
-            print("selected image1233 = \(info[UIImagePickerController.InfoKey.mediaType] as? PHAssetMediaType)")
-            
             if let mediaType = info[UIImagePickerController.InfoKey.mediaType] as? String {
             
                 
@@ -1996,26 +2005,26 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
             .messageTextAlignment(.left)
             .titleTextAlignment(.left)
-            .action(.default("Public - Post to public timelines".localized)) { (action, ind) in
-                print(action, ind)
+            .action(.default("Public - Post to public timelines".localized), image: UIImage(named: "eye")) { (action, ind) in
+                 
                 self.visibility = .public
                 self.visibilityButton.setImage(UIImage(named: "eye"), for: .normal)
                 self.bringBackDrawer()
             }
-            .action(.default("Unlisted - Do not post to public timelines".localized)) { (action, ind) in
-                print(action, ind)
+            .action(.default("   Unlisted - Do not post to public timelines".localized), image: UIImage(named: "unlisted")) { (action, ind) in
+                 
                 self.visibility = .unlisted
                 self.visibilityButton.setImage(UIImage(named: "unlisted"), for: .normal)
                 self.bringBackDrawer()
             }
-            .action(.default("Private - Post only to followers".localized)) { (action, ind) in
-                print(action, ind)
+            .action(.default("Private - Post only to followers".localized), image: UIImage(named: "private")) { (action, ind) in
+                 
                 self.visibility = .private
                 self.visibilityButton.setImage(UIImage(named: "private"), for: .normal)
                 self.bringBackDrawer()
             }
-            .action(.default("Direct - Post to mentioned users only".localized)) { (action, ind) in
-                print(action, ind)
+            .action(.default("Direct - Post to mentioned users only".localized), image: UIImage(named: "direct")) { (action, ind) in
+                 
                 self.visibility = .direct
                 self.visibilityButton.setImage(UIImage(named: "direct"), for: .normal)
                 self.bringBackDrawer()
@@ -2080,7 +2089,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             .titleTextAlignment(.left)
             
             .action(.default("Text Styles"), image: UIImage(named: "handwritten")) { (action, ind) in
-                print(action, ind)
+                 
                 
                 
                 Alertift.actionSheet(title: nil, message: self.prevTextReply)
@@ -2090,7 +2099,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("  Bold Text"), image: UIImage(named: "bold")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         self.bringBackDrawer()
                         if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
@@ -2105,7 +2114,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         
                     }
                     .action(.default("  Italics Text"), image: UIImage(named: "italics")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         self.bringBackDrawer()
                         if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
@@ -2120,7 +2129,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         
                     }
                     .action(.default("  Monospace Text"), image: UIImage(named: "mono")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         self.bringBackDrawer()
                         if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
@@ -2135,7 +2144,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         
                     }
                     .action(.default("Handwritten Text"), image: UIImage(named: "handwritten")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         self.bringBackDrawer()
                         if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
@@ -2150,7 +2159,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         
                     }
                     .action(.default("  Fraktur Text"), image: UIImage(named: "fraktur")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         self.bringBackDrawer()
                         if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
@@ -2165,7 +2174,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         
                     }
                     .action(.default(" Bubble Text"), image: UIImage(named: "bubblet")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         self.bringBackDrawer()
                         if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
@@ -2180,7 +2189,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         
                     }
                     .action(.default(" Filled Bubble Text"), image: UIImage(named: "bubblet2")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         self.bringBackDrawer()
                         if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
@@ -2195,7 +2204,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         
                     }
                     .action(.default("  Double Stroke Text"), image: UIImage(named: "doublestroke")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         self.bringBackDrawer()
                         if let range = self.textView.selectedTextRange, let selectedText = self.textView.text(in: range) {
@@ -2210,7 +2219,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         
                     }
                     .action(.default(" Clear Text Styling"), image: UIImage(named: "block")) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         self.bringBackDrawer()
                         self.clearTheText()
@@ -2230,13 +2239,13 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 
             }
             .action(.default(" Add Poll"), image: UIImage(named: "list")) { (action, ind) in
-                print(action, ind)
+                 
                 
                 let controller = NewPollViewController()
                 self.present(controller, animated: true, completion: nil)
             }
             .action(.default("  Add Now Playing"), image: UIImage(named: "music")) { (action, ind) in
-                print(action, ind)
+                 
                 
                 
                 
@@ -2245,8 +2254,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     let title: String = mediaItem.value(forProperty: MPMediaItemPropertyTitle) as? String ?? ""
                     let albumTitle: String = mediaItem.value(forProperty: MPMediaItemPropertyAlbumTitle) as? String ?? ""
                     let artist: String = mediaItem.value(forProperty: MPMediaItemPropertyArtist) as? String ?? ""
-                    
-                    print("\(title) on \(albumTitle) by \(artist)")
                     
                     if title == "" {
                         self.textView.becomeFirstResponder()
@@ -2270,7 +2277,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 
             }
             .action(.default("ASCII Text Faces"), image: UIImage(named: "ascii")) { (action, ind) in
-                print(action, ind)
+                 
                 
                 if self.picker.isDescendant(of: self.view) {
                     self.picker.removeFromSuperview()
@@ -2281,7 +2288,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 })
             }
             .action(.default("Instance Emoticons"), image: UIImage(named: "emoti")) { (action, ind) in
-                print(action, ind)
+                 
                 
                 if self.picker.isDescendant(of: self.view) {
                     self.picker.removeFromSuperview()
@@ -2292,7 +2299,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 })
             }
             .action(.default("Sentiment Analysis"), image: UIImage(named: "emoti2")) { (action, ind) in
-                print(action, ind)
+                 
                 
                 self.analyzeText()
                 
@@ -2300,7 +2307,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 
             }
             .action(.default("Insert GIF"), image: UIImage(named: "giff")) { (action, ind) in
-                print(action, ind)
+                 
                 
                 if self.picker.isDescendant(of: self.view) {
                     self.picker.removeFromSuperview()
@@ -2316,7 +2323,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 
             }
             .action(.default("Schedule Toot"), image: UIImage(named: "schedule")) { (action, ind) in
-                print(action, ind)
+                 
                 self.picker.delegate = self
                 self.picker.frame = CGRect(x: 0, y: self.view.bounds.height - self.picker.frame.size.height, width: self.view.bounds.width, height: self.picker.frame.size.height)
                 self.picker.alpha = 0
@@ -2325,17 +2332,16 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     self.picker.alpha = 1
                 })
                 self.picker.completionHandler = { date in
-                    print(date.iso8601())
                     self.scheduleTime = date.iso8601()
                     self.isScheduled = true
                 }
             }
             .action(.default("Compose Toot from Camera"), image: UIImage(named: "toot")) { (action, ind) in
-                print(action, ind)
+                 
                 self.cameraText()
             }
             .action(.default("Drafts"), image: UIImage(named: "list")) { (action, ind) in
-                print(action, ind)
+                 
                 
                 if self.picker.isDescendant(of: self.view) {
                     self.picker.removeFromSuperview()
@@ -2346,7 +2352,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 })
             }
             .action(.default("Clear All"), image: UIImage(named: "block")) { (action, ind) in
-                print(action, ind)
+                 
                 
                 self.textView.text = ""
                 self.bringBackDrawer()
@@ -2471,7 +2477,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         } else {
             let request = Statuses.delete(id: idToDel)
             StoreStruct.client.run(request) { (statuses) in
-                print("deleted")
+                
             }
         }
         
@@ -2503,8 +2509,14 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             successMessage = "scheduled"
         }
         
-        StoreStruct.drafts.append(self.textView.text!)
-        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+        let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+        
+        StoreStruct.newdrafts.append(newDraft)
+        do {
+            try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+        } catch {
+            print("err")
+        }
         
         
         
@@ -2514,7 +2526,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, poll: StoreStruct.newPollPost, visibility: self.visibility)
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request0) { (statuses) in
-                    print(statuses)
+                     
                     
                     DispatchQueue.main.async {
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "stopindi"), object: self)
@@ -2522,10 +2534,16 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     
                     if statuses.isError && self.scheduleTime != nil {
                         
-                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
-                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
-                        
                         DispatchQueue.main.async {
+                            
+                            let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                            
+                            StoreStruct.newdrafts.append(newDraft)
+                            do {
+                                try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                            } catch {
+                                print("err")
+                            }
                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                 let notification = UINotificationFeedbackGenerator()
                                 notification.notificationOccurred(.success)
@@ -2558,10 +2576,16 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         }
                     } else {
                         
-                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
-                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
-                        
                         DispatchQueue.main.async {
+                            
+                            let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                            
+                            StoreStruct.newdrafts.append(newDraft)
+                            do {
+                                try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                            } catch {
+                                print("err")
+                            }
                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                 let notification = UINotificationFeedbackGenerator()
                                 notification.notificationOccurred(.success)
@@ -2614,18 +2638,15 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
         
         if self.gifVidData != nil || self.isGifVid {
-            print("gifvidnotnil")
-            
             let request = Media.upload(media: .gif(self.gifVidData))
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
-                    print(stat.id)
                     mediaIDs.append(stat.id)
                     
                     let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
                     DispatchQueue.global(qos: .userInitiated).async {
                         StoreStruct.client.run(request0) { (statuses) in
-                            print(statuses)
+                             
                             
                             
                             DispatchQueue.main.async {
@@ -2633,10 +2654,16 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             }
                             if statuses.isError && self.scheduleTime != nil {
                                 
-                                StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
-                                UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                                 
                                 DispatchQueue.main.async {
+                                    let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                                    
+                                    StoreStruct.newdrafts.append(newDraft)
+                                    do {
+                                        try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                                    } catch {
+                                        print("err")
+                                    }
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -2669,10 +2696,16 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 }
                             } else {
                                 
-                                StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
-                                UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                             
                             DispatchQueue.main.async {
+                                let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                                
+                                StoreStruct.newdrafts.append(newDraft)
+                                do {
+                                    try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                                } catch {
+                                    print("err")
+                                }
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
                                     notification.notificationOccurred(.success)
@@ -2719,11 +2752,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             let request = Media.upload(media: .jpeg(imageData))
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
-                    print(stat.id)
                     mediaIDs.append(stat.id)
                     let request4 = Media.updateDescription(description: StoreStruct.caption1, id: stat.id)
                     StoreStruct.client.run(request4) { (statuses) in
-                        print(statuses)
+                         
                     }
                     
                     
@@ -2731,11 +2763,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     let request2 = Media.upload(media: .jpeg(imageData2))
                     StoreStruct.client.run(request2) { (statuses) in
                         if let stat = (statuses.value) {
-                            print(stat.id)
                             mediaIDs.append(stat.id)
                             let request5 = Media.updateDescription(description: StoreStruct.caption2, id: stat.id)
                             StoreStruct.client.run(request5) { (statuses) in
-                                print(statuses)
+                                 
                             }
                             
                             
@@ -2743,11 +2774,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             let request3 = Media.upload(media: .jpeg(imageData3))
                             StoreStruct.client.run(request3) { (statuses) in
                                 if let stat = (statuses.value) {
-                                    print(stat.id)
                                     mediaIDs.append(stat.id)
                                     let request6 = Media.updateDescription(description: StoreStruct.caption3, id: stat.id)
                                     StoreStruct.client.run(request6) { (statuses) in
-                                        print(statuses)
+                                         
                                     }
                                     
                                     
@@ -2755,28 +2785,33 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     let request4 = Media.upload(media: .jpeg(imageData4))
                                     StoreStruct.client.run(request4) { (statuses) in
                                         if let stat = (statuses.value) {
-                                            print(stat.id)
                                             mediaIDs.append(stat.id)
                                             let request7 = Media.updateDescription(description: StoreStruct.caption4, id: stat.id)
                                             StoreStruct.client.run(request7) { (statuses) in
-                                                print(statuses)
+                                                 
                                             }
                                             
                                             
                                             let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
                                             DispatchQueue.global(qos: .userInitiated).async {
                                                 StoreStruct.client.run(request0) { (statuses) in
-                                                    print(statuses)
+                                                     
                                                     
                                                     DispatchQueue.main.async {
                                                         NotificationCenter.default.post(name: Notification.Name(rawValue: "stopindi"), object: self)
                                                     }
                                                     if statuses.isError && self.scheduleTime != nil {
                                                         
-                                                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
-                                                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                                                         
                                                         DispatchQueue.main.async {
+                                                            let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                                                            
+                                                            StoreStruct.newdrafts.append(newDraft)
+                                                            do {
+                                                                try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                                                            } catch {
+                                                                print("err")
+                                                            }
                                                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                                                 let notification = UINotificationFeedbackGenerator()
                                                                 notification.notificationOccurred(.success)
@@ -2809,10 +2844,16 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                         }
                                                     } else {
                                                         
-                                                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
-                                                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                                                         
                                                     DispatchQueue.main.async {
+                                                        let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                                                        
+                                                        StoreStruct.newdrafts.append(newDraft)
+                                                        do {
+                                                            try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                                                        } catch {
+                                                            print("err")
+                                                        }
                                                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                                             let notification = UINotificationFeedbackGenerator()
                                                             notification.notificationOccurred(.success)
@@ -2859,11 +2900,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             let request = Media.upload(media: .jpeg(imageData))
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
-                    print(stat.id)
                     mediaIDs.append(stat.id)
                     let request4 = Media.updateDescription(description: StoreStruct.caption1, id: stat.id)
                     StoreStruct.client.run(request4) { (statuses) in
-                        print(statuses)
+                         
                     }
                     
                     
@@ -2871,11 +2911,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     let request2 = Media.upload(media: .jpeg(imageData2))
                     StoreStruct.client.run(request2) { (statuses) in
                         if let stat = (statuses.value) {
-                            print(stat.id)
                             mediaIDs.append(stat.id)
                             let request5 = Media.updateDescription(description: StoreStruct.caption2, id: stat.id)
                             StoreStruct.client.run(request5) { (statuses) in
-                                print(statuses)
+                                 
                             }
                             
                             
@@ -2883,28 +2922,33 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             let request3 = Media.upload(media: .jpeg(imageData3))
                             StoreStruct.client.run(request3) { (statuses) in
                                 if let stat = (statuses.value) {
-                                    print(stat.id)
                                     mediaIDs.append(stat.id)
                                     let request6 = Media.updateDescription(description: StoreStruct.caption3, id: stat.id)
                                     StoreStruct.client.run(request6) { (statuses) in
-                                        print(statuses)
+                                         
                                     }
                                     
                                     
                                     let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
                                     DispatchQueue.global(qos: .userInitiated).async {
                                         StoreStruct.client.run(request0) { (statuses) in
-                                            print(statuses)
+                                             
                                             
                                             DispatchQueue.main.async {
                                                 NotificationCenter.default.post(name: Notification.Name(rawValue: "stopindi"), object: self)
                                             }
                                             if statuses.isError && self.scheduleTime != nil {
                                                 
-                                                StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
-                                                UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                                                 
                                                 DispatchQueue.main.async {
+                                                    let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                                                    
+                                                    StoreStruct.newdrafts.append(newDraft)
+                                                    do {
+                                                        try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                                                    } catch {
+                                                        print("err")
+                                                    }
                                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                                         let notification = UINotificationFeedbackGenerator()
                                                         notification.notificationOccurred(.success)
@@ -2937,10 +2981,16 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                 }
                                             } else {
                                                 
-                                                StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
-                                                UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                                                 
                                             DispatchQueue.main.async {
+                                                let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                                                
+                                                StoreStruct.newdrafts.append(newDraft)
+                                                do {
+                                                    try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                                                } catch {
+                                                    print("err")
+                                                }
                                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                                     let notification = UINotificationFeedbackGenerator()
                                                     notification.notificationOccurred(.success)
@@ -2985,30 +3035,28 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             let request = Media.upload(media: .jpeg(imageData))
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
-                    print(stat.id)
                     mediaIDs.append(stat.id)
                     
                     let request4 = Media.updateDescription(description: StoreStruct.caption1, id: stat.id)
                     StoreStruct.client.run(request4) { (statuses) in
-                        print(statuses)
+                         
                     }
                     
                     let imageData2 = (theImage2 ?? UIImage()).jpegData(compressionQuality: compression)
                     let request2 = Media.upload(media: .jpeg(imageData2))
                     StoreStruct.client.run(request2) { (statuses) in
                         if let stat = (statuses.value) {
-                            print(stat.id)
                             mediaIDs.append(stat.id)
                             
                             let request5 = Media.updateDescription(description: StoreStruct.caption2, id: stat.id)
                             StoreStruct.client.run(request5) { (statuses) in
-                                print(statuses)
+                                 
                             }
                             
                             let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
                             DispatchQueue.global(qos: .userInitiated).async {
                                 StoreStruct.client.run(request0) { (statuses) in
-                                    print(statuses)
+                                     
                                     
                                     DispatchQueue.main.async {
                                         NotificationCenter.default.post(name: Notification.Name(rawValue: "stopindi"), object: self)
@@ -3016,10 +3064,16 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     
                                     if statuses.isError && self.scheduleTime != nil {
                                         
-                                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
-                                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                                         
                                         DispatchQueue.main.async {
+                                            let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                                            
+                                            StoreStruct.newdrafts.append(newDraft)
+                                            do {
+                                                try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                                            } catch {
+                                                print("err")
+                                            }
                                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                                 let notification = UINotificationFeedbackGenerator()
                                                 notification.notificationOccurred(.success)
@@ -3052,10 +3106,16 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                         }
                                     } else {
                                         
-                                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
-                                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                                         
                                     DispatchQueue.main.async {
+                                        let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                                        
+                                        StoreStruct.newdrafts.append(newDraft)
+                                        do {
+                                            try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                                        } catch {
+                                            print("err")
+                                        }
                                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                             let notification = UINotificationFeedbackGenerator()
                                             notification.notificationOccurred(.success)
@@ -3097,28 +3157,33 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             let request = Media.upload(media: .jpeg(imageData))
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
-                    print(stat.id)
                     mediaIDs.append(stat.id)
                     
                     let request4 = Media.updateDescription(description: StoreStruct.caption1, id: stat.id)
                     StoreStruct.client.run(request4) { (statuses) in
-                        print(statuses)
+                         
                     }
                     
                     let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
                     DispatchQueue.global(qos: .userInitiated).async {
                         StoreStruct.client.run(request0) { (statuses) in
-                            print(statuses)
+                             
                             
                             DispatchQueue.main.async {
                                 NotificationCenter.default.post(name: Notification.Name(rawValue: "stopindi"), object: self)
                             }
                             if statuses.isError && self.scheduleTime != nil {
                                 
-                                StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
-                                UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                                 
                                 DispatchQueue.main.async {
+                                    let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                                    
+                                    StoreStruct.newdrafts.append(newDraft)
+                                    do {
+                                        try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                                    } catch {
+                                        print("err")
+                                    }
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -3151,10 +3216,17 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 }
                             } else {
                                 
-                                StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
-                                UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
-                                
                             DispatchQueue.main.async {
+                                
+                                let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                                
+                                StoreStruct.newdrafts.append(newDraft)
+                                do {
+                                    try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                                } catch {
+                                    print("err")
+                                }
+                                
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
                                     notification.notificationOccurred(.success)
@@ -3193,7 +3265,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, poll: StoreStruct.newPollPost, visibility: self.visibility)
             DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request0) { (statuses) in
-                    print(statuses)
+                     
                     
                     DispatchQueue.main.async {
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "stopindi"), object: self)
@@ -3201,10 +3273,16 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     
                     if statuses.isError && self.scheduleTime != nil {
                         
-                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
-                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
                         
                         DispatchQueue.main.async {
+                            let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                            
+                            StoreStruct.newdrafts.append(newDraft)
+                            do {
+                                try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                            } catch {
+                                print("err")
+                            }
                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                 let notification = UINotificationFeedbackGenerator()
                                 notification.notificationOccurred(.success)
@@ -3237,10 +3315,17 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         }
                     } else {
                         
-                        StoreStruct.drafts.remove(at: StoreStruct.drafts.count - 1)
-                        UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
-                        
                     DispatchQueue.main.async {
+                        
+                        let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                        
+                        StoreStruct.newdrafts.append(newDraft)
+                        do {
+                            try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                        } catch {
+                            print("err")
+                        }
+                        
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let notification = UINotificationFeedbackGenerator()
                             notification.notificationOccurred(.success)
@@ -3366,8 +3451,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     
     func textViewDidChange(_ textView: UITextView) {
         
-        
-        
         if (UserDefaults.standard.object(forKey: "keyhap") == nil) || (UserDefaults.standard.object(forKey: "keyhap") as! Int == 0) {
             
         } else if (UserDefaults.standard.object(forKey: "keyhap") as! Int == 1) {
@@ -3377,7 +3460,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             let impact = UIImpactFeedbackGenerator()
             impact.impactOccurred()
         }
-        
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -3421,6 +3503,8 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         }
         
         
+        self.emotiLab.alpha = 0
+        
         let regex = try! NSRegularExpression(pattern: "\\S+$")
         let textRange = NSRange(location: 0, length: textView.text.count)
         
@@ -3431,8 +3515,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             let range2 = regex2.firstMatch(in: textView.text, range: textRange2)?.range
             let x1 = (String(textView.text[Range(range, in: textView.text) ?? Range(range2 ?? NSRange(location: 0, length: 0), in: textView.text) ?? Range(NSRange(location: 0, length: 0), in: "")!]))
             if x1.first == "@" && x1.count > 1 {
-                print("this is @ \(x1)")
-                
                 // search @ users in compose
                 self.theReg = x1
                 
@@ -3468,7 +3550,18 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 self.emotiButton.alpha = 0
                     self.tableView.alpha = 1
                 })
+                
             } else {
+                
+                var iCo = 0
+                for i in StoreStruct.mainResult2 {
+                    if x1.lowercased().contains(i.string.lowercased().replacingOccurrences(of: "￼    ", with: "")) {
+                        self.emotiLab.setAttributedTitle(StoreStruct.mainResult1[iCo], for: .normal)
+                        self.currentEmot = i.string.lowercased().replacingOccurrences(of: "￼    ", with: "")
+                        self.emotiLab.alpha = 1
+                    }
+                    iCo += 1
+                }
                 
                 UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.8, options: [], animations: {
                 self.bgView.frame = CGRect(x:0, y:Int(self.view.bounds.height) - 50 - Int(self.keyHeight), width:Int(self.view.bounds.width), height:Int(self.keyHeight) + 50)
@@ -3509,10 +3602,16 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             .messageTextAlignment(.left)
             .titleTextAlignment(.left)
             .action(.default("Save as Draft"), image: nil) { (action, ind) in
-                print(action, ind)
+                 
                 
-                StoreStruct.drafts.append(self.textView.text!)
-                UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+                let newDraft = Drafts(text: self.textView.text!, image1: self.selectedImage1.image?.pngData(), image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
+                
+                StoreStruct.newdrafts.append(newDraft)
+                do {
+                    try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                } catch {
+                    print("err")
+                }
                 
                 self.textView.resignFirstResponder()
                 
@@ -3575,10 +3674,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 title.text = "Instance Emoticons".localized
             }
         } else {
-            if StoreStruct.drafts.isEmpty {
+            if StoreStruct.newdrafts.isEmpty {
                 title.text = "No Drafts".localized
             } else {
-                title.text = "All Drafts".localized
+                title.text = "\(StoreStruct.newdrafts.count) Drafts".localized
             }
         }
         title.textColor = UIColor.white
@@ -3598,7 +3697,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         } else if tableView == self.tableViewEmoti {
             return StoreStruct.mainResult.count
         } else {
-            return StoreStruct.drafts.count
+            return StoreStruct.newdrafts.count
         }
     }
     
@@ -3660,24 +3759,103 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             
         } else {
             
-            let cell = tableViewDrafts.dequeueReusableCell(withIdentifier: "TweetCellDraft", for: indexPath) 
+            if StoreStruct.newdrafts[indexPath.row].image1 == nil {
             
-            if StoreStruct.drafts.isEmpty {
-                cell.textLabel?.text = "No saved drafts"
-                cell.textLabel?.textAlignment = .center
+                let cell = tableViewDrafts.dequeueReusableCell(withIdentifier: "TweetCellDraft", for: indexPath) as! ScheduledCell
+                
+                cell.delegate = self
+                
+                if StoreStruct.newdrafts.isEmpty {
+                    cell.userName.text = "No saved drafts"
+                    cell.toot.text = "Any drafts that you save will show up here."
+                    cell.configureDraft()
+                } else {
+                    cell.userName.text = "Draft \(indexPath.row + 1)"
+                    cell.toot.text = StoreStruct.newdrafts[indexPath.row].text
+                    cell.configureDraft()
+                    
+                    let backgroundView = UIView()
+                    backgroundView.backgroundColor = Colours.clear
+                    cell.selectedBackgroundView = backgroundView
+                }
+                cell.textLabel?.textColor = UIColor.white
+                cell.textLabel?.numberOfLines = 0
+                cell.backgroundColor = Colours.clear
+                return cell
+                
             } else {
-                cell.textLabel?.text = StoreStruct.drafts[indexPath.row]
-                cell.textLabel?.textAlignment = .left
+                
+                let cell = tableViewDrafts.dequeueReusableCell(withIdentifier: "TweetCellDraftImage", for: indexPath) as! ScheduledCellImage
+                
+                cell.delegate = self
+                
+                cell.userName.text = "Draft \(indexPath.row + 1)"
+                cell.toot.text = StoreStruct.newdrafts[indexPath.row].text
+                cell.configureDraft(StoreStruct.newdrafts[indexPath.row])
                 
                 let backgroundView = UIView()
                 backgroundView.backgroundColor = Colours.clear
                 cell.selectedBackgroundView = backgroundView
+                
+                cell.textLabel?.textColor = UIColor.white
+                cell.textLabel?.numberOfLines = 0
+                cell.backgroundColor = Colours.clear
+                return cell
+                
             }
-            cell.textLabel?.textColor = UIColor.white
-            cell.textLabel?.numberOfLines = 0
-            cell.backgroundColor = Colours.clear
-            return cell
         }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        
+        if tableView == self.tableViewDrafts {
+            if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {} else {
+                return nil
+            }
+            
+            if orientation == .right {
+                
+                let cross = SwipeAction(style: .default, title: nil) { action, indexPath in
+                    StoreStruct.newdrafts.remove(at: indexPath.row)
+//                    self.tableViewDrafts.reloadData()
+                    self.tableViewDrafts.beginUpdates()
+                    self.tableViewDrafts.deleteRows(at: [indexPath], with: .none)
+                    self.tableViewDrafts.endUpdates()
+                    
+                    do {
+                        try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                    } catch {
+                        print("err")
+                    }
+                }
+                cross.backgroundColor = Colours.clear
+                cross.transitionDelegate = ScaleTransition.default
+                cross.textColor = Colours.tabUnselected
+                cross.image = UIImage(named: "block")?.maskWithColor(color: Colours.white)
+                return [cross]
+                
+            } else {
+                return nil
+            }
+        } else {
+            return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        if (UserDefaults.standard.object(forKey: "selectSwipe") == nil) || (UserDefaults.standard.object(forKey: "selectSwipe") as! Int == 0) {
+            options.expansionStyle = .selection
+        } else {
+            options.expansionStyle = .none
+        }
+        options.transitionStyle = .drag
+        options.buttonSpacing = 0
+        options.buttonPadding = 0
+        options.maximumButtonWidth = 60
+        options.backgroundColor = Colours.clear
+        options.expansionDelegate = ScaleAndAlphaExpansion.default
+        return options
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -3761,13 +3939,29 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         } else {
             self.tableView.deselectRow(at: indexPath, animated: true)
             
-            self.textView.text = StoreStruct.drafts[indexPath.row]
+            self.textView.text = StoreStruct.newdrafts[indexPath.row].text
+            self.selectedImage1.image = UIImage(data: StoreStruct.newdrafts[indexPath.row].image1 ?? Data())
+            self.selectedImage2.image = UIImage(data: StoreStruct.newdrafts[indexPath.row].image2 ?? Data())
+            self.selectedImage3.image = UIImage(data: StoreStruct.newdrafts[indexPath.row].image3 ?? Data())
+            self.selectedImage4.image = UIImage(data: StoreStruct.newdrafts[indexPath.row].image4 ?? Data())
+            self.isGifVid = StoreStruct.newdrafts[indexPath.row].isGifVid
+            self.textVideoURL = NSURL(string: StoreStruct.newdrafts[indexPath.row].textVideoURL ?? "") ?? self.textVideoURL
+            self.gifVidData = StoreStruct.newdrafts[indexPath.row].gifVidData
+            
+            self.selectedImage1.isUserInteractionEnabled = true
+            self.selectedImage2.isUserInteractionEnabled = true
+            self.selectedImage3.isUserInteractionEnabled = true
+            self.selectedImage4.isUserInteractionEnabled = true
             
             let newCount = StoreStruct.maxChars - (textView.text?.count)!
             countLabel.text = "\(newCount)"
             
-            StoreStruct.drafts.remove(at: indexPath.row)
-            UserDefaults.standard.set(StoreStruct.drafts, forKey: "savedDrafts")
+            StoreStruct.newdrafts.remove(at: indexPath.row)
+            do {
+                try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+            } catch {
+                print("err")
+            }
             
             self.textView.becomeFirstResponder()
             self.bringBackDrawer()

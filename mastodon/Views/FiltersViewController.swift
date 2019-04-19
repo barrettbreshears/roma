@@ -246,7 +246,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        
         self.tableView.deselectRow(at: indexPath, animated: true)
         
         Alertift.actionSheet(title: nil, message: nil)
@@ -256,7 +256,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             .messageTextAlignment(.left)
             .titleTextAlignment(.left)
             .action(.default("Remove Filter".localized), image: UIImage(named: "block")) { (action, ind) in
-                print(action, ind)
+                 
                 
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                     let notification = UINotificationFeedbackGenerator()

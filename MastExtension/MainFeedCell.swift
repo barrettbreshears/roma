@@ -88,13 +88,15 @@ class MainFeedCell: UITableViewCell {
         
         
         let url3 = URL(string: "\(status.reblog?.account.avatar ?? status.account.avatar)")
+        if url3 == nil {} else {
         DispatchQueue.global().async {
             if "\(status.reblog?.account.avatar ?? status.account.avatar)" == "" {} else {
                 let data = try? Data(contentsOf: url3!)
                 DispatchQueue.main.async {
-                    self.profileImageView.setImage(UIImage(data: data!), for: .normal)
+                    self.profileImageView.setImage(UIImage(data: data ?? Data()), for: .normal)
                 }
             }
+        }
         }
         
         profileImageView.layer.masksToBounds = true

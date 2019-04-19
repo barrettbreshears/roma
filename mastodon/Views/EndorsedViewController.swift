@@ -191,7 +191,7 @@ class EndorsedViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        
         self.tableView.deselectRow(at: indexPath, animated: true)
         
         let controller = ThirdViewController()
@@ -214,9 +214,9 @@ class EndorsedViewController: UIViewController, UITableViewDelegate, UITableView
             if let stat = (statuses.value) {
                 
                 if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
-                    self.lastThing = stat.first?.id ?? ""
-                    self.statusFollows = self.statusFollows + stat
                     DispatchQueue.main.async {
+                        self.lastThing = stat.first?.id ?? ""
+                        self.statusFollows = self.statusFollows + stat
                         self.tableView.reloadData()
                     }
                 }
@@ -231,9 +231,9 @@ class EndorsedViewController: UIViewController, UITableViewDelegate, UITableView
             if let stat = (statuses.value) {
                 
                 if stat.isEmpty || self.lastThing2 == stat.first?.id ?? "" {} else {
-                    self.lastThing2 = stat.first?.id ?? ""
-                    self.statusFollows = self.statusFollows + stat
                     DispatchQueue.main.async {
+                        self.lastThing2 = stat.first?.id ?? ""
+                        self.statusFollows = self.statusFollows + stat
                         self.tableView.reloadData()
                     }
                 }

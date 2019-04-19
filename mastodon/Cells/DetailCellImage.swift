@@ -14,7 +14,7 @@ class DetailCellImage: UITableViewCell {
     
     var profileImageView = UIButton()
     var userName = UILabel()
-    var userTag = UILabel()
+    var userTag = UIButton()
     var date = UILabel()
     var toot = ActiveLabel()
     var faves = UIButton()
@@ -73,13 +73,12 @@ class DetailCellImage: UITableViewCell {
 //        }
         
         userName.numberOfLines = 0
-        userTag.numberOfLines = 0
         toot.numberOfLines = 0
         fromClient.numberOfLines = 0
         faves.titleLabel?.textAlignment = .left
         
         userName.textColor = Colours.black
-        userTag.textColor = Colours.black.withAlphaComponent(0.6)
+        userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
         date.textColor = Colours.black.withAlphaComponent(0.6)
         toot.textColor = Colours.black
         fromClient.textColor = Colours.black.withAlphaComponent(0.6)
@@ -87,7 +86,7 @@ class DetailCellImage: UITableViewCell {
         faves.setTitleColor(Colours.tabSelected, for: .normal)
         
         userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
-        userTag.font = UIFont.systemFont(ofSize: Colours.fontSize3)
+        userTag.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
         fromClient.font = UIFont.systemFont(ofSize: Colours.fontSize3)
@@ -147,11 +146,11 @@ class DetailCellImage: UITableViewCell {
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-15-[episodes]-15-[mainImage(250)]-10-[faves]-10-[from]-12-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-15-[episodes]-15-[mainImageBG(250)]-10-[faves]-10-[from]-12-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-15-[mainImage(250)]-10-[faves]-10-[from]-12-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-15-[mainImageBG(250)]-10-[faves]-10-[from]-12-|", options: [], metrics: nil, views: viewsDict))
         case .pad:
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-15-[episodes]-15-[mainImage(500)]-10-[faves]-10-[from]-12-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-15-[episodes]-15-[mainImageBG(500)]-10-[faves]-10-[from]-12-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-15-[mainImage(500)]-10-[faves]-10-[from]-12-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-15-[mainImageBG(500)]-10-[faves]-10-[from]-12-|", options: [], metrics: nil, views: viewsDict))
         default:
             print("nothing")
         }
@@ -172,9 +171,9 @@ class DetailCellImage: UITableViewCell {
         
         userName.text = status.reblog?.account.displayName ?? status.account.displayName
         if (UserDefaults.standard.object(forKey: "mentionToggle") == nil || UserDefaults.standard.object(forKey: "mentionToggle") as! Int == 0) {
-            userTag.text = "@\(status.reblog?.account.acct ?? status.account.acct)"
+            userTag.setTitle("@\(status.reblog?.account.acct ?? status.account.acct)", for: .normal)
         } else {
-            userTag.text = "@\(status.reblog?.account.username ?? status.account.username)"
+            userTag.setTitle("@\(status.reblog?.account.username ?? status.account.username)", for: .normal)
         }
         date.text = status.reblog?.createdAt.toStringWithRelativeTime() ?? status.createdAt.toStringWithRelativeTime()
         if status.reblog?.content.stripHTML() != nil {
@@ -318,7 +317,7 @@ class DetailCellImage: UITableViewCell {
         }
         
         userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
-        userTag.font = UIFont.systemFont(ofSize: Colours.fontSize3)
+        userTag.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
         fromClient.font = UIFont.systemFont(ofSize: Colours.fontSize3)

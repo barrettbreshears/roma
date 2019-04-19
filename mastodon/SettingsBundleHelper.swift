@@ -70,7 +70,6 @@ class SettingsBundleHelper {
             StoreStruct.allListRelID = ""
             StoreStruct.currentList = []
             StoreStruct.currentListTitle = ""
-            StoreStruct.drafts = []
             StoreStruct.allLikes = []
             StoreStruct.allBoosts = []
             StoreStruct.allPins = []

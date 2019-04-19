@@ -196,10 +196,10 @@ class DMFeedCell: SwipeTableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    override func prepareForReuse() {
-//        self.profileImageView.imageView?.image = nil
-//        self.profileImageView2.imageView?.image = nil
-//    }
+    override func prepareForReuse() {
+        self.profileImageView.imageView?.image = nil
+        self.profileImageView2.imageView?.image = nil
+    }
     
     func configure2(_ unread: Bool, id: String) {
         if StoreStruct.markedReadIDs.contains(id) {

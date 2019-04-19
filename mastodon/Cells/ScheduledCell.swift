@@ -30,8 +30,8 @@ class ScheduledCell: SwipeTableViewCell {
         userName.textColor = Colours.black
         toot.textColor = Colours.black
         
-        userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
-        toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
+        userName.font = UIFont.systemFont(ofSize: CGFloat(Colours.fontSize2))
+        toot.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
         
         toot.enabledTypes = [.mention, .hashtag, .url]
         toot.mentionColor = Colours.tabSelected
@@ -49,7 +49,7 @@ class ScheduledCell: SwipeTableViewCell {
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[name]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-5-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-0-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -78,9 +78,21 @@ class ScheduledCell: SwipeTableViewCell {
         let ti = String(format: "%0.2d:%0.2d", hour, minutes)
         let dmy = String(format: "%0.2d/%0.2d/%0.2d", day, month, year)
         userName.text = "Scheduled for \(ti) on \(dmy)"
-        userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
+        userName.font = UIFont.systemFont(ofSize: CGFloat(Colours.fontSize2))
         toot.text = status.params.text
-        toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
+        toot.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
+    }
+    
+    func configureDraft() {
+        
+        self.contentView.backgroundColor = Colours.clear
+        
+        toot.mentionColor = Colours.grayDark
+        toot.hashtagColor = Colours.grayDark
+        toot.URLColor = Colours.grayDark
+        
+        userName.font = UIFont.systemFont(ofSize: CGFloat(Colours.fontSize2))
+        toot.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
     }
     
 }
@@ -92,6 +104,11 @@ class ScheduledCellImage: SwipeTableViewCell {
     var mainImageView = UIButton()
     var mainImageViewBG = UIView()
     var imageCountTag = UIButton()
+    
+    var smallImage1 = UIButton()
+    var smallImage2 = UIButton()
+    var smallImage3 = UIButton()
+    var smallImage4 = UIButton()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -107,8 +124,8 @@ class ScheduledCellImage: SwipeTableViewCell {
         userName.textColor = Colours.black
         toot.textColor = Colours.black
         
-        userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
-        toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
+        userName.font = UIFont.systemFont(ofSize: CGFloat(Colours.fontSize2))
+        toot.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
         
         toot.enabledTypes = [.mention, .hashtag, .url]
         toot.mentionColor = Colours.tabSelected
@@ -158,8 +175,8 @@ class ScheduledCellImage: SwipeTableViewCell {
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[name]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-5-[episodes]-10-[mainImageBG(200)]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-5-[episodes]-10-[mainImage(200)]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-0-[episodes]-10-[mainImageBG(200)]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-0-[episodes]-10-[mainImage(200)]-12-|", options: [], metrics: nil, views: viewsDict))
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[mainImage]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-83-[mainImageBG]-30-|", options: [], metrics: nil, views: viewsDict))
@@ -170,6 +187,10 @@ class ScheduledCellImage: SwipeTableViewCell {
     }
     
     func configure(_ status: ScheduledStatus) {
+        self.smallImage1.alpha = 0
+        self.smallImage2.alpha = 0
+        self.smallImage3.alpha = 0
+        self.smallImage4.alpha = 0
         
         self.contentView.backgroundColor = Colours.white
         
@@ -191,9 +212,9 @@ class ScheduledCellImage: SwipeTableViewCell {
         let ti = String(format: "%0.2d:%0.2d", hour, minutes)
         let dmy = String(format: "%0.2d/%0.2d/%0.2d", day, month, year)
         userName.text = "Scheduled for \(ti) on \(dmy)"
-        userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
+        userName.font = UIFont.systemFont(ofSize: CGFloat(Colours.fontSize2))
         toot.text = status.params.text
-        toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
+        toot.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
         
         mainImageView.contentMode = .scaleAspectFill
         mainImageView.imageView?.contentMode = .scaleAspectFill
@@ -229,6 +250,141 @@ class ScheduledCellImage: SwipeTableViewCell {
             imageCountTag.backgroundColor = Colours.clear
             imageCountTag.alpha = 0
         }
+    }
+    
+    func configureDraft(_ status: Drafts) {
+        self.smallImage1.alpha = 0
+        self.smallImage2.alpha = 0
+        self.smallImage3.alpha = 0
+        self.smallImage4.alpha = 0
+        
+        self.contentView.backgroundColor = Colours.clear
+        
+        toot.mentionColor = Colours.grayDark
+        toot.hashtagColor = Colours.grayDark
+        toot.URLColor = Colours.grayDark
+        
+        userName.font = UIFont.systemFont(ofSize: CGFloat(Colours.fontSize2))
+        toot.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
+        
+        mainImageView.contentMode = .scaleAspectFill
+        mainImageView.imageView?.contentMode = .scaleAspectFill
+        mainImageView.clipsToBounds = true
+        
+        self.mainImageView.isUserInteractionEnabled = false
+        self.smallImage1.isUserInteractionEnabled = false
+        self.smallImage2.isUserInteractionEnabled = false
+        self.smallImage3.isUserInteractionEnabled = false
+        self.smallImage4.isUserInteractionEnabled = false
+        
+        if status.image4 != nil {
+            self.smallImage1.frame = CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 40)/2, height: 100)
+            self.smallImage1.contentMode = .scaleAspectFill
+            self.smallImage1.imageView?.contentMode = .scaleAspectFill
+            self.smallImage1.clipsToBounds = true
+            self.smallImage1.setImage(UIImage(data: status.image1 ?? Data()), for: .normal)
+            self.smallImage1.layer.masksToBounds = true
+            self.smallImage1.layer.borderColor = UIColor.black.cgColor
+            self.smallImage1.alpha = 1
+            self.mainImageView.addSubview(self.smallImage1)
+            
+            self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 40)/2, y: 0, width: (UIScreen.main.bounds.width - 40)/2, height: 100)
+            self.smallImage2.contentMode = .scaleAspectFill
+            self.smallImage2.imageView?.contentMode = .scaleAspectFill
+            self.smallImage2.clipsToBounds = true
+            self.smallImage2.setImage(UIImage(data: status.image2 ?? Data()), for: .normal)
+            self.smallImage2.layer.masksToBounds = true
+            self.smallImage2.layer.borderColor = UIColor.black.cgColor
+            self.smallImage2.alpha = 1
+            self.mainImageView.addSubview(self.smallImage2)
+            
+            self.smallImage3.frame = CGRect(x: 0, y: 100, width: (UIScreen.main.bounds.width - 40)/2, height: 100)
+            self.smallImage3.contentMode = .scaleAspectFill
+            self.smallImage3.imageView?.contentMode = .scaleAspectFill
+            self.smallImage3.clipsToBounds = true
+            self.smallImage3.setImage(UIImage(data: status.image3 ?? Data()), for: .normal)
+            self.smallImage3.layer.masksToBounds = true
+            self.smallImage3.layer.borderColor = UIColor.black.cgColor
+            self.smallImage3.alpha = 1
+            self.mainImageView.addSubview(self.smallImage3)
+            
+            self.smallImage4.frame = CGRect(x: (UIScreen.main.bounds.width - 40)/2, y: 100, width: (UIScreen.main.bounds.width - 40)/2, height: 100)
+            self.smallImage4.contentMode = .scaleAspectFill
+            self.smallImage4.imageView?.contentMode = .scaleAspectFill
+            self.smallImage4.clipsToBounds = true
+            self.smallImage4.setImage(UIImage(data: status.image4 ?? Data()), for: .normal)
+            self.smallImage4.layer.masksToBounds = true
+            self.smallImage4.layer.borderColor = UIColor.black.cgColor
+            self.smallImage4.alpha = 1
+            self.mainImageView.addSubview(self.smallImage4)
+        } else if status.image3 != nil {
+            self.smallImage1.frame = CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 40)/2, height: 200)
+            self.smallImage1.contentMode = .scaleAspectFill
+            self.smallImage1.imageView?.contentMode = .scaleAspectFill
+            self.smallImage1.clipsToBounds = true
+            self.smallImage1.setImage(UIImage(data: status.image1 ?? Data()), for: .normal)
+            self.smallImage1.layer.masksToBounds = true
+            self.smallImage1.layer.borderColor = UIColor.black.cgColor
+            self.smallImage1.alpha = 1
+            self.mainImageView.addSubview(self.smallImage1)
+            
+            self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 40)/2, y: 0, width: (UIScreen.main.bounds.width - 40)/2, height: 100)
+            self.smallImage2.contentMode = .scaleAspectFill
+            self.smallImage2.imageView?.contentMode = .scaleAspectFill
+            self.smallImage2.clipsToBounds = true
+            self.smallImage2.setImage(UIImage(data: status.image2 ?? Data()), for: .normal)
+            self.smallImage2.layer.masksToBounds = true
+            self.smallImage2.layer.borderColor = UIColor.black.cgColor
+            self.smallImage2.alpha = 1
+            self.mainImageView.addSubview(self.smallImage2)
+            
+            self.smallImage3.frame = CGRect(x: (UIScreen.main.bounds.width - 40)/2, y: 100, width: (UIScreen.main.bounds.width - 40)/2, height: 100)
+            self.smallImage3.contentMode = .scaleAspectFill
+            self.smallImage3.imageView?.contentMode = .scaleAspectFill
+            self.smallImage3.clipsToBounds = true
+            self.smallImage3.setImage(UIImage(data: status.image3 ?? Data()), for: .normal)
+            self.smallImage3.layer.masksToBounds = true
+            self.smallImage3.layer.borderColor = UIColor.black.cgColor
+            self.smallImage3.alpha = 1
+            self.mainImageView.addSubview(self.smallImage3)
+        } else if status.image2 != nil {
+            self.smallImage1.frame = CGRect(x: 0, y: 0, width: (UIScreen.main.bounds.width - 40)/2, height: 200)
+            self.smallImage1.contentMode = .scaleAspectFill
+            self.smallImage1.imageView?.contentMode = .scaleAspectFill
+            self.smallImage1.clipsToBounds = true
+            self.smallImage1.setImage(UIImage(data: status.image1 ?? Data()), for: .normal)
+            self.smallImage1.layer.masksToBounds = true
+            self.smallImage1.layer.borderColor = UIColor.black.cgColor
+            self.smallImage1.alpha = 1
+            self.mainImageView.addSubview(self.smallImage1)
+            
+            self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width - 40)/2, y: 0, width: (UIScreen.main.bounds.width - 40)/2, height: 200)
+            self.smallImage2.contentMode = .scaleAspectFill
+            self.smallImage2.imageView?.contentMode = .scaleAspectFill
+            self.smallImage2.clipsToBounds = true
+            self.smallImage2.setImage(UIImage(data: status.image2 ?? Data()), for: .normal)
+            self.smallImage2.layer.masksToBounds = true
+            self.smallImage2.layer.borderColor = UIColor.black.cgColor
+            self.smallImage2.alpha = 1
+            self.mainImageView.addSubview(self.smallImage2)
+        } else {
+            mainImageView.setImage(UIImage(data: status.image1 ?? Data()), for: .normal)
+        }
+        
+        
+        
+        mainImageView.layer.masksToBounds = true
+        mainImageView.layer.borderColor = UIColor.black.cgColor
+        if (UserDefaults.standard.object(forKey: "imCorner") == nil || UserDefaults.standard.object(forKey: "imCorner") as! Int == 0) {
+            mainImageView.layer.cornerRadius = 10
+        }
+        if (UserDefaults.standard.object(forKey: "imCorner") != nil && UserDefaults.standard.object(forKey: "imCorner") as! Int == 1) {
+            mainImageView.layer.cornerRadius = 0
+        }
+        
+        imageCountTag.isUserInteractionEnabled = false
+        imageCountTag.backgroundColor = Colours.clear
+        imageCountTag.alpha = 0
     }
     
 }

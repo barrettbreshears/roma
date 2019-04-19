@@ -200,7 +200,6 @@ class NewListViewController: UIViewController, UITextFieldDelegate {
                 DispatchQueue.main.async {
                     self.textView.resignFirstResponder()
                     self.dismiss(animated: true, completion: nil)
-                    print("created")
                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                         let notification = UINotificationFeedbackGenerator()
                         notification.notificationOccurred(.success)
@@ -224,7 +223,6 @@ class NewListViewController: UIViewController, UITextFieldDelegate {
                     DispatchQueue.main.async {
                     self.textView.resignFirstResponder()
                     self.dismiss(animated: true, completion: nil)
-                    print("edited")
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let notification = UINotificationFeedbackGenerator()
                             notification.notificationOccurred(.success)

@@ -161,12 +161,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             .messageTextAlignment(.left)
             .titleTextAlignment(.left)
             .action(.default("Hue Picker Wheel".localized), image: nil) { (action, ind) in
-                print(action, ind)
+                 
                 let controller = NewHuePickerViewController()
                 self.present(controller, animated: true, completion: nil)
             }
             .action(.default("Enter Hex Value Manually".localized), image: nil) { (action, ind) in
-                print(action, ind)
+                 
                 let controller = NewHexViewController()
                 self.present(controller, animated: true, completion: nil)
             }
@@ -353,9 +353,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         return vw
     }
     
-    var generalArray = ["Realtime Updates", "Push Notifications", "Haptic Feedback", "Always Display Sensitive Content", "Default Status Privacy", "Default Keyboard Style", "Long-Hold Anywhere Action", "Image Upload Quality", "Post Load Position", "Default Video Container", "Long Swipe Selection", "Swipe Action Order", "Default Mentions Tab", "Activity Graph", "Activity Graph Animation", "Status Actions Placement", "Display Boosts in Profiles", "Shake Gesture", "Initial Timeline", "User Search Scope", "Keyboard Haptics", "Jump to Top With New Post", "Thumb Scroller", "Link Previews", "Load More Order", "Automatically Load Gaps", "Default Profile Secondary Button", "Recent Media Swipe Type", "In-app Mentions Badge", "Direct Messages View Style"]
-    var generalArrayDesc = ["No need to refresh manually, you'll get the latest posts and notifications pushed to you.", "Realtime push notifications for mentions/follows/boosts/likes. Select which type of activities you'd like to receive notifications for.", "Get a responsive little vibration when tapping buttons and other on-screen elements.", "Sensitive content will always be displayed without a content warning overlay.", "Select a default privacy state for you posts, from public (everyone can see), unlisted (everyone apart from local and federated timelines can see), private (followers and mentioned users can see), and direct (only to the mentioned user).", "Choose from a convenient social keyboard that puts the @ and # keys front and centre, or the default keyboard with a return key.", "Select what happens when you long-hold anywhere in the app.", "Pick the quality of images uploaded when composing status. A higher quality image may take longer to upload.", "Choose whether to retain the timeline scroll position when streaming and pulling to refresh, or to scroll to the top.", "Choose whether to show videos and GIFs in a custom Picture-in-Picture container which can be swiped down to keep the view around, or in the stock media player, where swiping down dismisses the content.", "Swipe all the way left or right on a status to select the action on the edge.", "Select the order of swipe action elements.", "Switch to either show mentions or activity by default.", "Display an activity graph showing recent activity in the mentions tab.", "Animate the activity graph when showing it.", "Choose whether to display status actions on the status cell or behind a swipe. This will require restarting the app to take effect.", "Display reposted statuses  in the Posts & Replies section of user profiles.", "Select whether to hide sensitive content, rain confetti, or do nothing when shaking your device.", "Pick the initial timeline to be displayed, whether it's home, local, or all.", "Pick whether searching for users is across all of Mastodon or just local.", "Set haptic feedback for key presses on the keyboard.", "Pick whether posting a new stauts jumps the timeline to the top.", "Display a circular thumb scroller on timelines, which allows you to rotate the scroller with your thumb to navigate through timelines without lifting a finger. This may require restarting the app to take effect.", "Choose whether to display link preview cards in status details for all links within the status.", "Select whether tapping the 'load more' button in timelines retains the current scroll position (allowing the new posts to be read downwards), or whether it shifts you to just below the newly loaded posts (allowing the new posts to be read upwards).", "Automatically fetch gaps in between timelines, removing the need to tap the 'load more' buttons.", "Select what action the secondary profile button (on the left of the profile image) should do: View liked statuses or view pinned statuses.", "Pick whether swiping enlarged recent media images scrolls through all attached media in the specified post and does nothing if there's a single image, or whether it scrolls through all recent media.", "Display a badge on the mentions tab icon when receiving a new notification whilst in the app.", "Choose whether to open direct messages in the mentions tab in a chat-style view or a status-style view."]
-    var generalArrayIm = ["setreal", "notifs", "sethap", "setsensitivec", "priv", "keybse", "holdse", "comse", "posse", "setvid", "swipeact", "swipeact3", "actdef", "setgraph", "setgraph2", "like", "boost", "setshake", "segse", "searchscope", "keyhap", "jumptop", "circscroll", "linkcard", "lmore", "autol", "likepin", "comse", "notifs0", "direct2"]
+    var generalArray = ["Realtime Updates", "Push Notifications", "Haptic Feedback", "Always Display Sensitive Content", "Default Status Privacy", "Default Keyboard Style", "Long-Hold Anywhere Action", "Image Upload Quality", "Post Load Position", "Default Video Container", "Long Swipe Selection", "Swipe Action Order", "Default Mentions Tab", "Activity Graph", "Activity Graph Animation", "Status Actions Placement", "Display Boosts in Profiles", "Shake Gesture", "Initial Timeline", "User Search Scope", "Keyboard Haptics", "Jump to Top With New Post", "Thumb Scroller", "Link Previews", "Load More Order", "Automatically Load Gaps", "Default Profile Secondary Button", "Recent Media Swipe Type", "In-app Mentions Badge", "Direct Messages View Style", "Links Destination"]
+    var generalArrayDesc = ["No need to refresh manually, you'll get the latest posts and notifications pushed to you.", "Realtime push notifications for mentions/follows/boosts/likes. Select which type of activities you'd like to receive notifications for.", "Get a responsive little vibration when tapping buttons and other on-screen elements.", "Sensitive content will always be displayed without a content warning overlay.", "Select a default privacy state for you posts, from public (everyone can see), unlisted (everyone apart from local and federated timelines can see), private (followers and mentioned users can see), and direct (only to the mentioned user).", "Choose from a convenient social keyboard that puts the @ and # keys front and centre, or the default keyboard with a return key.", "Select what happens when you long-hold anywhere in the app.", "Pick the quality of images uploaded when composing status. A higher quality image may take longer to upload.", "Choose whether to retain the timeline scroll position when streaming and pulling to refresh, or to scroll to the top.", "Choose whether to show videos and GIFs in a custom Picture-in-Picture container which can be swiped down to keep the view around, or in the stock media player, where swiping down dismisses the content.", "Swipe all the way left or right on a status to select the action on the edge.", "Select the order of swipe action elements.", "Switch to either show mentions or activity by default.", "Display an activity graph showing recent activity in the mentions tab.", "Animate the activity graph when showing it.", "Choose whether to display status actions on the status cell or behind a swipe. This will require restarting the app to take effect.", "Display reposted statuses  in the Posts & Replies section of user profiles.", "Select whether to hide sensitive content, rain confetti, or do nothing when shaking your device.", "Pick the initial timeline to be displayed, whether it's home, local, or all.", "Pick whether searching for users is across all of Mastodon or just local.", "Set haptic feedback for key presses on the keyboard.", "Pick whether posting a new stauts jumps the timeline to the top.", "Display a circular thumb scroller on timelines, which allows you to rotate the scroller with your thumb to navigate through timelines without lifting a finger. This may require restarting the app to take effect.", "Choose whether to display link preview cards in status details for all links within the status.", "Select whether tapping the 'load more' button in timelines retains the current scroll position (allowing the new posts to be read downwards), or whether it shifts you to just below the newly loaded posts (allowing the new posts to be read upwards).", "Automatically fetch gaps in between timelines, removing the need to tap the 'load more' buttons.", "Select what action the secondary profile button (on the left of the profile image) should do: View liked statuses or view pinned statuses.", "Pick whether swiping enlarged recent media images scrolls through all attached media in the specified post and does nothing if there's a single image, or whether it scrolls through all recent media.", "Display a badge on the mentions tab icon when receiving a new notification whilst in the app.", "Choose whether to open direct messages in the mentions tab in a chat-style view or a status-style view.", "Pick whether to open links in-app, or in Safari."]
+    var generalArrayIm = ["setreal", "notifs", "sethap", "setsensitivec", "priv", "keybse", "holdse", "comse", "posse", "setvid", "swipeact", "swipeact3", "actdef", "setgraph", "setgraph2", "like", "boost", "setshake", "segse", "searchscope", "keyhap", "jumptop", "circscroll", "linkcard", "lmore", "autol", "likepin", "comse", "notifs0", "direct2",  "schemes"]
     
     var appearanceArray = ["", "Theme", "Text Size", "Profiles Corner Radius", "Images Corner Radius", "Hide Images in Timelines", "Full Usernames", "Confetti", "Gallery Grid Size", "Time Style", "Profile Header Background", "Segments Size", "Segments Transition Style", "Subtle Activity Notifications", "Profile Display Picture Border", "Pinch and History View Background Theme", "Media Captions", "Status Progress Indicator", "Highlight Direct Messages", "Post Bar Hue", "Activity Graph Hue", "Segments Hue", "Instances and Lists Icon", "Profile Display Picture in Status Composition", "Popup Alerts", "Full Usernames in Boosts"]
     var appearanceArrayDesc = ["", "Select from a white day theme, a dark dusk theme, an even darker night theme, or a truly black OLED-friendly theme.", "Always be able to read posts with adjustable text sizing.", "Circle or square, your choice.", "Rounded or not, your choice.", "Timelines with some plain old text, for a distraction-free browsing experience.", "Display the user's full username, with the instance, in posts.", "Add some fun to posting statuses, following users, reposting statuses, and liking statuses.", "Set the amount of columns in the status composition section's photo picker gallery.", "Pick between absolute or relative time to display in timelines.", "Change the style of the profile header background.", "Choose from larger home and notification screen segments, or tinier ones.", "Pick between a static and linear transition, or a playful liquid one.", "Dims activity notifications, while keeping mentions untouched.", "Select a size for the border around profile view display pictures.", "Select a theme for the background when pinching to status a screenshot, or when long-holding a back button to enter the history view.", "Pick whether to display the status text or the image's alt text in media captions.", "Choose whether to show the status progress indicator or not.", "Highlight direct messages in timelines with a subtle, distinct, or theme background.", "Select the hue for the keyboard bar when composing statuses.", "Select the hue for the activity graph columns.", "Select the hue for segments. This may require restarting the app to take effect.", "Select an icon to use for the top-left instances and list section icon.", "Choose whether to display the current account's display picture in the top-left when composing statuses.", "Pick whether to display popup alerts for a variety of actions including posting, liking, and reposting.", "Display the user's full username in boosts."]
@@ -684,7 +684,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             return cell
         } else if indexPath.section == 1 {
             
-            if indexPath.row == 1 || indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9 || indexPath.row == 11 || indexPath.row == 12 || indexPath.row == 15 || indexPath.row == 17 || indexPath.row == 18 || indexPath.row == 19 || indexPath.row == 20 || indexPath.row == 24 || indexPath.row == 26 || indexPath.row == 27 || indexPath.row == 29 {
+            if indexPath.row == 1 || indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7 || indexPath.row == 8 || indexPath.row == 9 || indexPath.row == 11 || indexPath.row == 12 || indexPath.row == 15 || indexPath.row == 17 || indexPath.row == 18 || indexPath.row == 19 || indexPath.row == 20 || indexPath.row == 24 || indexPath.row == 26 || indexPath.row == 27 || indexPath.row == 29 || indexPath.row == 30 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellse", for: indexPath) as! SettingsCell
                 cell.configure(status: self.generalArray[indexPath.row], status2: self.generalArrayDesc[indexPath.row], image: self.generalArrayIm[indexPath.row])
                 cell.backgroundColor = Colours.white
@@ -1195,7 +1195,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        
         self.tableView.deselectRow(at: indexPath, animated: true)
 
         if indexPath.section == 1 {
@@ -1236,7 +1236,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Mentions".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         if (UserDefaults.standard.object(forKey: "pnmentions") == nil) || (UserDefaults.standard.object(forKey: "pnmentions") as! Bool == true) {
                             UserDefaults.standard.set(false, forKey: "pnmentions")
                             UIApplication.shared.registerForRemoteNotifications()
@@ -1246,7 +1246,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         }
                     }
                     .action(.default("Likes".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         if (UserDefaults.standard.object(forKey: "pnlikes") == nil) || (UserDefaults.standard.object(forKey: "pnlikes") as! Bool == true) {
                             UserDefaults.standard.set(false, forKey: "pnlikes")
                             UIApplication.shared.registerForRemoteNotifications()
@@ -1256,7 +1256,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         }
                     }
                     .action(.default("Boosts".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         if (UserDefaults.standard.object(forKey: "pnboosts") == nil) || (UserDefaults.standard.object(forKey: "pnboosts") as! Bool == true) {
                             UserDefaults.standard.set(false, forKey: "pnboosts")
                             UIApplication.shared.registerForRemoteNotifications()
@@ -1266,7 +1266,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         }
                     }
                     .action(.default("Follows".localized), image: filledSet4) { (action, ind) in
-                        print(action, ind)
+                         
                         if (UserDefaults.standard.object(forKey: "pnfollows") == nil) || (UserDefaults.standard.object(forKey: "pnfollows") as! Bool == true) {
                             UserDefaults.standard.set(false, forKey: "pnfollows")
                             UIApplication.shared.registerForRemoteNotifications()
@@ -1322,19 +1322,19 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Public - Post to public timelines".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "privToot")
                     }
                     .action(.default("Unlisted - Do not post to public timelines".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "privToot")
                     }
                     .action(.default("Private - Post only to followers".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(2, forKey: "privToot")
                     }
                     .action(.default("Direct - Post to mentioned users only".localized), image: filledSet4) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(3, forKey: "privToot")
                     }
                     .action(.cancel("Dismiss"))
@@ -1371,11 +1371,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Social".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "keyb")
                     }
                     .action(.default("Default".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "keyb")
                     }
                     .action(.cancel("Dismiss"))
@@ -1449,27 +1449,27 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Cycle Through Themes".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "longToggle")
                     }
                     .action(.default("Invoke Lists".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "longToggle")
                     }
                     .action(.default("Invoke Search".localized), image: filledSet5) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(4, forKey: "longToggle")
                     }
                     .action(.default("Invoke Toot Composer".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(2, forKey: "longToggle")
                     }
                     .action(.default("Rain Confetti".localized), image: filledSet4) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(3, forKey: "longToggle")
                     }
                     .action(.default("Do Nothing".localized), image: filledSet6) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(6, forKey: "longToggle")
                     }
                     .action(.cancel("Dismiss"))
@@ -1511,15 +1511,15 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Low".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(2, forKey: "imqual")
                     }
                     .action(.default("Average".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "imqual")
                     }
                     .action(.default("High".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "imqual")
                     }
                     .action(.cancel("Dismiss"))
@@ -1550,11 +1550,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Retain Scroll Position".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "posset")
                     }
                     .action(.default("Scroll to the Top".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "posset")
                     }
                     .action(.cancel("Dismiss"))
@@ -1585,11 +1585,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Stock Video Player".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "vidgif")
                     }
                     .action(.default("Custom Picture-in-Picture".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "vidgif")
                     }
                     .action(.cancel("Dismiss"))
@@ -1660,27 +1660,27 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Reply Like Boost".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "sworder")
                     }
                     .action(.default("Reply Boost Like".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "sworder")
                     }
                     .action(.default("Boost Reply Like".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(2, forKey: "sworder")
                     }
                     .action(.default("Boost Like Reply".localized), image: filledSet4) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(3, forKey: "sworder")
                     }
                     .action(.default("Like Reply Boost".localized), image: filledSet5) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(4, forKey: "sworder")
                     }
                     .action(.default("Like Boost Reply".localized), image: filledSet6) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(5, forKey: "sworder")
                     }
                     .action(.cancel("Dismiss"))
@@ -1711,11 +1711,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("@You".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "mentdef2")
                     }
                     .action(.default("Activity".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "mentdef2")
                     }
                     .action(.cancel("Dismiss"))
@@ -1747,12 +1747,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Swipe Cells to Display Actions".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "tootpl")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
                     .action(.default("Actions on Status Cells".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "tootpl")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
@@ -1792,15 +1792,15 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Hide Sensitive Content".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "shakegest")
                     }
                     .action(.default("Rain Confetti".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "shakegest")
                     }
                     .action(.default("Do Nothing".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(2, forKey: "shakegest")
                     }
                     .action(.cancel("Dismiss"))
@@ -1839,17 +1839,17 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Home".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         StoreStruct.initTimeline = false
                         UserDefaults.standard.set(0, forKey: "inittimeline")
                     }
                     .action(.default("Local".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         StoreStruct.initTimeline = false
                         UserDefaults.standard.set(1, forKey: "inittimeline")
                     }
                     .action(.default("All".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         StoreStruct.initTimeline = false
                         UserDefaults.standard.set(2, forKey: "inittimeline")
                     }
@@ -1882,12 +1882,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("All".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         StoreStruct.initTimeline = false
                         UserDefaults.standard.set(0, forKey: "searchsco")
                     }
                     .action(.default("Local".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         StoreStruct.initTimeline = false
                         UserDefaults.standard.set(1, forKey: "searchsco")
                     }
@@ -1927,15 +1927,15 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Disabled".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "keyhap")
                     }
                     .action(.default("Mild".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "keyhap")
                     }
                     .action(.default("Wild".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(2, forKey: "keyhap")
                     }
                     .action(.cancel("Dismiss"))
@@ -1967,11 +1967,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Retain Scroll".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "lmore1")
                     }
                     .action(.default("Jump Below New Toots".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "lmore1")
                     }
                     .action(.cancel("Dismiss"))
@@ -2010,17 +2010,17 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Liked".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "likepin")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
                     }
                     .action(.default("Pinned".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "likepin")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
                     }
                     .action(.default("Edit Profile".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(2, forKey: "likepin")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
                     }
@@ -2053,11 +2053,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Swipe Attached Images".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "swrece")
                     }
                     .action(.default("Swipe Recent Media".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "swrece")
                     }
                     .action(.cancel("Dismiss"))
@@ -2089,12 +2089,48 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Chat Style".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "dmchats")
                     }
                     .action(.default("Toot Style".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "dmchats")
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 1))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+            if indexPath.row == 30 {
+                // link destination
+                
+                var filledSet1 = UIImage(named: "unfilledset")
+                var filledSet2 = UIImage(named: "unfilledset")
+                if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
+                    filledSet1 = UIImage(named: "filledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "linkdest") as! Int == 1) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "filledset")
+                }
+                
+                Alertift.actionSheet(title: title, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("In-app".localized), image: filledSet1) { (action, ind) in
+                         
+                        UserDefaults.standard.set(0, forKey: "linkdest")
+                    }
+                    .action(.default("Safari".localized), image: filledSet2) { (action, ind) in
+                         
+                        UserDefaults.standard.set(1, forKey: "linkdest")
                     }
                     .action(.cancel("Dismiss"))
                     .finally { action, index in
@@ -2158,23 +2194,23 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Day".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "light"), object: self)
                     }
                     .action(.default("Dusk".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "night"), object: self)
                     }
                     .action(.default("Night".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "night2"), object: self)
                     }
                     .action(.default("Midnight".localized), image: filledSet4) { (action, ind) in
-                        print(action, ind)
+                         
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "black"), object: self)
                     }
                     .action(.default("Midnight Blue".localized), image: filledSet5) { (action, ind) in
-                        print(action, ind)
+                         
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "midblue"), object: self)
                     }
                     .action(.cancel("Dismiss"))
@@ -2280,48 +2316,48 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("System Text Size".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "systemText")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
                     .action(.default("8 Points".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "systemText")
                         UserDefaults.standard.set(0, forKey: "fontSize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
                     .action(.default("9 Points".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "systemText")
                         UserDefaults.standard.set(1, forKey: "fontSize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
                     .action(.default("10 Points".localized), image: filledSet4) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "systemText")
                         UserDefaults.standard.set(2, forKey: "fontSize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
                     .action(.default("11 Points".localized), image: filledSet5) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "systemText")
                         UserDefaults.standard.set(3, forKey: "fontSize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
                     .action(.default("12 Points".localized), image: filledSet6) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "systemText")
                         UserDefaults.standard.set(4, forKey: "fontSize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
                     .action(.default("13 Points".localized), image: filledSet7) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "systemText")
                         UserDefaults.standard.set(5, forKey: "fontSize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
                     .action(.default("14 Points".localized), image: filledSet8) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "systemText")
                         UserDefaults.standard.set(6, forKey: "fontSize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
@@ -2365,17 +2401,17 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Circle".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "proCorner")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: self)
                     }
                     .action(.default("Rounded Square".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "proCorner")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: self)
                     }
                     .action(.default("Square".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(2, forKey: "proCorner")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: self)
                     }
@@ -2407,12 +2443,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Rounded Rectangle".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "imCorner")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: self)
                     }
                     .action(.default("Rectangle".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "imCorner")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: self)
                     }
@@ -2452,15 +2488,15 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("2 Column Grid".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(2, forKey: "colgrid")
                     }
                     .action(.default("3 Column Grid".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "colgrid")
                     }
                     .action(.default("4 Column Grid".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "colgrid")
                     }
                     .action(.cancel("Dismiss"))
@@ -2491,12 +2527,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Absolute".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "timerel")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: self)
                     }
                     .action(.default("Relative".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "timerel")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: self)
                     }
@@ -2535,17 +2571,17 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Light".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(2, forKey: "headbg1")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
                     .action(.default("Regular".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "headbg1")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
                     .action(.default("Dark".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(3, forKey: "headbg1")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
@@ -2578,12 +2614,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Small".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "segsize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "changeSeg"), object: self)
                     }
                     .action(.default("Large".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "segsize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "changeSeg"), object: self)
                     }
@@ -2615,12 +2651,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Static".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "segstyle")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "changeSeg"), object: self)
                     }
                     .action(.default("Liquid".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "segstyle")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "changeSeg"), object: self)
                     }
@@ -2664,17 +2700,17 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("None".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "bord")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
                     .action(.default("Mild".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "bord")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
                     .action(.default("Wild".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(2, forKey: "bord")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
@@ -2736,23 +2772,23 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Theme".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "screenshotcol")
                     }
                     .action(.default("Dusk".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "screenshotcol")
                     }
                     .action(.default("Night".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(2, forKey: "screenshotcol")
                     }
                     .action(.default("Midnight".localized), image: filledSet4) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(3, forKey: "screenshotcol")
                     }
                     .action(.default("Midnight Blue".localized), image: filledSet5) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(4, forKey: "screenshotcol")
                     }
                     .action(.cancel("Dismiss"))
@@ -2792,15 +2828,15 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Status Text".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "captionset")
                     }
                     .action(.default("Image Alt Text".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "captionset")
                     }
                     .action(.default("No Caption".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(2, forKey: "captionset")
                     }
                     .action(.cancel("Dismiss"))
@@ -2832,11 +2868,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Hidden".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "progprogprogprog")
                     }
                     .action(.default("Displayed".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "progprogprogprog")
                     }
                     .action(.cancel("Dismiss"))
@@ -2884,19 +2920,19 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("None".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "dmTog")
                     }
                     .action(.default("Subtle".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "dmTog")
                     }
                     .action(.default("Distinct".localized), image: filledSet3) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(2, forKey: "dmTog")
                     }
                     .action(.default("Theme".localized), image: filledSet4) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(3, forKey: "dmTog")
                     }
                     .action(.cancel("Dismiss"))
@@ -2928,11 +2964,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Theme Hue".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "barhue1")
                     }
                     .action(.default("Subtle".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "barhue1")
                     }
                     .action(.cancel("Dismiss"))
@@ -2964,11 +3000,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Theme Hue".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "acthue1")
                     }
                     .action(.default("Subtle".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "acthue1")
                     }
                     .action(.cancel("Dismiss"))
@@ -3000,11 +3036,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Theme Hue".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "seghue1")
                     }
                     .action(.default("Subtle".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "seghue1")
                     }
                     .action(.cancel("Dismiss"))
@@ -3036,11 +3072,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("List Icon".localized), image: filledSet1) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(0, forKey: "insicon1")
                     }
                     .action(.default("Profile Icon".localized), image: filledSet2) { (action, ind) in
-                        print(action, ind)
+                         
                         UserDefaults.standard.set(1, forKey: "insicon1")
                     }
                     .action(.cancel("Dismiss"))
@@ -3094,7 +3130,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Developer Mastodon".localized)) { (action, ind) in
-                        print(action, ind)
+                         
                         
                         
 //                        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -3122,12 +3158,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
 //                        let request = Accounts.follow(id: "107304")
 //                        StoreStruct.client.run(request) { (statuses) in
 //                            if let _ = (statuses.value) {
-//                                print("followed")
+//                                
 //                            }
 //                        }
                     }
                     .action(.default("Developer Twitter".localized)) { (action, ind) in
-                        print(action, ind)
+                         
                         let twUrl = URL(string: "twitter://user?screen_name=JPEGuin")!
                         let twUrlWeb = URL(string: "https://www.twitter.com/JPEGuin")!
                         if UIApplication.shared.canOpenURL(twUrl) {
@@ -3135,16 +3171,20 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         } else {
                             UIApplication.shared.open(twUrlWeb, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: twUrlWeb)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(twUrlWeb)
+                                    }
                                 }
                             }
                         }
                     }
                     .action(.default("Mast Twitter".localized)) { (action, ind) in
-                        print(action, ind)
+                         
                         let twUrl = URL(string: "twitter://user?screen_name=TheMastApp")!
                         let twUrlWeb = URL(string: "https://www.twitter.com/TheMastApp")!
                         if UIApplication.shared.canOpenURL(twUrl) {
@@ -3152,10 +3192,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                         } else {
                             UIApplication.shared.open(twUrlWeb, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
+                                    if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
                                     self.safariVC = SFSafariViewController(url: twUrlWeb)
                                     self.safariVC?.preferredBarTintColor = Colours.white
                                     self.safariVC?.preferredControlTintColor = Colours.tabSelected
                                     self.present(self.safariVC!, animated: true, completion: nil)
+                                    } else {
+                                        UIApplication.shared.openURL(twUrlWeb)
+                                    }
                                 }
                             }
                         }
@@ -3245,23 +3289,22 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
                     .action(.default("Switch".localized), image: UIImage(named: "profile")) { (action, ind) in
-                        print(action, ind)
-
-
-                        InstanceData.setCurrentInstance(instance: instances[indexPath.row])
-
+                         
+                        
+                        
+                        
                         DispatchQueue.main.async {
-
+                            
+                            InstanceData.setCurrentInstance(instance: instances[indexPath.row])
                             let appDelegate = UIApplication.shared.delegate as! AppDelegate
                             appDelegate.reloadApplication()
-
-
+                            
                         }
 
                     }
                     .action(.default("Remove".localized), image: UIImage(named: "block")) { (action, ind) in
-                        print(action, ind)
-
+                         
+                        
                         var instance = InstanceData.getAllInstances()
                         var account = Account.getAccounts()
                         account.remove(at: indexPath.row)

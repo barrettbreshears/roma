@@ -18,7 +18,7 @@ class TootController: WKInterfaceController {
     @IBAction func tappedToot() {
         let request0 = Statuses.create(status: StoreStruct.tootText, replyToID: StoreStruct.replyID, mediaIDs: [], sensitive: false, spoilerText: nil, visibility: .public)
         StoreStruct.client.run(request0) { (statuses) in
-            print(statuses)
+             
             StoreStruct.replyID = ""
         }
         self.dismiss()

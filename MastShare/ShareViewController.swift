@@ -138,9 +138,8 @@ class ShareViewController: UIViewController, UITextViewDelegate {
                            animations: {
                             self.viewBG.frame = CGRect(x: 0, y: UIScreen.main.bounds.size.height, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height)
                             self.bgView.frame = CGRect(x: 0, y: Int(UIScreen.main.bounds.size.height), width: Int(UIScreen.main.bounds.size.width), height: Int(self.keyHeight) + 50)
-            }, completion: { test in
-                self.extensionContext?.cancelRequest(withError: NSError())
-            })
+                            self.extensionContext?.cancelRequest(withError: NSError())
+            }, completion: nil)
         }
     }
     
