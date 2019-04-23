@@ -2363,7 +2363,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     }
                 }
-                .action(.default("Toot Filters".localized), image: UIImage(named: "filters")) { (action, ind) in
+                .action(.default("Status Filters".localized), image: UIImage(named: "filters")) { (action, ind) in
                      
                     
                     let request = FilterToots.all()
@@ -2378,7 +2378,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     }
                 }
-                .action(.default("Scheduled Toots"), image: UIImage(named: "scheduled")) { (action, ind) in
+                .action(.default("Scheduled Posts"), image: UIImage(named: "scheduled")) { (action, ind) in
                      
                     
                     let request = Statuses.allScheduled()

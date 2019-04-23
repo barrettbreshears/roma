@@ -2859,9 +2859,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             let statusAlert = StatusAlert()
             statusAlert.image = UIImage(named: "boostlarge")?.maskWithColor(color: Colours.grayDark)
-            statusAlert.title = "Unboosted".localized
+            statusAlert.title = "Un reposted".localized
             statusAlert.contentColor = Colours.grayDark
-            statusAlert.message = "Toot"
+            statusAlert.message = "Status"
             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
                 statusAlert.show()
             }
@@ -2884,9 +2884,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
             let statusAlert = StatusAlert()
             statusAlert.image = UIImage(named: "boostlarge")?.maskWithColor(color: Colours.grayDark)
-            statusAlert.title = "Boosted".localized
+            statusAlert.title = "Reposted".localized
             statusAlert.contentColor = Colours.grayDark
-            statusAlert.message = "Toot"
+            statusAlert.message = "Status"
             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
                 statusAlert.show()
             }
