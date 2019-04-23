@@ -29,9 +29,9 @@ class RepliesCellImage: SwipeTableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        profileImageView.backgroundColor = Colours.white
-        moreImage.backgroundColor = Colours.white
+        
+        profileImageView.backgroundColor = Colours.clear
+        moreImage.backgroundColor = Colours.clear
         
 //        userName.adjustsFontForContentSizeCategory = true
 //        userTag.titleLabel?.adjustsFontForContentSizeCategory = true
@@ -65,9 +65,9 @@ class RepliesCellImage: SwipeTableViewCell {
             mainImageView.layer.cornerRadius = 0
         }
         mainImageView.layer.masksToBounds = true
-        mainImageView.backgroundColor = Colours.white
+        mainImageView.backgroundColor = Colours.clear
         mainImageViewBG.layer.cornerRadius = 10
-        mainImageViewBG.backgroundColor = Colours.white
+        mainImageViewBG.backgroundColor = Colours.clear
         mainImageViewBG.layer.shadowColor = UIColor.black.cgColor
         mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 7)
         mainImageViewBG.layer.shadowRadius = 10

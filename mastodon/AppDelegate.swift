@@ -94,13 +94,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         }
     }
     
-    func application(_ application: UIApplication, shouldSaveApplicationState coder: NSCoder) -> Bool {
-        return true
-    }
-    
-    func application(_ application: UIApplication, shouldRestoreApplicationState coder: NSCoder) -> Bool {
-        return true
-    }
+//    func application(_ application: UIApplication, shouldSaveApplicationState coder: NSCoder) -> Bool {
+//        return true
+//    }
+//
+//    func application(_ application: UIApplication, shouldRestoreApplicationState coder: NSCoder) -> Bool {
+//        return true
+//    }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
@@ -257,7 +257,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                 print("Response ==> \(url.absoluteString)")
                 let x = url.absoluteString
                 let y = x.split(separator: "=")
-                StoreStruct.shared.currentInstance.authCode = y[1].description
+                StoreStruct.shared.currentInstance.authCode = y.last?.description ?? ""
                 if StoreStruct.tappedSignInCheck == false {
                     StoreStruct.tappedSignInCheck = true
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)

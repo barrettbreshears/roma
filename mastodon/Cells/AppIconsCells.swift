@@ -76,10 +76,7 @@ class AppIconsCells: UITableViewCell, UICollectionViewDelegate, UICollectionView
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionAppCell", for: indexPath) as! CollectionAppCell
         
-        cell.configure()
-        
         cell.image.contentMode = .scaleAspectFill
-        
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
@@ -95,12 +92,6 @@ class AppIconsCells: UITableViewCell, UICollectionViewDelegate, UICollectionView
         cell.image.layer.cornerRadius = 15
         cell.image.layer.masksToBounds = true
         cell.image.layer.borderColor = UIColor.black.cgColor
-        //cell.image.layer.borderWidth = 0.2
-        
-//        cell.image.frame.size.width = 60
-//        cell.image.frame.size.height = 60
-//        cell.bgImage.frame.size.width = 60
-//        cell.bgImage.frame.size.height = 60
         
         cell.image.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
         cell.bgImage.frame = CGRect(x: 0, y: 0, width: 80, height: 80)
@@ -116,6 +107,8 @@ class AppIconsCells: UITableViewCell, UICollectionViewDelegate, UICollectionView
         cell.frame.size.height = 80
         
         cell.backgroundColor = Colours.clear
+        
+        cell.configure()
         
         return cell
     }

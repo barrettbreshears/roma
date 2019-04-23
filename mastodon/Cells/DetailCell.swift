@@ -23,7 +23,7 @@ class DetailCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        profileImageView.backgroundColor = Colours.white
+        profileImageView.backgroundColor = Colours.clear
         
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         userName.translatesAutoresizingMaskIntoConstraints = false

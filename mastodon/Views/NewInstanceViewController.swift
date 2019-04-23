@@ -148,7 +148,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
                         self.tagListView.addTag(tag: tag)
                         self.tagListView.singleLine = true
                         springWithDelay(duration: 0.5, delay: 0, animations: {
-                            self.tagListView.alpha = 1
+                            self.tagListView.alpha = 0
                         })
                     }
                 }

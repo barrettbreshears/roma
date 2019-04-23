@@ -50,10 +50,10 @@ struct StoreStruct {
                            UIColor.clear]
     
     static var client = Client(baseURL: StoreStruct.shared.currentInstance.returnedText, accessToken:StoreStruct.shared.currentInstance.accessToken)
-    var currentInstance:InstanceData = InstanceData.getCurrentInstance() ?? InstanceData()
-    var allInstances:[InstanceData] = InstanceData.getAllInstances()
+    var currentInstance: InstanceData = InstanceData.getCurrentInstance() ?? InstanceData()
+    var allInstances: [InstanceData] = InstanceData.getAllInstances()
     var newClient = Client(baseURL: "")
-    var newInstance:InstanceData?
+    var newInstance: InstanceData?
     static var currentPage = 0
     static var playerID = ""
     

@@ -24,7 +24,7 @@ class SearchFeedCell: SwipeTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        profileImageView.backgroundColor = Colours.white
+        profileImageView.backgroundColor = Colours.clear
         profileImageView2.backgroundColor = Colours.clear
         warningB.backgroundColor = Colours.clear
         moreImage.backgroundColor = Colours.clear
@@ -62,9 +62,16 @@ class SearchFeedCell: SwipeTableViewCell {
         warningB.titleLabel?.textAlignment = .center
         warningB.setTitleColor(Colours.black.withAlphaComponent(0.4), for: .normal)
         warningB.layer.cornerRadius = 7
-        warningB.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
+        warningB.titleLabel?.font = UIFont.boldSystemFont(ofSize: Colours.fontSize3)
         warningB.titleLabel?.numberOfLines = 0
         warningB.layer.masksToBounds = true
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = warningB.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurEffectView.isUserInteractionEnabled = false
+        warningB.addSubview(blurEffectView)
+        warningB.sendSubviewToBack(blurEffectView)
         
         userName.numberOfLines = 0
         userTag.numberOfLines = 0
@@ -352,14 +359,15 @@ class SearchFeedCell: SwipeTableViewCell {
         if (UserDefaults.standard.object(forKey: "senseTog") == nil) || (UserDefaults.standard.object(forKey: "senseTog") as! Int == 0) {
             
             if status.reblog?.sensitive ?? false || status.sensitive ?? false {
-                warningB.backgroundColor = Colours.tabUnselected
+                warningB.backgroundColor = Colours.clear
+                
                 let z = status.reblog?.spoilerText ?? status.spoilerText
-                var zz = "Content Warning"
+                var zz = "Sensitive Content"
                 if z == "" {} else {
                     zz = z
                 }
-                warningB.setTitle("\(zz)\n\nTap to show toot", for: .normal)
-                warningB.setTitleColor(Colours.black.withAlphaComponent(0.4), for: .normal)
+                warningB.setTitle("\(zz)", for: .normal)
+                warningB.setTitleColor(Colours.white, for: .normal)
                 warningB.addTarget(self, action: #selector(self.didTouchWarning), for: .touchUpInside)
                 warningB.alpha = 1
             } else {

@@ -22,8 +22,8 @@ class RepliesCell: SwipeTableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        profileImageView.backgroundColor = Colours.white
-        moreImage.backgroundColor = Colours.white
+        profileImageView.backgroundColor = Colours.clear
+        moreImage.backgroundColor = Colours.clear
         
 //        userName.adjustsFontForContentSizeCategory = true
 //        userTag.titleLabel?.adjustsFontForContentSizeCategory = true

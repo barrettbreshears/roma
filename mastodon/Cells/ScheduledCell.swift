@@ -139,9 +139,9 @@ class ScheduledCellImage: SwipeTableViewCell {
             mainImageView.layer.cornerRadius = 0
         }
         mainImageView.layer.masksToBounds = true
-        mainImageView.backgroundColor = Colours.white
+        mainImageView.backgroundColor = Colours.clear
         mainImageViewBG.layer.cornerRadius = 10
-        mainImageViewBG.backgroundColor = Colours.white
+        mainImageViewBG.backgroundColor = Colours.clear
         mainImageViewBG.layer.shadowColor = UIColor.black.cgColor
         mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 7)
         mainImageViewBG.layer.shadowRadius = 10

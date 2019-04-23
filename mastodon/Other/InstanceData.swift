@@ -9,18 +9,17 @@
 import UIKit
 import Disk
 
-class InstanceData:Codable {
+class InstanceData: Codable {
     
     var redirect: String
-    var clientID:String
-    var clientSecret:String
-    var authCode:String
-    var accessToken:String
-    var returnedText:String
-    var instanceText:String
+    var clientID: String
+    var clientSecret: String
+    var authCode: String
+    var accessToken: String
+    var returnedText: String
+    var instanceText: String
     
-    
-    init(clientID:String = "", clientSecret:String = "", authCode:String = "", accessToken:String = "", returnedText:String = "", instanceText:String = "", redirect:String = "") {
+    init(clientID: String = "", clientSecret: String = "", authCode: String = "", accessToken: String = "", returnedText: String = "", instanceText: String = "", redirect: String = "") {
         self.clientID = clientID
         self.clientSecret = clientSecret
         self.authCode = authCode
@@ -31,31 +30,20 @@ class InstanceData:Codable {
     }
     
     static func getAllInstances() -> [InstanceData] {
-        
         guard let instaceData = UserDefaults.standard.object(forKey: "instances") as? Data, let instances = try? PropertyListDecoder().decode(Array<InstanceData>.self, from: instaceData) else {
             return [InstanceData]()
         }
-        
-        
         return instances
-        
     }
-    
-    
     
     static func getCurrentInstance() -> InstanceData? {
-        
-        guard let instanceData = UserDefaults.standard.data(forKey: "currentInstance"),  let instance = try? JSONDecoder().decode(InstanceData.self, from: instanceData) else {
+        guard let instanceData = UserDefaults.standard.data(forKey: "currentInstance"), let instance = try? JSONDecoder().decode(InstanceData.self, from: instanceData) else {
             return nil
         }
-    
         return instance
-    
-    
     }
     
-    static func setCurrentInstance(instance:InstanceData) {
-        
+    static func setCurrentInstance(instance: InstanceData) {
         guard let instanceData = try? JSONEncoder().encode(instance) else {
            return
         }
@@ -77,9 +65,6 @@ class InstanceData:Codable {
         StoreStruct.notifications = []
         StoreStruct.notificationsMentions = []
         StoreStruct.shared.currentInstance = instance
-        
-        
-        
     }
     
     static func clearInstances() {

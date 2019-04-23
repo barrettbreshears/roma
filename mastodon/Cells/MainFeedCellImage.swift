@@ -36,11 +36,11 @@ class MainFeedCellImage: SwipeTableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-
-        profileImageView.backgroundColor = Colours.white
-        profileImageView2.backgroundColor = Colours.white
-        warningB.backgroundColor = Colours.white
-        moreImage.backgroundColor = Colours.white
+        
+        profileImageView.backgroundColor = Colours.clear
+        profileImageView2.backgroundColor = Colours.clear
+        warningB.backgroundColor = Colours.clear
+        moreImage.backgroundColor = Colours.clear
         
 //        userName.adjustsFontForContentSizeCategory = true
 //        userTag.titleLabel?.adjustsFontForContentSizeCategory = true
@@ -77,10 +77,17 @@ class MainFeedCellImage: SwipeTableViewCell {
         warningB.titleLabel?.textAlignment = .center
         warningB.setTitleColor(Colours.black.withAlphaComponent(0.4), for: .normal)
         warningB.layer.cornerRadius = 7
-        warningB.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
+        warningB.titleLabel?.font = UIFont.boldSystemFont(ofSize: Colours.fontSize3)
         warningB.titleLabel?.numberOfLines = 0
         warningB.layer.masksToBounds = true
-
+        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = warningB.bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blurEffectView.isUserInteractionEnabled = false
+        warningB.addSubview(blurEffectView)
+        warningB.sendSubviewToBack(blurEffectView)
+        
         if (UserDefaults.standard.object(forKey: "imCorner") == nil || UserDefaults.standard.object(forKey: "imCorner") as! Int == 0) {
             mainImageView.layer.cornerRadius = 10
         }
@@ -88,9 +95,9 @@ class MainFeedCellImage: SwipeTableViewCell {
             mainImageView.layer.cornerRadius = 0
         }
         mainImageView.layer.masksToBounds = true
-        mainImageView.backgroundColor = Colours.white
+        mainImageView.backgroundColor = Colours.clear
         mainImageViewBG.layer.cornerRadius = 10
-        mainImageViewBG.backgroundColor = Colours.white
+        mainImageViewBG.backgroundColor = Colours.clear
         mainImageViewBG.layer.shadowColor = UIColor.black.cgColor
         mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 7)
         mainImageViewBG.layer.shadowRadius = 10
@@ -131,7 +138,7 @@ class MainFeedCellImage: SwipeTableViewCell {
 
         rep1.translatesAutoresizingMaskIntoConstraints = false
         rep1.setImage(UIImage(named: "reply3")?.maskWithColor(color: Colours.gray), for: .normal)
-        rep1.backgroundColor = Colours.white
+        rep1.backgroundColor = Colours.clear
         rep1.layer.masksToBounds = true
         if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
             self.rep1.alpha = 0
@@ -140,7 +147,7 @@ class MainFeedCellImage: SwipeTableViewCell {
         }
         like1.translatesAutoresizingMaskIntoConstraints = false
         like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
-        like1.backgroundColor = Colours.white
+        like1.backgroundColor = Colours.clear
         like1.layer.masksToBounds = true
         if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
             self.like1.alpha = 0
@@ -149,7 +156,7 @@ class MainFeedCellImage: SwipeTableViewCell {
         }
         boost1.translatesAutoresizingMaskIntoConstraints = false
         boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
-        boost1.backgroundColor = Colours.white
+        boost1.backgroundColor = Colours.clear
         boost1.layer.masksToBounds = true
         if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
             self.boost1.alpha = 0
@@ -158,7 +165,7 @@ class MainFeedCellImage: SwipeTableViewCell {
         }
         more1.translatesAutoresizingMaskIntoConstraints = false
         more1.setImage(UIImage(named: "more")?.maskWithColor(color: Colours.gray), for: .normal)
-        more1.backgroundColor = Colours.white
+        more1.backgroundColor = Colours.clear
         more1.layer.masksToBounds = true
         if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
             self.more1.alpha = 0
@@ -250,14 +257,14 @@ class MainFeedCellImage: SwipeTableViewCell {
 
     func configure(_ status: Status) {
         
-        profileImageView.backgroundColor = Colours.white
-        profileImageView2.backgroundColor = Colours.white
-        warningB.backgroundColor = Colours.white
-        moreImage.backgroundColor = Colours.white
-        rep1.backgroundColor = Colours.white
-        like1.backgroundColor = Colours.white
-        boost1.backgroundColor = Colours.white
-        more1.backgroundColor = Colours.white
+        profileImageView.backgroundColor = Colours.clear
+        profileImageView2.backgroundColor = Colours.clear
+        warningB.backgroundColor = Colours.clear
+        moreImage.backgroundColor = Colours.clear
+        rep1.backgroundColor = Colours.clear
+        like1.backgroundColor = Colours.clear
+        boost1.backgroundColor = Colours.clear
+        more1.backgroundColor = Colours.clear
         
         rep1.setImage(UIImage(named: "reply3")?.maskWithColor(color: Colours.gray), for: .normal)
         more1.setImage(UIImage(named: "more")?.maskWithColor(color: Colours.gray), for: .normal)
@@ -427,7 +434,7 @@ class MainFeedCellImage: SwipeTableViewCell {
             profileImageView2.pin_updateWithProgress = true
             profileImageView2.pin_setImage(from: URL(string: "\(status.account.avatar)"))
             profileImageView2.layer.masksToBounds = true
-            profileImageView2.layer.borderColor = Colours.white.cgColor
+            profileImageView2.layer.borderColor = Colours.clear.cgColor
             profileImageView2.layer.borderWidth = 2
             profileImageView2.alpha = 1
             if (UserDefaults.standard.object(forKey: "proCorner") == nil || UserDefaults.standard.object(forKey: "proCorner") as! Int == 0) {
@@ -565,23 +572,24 @@ class MainFeedCellImage: SwipeTableViewCell {
         if (UserDefaults.standard.object(forKey: "senseTog") == nil) || (UserDefaults.standard.object(forKey: "senseTog") as! Int == 0) {
 
             if status.reblog?.sensitive ?? false || status.sensitive ?? false {
-                warningB.backgroundColor = Colours.tabUnselected
+                warningB.backgroundColor = Colours.clear
+                
                 let z = status.reblog?.spoilerText ?? status.spoilerText
-                var zz = "Content Warning"
+                var zz = "Sensitive Content"
                 if z == "" {} else {
                     zz = z
                 }
-                warningB.setTitle("\(zz)\n\nTap to show status", for: .normal)
-                warningB.setTitleColor(Colours.black.withAlphaComponent(0.4), for: .normal)
+                warningB.setTitle("\(zz)", for: .normal)
+                warningB.setTitleColor(Colours.white, for: .normal)
                 warningB.addTarget(self, action: #selector(self.didTouchWarning), for: .touchUpInside)
                 warningB.alpha = 1
             } else {
-                warningB.backgroundColor = Colours.white
+                warningB.backgroundColor = Colours.clear
                 warningB.alpha = 0
             }
 
         } else {
-            warningB.backgroundColor = Colours.white
+            warningB.backgroundColor = Colours.clear
             warningB.alpha = 0
         }
 
@@ -767,7 +775,7 @@ class MainFeedCellImage: SwipeTableViewCell {
     }
 
     @objc func didTouchWarning() {
-        warningB.backgroundColor = Colours.white
+        warningB.backgroundColor = Colours.clear
         warningB.alpha = 0
 
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {

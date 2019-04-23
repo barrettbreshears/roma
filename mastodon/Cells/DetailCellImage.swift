@@ -31,9 +31,9 @@ class DetailCellImage: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        profileImageView.backgroundColor = Colours.white
-        mainImageView.backgroundColor = Colours.white
-        mainImageViewBG.backgroundColor = Colours.white
+        profileImageView.backgroundColor = Colours.clear
+        mainImageView.backgroundColor = Colours.clear
+        mainImageViewBG.backgroundColor = Colours.clear
         
 //        userName.adjustsFontForContentSizeCategory = true
 //        userTag.adjustsFontForContentSizeCategory = true

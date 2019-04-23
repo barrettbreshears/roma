@@ -75,9 +75,7 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionColourCell", for: indexPath) as! CollectionProCells
-
-        cell.configure()
-
+        
         if indexPath.item >= InstanceData.getAllInstances().count {
 
             cell.image.image = UIImage(named: "newac2")
@@ -118,15 +116,12 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
         cell.bgImage.layer.shadowRadius = 12
         cell.bgImage.layer.shadowOpacity = 0.12
         
-//        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(self.longPressed))
-//        longPressRecognizer.minimumPressDuration = 0.5
-//        cell.image.tag = indexPath.item
-//        cell.image.addGestureRecognizer(longPressRecognizer)
-        
         cell.frame.size.width = 55
         cell.frame.size.height = 55
         
         cell.backgroundColor = Colours.grayDark3
+        
+        cell.configure()
         
         return cell
     }

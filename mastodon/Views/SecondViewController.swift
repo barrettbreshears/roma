@@ -4904,7 +4904,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         DispatchQueue.global(qos: .userInitiated).async {
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
-                    DispatchQueue.main.async {
                     StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
                     StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
                     var newestC = StoreStruct.notifications.count
@@ -4913,6 +4912,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     StoreStruct.notifications = stat + StoreStruct.notifications
                     StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
                     var co = 0
+                    DispatchQueue.main.async {
                     
                         stat.map({
                             if $0.type == .mention {

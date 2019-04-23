@@ -1426,8 +1426,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
         tootLabel.setTitle("Post", for: .normal)
         tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-//        tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
-        tootLabel.setTitleColor(Colours.tabSelected, for: .normal)
+        tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
         tootLabel.contentHorizontalAlignment = .right
         tootLabel.addTarget(self, action: #selector(didTouchUpInsideTootButton), for: .touchUpInside)
         self.view.addSubview(tootLabel)
@@ -3553,14 +3552,16 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 
             } else {
                 
-                var iCo = 0
-                for i in StoreStruct.mainResult2 {
-                    if x1.lowercased().contains(i.string.lowercased().replacingOccurrences(of: "￼    ", with: "")) {
-                        self.emotiLab.setAttributedTitle(StoreStruct.mainResult1[iCo], for: .normal)
-                        self.currentEmot = i.string.lowercased().replacingOccurrences(of: "￼    ", with: "")
-                        self.emotiLab.alpha = 1
+                if (UserDefaults.standard.object(forKey: "emotisug") == nil) || (UserDefaults.standard.object(forKey: "emotisug") as! Int == 0) {
+                    var iCo = 0
+                    for i in StoreStruct.mainResult2 {
+                        if i.string.lowercased().replacingOccurrences(of: "￼    ", with: "").contains(x1.lowercased()) {
+                            self.emotiLab.setAttributedTitle(StoreStruct.mainResult1[iCo], for: .normal)
+                            self.currentEmot = i.string.lowercased().replacingOccurrences(of: "￼    ", with: "")
+                            self.emotiLab.alpha = 1
+                        }
+                        iCo += 1
                     }
-                    iCo += 1
                 }
                 
                 UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.8, options: [], animations: {

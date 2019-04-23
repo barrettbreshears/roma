@@ -296,14 +296,21 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     }
                     StoreStruct.shared.currentInstance.accessToken = (json["access_token"] as? String ?? "")
                     StoreStruct.client.accessToken = StoreStruct.shared.currentInstance.accessToken
-
-
+                   
                     let currentInstance = InstanceData(clientID: StoreStruct.shared.currentInstance.clientID, clientSecret: StoreStruct.shared.currentInstance.clientSecret, authCode: StoreStruct.shared.currentInstance.authCode, accessToken: StoreStruct.shared.currentInstance.accessToken, returnedText: StoreStruct.shared.currentInstance.returnedText, redirect:StoreStruct.shared.currentInstance.redirect)
 
                     var instances = InstanceData.getAllInstances()
-
-                    if !instances.contains(currentInstance){
-                        instances.append(currentInstance)
+                    instances.append(currentInstance)
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
+                    InstanceData.setCurrentInstance(instance: currentInstance)
+                    
+                    let request = Timelines.home()
+                    StoreStruct.client.run(request) { (statuses) in
+                        if let stat = (statuses.value) {
+                            StoreStruct.statusesHome = stat
+                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
+                        }
                     }
                     let request2 = Accounts.currentUser()
                     StoreStruct.client.run(request2) { (statuses) in
@@ -316,7 +323,41 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
                         }
                     }
-
+                    
+                    let request3 = Instances.customEmojis()
+                    StoreStruct.client.run(request3) { (statuses) in
+                        if let stat = (statuses.value) {
+                            DispatchQueue.main.async {
+                                StoreStruct.emotiFace = stat
+                            }
+                            stat.map({
+                                let attributedString = NSAttributedString(string: "    \($0.shortcode)")
+                                let textAttachment = NSTextAttachment()
+                                textAttachment.loadImageUsingCache(withUrl: $0.staticURL.absoluteString)
+                                textAttachment.bounds = CGRect(x:0, y: Int(-9), width: Int(30), height: Int(30))
+                                let attrStringWithImage = NSAttributedString(attachment: textAttachment)
+                                let result = NSMutableAttributedString()
+                                result.append(attrStringWithImage)
+                                result.append(attributedString)
+                                StoreStruct.mainResult.append(result)
+                                
+                                let textAttachment1 = NSTextAttachment()
+                                textAttachment1.loadImageUsingCache(withUrl: $0.staticURL.absoluteString)
+                                textAttachment1.bounds = CGRect(x:0, y: Int(-9), width: Int(30), height: Int(30))
+                                let attrStringWithImage1 = NSAttributedString(attachment: textAttachment1)
+                                let result1 = NSMutableAttributedString()
+                                result1.append(attrStringWithImage1)
+                                StoreStruct.mainResult1.append(result1)
+                                
+                                let attributedString2 = NSAttributedString(string: "\($0.shortcode)")
+                                let result2 = NSMutableAttributedString()
+                                result2.append(attributedString2)
+                                StoreStruct.mainResult2.append(result)
+                            })
+                        }
+                    }
+                    
+                    
                     // onboarding
                     if (UserDefaults.standard.object(forKey: "onb") == nil) || (UserDefaults.standard.object(forKey: "onb") as! Int == 0) {
                         DispatchQueue.main.async {
@@ -335,9 +376,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         task.resume()
 
     }
-
-
-    @objc func newInstanceLogged(){
+    
+    
+    @objc func newInstanceLogged() {
         
         
         var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.newInstance!.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.newInstance!.authCode)&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&client_id=\(StoreStruct.shared.newInstance!.clientID)&client_secret=\(StoreStruct.shared.newInstance!.clientSecret)&scope=read%20write%20follow%20push")!)
@@ -360,8 +401,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     InstanceData.setCurrentInstance(instance: newInstance)
                     var instances = InstanceData.getAllInstances()
                     instances.append(newInstance)
-                    UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
-                    
+                    UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey: "instances")
                     
                     let request = Timelines.home()
                     StoreStruct.shared.newClient.run(request) { (statuses) in
@@ -371,12 +411,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                             NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
                         }
                     }
-
-
-                    newInstance.accessToken = access1
-                    StoreStruct.shared.newClient.accessToken = access1
-
-
+                    
                     let request2 = Accounts.currentUser()
                     StoreStruct.shared.newClient.run(request2) { (statuses) in
                         if let stat = (statuses.value) {
@@ -1051,7 +1086,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 DispatchQueue.main.async {
                     StoreStruct.emotiFace = stat
                 }
-                
                 stat.map({
                     let attributedString = NSAttributedString(string: "    \($0.shortcode)")
                     let textAttachment = NSTextAttachment()
@@ -1061,7 +1095,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     let result = NSMutableAttributedString()
                     result.append(attrStringWithImage)
                     result.append(attributedString)
-
                     StoreStruct.mainResult.append(result)
                     
                     let textAttachment1 = NSTextAttachment()
@@ -1070,13 +1103,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     let attrStringWithImage1 = NSAttributedString(attachment: textAttachment1)
                     let result1 = NSMutableAttributedString()
                     result1.append(attrStringWithImage1)
-                    
                     StoreStruct.mainResult1.append(result1)
                     
                     let attributedString2 = NSAttributedString(string: "\($0.shortcode)")
                     let result2 = NSMutableAttributedString()
                     result2.append(attributedString2)
-                    
                     StoreStruct.mainResult2.append(result)
                 })
             }
@@ -1251,7 +1282,27 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             if section == 1 {
                 return 0
             } else {
-                return 34
+                if tableView == self.tableViewLists {
+                    if section == 0 {
+                        return 34
+                    } else if section == 2 {
+                        if StoreStruct.allLists.isEmpty {
+                            return 0
+                        } else {
+                            return 34
+                        }
+                    } else if section == 3 {
+                        if StoreStruct.instanceLocalToAdd.isEmpty {
+                            return 0
+                        } else {
+                            return 34
+                        }
+                    } else {
+                        return 0
+                    }
+                } else {
+                    return 34
+                }
             }
         }
     }
@@ -1508,11 +1559,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
 
         guard orientation == .right else { return nil }
-
-        if indexPath.section == 0 {
-
-        guard indexPath.row > 1 else { return nil }
-
+        
+        guard indexPath.section > 1 else { return nil }
+        
+        if indexPath.section == 2 {
+        
         let impact = UIImpactFeedbackGenerator(style: .medium)
 
         let more = SwipeAction(style: .default, title: nil) { action, indexPath in
@@ -2286,9 +2337,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.dismiss(animated: true, completion: nil)
     }
     
-    func createLoginView(newInstance:Bool = false) {
-
-
+    func createLoginView(newInstance: Bool = false) {
         self.newInstance = newInstance
         self.loginBG.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: self.view.bounds.height)
         self.loginBG.backgroundColor = Colours.tabSelected
@@ -2367,7 +2416,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.termsButton.addTarget(self, action: #selector(self.showTerms), for: .touchUpInside)
         self.view.addSubview(self.termsButton)
         
-        tagListView.alpha = 1
+        tagListView.alpha = 0
         tagListView.frame = CGRect(x: 0, y: Int(self.view.bounds.height) - self.keyHeight - 70, width: Int(self.view.bounds.width), height: 60)
         self.view.addSubview(tagListView)
         
@@ -3258,25 +3307,26 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabTwo.tabBarItem.tag = 2
             
             // Create Tab DM
-            self.tabDM = SAHistoryNavigationViewController(rootViewController: self.dmView)
-            if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
-                self.tabDM.historyBackgroundColor = Colours.tabSelected
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
-                self.tabDM.historyBackgroundColor = UIColor(red: 53/250, green: 53/250, blue: 64/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
-                self.tabDM.historyBackgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
-                self.tabDM.historyBackgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
-                self.tabDM.historyBackgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
-            }
-            let tabDMBarItem2 = UITabBarItem(title: "", image: UIImage(named: "direct")?.maskWithColor(color: Colours.gray), selectedImage: UIImage(named: "direct")?.maskWithColor(color: Colours.gray))
-            tabDMBarItem2.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
-            self.tabDM.tabBarItem = tabDMBarItem2
-            self.tabDM.navigationBar.backgroundColor = Colours.white
-            self.tabDM.navigationBar.barTintColor = Colours.white
-            self.tabDM.navigationBar.setBackgroundImage(UIImage(), for: .default)
-            self.tabDM.tabBarItem.tag = 2
+            // ADD DM TAB BACK ONCE PLEROMA SUPPORTS CONVERSATIONS API
+//            self.tabDM = SAHistoryNavigationViewController(rootViewController: self.dmView)
+//            if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
+//                self.tabDM.historyBackgroundColor = Colours.tabSelected
+//            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
+//                self.tabDM.historyBackgroundColor = UIColor(red: 53/250, green: 53/250, blue: 64/250, alpha: 1.0)
+//            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
+//                self.tabDM.historyBackgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
+//            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
+//                self.tabDM.historyBackgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
+//            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
+//                self.tabDM.historyBackgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
+//            }
+//            let tabDMBarItem2 = UITabBarItem(title: "", image: UIImage(named: "direct")?.maskWithColor(color: Colours.gray), selectedImage: UIImage(named: "direct")?.maskWithColor(color: Colours.gray))
+//            tabDMBarItem2.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+//            self.tabDM.tabBarItem = tabDMBarItem2
+//            self.tabDM.navigationBar.backgroundColor = Colours.white
+//            self.tabDM.navigationBar.barTintColor = Colours.white
+//            self.tabDM.navigationBar.setBackgroundImage(UIImage(), for: .default)
+//            self.tabDM.tabBarItem.tag = 2
             
             // Create Tab three
             self.tabThree = SAHistoryNavigationViewController(rootViewController: self.thirdView)
@@ -3320,7 +3370,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabFour.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.tabFour.tabBarItem.tag = 4
             
-            let viewControllerList = [self.tabOne, self.tabTwo, self.tabDM, self.tabThree, self.tabFour]
+            let viewControllerList = [self.tabOne, self.tabTwo, /*self.tabDM,*/ self.tabThree, self.tabFour]
             
             for x in viewControllerList {
 
