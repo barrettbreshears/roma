@@ -1354,9 +1354,37 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             } else if section == 2 {
                 return StoreStruct.allLists.count
             } else {
+                
+                let z1 = Account.getAccounts().count
+                let z2 = InstanceData.getAllInstances().count
+                
+                
+                if z1 != z2 {
+                    showAccountError()
+                    return 0
+                }
+                
                 return StoreStruct.instanceLocalToAdd.count
             }
         }
+    }
+    
+    func showAccountError(){
+        
+        let alert = UIAlertController(title: "Looks like we encountered an error please log in again", message: nil, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .default) { (_) in
+            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+            switch (deviceIdiom) {
+            case .phone:
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut"), object: nil)
+            case .pad:
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "logBackOut"), object: nil)
+            default:
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut"), object: nil)
+            }
+        }
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

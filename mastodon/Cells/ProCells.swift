@@ -56,9 +56,43 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        let z1 = Account.getAccounts().count
+        let z2 = InstanceData.getAllInstances().count
+        
+        
+        if z1 != z2 {
+            showAccountError()
+            return 0
+        }
         return InstanceData.getAllInstances().count + 1
     }
-
+    
+    func showAccountError(){
+        
+        let alert = UIAlertController(title: "Looks like we encountered an error please log in again", message: nil, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .default) { (_) in
+            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+            switch (deviceIdiom) {
+            case .phone:
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut"), object: nil)
+            case .pad:
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "logBackOut"), object: nil)
+            default:
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut"), object: nil)
+            }
+        }
+        alert.addAction(action)
+        
+        if var topController = UIApplication.shared.keyWindow?.rootViewController {
+            while let presentedViewController = topController.presentedViewController {
+                topController = presentedViewController
+            }
+            topController.present(alert, animated: true, completion: nil)
+        }
+        
+    }
+    
+    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
 
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionColourCell", for: indexPath) as! CollectionProCells

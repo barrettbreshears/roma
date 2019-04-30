@@ -560,7 +560,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>5</string>
+	<string>6</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>twitter</string>
