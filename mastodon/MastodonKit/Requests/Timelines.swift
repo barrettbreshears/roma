@@ -26,9 +26,12 @@ public struct Timelines {
     ///   - local: Only return statuses originating from this instance.
     ///   - range: The bounds used when requesting data from Mastodon.
     /// - Returns: Request for `[Status]`.
-    public static func `public`(local: Bool? = nil, range: RequestRange = .default) -> Request<[Status]> {
+    public static func `public`(local: Bool? = nil, range: RequestRange = .default, mediaOnly: Bool? = nil) -> Request<[Status]> {
         let rangeParameters = range.parameters(limit: between(1, and: 40, default: 20)) ?? []
-        let localParameter = [Parameter(name: "local", value: local.flatMap(trueOrNil))]
+        let localParameter = [
+            Parameter(name: "only_media", value: mediaOnly.flatMap(trueOrNil)),
+            Parameter(name: "local", value: local.flatMap(trueOrNil))
+        ]
         let method = HTTPMethod.get(.parameters(localParameter + rangeParameters))
 
         return Request<[Status]>(path: "/api/v1/timelines/public", method: method)

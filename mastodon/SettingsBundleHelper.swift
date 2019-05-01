@@ -74,6 +74,43 @@ class SettingsBundleHelper {
             StoreStruct.allBoosts = []
             StoreStruct.allPins = []
             StoreStruct.photoNew = UIImage()
+            StoreStruct.spoilerText = ""
+            StoreStruct.typeOfSearch = 0
+            StoreStruct.curID = ""
+            StoreStruct.curIDNoti = ""
+            StoreStruct.doOnce = true
+            StoreStruct.isSplit = false
+            StoreStruct.gapLastHomeID = ""
+            StoreStruct.gapLastLocalID = ""
+            StoreStruct.gapLastFedID = ""
+            StoreStruct.gapLastHomeStat = nil
+            StoreStruct.gapLastLocalStat = nil
+            StoreStruct.gapLastFedStat = nil
+            StoreStruct.newIDtoGoTo = ""
+            StoreStruct.maxChars = 500
+            StoreStruct.initTimeline = false
+            StoreStruct.savedComposeText = ""
+            StoreStruct.savedInReplyText = ""
+            StoreStruct.hexCol = UIColor.white
+            StoreStruct.historyBool = false
+            StoreStruct.currentInstanceDetails = []
+            StoreStruct.currentImageURL = URL(string: "www.google.com")
+            StoreStruct.containsPoll = false
+            StoreStruct.pollHeight = 0
+            StoreStruct.currentPollSelection = []
+            StoreStruct.currentPollSelectionTitle = ""
+            StoreStruct.newPollPost = []
+            StoreStruct.currentOptions = []
+            StoreStruct.expiresIn = 86400
+            StoreStruct.allowsMultiple = false
+            StoreStruct.totalsHidden = false
+            StoreStruct.pollPickerDate = Date()
+            StoreStruct.composedTootText = ""
+            StoreStruct.holdOnTempText = ""
+            StoreStruct.tappedSignInCheck = false
+            StoreStruct.markedReadIDs = []
+            StoreStruct.newdrafts = []
+            StoreStruct.notTypes = []
             
             do {
                 try Disk.clear(.documents)

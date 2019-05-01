@@ -14,7 +14,7 @@ import AVFoundation
 import StatusAlert
 import SafariServices
 
-class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate, SwipeTableViewCellDelegate {
+class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate, SwipeTableViewCellDelegate, UIGestureRecognizerDelegate {
     
     var searchTextField = SearchField()
     var segmentedControl: SJFluidSegmentedControl!
@@ -24,10 +24,71 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
     var safariVC: SFSafariViewController?
     var searchIcon = UIImageView()
     
+    @objc func longAction(sender: UILongPressGestureRecognizer) {
+        if (UserDefaults.standard.object(forKey: "longToggle") == nil) || (UserDefaults.standard.object(forKey: "longToggle") as! Int == 0) {
+            
+        } else if (UserDefaults.standard.object(forKey: "longToggle") as! Int == 3) {
+            if sender.state == .began {
+                var theTable = self.tableView
+                var sto = StoreStruct.statusSearch
+                let touchPoint = sender.location(in: theTable)
+                if self.typeOfSearch == 0 {
+                    sto = StoreStruct.statusSearch
+                    theTable = self.tableView
+                    if let indexPath = theTable.indexPathForRow(at: touchPoint) {
+                        if let myWebsite = sto[indexPath.row].url {
+                            let objectsToShare = [myWebsite]
+                            let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                            vc.popoverPresentationController?.sourceView = self.view
+                            vc.previewNumberOfLines = 5
+                            vc.previewFont = UIFont.systemFont(ofSize: 14)
+                            self.present(vc, animated: true, completion: nil)
+                        }
+                    }
+                } else if self.typeOfSearch == 1 {
+                    sto = StoreStruct.statusSearch
+                    theTable = self.tableView
+                    if let indexPath = theTable.indexPathForRow(at: touchPoint) {
+                        if let myWebsite = sto[indexPath.row].url {
+                            let objectsToShare = [myWebsite]
+                            let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                            vc.popoverPresentationController?.sourceView = self.view
+                            vc.previewNumberOfLines = 5
+                            vc.previewFont = UIFont.systemFont(ofSize: 14)
+                            self.present(vc, animated: true, completion: nil)
+                        }
+                    }
+                } else if self.typeOfSearch == 2 {
+                    theTable = self.tableView
+                    if let indexPath = theTable.indexPathForRow(at: touchPoint) {
+                        if let myWebsite = URL(string: StoreStruct.statusSearchUser[indexPath.row].url) {
+                            let objectsToShare = [myWebsite]
+                            let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                            vc.popoverPresentationController?.sourceView = self.view
+                            vc.previewNumberOfLines = 5
+                            vc.previewFont = UIFont.systemFont(ofSize: 14)
+                            self.present(vc, animated: true, completion: nil)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.view.backgroundColor = Colours.white
+        
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longAction(sender:)))
+        longPress.minimumPressDuration = 0.5
+        longPress.delegate = self
+        self.view.addGestureRecognizer(longPress)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.loadLoadLoad), name: NSNotification.Name(rawValue: "load"), object: nil)
         
@@ -458,7 +519,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                 cell.profileImageView.isUserInteractionEnabled = false
                 cell.backgroundColor = Colours.clear
                 cell.userName.textColor = UIColor.white
-                cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
+                cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
                 cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                 cell.toot.textColor = UIColor.white
                 let bgColorView = UIView()
@@ -484,7 +545,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                     cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.backgroundColor = Colours.clear
                     cell.userName.textColor = UIColor.white
-                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
                     cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                     cell.toot.textColor = UIColor.white
                     cell.delegate = self
@@ -595,7 +656,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                     cell.smallImage4.tag = indexPath.row
                     cell.backgroundColor = Colours.clear
                     cell.userName.textColor = UIColor.white
-                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
                     cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                     cell.toot.textColor = UIColor.white
                     cell.mainImageView.backgroundColor = Colours.white
@@ -689,7 +750,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                 cell.profileImageView.tag = indexPath.row
                 cell.backgroundColor = Colours.clear
                 cell.userName.textColor = UIColor.white
-                cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
+                cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
                 cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                 cell.toot.textColor = UIColor.white
                 let bgColorView = UIView()
@@ -1979,7 +2040,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                 }
             }
             
-            more.image = UIImage(named: "more2")
+            more.image = UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected)
             more.transitionDelegate = ScaleTransition.default
             more.textColor = Colours.tabUnselected
             return [more]

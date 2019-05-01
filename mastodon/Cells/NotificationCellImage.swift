@@ -82,12 +82,30 @@ class NotificationCellImage: SwipeTableViewCell {
         mainImageViewBG.layer.cornerRadius = 10
         mainImageViewBG.backgroundColor = Colours.clear
         mainImageViewBG.layer.shadowColor = UIColor.black.cgColor
-        mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 7)
+//        mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 7)
         mainImageViewBG.layer.shadowRadius = 10
-        mainImageViewBG.layer.shadowOpacity = 0.22
+        mainImageViewBG.layer.shadowOpacity = 0.5
         mainImageViewBG.layer.masksToBounds = false
-
-
+        
+        if (UserDefaults.standard.object(forKey: "depthToggle") == nil) || (UserDefaults.standard.object(forKey: "depthToggle") as! Int == 0) {
+            let horizontalEffect = UIInterpolatingMotionEffect(
+                keyPath: "layer.shadowOffset.width",
+                type: .tiltAlongHorizontalAxis)
+            horizontalEffect.minimumRelativeValue = 26
+            horizontalEffect.maximumRelativeValue = -26
+            let verticalEffect = UIInterpolatingMotionEffect(
+                keyPath: "layer.shadowOffset.height",
+                type: .tiltAlongVerticalAxis)
+            verticalEffect.minimumRelativeValue = 26
+            verticalEffect.maximumRelativeValue = -26
+            let effectGroup = UIMotionEffectGroup()
+            effectGroup.motionEffects = [horizontalEffect, verticalEffect]
+            self.mainImageViewBG.addMotionEffect(effectGroup)
+        } else {
+            mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 7)
+        }
+        
+        
         warningB.titleEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         warningB.titleLabel?.textAlignment = .center
         warningB.setTitleColor(Colours.black.withAlphaComponent(0.4), for: .normal)
@@ -95,20 +113,20 @@ class NotificationCellImage: SwipeTableViewCell {
         warningB.titleLabel?.font = UIFont.boldSystemFont(ofSize: Colours.fontSize3)
         warningB.titleLabel?.numberOfLines = 0
         warningB.layer.masksToBounds = true
-        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = warningB.bounds
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        blurEffectView.isUserInteractionEnabled = false
-        warningB.addSubview(blurEffectView)
-        warningB.sendSubviewToBack(blurEffectView)
+//        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
+//        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+//        blurEffectView.frame = warningB.bounds
+//        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        blurEffectView.isUserInteractionEnabled = false
+//        warningB.addSubview(blurEffectView)
+//        warningB.sendSubviewToBack(blurEffectView)
         
         userName.numberOfLines = 0
         toot.numberOfLines = 0
 
         userName.textColor = Colours.black
-        userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-        date.textColor = Colours.black.withAlphaComponent(0.6)
+        userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+        date.textColor = Colours.grayDark.withAlphaComponent(0.38)
         toot.textColor = Colours.black
 
 
@@ -207,13 +225,14 @@ class NotificationCellImage: SwipeTableViewCell {
             "boost1" : boost1,
             "more1" : more1,
             ]
-
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[name]-(>=5)-[date]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[artist]-(>=5)-[more(16)]-20-|", options: [], metrics: nil, views: viewsDict))
+        
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[name]-(>=5)-[more(16)]-4-[date]-20-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[artist]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-107-[mainImage]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-117-[mainImageBG]-30-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[date]-2-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[type(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
 
@@ -328,8 +347,8 @@ class NotificationCellImage: SwipeTableViewCell {
             if (UserDefaults.standard.object(forKey: "subtleToggle") == nil) || (UserDefaults.standard.object(forKey: "subtleToggle") as! Int == 0) {
                 toot.textColor = Colours.black
                 userName.textColor = Colours.black
-                userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-                date.textColor = Colours.black.withAlphaComponent(0.6)
+                userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                date.textColor = Colours.grayDark.withAlphaComponent(0.38)
             } else {
                 toot.textColor = Colours.black.withAlphaComponent(0.3)
                 userName.textColor = Colours.black.withAlphaComponent(0.3)
@@ -345,8 +364,8 @@ class NotificationCellImage: SwipeTableViewCell {
             if (UserDefaults.standard.object(forKey: "subtleToggle") == nil) || (UserDefaults.standard.object(forKey: "subtleToggle") as! Int == 0) {
                 toot.textColor = Colours.black
                 userName.textColor = Colours.black
-                userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-                date.textColor = Colours.black.withAlphaComponent(0.6)
+                userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                date.textColor = Colours.grayDark.withAlphaComponent(0.38)
             } else {
                 toot.textColor = Colours.black.withAlphaComponent(0.3)
                 userName.textColor = Colours.black.withAlphaComponent(0.3)
@@ -358,8 +377,8 @@ class NotificationCellImage: SwipeTableViewCell {
             profileImageView.isUserInteractionEnabled = true
             toot.textColor = Colours.black
             userName.textColor = Colours.black
-            userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-            date.textColor = Colours.black.withAlphaComponent(0.6)
+            userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+            date.textColor = Colours.grayDark.withAlphaComponent(0.38)
             userName.text = "\(status.account.displayName) mentioned you"
             if status.status?.visibility == .direct {
                 typeImage.setImage(UIImage(named: "direct")?.maskWithColor(color: Colours.purple), for: .normal)
@@ -379,8 +398,8 @@ class NotificationCellImage: SwipeTableViewCell {
             if (UserDefaults.standard.object(forKey: "subtleToggle") == nil) || (UserDefaults.standard.object(forKey: "subtleToggle") as! Int == 0) {
                 toot.textColor = Colours.black
                 userName.textColor = Colours.black
-                userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-                date.textColor = Colours.black.withAlphaComponent(0.6)
+                userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                date.textColor = Colours.grayDark.withAlphaComponent(0.38)
             } else {
                 toot.textColor = Colours.black.withAlphaComponent(0.3)
                 userName.textColor = Colours.black.withAlphaComponent(0.3)
@@ -677,7 +696,7 @@ class NotificationCellImage: SwipeTableViewCell {
         if (UserDefaults.standard.object(forKey: "senseTog") == nil) || (UserDefaults.standard.object(forKey: "senseTog") as! Int == 0) {
 
             if status.status?.reblog?.sensitive ?? false || status.status?.sensitive ?? false {
-                warningB.backgroundColor = Colours.clear
+                warningB.backgroundColor = Colours.tabUnselected
                 
                 let z = status.status?.reblog?.spoilerText ?? status.status?.spoilerText ?? ""
                 var zz = "Sensitive Content"
@@ -685,7 +704,7 @@ class NotificationCellImage: SwipeTableViewCell {
                     zz = z
                 }
                 warningB.setTitle("\(zz)", for: .normal)
-                warningB.setTitleColor(Colours.white, for: .normal)
+                warningB.setTitleColor(Colours.grayDark.withAlphaComponent(0.6), for: .normal)
                 warningB.addTarget(self, action: #selector(self.didTouchWarning), for: .touchUpInside)
                 warningB.alpha = 1
             } else {

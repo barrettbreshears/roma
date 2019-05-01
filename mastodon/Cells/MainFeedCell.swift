@@ -70,20 +70,20 @@ class MainFeedCell: SwipeTableViewCell {
         warningB.titleLabel?.font = UIFont.boldSystemFont(ofSize: Colours.fontSize3)
         warningB.titleLabel?.numberOfLines = 0
         warningB.layer.masksToBounds = true
-        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = warningB.bounds
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        blurEffectView.isUserInteractionEnabled = false
-        warningB.addSubview(blurEffectView)
-        warningB.sendSubviewToBack(blurEffectView)
+//        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
+//        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+//        blurEffectView.frame = warningB.bounds
+//        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        blurEffectView.isUserInteractionEnabled = false
+//        warningB.addSubview(blurEffectView)
+//        warningB.sendSubviewToBack(blurEffectView)
         
         userName.numberOfLines = 0
         toot.numberOfLines = 0
         date.textAlignment = .right
         userName.textColor = Colours.black
-        userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-        date.textColor = Colours.black.withAlphaComponent(0.6)
+        userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+        date.textColor = Colours.grayDark.withAlphaComponent(0.38)
         toot.textColor = Colours.black
 
         userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
@@ -165,11 +165,12 @@ class MainFeedCell: SwipeTableViewCell {
             ]
         
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[name]-(>=5)-[date]-20-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[name]-(>=5)-[more(16)]-4-[date]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[image2(26)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[artist]-(>=5)-[more(16)]-20-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[artist]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[date]-2-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-32-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
 
@@ -302,10 +303,7 @@ class MainFeedCell: SwipeTableViewCell {
         
         
         if status.reblog?.content.stripHTML() != nil {
-
-
-
-
+            
             if status.reblog!.emojis.isEmpty {
                 toot.text = "\(status.reblog?.content.stripHTML() ?? "")"
             } else {
@@ -474,15 +472,15 @@ class MainFeedCell: SwipeTableViewCell {
             self.moreImage.image = UIImage(named: "like")
         } else {
             if status.reblog?.poll ?? status.poll != nil {
-                self.moreImage.image = UIImage(named: "list")
+                self.moreImage.image = UIImage(named: "list")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
             } else {
 
             if status.reblog?.visibility ?? status.visibility == .direct {
-                self.moreImage.image = UIImage(named: "direct")
+                self.moreImage.image = UIImage(named: "direct")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
             } else if status.reblog?.visibility ?? status.visibility == .unlisted {
-                self.moreImage.image = UIImage(named: "unlisted")
+                self.moreImage.image = UIImage(named: "unlisted")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
             } else if status.reblog?.visibility ?? status.visibility == .private {
-                self.moreImage.image = UIImage(named: "private")
+                self.moreImage.image = UIImage(named: "private")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
             } else {
                 self.moreImage.image = nil
             }
@@ -494,7 +492,7 @@ class MainFeedCell: SwipeTableViewCell {
         if (UserDefaults.standard.object(forKey: "senseTog") == nil) || (UserDefaults.standard.object(forKey: "senseTog") as! Int == 0) {
 
             if status.reblog?.sensitive ?? false || status.sensitive ?? false {
-                warningB.backgroundColor = Colours.clear
+                warningB.backgroundColor = Colours.tabUnselected
                 
                 let z = status.reblog?.spoilerText ?? status.spoilerText
                 var zz = "Sensitive Content"
@@ -502,7 +500,7 @@ class MainFeedCell: SwipeTableViewCell {
                     zz = z
                 }
                 warningB.setTitle("\(zz)", for: .normal)
-                warningB.setTitleColor(Colours.white, for: .normal)
+                warningB.setTitleColor(Colours.grayDark.withAlphaComponent(0.6), for: .normal)
                 warningB.addTarget(self, action: #selector(self.didTouchWarning), for: .touchUpInside)
                 warningB.alpha = 1
             } else {

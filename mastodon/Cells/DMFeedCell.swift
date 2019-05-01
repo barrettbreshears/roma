@@ -72,20 +72,20 @@ class DMFeedCell: SwipeTableViewCell {
         warningB.titleLabel?.font = UIFont.boldSystemFont(ofSize: Colours.fontSize3)
         warningB.titleLabel?.numberOfLines = 0
         warningB.layer.masksToBounds = true
-        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = warningB.bounds
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        blurEffectView.isUserInteractionEnabled = false
-        warningB.addSubview(blurEffectView)
-        warningB.sendSubviewToBack(blurEffectView)
+//        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
+//        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+//        blurEffectView.frame = warningB.bounds
+//        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        blurEffectView.isUserInteractionEnabled = false
+//        warningB.addSubview(blurEffectView)
+//        warningB.sendSubviewToBack(blurEffectView)
         
         userName.numberOfLines = 1
         date.numberOfLines = 1
         date.textAlignment = .right
         userName.textColor = Colours.black
-        userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-        date.textColor = Colours.black.withAlphaComponent(0.6)
+        userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+        date.textColor = Colours.grayDark.withAlphaComponent(0.38)
         toot.textColor = Colours.black
         
         userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
@@ -223,8 +223,8 @@ class DMFeedCell: SwipeTableViewCell {
     func configure(_ status: Status) {
         
         userName.textColor = Colours.black
-        userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-        date.textColor = Colours.black.withAlphaComponent(0.6)
+        userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+        date.textColor = Colours.grayDark.withAlphaComponent(0.38)
         toot.textColor = Colours.black
         
         rep1.setImage(UIImage(named: "reply3")?.maskWithColor(color: Colours.gray), for: .normal)
@@ -514,7 +514,7 @@ class DMFeedCell: SwipeTableViewCell {
         if (UserDefaults.standard.object(forKey: "senseTog") == nil) || (UserDefaults.standard.object(forKey: "senseTog") as! Int == 0) {
             
             if status.reblog?.sensitive ?? false || status.sensitive ?? false {
-                warningB.backgroundColor = Colours.clear
+                warningB.backgroundColor = Colours.tabUnselected
                 
                 let z = status.reblog?.spoilerText ?? status.spoilerText
                 var zz = "Sensitive Content"
@@ -522,7 +522,7 @@ class DMFeedCell: SwipeTableViewCell {
                     zz = z
                 }
                 warningB.setTitle("\(zz)", for: .normal)
-                warningB.setTitleColor(Colours.white, for: .normal)
+                warningB.setTitleColor(Colours.grayDark.withAlphaComponent(0.6), for: .normal)
                 warningB.addTarget(self, action: #selector(self.didTouchWarning), for: .touchUpInside)
                 warningB.alpha = 1
             } else {

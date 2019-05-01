@@ -69,17 +69,35 @@ class RepliesCellImage: SwipeTableViewCell {
         mainImageViewBG.layer.cornerRadius = 10
         mainImageViewBG.backgroundColor = Colours.clear
         mainImageViewBG.layer.shadowColor = UIColor.black.cgColor
-        mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 7)
+//        mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 7)
         mainImageViewBG.layer.shadowRadius = 10
-        mainImageViewBG.layer.shadowOpacity = 0.22
+        mainImageViewBG.layer.shadowOpacity = 0.5
         mainImageViewBG.layer.masksToBounds = false
-
+        
+        if (UserDefaults.standard.object(forKey: "depthToggle") == nil) || (UserDefaults.standard.object(forKey: "depthToggle") as! Int == 0) {
+            let horizontalEffect = UIInterpolatingMotionEffect(
+                keyPath: "layer.shadowOffset.width",
+                type: .tiltAlongHorizontalAxis)
+            horizontalEffect.minimumRelativeValue = 26
+            horizontalEffect.maximumRelativeValue = -26
+            let verticalEffect = UIInterpolatingMotionEffect(
+                keyPath: "layer.shadowOffset.height",
+                type: .tiltAlongVerticalAxis)
+            verticalEffect.minimumRelativeValue = 26
+            verticalEffect.maximumRelativeValue = -26
+            let effectGroup = UIMotionEffectGroup()
+            effectGroup.motionEffects = [horizontalEffect, verticalEffect]
+            self.mainImageViewBG.addMotionEffect(effectGroup)
+        } else {
+            mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 7)
+        }
+        
         userName.numberOfLines = 0
         toot.numberOfLines = 0
 
         userName.textColor = Colours.black
-        userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-        date.textColor = Colours.black.withAlphaComponent(0.6)
+        userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+        date.textColor = Colours.grayDark.withAlphaComponent(0.38)
         toot.textColor = Colours.black
 
         userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
@@ -123,13 +141,14 @@ class RepliesCellImage: SwipeTableViewCell {
             "more" : moreImage,
             "countTag" : imageCountTag,
             ]
-
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[image(40)]-13-[name]-(>=5)-[date]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[image(40)]-13-[artist]-(>=5)-[more(16)]-20-|", options: [], metrics: nil, views: viewsDict))
+        
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[image(40)]-13-[name]-(>=5)-[more(16)]-4-[date]-20-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[image(40)]-13-[artist]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-126-[mainImage]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-136-[mainImageBG]-30-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[date]-2-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(210)]-23-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(210)]-23-|", options: [], metrics: nil, views: viewsDict))
@@ -243,14 +262,28 @@ class RepliesCellImage: SwipeTableViewCell {
         }
         //mainImageView.layer.borderWidth = 0.2
         
-        if (status.favourited ?? false) && (status.reblogged ?? false) {
+        if (status.reblog?.favourited ?? status.favourited ?? false) && (status.reblog?.reblogged ?? status.reblogged ?? false) {
             self.moreImage.image = UIImage(named: "fifty")
-        } else if status.reblogged ?? false {
+        } else if status.reblog?.reblogged ?? status.reblogged ?? false {
             self.moreImage.image = UIImage(named: "boost")
-        } else if (status.favourited ?? false) || StoreStruct.allLikes.contains(status.id) {
+        } else if (status.reblog?.favourited ?? status.favourited ?? false) || StoreStruct.allLikes.contains(status.reblog?.id ?? status.id) {
             self.moreImage.image = UIImage(named: "like")
         } else {
-            self.moreImage.image = nil
+            if status.reblog?.poll ?? status.poll != nil {
+                self.moreImage.image = UIImage(named: "list")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
+            } else {
+                
+                if status.reblog?.visibility ?? status.visibility == .direct {
+                    self.moreImage.image = UIImage(named: "direct")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
+                } else if status.reblog?.visibility ?? status.visibility == .unlisted {
+                    self.moreImage.image = UIImage(named: "unlisted")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
+                } else if status.reblog?.visibility ?? status.visibility == .private {
+                    self.moreImage.image = UIImage(named: "private")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
+                } else {
+                    self.moreImage.image = nil
+                }
+                
+            }
         }
 
 

@@ -24,7 +24,7 @@ class PollOptionCell: SwipeTableViewCell {
         optionCount.numberOfLines = 0
         theOption.numberOfLines = 0
         
-        optionCount.textColor = Colours.black.withAlphaComponent(0.6)
+        optionCount.textColor = Colours.grayDark.withAlphaComponent(0.38)
         theOption.textColor = Colours.black
         
         optionCount.font = UIFont.systemFont(ofSize: Colours.fontSize3)

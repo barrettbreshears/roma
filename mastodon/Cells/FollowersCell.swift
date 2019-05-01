@@ -48,7 +48,7 @@ class FollowersCell: SwipeTableViewCell {
         
         userName.textColor = Colours.black
         userTag.textColor = Colours.black
-        toot.textColor = Colours.black.withAlphaComponent(0.6)
+        toot.textColor = Colours.grayDark.withAlphaComponent(0.38)
         
         userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
         userTag.font = UIFont.systemFont(ofSize: Colours.fontSize1)

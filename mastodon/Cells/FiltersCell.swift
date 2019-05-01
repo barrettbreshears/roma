@@ -28,7 +28,7 @@ class FiltersCell: SwipeTableViewCell {
         toot.numberOfLines = 0
         
         userName.textColor = Colours.black
-        toot.textColor = Colours.black.withAlphaComponent(0.6)
+        toot.textColor = Colours.grayDark.withAlphaComponent(0.38)
         
         userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize3)

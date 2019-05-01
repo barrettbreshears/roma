@@ -17,7 +17,7 @@ import AVFoundation
 import SJFluidSegmentedControl
 import MessageUI
 
-class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, CrownControlDelegate, MFMailComposeViewControllerDelegate {
+class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, CrownControlDelegate, MFMailComposeViewControllerDelegate, UIGestureRecognizerDelegate {
     
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
@@ -349,12 +349,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         
         if self.fromOtherUser == true {
-            let request = Accounts.statuses(id: StoreStruct.currentUser.id)
+            let request = Accounts.statuses(id: self.userIDtoUse)
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
                     if stat.isEmpty {
-
-                        let request09 = Accounts.account(id: StoreStruct.currentUser.id)
+                        
+                        let request09 = Accounts.account(id: self.userIDtoUse)
                         StoreStruct.client.run(request09) { (statuses) in
                             if let stat = (statuses.value) {
                                 DispatchQueue.main.async {
@@ -523,7 +523,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     @objc func goToSettings() {
-        let controller = SettingsViewController()
+        let controller = MainSettingsViewController()
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -541,6 +541,35 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.tableView.setContentOffset(CGPoint(x: 0, y: 0), animated: true)
                 } else {
                     self.tableView.scrollToRow(at: IndexPath(row: 0, section: 2), at: .top, animated: true)
+                }
+            }
+        }
+    }
+    
+    @objc func longAction(sender: UILongPressGestureRecognizer) {
+        if (UserDefaults.standard.object(forKey: "longToggle") == nil) || (UserDefaults.standard.object(forKey: "longToggle") as! Int == 0) {
+            
+        } else if (UserDefaults.standard.object(forKey: "longToggle") as! Int == 3) {
+            if sender.state == .began {
+                var theTable = self.tableView
+                var sto = self.profileStatuses
+                if self.currentIndex == 0 {
+                    sto = self.profileStatuses
+                    theTable = self.tableView
+                } else if self.currentIndex == 1 {
+                    sto = self.profileStatuses2
+                    theTable = self.tableView
+                }
+                let touchPoint = sender.location(in: theTable)
+                if let indexPath = theTable.indexPathForRow(at: touchPoint) {
+                    if let myWebsite = sto[indexPath.row].url {
+                        let objectsToShare = [myWebsite]
+                        let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                        vc.popoverPresentationController?.sourceView = self.view
+                        vc.previewNumberOfLines = 5
+                        vc.previewFont = UIFont.systemFont(ofSize: 14)
+                        self.present(vc, animated: true, completion: nil)
+                    }
                 }
             }
         }
@@ -575,8 +604,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self?.player.seek(to: CMTime.zero)
             self?.player.play()
         }
-
-
+        
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longAction(sender:)))
+        longPress.minimumPressDuration = 0.5
+        longPress.delegate = self
+        self.view.addGestureRecognizer(longPress)
+        
         UserDefaults.standard.set(1, forKey: "onb")
         splitViewController?.view.backgroundColor = Colours.cellQuote
 
@@ -740,9 +774,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
 
                     } else {
-                        DispatchQueue.main.async {
                         self.profileStatuses = stat
                         self.chosenUser = self.profileStatuses[0].account
+                        DispatchQueue.main.async {
                             
                             self.ai.alpha = 0
                             self.ai.removeFromSuperview()
@@ -775,9 +809,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
                                 } else {
                                     
-                                    DispatchQueue.main.async {
                                     self.profileStatuses = stat
                                     self.chosenUser = self.profileStatuses[0].account
+                                    DispatchQueue.main.async {
                                         
                                         self.ai.alpha = 0
                                         self.ai.removeFromSuperview()
@@ -800,17 +834,17 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     if let stat = (statuses.value) {
 
                         if stat.isEmpty {
-
+                            
+                            self.chosenUser = StoreStruct.currentUser
                             DispatchQueue.main.async {
-                                self.chosenUser = StoreStruct.currentUser
                                 self.tableView.reloadData()
                             }
 
                         } else {
                             
-                            DispatchQueue.main.async {
                             self.profileStatuses = stat
                             self.chosenUser = self.profileStatuses[0].account
+                            DispatchQueue.main.async {
                                 
                                 self.ai.alpha = 0
                                 self.ai.removeFromSuperview()
@@ -843,17 +877,17 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         let request09 = Accounts.account(id: self.userIDtoUse)
                         StoreStruct.client.run(request09) { (statuses) in
                             if let stat = (statuses.value) {
+                                self.chosenUser = stat
                                 DispatchQueue.main.async {
-                                    self.chosenUser = stat
                                     self.tableView.reloadData()
                                 }
                             }
                         }
 
                     } else {
-                        DispatchQueue.main.async {
                         self.profileStatuses2 = stat
                         self.chosenUser = self.profileStatuses2[0].account
+                        DispatchQueue.main.async {
                             
                             self.ai.alpha = 0
                             self.ai.removeFromSuperview()
@@ -878,17 +912,17 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             if let stat = (statuses.value) {
 
                                 if stat.isEmpty {
-
+                                    
+                                    self.chosenUser = StoreStruct.currentUser
                                     DispatchQueue.main.async {
-                                        self.chosenUser = StoreStruct.currentUser
                                         self.tableView.reloadData()
                                     }
 
                                 } else {
                                     
+                                    self.profileStatuses2 = stat
+                                    self.chosenUser = self.profileStatuses2[0].account
                                     DispatchQueue.main.async {
-                                        self.profileStatuses2 = stat
-                                        self.chosenUser = self.profileStatuses2[0].account
                                         
                                         self.ai.alpha = 0
                                         self.ai.removeFromSuperview()
@@ -911,17 +945,17 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     if let stat = (statuses.value) {
 
                         if stat.isEmpty {
-
+                            
+                            self.chosenUser = StoreStruct.currentUser
                             DispatchQueue.main.async {
-                                self.chosenUser = StoreStruct.currentUser
                                 self.tableView.reloadData()
                             }
 
                         } else {
                             
+                            self.profileStatuses2 = stat
+                            self.chosenUser = self.profileStatuses2[0].account
                             DispatchQueue.main.async {
-                                self.profileStatuses2 = stat
-                                self.chosenUser = self.profileStatuses2[0].account
                                 
                                 self.ai.alpha = 0
                                 self.ai.removeFromSuperview()
@@ -949,8 +983,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     StoreStruct.client.run(request2) { (statuses) in
                         if let stat = (statuses.value) {
                             if stat.isEmpty {} else {
-                                DispatchQueue.main.async {
                                 self.profileStatusesHasImage = self.profileStatusesHasImage + stat
+                                DispatchQueue.main.async {
                                     self.tableView.reloadData()
                                 }
                             }
@@ -1034,8 +1068,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         
-        if self.fromOtherUser && self.isPeeking == false && self.userIDtoUse != StoreStruct.currentUser.id {
-
+        if self.fromOtherUser && (self.isPeeking == false) && (self.userIDtoUse != StoreStruct.currentUser.id) {
+            
             let request00 = Accounts.allEndorsements()
             StoreStruct.client.run(request00) { (statuses) in
                 if let stat = (statuses.value) {
@@ -1223,6 +1257,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 return nil
             } else {
                 title.text = "Recent Media".localized
+                let moreB = UIButton()
+                moreB.frame = CGRect(x: self.view.bounds.width - 50, y: 5, width: 40, height: 40)
+                moreB.setImage(UIImage(named: "more")?.maskWithColor(color: Colours.grayDark), for: .normal)
+                moreB.backgroundColor = UIColor.clear
+                moreB.addTarget(self, action: #selector(self.tapMoreImages), for: .touchUpInside)
+                vw.addSubview(moreB)
             }
         } else if section == 2 {
             if self.profileStatuses.count > 0 {
@@ -1260,7 +1300,19 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         return vw
     }
-
+    
+    @objc func tapMoreImages() {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let imp = UIImpactFeedbackGenerator()
+            imp.impactOccurred()
+        }
+        
+        let controller = AllMediaViewController()
+        controller.profileStatusesHasImage = self.profileStatusesHasImage
+        controller.chosenUser = self.chosenUser
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 3
     }
@@ -1302,8 +1354,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let impact = UIImpactFeedbackGenerator()
             impact.impactOccurred()
         }
-
-        let controller = SettingsViewController()
+        
+        let controller = MainSettingsViewController()
         self.navigationController?.pushViewController(controller, animated: true)
     }
     @objc func setTop() {
@@ -2515,6 +2567,28 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
 
                 }
+                .action(.default("Tell Me A Joke!".localized), image: UIImage(named: "emoti")) { (action, ind) in
+                    
+                    let urlStr = "https://official-joke-api.appspot.com/jokes/random"
+                    let url: URL = URL(string: urlStr)!
+                    var request = URLRequest(url: url)
+                    request.httpMethod = "GET"
+                    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                    request.addValue("application/json", forHTTPHeaderField: "Accept")
+                    let sessionConfig = URLSessionConfiguration.default
+                    let session = URLSession(configuration: sessionConfig)
+                    let task = session.dataTask(with: request) { (data, response, err) in
+                        do {
+                            let json = try JSONDecoder().decode(Joke.self, from: data ?? Data())
+                            self.tellJoke(json)
+                        } catch {
+                            print("err")
+                        }
+                    }
+                    task.resume()
+                    
+                    
+                }
                 .action(.default("Save Yourself!".localized), image: UIImage(named: "game")) { (action, ind) in
                      
                     let vc = GameViewController()
@@ -2574,7 +2648,48 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
 
     }
-
+    
+    func tellJoke(_ json: Joke) {
+        DispatchQueue.main.async {
+            let z2 = Alertift.actionSheet(title: json.setup, message: json.punchline)
+                .backgroundColor(Colours.white)
+                .titleTextColor(Colours.grayDark)
+                .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                .messageTextAlignment(.left)
+                .titleTextAlignment(.left)
+                .action(.default("Tell Me Another Joke!".localized), image: UIImage(named: "emoti")) { (action, ind) in
+                    
+                    let urlStr = "https://official-joke-api.appspot.com/jokes/random"
+                    let url: URL = URL(string: urlStr)!
+                    var request = URLRequest(url: url)
+                    request.httpMethod = "GET"
+                    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                    request.addValue("application/json", forHTTPHeaderField: "Accept")
+                    let sessionConfig = URLSessionConfiguration.default
+                    let session = URLSession(configuration: sessionConfig)
+                    let task = session.dataTask(with: request) { (data, response, err) in
+                        do {
+                            let json = try JSONDecoder().decode(Joke.self, from: data ?? Data())
+                            self.tellJoke(json)
+                        } catch {
+                            print("err")
+                        }
+                    }
+                    task.resume()
+                    
+                    
+                }
+                .action(.cancel("Dismiss"))
+                .finally { action, index in
+                    if action.style == .cancel {
+                        return
+                    }
+            }
+            z2.popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.contentView ?? self.view)
+            z2.show(on: self)
+        }
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         if indexPath.section == 0 {
@@ -3213,8 +3328,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 //cell.configure(zzz[indexPath.row])
                 cell.backgroundColor = Colours.white
                 cell.userName.textColor = Colours.black
-                cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-                cell.date.textColor = Colours.black.withAlphaComponent(0.6)
+                cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
                 cell.toot.textColor = Colours.black
                 cell.toot.handleMentionTap { (string) in
                     // mention
@@ -3321,8 +3436,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.backgroundColor = Colours.white
                     cell.userName.textColor = Colours.black
-                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-                    cell.date.textColor = Colours.black.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
                     cell.toot.textColor = Colours.black
                     cell.toot.handleMentionTap { (string) in
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -3432,8 +3547,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userName.textColor = Colours.black
-                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-                    cell.date.textColor = Colours.black.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
                     cell.toot.textColor = Colours.black
                     cell.mainImageView.backgroundColor = Colours.white
                     cell.mainImageViewBG.backgroundColor = Colours.white
@@ -3546,8 +3661,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userName.textColor = Colours.black
-                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-                    cell.date.textColor = Colours.black.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
                     cell.toot.textColor = Colours.black
                     cell.mainImageView.backgroundColor = Colours.white
                     cell.mainImageViewBG.backgroundColor = Colours.white
@@ -5359,7 +5474,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                 }
                 more.backgroundColor = Colours.white
-                more.image = UIImage(named: "more2")
+                more.image = UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected)
                 more.transitionDelegate = ScaleTransition.default
                 more.textColor = Colours.tabUnselected
                 return [more]
@@ -5436,8 +5551,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
                         self.lastThing = stat.first?.id ?? ""
                         self.profileStatuses = self.profileStatuses + stat
+                        self.profileStatuses = self.profileStatuses.removeDuplicates()
                         DispatchQueue.main.async {
-                            self.profileStatuses = self.profileStatuses.removeDuplicates()
                             self.tableView.reloadData()
                         }
                     }
@@ -5459,8 +5574,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
                         self.lastThing = stat.first?.id ?? ""
                         self.profileStatuses2 = self.profileStatuses2 + stat
+                        self.profileStatuses2 = self.profileStatuses2.removeDuplicates()
                         DispatchQueue.main.async {
-                            self.profileStatuses2 = self.profileStatuses2.removeDuplicates()
                             self.tableView.reloadData()
                         }
                     }
@@ -5480,9 +5595,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
                     self.profileStatuses = stat + self.profileStatuses
+                    self.profileStatuses = self.profileStatuses.removeDuplicates()
                     
                     DispatchQueue.main.async {
-                        self.profileStatuses = self.profileStatuses.removeDuplicates()
                         if stat.count > 0 {
                             self.tableView.reloadData()
                         }
@@ -5505,9 +5620,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
                     self.profileStatuses2 = stat + self.profileStatuses2
+                    self.profileStatuses2 = self.profileStatuses2.removeDuplicates()
                     
                     DispatchQueue.main.async {
-                        self.profileStatuses2 = self.profileStatuses2.removeDuplicates()
                         if stat.count > 0 {
                             self.tableView.reloadData()
                         }

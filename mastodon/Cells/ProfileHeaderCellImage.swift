@@ -92,9 +92,27 @@ class ProfileHeaderCellImage: UITableViewCell, UICollectionViewDelegate, UIColle
                 
                 cell.bgImage.layer.masksToBounds = false
                 cell.bgImage.layer.shadowColor = UIColor.black.cgColor
-                cell.bgImage.layer.shadowOffset = CGSize(width:0, height:8)
-                cell.bgImage.layer.shadowRadius = 12
-                cell.bgImage.layer.shadowOpacity = 0.22
+//                cell.bgImage.layer.shadowOffset = CGSize(width:0, height:8)
+                cell.bgImage.layer.shadowRadius = 10
+                cell.bgImage.layer.shadowOpacity = 0.4
+                
+                if (UserDefaults.standard.object(forKey: "depthToggle") == nil) || (UserDefaults.standard.object(forKey: "depthToggle") as! Int == 0) {
+                    let horizontalEffect = UIInterpolatingMotionEffect(
+                        keyPath: "layer.shadowOffset.width",
+                        type: .tiltAlongHorizontalAxis)
+                    horizontalEffect.minimumRelativeValue = 18
+                    horizontalEffect.maximumRelativeValue = -18
+                    let verticalEffect = UIInterpolatingMotionEffect(
+                        keyPath: "layer.shadowOffset.height",
+                        type: .tiltAlongVerticalAxis)
+                    verticalEffect.minimumRelativeValue = 18
+                    verticalEffect.maximumRelativeValue = -18
+                    let effectGroup = UIMotionEffectGroup()
+                    effectGroup.motionEffects = [horizontalEffect, verticalEffect]
+                    cell.bgImage.addMotionEffect(effectGroup)
+                } else {
+                    cell.bgImage.layer.shadowOffset = CGSize(width: 0, height: 8)
+                }
                 
                 if self.profileStatusesHasImage[indexPath.item].reblog?.mediaAttachments[0].type ?? self.profileStatusesHasImage[indexPath.item].mediaAttachments[0].type == .video {
                     cell.imageCountTag.setTitle("\u{25b6}", for: .normal)

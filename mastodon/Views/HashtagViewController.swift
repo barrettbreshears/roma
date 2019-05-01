@@ -15,7 +15,7 @@ import SAConfettiView
 import AVKit
 import AVFoundation
 
-class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate {
+class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate, UIGestureRecognizerDelegate {
     
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
@@ -154,6 +154,28 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
+    @objc func longAction(sender: UILongPressGestureRecognizer) {
+        if (UserDefaults.standard.object(forKey: "longToggle") == nil) || (UserDefaults.standard.object(forKey: "longToggle") as! Int == 0) {
+            
+        } else if (UserDefaults.standard.object(forKey: "longToggle") as! Int == 3) {
+            if sender.state == .began {
+                var theTable = self.tableView
+                var sto = self.currentTags
+                let touchPoint = sender.location(in: theTable)
+                if let indexPath = theTable.indexPathForRow(at: touchPoint) {
+                    if let myWebsite = sto[indexPath.row].url {
+                        let objectsToShare = [myWebsite]
+                        let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                        vc.popoverPresentationController?.sourceView = self.view
+                        vc.previewNumberOfLines = 5
+                        vc.previewFont = UIFont.systemFont(ofSize: 14)
+                        self.present(vc, animated: true, completion: nil)
+                    }
+                }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -162,6 +184,11 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         NotificationCenter.default.addObserver(self, selector: #selector(self.load), name: NSNotification.Name(rawValue: "load"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name: NSNotification.Name(rawValue: "refresh"), object: nil)
         //NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTop1), name: NSNotification.Name(rawValue: "scrollTop1"), object: nil)
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longAction(sender:)))
+        longPress.minimumPressDuration = 0.5
+        longPress.delegate = self
+        self.view.addGestureRecognizer(longPress)
         
         self.view.backgroundColor = Colours.white
         
@@ -351,8 +378,8 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
             cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
             cell.userName.textColor = Colours.black
-            cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-            cell.date.textColor = Colours.black.withAlphaComponent(0.6)
+            cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+            cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
             cell.toot.textColor = Colours.black
             cell.toot.handleMentionTap { (string) in
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -464,8 +491,8 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                     cell.smallImage3.tag = indexPath.row
                     cell.smallImage4.tag = indexPath.row
             cell.userName.textColor = Colours.black
-            cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-            cell.date.textColor = Colours.black.withAlphaComponent(0.6)
+            cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+            cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
             cell.toot.textColor = Colours.black
             cell.mainImageView.backgroundColor = Colours.white
             cell.mainImageViewBG.backgroundColor = Colours.white
@@ -2032,7 +2059,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                 }
             }
             
-            more.image = UIImage(named: "more2")
+            more.image = UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected)
             more.transitionDelegate = ScaleTransition.default
             more.textColor = Colours.tabUnselected
             return [more]

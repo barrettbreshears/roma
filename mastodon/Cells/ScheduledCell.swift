@@ -143,10 +143,27 @@ class ScheduledCellImage: SwipeTableViewCell {
         mainImageViewBG.layer.cornerRadius = 10
         mainImageViewBG.backgroundColor = Colours.clear
         mainImageViewBG.layer.shadowColor = UIColor.black.cgColor
-        mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 7)
+//        mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 7)
         mainImageViewBG.layer.shadowRadius = 10
-        mainImageViewBG.layer.shadowOpacity = 0.22
+        mainImageViewBG.layer.shadowOpacity = 0.5
         mainImageViewBG.layer.masksToBounds = false
+        if (UserDefaults.standard.object(forKey: "depthToggle") == nil) || (UserDefaults.standard.object(forKey: "depthToggle") as! Int == 0) {
+            let horizontalEffect = UIInterpolatingMotionEffect(
+                keyPath: "layer.shadowOffset.width",
+                type: .tiltAlongHorizontalAxis)
+            horizontalEffect.minimumRelativeValue = 26
+            horizontalEffect.maximumRelativeValue = -26
+            let verticalEffect = UIInterpolatingMotionEffect(
+                keyPath: "layer.shadowOffset.height",
+                type: .tiltAlongVerticalAxis)
+            verticalEffect.minimumRelativeValue = 26
+            verticalEffect.maximumRelativeValue = -26
+            let effectGroup = UIMotionEffectGroup()
+            effectGroup.motionEffects = [horizontalEffect, verticalEffect]
+            self.mainImageViewBG.addMotionEffect(effectGroup)
+        } else {
+            mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 7)
+        }
         
         contentView.addSubview(userName)
         contentView.addSubview(toot)

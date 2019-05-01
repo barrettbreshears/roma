@@ -338,23 +338,11 @@ class ShareViewController: UIViewController, UITextViewDelegate {
         }
         
         isDoing = true
-//        let theTempText: NSExtensionItem = self.extensionContext?.inputItems.first as! NSExtensionItem
         let theText = self.textView.text ?? ""
         
         if let item = extensionContext?.inputItems.first as? NSExtensionItem {
             if let itemProvider = item.attachments?.first {
-                if itemProvider.hasItemConformingToTypeIdentifier("public.url") {
-                    itemProvider.loadItem(forTypeIdentifier: "public.url", options: nil, completionHandler: { (url, error) -> Void in
-                        if let shareURL = url as? NSURL {
-                            let request0 = Statuses.create(status: "\(theText)\n\n\(shareURL)", replyToID: nil, mediaIDs: [], sensitive: isSensitive, spoilerText: spoilers, visibility: self.currentVisibility)
-                            client.run(request0) { (statuses) in
-                                print("06")
-                                self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
-                            }
-                        }
-                        
-                    })
-                } else {
+                if itemProvider.hasItemConformingToTypeIdentifier("public.image") {
                     
                     itemProvider.loadItem(forTypeIdentifier: "public.image", options: nil, completionHandler: { (url, error) -> Void in
                         if let data = url as? URL {
@@ -415,10 +403,17 @@ class ShareViewController: UIViewController, UITextViewDelegate {
                                 })
                             }
                         }
-                        
-                        
-                        
-                        
+                    })
+                } else {
+                    
+                    itemProvider.loadItem(forTypeIdentifier: "public.url", options: nil, completionHandler: { (url, error) -> Void in
+                        if let shareURL = url as? NSURL {
+                            let request0 = Statuses.create(status: "\(theText)\n\n\(shareURL)", replyToID: nil, mediaIDs: [], sensitive: isSensitive, spoilerText: spoilers, visibility: self.currentVisibility)
+                            client.run(request0) { (statuses) in
+                                print("06")
+                                self.extensionContext?.completeRequest(returningItems: [], completionHandler: nil)
+                            }
+                        }
                         
                     })
                     

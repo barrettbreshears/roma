@@ -19,7 +19,7 @@ import Disk
 import AVKit
 import AVFoundation
 
-class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, URLSessionDataDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate, UIPencilInteractionDelegate, UIScrollViewDelegate {
+class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, URLSessionDataDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate, UIPencilInteractionDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate {
     
     var socket: WebSocket!
     var lsocket: WebSocket!
@@ -723,7 +723,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 self.segmentedControl.alpha = 0
             })
         }
-        let controller = SettingsViewController()
+        let controller = MainSettingsViewController()
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -742,6 +742,42 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 }
             }
         }
+    }
+    
+    @objc func longAction(sender: UILongPressGestureRecognizer) {
+        if (UserDefaults.standard.object(forKey: "longToggle") == nil) || (UserDefaults.standard.object(forKey: "longToggle") as! Int == 0) {
+            
+        } else if (UserDefaults.standard.object(forKey: "longToggle") as! Int == 3) {
+            if sender.state == .began {
+                var theTable = self.tableView
+                var sto = StoreStruct.statusesHome
+                if self.currentIndex == 0 {
+                    sto = StoreStruct.statusesHome
+                    theTable = self.tableView
+                } else if self.currentIndex == 1 {
+                    sto = StoreStruct.statusesLocal
+                    theTable = self.tableViewL
+                } else if self.currentIndex == 2 {
+                    sto = StoreStruct.statusesFederated
+                    theTable = self.tableViewF
+                }
+                let touchPoint = sender.location(in: theTable)
+                if let indexPath = theTable.indexPathForRow(at: touchPoint) {
+                    if let myWebsite = sto[indexPath.row].url {
+                        let objectsToShare = [myWebsite]
+                        let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                        vc.popoverPresentationController?.sourceView = self.view
+                        vc.previewNumberOfLines = 5
+                        vc.previewFont = UIFont.systemFont(ofSize: 14)
+                        self.present(vc, animated: true, completion: nil)
+                    }
+                }
+            }
+        }
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
     }
     
     override func viewDidLoad() {
@@ -771,6 +807,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToSettings), name: NSNotification.Name(rawValue: "goToSettings"), object: nil)
         
         self.view.backgroundColor = Colours.white
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longAction(sender:)))
+        longPress.minimumPressDuration = 0.5
+        longPress.delegate = self
+        self.view.addGestureRecognizer(longPress)
         
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
             self?.player.seek(to: CMTime.zero)
@@ -1576,6 +1617,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     
     
     func streamDataHome() {
+        if UserDefaults.standard.object(forKey: "accessToken") == nil {} else {
         if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
             self.hStream = true
             
@@ -1677,9 +1719,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
             socket.connect()
         }
+        }
     }
     
     func streamDataLocal() {
+        if UserDefaults.standard.object(forKey: "accessToken") == nil {} else {
         if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
             self.lStream = true
             
@@ -1780,9 +1824,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
             lsocket.connect()
         }
+        }
     }
     
     func streamDataFed() {
+        if UserDefaults.standard.object(forKey: "accessToken") == nil {} else {
         if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
             self.fStream = true
             
@@ -1892,6 +1938,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 print("got some data: \(data.count)")
             }
             fsocket.connect()
+        }
         }
     }
     
@@ -2091,6 +2138,52 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
 //        return UITableView.automaticDimension
 //    }
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if tableView == self.tableViewL || tableView == self.tableViewF {
+            return 26
+        } else {
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let vw = UIView()
+        vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 26)
+        let title = UILabel()
+        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 26)
+        
+        if tableView == self.tableViewL || tableView == self.tableViewF {
+            title.text = ""
+            let moreB = UIButton()
+            moreB.frame = CGRect(x: self.view.bounds.width - 50, y: -12, width: 40, height: 40)
+            moreB.setImage(UIImage(named: "more")?.maskWithColor(color: Colours.grayDark), for: .normal)
+            moreB.backgroundColor = UIColor.clear
+            moreB.addTarget(self, action: #selector(self.tapMoreActivity), for: .touchUpInside)
+            vw.addSubview(moreB)
+        }
+        title.textColor = Colours.grayDark2
+        title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
+        vw.addSubview(title)
+        vw.backgroundColor = Colours.white
+        
+        return vw
+    }
+    
+    @objc func tapMoreActivity() {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let imp = UIImpactFeedbackGenerator()
+            imp.impactOccurred()
+        }
+        
+        let controller = FeedMediaViewController()
+        if self.currentIndex == 1 {
+            controller.publicTypeLocal = true
+        } else {
+            controller.publicTypeLocal = false
+        }
+        self.navigationController?.pushViewController(controller, animated: true)
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         if tableView == self.tableView {
@@ -2151,8 +2244,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userName.textColor = Colours.black
-                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-                    cell.date.textColor = Colours.black.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
                     cell.toot.textColor = Colours.black
                     cell.toot.handleMentionTap { (string) in
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -2268,8 +2361,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     
                     
                     cell.userName.textColor = Colours.black
-                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-                    cell.date.textColor = Colours.black.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
                     cell.toot.textColor = Colours.black
                     cell.mainImageView.backgroundColor = Colours.white
                     cell.mainImageViewBG.backgroundColor = Colours.white
@@ -2423,8 +2516,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userName.textColor = Colours.black
-                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-                    cell.date.textColor = Colours.black.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
                     cell.toot.textColor = Colours.black
                     cell.toot.handleMentionTap { (string) in
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -2536,8 +2629,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     cell.smallImage3.tag = indexPath.row
                     cell.smallImage4.tag = indexPath.row
                     cell.userName.textColor = Colours.black
-                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-                    cell.date.textColor = Colours.black.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
                     cell.toot.textColor = Colours.black
                     cell.mainImageView.backgroundColor = Colours.white
                     cell.mainImageViewBG.backgroundColor = Colours.white
@@ -2683,8 +2776,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userName.textColor = Colours.black
-                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-                    cell.date.textColor = Colours.black.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
                     cell.toot.textColor = Colours.black
                     cell.toot.handleMentionTap { (string) in
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -2796,8 +2889,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     cell.smallImage3.tag = indexPath.row
                     cell.smallImage4.tag = indexPath.row
                     cell.userName.textColor = Colours.black
-                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-                    cell.date.textColor = Colours.black.withAlphaComponent(0.6)
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
                     cell.toot.textColor = Colours.black
                     cell.mainImageView.backgroundColor = Colours.white
                     cell.mainImageViewBG.backgroundColor = Colours.white
@@ -4528,7 +4621,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 }
             }
             
-            more.image = UIImage(named: "more2")
+            more.image = UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected)
             more.transitionDelegate = ScaleTransition.default
             more.textColor = Colours.tabUnselected
             return [more]
@@ -4674,7 +4767,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     } else {
                                         if (UserDefaults.standard.object(forKey: "lmore1") == nil) || (UserDefaults.standard.object(forKey: "lmore1") as! Int == 0) {} else {
                                             if stat.count > 0 {
+                                                if newestC < StoreStruct.statusesHome.count {
                                                 self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                                }
                                             }
                                             
                                             do {
@@ -4749,7 +4844,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     } else {
                                         if (UserDefaults.standard.object(forKey: "lmore1") == nil) || (UserDefaults.standard.object(forKey: "lmore1") as! Int == 0) {} else {
                                             if stat.count > 0 {
+                                                if newestC < StoreStruct.statusesLocal.count {
                                                 self.tableViewL.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                                }
                                             }
                                             
                                             do {
@@ -4821,7 +4918,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     } else {
                                         if (UserDefaults.standard.object(forKey: "lmore1") == nil) || (UserDefaults.standard.object(forKey: "lmore1") as! Int == 0) {} else {
                                             if stat.count > 0 {
+                                                if newestC < StoreStruct.statusesFederated.count {
                                                 self.tableViewF.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
+                                                }
                                             }
                                             
                                             do {
@@ -4990,7 +5089,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if stat.count == 0 {
                                     
                                 } else {
-                                    if StoreStruct.statusesHome.count == 0 || stat.count == 0 {
+                                    if StoreStruct.statusesHome.count == 0 || stat.count == 0 || StoreStruct.statusesHome.count == stat.count {
                                         
                                     } else {
                                         self.tableView.scrollToRow(at: IndexPath(row: stat.count, section: 0), at: .top, animated: false)
@@ -5001,6 +5100,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     self.tableView.reloadData()
                                 }
 //                                self.refreshControl.endRefreshing()
+                            }
+                            
+                            do {
+                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
+                            } catch {
+                                print("Couldn't save")
                             }
                             
                         }
@@ -5065,7 +5172,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if stat.count == 0 {
                                     
                                 } else {
-                                    if StoreStruct.statusesLocal.count == 0 || stat.count == 0 {
+                                    if StoreStruct.statusesLocal.count == 0 || stat.count == 0 || StoreStruct.statusesLocal.count == stat.count{
                                         
                                     } else {
                                         self.tableViewL.scrollToRow(at: IndexPath(row: stat.count, section: 0), at: .top, animated: false)
@@ -5080,6 +5187,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 
                             }
                             
+                            do {
+                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
+                            } catch {
+                                print("Couldn't save")
+                            }
                             
                         }
                     }
@@ -5135,7 +5249,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if stat.count == 0 {
                                     
                                 } else {
-                                    if StoreStruct.statusesFederated.count == 0 || stat.count == 0 {
+                                    if StoreStruct.statusesFederated.count == 0 || stat.count == 0 || StoreStruct.statusesFederated.count == stat.count{
                                         
                                     } else {
                                         self.tableViewF.scrollToRow(at: IndexPath(row: stat.count, section: 0), at: .top, animated: false)
@@ -5151,6 +5265,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 
                             }
                             
+                            do {
+                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
+                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
+                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
+                            } catch {
+                                print("Couldn't save")
+                            }
                             
                         }
                     }

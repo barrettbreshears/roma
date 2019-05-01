@@ -26,6 +26,8 @@ class NotificationService: UNNotificationServiceExtension {
                 return
             }
             
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "refpush1"), object: nil)
+            
             if let content = try? bestAttemptContent.decrypt(state: storedState) {
                 if content.notificationType == .follow {} else {
                     if let userDefaults = UserDefaults(suiteName: "group.com.shi.Mast.wormhole") {

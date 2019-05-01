@@ -298,29 +298,28 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     StoreStruct.client.accessToken = StoreStruct.shared.currentInstance.accessToken
                    
                     let currentInstance = InstanceData(clientID: StoreStruct.shared.currentInstance.clientID, clientSecret: StoreStruct.shared.currentInstance.clientSecret, authCode: StoreStruct.shared.currentInstance.authCode, accessToken: StoreStruct.shared.currentInstance.accessToken, returnedText: StoreStruct.shared.currentInstance.returnedText, redirect:StoreStruct.shared.currentInstance.redirect)
-
-                    var instances = InstanceData.getAllInstances()
-                    instances.append(currentInstance)
-                    UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
                     InstanceData.setCurrentInstance(instance: currentInstance)
                     
-                    let request = Timelines.home()
-                    StoreStruct.client.run(request) { (statuses) in
-                        if let stat = (statuses.value) {
-                            StoreStruct.statusesHome = stat
-                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
-                        }
-                    }
                     let request2 = Accounts.currentUser()
                     StoreStruct.client.run(request2) { (statuses) in
                         if let stat = (statuses.value) {
                             DispatchQueue.main.async {
+                                var instances = InstanceData.getAllInstances()
+                                instances.append(currentInstance)
+                                UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
                                 StoreStruct.currentUser = stat
                                 Account.addAccountToList(account: stat)
                                 NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
                             }
 
+                        }
+                    }
+                    
+                    let request = Timelines.home()
+                    StoreStruct.client.run(request) { (statuses) in
+                        if let stat = (statuses.value) {
+                            StoreStruct.statusesHome = stat
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
                         }
                     }
                     
@@ -399,28 +398,26 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     
                     newInstance.accessToken = access1
                     InstanceData.setCurrentInstance(instance: newInstance)
-                    var instances = InstanceData.getAllInstances()
-                    instances.append(newInstance)
-                    UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey: "instances")
+                        
+                        let request2 = Accounts.currentUser()
+                        StoreStruct.shared.newClient.run(request2) { (statuses) in
+                            if let stat = (statuses.value) {
+                                DispatchQueue.main.async {
+                                    var instances = InstanceData.getAllInstances()
+                                    instances.append(newInstance)
+                                    UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey: "instances")
+                                    StoreStruct.currentUser = stat
+                                    Account.addAccountToList(account: stat)
+                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
+                                }
+                            }
+                        }
                     
                     let request = Timelines.home()
                     StoreStruct.shared.newClient.run(request) { (statuses) in
                         if let stat = (statuses.value) {
                             StoreStruct.statusesHome = stat
-                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                             NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
-                        }
-                    }
-                    
-                    let request2 = Accounts.currentUser()
-                    StoreStruct.shared.newClient.run(request2) { (statuses) in
-                        if let stat = (statuses.value) {
-                            DispatchQueue.main.async {
-                                StoreStruct.currentUser = stat
-                                Account.addAccountToList(account: stat)
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: "refProf"), object: nil)
-                            }
-
                         }
                     }
                         
@@ -570,14 +567,14 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         if item.tag == 2 && StoreStruct.currentPage == 1 {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "scrollTop2"), object: nil)
         }
-        if item.tag == 3 && StoreStruct.currentPage == 2 {
+        if item.tag == 3 && StoreStruct.currentPage == 101010 {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "scrollTopDM"), object: nil)
+        }
+        if item.tag == 4 && StoreStruct.currentPage == 2 {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "scrollTop3"), object: nil)
         }
-        if item.tag == 3 {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "setLeft"), object: nil)
-        }
-        if item.tag == 4 {
-
+        if item.tag == 5 {
+            
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 let imp = UIImpactFeedbackGenerator()
                 imp.impactOccurred()
@@ -666,6 +663,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     @objc func stopindi() {
         self.ai.alpha = 0
         self.ai.stopAnimating()
+        StoreStruct.newdrafts.remove(at: StoreStruct.newdrafts.count - 1)
     }
 
     override func didReceiveMemoryWarning() {
@@ -814,6 +812,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     }
     
     func streamDataDirect() {
+        if UserDefaults.standard.object(forKey: "accessToken") == nil {} else {
         if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
             
             var sss = StoreStruct.client.baseURL.replacingOccurrences(of: "https", with: "wss")
@@ -840,14 +839,16 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                             return
                         }
                         
-                        if (model.status?.visibility)! == .direct {
+                        if (model.status?.visibility) ?? Visibility.private == .direct {
                             
                             let request = Timelines.conversations(range: .since(id: StoreStruct.notificationsDirect.first?.id ?? "", limit: 5000))
                             StoreStruct.client.run(request) { (statuses) in
                                 if let stat = (statuses.value) {
                                     if stat.isEmpty {} else {
                                         DispatchQueue.main.async {
-                                            self.tabBar.items?[2].badgeValue = "1"
+                                            if (UserDefaults.standard.object(forKey: "badgeMentd") == nil) || (UserDefaults.standard.object(forKey: "badgeMentd") as! Int == 0) {
+                                                self.tabBar.items?[2].badgeValue = "1"
+                                            }
                                             StoreStruct.notificationsDirect = stat + StoreStruct.notificationsDirect
                                             StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                                             NotificationCenter.default.post(name: Notification.Name(rawValue: "updateDM"), object: nil)
@@ -868,6 +869,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 print("got some data: \(data.count)")
             }
             nsocket.connect()
+        }
         }
     }
     
@@ -944,12 +946,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         } else {
             StoreStruct.instanceLocalToAdd = UserDefaults.standard.object(forKey: "instancesLocal") as! [String]
         }
-
-        if (UserDefaults.standard.object(forKey: "popupset") == nil) {
-            UserDefaults.standard.set(1, forKey: "popupset")
-        }
-
-
+        
+        
         self.tabBar.barTintColor = Colours.white
         self.tabBar.backgroundColor = Colours.white
         self.tabBar.isTranslucent = false
@@ -1049,20 +1047,15 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             
             do {
                 let st1 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
-                StoreStruct.statusesHome = StoreStruct.statusesHome + st1
-                StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                StoreStruct.statusesHome = st1
                 let st2 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
-                StoreStruct.statusesLocal = StoreStruct.statusesLocal + st2
-                StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                StoreStruct.statusesLocal = st2
                 let st3 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
-                StoreStruct.statusesFederated = StoreStruct.statusesFederated + st3
-                StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                StoreStruct.statusesFederated = st3
                 let st4 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
-                StoreStruct.notifications = StoreStruct.notifications + st4
-                StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
+                StoreStruct.notifications = st4
                 let st5 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
-                StoreStruct.notificationsMentions = StoreStruct.notificationsMentions + st5
-                StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
+                StoreStruct.notificationsMentions = st5
             } catch {
                 print("Couldn't load")
             }
@@ -1071,6 +1064,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             let request2 = Accounts.currentUser()
             StoreStruct.client.run(request2) { (statuses) in
                 if let stat = (statuses.value) {
+                    if Account.getAccounts().contains(stat) {} else {
+                        Account.addAccountToList(account: stat)
+                    }
                     StoreStruct.currentUser = stat
                 }
             }
@@ -1319,7 +1315,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         } else if section == 3 {
             title.text = "Your Instances"
         }
-        title.textColor = Colours.grayDark2.withAlphaComponent(0.35)
+        title.textColor = UIColor(red: 67/255.0, green: 67/255.0, blue: 75/255.0, alpha: 1.0)
         title.font = UIFont.systemFont(ofSize: 16, weight: .heavy)
         vw.addSubview(title)
         vw.backgroundColor = Colours.grayDark3
@@ -1422,7 +1418,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     cell.profileImageView.isUserInteractionEnabled = false
                     cell.backgroundColor = Colours.grayDark3
                     cell.userName.textColor = UIColor.white
-                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
                     cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                     cell.toot.textColor = UIColor.white
                     let bgColorView = UIView()
@@ -1447,7 +1443,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.backgroundColor = Colours.grayDark3
                     cell.userName.textColor = UIColor.white
-                        cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
+                        cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
                     cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                     cell.toot.textColor = UIColor.white
                     let bgColorView = UIView()
@@ -1469,7 +1465,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.backgroundColor = Colours.grayDark3
                         cell.userName.textColor = UIColor.white
-                        cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
+                        cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
                         cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                         cell.toot.textColor = UIColor.white
                         cell.mainImageView.backgroundColor = Colours.white
@@ -1484,7 +1480,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     cell.profileImageView.tag = indexPath.row
                     cell.backgroundColor = Colours.grayDark3
                     cell.userName.textColor = UIColor.white
-                    cell.userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
                     cell.date.textColor = UIColor.white.withAlphaComponent(0.6)
                     cell.toot.textColor = UIColor.white
                     let bgColorView = UIView()
@@ -1662,7 +1658,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             }
         }
         more.backgroundColor = Colours.grayDark3
-        more.image = UIImage(named: "more2")
+        more.image = UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected)
         more.transitionDelegate = ScaleTransition.default
         more.textColor = Colours.tabUnselected
         return [more]
@@ -1721,7 +1717,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 }
             }
             more.backgroundColor = Colours.grayDark3
-            more.image = UIImage(named: "more2")
+            more.image = UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected)
             more.transitionDelegate = ScaleTransition.default
             more.textColor = Colours.tabUnselected
             return [more]
@@ -1779,7 +1775,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 }
             }
             more.backgroundColor = Colours.grayDark3
-            more.image = UIImage(named: "more2")
+            more.image = UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected)
             more.transitionDelegate = ScaleTransition.default
             more.textColor = Colours.tabUnselected
             return [more]
@@ -2020,10 +2016,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             }
 
         } else if (UserDefaults.standard.object(forKey: "longToggle") as! Int == 3) {
-
-            if sender.state == .began {
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
-            }
+            print("do nothing")
         } else if (UserDefaults.standard.object(forKey: "longToggle") as! Int == 6) {
             print("do nothing")
         } else {
@@ -2273,12 +2266,14 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
 
     @objc func signOutNewInstance() {
-        let loginController = ViewController()
-        loginController.loadingAdditionalInstance = true
-        loginController.createLoginView(newInstance: true)
-        self.present(loginController, animated: true, completion: {
-            loginController.textField.becomeFirstResponder()
-        })
+        DispatchQueue.main.async {
+            let loginController = ViewController()
+            loginController.loadingAdditionalInstance = true
+            loginController.createLoginView(newInstance: true)
+            self.present(loginController, animated: true, completion: {
+                loginController.textField.becomeFirstResponder()
+            })
+        }
     }
 
 
@@ -2526,11 +2521,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         })
         }
     }
-
-//    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-//        return true
-//    }
-
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 
         if textField == self.searchTextField {
@@ -2785,6 +2780,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             let request2 = Accounts.currentUser()
             StoreStruct.client.run(request2) { (statuses) in
                 if let stat = (statuses.value) {
+                    if Account.getAccounts().contains(stat) {} else {
+                        Account.addAccountToList(account: stat)
+                    }
                     StoreStruct.currentUser = stat
                 }
             }
@@ -3335,26 +3333,25 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabTwo.tabBarItem.tag = 2
             
             // Create Tab DM
-            // ADD DM TAB BACK ONCE PLEROMA SUPPORTS CONVERSATIONS API
-//            self.tabDM = SAHistoryNavigationViewController(rootViewController: self.dmView)
-//            if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
-//                self.tabDM.historyBackgroundColor = Colours.tabSelected
-//            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
-//                self.tabDM.historyBackgroundColor = UIColor(red: 53/250, green: 53/250, blue: 64/250, alpha: 1.0)
-//            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
-//                self.tabDM.historyBackgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
-//            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
-//                self.tabDM.historyBackgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
-//            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
-//                self.tabDM.historyBackgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
-//            }
-//            let tabDMBarItem2 = UITabBarItem(title: "", image: UIImage(named: "direct")?.maskWithColor(color: Colours.gray), selectedImage: UIImage(named: "direct")?.maskWithColor(color: Colours.gray))
-//            tabDMBarItem2.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
-//            self.tabDM.tabBarItem = tabDMBarItem2
-//            self.tabDM.navigationBar.backgroundColor = Colours.white
-//            self.tabDM.navigationBar.barTintColor = Colours.white
-//            self.tabDM.navigationBar.setBackgroundImage(UIImage(), for: .default)
-//            self.tabDM.tabBarItem.tag = 2
+            self.tabDM = SAHistoryNavigationViewController(rootViewController: self.dmView)
+            if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
+                self.tabDM.historyBackgroundColor = Colours.tabSelected
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
+                self.tabDM.historyBackgroundColor = UIColor(red: 53/250, green: 53/250, blue: 64/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
+                self.tabDM.historyBackgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
+                self.tabDM.historyBackgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
+            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
+                self.tabDM.historyBackgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
+            }
+            let tabDMBarItem2 = UITabBarItem(title: "", image: UIImage(named: "direct")?.maskWithColor(color: Colours.gray), selectedImage: UIImage(named: "direct")?.maskWithColor(color: Colours.gray))
+            tabDMBarItem2.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
+            self.tabDM.tabBarItem = tabDMBarItem2
+            self.tabDM.navigationBar.backgroundColor = Colours.white
+            self.tabDM.navigationBar.barTintColor = Colours.white
+            self.tabDM.navigationBar.setBackgroundImage(UIImage(), for: .default)
+            self.tabDM.tabBarItem.tag = 3
             
             // Create Tab three
             self.tabThree = SAHistoryNavigationViewController(rootViewController: self.thirdView)
@@ -3375,8 +3372,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabThree.navigationBar.backgroundColor = Colours.white
             self.tabThree.navigationBar.barTintColor = Colours.white
             self.tabThree.navigationBar.setBackgroundImage(UIImage(), for: .default)
-            self.tabThree.tabBarItem.tag = 3
-
+            self.tabThree.tabBarItem.tag = 4
+            
             // Create Tab four
             self.tabFour = SAHistoryNavigationViewController(rootViewController: self.fourthView)
             if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
@@ -3396,7 +3393,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabFour.navigationBar.backgroundColor = Colours.white
             self.tabFour.navigationBar.barTintColor = Colours.white
             self.tabFour.navigationBar.setBackgroundImage(UIImage(), for: .default)
-            self.tabFour.tabBarItem.tag = 4
+            self.tabFour.tabBarItem.tag = 5
             
             let viewControllerList = [self.tabOne, self.tabTwo, /*self.tabDM,*/ self.tabThree, self.tabFour]
             

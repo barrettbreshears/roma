@@ -41,6 +41,10 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         }
     }
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Colours.white
@@ -79,7 +83,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         messageInputBar.sendButton.imageView?.backgroundColor = UIColor.clear
         messageInputBar.sendButton.contentEdgeInsets = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2)
         messageInputBar.sendButton.setSize(CGSize(width: 36, height: 36), animated: false)
-        messageInputBar.sendButton.image = UIImage(named: "direct")?.maskWithColor(color: Colours.gray)
+        messageInputBar.sendButton.image = UIImage(named: "direct")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
         messageInputBar.sendButton.title = nil
         messageInputBar.sendButton.imageView?.layer.cornerRadius = 0
         messageInputBar.sendButton.addTarget(self, action: #selector(self.didTouchSend), for: .touchUpInside)
@@ -109,7 +113,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                 })
             }.onDisabled { item in
                 UIView.animate(withDuration: 0.3, animations: {
-                    self.messageInputBar.sendButton.image = UIImage(named: "direct")?.maskWithColor(color: Colours.gray)
+                    self.messageInputBar.sendButton.image = UIImage(named: "direct")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
                 })
         }
         let bottomItems = [charCountButton]
@@ -122,7 +126,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                     DispatchQueue.main.async {
                     self.allPrevious = (stat.ancestors)
                     self.allReplies = (stat.descendants)
-                    
+
                         (self.allPrevious + self.mainStatus + self.allReplies).map({
                             var theType = "0"
                             if $0.account.acct == StoreStruct.currentUser.acct {
@@ -130,8 +134,30 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                             }
                             self.lastUser = $0.account.acct
                             
+                            var theText = NSMutableAttributedString(string: $0.content.stripHTML().replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""))
+                            
+                            if $0.emojis.isEmpty {} else {
+                                let attributedString = theText
+                                $0.emojis.map({
+                                    let textAttachment = NSTextAttachment()
+                                    textAttachment.loadImageUsingCache(withUrl: $0.url.absoluteString)
+                                    textAttachment.bounds = CGRect(x:0, y: Int(-4), width: Int(UIFont.systemFont(ofSize: Colours.fontSize1).lineHeight), height: Int(UIFont.systemFont(ofSize: Colours.fontSize1).lineHeight))
+                                    let attrStringWithImage = NSAttributedString(attachment: textAttachment)
+                                    while attributedString.mutableString.contains(":\($0.shortcode):") {
+                                        let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\($0.shortcode):")
+                                        attributedString.replaceCharacters(in: range, with: attrStringWithImage)
+                                    }
+                                })
+                                theText = attributedString
+                            }
+                            if $0.account.acct == StoreStruct.currentUser.acct {
+                                theText.addAttributes([NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: Colours.fontSize1)], range: theText.mutableString.range(of: theText.string))
+                            } else {
+                                theText.addAttributes([NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.systemFont(ofSize: Colours.fontSize1)], range: theText.mutableString.range(of: theText.string))
+                            }
+                            
                             let sender = Sender(id: theType, displayName: "\($0.account.acct)")
-                            let x = MockMessage.init(text: $0.content.stripHTML().replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""), sender: sender, messageId: $0.id, date: $0.createdAt)
+                            let x = MockMessage.init(attributedText: theText, sender: sender, messageId: $0.id, date: $0.createdAt)
                             self.messages.append(x)
                             self.allPosts.append($0)
                             
@@ -143,11 +169,11 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                                 self.messages.append(y)
                                 self.allPosts.append($0)
                             }
-                            
+
                             self.ai.stopAnimating()
                             self.ai.alpha = 0
                             self.ai.removeFromSuperview()
-                            
+
                             self.messagesCollectionView.reloadData()
                             self.messagesCollectionView.scrollToBottom()
                         })
@@ -155,6 +181,9 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                 }
             }
         }
+        
+//        self.allPosts = self.mainStatus
+//        self.fetchEverything(self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id)
     }
     
     @objc func updateThread() {
@@ -280,18 +309,64 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         
     }
     
+//    func fetchEverything(_ id: String) {
+//        if self.mainStatus.isEmpty {} else {
+//            let request = Statuses.context(id: id)
+//            StoreStruct.client.run(request) { (statuses) in
+//                if let stat = (statuses.value) {
+//                    DispatchQueue.main.async {
+//                        self.allPosts = stat.ancestors + self.allPosts + stat.descendants
+//                        self.allPosts = self.allPosts.removeDuplicates()
+//                        let _ = self.allPosts.map({self.fetchEverything($0.id)})
+//
+//                        self.allPosts.map({
+//                            var theType = "0"
+//                            if $0.account.acct == StoreStruct.currentUser.acct {
+//                                theType = "1"
+//                            }
+//                            self.lastUser = $0.account.acct
+//
+//                            let sender = Sender(id: theType, displayName: "\($0.account.acct)")
+//                            let x = MockMessage.init(text: $0.content.stripHTML().replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""), sender: sender, messageId: $0.id, date: $0.createdAt)
+//                            self.messages.append(x)
+//                            self.allPosts.append($0)
+//
+//                            if $0.mediaAttachments.isEmpty {} else {
+//                                let url = URL(string: $0.mediaAttachments.first?.previewURL ?? "")
+//                                let imageData = try! Data(contentsOf: url!)
+//                                let image1 = UIImage(data: imageData)
+//                                let y = MockMessage.init(image: image1!, sender: sender, messageId: $0.id, date: $0.createdAt)
+//                                self.messages.append(y)
+//                                self.allPosts.append($0)
+//                            }
+//
+//                            self.ai.stopAnimating()
+//                            self.ai.alpha = 0
+//                            self.ai.removeFromSuperview()
+//
+//                            self.messagesCollectionView.reloadData()
+//                            self.messagesCollectionView.scrollToBottom()
+//                        })
+//                    }
+//                }
+//            }
+//        }
+//    }
+    
     @objc func didTouchSend(sender: UIButton) {
         let impact = UIImpactFeedbackGenerator(style: .medium)
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
             impact.impactOccurred()
         }
         
-        let sender = Sender(id: "1", displayName: "\(StoreStruct.currentUser.acct)")
-        let x = MockMessage.init(text: self.messageInputBar.inputTextView.text.replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""), sender: sender, messageId: "18982", date: Date())
+        guard let thText = self.messageInputBar.inputTextView.text else { return }
         
-        let request0 = Statuses.create(status: "@\(self.lastUser) \(String(describing: self.messageInputBar.inputTextView.text))", replyToID: self.mainStatus[0].inReplyToID, mediaIDs: [], sensitive: self.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
+        let sender = Sender(id: "1", displayName: "\(StoreStruct.currentUser.acct)")
+        let x = MockMessage.init(text: thText.replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""), sender: sender, messageId: "18982", date: Date())
+        
+        let request0 = Statuses.create(status: "@\(self.lastUser) \(String(describing: thText))", replyToID: self.mainStatus[0].id, mediaIDs: [], sensitive: self.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
         StoreStruct.client.run(request0) { (statuses) in
-             
+            
             DispatchQueue.main.async {
                 if let stat = statuses.value {
                     self.allPosts.append(stat)

@@ -55,10 +55,10 @@ class DetailCell: UITableViewCell {
         faves.titleLabel?.textAlignment = .left
         
         userName.textColor = Colours.black
-        userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-        date.textColor = Colours.black.withAlphaComponent(0.6)
+        userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+        date.textColor = Colours.grayDark.withAlphaComponent(0.38)
         toot.textColor = Colours.black
-        fromClient.textColor = Colours.black.withAlphaComponent(0.6)
+        fromClient.textColor = Colours.grayDark.withAlphaComponent(0.38)
         faves.titleLabel?.textColor = Colours.tabSelected
         faves.setTitleColor(Colours.tabSelected, for: .normal)
         
@@ -126,6 +126,8 @@ class DetailCell: UITableViewCell {
             userTag.setTitle("@\(status.reblog?.account.username ?? status.account.username)", for: .normal)
         }
         date.text = status.reblog?.createdAt.toStringWithRelativeTime() ?? status.createdAt.toStringWithRelativeTime()
+        
+        
         if status.reblog?.content.stripHTML() != nil {
 //            toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.username) reposted"
             
@@ -152,9 +154,6 @@ class DetailCell: UITableViewCell {
                 self.reloadInputViews()
             }
             
-            
-            
-            
             if status.reblog?.account.emojis.isEmpty ?? true {
                 userName.text = status.reblog?.account.displayName.stripHTML()
             } else {
@@ -177,11 +176,6 @@ class DetailCell: UITableViewCell {
             
             
         } else {
-//            toot.text = status.content.stripHTML()
-            
-            
-            
-            
             
             if status.emojis.isEmpty {
                 toot.text = status.content.stripHTML()
@@ -225,6 +219,7 @@ class DetailCell: UITableViewCell {
             
             
         }
+        
         
         let z = status.reblog?.application?.name ?? status.application?.name ?? ""
         let da = status.createdAt.toString(dateStyle: .medium, timeStyle: .medium)

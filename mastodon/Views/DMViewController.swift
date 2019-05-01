@@ -234,7 +234,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         self.ai.startAnimating()
         
         
-        if (UserDefaults.standard.object(forKey: "biometricsnot") == nil) || (UserDefaults.standard.object(forKey: "biometricsnot") as! Int == 0) {} else {
+        if (UserDefaults.standard.object(forKey: "biometricsnotdm") == nil) || (UserDefaults.standard.object(forKey: "biometricsnotdm") as! Int == 0) {} else {
             self.biometricAuthenticationClicked(self)
         }
     }
@@ -347,7 +347,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     @objc func goToSettings() {
-        let controller = SettingsViewController()
+        let controller = MainSettingsViewController()
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -355,9 +355,26 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         self.tableView.reloadData()
     }
     
+    @objc func scrollTopDM() {
+        DispatchQueue.main.async {
+            let indexPath = IndexPath(row: 0, section: 0)
+            if StoreStruct.notificationsDirect.count > 0 {
+                if self.tableView.alpha == 1 {
+                    if StoreStruct.notificationsDirect.count <= 0 {
+                        
+                    } else {
+                        self.tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+                    }
+                }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCont), name: NSNotification.Name(rawValue: "refpush1"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTopDM), name: NSNotification.Name(rawValue: "scrollTopDM"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateDM), name: NSNotification.Name(rawValue: "updateDM"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToIDNoti), name: NSNotification.Name(rawValue: "gotoidnoti2"), object: nil)
@@ -493,6 +510,8 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         settingsButton.adjustsImageWhenHighlighted = false
         settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
         self.navigationController?.view.addSubview(settingsButton)
+        
+        self.refreshCont()
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -785,10 +804,10 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.backgroundColor = Colours.white
-                        //cell.userName.textColor = Colours.black
-                        //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.date.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.toot.textColor = Colours.black
+                        cell.userName.textColor = Colours.black
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                        cell.toot.textColor = Colours.black
                         cell.toot.handleMentionTap { (string) in
                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                 let selection = UISelectionFeedbackGenerator()
@@ -886,10 +905,10 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     cell.configure(StoreStruct.notificationsDirect[indexPath.row].lastStatus!)
                     cell.moreImage.image = nil
                     cell.backgroundColor = Colours.white
-                    //cell.userName.textColor = Colours.black
-                    //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
-                    //cell.date.textColor = Colours.black.withAlphaComponent(0.6)
-                    //cell.toot.textColor = Colours.black
+                    cell.userName.textColor = Colours.black
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                    cell.toot.textColor = Colours.black
                     cell.toot.handleMentionTap { (string) in
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let selection = UISelectionFeedbackGenerator()
@@ -1244,7 +1263,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 }
                 reply.backgroundColor = Colours.white
                 if sto[indexPath.row].lastStatus?.visibility == .direct {
-                    reply.image = UIImage(named: "direct2")
+                    reply.image = UIImage(named: "direct23")
                 } else {
                     reply.image = UIImage(named: "reply")
                 }
@@ -1645,7 +1664,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     }
                 }
                 more.backgroundColor = Colours.white
-                more.image = UIImage(named: "more2")
+                more.image = UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected)
                 more.transitionDelegate = ScaleTransition.default
                 more.textColor = Colours.tabUnselected
                 return [more]
@@ -1701,11 +1720,11 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty {} else {
+                    StoreStruct.notificationsDirect = StoreStruct.notificationsDirect + stat
+                    StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                     DispatchQueue.main.async {
                         self.ai.stopAnimating()
                         self.ai.alpha = 0
-                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect + stat
-                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                         self.tableView.reloadData()
                     }
                 }
@@ -1718,9 +1737,9 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty {} else {
+                    StoreStruct.notificationsDirect = stat + StoreStruct.notificationsDirect
+                    StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                     DispatchQueue.main.async {
-                        StoreStruct.notificationsDirect = stat + StoreStruct.notificationsDirect
-                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                         self.tableView.reloadData()
                     }
                 }

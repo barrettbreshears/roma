@@ -51,6 +51,10 @@ class GameViewController: UIViewController {
     var crossButton = UIButton()
     var tipLabel = UILabel()
     
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()

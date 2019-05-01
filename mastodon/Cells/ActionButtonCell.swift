@@ -128,19 +128,19 @@ class ActionButtonCell: UITableViewCell {
     }
     
     func configure(mainStatus: Status) {
-        replyButton.setImage(UIImage(named: "reply0"), for: .normal)
-        moreButton.setImage(UIImage(named: "more2"), for: .normal)
+        replyButton.setImage(UIImage(named: "reply0")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.15)), for: .normal)
+        moreButton.setImage(UIImage(named: "more2")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.15)), for: .normal)
         
         if mainStatus.reblog?.favourited ?? mainStatus.favourited ?? false || StoreStruct.allLikes.contains(mainStatus.reblog?.id ?? mainStatus.id) {
             likeButton.setImage(UIImage(named: "like"), for: .normal)
         } else {
-            likeButton.setImage(UIImage(named: "like0"), for: .normal)
+            likeButton.setImage(UIImage(named: "like0")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.15)), for: .normal)
         }
         
         if mainStatus.reblog?.reblogged ?? mainStatus.reblogged ?? false || StoreStruct.allBoosts.contains(mainStatus.reblog?.id ?? mainStatus.id) {
             boostButton.setImage(UIImage(named: "boost"), for: .normal)
         } else {
-            boostButton.setImage(UIImage(named: "boost0"), for: .normal)
+            boostButton.setImage(UIImage(named: "boost0")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.15)), for: .normal)
         }
     }
     
@@ -228,13 +228,13 @@ class ActionButtonCell2: UITableViewCell {
     }
     
     func configure(mainStatus: Status) {
-        replyButton.setImage(UIImage(named: "direct2"), for: .normal)
-        moreButton.setImage(UIImage(named: "more2"), for: .normal)
+        replyButton.setImage(UIImage(named: "direct2")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.15)), for: .normal)
+        moreButton.setImage(UIImage(named: "more2")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.15)), for: .normal)
         
         if mainStatus.reblog?.favourited ?? mainStatus.favourited ?? false || StoreStruct.allLikes.contains(mainStatus.reblog?.id ?? mainStatus.id) {
             likeButton.setImage(UIImage(named: "like"), for: .normal)
         } else {
-            likeButton.setImage(UIImage(named: "like0"), for: .normal)
+            likeButton.setImage(UIImage(named: "like0")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.15)), for: .normal)
         }
     }
     

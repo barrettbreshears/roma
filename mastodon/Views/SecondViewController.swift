@@ -16,8 +16,9 @@ import ReactiveSSE
 import ReactiveSwift
 import AVKit
 import AVFoundation
+import Disk
 
-class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate {
+class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate, UIGestureRecognizerDelegate {
     
     var newUpdatesB1 = UIButton()
     var newUpdatesB2 = UIButton()
@@ -585,7 +586,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 self.segmentedControl.alpha = 0
             })
         }
-        let controller = SettingsViewController()
+        let controller = MainSettingsViewController()
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
@@ -600,9 +601,40 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         }
     }
     
+    @objc func longAction(sender: UILongPressGestureRecognizer) {
+        if (UserDefaults.standard.object(forKey: "longToggle") == nil) || (UserDefaults.standard.object(forKey: "longToggle") as! Int == 0) {
+            
+        } else if (UserDefaults.standard.object(forKey: "longToggle") as! Int == 3) {
+            if sender.state == .began {
+                var theTable = self.tableView
+                var sto = StoreStruct.notificationsMentions
+                if self.currentIndex == 1 {
+                    sto = StoreStruct.notificationsMentions
+                    theTable = self.tableView
+                } else if self.currentIndex == 0 {
+                    sto = StoreStruct.notifications
+                    theTable = self.tableView2
+                }
+                let touchPoint = sender.location(in: theTable)
+                if let indexPath = theTable.indexPathForRow(at: touchPoint) {
+                    print("inde - \(indexPath.row) - \(indexPath.section)")
+                    if let myWebsite = sto[indexPath.row].status?.url! {
+                        let objectsToShare = [myWebsite]
+                        let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                        vc.popoverPresentationController?.sourceView = self.view
+                        vc.previewNumberOfLines = 5
+                        vc.previewFont = UIFont.systemFont(ofSize: 14)
+                        self.present(vc, animated: true, completion: nil)
+                    }
+                }
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCont), name: NSNotification.Name(rawValue: "refpush1"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.currentSegIndex), name: NSNotification.Name(rawValue: "setCurrentSegmentIndex"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshgraph), name: NSNotification.Name(rawValue: "refrefref"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid2"), object: nil)
@@ -624,12 +656,21 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         self.view.backgroundColor = Colours.white
         
         
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longAction(sender:)))
+        longPress.minimumPressDuration = 0.5
+        longPress.delegate = self
+        self.view.addGestureRecognizer(longPress)
+        
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
             self?.player.seek(to: CMTime.zero)
             self?.player.play()
         }
         
-        
+        do {
+            StoreStruct.notTypes = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)nottypes.json", from: .documents, as: [NotificationType].self)
+        } catch {
+            print("Couldn't load")
+        }
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -773,10 +814,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.view.addSubview(self.tableView2)
         }
         
-        
-//        refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
-        //self.tableView.addSubview(refreshControl)
-        
         tableView.cr.addHeadRefresh(animator: NormalHeaderAnimator()) { [weak self] in
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 let selection = UISelectionFeedbackGenerator()
@@ -807,8 +844,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 self?.tableView3.cr.endHeaderRefresh()
             })
         }
-        //tableView.cr.beginHeaderRefresh()
-        
         
         self.ai = NVActivityIndicatorView(frame: CGRect(x: self.view.bounds.width/2 - 20, y: self.view.bounds.height/2, width: 40, height: 40), type: .ballRotateChase, color: Colours.tabSelected)
         self.view.addSubview(self.ai)
@@ -816,56 +851,53 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         
         self.fetchMoreNotifications()
         
-        if StoreStruct.notifications.isEmpty {
-            let request = Notifications.all(range: .default)
+        if StoreStruct.notifications.isEmpty || StoreStruct.notificationsMentions.isEmpty {
+            let request = Notifications.all(range: .default, typesToExclude: StoreStruct.notTypes)
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
-                    DispatchQueue.main.async {
                     StoreStruct.notifications = stat
+                    DispatchQueue.main.async {
+                        self.ai.alpha = 0
+                        self.ai.removeFromSuperview()
+                        
+                        self.tableView2.reloadData()
+                        
+                    }
                     
-//                    StoreStruct.notificationsMentions = []
-                    
-                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions + StoreStruct.notifications.filter({ (test) -> Bool in
-                        test.type == .mention
-                    })
-                    
-                    
-                    
-                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
-                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
+                }
+            }
+            
+            let request2 = Notifications.all(range: .default, typesToExclude: [.favourite, .follow, .reblog])
+            StoreStruct.client.run(request2) { (statuses) in
+                if let stat = (statuses.value) {
+                    StoreStruct.notificationsMentions = stat
+                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
+                    DispatchQueue.main.async {
                         
                         self.ai.alpha = 0
                         self.ai.removeFromSuperview()
                         
                         self.tableView.reloadData()
-                        self.tableView2.reloadData()
-                        self.tableView3.reloadData()
                         
                     }
                     
                 }
             }
         } else {
-//            StoreStruct.notificationsMentions = []
             
-            DispatchQueue.main.async {
             
             StoreStruct.notificationsMentions = StoreStruct.notificationsMentions + StoreStruct.notifications.filter({ (test) -> Bool in
                 test.type == .mention
             })
             
-            
-            
-            
-                StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
-                StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
+            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
+            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
+            DispatchQueue.main.async {
                 
                 self.ai.alpha = 0
                 self.ai.removeFromSuperview()
                 
                 self.tableView.reloadData()
-                self.tableView2.reloadData()
-                self.tableView3.reloadData()
                 
             }
         }
@@ -1153,28 +1185,30 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView2.alpha = 1
             self.tableView3.alpha = 0
             
-            if StoreStruct.notifications.isEmpty {
-                let request = Notifications.all(range: .default)
+            if StoreStruct.notifications.isEmpty || StoreStruct.notificationsMentions.isEmpty {
+                let request = Notifications.all(range: .default, typesToExclude: StoreStruct.notTypes)
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
-                        DispatchQueue.main.async {
                         StoreStruct.notifications = stat
-                        
-                        stat.map({
-                            if $0.type == .mention {
-                                StoreStruct.notificationsMentions.append($0)
-                            }
-                        })
-                        
+                        DispatchQueue.main.async {
                             self.tableView2.reloadData()
-                            self.tableView3.reloadData()
+                        }
+                        
+                    }
+                }
+                
+                let request2 = Notifications.all(range: .default, typesToExclude: [.favourite, .follow, .reblog])
+                StoreStruct.client.run(request2) { (statuses) in
+                    if let stat = (statuses.value) {
+                        StoreStruct.notificationsMentions = stat
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
                         }
                         
                     }
                 }
             } else {
                 self.tableView2.reloadData()
-                self.tableView3.reloadData()
             }
         }
     }
@@ -1580,29 +1614,18 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             
             
             self.tableView.reloadData()
-            if StoreStruct.notifications.isEmpty {
-                let request = Notifications.all(range: .default)
+            if StoreStruct.notificationsMentions.isEmpty {
+                let request = Notifications.all(range: .default, typesToExclude: [.favourite, .follow, .reblog])
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
+                        StoreStruct.notificationsMentions = stat
+                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
                         DispatchQueue.main.async {
-                        StoreStruct.notifications = stat
-                        
-                        StoreStruct.notificationsMentions = []
-                        
-                        
-                        StoreStruct.notificationsMentions = StoreStruct.notifications.filter({ (test) -> Bool in
-                            test.type == .mention
-                        })
-                        
-                        
-                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
-                            StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
                             
                             self.ai.alpha = 0
                             self.ai.removeFromSuperview()
                             
                             self.tableView.reloadData()
-                            self.tableView2.reloadData()
                             
                         }
                         
@@ -1640,17 +1663,21 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView3.alpha = 0
             
             
+            self.tableView2.reloadData()
             if StoreStruct.notifications.isEmpty {
-                let request = Notifications.all(range: .default)
+                let request = Notifications.all(range: .default, typesToExclude: StoreStruct.notTypes)
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
                         StoreStruct.notifications = stat
-                        self.tableView2.reloadData()
+                        StoreStruct.notifications = StoreStruct.notifications.sorted(by: { $0.createdAt > $1.createdAt })
+                        DispatchQueue.main.async {
+                            self.tableView2.reloadData()
+                        }
                         
                     }
                 }
             } else {
-                self.tableView2.reloadData()
+                
             }
             
             
@@ -1708,6 +1735,12 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             title.text = "Recent"
         } else {
             title.text = "Activity"
+            let moreB = UIButton()
+            moreB.frame = CGRect(x: self.view.bounds.width - 50, y: 5, width: 40, height: 40)
+            moreB.setImage(UIImage(named: "more")?.maskWithColor(color: Colours.grayDark), for: .normal)
+            moreB.backgroundColor = UIColor.clear
+            moreB.addTarget(self, action: #selector(self.tapMoreActivity), for: .touchUpInside)
+            vw.addSubview(moreB)
         }
         title.textColor = Colours.grayDark2
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
@@ -1715,6 +1748,122 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         vw.backgroundColor = Colours.white
         
         return vw
+    }
+    
+    @objc func tapMoreActivity() {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let imp = UIImpactFeedbackGenerator()
+            imp.impactOccurred()
+        }
+        
+        var filledSet1 = UIImage(named: "unfilledset")
+        var filledSet2 = UIImage(named: "unfilledset")
+        var filledSet3 = UIImage(named: "unfilledset")
+        var filledSet4 = UIImage(named: "unfilledset")
+        if (UserDefaults.standard.object(forKey: "nnmentions") == nil) || (UserDefaults.standard.object(forKey: "nnmentions") as! Bool == true) {
+            filledSet1 = UIImage(named: "filledset")
+        } else {
+            filledSet1 = UIImage(named: "unfilledset")
+        }
+        if (UserDefaults.standard.object(forKey: "nnlikes") == nil) || (UserDefaults.standard.object(forKey: "nnlikes") as! Bool == true) {
+            filledSet2 = UIImage(named: "filledset")
+        } else {
+            filledSet2 = UIImage(named: "unfilledset")
+        }
+        if (UserDefaults.standard.object(forKey: "nnboosts") == nil) || (UserDefaults.standard.object(forKey: "nnboosts") as! Bool == true) {
+            filledSet3 = UIImage(named: "filledset")
+        } else {
+            filledSet3 = UIImage(named: "unfilledset")
+        }
+        if (UserDefaults.standard.object(forKey: "nnfollows") == nil) || (UserDefaults.standard.object(forKey: "nnfollows") as! Bool == true) {
+            filledSet4 = UIImage(named: "filledset")
+        } else {
+            filledSet4 = UIImage(named: "unfilledset")
+        }
+        
+        Alertift.actionSheet(title: title, message: nil)
+            .backgroundColor(Colours.white)
+            .titleTextColor(Colours.grayDark)
+            .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+            .messageTextAlignment(.left)
+            .titleTextAlignment(.left)
+            .action(.default("Mentions".localized), image: filledSet1) { (action, ind) in
+                if (UserDefaults.standard.object(forKey: "nnmentions") == nil) || (UserDefaults.standard.object(forKey: "nnmentions") as! Bool == true) {
+                    UserDefaults.standard.set(false, forKey: "nnmentions")
+                    StoreStruct.notTypes.append(NotificationType.mention)
+                    self.filterNots()
+                } else {
+                    UserDefaults.standard.set(true, forKey: "nnmentions")
+                    StoreStruct.notTypes = StoreStruct.notTypes.filter {$0 != NotificationType.mention}
+                    self.filterNots()
+                }
+            }
+            .action(.default("Likes".localized), image: filledSet2) { (action, ind) in
+                if (UserDefaults.standard.object(forKey: "nnlikes") == nil) || (UserDefaults.standard.object(forKey: "nnlikes") as! Bool == true) {
+                    UserDefaults.standard.set(false, forKey: "nnlikes")
+                    StoreStruct.notTypes.append(NotificationType.favourite)
+                    self.filterNots()
+                } else {
+                    UserDefaults.standard.set(true, forKey: "nnlikes")
+                    StoreStruct.notTypes = StoreStruct.notTypes.filter {$0 != NotificationType.favourite}
+                    self.filterNots()
+                }
+            }
+            .action(.default("Boosts".localized), image: filledSet3) { (action, ind) in
+                if (UserDefaults.standard.object(forKey: "nnboosts") == nil) || (UserDefaults.standard.object(forKey: "nnboosts") as! Bool == true) {
+                    UserDefaults.standard.set(false, forKey: "nnboosts")
+                    StoreStruct.notTypes.append(NotificationType.reblog)
+                    self.filterNots()
+                } else {
+                    UserDefaults.standard.set(true, forKey: "nnboosts")
+                    StoreStruct.notTypes = StoreStruct.notTypes.filter {$0 != NotificationType.reblog}
+                    self.filterNots()
+                }
+            }
+            .action(.default("Follows".localized), image: filledSet4) { (action, ind) in
+                if (UserDefaults.standard.object(forKey: "nnfollows") == nil) || (UserDefaults.standard.object(forKey: "nnfollows") as! Bool == true) {
+                    UserDefaults.standard.set(false, forKey: "nnfollows")
+                    StoreStruct.notTypes.append(NotificationType.follow)
+                    self.filterNots()
+                } else {
+                    UserDefaults.standard.set(true, forKey: "nnfollows")
+                    StoreStruct.notTypes = StoreStruct.notTypes.filter {$0 != NotificationType.follow}
+                    self.filterNots()
+                }
+            }
+            .action(.cancel("Dismiss"))
+            .finally { action, index in
+                if action.style == .cancel {
+                    return
+                }
+            }
+            .popover(anchorView: self.view)
+            .show(on: self)
+    }
+    
+    func filterNots() {
+        do {
+            try Disk.save(StoreStruct.notTypes, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)nottypes.json")
+        } catch {
+            print("Couldn't save")
+        }
+        let request = Notifications.all(range: .min(id: StoreStruct.notifications.first?.id ?? "", limit: 5000), typesToExclude: StoreStruct.notTypes)
+        DispatchQueue.global(qos: .userInitiated).async {
+            StoreStruct.client.run(request) { (statuses) in
+                if let stat = (statuses.value) {
+                    StoreStruct.notifications = stat
+                    DispatchQueue.main.async {
+                        StoreStruct.notifications = StoreStruct.notifications.sorted(by: { $0.createdAt > $1.createdAt })
+                        StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
+                        
+                        if stat.count > 0 {
+                            self.tableView2.reloadData()
+                        }
+                    }
+                    self.fetchMoreNotifications()
+                }
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -1772,10 +1921,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.backgroundColor = Colours.white
-                        //cell.userName.textColor = Colours.black
-                        //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.date.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.toot.textColor = Colours.black
+                        cell.userName.textColor = Colours.black
+                        cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                        cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                        cell.toot.textColor = Colours.black
                         cell.toot.handleMentionTap { (string) in
                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                 let selection = UISelectionFeedbackGenerator()
@@ -1879,10 +2028,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     cell.smallImage3.tag = indexPath.row
                     cell.smallImage4.tag = indexPath.row
                         cell.backgroundColor = Colours.white
-                        //cell.userName.textColor = Colours.black
-                        //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.date.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.toot.textColor = Colours.black
+                        cell.userName.textColor = Colours.black
+                        cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                        cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                        cell.toot.textColor = Colours.black
                         cell.mainImageView.backgroundColor = Colours.white
                         cell.mainImageViewBG.backgroundColor = Colours.white
                         cell.toot.handleMentionTap { (string) in
@@ -1977,10 +2126,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     cell.configure(StoreStruct.notificationsDirect[indexPath.row].lastStatus!)
                     cell.moreImage.image = nil
                     cell.backgroundColor = Colours.white
-                    //cell.userName.textColor = Colours.black
-                    //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
-                    //cell.date.textColor = Colours.black.withAlphaComponent(0.6)
-                    //cell.toot.textColor = Colours.black
+                    cell.userName.textColor = Colours.black
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                    cell.toot.textColor = Colours.black
                     cell.toot.handleMentionTap { (string) in
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let selection = UISelectionFeedbackGenerator()
@@ -2094,6 +2243,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 
                 if StoreStruct.notifications.count == 0 || indexPath.row >= StoreStruct.notifications.count {
                     
+                    self.fetchMoreNotifications()
                     self.ai.stopAnimating()
                     self.ai.removeFromSuperview()
                     
@@ -2106,7 +2256,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 } else {
                     
                     
-                    if indexPath.row == StoreStruct.notifications.count - 14 || indexPath.row == StoreStruct.notifications.count {
+                    if indexPath.row == StoreStruct.notifications.count - 14 {
                         self.fetchMoreNotifications()
                     }
                     
@@ -2130,10 +2280,24 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                             cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                             cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                             cell.backgroundColor = Colours.white
-                            //cell.userName.textColor = Colours.black
-                            //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
-                            //cell.date.textColor = Colours.black.withAlphaComponent(0.6)
-                            //cell.toot.textColor = Colours.black
+                            if StoreStruct.notifications[indexPath.row].type == .mention || StoreStruct.notifications[indexPath.row].type == .direct {
+                                cell.toot.textColor = Colours.black
+                                cell.userName.textColor = Colours.black
+                                cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                                cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                            } else {
+                                if (UserDefaults.standard.object(forKey: "subtleToggle") == nil) || (UserDefaults.standard.object(forKey: "subtleToggle") as! Int == 0) {
+                                    cell.toot.textColor = Colours.black
+                                    cell.userName.textColor = Colours.black
+                                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                                } else {
+                                    cell.toot.textColor = Colours.black.withAlphaComponent(0.3)
+                                    cell.userName.textColor = Colours.black.withAlphaComponent(0.3)
+                                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                                }
+                            }
                             cell.typeImage.backgroundColor = Colours.white
                             cell.toot.handleMentionTap { (string) in
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -2242,10 +2406,24 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     cell.smallImage3.tag = indexPath.row
                     cell.smallImage4.tag = indexPath.row
                             cell.backgroundColor = Colours.white
-                            //cell.userName.textColor = Colours.black
-                            //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
-                            //cell.date.textColor = Colours.black.withAlphaComponent(0.6)
-                            //cell.toot.textColor = Colours.black
+                            if StoreStruct.notifications[indexPath.row].type == .mention || StoreStruct.notifications[indexPath.row].type == .direct {
+                                cell.toot.textColor = Colours.black
+                                cell.userName.textColor = Colours.black
+                                cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                                cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                            } else {
+                                if (UserDefaults.standard.object(forKey: "subtleToggle") == nil) || (UserDefaults.standard.object(forKey: "subtleToggle") as! Int == 0) {
+                                    cell.toot.textColor = Colours.black
+                                    cell.userName.textColor = Colours.black
+                                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                                } else {
+                                    cell.toot.textColor = Colours.black.withAlphaComponent(0.3)
+                                    cell.userName.textColor = Colours.black.withAlphaComponent(0.3)
+                                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                                }
+                            }
                             cell.typeImage.backgroundColor = Colours.white
                             cell.mainImageView.backgroundColor = Colours.white
                             cell.mainImageViewBG.backgroundColor = Colours.white
@@ -2347,10 +2525,24 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         
                         cell.configure(StoreStruct.notifications[indexPath.row])
                         cell.backgroundColor = Colours.white
-                        //cell.userName.textColor = Colours.black
-                        //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.date.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.toot.textColor = Colours.black
+                        if StoreStruct.notifications[indexPath.row].type == .mention || StoreStruct.notifications[indexPath.row].type == .direct {
+                            cell.toot.textColor = Colours.black
+                            cell.userName.textColor = Colours.black
+                            cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                            cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                        } else {
+                        if (UserDefaults.standard.object(forKey: "subtleToggle") == nil) || (UserDefaults.standard.object(forKey: "subtleToggle") as! Int == 0) {
+                            cell.toot.textColor = Colours.black
+                            cell.userName.textColor = Colours.black
+                            cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                            cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                        } else {
+                            cell.toot.textColor = Colours.black.withAlphaComponent(0.3)
+                            cell.userName.textColor = Colours.black.withAlphaComponent(0.3)
+                            cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                            cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                        }
+                        }
                         cell.typeImage.backgroundColor = Colours.white
                         cell.toot.handleMentionTap { (string) in
                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -2459,10 +2651,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 if indexPath.row == StoreStruct.notificationsMentions.count - 14 {
                     self.fetchMoreNotifications()
                 }
-                if indexPath.row < 7 && self.doOnce == false {
-                    self.doOnce = true
-                    self.fetchMoreNotifications()
-                }
                 
                 if let hasStatus = StoreStruct.notificationsMentions[indexPath.row].status {
                     
@@ -2483,10 +2671,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.backgroundColor = Colours.white
-                        //cell.userName.textColor = Colours.black
-                        //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.date.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.toot.textColor = Colours.black
+                        cell.userName.textColor = Colours.black
+                        cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                        cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                        cell.toot.textColor = Colours.black
                         cell.typeImage.backgroundColor = Colours.white
                         cell.toot.handleMentionTap { (string) in
                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -2595,10 +2783,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     cell.smallImage3.tag = indexPath.row
                     cell.smallImage4.tag = indexPath.row
                         cell.backgroundColor = Colours.white
-                        //cell.userName.textColor = Colours.black
-                        //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.date.textColor = Colours.black.withAlphaComponent(0.6)
-                        //cell.toot.textColor = Colours.black
+                        cell.userName.textColor = Colours.black
+                        cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                        cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                        cell.toot.textColor = Colours.black
                         cell.typeImage.backgroundColor = Colours.white
                         cell.mainImageView.backgroundColor = Colours.white
                         cell.mainImageViewBG.backgroundColor = Colours.white
@@ -2698,10 +2886,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     
                     cell.configure(StoreStruct.notificationsMentions[indexPath.row])
                     cell.backgroundColor = Colours.white
-                    //cell.userName.textColor = Colours.black
-                    //cell.userTag.textColor = Colours.black.withAlphaComponent(0.6)
-                    //cell.date.textColor = Colours.black.withAlphaComponent(0.6)
-                    //cell.toot.textColor = Colours.black
+                    cell.userName.textColor = Colours.black
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                    cell.toot.textColor = Colours.black
                     cell.typeImage.backgroundColor = Colours.white
                     cell.toot.handleMentionTap { (string) in
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -3671,7 +3859,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 }
                 reply.backgroundColor = Colours.white
                 if sto[indexPath.row].status?.visibility == .direct {
-                    reply.image = UIImage(named: "direct2")
+                    reply.image = UIImage(named: "direct23")
                 } else {
                     reply.image = UIImage(named: "reply")
                 }
@@ -4070,7 +4258,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     }
                 }
                 more.backgroundColor = Colours.white
-                more.image = UIImage(named: "more2")
+                more.image = UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected)
                 more.transitionDelegate = ScaleTransition.default
                 more.textColor = Colours.tabUnselected
                 return [more]
@@ -4268,7 +4456,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 }
                 reply.backgroundColor = Colours.white
                 if sto[indexPath.row].status?.visibility == .direct {
-                    reply.image = UIImage(named: "direct2")
+                    reply.image = UIImage(named: "direct23")
                 } else {
                     reply.image = UIImage(named: "reply")
                 }
@@ -4688,7 +4876,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     }
                 }
                 more.backgroundColor = Colours.white
-                more.image = UIImage(named: "more2")
+                more.image = UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected)
                 more.transitionDelegate = ScaleTransition.default
                 more.textColor = Colours.tabUnselected
                 return [more]
@@ -4854,44 +5042,41 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     }
     
     var lastThing = ""
-    var tempFetchedDirect = false
     func fetchMoreNotifications() {
-        let request = Notifications.all(range: .max(id: StoreStruct.notifications.last?.id ?? "", limit: 5000))
+        let request = Notifications.all(range: .max(id: StoreStruct.notifications.last?.id ?? "", limit: 5000), typesToExclude: StoreStruct.notTypes)
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 
                 if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
-                    DispatchQueue.main.async {
                     self.lastThing = stat.first?.id ?? ""
-                StoreStruct.notifications = StoreStruct.notifications + stat
-                
-                    stat.map({
-                        if $0.type == .mention {
-                            StoreStruct.notificationsMentions.append($0)
-                        }
-                    })
-                
-                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
+                    StoreStruct.notifications = StoreStruct.notifications + stat
                     StoreStruct.notifications = StoreStruct.notifications.sorted(by: { $0.createdAt > $1.createdAt })
-
-                    
                     StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
-                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-                    
-                    if self.currentIndex == 1 {
-                        self.tableView.reloadData()
-                    } else if self.currentIndex == 5 {
-                        self.tableView3.reloadData()
-                    } else {
+                    DispatchQueue.main.async {
                         self.tableView2.reloadData()
                     }
+//                    if StoreStruct.notifications.isEmpty {
+//                        self.fetchMoreNotifications()
+//                    }
                     
-                    if StoreStruct.notifications.isEmpty {
-                        self.fetchMoreNotifications()
-                    }
-                    
-                    self.tempFetchedDirect = false
                 }
+            }
+        }
+        let request2 = Notifications.all(range: .max(id: StoreStruct.notificationsMentions.last?.id ?? "", limit: 5000), typesToExclude: [.favourite, .follow, .reblog])
+        StoreStruct.client.run(request2) { (statuses) in
+            if let stat = (statuses.value) {
+                
+                if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
+                    self.lastThing = stat.first?.id ?? ""
+                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions + stat
+                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
+                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+//                    if StoreStruct.notificationsMentions.isEmpty {
+//                        self.fetchMoreNotifications()
+//                    }
                     
                 }
             }
@@ -4900,56 +5085,31 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     
     
     @objc func refreshCont() {
-        let request = Notifications.all(range: .min(id: StoreStruct.notifications.first?.id ?? "", limit: 5000))
+        let request = Notifications.all(range: .min(id: StoreStruct.notifications.first?.id ?? "", limit: 5000), typesToExclude: StoreStruct.notTypes)
         DispatchQueue.global(qos: .userInitiated).async {
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
-                    StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
-                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
                     var newestC = StoreStruct.notifications.count
-                    var newestC2 = StoreStruct.notificationsMentions.count
                     
                     StoreStruct.notifications = stat + StoreStruct.notifications
+                    StoreStruct.notifications = StoreStruct.notifications.sorted(by: { $0.createdAt > $1.createdAt })
                     StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
                     var co = 0
                     DispatchQueue.main.async {
-                    
-                        stat.map({
-                            if $0.type == .mention {
-                                StoreStruct.notificationsMentions = [$0] + StoreStruct.notificationsMentions
-                                co = co + 1
-                            }
-                        })
-                        
-                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
-                        StoreStruct.notifications = StoreStruct.notifications.sorted(by: { $0.createdAt > $1.createdAt })
-                        StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
-                        StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
                         
                         newestC = StoreStruct.notifications.count - newestC
-                        newestC2 = StoreStruct.notificationsMentions.count - newestC2
                         
                         if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                         
                         
                         if self.currentIndex == 1 {
-                        self.newUpdatesB1.setTitle("\(newestC2)  ", for: .normal)
-//                        self.newUpdatesB1.transform = CGAffineTransform(translationX: 120, y: 0)
-                            self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width + 78)
-                        springWithDelay(duration: 0.5, delay: 0, animations: {
-                            self.newUpdatesB1.alpha = 1
-//                            self.newUpdatesB1.transform = CGAffineTransform(translationX: 0, y: 0)
-                            self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
-                        })
-                        self.countcount1 = co
+                            
                         } else {
                             
                             self.newUpdatesB2.setTitle("\(newestC)  ", for: .normal)
-//                            self.newUpdatesB2.transform = CGAffineTransform(translationX: 120, y: 0)
                             self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width + 78)
                             springWithDelay(duration: 0.5, delay: 0, animations: {
                                 self.newUpdatesB2.alpha = 1
-//                                self.newUpdatesB2.transform = CGAffineTransform(translationX: 0, y: 0)
                                 self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
                             })
                             self.countcount2 = stat.count
@@ -4958,22 +5118,68 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                         }
                         
                             if stat.count > 0 {
-                                self.tableView.reloadData()
                                 self.tableView2.reloadData()
-                                self.tableView3.reloadData()
                             }
                         
                         if self.currentIndex == 1 {
-                            if newestC2 <= 0 {} else {
-                                self.tableView.scrollToRow(at: IndexPath(row: newestC2, section: 0), at: .top, animated: false)
+                            if newestC <= 0 {} else {
+                                self.tableView2.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
                             }
                         }
                             
                         } else {
                             if stat.count > 0 {
-                                self.tableView.reloadData()
                                 self.tableView2.reloadData()
-                                self.tableView3.reloadData()
+                            }
+                            
+                        }
+                        
+                    }
+                }
+            }
+        }
+        
+        let request2 = Notifications.all(range: .min(id: StoreStruct.notificationsMentions.first?.id ?? "", limit: 5000), typesToExclude: [.favourite, .follow, .reblog])
+        DispatchQueue.global(qos: .userInitiated).async {
+            StoreStruct.client.run(request2) { (statuses) in
+                if let stat = (statuses.value) {
+                    var newestC2 = StoreStruct.notificationsMentions.count
+                    
+                    StoreStruct.notificationsMentions = stat + StoreStruct.notificationsMentions
+                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
+                    StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
+                    var co = 0
+                    DispatchQueue.main.async {
+                        
+                        
+                        newestC2 = StoreStruct.notificationsMentions.count - newestC2
+                        
+                        if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
+                            
+                            
+                            if self.currentIndex == 1 {
+                                self.newUpdatesB1.setTitle("\(newestC2)  ", for: .normal)
+                                self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                springWithDelay(duration: 0.5, delay: 0, animations: {
+                                    self.newUpdatesB1.alpha = 1
+                                    self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                })
+                                self.countcount1 = co
+                            }
+                            
+                            if stat.count > 0 {
+                                self.tableView.reloadData()
+                            }
+                            
+                            if self.currentIndex == 1 {
+                                if newestC2 <= 0 {} else {
+                                    self.tableView.scrollToRow(at: IndexPath(row: newestC2, section: 0), at: .top, animated: false)
+                                }
+                            }
+                            
+                        } else {
+                            if stat.count > 0 {
+                                self.tableView.reloadData()
                             }
                             
                         }

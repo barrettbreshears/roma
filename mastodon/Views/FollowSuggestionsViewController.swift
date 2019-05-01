@@ -178,7 +178,7 @@ class FollowSuggestionsViewController: UIViewController, UITableViewDelegate, UI
                 cell.backgroundColor = Colours.white
                 cell.userName.textColor = Colours.black
                 cell.userTag.textColor = Colours.black
-                cell.toot.textColor = Colours.black.withAlphaComponent(0.6)
+                cell.toot.textColor = Colours.grayDark.withAlphaComponent(0.38)
                 let bgColorView = UIView()
                 bgColorView.backgroundColor = Colours.white
                 cell.selectedBackgroundView = bgColorView

@@ -66,7 +66,7 @@ class DetailCellImage: UITableViewCell {
         mainImageViewBG.layer.shadowColor = UIColor.black.cgColor
         mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 0)
         mainImageViewBG.layer.shadowRadius = 12
-        mainImageViewBG.layer.shadowOpacity = 0.22
+        mainImageViewBG.layer.shadowOpacity = 0
         mainImageViewBG.layer.masksToBounds = false
 //        if UIDevice.current.userInterfaceIdiom == .pad {
 //            mainImageViewBG.alpha = 0
@@ -78,10 +78,10 @@ class DetailCellImage: UITableViewCell {
         faves.titleLabel?.textAlignment = .left
         
         userName.textColor = Colours.black
-        userTag.setTitleColor(Colours.black.withAlphaComponent(0.6), for: .normal)
-        date.textColor = Colours.black.withAlphaComponent(0.6)
+        userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+        date.textColor = Colours.grayDark.withAlphaComponent(0.38)
         toot.textColor = Colours.black
-        fromClient.textColor = Colours.black.withAlphaComponent(0.6)
+        fromClient.textColor = Colours.grayDark.withAlphaComponent(0.38)
         faves.titleLabel?.textColor = Colours.tabSelected
         faves.setTitleColor(Colours.tabSelected, for: .normal)
         

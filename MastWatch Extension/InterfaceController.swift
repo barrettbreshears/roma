@@ -221,11 +221,11 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                     //DispatchQueue.global().async { [weak self] in
                     self.getDataFromUrl(url: URL(string: StoreStruct.allStats[index].reblog?.account.avatar ?? StoreStruct.allStats[index].account.avatar ?? "")!) { data, response, error in
                         guard let data = data, error == nil else { return }
-                        //DispatchQueue.main.async() {
+                        DispatchQueue.main.async() {
                         if self.isShowing {
                             controller.imageView.setImageData(data)
                         }
-                        //}
+                        }
                     }
                     //}
                     
