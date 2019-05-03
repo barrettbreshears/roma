@@ -147,7 +147,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
         self.tabBar.barTintColor = Colours.white
         self.tabBar.backgroundColor = Colours.white
-        self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
+        self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tabBar.tintColor = Colours.tabSelected
 
         self.firstView.view.backgroundColor = Colours.white
@@ -395,12 +395,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                     
                     if let access1 = (json["access_token"] as? String) {
-                    
-                    newInstance.accessToken = access1
-                    InstanceData.setCurrentInstance(instance: newInstance)
+                        
+                        newInstance.accessToken = access1
+                       InstanceData.setCurrentInstance(instance: newInstance)
                         
                         let request2 = Accounts.currentUser()
-                        StoreStruct.shared.newClient.run(request2) { (statuses) in
+                        StoreStruct.client.run(request2) { (statuses) in
+                            print(statuses)
                             if let stat = (statuses.value) {
                                 DispatchQueue.main.async {
                                     var instances = InstanceData.getAllInstances()
@@ -412,29 +413,30 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                                 }
                             }
                         }
-                    
-                    let request = Timelines.home()
-                    StoreStruct.shared.newClient.run(request) { (statuses) in
-                        if let stat = (statuses.value) {
-                            StoreStruct.statusesHome = stat
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
-                        }
-                    }
                         
-                    // onboarding
-                    if (UserDefaults.standard.object(forKey: "onb") == nil) || (UserDefaults.standard.object(forKey: "onb") as! Int == 0) {
-                        DispatchQueue.main.async {
-                            self.bulletinManager.prepare()
-                            self.bulletinManager.presentBulletin(above: self, animated: true, completion: nil)
+                        let request = Timelines.home()
+                        StoreStruct.client.run(request) { (statuses) in
+                            if let stat = (statuses.value) {
+                                StoreStruct.statusesHome = stat
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
+                            }
                         }
-                    }
-                    
-                    DispatchQueue.main.async {
-                        StoreStruct.tappedSignInCheck = false
-                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                        appDelegate.reloadApplication()
-                    }
-                    
+                        
+                        // onboarding
+                        if (UserDefaults.standard.object(forKey: "onb") == nil) || (UserDefaults.standard.object(forKey: "onb") as! Int == 0) {
+                            DispatchQueue.main.async {
+                                self.bulletinManager.prepare()
+                                self.bulletinManager.presentBulletin(above: self, animated: true, completion: nil)
+                            }
+                        }
+                        
+                        DispatchQueue.main.async {
+                            StoreStruct.tappedSignInCheck = false
+                            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                            appDelegate.reloadApplication()
+                        }
+                        
+                        
                     }
                     
                 }
@@ -669,8 +671,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
-    func presentIntro() {
+    
+    @objc func presentIntro() {
         DispatchQueue.main.async {
             self.bulletinManager.prepare()
             self.bulletinManager.presentBulletin(above: self, animated: true, completion: nil)
@@ -688,14 +690,18 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     func switchTo3() {
         self.tabBarController?.selectedIndex = 3
     }
-
-    func gotoID() {
+    
+    @objc func gotoID() {
         if StoreStruct.currentPage == 0 {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid"), object: self)
         } else if StoreStruct.currentPage == 1 {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid2"), object: self)
-        } else {
+        } else if StoreStruct.currentPage == 2 {
             NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid3"), object: self)
+        } else if StoreStruct.currentPage == 778 {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid778"), object: self)
+        } else {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid779"), object: self)
         }
     }
 
@@ -881,6 +887,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.restorationIdentifier = "ViewController"
         self.restorationClass = ViewController.self
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.presentIntro), name: NSNotification.Name(rawValue: "presentIntro00"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.gotoID), name: NSNotification.Name(rawValue: "gotoid00"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.tappedOnTag), name: NSNotification.Name(rawValue: "tappedOnTag"), object: nil)
@@ -951,7 +959,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.tabBar.barTintColor = Colours.white
         self.tabBar.backgroundColor = Colours.white
         self.tabBar.isTranslucent = false
-        self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
+        self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tabBar.tintColor = Colours.tabSelected
 
         statusBarView = UIView(frame: UIApplication.shared.statusBarFrame)
@@ -960,12 +968,14 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
         UINavigationBar.appearance().shadowImage = UIImage()
         UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-        UITabBar.appearance().layer.borderWidth = 0.0
-        UITabBar.appearance().clipsToBounds = true
-
-
-
-
+        UITabBar.appearance().layer.borderWidth = 1.0
+        UITabBar.appearance().layer.borderColor = Colours.grayDark.withAlphaComponent(0.21).cgColor
+        self.tabBar.layer.borderColor = Colours.grayDark.withAlphaComponent(0.21).cgColor
+        //        UITabBar.appearance().clipsToBounds = false
+        
+        
+        
+        
         if UserDefaults.standard.object(forKey: "accessToken") == nil {} else {
             var customStyle = VolumeBarStyle.likeInstagram
             customStyle.trackTintColor = Colours.cellQuote
@@ -1064,9 +1074,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             let request2 = Accounts.currentUser()
             StoreStruct.client.run(request2) { (statuses) in
                 if let stat = (statuses.value) {
-                    if Account.getAccounts().contains(stat) {} else {
-                        Account.addAccountToList(account: stat)
-                    }
+//                    if Account.getAccounts().contains(stat) {} else {
+//                        Account.addAccountToList(account: stat)
+//                    }
                     StoreStruct.currentUser = stat
                 }
             }
@@ -1972,7 +1982,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
                 self.tabBar.barTintColor = Colours.white
                 self.tabBar.backgroundColor = Colours.white
-                self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
+                self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.21)
                 self.tabBar.tintColor = Colours.tabSelected
 
                 self.firstView.view.backgroundColor = Colours.white
@@ -2054,7 +2064,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
                 self.tabBar.barTintColor = Colours.white
                 self.tabBar.backgroundColor = Colours.white
-                self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
+                self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.21)
                 self.tabBar.tintColor = Colours.tabSelected
 
                 self.firstView.view.backgroundColor = Colours.white
@@ -2100,7 +2110,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             self.tabBar.barTintColor = Colours.white
             self.tabBar.backgroundColor = Colours.white
-            self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
+            self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tabBar.tintColor = Colours.tabSelected
 
             self.firstView.view.backgroundColor = Colours.white
@@ -2146,7 +2156,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             self.tabBar.barTintColor = Colours.white
             self.tabBar.backgroundColor = Colours.white
-            self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
+            self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tabBar.tintColor = Colours.tabSelected
 
             self.firstView.view.backgroundColor = Colours.white
@@ -2192,7 +2202,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             self.tabBar.barTintColor = Colours.white
             self.tabBar.backgroundColor = Colours.white
-            self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
+            self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tabBar.tintColor = Colours.tabSelected
 
             self.firstView.view.backgroundColor = Colours.white
@@ -2239,7 +2249,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             self.tabBar.barTintColor = Colours.white
             self.tabBar.backgroundColor = Colours.white
-            self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.15)
+            self.tabBar.unselectedItemTintColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tabBar.tintColor = Colours.tabSelected
 
             self.firstView.view.backgroundColor = Colours.white
@@ -2780,9 +2790,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             let request2 = Accounts.currentUser()
             StoreStruct.client.run(request2) { (statuses) in
                 if let stat = (statuses.value) {
-                    if Account.getAccounts().contains(stat) {} else {
-                        Account.addAccountToList(account: stat)
-                    }
+//                    if Account.getAccounts().contains(stat) {} else {
+//                        Account.addAccountToList(account: stat)
+//                    }
                     StoreStruct.currentUser = stat
                 }
             }
@@ -3308,7 +3318,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabOne.tabBarItem = tabOneBarItem
             self.tabOne.navigationBar.backgroundColor = Colours.white
             self.tabOne.navigationBar.barTintColor = Colours.white
-            self.tabOne.navigationBar.setBackgroundImage(UIImage(), for: .default)
+//            self.tabOne.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.tabOne.tabBarItem.tag = 1
 
             // Create Tab two
@@ -3329,7 +3339,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabTwo.tabBarItem = tabTwoBarItem2
             self.tabTwo.navigationBar.backgroundColor = Colours.white
             self.tabTwo.navigationBar.barTintColor = Colours.white
-            self.tabTwo.navigationBar.setBackgroundImage(UIImage(), for: .default)
+//            self.tabTwo.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.tabTwo.tabBarItem.tag = 2
             
             // Create Tab DM
@@ -3350,7 +3360,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabDM.tabBarItem = tabDMBarItem2
             self.tabDM.navigationBar.backgroundColor = Colours.white
             self.tabDM.navigationBar.barTintColor = Colours.white
-            self.tabDM.navigationBar.setBackgroundImage(UIImage(), for: .default)
+//            self.tabDM.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.tabDM.tabBarItem.tag = 3
             
             // Create Tab three
@@ -3371,7 +3381,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabThree.tabBarItem = tabThreeBarItem
             self.tabThree.navigationBar.backgroundColor = Colours.white
             self.tabThree.navigationBar.barTintColor = Colours.white
-            self.tabThree.navigationBar.setBackgroundImage(UIImage(), for: .default)
+//            self.tabThree.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.tabThree.tabBarItem.tag = 4
             
             // Create Tab four
@@ -3392,7 +3402,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabFour.tabBarItem = tabFourBarItem
             self.tabFour.navigationBar.backgroundColor = Colours.white
             self.tabFour.navigationBar.barTintColor = Colours.white
-            self.tabFour.navigationBar.setBackgroundImage(UIImage(), for: .default)
+//            self.tabFour.navigationBar.setBackgroundImage(UIImage(), for: .default)
             self.tabFour.tabBarItem.tag = 5
             
             let viewControllerList = [self.tabOne, self.tabTwo, /*self.tabDM,*/ self.tabThree, self.tabFour]

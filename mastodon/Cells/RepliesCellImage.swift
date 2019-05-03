@@ -75,19 +75,32 @@ class RepliesCellImage: SwipeTableViewCell {
         mainImageViewBG.layer.masksToBounds = false
         
         if (UserDefaults.standard.object(forKey: "depthToggle") == nil) || (UserDefaults.standard.object(forKey: "depthToggle") as! Int == 0) {
+            let amount = 5
             let horizontalEffect = UIInterpolatingMotionEffect(
                 keyPath: "layer.shadowOffset.width",
                 type: .tiltAlongHorizontalAxis)
-            horizontalEffect.minimumRelativeValue = 26
-            horizontalEffect.maximumRelativeValue = -26
+            horizontalEffect.minimumRelativeValue = amount
+            horizontalEffect.maximumRelativeValue = -amount
             let verticalEffect = UIInterpolatingMotionEffect(
                 keyPath: "layer.shadowOffset.height",
                 type: .tiltAlongVerticalAxis)
-            verticalEffect.minimumRelativeValue = 26
-            verticalEffect.maximumRelativeValue = -26
+            verticalEffect.minimumRelativeValue = amount
+            verticalEffect.maximumRelativeValue = -amount
             let effectGroup = UIMotionEffectGroup()
             effectGroup.motionEffects = [horizontalEffect, verticalEffect]
             self.mainImageViewBG.addMotionEffect(effectGroup)
+            
+            let horizontal = UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis)
+            horizontal.minimumRelativeValue = -amount
+            horizontal.maximumRelativeValue = amount
+            let vertical = UIInterpolatingMotionEffect(keyPath: "center.y", type: .tiltAlongVerticalAxis)
+            vertical.minimumRelativeValue = -amount
+            vertical.maximumRelativeValue = amount
+            let effectGro = UIMotionEffectGroup()
+            effectGro.motionEffects = [horizontal, vertical]
+            self.mainImageView.addMotionEffect(effectGro)
+            self.mainImageViewBG.addMotionEffect(effectGro)
+            //            self.imageCountTag.addMotionEffect(effectGro)
         } else {
             mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 7)
         }
@@ -99,8 +112,8 @@ class RepliesCellImage: SwipeTableViewCell {
         userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
         date.textColor = Colours.grayDark.withAlphaComponent(0.38)
         toot.textColor = Colours.black
-
-        userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
+        
+        userName.font = UIFont.systemFont(ofSize: Colours.fontSize1, weight: .heavy)
         userTag.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
@@ -109,7 +122,10 @@ class RepliesCellImage: SwipeTableViewCell {
         toot.mentionColor = Colours.tabSelected
         toot.hashtagColor = Colours.tabSelected
         toot.URLColor = Colours.tabSelected
-
+        
+        userName.setCompressionResistance(LayoutPriority(rawValue: 499), for: .horizontal)
+        date.setCompressionResistance(LayoutPriority(rawValue: 501), for: .horizontal)
+        
         contentView.addSubview(profileImageView)
         contentView.addSubview(mainImageViewBG)
         contentView.addSubview(mainImageView)
@@ -147,12 +163,12 @@ class RepliesCellImage: SwipeTableViewCell {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-126-[mainImage]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-136-[mainImageBG]-30-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImage(210)]-23-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[artist]-5-[episodes]-10-[mainImageBG(210)]-23-|", options: [], metrics: nil, views: viewsDict))
-
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-1-[episodes]-10-[mainImage(210)]-23-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-1-[episodes]-10-[mainImageBG(210)]-23-|", options: [], metrics: nil, views: viewsDict))
+        
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
     }
@@ -222,7 +238,7 @@ class RepliesCellImage: SwipeTableViewCell {
             
             
         
-        userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
+        userName.font = UIFont.systemFont(ofSize: Colours.fontSize1, weight: .heavy)
         userTag.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)

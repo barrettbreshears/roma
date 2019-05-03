@@ -479,11 +479,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         NotificationCenter.default.addObserver(self, selector: #selector(self.tappedPoll), name: NSNotification.Name(rawValue: "tappedPoll"), object: nil)
 
         self.view.backgroundColor = Colours.white
-        splitViewController?.view.backgroundColor = Colours.cellQuote
+//        splitViewController?.view.backgroundColor = Colours.cellQuote
         
         
-        UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+//        UINavigationBar.appearance().shadowImage = UIImage()
+//        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
         UINavigationBar.appearance().backgroundColor = Colours.white
         UINavigationBar.appearance().barTintColor = Colours.black
         UINavigationBar.appearance().tintColor = Colours.black
@@ -536,11 +536,12 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .singleLine
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.layer.masksToBounds = true
         self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
+        self.tableView.tableFooterView = UIView()
         
         self.detailPrev.frame = CGRect(x: Int(self.view.bounds.width) - 53, y: Int(offset + 15), width: 40, height: 40)
         self.detailPrev.setImage(UIImage(named: "detailprev"), for: .normal)
@@ -5588,7 +5589,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
 
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.reloadData()
         self.tableView.reloadInputViews()
 
@@ -5596,8 +5597,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.navigationController?.navigationBar.tintColor = Colours.black
         self.navigationController?.navigationBar.barTintColor = Colours.black
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
-        self.splitViewController?.view.backgroundColor = Colours.cellQuote
-
+//        self.splitViewController?.view.backgroundColor = Colours.cellQuote
+        
         //        var customStyle = VolumeBarStyle.likeInstagram
         //        customStyle.trackTintColor = Colours.cellQuote
         //        customStyle.progressTintColor = Colours.grayDark

@@ -83,11 +83,12 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .singleLine
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.layer.masksToBounds = true
         self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
+        self.tableView.tableFooterView = UIView()
         self.loadLoadLoad()
     }
     
@@ -211,28 +212,28 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
         }
     }
     
-    var thArray = ["Theme", "Text Size", "Pinch and History View Background", "Toot Bar Hue", "Activity Graph Hue"]
+    var thArray = ["Theme", "Text Size", "Pinch and History View Background", "Post Bar Hue", "Activity Graph Hue"]
     var thArrayDesc = ["Select from a white day theme, a dark dusk theme, an even darker night theme, a truly black OLED-friendly theme, or a midnight blue theme.", "Always be able to read posts with adjustable text sizing.", "Select a theme for the background when pinching to toot a screenshot, or when long-holding a back button to enter the history view.", "Select the hue for the keyboard bar when composing toots.", "Select the hue for the activity graph columns."]
     var thArrayIm = ["setnight", "settext", "pinchset", "barcol", "acthue"]
     
-    var tiArray = ["Swipe Action Order", "Activity Graph", "Activity Graph Animation", "Toot Action Placement", "Full Usernames", "Full Usernames in Boosts", "Time Style", "Subtle Activity Notifications", "Highlight Direct Messages", "Hide Images"]
-    var tiArrayDesc = ["Select the order of swipe action elements.", "Display an activity graph showing recent activity in the mentions tab.", "Animate the activity graph when displaying it.", "Choose whether to display toot actions on the toot cell or behind a swipe. This will require restarting the app to take effect.", "Display the user's full username, with the instance, in toots.", "Display the user's full username in boosts.", "Pick between displaying absolute or relative time in timelines.", "Dim activity notification text, whilst keeping mentions untouched.", "Highlight direct messages in timelines with a subtle, distinct, or themed background.", "Timelines without media, for a distraction-free browsing experience."]
+    var tiArray = ["Swipe Action Order", "Activity Graph", "Activity Graph Animation", "Status Action Placement", "Full Usernames", "Full Usernames in Boosts", "Time Style", "Subtle Activity Notifications", "Highlight Direct Messages", "Hide Images"]
+    var tiArrayDesc = ["Select the order of swipe action elements.", "Display an activity graph showing recent activity in the mentions tab.", "Animate the activity graph when displaying it.", "Choose whether to display post actions on the status cell or behind a swipe. This will require restarting the app to take effect.", "Display the user's full username, with the instance, in toots.", "Display the user's full username in boosts.", "Pick between displaying absolute or relative time in timelines.", "Dim activity notification text, whilst keeping mentions untouched.", "Highlight direct messages in timelines with a subtle, distinct, or themed background.", "Timelines without media, for a distraction-free browsing experience."]
     var tiArrayIm = ["swipeact3", "setgraph", "setgraph2", "like", "userat", "userat2", "timese", "subtleno", "direct23", "setima2"]
     
-    var prArray = ["Profile Corner Radius", "Profile Header Background", "Profile Display Picture Border", "Profile Display Picture in Toot Composition"]
-    var prArrayDesc = ["Circle or square, your choice.", "Change the style of the profile header background.", "Select a size for the border around display pictures.", "Choose whether to display the current account's display picture in the top-left when composing toots."]
+    var prArray = ["Profile Corner Radius", "Profile Header Background", "Profile Display Picture Border", "Profile Display Picture in Status Composition"]
+    var prArrayDesc = ["Circle or square, your choice.", "Change the style of the profile header background.", "Select a size for the border around display pictures.", "Choose whether to display the current account's display picture in the top-left when composing posts."]
     var prArrayIm = ["setpro", "headbgse", "bordset", "compav"]
     
     var meArray = ["Image Corner Radius", "Media Captions", "Media Gallery Columns", "Photos Gallery Columns"]
-    var meArrayDesc = ["Rounded or not, your choice.", "Pick whether to display the toot text or the image's alt text in media captions.", "Pick the amount of columns for the media gallery grid.", "Pick the amount of columns for the toot composition photo picker gallery grid."]
-    var meArrayIm = ["setima", "heavyse", "gridse", "gridse"]
+    var meArrayDesc = ["Rounded or not, your choice.", "Pick whether to display the status text or the image's alt text in media captions.", "Pick the amount of columns for the media gallery grid.", "Pick the amount of columns for the post composition photo picker gallery grid."]
+    var meArrayIm = ["setima", "heavyse", "gridse3", "gridse"]
     
     var seArray = ["Segment Size", "Segment Transition Style", "Segment Hue"]
     var seArrayDesc = ["Choose from larger home and notification section segments, or tinier ones.", "Pick between a static transition, or a playful liquid one.", "Select the hue for segments. This may require restarting the app to take effect."]
     var seArrayIm = ["segse", "segse2", "seghue"]
     
-    var otArray = ["Toot Progress Indicator", "Instances and Lists Icon", "Popup Alerts", "Confetti"]
-    var otArrayDesc = ["Choose whether to show the toot progress indicator or not.", "Select an icon to use for the top-left instances and list section icon.", "Pick whether to display popup alerts for a variety of actions including tooting, liking, and boosting.", "Add some fun to posting toots, following users, boosting toots, and liking toots."]
+    var otArray = ["Post Progress Indicator", "Instances and Lists Icon", "Popup Alerts", "Confetti"]
+    var otArrayDesc = ["Choose whether to show the post progress indicator or not.", "Select an icon to use for the top-left instances and list section icon.", "Pick whether to display popup alerts for a variety of actions including posting, liking, and reposting.", "Add some fun to posting statuses, following users, reposting statuses, and liking statuses."]
     var otArrayIm = ["indic", "barcol10", "popupset", "confett"]
     
     @objc func handleToggleSelectGraph(sender: UISwitch) {
@@ -960,27 +961,27 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
-                    .action(.default("Reply Like Boost".localized), image: filledSet1) { (action, ind) in
+                    .action(.default("Reply Like Repost".localized), image: filledSet1) { (action, ind) in
                         
                         UserDefaults.standard.set(0, forKey: "sworder")
                     }
-                    .action(.default("Reply Boost Like".localized), image: filledSet2) { (action, ind) in
+                    .action(.default("Reply Repost Like".localized), image: filledSet2) { (action, ind) in
                         
                         UserDefaults.standard.set(1, forKey: "sworder")
                     }
-                    .action(.default("Boost Reply Like".localized), image: filledSet3) { (action, ind) in
+                    .action(.default("Repost Reply Like".localized), image: filledSet3) { (action, ind) in
                         
                         UserDefaults.standard.set(2, forKey: "sworder")
                     }
-                    .action(.default("Boost Like Reply".localized), image: filledSet4) { (action, ind) in
+                    .action(.default("Repost Like Reply".localized), image: filledSet4) { (action, ind) in
                         
                         UserDefaults.standard.set(3, forKey: "sworder")
                     }
-                    .action(.default("Like Reply Boost".localized), image: filledSet5) { (action, ind) in
+                    .action(.default("Like Reply Repost".localized), image: filledSet5) { (action, ind) in
                         
                         UserDefaults.standard.set(4, forKey: "sworder")
                     }
-                    .action(.default("Like Boost Reply".localized), image: filledSet6) { (action, ind) in
+                    .action(.default("Like Repost Reply".localized), image: filledSet6) { (action, ind) in
                         
                         UserDefaults.standard.set(5, forKey: "sworder")
                     }
@@ -1015,7 +1016,7 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                         UserDefaults.standard.set(0, forKey: "tootpl")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
-                    .action(.default("Actions on Toot Cells".localized), image: filledSet2) { (action, ind) in
+                    .action(.default("Actions on Status Cells".localized), image: filledSet2) { (action, ind) in
                         
                         UserDefaults.standard.set(1, forKey: "tootpl")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
@@ -1744,7 +1745,7 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
         }
         
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.reloadData()
         self.tableView.reloadInputViews()
     }

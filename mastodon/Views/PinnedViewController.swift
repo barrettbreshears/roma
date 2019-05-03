@@ -137,7 +137,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.view.addGestureRecognizer(longPress)
         
         self.view.backgroundColor = Colours.white
-        splitViewController?.view.backgroundColor = Colours.cellQuote
+//        splitViewController?.view.backgroundColor = Colours.cellQuote
         
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
             self?.player.seek(to: CMTime.zero)
@@ -146,7 +146,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         
         //        UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+//        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
         //        UINavigationBar.appearance().backgroundColor = Colours.white
         UINavigationBar.appearance().barTintColor = Colours.black
         UINavigationBar.appearance().tintColor = Colours.black
@@ -175,11 +175,12 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .singleLine
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.layer.masksToBounds = true
         self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
+        self.tableView.tableFooterView = UIView()
         
         self.loadLoadLoad()
         
@@ -2122,7 +2123,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.reloadData()
         self.tableView.reloadInputViews()
         
@@ -2131,7 +2132,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.navigationController?.navigationBar.tintColor = Colours.black
         self.navigationController?.navigationBar.barTintColor = Colours.black
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
-        self.splitViewController?.view.backgroundColor = Colours.cellQuote
+//        self.splitViewController?.view.backgroundColor = Colours.cellQuote
         
         //        var customStyle = VolumeBarStyle.likeInstagram
         //        customStyle.trackTintColor = Colours.cellQuote

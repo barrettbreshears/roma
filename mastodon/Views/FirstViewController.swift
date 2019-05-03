@@ -148,6 +148,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     }
     
     @objc func goToIDNoti() {
+        sleep(2)
         let request = Notifications.notification(id: StoreStruct.curIDNoti)
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
@@ -526,7 +527,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.tableView.dataSource = self
             self.tableView.separatorStyle = .singleLine
             self.tableView.backgroundColor = Colours.white
-            self.tableView.separatorColor = Colours.cellQuote
+            self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tableView.layer.masksToBounds = true
             self.tableView.estimatedRowHeight = UITableView.automaticDimension
             self.tableView.rowHeight = UITableView.automaticDimension
@@ -541,7 +542,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.tableViewL.dataSource = self
             self.tableViewL.separatorStyle = .singleLine
             self.tableViewL.backgroundColor = Colours.white
-            self.tableViewL.separatorColor = Colours.cellQuote
+            self.tableViewL.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tableViewL.layer.masksToBounds = true
             self.tableViewL.estimatedRowHeight = UITableView.automaticDimension
             self.tableViewL.rowHeight = UITableView.automaticDimension
@@ -556,7 +557,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.tableViewF.dataSource = self
             self.tableViewF.separatorStyle = .singleLine
             self.tableViewF.backgroundColor = Colours.white
-            self.tableViewF.separatorColor = Colours.cellQuote
+            self.tableViewF.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tableViewF.layer.masksToBounds = true
             self.tableViewF.estimatedRowHeight = UITableView.automaticDimension
             self.tableViewF.rowHeight = UITableView.automaticDimension
@@ -590,7 +591,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.tableView.dataSource = self
             self.tableView.separatorStyle = .singleLine
             self.tableView.backgroundColor = Colours.white
-            self.tableView.separatorColor = Colours.cellQuote
+            self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tableView.layer.masksToBounds = true
             self.tableView.estimatedRowHeight = UITableView.automaticDimension
             self.tableView.rowHeight = UITableView.automaticDimension
@@ -605,7 +606,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.tableViewL.dataSource = self
             self.tableViewL.separatorStyle = .singleLine
             self.tableViewL.backgroundColor = Colours.white
-            self.tableViewL.separatorColor = Colours.cellQuote
+            self.tableViewL.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tableViewL.layer.masksToBounds = true
             self.tableViewL.estimatedRowHeight = UITableView.automaticDimension
             self.tableViewL.rowHeight = UITableView.automaticDimension
@@ -620,7 +621,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.tableViewF.dataSource = self
             self.tableViewF.separatorStyle = .singleLine
             self.tableViewF.backgroundColor = Colours.white
-            self.tableViewF.separatorColor = Colours.cellQuote
+            self.tableViewF.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tableViewF.layer.masksToBounds = true
             self.tableViewF.estimatedRowHeight = UITableView.automaticDimension
             self.tableViewF.rowHeight = UITableView.automaticDimension
@@ -868,11 +869,12 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.tableView.dataSource = self
             self.tableView.separatorStyle = .singleLine
             self.tableView.backgroundColor = Colours.white
-            self.tableView.separatorColor = Colours.cellQuote
+            self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tableView.layer.masksToBounds = true
             self.tableView.estimatedRowHeight = UITableView.automaticDimension
             self.tableView.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView)
+            self.tableView.tableFooterView = UIView()
             
             self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
             self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
@@ -883,11 +885,12 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.tableViewL.dataSource = self
             self.tableViewL.separatorStyle = .singleLine
             self.tableViewL.backgroundColor = Colours.white
-            self.tableViewL.separatorColor = Colours.cellQuote
+            self.tableViewL.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tableViewL.layer.masksToBounds = true
             self.tableViewL.estimatedRowHeight = UITableView.automaticDimension
             self.tableViewL.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableViewL)
+            self.tableViewL.tableFooterView = UIView()
             
             self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
             self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
@@ -898,11 +901,12 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.tableViewF.dataSource = self
             self.tableViewF.separatorStyle = .singleLine
             self.tableViewF.backgroundColor = Colours.white
-            self.tableViewF.separatorColor = Colours.cellQuote
+            self.tableViewF.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tableViewF.layer.masksToBounds = true
             self.tableViewF.estimatedRowHeight = UITableView.automaticDimension
             self.tableViewF.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableViewF)
+            self.tableViewF.tableFooterView = UIView()
         } else {
             if UIApplication.shared.isSplitOrSlideOver {
                 segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(30), width: CGFloat(200), height: CGFloat(40)))
@@ -931,11 +935,12 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.tableView.dataSource = self
             self.tableView.separatorStyle = .singleLine
             self.tableView.backgroundColor = Colours.white
-            self.tableView.separatorColor = Colours.cellQuote
+            self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tableView.layer.masksToBounds = true
             self.tableView.estimatedRowHeight = UITableView.automaticDimension
             self.tableView.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableView)
+            self.tableView.tableFooterView = UIView()
             
             self.tableViewL.register(MainFeedCell.self, forCellReuseIdentifier: "celll")
             self.tableViewL.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2l")
@@ -946,11 +951,12 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.tableViewL.dataSource = self
             self.tableViewL.separatorStyle = .singleLine
             self.tableViewL.backgroundColor = Colours.white
-            self.tableViewL.separatorColor = Colours.cellQuote
+            self.tableViewL.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tableViewL.layer.masksToBounds = true
             self.tableViewL.estimatedRowHeight = UITableView.automaticDimension
             self.tableViewL.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableViewL)
+            self.tableViewL.tableFooterView = UIView()
             
             self.tableViewF.register(MainFeedCell.self, forCellReuseIdentifier: "cellf")
             self.tableViewF.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2f")
@@ -961,11 +967,12 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.tableViewF.dataSource = self
             self.tableViewF.separatorStyle = .singleLine
             self.tableViewF.backgroundColor = Colours.white
-            self.tableViewF.separatorColor = Colours.cellQuote
+            self.tableViewF.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
             self.tableViewF.layer.masksToBounds = true
             self.tableViewF.estimatedRowHeight = UITableView.automaticDimension
             self.tableViewF.rowHeight = UITableView.automaticDimension
             self.view.addSubview(self.tableViewF)
+            self.tableViewF.tableFooterView = UIView()
         }
         
         if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
@@ -5413,17 +5420,17 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         self.ai.removeFromSuperview()
         
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.reloadData()
         self.tableView.reloadInputViews()
         
         self.tableViewL.backgroundColor = Colours.white
-        self.tableViewL.separatorColor = Colours.cellQuote
+        self.tableViewL.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableViewL.reloadData()
         self.tableViewL.reloadInputViews()
         
         self.tableViewF.backgroundColor = Colours.white
-        self.tableViewF.separatorColor = Colours.cellQuote
+        self.tableViewF.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableViewF.reloadData()
         self.tableViewF.reloadInputViews()
     }

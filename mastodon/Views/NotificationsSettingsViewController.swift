@@ -78,11 +78,12 @@ class NotificationsSettingsViewController: UIViewController, UITableViewDelegate
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .singleLine
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.layer.masksToBounds = true
         self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
+        self.tableView.tableFooterView = UIView()
         self.loadLoadLoad()
     }
     
@@ -232,8 +233,8 @@ class NotificationsSettingsViewController: UIViewController, UITableViewDelegate
         }
     }
     
-    var notifArray = ["Mentions", "Likes", "Boosts", "Follows"]
-    var notifArrayDesc = ["Get notified via a push notification when mentioned by other users.", "Get notified via a push notification when your toot is liked by other users.", "Get notified via a push notification when your toot is boosted by other users.", "Get notified via a push notification when you get a new follower."]
+    var notifArray = ["Mentions", "Likes", "Reposts", "Follows"]
+    var notifArrayDesc = ["Get notified via a push notification when mentioned by other users.", "Get notified via a push notification when your toot is liked by other users.", "Get notified via a push notification when your toot is reposted by other users.", "Get notified via a push notification when you get a new follower."]
     var notifArrayIm = ["notifs0", "notifs0", "notifs0", "notifs0"]
     
     var innotifArray = ["Mentions and Activity", "Direct Messages"]
@@ -435,7 +436,7 @@ class NotificationsSettingsViewController: UIViewController, UITableViewDelegate
         }
         
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.reloadData()
         self.tableView.reloadInputViews()
     }

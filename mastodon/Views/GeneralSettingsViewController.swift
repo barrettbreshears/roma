@@ -87,11 +87,12 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .singleLine
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.layer.masksToBounds = true
         self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
+        self.tableView.tableFooterView = UIView()
         self.loadLoadLoad()
     }
     
@@ -197,7 +198,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
         } else if section == 6 {
             return otArray.count
         } else {
-            return 1
+            return 2
         }
     }
     
@@ -205,17 +206,17 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
         return UITableView.automaticDimension
     }
     
-    var tiArray = ["Realtime Updates", "Always display sensitive content", "Toot Load Position", "Load More Order", "Automatically Load Gaps", "Initial Timeline", "Default Mentions Tab"]
+    var tiArray = ["Realtime Updates", "Always display sensitive content", "Status Load Position", "Load More Order", "Automatically Load Gaps", "Initial Timeline", "Default Mentions Tab"]
     var tiArrayDesc = ["No need to refresh manually, you'll get the latest toots pushed to you.", "Sensitive content will always be displayed without a content warning overlay.", "Choose whether to retain the timeline scroll position when streaming and pulling to refresh, or to scroll to the top.", "Select whether tapping the 'load more' button in timelines retains the current scroll position (allowing the new toots to be read downwards), or whether it shifts you to just below the newly loaded toots (allowing the new toots to be read upwards).", "Automatically fetch gaps in between timelines, removing the need to tap the 'load more' buttons.", "Pick the initial timeline to be displayed, whether it's home, local, or all.", "Switch to either show mentions or activity by default."]
     var tiArrayIm = ["setreal", "setsensitivec", "posse", "lmore", "autol", "segse", "actdef"]
     
-    var prArray = ["Display Boosts in Profiles", "Default Profile Secondary Button"]
-    var prArrayDesc = ["Display boosted toots in the Toots & Replies section of user profiles.", "Select what action the secondary profile button (on the left of the profile image) should do: View liked toots or view pinned toots."]
+    var prArray = ["Display Reposts in Profiles", "Default Profile Secondary Button"]
+    var prArrayDesc = ["Display reposted statuses in the Status & Replies section of user profiles.", "Select what action the secondary profile button (on the left of the profile image) should do: View liked toots or view pinned toots."]
     var prArrayIm = ["boost", "likepin"]
     
-    var toArray = ["Default Toot Privacy", "Emoticon Suggestions"]
-    var toArrayDesc = ["Select a default privacy state for you toots, from public (everyone can see), unlisted (everyone apart from local and federated timelines can see), private (followers and mentioned users can see), and direct (only to the mentioned user).", "Choose whether to allow emoticon suggestions when composing toots."]
-    var toArrayIm = ["biolock2", "setemot"]
+    var toArray = ["Default Status Privacy", "Emoticon Suggestions"]
+    var toArrayDesc = ["Select a default privacy state for you statuses, from public (everyone can see), unlisted (everyone apart from local and federated timelines can see), private (followers and mentioned users can see), and direct (only to the mentioned user).", "Choose whether to allow emoticon suggestions when composing toots."]
+    var toArrayIm = ["biolock3", "setemot"]
     
     var meArray = ["Image Upload Quality", "Recent Media Swipe Type", "Default Video Container", "Link Previews"]
     var meArrayDesc = ["Pick the quality of images uploaded when composing toots. A higher quality image may take longer to upload.", "Pick whether swiping enlarged recent media images scrolls through all attached media in the specified toot and does nothing if there's a single image, or whether it scrolls through all recent media.", "Choose whether to show videos and GIFs in a custom Picture-in-Picture container which can be swiped down to keep the view around, or in the stock media player, where swiping down dismisses the content.", "Choose whether to display link preview cards in toot details for the attached link within the toot."]
@@ -227,11 +228,11 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
     
     var geArray = ["Shake Gesture", "Long-Hold Anywhere Action", "Long Swipe Selection", "Tilt Depth"]
     var geArrayDesc = ["Select whether to hide sensitive content, rain confetti, or do nothing when shaking your device.", "Select what happens when you long-hold anywhere in the app.", "Swipe all the way left or right on a toot to select the action on the edge.", "Tilt the device to emulate a sense of depth. This may require restarting the app to take effect."]
-    var geArrayIm = ["setshake", "holdse", "swipeact", "holdse"]
+    var geArrayIm = ["setshake", "holdse", "swipeact", "tiltin"]
     
     var otArray = ["Haptic Feedback", "User Search Scope", "Thumb Scroller", "Links Destination", "Direct Messages View Style", "URL Schemes"]
     var otArrayDesc = ["Get a responsive little vibration when tapping buttons and other on-screen elements.", "Pick whether searching for users is across all of Mastodon or just local.", "Display a circular thumb scroller on timelines, which allows you to rotate the scroller with your thumb to navigate through timelines without lifting a finger. This may require restarting the app to take effect.", "Pick whether to open links in-app, or in Safari.", "Choose whether to open direct messages in the mentions tab in a chat-style view or a toot-style view.", "Use these to do specific actions within the app from outside the app."]
-    var otArrayIm = ["sethap", "searchscope", "circscroll", "schemes", "direct23", "schemes"]
+    var otArrayIm = ["sethap", "searchscope", "circscroll", "ldest", "direct23", "schemes"]
     
     @objc func handleToggleStream(sender: UISwitch) {
         if sender.isOn {
@@ -577,16 +578,29 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                 }
             }
         } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cellse3", for: indexPath) as! SettingsCell3
-            cell.configure(status: "Reset App", status2: "Resetting the app will clear all content and data, remove all accounts, and return you to the log-in screen.")
-            cell.backgroundColor = Colours.white
-            cell.userName.textColor = Colours.black
-            cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
-            cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
-            let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
-            cell.selectedBackgroundView = bgColorView
-            return cell
+            if indexPath.row == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellse3", for: indexPath) as! SettingsCell3
+                cell.configure(status: "Clear All Notifications", status2: "Clearing all notifications will clear all received notifications and direct messages from the server.")
+                cell.backgroundColor = Colours.white
+                cell.userName.textColor = Colours.black
+                cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                let bgColorView = UIView()
+                bgColorView.backgroundColor = Colours.white
+                cell.selectedBackgroundView = bgColorView
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellse3", for: indexPath) as! SettingsCell3
+                cell.configure(status: "Reset App", status2: "Resetting the app will clear all content and data, remove all accounts, and return you to the log-in screen.")
+                cell.backgroundColor = Colours.white
+                cell.userName.textColor = Colours.black
+                cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                let bgColorView = UIView()
+                bgColorView.backgroundColor = Colours.white
+                cell.selectedBackgroundView = bgColorView
+                return cell
+            }
         }
     }
     
@@ -1296,23 +1310,58 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
             }
         }
         if indexPath.section == 7 {
-            Alertift.actionSheet(title: "Are you sure?", message: "Resetting the app will clear all content and data, remove all accounts, and return you to the log-in screen.")
-                .backgroundColor(Colours.white)
-                .titleTextColor(Colours.grayDark)
-                .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
-                .messageTextAlignment(.left)
-                .titleTextAlignment(.left)
-                .action(.destructive("Reset App".localized), image: nil) { (action, ind) in
-                    self.clearAll()
-                }
-                .action(.cancel("Dismiss"))
-                .finally { action, index in
-                    if action.style == .cancel {
-                        return
+            if indexPath.row == 0 {
+                Alertift.actionSheet(title: "Are you sure?", message: "Clearing all notifications will clear all received notifications and direct messages from the server.")
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.destructive("Clear All Notifications".localized), image: nil) { (action, ind) in
+                        self.clearAllNotifications()
                     }
-                }
-                .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 7))?.contentView ?? self.view)
-                .show(on: self)
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 7))?.contentView ?? self.view)
+                    .show(on: self)
+            } else {
+                Alertift.actionSheet(title: "Are you sure?", message: "Resetting the app will clear all content and data, remove all accounts, and return you to the log-in screen.")
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.destructive("Reset App".localized), image: nil) { (action, ind) in
+                        self.clearAll()
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 7))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+        }
+    }
+    
+    func clearAllNotifications() {
+        let request = Notifications.dismissAll()
+        StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.notifications = []
+            StoreStruct.notificationsMentions = []
+            StoreStruct.notificationsDirect = []
+            do {
+                try Disk.save(StoreStruct.notifications, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)noti.json")
+                try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)ment.json")
+            } catch {
+                print("Couldn't save")
+            }
         }
     }
     
@@ -1542,7 +1591,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
         }
         
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.reloadData()
         self.tableView.reloadInputViews()
     }

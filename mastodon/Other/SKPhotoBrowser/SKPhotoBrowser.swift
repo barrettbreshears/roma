@@ -442,15 +442,26 @@ open class SKPhotoBrowser: UIViewController, UIScrollViewDelegate {
     }
     
     @objc func tapFired(recognizer: UITapGestureRecognizer) {
-        print("tapped bottom")
-        
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
             let impact = UIImpactFeedbackGenerator(style: .medium)
             impact.impactOccurred()
         }
         
-        self.openURL("com.vm.roma://id=\(StoreStruct.newIDtoGoTo)")
-        self.determineAndClose()
+        DispatchQueue.main.async {
+            self.determineAndClose()
+            StoreStruct.curID = StoreStruct.newIDtoGoTo
+            if StoreStruct.currentPage == 0 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid"), object: self)
+            } else if StoreStruct.currentPage == 1 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid2"), object: self)
+            } else if StoreStruct.currentPage == 2 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid3"), object: self)
+            } else if StoreStruct.currentPage == 778 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid778"), object: self)
+            } else {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid779"), object: self)
+            }
+        }
     }
     
     open override func viewDidAppear(_ animated: Bool) {

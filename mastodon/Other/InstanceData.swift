@@ -57,6 +57,7 @@ class InstanceData: Codable {
         UserDefaults.standard.set(instance.accessToken, forKey: "accessToken")
         UserDefaults.standard.set(instance.returnedText, forKey: "returnedText")
         
+        StoreStruct.client = Client(baseURL: "https://\(instance.returnedText)", accessToken: instance.accessToken, session: .shared)
         StoreStruct.shared.newClient = Client(baseURL: "")
         StoreStruct.shared.newInstance = nil
         StoreStruct.statusesHome = []

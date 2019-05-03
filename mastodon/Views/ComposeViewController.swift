@@ -192,7 +192,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
                 .messageTextAlignment(.left)
                 .titleTextAlignment(.left)
-                .action(.default("Edit Poll"), image: UIImage(named: "list")) { (action, ind) in
+                .action(.default("Edit Poll"), image: UIImage(named: "pollbubble")) { (action, ind) in
                      
                     let controller = NewPollViewController()
                     self.present(controller, animated: true, completion: nil)
@@ -1121,7 +1121,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.selectedImage1.isUserInteractionEnabled = true
         self.selectedImage1.contentMode = .scaleAspectFit
         self.selectedImage1.layer.masksToBounds = true
-        self.selectedImage1.image = UIImage(named: "list")
+        self.selectedImage1.image = UIImage(named: "pollbubble")
         self.selectedImage2.image = nil
         self.selectedImage3.image = nil
         self.selectedImage4.image = nil
@@ -1544,19 +1544,32 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         cell.bgImage.layer.shadowRadius = 12
         cell.bgImage.layer.shadowOpacity = 0.44
             if (UserDefaults.standard.object(forKey: "depthToggle") == nil) || (UserDefaults.standard.object(forKey: "depthToggle") as! Int == 0) {
+                let amount = 5
                 let horizontalEffect = UIInterpolatingMotionEffect(
                     keyPath: "layer.shadowOffset.width",
                     type: .tiltAlongHorizontalAxis)
-                horizontalEffect.minimumRelativeValue = 18
-                horizontalEffect.maximumRelativeValue = -18
+                horizontalEffect.minimumRelativeValue = amount
+                horizontalEffect.maximumRelativeValue = -amount
                 let verticalEffect = UIInterpolatingMotionEffect(
                     keyPath: "layer.shadowOffset.height",
                     type: .tiltAlongVerticalAxis)
-                verticalEffect.minimumRelativeValue = 18
-                verticalEffect.maximumRelativeValue = -18
+                verticalEffect.minimumRelativeValue = amount
+                verticalEffect.maximumRelativeValue = -amount
                 let effectGroup = UIMotionEffectGroup()
                 effectGroup.motionEffects = [horizontalEffect, verticalEffect]
                 cell.bgImage.addMotionEffect(effectGroup)
+                
+                let horizontal = UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis)
+                horizontal.minimumRelativeValue = -amount
+                horizontal.maximumRelativeValue = amount
+                let vertical = UIInterpolatingMotionEffect(keyPath: "center.y", type: .tiltAlongVerticalAxis)
+                vertical.minimumRelativeValue = -amount
+                vertical.maximumRelativeValue = amount
+                let effectGro = UIMotionEffectGroup()
+                effectGro.motionEffects = [horizontal, vertical]
+                cell.image.addMotionEffect(effectGro)
+                cell.bgImage.addMotionEffect(effectGro)
+//                cell.imageCountTag.addMotionEffect(effectGro)
             } else {
                 cell.bgImage.layer.shadowOffset = CGSize(width: 0, height: 8)
             }
@@ -2308,7 +2321,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 
                 
             }
-            .action(.default(" Add Poll"), image: UIImage(named: "list")) { (action, ind) in
+            .action(.default(" Add Poll"), image: UIImage(named: "pollbubble")) { (action, ind) in
                  
                 
                 let controller = NewPollViewController()

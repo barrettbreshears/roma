@@ -1305,7 +1305,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                             UIApplication.shared.registerForRemoteNotifications()
                         }
                     }
-                    .action(.default("Boosts".localized), image: filledSet3) { (action, ind) in
+                    .action(.default("Reposts".localized), image: filledSet3) { (action, ind) in
                          
                         if (UserDefaults.standard.object(forKey: "pnboosts") == nil) || (UserDefaults.standard.object(forKey: "pnboosts") as! Bool == true) {
                             UserDefaults.standard.set(false, forKey: "pnboosts")

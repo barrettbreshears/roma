@@ -80,11 +80,12 @@ class SchemesSettingsViewController: UIViewController, UITableViewDelegate, UITa
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .singleLine
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.layer.masksToBounds = true
         self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
+        self.tableView.tableFooterView = UIView()
         self.loadLoadLoad()
     }
     
@@ -187,7 +188,7 @@ class SchemesSettingsViewController: UIViewController, UITableViewDelegate, UITa
         
         UIPasteboard.general.string = scArray[indexPath.row]
         
-        Alertift.actionSheet(title: "Copied to clipboard", message: scArrayDesc[indexPath.row])
+        Alertift.actionSheet(title: "Copied to clipboard", message: scArray[indexPath.row])
             .backgroundColor(Colours.white)
             .titleTextColor(Colours.grayDark)
             .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
@@ -324,7 +325,7 @@ class SchemesSettingsViewController: UIViewController, UITableViewDelegate, UITa
         }
         
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.reloadData()
         self.tableView.reloadInputViews()
     }

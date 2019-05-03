@@ -232,11 +232,12 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .singleLine
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.layer.masksToBounds = true
         self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
+        self.tableView.tableFooterView = UIView()
         
         
         self.ai.frame = CGRect(x: self.view.bounds.width/2 - 20, y: self.view.bounds.height/2, width: 40, height: 40)
@@ -308,7 +309,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
 //        self.tableView.dataSource = self
 //        self.tableView.separatorStyle = .singleLine
 //        self.tableView.backgroundColor = Colours.white
-//        self.tableView.separatorColor = Colours.cellQuote
+//        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
 //        self.tableView.layer.masksToBounds = true
 //        self.tableView.estimatedRowHeight = UITableView.automaticDimension
 //        self.tableView.rowHeight = UITableView.automaticDimension
@@ -2358,7 +2359,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         }
         
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.reloadData()
         self.tableView.reloadInputViews()
         //        var customStyle = VolumeBarStyle.likeInstagram

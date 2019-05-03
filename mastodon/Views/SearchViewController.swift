@@ -121,6 +121,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
         self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
+        self.tableView.tableFooterView = UIView()
         
         let wid = self.view.bounds.width - 20
         searchTextField.frame = CGRect(x: 10, y: Int(offset + 5), width: Int(wid), height: 40)
@@ -2209,7 +2210,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
         }
         
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.reloadData()
         self.tableView.reloadInputViews()
     }

@@ -79,10 +79,11 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .singleLine
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.layer.masksToBounds = true
         self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.tableFooterView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40))
         self.view.addSubview(self.tableView)
         self.loadLoadLoad()
     }
@@ -136,7 +137,7 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
     // Table stuff
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 1
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -162,7 +163,7 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     var generalArray = ["General", "Appearance", "Notifications", "Biometric Lock", "Accounts"]
-    var generalArrayDesc = ["From timelines to toots, and media content to gestures, change how things behave.", "Pick themes and hues, change the app icon, and decide how things look.", "Select which push notifications to subscribe to.", "Add a biometric lock to various sections of the app.", "Add and manage multiple user accounts."]
+    var generalArrayDesc = ["From timelines to statuses, and media content to gestures, change how things behave.", "Pick themes and hues, change the app icon, and decide how things look.", "Select which push notifications to subscribe to.", "Add a biometric lock to various sections of the app.", "Add and manage multiple user accounts."]
     var generalArrayIm = ["setset1", "setnight", "notifs0", "biolock2", "setpro"]
     
     var otherArray = ["Rate Mast \u{2605}\u{2605}\u{2605}\u{2605}\u{2605}", "About Mast", "Tip Mast"]
@@ -439,7 +440,7 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
         }
         
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.reloadData()
         self.tableView.reloadInputViews()
     }

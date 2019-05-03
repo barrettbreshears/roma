@@ -461,6 +461,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
 
     @objc func goToIDNoti() {
+        sleep(2)
         let request = Notifications.notification(id: StoreStruct.curIDNoti)
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
@@ -612,11 +613,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.view.addGestureRecognizer(longPress)
         
         UserDefaults.standard.set(1, forKey: "onb")
-        splitViewController?.view.backgroundColor = Colours.cellQuote
-
-
+//        splitViewController?.view.backgroundColor = Colours.cellQuote
+        
+        
         //        UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+//        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
         //        UINavigationBar.appearance().backgroundColor = Colours.white
         UINavigationBar.appearance().barTintColor = Colours.black
         UINavigationBar.appearance().tintColor = Colours.black
@@ -683,11 +684,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.tableView.dataSource = self
         self.tableView.separatorStyle = .singleLine
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.layer.masksToBounds = true
         self.tableView.estimatedRowHeight = UITableView.automaticDimension
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
+        self.tableView.tableFooterView = UIView()
         
 //        refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
         //self.tableView.addSubview(refreshControl)
@@ -2056,7 +2058,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     
                     if self.isFollowing == false {
                         
-                        Alertift.actionSheet(title: nil, message: "You must be following this user to choose whether to display their boosted toots on the home timeline.")
+                        Alertift.actionSheet(title: nil, message: "You must be following this user to choose whether to display their reposted toots on the home timeline.")
                             .backgroundColor(Colours.white)
                             .titleTextColor(Colours.grayDark)
                             .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
@@ -5705,8 +5707,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             UIApplication.shared.statusBarStyle = .lightContent
         }
         
-        self.navigationController?.navigationBar.barTintColor = Colours.grayDark
-        self.navigationController?.navigationBar.tintColor = Colours.grayDark
+//        self.navigationController?.navigationBar.barTintColor = Colours.grayDark
+//        self.navigationController?.navigationBar.tintColor = Colours.grayDark
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.grayDark]
         
         self.view.backgroundColor = Colours.white
@@ -5759,7 +5761,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
 
         self.tableView.backgroundColor = Colours.white
-        self.tableView.separatorColor = Colours.cellQuote
+        self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
         self.tableView.reloadData()
         self.tableView.reloadInputViews()
         self.tableView.tableHeaderView?.reloadInputViews()
@@ -5768,8 +5770,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.navigationController?.navigationBar.tintColor = Colours.black
         self.navigationController?.navigationBar.barTintColor = Colours.black
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
-        self.splitViewController?.view.backgroundColor = Colours.cellQuote
-
+//        self.splitViewController?.view.backgroundColor = Colours.cellQuote
+        
         //        var customStyle = VolumeBarStyle.likeInstagram
         //        customStyle.trackTintColor = Colours.cellQuote
         //        customStyle.progressTintColor = Colours.grayDark

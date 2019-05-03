@@ -44,7 +44,7 @@ class GraphCell: UITableViewCell, ScrollableGraphViewDataSource {
         }
     }
     
-    let labels = ["@You", "Direct", "Boosts", "Likes", "Follows"]
+    let labels = ["@You", "Direct", "Reposts", "Likes", "Follows"]
     func label(atIndex pointIndex: Int) -> String {
         return labels[pointIndex]
     }

@@ -30,7 +30,7 @@ class FiltersCell: SwipeTableViewCell {
         userName.textColor = Colours.black
         toot.textColor = Colours.grayDark.withAlphaComponent(0.38)
         
-        userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
+        userName.font = UIFont.systemFont(ofSize: Colours.fontSize1, weight: .heavy)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         
         contentView.addSubview(userName)
@@ -43,7 +43,7 @@ class FiltersCell: SwipeTableViewCell {
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[name]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-5-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -63,7 +63,7 @@ class FiltersCell: SwipeTableViewCell {
         userName.text = status.phrase
         toot.text = "Filtered in - \(x)"
         
-        userName.font = UIFont.boldSystemFont(ofSize: Colours.fontSize1)
+        userName.font = UIFont.systemFont(ofSize: Colours.fontSize1, weight: .heavy)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         
     }
