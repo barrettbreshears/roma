@@ -178,8 +178,8 @@ class FollowSuggestionsViewController: UIViewController, UITableViewDelegate, UI
                 cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                 cell.backgroundColor = Colours.white
                 cell.userName.textColor = Colours.black
-                cell.userTag.textColor = Colours.black
-                cell.toot.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                cell.userTag.textColor = Colours.grayDark.withAlphaComponent(0.38)
+                cell.toot.textColor = Colours.grayDark.withAlphaComponent(0.74)
                 let bgColorView = UIView()
                 bgColorView.backgroundColor = Colours.white
                 cell.selectedBackgroundView = bgColorView
@@ -198,10 +198,10 @@ class FollowSuggestionsViewController: UIViewController, UITableViewDelegate, UI
     }
     
     @objc func didTouchProfile(sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
     }
     
     var lastThing = ""

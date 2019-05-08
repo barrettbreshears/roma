@@ -21,7 +21,8 @@ class EndorsedViewController: UIViewController, UITableViewDelegate, UITableView
     var statusFollows: [Account] = []
     var doOnce = false
     var doOnce2 = false
-    
+    var newLast: RequestRange = .max(id: "", limit: nil)
+    var newLast2: RequestRange = .max(id: "", limit: nil)
     
     @objc func load() {
         DispatchQueue.main.async {
@@ -45,8 +46,25 @@ class EndorsedViewController: UIViewController, UITableViewDelegate, UITableView
         super.didReceiveMemoryWarning()
     }
     
+    func removeTabbarItemsText() {
+        var offset: CGFloat = 6.0
+        if #available(iOS 11.0, *), traitCollection.horizontalSizeClass == .regular {
+            offset = 0.0
+        }
+        if let items = self.tabBarController?.tabBar.items {
+            for item in items {
+                item.title = ""
+                item.imageInsets = UIEdgeInsets(top: offset, left: 0, bottom: -offset, right: 0);
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.title = "Endorsed"
+        self.removeTabbarItemsText()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.search), name: NSNotification.Name(rawValue: "search"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.load), name: NSNotification.Name(rawValue: "load"), object: nil)
         
@@ -84,6 +102,7 @@ class EndorsedViewController: UIViewController, UITableViewDelegate, UITableView
         self.view.addSubview(self.tableView)
         self.tableView.tableFooterView = UIView()
         
+//        self.fetchFollows()
         self.loadLoadLoad()
         
     }
@@ -120,16 +139,7 @@ class EndorsedViewController: UIViewController, UITableViewDelegate, UITableView
     
     // Table stuff
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .phone:
-            return 40
-        case .pad:
-            return 0
-        default:
-            return 40
-        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -168,12 +178,8 @@ class EndorsedViewController: UIViewController, UITableViewDelegate, UITableView
             return cell
         } else {
             
-            if indexPath.row == self.statusFollows.count - 6 {
-//                self.fetchFollows()
-            }
-            if indexPath.row < 7 && self.doOnce == false {
-                self.doOnce = true
-//                self.fetchFollows()
+            if indexPath.row == self.statusFollows.count - 1 {
+                self.fetchFollows()
             }
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellf", for: indexPath) as! FollowersCell
@@ -182,8 +188,8 @@ class EndorsedViewController: UIViewController, UITableViewDelegate, UITableView
             cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
             cell.backgroundColor = Colours.white
             cell.userName.textColor = Colours.black
-            cell.userTag.textColor = Colours.black
-            cell.toot.textColor = Colours.black.withAlphaComponent(0.6)
+            cell.userTag.textColor = Colours.grayDark.withAlphaComponent(0.38)
+            cell.toot.textColor = Colours.grayDark.withAlphaComponent(0.74)
             let bgColorView = UIView()
             bgColorView.backgroundColor = Colours.white
             cell.selectedBackgroundView = bgColorView
@@ -202,22 +208,27 @@ class EndorsedViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @objc func didTouchProfile(sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
     }
     
     var lastThing = ""
     func fetchFollows() {
-        let request = Accounts.following(id: self.profileStatus, range: .max(id: self.statusFollows.last?.id ?? "", limit: nil))
+        if self.newLast == RequestRange.max(id: "0", limit: nil) {
+            return
+        }
+        let request = Accounts.following(id: self.profileStatus, range: self.newLast)
         StoreStruct.client.run(request) { (statuses) in
+            self.newLast = statuses.pagination?.next ?? RequestRange.max(id: "0", limit: nil) as! RequestRange
             if let stat = (statuses.value) {
                 
-                if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
+                if stat.isEmpty {} else {
                     DispatchQueue.main.async {
                         self.lastThing = stat.first?.id ?? ""
                         self.statusFollows = self.statusFollows + stat
+                        self.statusFollows = self.statusFollows.removeDuplicates()
                         self.tableView.reloadData()
                     }
                 }
@@ -227,14 +238,19 @@ class EndorsedViewController: UIViewController, UITableViewDelegate, UITableView
     
     var lastThing2 = ""
     func fetchFollowers() {
-        let request = Accounts.followers(id: self.profileStatus, range: .max(id: self.statusFollows.last?.id ?? "", limit: nil))
+        if self.newLast2 == RequestRange.max(id: "0", limit: nil) {
+            return
+        }
+        let request = Accounts.followers(id: self.profileStatus, range: self.newLast2)
         StoreStruct.client.run(request) { (statuses) in
+            self.newLast2 = statuses.pagination?.next ?? RequestRange.max(id: "0", limit: nil) as! RequestRange
             if let stat = (statuses.value) {
                 
-                if stat.isEmpty || self.lastThing2 == stat.first?.id ?? "" {} else {
+                if stat.isEmpty {} else {
                     DispatchQueue.main.async {
                         self.lastThing2 = stat.first?.id ?? ""
                         self.statusFollows = self.statusFollows + stat
+                        self.statusFollows = self.statusFollows.removeDuplicates()
                         self.tableView.reloadData()
                     }
                 }

@@ -18,10 +18,15 @@ public struct Lists {
 
     /// Retrieves accounts in a list.
     ///
-    /// - Parameter id: The list ID.
+    /// - Parameter
+    ///     - id: The list ID.
+    ///     - range: The bounds used when requesting data from Mastodon.
     /// - Returns: Request for `[Account]`.
-    public static func accounts(id: String) -> Request<[Account]> {
-        return Request<[Account]>(path: "/api/v1/lists/\(id)/accounts")
+    public static func accounts(id: String, range: RequestRange = .default) -> Request<[Account]> {
+        let parameters = range.parameters(limit: between(1, and: 80, default: 40))
+        let method = HTTPMethod.get(.parameters(parameters))
+        
+        return Request<[Account]>(path: "/api/v1/lists/\(id)/accounts", method: method)
     }
 
     /// Retrieves a list.

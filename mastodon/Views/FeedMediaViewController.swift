@@ -158,10 +158,10 @@ class FeedMediaViewController: UIViewController, UICollectionViewDelegate, UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
         
         var sto = self.statusesLocal
         StoreStruct.newIDtoGoTo = sto[indexPath.item].id
@@ -227,7 +227,7 @@ class FeedMediaViewController: UIViewController, UICollectionViewDelegate, UICol
     
     func fetchMoreImages() {
         let request = Timelines.public(local: self.publicTypeLocal, range: .max(id: self.statusesLocal.last?.id ?? "", limit: 5000), mediaOnly: true)
-        DispatchQueue.global(qos: .userInitiated).async {
+//        DispatchQueue.global(qos: .userInitiated).async {
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
                     DispatchQueue.main.async {
@@ -237,7 +237,7 @@ class FeedMediaViewController: UIViewController, UICollectionViewDelegate, UICol
                     }
                 }
             }
-        }
+//        }
     }
 }
 

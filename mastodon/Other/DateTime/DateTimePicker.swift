@@ -671,7 +671,7 @@ public protocol DateTimePickerDelegate {
         dismissHandler?()
         completionHandler2?("clear")
         
-        let selection = UIImpactFeedbackGenerator()
+        let selection = UIImpactFeedbackGenerator(style: .light)
         selection.impactOccurred()
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 0.8, options: .curveLinear, animations: {
@@ -688,7 +688,7 @@ public protocol DateTimePickerDelegate {
         completionHandler?(selectedDate)
         
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UIImpactFeedbackGenerator()
+            let selection = UIImpactFeedbackGenerator(style: .light)
             selection.impactOccurred()
         }
         

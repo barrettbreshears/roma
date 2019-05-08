@@ -22,11 +22,6 @@ class DMFeedCell: SwipeTableViewCell {
     var moreImage = UIImageView()
     var readIndi = UIView()
     
-    var rep1 = UIButton()
-    var like1 = UIButton()
-    var boost1 = UIButton()
-    var more1 = UIButton()
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
@@ -72,13 +67,6 @@ class DMFeedCell: SwipeTableViewCell {
         warningB.titleLabel?.font = UIFont.boldSystemFont(ofSize: Colours.fontSize3)
         warningB.titleLabel?.numberOfLines = 0
         warningB.layer.masksToBounds = true
-//        let blurEffect = UIBlurEffect(style: UIBlurEffect.Style.regular)
-//        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-//        blurEffectView.frame = warningB.bounds
-//        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//        blurEffectView.isUserInteractionEnabled = false
-//        warningB.addSubview(blurEffectView)
-//        warningB.sendSubviewToBack(blurEffectView)
         
         userName.numberOfLines = 1
         date.numberOfLines = 1
@@ -114,50 +102,6 @@ class DMFeedCell: SwipeTableViewCell {
         contentView.addSubview(toot)
         contentView.addSubview(moreImage)
         contentView.addSubview(readIndi)
-        
-        
-        rep1.translatesAutoresizingMaskIntoConstraints = false
-        rep1.setImage(UIImage(named: "reply3")?.maskWithColor(color: Colours.gray), for: .normal)
-        rep1.backgroundColor = UIColor.clear
-        rep1.layer.masksToBounds = true
-        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
-            self.rep1.alpha = 0
-        } else {
-            self.rep1.alpha = 1
-        }
-        like1.translatesAutoresizingMaskIntoConstraints = false
-        like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
-        like1.backgroundColor = UIColor.clear
-        like1.layer.masksToBounds = true
-        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
-            self.like1.alpha = 0
-        } else {
-            self.like1.alpha = 1
-        }
-        boost1.translatesAutoresizingMaskIntoConstraints = false
-        boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
-        boost1.backgroundColor = UIColor.clear
-        boost1.layer.masksToBounds = true
-        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
-            self.boost1.alpha = 0
-        } else {
-            self.boost1.alpha = 1
-        }
-        more1.translatesAutoresizingMaskIntoConstraints = false
-        more1.setImage(UIImage(named: "more")?.maskWithColor(color: Colours.gray), for: .normal)
-        more1.backgroundColor = UIColor.clear
-        more1.layer.masksToBounds = true
-        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
-            self.more1.alpha = 0
-        } else {
-            self.more1.alpha = 0
-        }
-        
-        contentView.addSubview(rep1)
-        contentView.addSubview(like1)
-        contentView.addSubview(boost1)
-        contentView.addSubview(more1)
-        
         contentView.addSubview(warningB)
         
         let viewsDict = [
@@ -169,10 +113,6 @@ class DMFeedCell: SwipeTableViewCell {
             "date" : date,
             "episodes" : toot,
             "more" : moreImage,
-            "rep1" : rep1,
-            "like1" : like1,
-            "boost1" : boost1,
-            "more1" : more1,
             "readIndi" : readIndi,
         ]
         
@@ -181,22 +121,12 @@ class DMFeedCell: SwipeTableViewCell {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-43-[image2(26)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[readIndi(8)]-5-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-32-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-28-[readIndi(8)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-38-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-34-[readIndi(8)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         
-        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[artist]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
-        } else {
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-1-[episodes]-15-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[artist]-1-[episodes]-15-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-15-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-15-[like1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-15-[boost1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-15-[more1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[rep1(36)]-24-[like1(40)]-15-[boost1(40)]-24-[more1(20)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
-        }
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-74-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
@@ -229,49 +159,6 @@ class DMFeedCell: SwipeTableViewCell {
         userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
         date.textColor = Colours.grayDark.withAlphaComponent(0.38)
         toot.textColor = Colours.black
-        
-        rep1.setImage(UIImage(named: "reply3")?.maskWithColor(color: Colours.gray), for: .normal)
-        more1.setImage(UIImage(named: "more")?.maskWithColor(color: Colours.gray), for: .normal)
-        if StoreStruct.allBoosts.contains(status.reblog?.id ?? status.id) || status.reblog?.reblogged ?? status.reblogged ?? false {
-            boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
-        } else {
-            boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
-        }
-        if StoreStruct.allLikes.contains(status.reblog?.id ?? status.id) || status.reblog?.favourited ?? status.favourited ?? false {
-            like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
-        } else {
-            like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
-        }
-        
-        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {} else {
-            var repc1 = "\(status.reblog?.repliesCount ?? status.repliesCount)"
-            if repc1 == "0" {
-                repc1 = ""
-            }
-            var likec1 = "\(status.reblog?.favouritesCount ?? status.favouritesCount)"
-            if likec1 == "0" {
-                likec1 = ""
-            }
-            var boostc1 = "\(status.reblog?.reblogsCount ?? status.reblogsCount)"
-            if boostc1 == "0" {
-                boostc1 = ""
-            }
-            rep1.setTitle(repc1, for: .normal)
-            rep1.setTitleColor(Colours.grayDark.withAlphaComponent(0.4), for: .normal)
-            rep1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            rep1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
-            rep1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
-            like1.setTitle(likec1, for: .normal)
-            like1.setTitleColor(Colours.grayDark.withAlphaComponent(0.4), for: .normal)
-            like1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            like1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
-            like1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
-            boost1.setTitle(boostc1, for: .normal)
-            boost1.setTitleColor(Colours.grayDark.withAlphaComponent(0.4), for: .normal)
-            boost1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            boost1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
-            boost1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
-        }
         
         if (UserDefaults.standard.object(forKey: "dmTog") == nil) || (UserDefaults.standard.object(forKey: "dmTog") as! Int == 0) {
             
@@ -330,7 +217,7 @@ class DMFeedCell: SwipeTableViewCell {
             
             
             if status.reblog!.emojis.isEmpty {
-                toot.text = "\(status.reblog?.content.stripHTML() ?? "")".replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: "")
+                toot.text = "\(status.reblog?.content.stripHTML() ?? "")"
             } else {
                 let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")")
                 status.reblog!.emojis.map({
@@ -394,7 +281,7 @@ class DMFeedCell: SwipeTableViewCell {
             profileImageView2.pin_updateWithProgress = true
             profileImageView2.pin_setImage(from: URL(string: "\(status.account.avatar)"))
             profileImageView2.layer.masksToBounds = true
-            profileImageView2.layer.borderColor = Colours.clear.cgColor
+            profileImageView2.layer.borderColor = Colours.white.cgColor
             profileImageView2.layer.borderWidth = 2
             profileImageView2.alpha = 1
             if (UserDefaults.standard.object(forKey: "proCorner") == nil || UserDefaults.standard.object(forKey: "proCorner") as! Int == 0) {
@@ -410,7 +297,7 @@ class DMFeedCell: SwipeTableViewCell {
             
             
             if status.emojis.isEmpty {
-                toot.text = status.content.stripHTML().replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: "")
+                toot.text = status.content.stripHTML()
             } else {
                 let attributedString = NSMutableAttributedString(string: status.content.stripHTML())
                 status.emojis.map({
@@ -497,7 +384,7 @@ class DMFeedCell: SwipeTableViewCell {
             self.moreImage.image = UIImage(named: "like")
         } else {
             if status.reblog?.poll ?? status.poll != nil {
-                self.moreImage.image = UIImage(named: "list")
+                self.moreImage.image = UIImage(named: "pollbubble")
             } else {
                 
                 if status.reblog?.visibility ?? status.visibility == .direct {

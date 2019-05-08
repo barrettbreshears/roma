@@ -232,7 +232,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                 selection.selectionChanged()
             }
             self?.refreshCont()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
                 self?.tableView.cr.endHeaderRefresh()
             })
         }
@@ -405,9 +405,9 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                         controller.fromOtherUser = true
                     }
                     controller.userIDtoUse = newString
-//                    DispatchQueue.main.async {
+                    DispatchQueue.main.async {
                         self.navigationController?.pushViewController(controller, animated: true)
-//                    }
+                    }
                 }
                 cell.toot.handleURLTap { (url) in
                     // safari
@@ -520,9 +520,9 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                         controller.fromOtherUser = true
                     }
                     controller.userIDtoUse = newString
-//                    DispatchQueue.main.async {
+                    DispatchQueue.main.async {
                         self.navigationController?.pushViewController(controller, animated: true)
-//                    }
+                    }
                 }
                 cell.toot.handleURLTap { (url) in
                     // safari
@@ -590,10 +590,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @objc func didTouchProfile(sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
         
         let controller = ThirdViewController()
         if StoreStruct.newInstanceTags[sender.tag].reblog?.account.username ?? StoreStruct.newInstanceTags[sender.tag].account.username == StoreStruct.currentUser.username {} else {
@@ -605,10 +605,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
     
     var player = AVPlayer()
     @objc func tappedImage(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
         
         
         var sto = StoreStruct.newInstanceTags
@@ -678,10 +678,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     @objc func tappedImageS1(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
         
         var sto = StoreStruct.newInstanceTags
         
@@ -737,10 +737,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @objc func tappedImageS2(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
         
         var sto = StoreStruct.newInstanceTags
         
@@ -797,10 +797,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     @objc func tappedImageS3(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
         
         var sto = StoreStruct.newInstanceTags
         
@@ -858,10 +858,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
     
     
     @objc func tappedImageS4(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
         
         var sto = StoreStruct.newInstanceTags
         
@@ -927,7 +927,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
     
     @objc func didTouchBoost(sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
@@ -947,7 +947,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                             cell.moreImage.image = nil
                         }
                         cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
-                        cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
+                        cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
@@ -958,7 +958,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                             cell.moreImage.image = nil
                         }
                         cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
-                        cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
+                        cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -976,7 +976,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
+                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
@@ -989,7 +989,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
+                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
@@ -1008,7 +1008,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
     
     @objc func didTouchLike(sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
@@ -1028,7 +1028,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                             cell.moreImage.image = nil
                         }
                         cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
-                        cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
+                        cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                         cell.hideSwipe(animated: true)
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
@@ -1039,7 +1039,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                             cell.moreImage.image = nil
                         }
                         cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
-                        cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
+                        cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -1056,7 +1056,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
+                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
@@ -1069,7 +1069,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
+                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
@@ -1088,7 +1088,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
     
     @objc func didTouchReply(sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
@@ -1231,6 +1231,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                         } else {
                             newSecondsText = "\(Int(newSeconds/60)) minutes and \(Int(newSeconds) % 60) seconds average reading time"
                         }
+                    }
+                    
+                    if sto[indexPath.row].spoilerText != "" {
+                        newSecondsText = "\(sto[indexPath.row].spoilerText)\n\n\(newSecondsText)"
                     }
                     
                     Alertift.actionSheet(title: nil, message: newSecondsText)
@@ -1469,6 +1473,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                         } else {
                             newSecondsText = "\(Int(newSeconds/60)) minutes and \(Int(newSeconds) % 60) seconds average reading time"
                         }
+                    }
+                    
+                    if sto[indexPath.row].spoilerText != "" {
+                        newSecondsText = "\(sto[indexPath.row].spoilerText)\n\n\(newSecondsText)"
                     }
                     
                     Alertift.actionSheet(title: nil, message: newSecondsText)
@@ -1957,8 +1965,8 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
             if let stat = (statuses.value) {
                 if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
                     self.lastThing = stat.first?.id ?? ""
-                StoreStruct.newInstanceTags = StoreStruct.newInstanceTags + stat
                 DispatchQueue.main.async {
+                    StoreStruct.newInstanceTags = StoreStruct.newInstanceTags + stat
                     StoreStruct.newInstanceTags = StoreStruct.newInstanceTags.removeDuplicates()
                     self.tableView.reloadData()
                     }}
@@ -1977,8 +1985,8 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
         testClient.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 var newestC = StoreStruct.newInstanceTags.count
-                StoreStruct.newInstanceTags = stat + StoreStruct.newInstanceTags
                 DispatchQueue.main.async {
+                    StoreStruct.newInstanceTags = stat + StoreStruct.newInstanceTags
                     StoreStruct.newInstanceTags = StoreStruct.newInstanceTags.removeDuplicates()
                     
                     newestC = StoreStruct.newInstanceTags.count - newestC
@@ -1995,14 +2003,14 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     self.countcount1 = newestC
                     
 //                    UIView.setAnimationsEnabled(false)
+                        self.tableView.cr.endHeaderRefresh()
                     self.tableView.reloadData()
                     self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
 //                    UIView.setAnimationsEnabled(true)
                         
                     } else {
-                        
+                        self.tableView.cr.endHeaderRefresh()
                         self.tableView.reloadData()
-                        
                     }
                 }
             }

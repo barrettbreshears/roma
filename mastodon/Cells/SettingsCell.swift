@@ -107,6 +107,8 @@ class SettingsCell2: SwipeTableViewCell {
         toot.translatesAutoresizingMaskIntoConstraints = false
         chevronImageView.translatesAutoresizingMaskIntoConstraints = false
         
+        profileImageView.isUserInteractionEnabled = false
+        
         profileImageView.layer.cornerRadius = 20
         profileImageView.layer.masksToBounds = true
         

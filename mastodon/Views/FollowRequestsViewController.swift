@@ -22,6 +22,7 @@ class FollowRequestsViewController: UIViewController, UITableViewDelegate, UITab
     var currentIndex = 0
     var currentTagTitle = ""
     var currentTags: [Account] = []
+    var newLast: RequestRange = .max(id: "", limit: nil)
     
     @objc func refresh() {
         DispatchQueue.main.async {
@@ -66,8 +67,24 @@ class FollowRequestsViewController: UIViewController, UITableViewDelegate, UITab
         super.didReceiveMemoryWarning()
     }
     
+    func removeTabbarItemsText() {
+        var offset: CGFloat = 6.0
+        if #available(iOS 11.0, *), traitCollection.horizontalSizeClass == .regular {
+            offset = 0.0
+        }
+        if let items = self.tabBarController?.tabBar.items {
+            for item in items {
+                item.title = ""
+                item.imageInsets = UIEdgeInsets(top: offset, left: 0, bottom: -offset, right: 0);
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.title = "Follow Requests"
+        self.removeTabbarItemsText()
         
         //NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.search), name: NSNotification.Name(rawValue: "search"), object: nil)
@@ -140,7 +157,7 @@ class FollowRequestsViewController: UIViewController, UITableViewDelegate, UITab
     
     // Table stuff
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 40
+        return 0
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -179,7 +196,7 @@ class FollowRequestsViewController: UIViewController, UITableViewDelegate, UITab
             return cell
         } else {
             
-            if indexPath.row == self.currentTags.count - 6 {
+            if indexPath.row == self.currentTags.count - 1 {
                 self.fetchMoreHome()
             }
             
@@ -190,8 +207,8 @@ class FollowRequestsViewController: UIViewController, UITableViewDelegate, UITab
             cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
             cell.backgroundColor = Colours.white
             cell.userName.textColor = Colours.black
-            cell.userTag.textColor = Colours.black
-            cell.toot.textColor = Colours.grayDark.withAlphaComponent(0.38)
+            cell.userTag.textColor = Colours.grayDark.withAlphaComponent(0.38)
+            cell.toot.textColor = Colours.grayDark.withAlphaComponent(0.74)
             let bgColorView = UIView()
             bgColorView.backgroundColor = Colours.white
             cell.selectedBackgroundView = bgColorView
@@ -201,10 +218,10 @@ class FollowRequestsViewController: UIViewController, UITableViewDelegate, UITab
     }
     
     @objc func didTouchProfile(sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
         
         let controller = ThirdViewController()
         controller.fromOtherUser = true
@@ -335,14 +352,20 @@ class FollowRequestsViewController: UIViewController, UITableViewDelegate, UITab
     
     var lastThing = ""
     func fetchMoreHome() {
+        if self.newLast == RequestRange.max(id: "0", limit: nil) {
+            return
+        }
         
-        let request = FollowRequests.all(range: .max(id: self.currentTags.last?.id ?? "", limit: nil))
+        let request = FollowRequests.all(range: self.newLast)
         StoreStruct.client.run(request) { (statuses) in
+            self.newLast = statuses.pagination?.next ?? RequestRange.max(id: "0", limit: nil) as! RequestRange
             if let stat = (statuses.value) {
                 
-                if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
+                if stat.isEmpty {} else {
                     self.lastThing = stat.first?.id ?? ""
                 DispatchQueue.main.async {
+                    self.currentTags = self.currentTags + stat
+                    self.currentTags = self.currentTags.removeDuplicates()
                     self.tableView.reloadData()
                     
                 }

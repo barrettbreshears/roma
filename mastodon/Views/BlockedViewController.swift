@@ -22,6 +22,7 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
     var currentIndex = 0
     var currentTagTitle = ""
     var currentTags: [Account] = []
+    var newLast: RequestRange = .max(id: "", limit: nil)
     
     @objc func refresh() {
         DispatchQueue.main.async {
@@ -58,7 +59,7 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        //self.ai.startAnimating()
+        self.ai.startAnimating()
     }
     
     
@@ -66,8 +67,24 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.didReceiveMemoryWarning()
     }
     
+    func removeTabbarItemsText() {
+        var offset: CGFloat = 6.0
+        if #available(iOS 11.0, *), traitCollection.horizontalSizeClass == .regular {
+            offset = 0.0
+        }
+        if let items = self.tabBarController?.tabBar.items {
+            for item in items {
+                item.title = ""
+                item.imageInsets = UIEdgeInsets(top: offset, left: 0, bottom: -offset, right: 0);
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.title = "Blocked"
+        self.removeTabbarItemsText()
         
         //NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.search), name: NSNotification.Name(rawValue: "search"), object: nil)
@@ -75,7 +92,7 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
         NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name: NSNotification.Name(rawValue: "refresh"), object: nil)
         //NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTop1), name: NSNotification.Name(rawValue: "scrollTop1"), object: nil)
         
-        self.ai.frame = CGRect(x: self.view.bounds.width/2 - 20, y: self.view.bounds.height/2, width: 40, height: 40)
+        self.ai.frame = CGRect(x: self.view.bounds.width/2 - 20, y: self.view.bounds.height/2 - 20, width: 40, height: 40)
         self.view.backgroundColor = Colours.white
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
@@ -108,6 +125,8 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.view.addSubview(self.tableView)
         self.tableView.tableFooterView = UIView()
         
+        self.view.addSubview(self.ai)
+        
         self.loadLoadLoad()
         
         //        refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
@@ -117,6 +136,7 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
+        self.fetchMoreHome()
 //        self.navigationController?.navigationBar.tintColor = Colours.tabUnselected
 //        self.navigationController?.navigationBar.barTintColor = Colours.tabUnselected
         self.navigationController?.navigationItem.backBarButtonItem?.tintColor = Colours.tabUnselected
@@ -151,16 +171,7 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // Table stuff
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .phone:
-            return 40
-        case .pad:
-            return 0
-        default:
-            return 40
-        }
+        return 0
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -199,7 +210,7 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
             return cell
         } else {
             
-        if indexPath.row == self.currentTags.count - 6 {
+        if indexPath.row == self.currentTags.count - 1 {
             self.fetchMoreHome()
         }
         
@@ -221,10 +232,10 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @objc func didTouchProfile(sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let selection = UISelectionFeedbackGenerator()
-        selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//        let selection = UISelectionFeedbackGenerator()
+//        selection.selectionChanged()
+//        }
         
         let controller = ThirdViewController()
         controller.fromOtherUser = true
@@ -331,13 +342,21 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     var lastThing = ""
     func fetchMoreHome() {
-        let request = Blocks.all(range: .max(id: self.currentTags.last?.id ?? "", limit: nil))
+        if self.newLast == RequestRange.max(id: "0", limit: nil) {
+            return
+        }
+        let request = Blocks.all(range: self.newLast)
         StoreStruct.client.run(request) { (statuses) in
+            self.newLast = statuses.pagination?.next ?? RequestRange.max(id: "0", limit: nil) as! RequestRange
             if let stat = (statuses.value) {
                 
-                if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
+                if stat.isEmpty {} else {
                     self.lastThing = stat.first?.id ?? ""
+                    self.currentTags = self.currentTags + stat
+                    self.currentTags = self.currentTags.removeDuplicates()
                 DispatchQueue.main.async {
+                    self.ai.stopAnimating()
+                    self.ai.alpha = 0
                     self.tableView.reloadData()
                 }
                 }

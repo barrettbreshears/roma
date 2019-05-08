@@ -150,7 +150,7 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
         let title = UILabel()
         title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
         if section == 0 {
-            title.text = "Settings".localized
+            title.text = "General".localized
         } else {
             title.text = "Mast \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "")"
         }

@@ -104,7 +104,7 @@ public class DLTagView: UIScrollView {
         didTapTag?(button.tagInfo)
         
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         StoreStruct.tappedTag = button.tagInfo.altText ?? ""

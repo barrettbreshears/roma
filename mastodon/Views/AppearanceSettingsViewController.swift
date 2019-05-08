@@ -39,11 +39,36 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
         super.didReceiveMemoryWarning()
     }
     
+    @objc func hexNew() {
+        Alertift.actionSheet(title: nil, message: nil)
+            .backgroundColor(Colours.white)
+            .titleTextColor(Colours.grayDark)
+            .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+            .messageTextAlignment(.left)
+            .titleTextAlignment(.left)
+            .action(.default("Hue Picker Wheel".localized), image: nil) { (action, ind) in
+                let controller = NewHuePickerViewController()
+                self.present(controller, animated: true, completion: nil)
+            }
+            .action(.default("Enter Hex Value Manually".localized), image: nil) { (action, ind) in
+                let controller = NewHexViewController()
+                self.present(controller, animated: true, completion: nil)
+            }
+            .action(.cancel("Dismiss"))
+            .finally { action, index in
+                if action.style == .cancel {
+                    return
+                }
+            }
+            .show(on: self)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.title = "Appearance"
         self.removeTabbarItemsText()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.hexNew), name: NSNotification.Name(rawValue: "hexnew"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.search), name: NSNotification.Name(rawValue: "search"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.load), name: NSNotification.Name(rawValue: "load"), object: nil)
         
@@ -220,9 +245,9 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
     var tiArrayDesc = ["Select the order of swipe action elements.", "Display an activity graph showing recent activity in the mentions tab.", "Animate the activity graph when displaying it.", "Choose whether to display post actions on the status cell or behind a swipe. This will require restarting the app to take effect.", "Display the user's full username, with the instance, in toots.", "Display the user's full username in boosts.", "Pick between displaying absolute or relative time in timelines.", "Dim activity notification text, whilst keeping mentions untouched.", "Highlight direct messages in timelines with a subtle, distinct, or themed background.", "Timelines without media, for a distraction-free browsing experience."]
     var tiArrayIm = ["swipeact3", "setgraph", "setgraph2", "like", "userat", "userat2", "timese", "subtleno", "direct23", "setima2"]
     
-    var prArray = ["Profile Corner Radius", "Profile Header Background", "Profile Display Picture Border", "Profile Display Picture in Status Composition"]
-    var prArrayDesc = ["Circle or square, your choice.", "Change the style of the profile header background.", "Select a size for the border around display pictures.", "Choose whether to display the current account's display picture in the top-left when composing posts."]
-    var prArrayIm = ["setpro", "headbgse", "bordset", "compav"]
+    var prArray = ["Profile Corner Radius", "Profile Header Background", "Profile Header Blur", "Profile Display Picture Border", "Profile Display Picture in Toot Composition"]
+    var prArrayDesc = ["Circle or square, your choice.", "Change the style of the profile header background.", "Change the blur of the profile header background.", "Select a size for the border around display pictures.", "Choose whether to display the current account's display picture in the top-left when composing toots."]
+    var prArrayIm = ["setpro", "headbgse", "headbgse2", "bordset", "compav"]
     
     var meArray = ["Image Corner Radius", "Media Captions", "Media Gallery Columns", "Photos Gallery Columns"]
     var meArrayDesc = ["Rounded or not, your choice.", "Pick whether to display the status text or the image's alt text in media captions.", "Pick the amount of columns for the media gallery grid.", "Pick the amount of columns for the post composition photo picker gallery grid."]
@@ -430,7 +455,7 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                 return cell
             }
         } else if indexPath.section == 4 {
-            if indexPath.row == 3 {
+            if indexPath.row == 4 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellse23", for: indexPath) as! SettingsCellToggle
                 cell.configure(status: prArray[indexPath.row], status2: prArrayDesc[indexPath.row], image: prArrayIm[indexPath.row])
                 cell.backgroundColor = Colours.white
@@ -1225,6 +1250,42 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
             if indexPath.row == 2 {
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
+                if (UserDefaults.standard.object(forKey: "blurd") == nil) || (UserDefaults.standard.object(forKey: "blurd") as! Int == 0) {
+                    filledSet1 = UIImage(named: "filledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "bord") as! Int == 1) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "filledset")
+                }
+                
+                Alertift.actionSheet(title: nil, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("None".localized), image: filledSet1) { (action, ind) in
+                        
+                        UserDefaults.standard.set(0, forKey: "blurd")
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
+                    }
+                    .action(.default("Blurred".localized), image: filledSet2) { (action, ind) in
+                        
+                        UserDefaults.standard.set(1, forKey: "blurd")
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 4))?.contentView ?? self.view)
+                    .show(on: self)
+            }
+            if indexPath.row == 3 {
+                var filledSet1 = UIImage(named: "unfilledset")
+                var filledSet2 = UIImage(named: "unfilledset")
                 var filledSet3 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "bord") == nil) || (UserDefaults.standard.object(forKey: "bord") as! Int == 0) {
                     filledSet1 = UIImage(named: "filledset")
@@ -1377,15 +1438,15 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
-                    .action(.default("2 Columns".localized), image: filledSet1) { (action, ind) in
+                    .action(.default("2 Column Grid".localized), image: filledSet1) { (action, ind) in
                         
                         UserDefaults.standard.set(1, forKey: "medcolgrid")
                     }
-                    .action(.default("3 Columns".localized), image: filledSet2) { (action, ind) in
+                    .action(.default("3 Column Grid".localized), image: filledSet2) { (action, ind) in
                         
                         UserDefaults.standard.set(0, forKey: "medcolgrid")
                     }
-                    .action(.default("4 Columns".localized), image: filledSet3) { (action, ind) in
+                    .action(.default("4 Column Grid".localized), image: filledSet3) { (action, ind) in
                         
                         UserDefaults.standard.set(2, forKey: "medcolgrid")
                     }

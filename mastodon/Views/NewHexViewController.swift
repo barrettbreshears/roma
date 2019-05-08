@@ -136,7 +136,7 @@ class NewHexViewController: UIViewController, UITextViewDelegate {
     
     @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         if gesture.direction == UISwipeGestureRecognizer.Direction.down {
@@ -147,7 +147,7 @@ class NewHexViewController: UIViewController, UITextViewDelegate {
     
     @objc func didTouchUpInsideCloseButton(_ sender: AnyObject) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
@@ -170,7 +170,7 @@ class NewHexViewController: UIViewController, UITextViewDelegate {
             let selection = UISelectionFeedbackGenerator()
             selection.selectionChanged()
         } else if (UserDefaults.standard.object(forKey: "keyhap") as! Int == 2) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
@@ -187,11 +187,11 @@ class NewHexViewController: UIViewController, UITextViewDelegate {
         if self.textView.text == "" { return }
         
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
-        StoreStruct.hexCol = UIColor(hexString: self.hex.replacingOccurrences(of: "#", with: "")) ?? UIColor(red: 107/255.0, green: 122/255.0, blue: 214/255.0, alpha: 1.0)
+        StoreStruct.hexCol = UIColor(hexString: self.hex.replacingOccurrences(of: "#", with: "")) ?? UIColor(red: 84/255.0, green: 102/255.0, blue: 205/255.0, alpha: 1.0)
         Colours.tabSelected = StoreStruct.hexCol
         UIApplication.shared.keyWindow?.tintColor = Colours.tabSelected
         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)

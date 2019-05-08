@@ -65,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
-        if application.applicationState == .inactive || application.applicationState == .background {
+        if application.applicationState == .inactive {
             if let userDefaults = UserDefaults(suiteName: "group.com.vm.roma.wormhole") {
                 if userDefaults.value(forKey: "notidpush") != nil {
                     if let id = userDefaults.value(forKey: "notidpush") as? Int64 {
@@ -74,8 +74,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                             NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti"), object: self)
                         } else if StoreStruct.currentPage == 1 {
                             NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti2"), object: self)
-                        } else {
+                        } else if StoreStruct.currentPage == 101010 {
                             NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti3"), object: self)
+                        } else {
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoidnoti4"), object: self)
                         }
                     }
                     userDefaults.set(nil, forKey: "notidpush")
@@ -172,29 +174,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
 
             if url.host == "light" {
-                if let viewController = window?.rootViewController as? ViewController {
-                    viewController.siriLight()
-                }
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "light00"), object: nil)
                 return true
             } else if url.host == "dark" {
-                if let viewController = window?.rootViewController as? ViewController {
-                    viewController.siriDark()
-                }
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "dark00"), object: nil)
                 return true
             } else if url.host == "darker" {
-                if let viewController = window?.rootViewController as? ViewController {
-                    viewController.siriDark2()
-                }
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "darker00"), object: nil)
                 return true
             } else if url.host == "black" {
-                if let viewController = window?.rootViewController as? ViewController {
-                    viewController.siriOled()
-                }
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "black00"), object: nil)
                 return true
             } else if url.host == "blue" {
-                if let viewController = window?.rootViewController as? ViewController {
-                    viewController.siriBlue()
-                }
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "blue00"), object: nil)
                 return true
             } else if url.host == "confetti" {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
@@ -288,8 +280,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance"), object: self)
                     } else if StoreStruct.currentPage == 1 {
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance2"), object: self)
-                    } else {
+                    } else if StoreStruct.currentPage == 101010 {
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance3"), object: self)
+                    } else {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance4"), object: self)
                     }
                 }
 
@@ -404,12 +398,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
             StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
             StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
             StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
-            StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
-            StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
-
+            
             StoreStruct.gapLastHomeStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)homestat.json", from: .documents, as: Status.self)
             StoreStruct.gapLastLocalStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)localstat.json", from: .documents, as: Status.self)
             StoreStruct.gapLastFedStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fedstat.json", from: .documents, as: Status.self)
+            
+            StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
+            StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
         } catch {
             print("Couldn't load")
         }
@@ -486,7 +481,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                     StoreStruct.savedComposeText = x
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "savedComposePresent"), object: nil)
                 }
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "savedComposePresent"), object: nil)
             }
         }
 

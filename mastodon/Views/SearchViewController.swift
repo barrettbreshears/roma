@@ -149,7 +149,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
         segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: 20, y: Int(offset + 60), width: Int(wid), height: Int(40)))
         segmentedControl.dataSource = self
         segmentedControl.shapeStyle = .roundedRect
-        segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+        segmentedControl.textFont = .systemFont(ofSize: 15, weight: .heavy)
         segmentedControl.cornerRadius = 12
         segmentedControl.shadowsEnabled = false
         segmentedControl.transitionStyle = .slide
@@ -184,7 +184,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
             self.segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: 20, y: Int(offset + 60), width: Int(wid), height: Int(40)))
             segmentedControl.dataSource = self
             segmentedControl.shapeStyle = .roundedRect
-            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.textFont = .systemFont(ofSize: 15, weight: .heavy)
             segmentedControl.cornerRadius = 12
             segmentedControl.shadowsEnabled = false
             segmentedControl.transitionStyle = .slide
@@ -208,7 +208,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
             let selection = UISelectionFeedbackGenerator()
             selection.selectionChanged()
         } else if (UserDefaults.standard.object(forKey: "keyhap") as! Int == 2) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
@@ -328,7 +328,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
     
     @objc func didTouchBoost(sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
@@ -397,7 +397,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
     
     @objc func didTouchLike(sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
@@ -465,7 +465,7 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
     
     @objc func didTouchReply(sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
@@ -569,9 +569,9 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                             controller.fromOtherUser = true
                         }
                         controller.userIDtoUse = newString
-//                        DispatchQueue.main.async {
+                        DispatchQueue.main.async {
                             self.navigationController?.pushViewController(controller, animated: true)
-//                        }
+                        }
                     }
                     cell.toot.handleURLTap { (url) in
                         // safari
@@ -682,9 +682,9 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                             controller.fromOtherUser = true
                         }
                         controller.userIDtoUse = newString
-//                        DispatchQueue.main.async {
+                        DispatchQueue.main.async {
                             self.navigationController?.pushViewController(controller, animated: true)
-//                        }
+                        }
                     }
                     cell.toot.handleURLTap { (url) in
                         // safari
@@ -763,10 +763,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
     }
     
     @objc func didTouchProfile(sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
         
         let controller = ThirdViewController()
         if StoreStruct.statusSearch[sender.tag].account.username == StoreStruct.currentUser.username {} else {
@@ -778,10 +778,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
     
     var player = AVPlayer()
     @objc func tappedImage(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
         
         
         var sto = StoreStruct.statusSearch
@@ -851,10 +851,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
     }
     
     @objc func tappedImageS1(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
         
         var sto = StoreStruct.statusSearch
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
@@ -913,10 +913,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
     }
     
     @objc func tappedImageS2(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
         
         var sto = StoreStruct.statusSearch
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
@@ -975,10 +975,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
     }
     
     @objc func tappedImageS3(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
         
         var sto = StoreStruct.statusSearch
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
@@ -1037,10 +1037,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
     }
     
     @objc func tappedImageS4(_ sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
         
         var sto = StoreStruct.statusSearch
         StoreStruct.newIDtoGoTo = sto[sender.tag].id
@@ -1428,6 +1428,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                         }
                     }
                     
+                    if sto[indexPath.row].spoilerText != "" {
+                        newSecondsText = "\(sto[indexPath.row].spoilerText)\n\n\(newSecondsText)"
+                    }
+                    
                     Alertift.actionSheet(title: nil, message: newSecondsText)
                         .backgroundColor(Colours.white)
                         .titleTextColor(Colours.grayDark)
@@ -1670,6 +1674,10 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                         } else {
                             newSecondsText = "\(Int(newSeconds/60)) minutes and \(Int(newSeconds) % 60) seconds average reading time"
                         }
+                    }
+                    
+                    if sto[indexPath.row].spoilerText != "" {
+                        newSecondsText = "\(sto[indexPath.row].spoilerText)\n\n\(newSecondsText)"
                     }
                     
                     Alertift.actionSheet(title: nil, message: newSecondsText)

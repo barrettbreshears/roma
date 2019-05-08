@@ -15,7 +15,6 @@ class DetailCell: UITableViewCell {
     var profileImageView = UIButton()
     var userName = UILabel()
     var userTag = UIButton()
-    var date = UILabel()
     var toot = ActiveLabel()
     var faves = UIButton()
     var fromClient = UILabel()
@@ -28,7 +27,6 @@ class DetailCell: UITableViewCell {
         profileImageView.translatesAutoresizingMaskIntoConstraints = false
         userName.translatesAutoresizingMaskIntoConstraints = false
         userTag.translatesAutoresizingMaskIntoConstraints = false
-        date.translatesAutoresizingMaskIntoConstraints = false
         toot.translatesAutoresizingMaskIntoConstraints = false
         fromClient.translatesAutoresizingMaskIntoConstraints = false
         faves.translatesAutoresizingMaskIntoConstraints = false
@@ -56,7 +54,6 @@ class DetailCell: UITableViewCell {
         
         userName.textColor = Colours.black
         userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
-        date.textColor = Colours.grayDark.withAlphaComponent(0.38)
         toot.textColor = Colours.black
         fromClient.textColor = Colours.grayDark.withAlphaComponent(0.38)
         faves.titleLabel?.textColor = Colours.tabSelected
@@ -64,10 +61,9 @@ class DetailCell: UITableViewCell {
         
         userName.font = UIFont.systemFont(ofSize: Colours.fontSize1, weight: .heavy)
         userTag.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
-        date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
         fromClient.font = UIFont.systemFont(ofSize: Colours.fontSize3)
-        faves.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
+        faves.titleLabel?.font = UIFont.boldSystemFont(ofSize: Colours.fontSize3)
         
         
         
@@ -78,12 +74,10 @@ class DetailCell: UITableViewCell {
         toot.URLColor = Colours.tabSelected
         
         userName.setCompressionResistance(LayoutPriority(rawValue: 499), for: .horizontal)
-        date.setCompressionResistance(LayoutPriority(rawValue: 501), for: .horizontal)
         
         contentView.addSubview(profileImageView)
         contentView.addSubview(userName)
         contentView.addSubview(userTag)
-        contentView.addSubview(date)
         contentView.addSubview(toot)
         contentView.addSubview(fromClient)
         contentView.addSubview(faves)
@@ -92,20 +86,18 @@ class DetailCell: UITableViewCell {
             "image" : profileImageView,
             "name" : userName,
             "artist" : userTag,
-            "date" : date,
             "episodes" : toot,
             "from" : fromClient,
             "faves" : faves,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[name]-(>=5)-[date]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[artist]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[from]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[faves]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-1-[episodes]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[image(40)]-13-[name]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[image(40)]-13-[artist]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[episodes]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[from]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[faves]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
         
     }
     
@@ -120,7 +112,9 @@ class DetailCell: UITableViewCell {
         toot.URLColor = Colours.tabSelected
         
         userName.text = status.reblog?.account.displayName ?? status.account.displayName
-        
+        if userName.text == "" {
+            userName.text = " "
+        }
         
         
         if (UserDefaults.standard.object(forKey: "mentionToggle") == nil || UserDefaults.standard.object(forKey: "mentionToggle") as! Int == 0) {
@@ -128,7 +122,6 @@ class DetailCell: UITableViewCell {
         } else {
             userTag.setTitle("@\(status.reblog?.account.username ?? status.account.username)", for: .normal)
         }
-        date.text = status.reblog?.createdAt.toStringWithRelativeTime() ?? status.createdAt.toStringWithRelativeTime()
         
         
         if status.reblog?.content.stripHTML() != nil {
@@ -232,7 +225,6 @@ class DetailCell: UITableViewCell {
             fromClient.text = "\(da), via \(z)"
         }
         
-        
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = NumberFormatter.Style.decimal
         let formattedNumber = numberFormatter.string(from: NSNumber(value: status.reblog?.favouritesCount ?? status.favouritesCount))
@@ -272,10 +264,9 @@ class DetailCell: UITableViewCell {
         
         userName.font = UIFont.systemFont(ofSize: Colours.fontSize1, weight: .heavy)
         userTag.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
-        date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
         fromClient.font = UIFont.systemFont(ofSize: Colours.fontSize3)
-        faves.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
+        faves.titleLabel?.font = UIFont.boldSystemFont(ofSize: Colours.fontSize3)
         
         
     }

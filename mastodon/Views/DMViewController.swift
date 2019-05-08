@@ -377,18 +377,18 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         NotificationCenter.default.addObserver(self, selector: #selector(self.refreshCont), name: NSNotification.Name(rawValue: "refpush1"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTopDM), name: NSNotification.Name(rawValue: "scrollTopDM"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateDM), name: NSNotification.Name(rawValue: "updateDM"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid2"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.goToIDNoti), name: NSNotification.Name(rawValue: "gotoidnoti2"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.goMembers), name: NSNotification.Name(rawValue: "goMembers2"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists2"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.goInstance), name: NSNotification.Name(rawValue: "goInstance2"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.search), name: NSNotification.Name(rawValue: "search2"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.searchPro), name: NSNotification.Name(rawValue: "searchPro2"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.searchUser), name: NSNotification.Name(rawValue: "searchUser2"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid3"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goToIDNoti), name: NSNotification.Name(rawValue: "gotoidnoti3"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goMembers), name: NSNotification.Name(rawValue: "goMembers3"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists3"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goInstance), name: NSNotification.Name(rawValue: "goInstance3"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.search), name: NSNotification.Name(rawValue: "search3"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.searchPro), name: NSNotification.Name(rawValue: "searchPro3"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.searchUser), name: NSNotification.Name(rawValue: "searchUser3"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.load), name: NSNotification.Name(rawValue: "load"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTop2), name: NSNotification.Name(rawValue: "scrollTop2"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeSeg), name: NSNotification.Name(rawValue: "changeSeg"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.goToSettings), name: NSNotification.Name(rawValue: "goToSettings"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goToSettings), name: NSNotification.Name(rawValue: "goToSettings3"), object: nil)
         
         self.view.backgroundColor = Colours.white
         self.title = "Direct Messages"
@@ -437,7 +437,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 selection.selectionChanged()
             }
             self?.refreshCont()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
                 self?.tableView.cr.endHeaderRefresh()
             })
         }
@@ -445,10 +445,9 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         self.ai = NVActivityIndicatorView(frame: CGRect(x: self.view.bounds.width/2 - 20, y: self.view.bounds.height/2, width: 40, height: 40), type: .ballRotateChase, color: Colours.tabSelected)
         self.view.addSubview(self.ai)
-        self.loadLoadLoad()
         
         if StoreStruct.notificationsDirect.isEmpty {
-            self.fetchMoreNotifications()
+            self.refreshCont()
         } else {
             self.ai.stopAnimating()
             self.ai.alpha = 0
@@ -513,7 +512,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
         self.navigationController?.view.addSubview(settingsButton)
         
-        self.refreshCont()
+//        self.refreshCont()
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -791,12 +790,6 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     
                         let cell = tableView.dequeueReusableCell(withIdentifier: "cell444", for: indexPath) as! DMFeedCell
                         cell.delegate = self
-                        cell.rep1.tag = indexPath.row
-                        cell.like1.tag = indexPath.row
-                        cell.boost1.tag = indexPath.row
-                        cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
-                        cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
-                        cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
                     
                     cell.configure2(StoreStruct.notificationsDirect[indexPath.row].unread, id: StoreStruct.notificationsDirect[indexPath.row].id)
                         cell.configure(StoreStruct.notificationsDirect[indexPath.row].lastStatus!)
@@ -829,9 +822,9 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 controller.fromOtherUser = true
                             }
                             controller.userIDtoUse = newString
-                            //                            DispatchQueue.main.async {
-                            self.navigationController?.pushViewController(controller, animated: true)
-                            //                            }
+                            DispatchQueue.main.async {
+                                self.navigationController?.pushViewController(controller, animated: true)
+                            }
                         }
                         cell.toot.handleURLTap { (url) in
                             // safari
@@ -896,13 +889,6 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell444", for: indexPath) as! DMFeedCell
                     cell.delegate = self
                     
-                    cell.rep1.tag = indexPath.row
-                    cell.like1.tag = indexPath.row
-                    cell.boost1.tag = indexPath.row
-                    cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
-                    cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
-                    cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
-                    
                     cell.configure2(StoreStruct.notificationsDirect[indexPath.row].unread, id: StoreStruct.notificationsDirect[indexPath.row].id)
                     cell.configure(StoreStruct.notificationsDirect[indexPath.row].lastStatus!)
                     cell.moreImage.image = nil
@@ -930,9 +916,9 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                             controller.fromOtherUser = true
                         }
                         controller.userIDtoUse = newString
-                        //                        DispatchQueue.main.async {
-                        self.navigationController?.pushViewController(controller, animated: true)
-                        //                        }
+                        DispatchQueue.main.async {
+                            self.navigationController?.pushViewController(controller, animated: true)
+                        }
                     }
                     cell.toot.handleURLTap { (url) in
                         // safari
@@ -1001,10 +987,10 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     
     @objc func didTouchProfile(sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let selection = UISelectionFeedbackGenerator()
+//            selection.selectionChanged()
+//        }
 
         var sto = StoreStruct.notificationsDirect
 
@@ -1023,7 +1009,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     @objc func didTouchBoost(sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
@@ -1048,8 +1034,6 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                         } else {
                             cell.moreImage.image = nil
                         }
-                        cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
-                        cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -1065,13 +1049,9 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? DMFeedCell {
                         if sto[sender.tag].lastStatus!.favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].lastStatus?.id ?? "" ) {
-                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
-                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
-                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
                             cell.moreImage.image = UIImage(named: "boost")
                         }
                         cell.hideSwipe(animated: true)
@@ -1085,7 +1065,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     @objc func didTouchLike(sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
@@ -1110,8 +1090,6 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                         } else {
                             cell.moreImage.image = nil
                         }
-                        cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
-                        cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -1126,13 +1104,9 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     }
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? DMFeedCell {
                         if sto[sender.tag].lastStatus!.reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].lastStatus?.id ?? "" ) {
-                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
-                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.gray), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")
                         } else {
-                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
                             cell.moreImage.image = UIImage(named: "like")
                         }
                         cell.hideSwipe(animated: true)
@@ -1146,7 +1120,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     @objc func didTouchReply(sender: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
@@ -1332,6 +1306,10 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                         } else {
                             newSecondsText = "\(Int(newSeconds/60)) minutes and \(Int(newSeconds) % 60) seconds average reading time"
                         }
+                    }
+                    
+                    if sto[indexPath.row].lastStatus?.spoilerText ?? "-" != "" {
+                        newSecondsText = "\(sto[indexPath.row].lastStatus?.spoilerText ?? "")\n\n\(newSecondsText)"
                     }
                     
                     Alertift.actionSheet(title: nil, message: newSecondsText)
@@ -1722,11 +1700,9 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty {} else {
-                    StoreStruct.notificationsDirect = StoreStruct.notificationsDirect + stat
-                    StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                     DispatchQueue.main.async {
-                        self.ai.stopAnimating()
-                        self.ai.alpha = 0
+                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect + stat
+                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                         self.tableView.reloadData()
                     }
                 }
@@ -1739,9 +1715,12 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty {} else {
-                    StoreStruct.notificationsDirect = stat + StoreStruct.notificationsDirect
-                    StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                     DispatchQueue.main.async {
+                        StoreStruct.notificationsDirect = stat + StoreStruct.notificationsDirect
+                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
+                        self.ai.stopAnimating()
+                        self.ai.alpha = 0
+                        self.tableView.cr.endHeaderRefresh()
                         self.tableView.reloadData()
                     }
                 }

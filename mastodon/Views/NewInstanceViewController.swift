@@ -268,7 +268,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
     
     @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         if gesture.direction == UISwipeGestureRecognizer.Direction.down {
@@ -279,7 +279,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
     
     @objc func didTouchUpInsideCloseButton(_ sender: AnyObject) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
@@ -295,7 +295,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
             let selection = UISelectionFeedbackGenerator()
             selection.selectionChanged()
         } else if (UserDefaults.standard.object(forKey: "keyhap") as! Int == 2) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         
@@ -312,7 +312,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
         if self.textView.text == "" { return }
         
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
         }
         

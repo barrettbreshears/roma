@@ -1544,17 +1544,18 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         cell.bgImage.layer.shadowRadius = 12
         cell.bgImage.layer.shadowOpacity = 0.44
             if (UserDefaults.standard.object(forKey: "depthToggle") == nil) || (UserDefaults.standard.object(forKey: "depthToggle") as! Int == 0) {
-                let amount = 5
+                let amount = 10
+                let amount2 = 15
                 let horizontalEffect = UIInterpolatingMotionEffect(
                     keyPath: "layer.shadowOffset.width",
                     type: .tiltAlongHorizontalAxis)
-                horizontalEffect.minimumRelativeValue = amount
-                horizontalEffect.maximumRelativeValue = -amount
+                horizontalEffect.minimumRelativeValue = amount2
+                horizontalEffect.maximumRelativeValue = -amount2
                 let verticalEffect = UIInterpolatingMotionEffect(
                     keyPath: "layer.shadowOffset.height",
                     type: .tiltAlongVerticalAxis)
-                verticalEffect.minimumRelativeValue = amount
-                verticalEffect.maximumRelativeValue = -amount
+                verticalEffect.minimumRelativeValue = amount2
+                verticalEffect.maximumRelativeValue = -amount2
                 let effectGroup = UIMotionEffectGroup()
                 effectGroup.motionEffects = [horizontalEffect, verticalEffect]
                 cell.bgImage.addMotionEffect(effectGroup)
@@ -1796,7 +1797,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     
     @objc func didTouchUpInsideCamPickButton(_ sender: AnyObject) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
         }
         
@@ -1840,7 +1841,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     
     @objc func didTouchUpInsideGalPickButton(_ sender: AnyObject) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let impact = UIImpactFeedbackGenerator()
+        let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
         }
         
@@ -1984,7 +1985,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     
     @objc func didTouchUpInsideCameraButton(_ sender: AnyObject) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let impact = UIImpactFeedbackGenerator()
+        let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
         }
         
@@ -2061,7 +2062,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     }
     @objc func didTouchUpInsideVisibilityButton(_ sender: AnyObject) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let impact = UIImpactFeedbackGenerator()
+        let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
         }
         
@@ -2124,7 +2125,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     }
     @objc func didTouchUpInsideWarningButton(_ sender: AnyObject) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let impact = UIImpactFeedbackGenerator()
+        let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
         }
         
@@ -2148,7 +2149,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     
     @objc func didTouchUpInsideEmotiButton(_ sender: AnyObject) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let impact = UIImpactFeedbackGenerator()
+        let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
         }
         
@@ -2522,7 +2523,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     
     @objc func didTouchUpInsideCloseButton(_ sender: AnyObject) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
         }
         
@@ -2550,7 +2551,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         if self.textView.text == "" && self.selectedImage1.image == nil { return }
         
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let impact = UIImpactFeedbackGenerator()
+        let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
         }
         
@@ -2620,7 +2621,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
         if self.isPollAdded {
             let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, poll: StoreStruct.newPollPost, visibility: self.visibility)
-            DispatchQueue.global(qos: .userInitiated).async {
+//            DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request0) { (statuses) in
                      
                     
@@ -2631,19 +2632,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     if statuses.isError && self.scheduleTime != nil {
                         
                         DispatchQueue.main.async {
-                            
-                            var seIm: Data? = nil
-                            if self.isPollAdded == false {
-                                seIm = self.selectedImage1.image?.pngData()
-                            }
-                            let newDraft = Drafts(text: self.textView.text!, image1: seIm, image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
-                            
-                            StoreStruct.newdrafts.append(newDraft)
-                            do {
-                                try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
-                            } catch {
-                                print("err")
-                            }
                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                 let notification = UINotificationFeedbackGenerator()
                                 notification.notificationOccurred(.success)
@@ -2677,19 +2665,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     } else {
                         
                         DispatchQueue.main.async {
-                            
-                            var seIm: Data? = nil
-                            if self.isPollAdded == false {
-                                seIm = self.selectedImage1.image?.pngData()
-                            }
-                            let newDraft = Drafts(text: self.textView.text!, image1: seIm, image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
-                            
-                            StoreStruct.newdrafts.append(newDraft)
-                            do {
-                                try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
-                            } catch {
-                                print("err")
-                            }
                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                 let notification = UINotificationFeedbackGenerator()
                                 notification.notificationOccurred(.success)
@@ -2721,7 +2696,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         }
                     }
                 }
-            }
+//            }
             DispatchQueue.main.async {
                 if (UserDefaults.standard.object(forKey: "progprogprogprog") == nil || UserDefaults.standard.object(forKey: "progprogprogprog") as! Int == 0) {
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "startindi"), object: self)
@@ -2748,7 +2723,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     mediaIDs.append(stat.id)
                     
                     let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
-                    DispatchQueue.global(qos: .userInitiated).async {
+//                    DispatchQueue.global(qos: .userInitiated).async {
                         StoreStruct.client.run(request0) { (statuses) in
                              
                             
@@ -2760,18 +2735,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 
                                 
                                 DispatchQueue.main.async {
-                                    var seIm: Data? = nil
-                                    if self.isPollAdded == false {
-                                        seIm = self.selectedImage1.image?.pngData()
-                                    }
-                                    let newDraft = Drafts(text: self.textView.text!, image1: seIm, image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
-                                    
-                                    StoreStruct.newdrafts.append(newDraft)
-                                    do {
-                                        try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
-                                    } catch {
-                                        print("err")
-                                    }
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -2806,18 +2769,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 
                             
                             DispatchQueue.main.async {
-                                var seIm: Data? = nil
-                                if self.isPollAdded == false {
-                                    seIm = self.selectedImage1.image?.pngData()
-                                }
-                                let newDraft = Drafts(text: self.textView.text!, image1: seIm, image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
-                                
-                                StoreStruct.newdrafts.append(newDraft)
-                                do {
-                                    try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
-                                } catch {
-                                    print("err")
-                                }
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
                                     notification.notificationOccurred(.success)
@@ -2850,7 +2801,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 
                             }
                         }
-                    }
+//                    }
                 }
             }
             
@@ -2905,7 +2856,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             
                                             
                                             let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
-                                            DispatchQueue.global(qos: .userInitiated).async {
+//                                            DispatchQueue.global(qos: .userInitiated).async {
                                                 StoreStruct.client.run(request0) { (statuses) in
                                                      
                                                     
@@ -2916,18 +2867,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                         
                                                         
                                                         DispatchQueue.main.async {
-                                                            var seIm: Data? = nil
-                                                            if self.isPollAdded == false {
-                                                                seIm = self.selectedImage1.image?.pngData()
-                                                            }
-                                                            let newDraft = Drafts(text: self.textView.text!, image1: seIm, image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
-                                                            
-                                                            StoreStruct.newdrafts.append(newDraft)
-                                                            do {
-                                                                try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
-                                                            } catch {
-                                                                print("err")
-                                                            }
                                                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                                                 let notification = UINotificationFeedbackGenerator()
                                                                 notification.notificationOccurred(.success)
@@ -2962,18 +2901,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                         
                                                         
                                                     DispatchQueue.main.async {
-                                                        var seIm: Data? = nil
-                                                        if self.isPollAdded == false {
-                                                            seIm = self.selectedImage1.image?.pngData()
-                                                        }
-                                                        let newDraft = Drafts(text: self.textView.text!, image1: seIm, image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
-                                                        
-                                                        StoreStruct.newdrafts.append(newDraft)
-                                                        do {
-                                                            try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
-                                                        } catch {
-                                                            print("err")
-                                                        }
                                                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                                             let notification = UINotificationFeedbackGenerator()
                                                             notification.notificationOccurred(.success)
@@ -3006,7 +2933,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                         
                                                     }
                                                 }
-                                            }
+//                                            }
                                         }
                                     }
                                 }
@@ -3050,7 +2977,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     
                                     
                                     let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
-                                    DispatchQueue.global(qos: .userInitiated).async {
+//                                    DispatchQueue.global(qos: .userInitiated).async {
                                         StoreStruct.client.run(request0) { (statuses) in
                                              
                                             
@@ -3061,18 +2988,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                 
                                                 
                                                 DispatchQueue.main.async {
-                                                    var seIm: Data? = nil
-                                                    if self.isPollAdded == false {
-                                                        seIm = self.selectedImage1.image?.pngData()
-                                                    }
-                                                    let newDraft = Drafts(text: self.textView.text!, image1: seIm, image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
-                                                    
-                                                    StoreStruct.newdrafts.append(newDraft)
-                                                    do {
-                                                        try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
-                                                    } catch {
-                                                        print("err")
-                                                    }
                                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                                         let notification = UINotificationFeedbackGenerator()
                                                         notification.notificationOccurred(.success)
@@ -3107,18 +3022,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                 
                                                 
                                             DispatchQueue.main.async {
-                                                var seIm: Data? = nil
-                                                if self.isPollAdded == false {
-                                                    seIm = self.selectedImage1.image?.pngData()
-                                                }
-                                                let newDraft = Drafts(text: self.textView.text!, image1: seIm, image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
-                                                
-                                                StoreStruct.newdrafts.append(newDraft)
-                                                do {
-                                                    try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
-                                                } catch {
-                                                    print("err")
-                                                }
                                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                                     let notification = UINotificationFeedbackGenerator()
                                                     notification.notificationOccurred(.success)
@@ -3151,7 +3054,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             
                                         }
                                         }
-                                    }
+//                                    }
                                 }
                             }
                         }
@@ -3182,7 +3085,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             }
                             
                             let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
-                            DispatchQueue.global(qos: .userInitiated).async {
+//                            DispatchQueue.global(qos: .userInitiated).async {
                                 StoreStruct.client.run(request0) { (statuses) in
                                      
                                     
@@ -3194,18 +3097,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                         
                                         
                                         DispatchQueue.main.async {
-                                            var seIm: Data? = nil
-                                            if self.isPollAdded == false {
-                                                seIm = self.selectedImage1.image?.pngData()
-                                            }
-                                            let newDraft = Drafts(text: self.textView.text!, image1: seIm, image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
-                                            
-                                            StoreStruct.newdrafts.append(newDraft)
-                                            do {
-                                                try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
-                                            } catch {
-                                                print("err")
-                                            }
                                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                                 let notification = UINotificationFeedbackGenerator()
                                                 notification.notificationOccurred(.success)
@@ -3240,18 +3131,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                         
                                         
                                     DispatchQueue.main.async {
-                                        var seIm: Data? = nil
-                                        if self.isPollAdded == false {
-                                            seIm = self.selectedImage1.image?.pngData()
-                                        }
-                                        let newDraft = Drafts(text: self.textView.text!, image1: seIm, image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
-                                        
-                                        StoreStruct.newdrafts.append(newDraft)
-                                        do {
-                                            try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
-                                        } catch {
-                                            print("err")
-                                        }
                                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                             let notification = UINotificationFeedbackGenerator()
                                             notification.notificationOccurred(.success)
@@ -3283,7 +3162,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     }
                                     }
                                 }
-                            }
+//                            }
                         }
                     }
                 }
@@ -3301,7 +3180,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     }
                     
                     let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, visibility: self.visibility)
-                    DispatchQueue.global(qos: .userInitiated).async {
+//                    DispatchQueue.global(qos: .userInitiated).async {
                         StoreStruct.client.run(request0) { (statuses) in
                              
                             
@@ -3312,18 +3191,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 
                                 
                                 DispatchQueue.main.async {
-                                    var seIm: Data? = nil
-                                    if self.isPollAdded == false {
-                                        seIm = self.selectedImage1.image?.pngData()
-                                    }
-                                    let newDraft = Drafts(text: self.textView.text!, image1: seIm, image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
-                                    
-                                    StoreStruct.newdrafts.append(newDraft)
-                                    do {
-                                        try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
-                                    } catch {
-                                        print("err")
-                                    }
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -3357,20 +3224,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             } else {
                                 
                             DispatchQueue.main.async {
-                                
-                                var seIm: Data? = nil
-                                if self.isPollAdded == false {
-                                    seIm = self.selectedImage1.image?.pngData()
-                                }
-                                let newDraft = Drafts(text: self.textView.text!, image1: seIm, image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
-                                
-                                StoreStruct.newdrafts.append(newDraft)
-                                do {
-                                    try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
-                                } catch {
-                                    print("err")
-                                }
-                                
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
                                     notification.notificationOccurred(.success)
@@ -3402,12 +3255,12 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             }
                             }
                         }
-                    }
+//                    }
                 }
             }
         } else if self.selectedImage1.image == nil {
             let request0 = Statuses.create(status: theText, replyToID: inRep, mediaIDs: mediaIDs, sensitive: self.isSensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: self.scheduleTime, poll: StoreStruct.newPollPost, visibility: self.visibility)
-            DispatchQueue.global(qos: .userInitiated).async {
+//            DispatchQueue.global(qos: .userInitiated).async {
                 StoreStruct.client.run(request0) { (statuses) in
                      
                     
@@ -3419,18 +3272,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                         
                         
                         DispatchQueue.main.async {
-                            var seIm: Data? = nil
-                            if self.isPollAdded == false {
-                                seIm = self.selectedImage1.image?.pngData()
-                            }
-                            let newDraft = Drafts(text: self.textView.text!, image1: seIm, image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
-                            
-                            StoreStruct.newdrafts.append(newDraft)
-                            do {
-                                try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
-                            } catch {
-                                print("err")
-                            }
                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                 let notification = UINotificationFeedbackGenerator()
                                 notification.notificationOccurred(.success)
@@ -3464,20 +3305,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     } else {
                         
                     DispatchQueue.main.async {
-                        
-                        var seIm: Data? = nil
-                        if self.isPollAdded == false {
-                            seIm = self.selectedImage1.image?.pngData()
-                        }
-                        let newDraft = Drafts(text: self.textView.text!, image1: seIm, image2: self.selectedImage2.image?.pngData(), image3: self.selectedImage3.image?.pngData(), image4: self.selectedImage4.image?.pngData(), isGifVid: self.isGifVid, textVideoURL: self.textVideoURL.absoluteString, gifVidData: self.gifVidData)
-                        
-                        StoreStruct.newdrafts.append(newDraft)
-                        do {
-                            try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
-                        } catch {
-                            print("err")
-                        }
-                        
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let notification = UINotificationFeedbackGenerator()
                             notification.notificationOccurred(.success)
@@ -3509,7 +3336,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     }
                     }
                 }
-            }
+//            }
         }
         
         }
@@ -3524,10 +3351,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     }
     
     @objc func handleGesture(gesture: UISwipeGestureRecognizer) -> Void {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
-            impact.impactOccurred()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//            let impact = UIImpactFeedbackGenerator(style: .light)
+//            impact.impactOccurred()
+//        }
         if gesture.direction == UISwipeGestureRecognizer.Direction.down {
             if self.textView.text! == "" || self.textView.text! == self.startRepText {
                 self.textView.resignFirstResponder()
@@ -3610,8 +3437,8 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         if (UserDefaults.standard.object(forKey: "keyhap") == nil) || (UserDefaults.standard.object(forKey: "keyhap") as! Int == 0) {
             
         } else if (UserDefaults.standard.object(forKey: "keyhap") as! Int == 1) {
-            let selection = UISelectionFeedbackGenerator()
-            selection.selectionChanged()
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
         } else if (UserDefaults.standard.object(forKey: "keyhap") as! Int == 2) {
             let impact = UIImpactFeedbackGenerator()
             impact.impactOccurred()
@@ -3840,6 +3667,12 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 title.text = "No Drafts".localized
             } else {
                 title.text = "\(StoreStruct.newdrafts.count) Drafts".localized
+                let moreB = UIButton()
+                moreB.frame = CGRect(x: self.view.bounds.width - 50, y: -5, width: 36, height: 36)
+                moreB.setImage(UIImage(named: "block")?.maskWithColor(color: UIColor.white), for: .normal)
+                moreB.backgroundColor = UIColor.clear
+                moreB.addTarget(self, action: #selector(self.tapMoreDrafts), for: .touchUpInside)
+                vw.addSubview(moreB)
             }
         }
         title.textColor = UIColor.white
@@ -3850,6 +3683,39 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         return vw
     }
     
+    @objc func tapMoreDrafts() {
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+        }
+        
+        Alertift.actionSheet(title: "Clear All Drafts", message: "Clearing all drafts will clear all saved drafts.")
+            .backgroundColor(Colours.white)
+            .titleTextColor(Colours.grayDark)
+            .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+            .messageTextAlignment(.left)
+            .titleTextAlignment(.left)
+            .action(.destructive("Clear All Drafts".localized), image: nil) { (action, ind) in
+                StoreStruct.newdrafts = []
+                do {
+                    try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                } catch {
+                    print("err")
+                }
+                self.tableViewDrafts.beginUpdates()
+                let indexSet: IndexSet = [0]
+                self.tableViewDrafts.reloadSections(indexSet, with: .automatic)
+                self.tableViewDrafts.endUpdates()
+            }
+            .action(.cancel("Dismiss"))
+            .finally { action, index in
+                if action.style == .cancel {
+                    return
+                }
+            }
+            .popover(anchorView: self.tableViewDrafts.cellForRow(at: IndexPath(row: 0, section: 0))?.contentView ?? self.view)
+            .show(on: self)
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == self.tableView {
@@ -3957,9 +3823,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 
                 let cross = SwipeAction(style: .default, title: nil) { action, indexPath in
                     StoreStruct.newdrafts.remove(at: indexPath.row)
-//                    self.tableViewDrafts.reloadData()
                     self.tableViewDrafts.beginUpdates()
-                    self.tableViewDrafts.deleteRows(at: [indexPath], with: .none)
+                    let indexSet: IndexSet = [0]
+                    self.tableViewDrafts.reloadSections(indexSet, with: .automatic)
                     self.tableViewDrafts.endUpdates()
                     
                     do {

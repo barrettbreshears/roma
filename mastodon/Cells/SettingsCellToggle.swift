@@ -86,6 +86,9 @@ class SettingsCellToggle: SwipeTableViewCell {
         userTag.text = status
         toot.text = status2
         profileImageView.image = UIImage(named: image)
+        
+        profileImageView.isUserInteractionEnabled = false
+        
         //.tintColor = Colours.white2
         //switchView.thumbTintColor = Colours.white2
         userName.font = UIFont.systemFont(ofSize: Colours.fontSize1, weight: .heavy)

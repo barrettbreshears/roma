@@ -430,7 +430,7 @@ extension CameraViewController {
         
         
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let impact = UIImpactFeedbackGenerator()
+        let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
         }
         
@@ -503,7 +503,7 @@ extension CameraViewController {
         } else {
             NextLevel.shared.flipCaptureDevicePosition()
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let impact = UIImpactFeedbackGenerator()
+            let impact = UIImpactFeedbackGenerator(style: .light)
             impact.impactOccurred()
             }
         }
@@ -514,7 +514,7 @@ extension CameraViewController {
     
     @objc internal func handleSaveButton(_ button: UIButton) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let impact = UIImpactFeedbackGenerator()
+        let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
         }
         
@@ -574,7 +574,7 @@ extension CameraViewController {
     @objc internal func handlePhotoTapGestureRecognizer(_ gestureRecognizer: UIGestureRecognizer) {
         
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let impact = UIImpactFeedbackGenerator()
+        let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
         }
         // play system camera shutter sound
@@ -803,7 +803,7 @@ extension CameraViewController: NextLevelVideoDelegate {
     func nextLevel(_ nextLevel: NextLevel, didCompletePhotoCaptureFromVideoFrame photoDict: [String : Any]?) {
         
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let impact = UIImpactFeedbackGenerator()
+        let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
         }
         if let dictionary = photoDict,

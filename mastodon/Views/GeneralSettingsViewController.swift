@@ -157,6 +157,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
         title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
+        title.textColor = Colours.grayDark.withAlphaComponent(0.38)
         if section == 0 {
             title.text = "Timeline"
         } else if section == 1 {
@@ -173,8 +174,8 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
             title.text = "Other"
         } else {
             title.text = "Danger Zone"
+            title.textColor = Colours.red
         }
-        title.textColor = Colours.grayDark.withAlphaComponent(0.38)
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         vw.addSubview(title)
         vw.backgroundColor = Colours.white
@@ -198,7 +199,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
         } else if section == 6 {
             return otArray.count
         } else {
-            return 2
+            return 3
         }
     }
     
@@ -580,6 +581,17 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
         } else {
             if indexPath.row == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellse3", for: indexPath) as! SettingsCell3
+                cell.configure(status: "Clear All Drafts", status2: "Clearing all drafts will clear all saved drafts from the composition screen.")
+                cell.backgroundColor = Colours.white
+                cell.userName.textColor = Colours.black
+                cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                let bgColorView = UIView()
+                bgColorView.backgroundColor = Colours.white
+                cell.selectedBackgroundView = bgColorView
+                return cell
+            } else if indexPath.row == 1 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellse3", for: indexPath) as! SettingsCell3
                 cell.configure(status: "Clear All Notifications", status2: "Clearing all notifications will clear all received notifications and direct messages from the server.")
                 cell.backgroundColor = Colours.white
                 cell.userName.textColor = Colours.black
@@ -740,7 +752,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                     .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
-                    .action(.default("@You".localized), image: filledSet1) { (action, ind) in
+                    .action(.default("Mentions".localized), image: filledSet1) { (action, ind) in
                         
                         UserDefaults.standard.set(0, forKey: "mentdef2")
                     }
@@ -1311,6 +1323,24 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
         }
         if indexPath.section == 7 {
             if indexPath.row == 0 {
+                Alertift.actionSheet(title: "Are you sure?", message: "Clearing all drafts will clear all saved drafts from the composition screen.")
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.destructive("Clear All Drafts".localized), image: nil) { (action, ind) in
+                        self.clearAllDrafts()
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 7))?.contentView ?? self.view)
+                    .show(on: self)
+            } else if indexPath.row == 1 {
                 Alertift.actionSheet(title: "Are you sure?", message: "Clearing all notifications will clear all received notifications and direct messages from the server.")
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1347,6 +1377,15 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                     .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 7))?.contentView ?? self.view)
                     .show(on: self)
             }
+        }
+    }
+    
+    func clearAllDrafts() {
+        StoreStruct.newdrafts = []
+        do {
+            try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+        } catch {
+            print("err")
         }
     }
     

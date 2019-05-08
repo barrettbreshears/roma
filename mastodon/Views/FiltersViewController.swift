@@ -66,7 +66,8 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
-                    self.currentTags = stat
+                    self.currentTags = self.currentTags + stat
+                    self.currentTags = self.currentTags.removeDuplicates()
                     self.tableView.reloadData()
                 }
             }
@@ -202,7 +203,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     @objc func addTapped() {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-            let selection = UIImpactFeedbackGenerator()
+            let selection = UIImpactFeedbackGenerator(style: .light)
             selection.impactOccurred()
         }
         
@@ -257,7 +258,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             .messageTextAlignment(.left)
             .titleTextAlignment(.left)
             .action(.default("Remove Filter".localized), image: UIImage(named: "block")) { (action, ind) in
-                 
                 
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                     let notification = UINotificationFeedbackGenerator()
@@ -272,6 +272,11 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                         statusAlert.show()
                     }
                 
+                DispatchQueue.main.async {
+                    self.currentTags.remove(at: indexPath.row)
+                    StoreStruct.allCurrentFilters.remove(at: indexPath.row)
+                    self.tableView.reloadData()
+                }
                 
                 let request = FilterToots.delete(id: self.currentTags[indexPath.row].id)
                 StoreStruct.client.run(request) { (statuses) in
@@ -291,13 +296,15 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     var lastThing = ""
     func fetchMoreHome() {
-        let request = Blocks.all(range: .max(id: self.currentTags.last?.id ?? "", limit: nil))
+        let request = FilterToots.all(range: .max(id: self.currentTags.last?.id ?? "", limit: nil))
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 
-                if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
+                if stat.isEmpty {} else {
                     self.lastThing = stat.first?.id ?? ""
                     DispatchQueue.main.async {
+                        self.currentTags = self.currentTags + stat
+                        self.currentTags = self.currentTags.removeDuplicates()
                         self.tableView.reloadData()
                     }
                 }

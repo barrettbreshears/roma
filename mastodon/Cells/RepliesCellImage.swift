@@ -26,12 +26,14 @@ class RepliesCellImage: SwipeTableViewCell {
     var smallImage2 = UIButton()
     var smallImage3 = UIButton()
     var smallImage4 = UIButton()
-
+    var warningB = MultiLineButton()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         profileImageView.backgroundColor = Colours.clear
         moreImage.backgroundColor = Colours.clear
+        warningB.backgroundColor = Colours.clear
         
 //        userName.adjustsFontForContentSizeCategory = true
 //        userTag.titleLabel?.adjustsFontForContentSizeCategory = true
@@ -46,7 +48,8 @@ class RepliesCellImage: SwipeTableViewCell {
         date.translatesAutoresizingMaskIntoConstraints = false
         toot.translatesAutoresizingMaskIntoConstraints = false
         moreImage.translatesAutoresizingMaskIntoConstraints = false
-
+        warningB.translatesAutoresizingMaskIntoConstraints = false
+        
         if (UserDefaults.standard.object(forKey: "proCorner") == nil || UserDefaults.standard.object(forKey: "proCorner") as! Int == 0) {
             profileImageView.layer.cornerRadius = 20
         }
@@ -75,17 +78,18 @@ class RepliesCellImage: SwipeTableViewCell {
         mainImageViewBG.layer.masksToBounds = false
         
         if (UserDefaults.standard.object(forKey: "depthToggle") == nil) || (UserDefaults.standard.object(forKey: "depthToggle") as! Int == 0) {
-            let amount = 5
+            let amount = 10
+            let amount2 = 15
             let horizontalEffect = UIInterpolatingMotionEffect(
                 keyPath: "layer.shadowOffset.width",
                 type: .tiltAlongHorizontalAxis)
-            horizontalEffect.minimumRelativeValue = amount
-            horizontalEffect.maximumRelativeValue = -amount
+            horizontalEffect.minimumRelativeValue = amount2
+            horizontalEffect.maximumRelativeValue = -amount2
             let verticalEffect = UIInterpolatingMotionEffect(
                 keyPath: "layer.shadowOffset.height",
                 type: .tiltAlongVerticalAxis)
-            verticalEffect.minimumRelativeValue = amount
-            verticalEffect.maximumRelativeValue = -amount
+            verticalEffect.minimumRelativeValue = amount2
+            verticalEffect.maximumRelativeValue = -amount2
             let effectGroup = UIMotionEffectGroup()
             effectGroup.motionEffects = [horizontalEffect, verticalEffect]
             self.mainImageViewBG.addMotionEffect(effectGroup)
@@ -107,7 +111,15 @@ class RepliesCellImage: SwipeTableViewCell {
         
         userName.numberOfLines = 0
         toot.numberOfLines = 0
-
+        
+        warningB.titleEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        warningB.titleLabel?.textAlignment = .center
+        warningB.setTitleColor(Colours.black.withAlphaComponent(0.4), for: .normal)
+        warningB.layer.cornerRadius = 7
+        warningB.titleLabel?.font = UIFont.boldSystemFont(ofSize: Colours.fontSize3)
+        warningB.titleLabel?.numberOfLines = 0
+        warningB.layer.masksToBounds = true
+        
         userName.textColor = Colours.black
         userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
         date.textColor = Colours.grayDark.withAlphaComponent(0.38)
@@ -123,6 +135,7 @@ class RepliesCellImage: SwipeTableViewCell {
         toot.hashtagColor = Colours.tabSelected
         toot.URLColor = Colours.tabSelected
         
+        userTag.setCompressionResistance(LayoutPriority(rawValue: 498), for: .horizontal)
         userName.setCompressionResistance(LayoutPriority(rawValue: 499), for: .horizontal)
         date.setCompressionResistance(LayoutPriority(rawValue: 501), for: .horizontal)
         
@@ -134,7 +147,8 @@ class RepliesCellImage: SwipeTableViewCell {
         contentView.addSubview(date)
         contentView.addSubview(toot)
         contentView.addSubview(moreImage)
-
+        contentView.addSubview(warningB)
+        
         imageCountTag.backgroundColor = Colours.clear
         imageCountTag.translatesAutoresizingMaskIntoConstraints = false
         imageCountTag.layer.cornerRadius = 7
@@ -156,21 +170,26 @@ class RepliesCellImage: SwipeTableViewCell {
             "episodes" : toot,
             "more" : moreImage,
             "countTag" : imageCountTag,
+            "warning" : warningB,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[image(40)]-13-[name]-(>=5)-[more(16)]-4-[date]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[image(40)]-13-[artist]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-20-|", options: [], metrics: nil, views: viewsDict))
+//        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[image(40)]-13-[artist]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-126-[mainImage]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-136-[mainImageBG]-30-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-1-[episodes]-10-[mainImage(210)]-23-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-1-[episodes]-10-[mainImageBG(210)]-23-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-10-[mainImage(210)]-23-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-10-[mainImageBG(210)]-23-|", options: [], metrics: nil, views: viewsDict))
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+        
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-124-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -182,8 +201,12 @@ class RepliesCellImage: SwipeTableViewCell {
         toot.mentionColor = Colours.tabSelected
         toot.hashtagColor = Colours.tabSelected
         toot.URLColor = Colours.tabSelected
+        warningB.backgroundColor = Colours.clear
         
         userName.text = status.account.displayName
+        if userName.text == "" {
+            userName.text = " "
+        }
         if (UserDefaults.standard.object(forKey: "mentionToggle") == nil || UserDefaults.standard.object(forKey: "mentionToggle") as! Int == 0) {
             userTag.setTitle("@\(status.account.acct)", for: .normal)
         } else {
@@ -220,6 +243,9 @@ class RepliesCellImage: SwipeTableViewCell {
 
             if status.account.emojis.isEmpty {
                 userName.text = status.account.displayName.stripHTML()
+                if userName.text == "" {
+                    userName.text = " "
+                }
             } else {
                 let attributedString = NSMutableAttributedString(string: status.account.displayName.stripHTML())
                 status.account.emojis.map({
@@ -266,7 +292,7 @@ class RepliesCellImage: SwipeTableViewCell {
 //        DispatchQueue.global(qos: .userInitiated).async {
         self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
         self.mainImageView.pin_updateWithProgress = true
-        self.mainImageView.pin_setImage(from: URL(string: "\(status.mediaAttachments[0].previewURL)"))
+        self.mainImageView.pin_setImage(from: URL(string: "\(status.mediaAttachments[0].url)"))
 //        }
         mainImageView.layer.masksToBounds = true
         mainImageView.layer.borderColor = UIColor.black.cgColor
@@ -286,7 +312,7 @@ class RepliesCellImage: SwipeTableViewCell {
             self.moreImage.image = UIImage(named: "like")
         } else {
             if status.reblog?.poll ?? status.poll != nil {
-                self.moreImage.image = UIImage(named: "list")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
+                self.moreImage.image = UIImage(named: "pollbubble")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
             } else {
                 
                 if status.reblog?.visibility ?? status.visibility == .direct {
@@ -321,7 +347,40 @@ class RepliesCellImage: SwipeTableViewCell {
             imageCountTag.backgroundColor = Colours.clear
             imageCountTag.alpha = 0
         }
-
+        
+        if (UserDefaults.standard.object(forKey: "senseTog") == nil) || (UserDefaults.standard.object(forKey: "senseTog") as! Int == 0) {
+            
+            if status.reblog?.sensitive ?? false || status.sensitive ?? false {
+                warningB.backgroundColor = Colours.tabUnselected
+                
+                let z = status.reblog?.spoilerText ?? status.spoilerText
+                var zz = "Sensitive Content"
+                if z == "" {} else {
+                    zz = z
+                }
+                warningB.setTitle("\(zz)", for: .normal)
+                warningB.setTitleColor(Colours.grayDark.withAlphaComponent(0.6), for: .normal)
+                warningB.addTarget(self, action: #selector(self.didTouchWarning), for: .touchUpInside)
+                warningB.alpha = 1
+            } else {
+                warningB.backgroundColor = Colours.clear
+                warningB.alpha = 0
+            }
+            
+        } else {
+            warningB.backgroundColor = Colours.clear
+            warningB.alpha = 0
+        }
+        
+    }
+    
+    @objc func didTouchWarning() {
+        warningB.backgroundColor = Colours.clear
+        warningB.alpha = 0
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let selection = UISelectionFeedbackGenerator()
+            selection.selectionChanged()
+        }
     }
 
 }

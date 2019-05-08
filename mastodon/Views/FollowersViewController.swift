@@ -22,6 +22,8 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
     var statusFollowers: [Account] = []
     var doOnce = false
     var doOnce2 = false
+    var newLast: RequestRange = .max(id: "", limit: nil)
+    var newLast2: RequestRange = .max(id: "", limit: nil)
     
     
     @objc func load() {
@@ -38,7 +40,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        //self.ai.startAnimating()
+        self.ai.startAnimating()
     }
     
     
@@ -84,7 +86,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
             } else {
                 segmentedControl.shapeStyle = .liquid
             }
-            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.textFont = .systemFont(ofSize: 15, weight: .heavy)
             segmentedControl.cornerRadius = 12
             segmentedControl.shadowsEnabled = false
             segmentedControl.transitionStyle = .slide
@@ -105,9 +107,9 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
             self.view.addSubview(self.tableView)
         } else {
             if UIApplication.shared.isSplitOrSlideOver {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(30), width: CGFloat(200), height: CGFloat(40)))
             } else {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(newoff), width: CGFloat(240), height: CGFloat(40)))
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(newoff), width: CGFloat(200), height: CGFloat(40)))
             }
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
@@ -115,7 +117,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
             } else {
                 segmentedControl.shapeStyle = .liquid
             }
-            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.textFont = .systemFont(ofSize: 15, weight: .heavy)
             segmentedControl.cornerRadius = 12
             segmentedControl.shadowsEnabled = false
             segmentedControl.transitionStyle = .slide
@@ -144,7 +146,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
         NotificationCenter.default.addObserver(self, selector: #selector(self.load), name: NSNotification.Name(rawValue: "load"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.changeSeg), name: NSNotification.Name(rawValue: "changeSeg"), object: nil)
         
-        self.ai.frame = CGRect(x: self.view.bounds.width/2 - 20, y: self.view.bounds.height/2, width: 40, height: 40)
+        self.ai.frame = CGRect(x: self.view.bounds.width/2 - 20, y: self.view.bounds.height/2 - 20, width: 40, height: 40)
         self.view.backgroundColor = Colours.white
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
@@ -173,7 +175,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
             } else {
                 segmentedControl.shapeStyle = .liquid
             }
-            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.textFont = .systemFont(ofSize: 15, weight: .heavy)
             segmentedControl.cornerRadius = 12
             segmentedControl.shadowsEnabled = false
             segmentedControl.transitionStyle = .slide
@@ -206,9 +208,9 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
             }
         } else {
             if UIApplication.shared.isSplitOrSlideOver {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(30), width: CGFloat(240), height: CGFloat(40)))
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(30), width: CGFloat(200), height: CGFloat(40)))
             } else {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 120), y: CGFloat(newoff), width: CGFloat(240), height: CGFloat(40)))
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(newoff), width: CGFloat(200), height: CGFloat(40)))
             }
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
@@ -216,7 +218,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
             } else {
                 segmentedControl.shapeStyle = .liquid
             }
-            segmentedControl.textFont = .systemFont(ofSize: 16, weight: .heavy)
+            segmentedControl.textFont = .systemFont(ofSize: 15, weight: .heavy)
             segmentedControl.cornerRadius = 12
             segmentedControl.shadowsEnabled = false
             segmentedControl.transitionStyle = .slide
@@ -255,6 +257,8 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
             }
         }
         
+        self.view.addSubview(self.ai)
+        
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         
@@ -264,6 +268,8 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        
+        self.fetchFollows()
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -415,11 +421,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                 return cell
             } else {
             
-            if indexPath.row == self.statusFollows.count - 6 {
-                self.fetchFollows()
-            }
-            if indexPath.row < 7 && self.doOnce == false {
-                self.doOnce = true
+            if indexPath.row == self.statusFollows.count - 1 {
                 self.fetchFollows()
             }
             
@@ -429,8 +431,8 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
             cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
             cell.backgroundColor = Colours.white
             cell.userName.textColor = Colours.black
-            cell.userTag.textColor = Colours.black
-            cell.toot.textColor = Colours.grayDark.withAlphaComponent(0.38)
+            cell.userTag.textColor = Colours.grayDark.withAlphaComponent(0.38)
+            cell.toot.textColor = Colours.grayDark.withAlphaComponent(0.74)
             let bgColorView = UIView()
             bgColorView.backgroundColor = Colours.white
             cell.selectedBackgroundView = bgColorView
@@ -447,11 +449,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                 return cell
             } else {
             
-            if indexPath.row == self.statusFollowers.count - 6 {
-                self.fetchFollowers()
-            }
-            if indexPath.row < 7 && self.doOnce2 == false {
-                self.doOnce2 = true
+            if indexPath.row == self.statusFollowers.count - 1 {
                 self.fetchFollowers()
             }
             
@@ -461,8 +459,8 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
             cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
             cell.backgroundColor = Colours.white
             cell.userName.textColor = Colours.black
-            cell.userTag.textColor = Colours.black
-            cell.toot.textColor = Colours.grayDark.withAlphaComponent(0.38)
+            cell.userTag.textColor = Colours.grayDark.withAlphaComponent(0.38)
+            cell.toot.textColor = Colours.grayDark.withAlphaComponent(0.74)
             let bgColorView = UIView()
             bgColorView.backgroundColor = Colours.white
             cell.selectedBackgroundView = bgColorView
@@ -487,23 +485,29 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
     }
     
     @objc func didTouchProfile(sender: UIButton) {
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let selection = UISelectionFeedbackGenerator()
-        selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//        let selection = UISelectionFeedbackGenerator()
+//        selection.selectionChanged()
+//        }
     }
     
     var lastThing = ""
     func fetchFollows() {
-        let request = Accounts.following(id: self.profileStatus, range: .max(id: self.statusFollows.last?.id ?? "", limit: nil))
+        if self.newLast == RequestRange.max(id: "0", limit: nil) {
+            return
+        }
+        let request = Accounts.following(id: self.profileStatus, range: self.newLast)
         StoreStruct.client.run(request) { (statuses) in
+            self.newLast = statuses.pagination?.next ?? RequestRange.max(id: "0", limit: nil) as! RequestRange
             if let stat = (statuses.value) {
-                
-                if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
+                print("latest stat: \(stat)")
+                if stat.isEmpty {} else {
                     self.lastThing = stat.first?.id ?? ""
                 self.statusFollows = self.statusFollows + stat
                     self.statusFollows = self.statusFollows.removeDuplicates()
                 DispatchQueue.main.async {
+                    self.ai.stopAnimating()
+                    self.ai.alpha = 0
                     self.tableView.reloadData()
                 }
                 }
@@ -513,11 +517,15 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
     
     var lastThing2 = ""
     func fetchFollowers() {
-        let request = Accounts.followers(id: self.profileStatus, range: .max(id: self.statusFollows.last?.id ?? "", limit: nil))
+        if self.newLast2 == RequestRange.max(id: "0", limit: nil) {
+            return
+        }
+        let request = Accounts.followers(id: self.profileStatus, range: self.newLast2)
         StoreStruct.client.run(request) { (statuses) in
+            self.newLast2 = statuses.pagination?.next ?? RequestRange.max(id: "0", limit: nil) as! RequestRange
             if let stat = (statuses.value) {
                 
-                if stat.isEmpty || self.lastThing2 == stat.first?.id ?? "" {} else {
+                if stat.isEmpty {} else {
                     self.lastThing2 = stat.first?.id ?? ""
                 self.statusFollows = self.statusFollows + stat
                     self.statusFollows = self.statusFollows.removeDuplicates()

@@ -30,7 +30,7 @@ class CollectionColourCell: UICollectionViewCell {
     public func configure() {
         self.bgImage.backgroundColor = Colours.white
         self.bgImage.frame = CGRect(x: 0, y: 0, width: 55, height: 55)
-        self.bgImage.layer.cornerRadius = 12
+        self.bgImage.layer.cornerRadius = 27.5
         contentView.addSubview(bgImage)
         
         self.image.frame.origin.x = 0
@@ -38,7 +38,7 @@ class CollectionColourCell: UICollectionViewCell {
         self.image.frame.size.width = 55
         self.image.frame.size.height = 55
         self.image.backgroundColor = UIColor.clear
-        self.image.layer.cornerRadius = 12
+        self.image.layer.cornerRadius = 27.5
         contentView.addSubview(image)
     }
 }

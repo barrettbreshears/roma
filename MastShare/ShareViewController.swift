@@ -172,7 +172,7 @@ class ShareViewController: UIViewController, UITextViewDelegate {
         self.viewBG.addSubview(self.selectedImage1)
         
         bgView.frame = CGRect(x: 0, y: Int(UIScreen.main.bounds.size.height), width: Int(UIScreen.main.bounds.size.width), height: Int(self.keyHeight) + 50)
-        bgView.backgroundColor = UIColor(red: 107/255.0, green: 122/255.0, blue: 214/255.0, alpha: 1.0)
+        bgView.backgroundColor = UIColor(red: 84/255.0, green: 102/255.0, blue: 205/255.0, alpha: 1.0)
         self.view.addSubview(bgView)
         
         visibilityButton.frame = CGRect(x: 0, y: 0, width: 80, height: 50)
@@ -207,7 +207,7 @@ class ShareViewController: UIViewController, UITextViewDelegate {
         
         tootLabel.frame = CGRect(x: UIScreen.main.bounds.size.width - 90, y: -50, width: 80, height: 30)
         tootLabel.setTitle("Toot", for: .normal)
-        tootLabel.setTitleColor(UIColor(red: 107/255.0, green: 122/255.0, blue: 214/255.0, alpha: 1.0), for: .normal)
+        tootLabel.setTitleColor(UIColor(red: 84/255.0, green: 102/255.0, blue: 205/255.0, alpha: 1.0), for: .normal)
         tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .heavy)
         tootLabel.addTarget(self, action: #selector(self.didSelectPost), for: .touchUpInside)
         tootLabel.titleLabel?.textAlignment = .right
@@ -295,7 +295,7 @@ class ShareViewController: UIViewController, UITextViewDelegate {
     }
     
     @objc func didSelectCancel() {
-        let impact = UIImpactFeedbackGenerator()
+        let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
         textView.resignFirstResponder()
         UIView.animate(withDuration: 0.3,
@@ -317,7 +317,7 @@ class ShareViewController: UIViewController, UITextViewDelegate {
             return
         }
         
-        let impact = UIImpactFeedbackGenerator()
+        let impact = UIImpactFeedbackGenerator(style: .light)
         impact.impactOccurred()
         
         var client = Client(baseURL: "")

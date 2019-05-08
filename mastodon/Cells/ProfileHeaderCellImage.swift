@@ -97,7 +97,7 @@ class ProfileHeaderCellImage: UITableViewCell, UICollectionViewDelegate, UIColle
                 cell.bgImage.layer.shadowOpacity = 0.2
                 
 //                if (UserDefaults.standard.object(forKey: "depthToggle") == nil) || (UserDefaults.standard.object(forKey: "depthToggle") as! Int == 0) {
-//                    let amount = 5
+//                    let amount = 10
 //                    let horizontalEffect = UIInterpolatingMotionEffect(
 //                        keyPath: "layer.shadowOffset.width",
 //                        type: .tiltAlongHorizontalAxis)
@@ -151,10 +151,10 @@ class ProfileHeaderCellImage: UITableViewCell, UICollectionViewDelegate, UIColle
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
-        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-        let selection = UISelectionFeedbackGenerator()
-        selection.selectionChanged()
-        }
+//        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+//        let selection = UISelectionFeedbackGenerator()
+//        selection.selectionChanged()
+//        }
         
         var sto = self.profileStatusesHasImage
         StoreStruct.newIDtoGoTo = sto[indexPath.item].id

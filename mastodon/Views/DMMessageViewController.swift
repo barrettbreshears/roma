@@ -134,7 +134,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                             }
                             self.lastUser = $0.account.acct
                             
-                            var theText = NSMutableAttributedString(string: $0.content.stripHTML().replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""))
+                            var theText = NSMutableAttributedString(string: $0.content.stripHTML())
                             
                             if $0.emojis.isEmpty {} else {
                                 let attributedString = theText
@@ -205,7 +205,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                         self.lastUser = $0.account.acct
                         
                         let sender = Sender(id: theType, displayName: "\($0.account.acct)")
-                        let x = MockMessage.init(text: $0.content.stripHTML().replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""), sender: sender, messageId: $0.id, date: $0.createdAt)
+                        let x = MockMessage.init(text: $0.content.stripHTML(), sender: sender, messageId: $0.id, date: $0.createdAt)
                         self.messages.append(x)
                         self.allPosts.append($0)
                         
@@ -362,7 +362,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         guard let thText = self.messageInputBar.inputTextView.text else { return }
         
         let sender = Sender(id: "1", displayName: "\(StoreStruct.currentUser.acct)")
-        let x = MockMessage.init(text: thText.replace("@\(StoreStruct.currentUser.acct) ", with: "").replace("@\(StoreStruct.currentUser.acct)\n", with: "").replace("@\(StoreStruct.currentUser.acct)", with: ""), sender: sender, messageId: "18982", date: Date())
+        let x = MockMessage.init(text: thText, sender: sender, messageId: "18982", date: Date())
         
         let request0 = Statuses.create(status: "@\(self.lastUser) \(String(describing: thText))", replyToID: self.mainStatus[0].id, mediaIDs: [], sensitive: self.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
         StoreStruct.client.run(request0) { (statuses) in

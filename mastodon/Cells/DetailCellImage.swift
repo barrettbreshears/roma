@@ -15,7 +15,6 @@ class DetailCellImage: UITableViewCell {
     var profileImageView = UIButton()
     var userName = UILabel()
     var userTag = UIButton()
-    var date = UILabel()
     var toot = ActiveLabel()
     var faves = UIButton()
     var fromClient = UILabel()
@@ -45,7 +44,6 @@ class DetailCellImage: UITableViewCell {
         mainImageViewBG.translatesAutoresizingMaskIntoConstraints = false
         userName.translatesAutoresizingMaskIntoConstraints = false
         userTag.translatesAutoresizingMaskIntoConstraints = false
-        date.translatesAutoresizingMaskIntoConstraints = false
         toot.translatesAutoresizingMaskIntoConstraints = false
         fromClient.translatesAutoresizingMaskIntoConstraints = false
         faves.translatesAutoresizingMaskIntoConstraints = false
@@ -79,7 +77,6 @@ class DetailCellImage: UITableViewCell {
         
         userName.textColor = Colours.black
         userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
-        date.textColor = Colours.grayDark.withAlphaComponent(0.38)
         toot.textColor = Colours.black
         fromClient.textColor = Colours.grayDark.withAlphaComponent(0.38)
         faves.titleLabel?.textColor = Colours.tabSelected
@@ -87,10 +84,9 @@ class DetailCellImage: UITableViewCell {
         
         userName.font = UIFont.systemFont(ofSize: Colours.fontSize1, weight: .heavy)
         userTag.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
-        date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
         fromClient.font = UIFont.systemFont(ofSize: Colours.fontSize3)
-        faves.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
+        faves.titleLabel?.font = UIFont.boldSystemFont(ofSize: Colours.fontSize3)
         
         
         toot.enabledTypes = [.mention, .hashtag, .url]
@@ -99,14 +95,12 @@ class DetailCellImage: UITableViewCell {
         toot.URLColor = Colours.tabSelected
         
         userName.setCompressionResistance(LayoutPriority(rawValue: 499), for: .horizontal)
-        date.setCompressionResistance(LayoutPriority(rawValue: 501), for: .horizontal)
         
         contentView.addSubview(profileImageView)
         contentView.addSubview(mainImageViewBG)
         contentView.addSubview(mainImageView)
         contentView.addSubview(userName)
         contentView.addSubview(userTag)
-        contentView.addSubview(date)
         contentView.addSubview(toot)
         contentView.addSubview(fromClient)
         contentView.addSubview(faves)
@@ -128,7 +122,6 @@ class DetailCellImage: UITableViewCell {
             "mainImage" : mainImageView,
             "name" : userName,
             "artist" : userTag,
-            "date" : date,
             "episodes" : toot,
             "from" : fromClient,
             "faves" : faves,
@@ -136,24 +129,23 @@ class DetailCellImage: UITableViewCell {
             ]
         
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[name]-(>=5)-[date]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[artist]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[from]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[faves]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[image(40)]-13-[name]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[image(40)]-13-[artist]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[episodes]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[from]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[faves]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[mainImage]-0-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[mainImageBG]-0-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]", options: [], metrics: nil, views: viewsDict))
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-1-[episodes]-15-[mainImage(250)]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-1-[episodes]-15-[mainImageBG(250)]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImage(275)]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImageBG(275)]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
         case .pad:
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-1-[episodes]-15-[mainImage(500)]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-1-[episodes]-15-[mainImageBG(500)]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImage(500)]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImageBG(500)]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
         default:
             print("nothing")
         }
@@ -173,12 +165,15 @@ class DetailCellImage: UITableViewCell {
         toot.URLColor = Colours.tabSelected
         
         userName.text = status.reblog?.account.displayName ?? status.account.displayName
+        if userName.text == "" {
+            userName.text = " "
+        }
+        
         if (UserDefaults.standard.object(forKey: "mentionToggle") == nil || UserDefaults.standard.object(forKey: "mentionToggle") as! Int == 0) {
             userTag.setTitle("@\(status.reblog?.account.acct ?? status.account.acct)", for: .normal)
         } else {
             userTag.setTitle("@\(status.reblog?.account.username ?? status.account.username)", for: .normal)
         }
-        date.text = status.reblog?.createdAt.toStringWithRelativeTime() ?? status.createdAt.toStringWithRelativeTime()
         if status.reblog?.content.stripHTML() != nil {
 //            toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.username) reposted"
             
@@ -321,10 +316,9 @@ class DetailCellImage: UITableViewCell {
         
         userName.font = UIFont.systemFont(ofSize: Colours.fontSize1, weight: .heavy)
         userTag.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
-        date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
         fromClient.font = UIFont.systemFont(ofSize: Colours.fontSize3)
-        faves.titleLabel?.font = UIFont.systemFont(ofSize: Colours.fontSize3)
+        faves.titleLabel?.font = UIFont.boldSystemFont(ofSize: Colours.fontSize3)
         
         
         mainImageView.contentMode = .scaleAspectFill
@@ -379,7 +373,7 @@ class DetailCellImage: UITableViewCell {
             
             self.mainImageView.setImage(UIImage(), for: .normal)
             if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count == 2 {
-                self.smallImage1.frame = CGRect(x: -2, y: 0, width: (UIScreen.main.bounds.width)/2, height: 240)
+                self.smallImage1.frame = CGRect(x: -2, y: 0, width: (UIScreen.main.bounds.width)/2, height: 275)
                 self.smallImage1.contentMode = .scaleAspectFill
                 self.smallImage1.imageView?.contentMode = .scaleAspectFill
                 self.smallImage1.clipsToBounds = true
@@ -393,7 +387,7 @@ class DetailCellImage: UITableViewCell {
                 self.smallImage1.alpha = 1
                 self.mainImageView.addSubview(self.smallImage1)
                 
-                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: 0, width: (UIScreen.main.bounds.width)/2, height: 240)
+                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: 0, width: (UIScreen.main.bounds.width)/2, height: 275)
                 self.smallImage2.contentMode = .scaleAspectFill
                 self.smallImage2.imageView?.contentMode = .scaleAspectFill
                 self.smallImage2.clipsToBounds = true
@@ -407,7 +401,7 @@ class DetailCellImage: UITableViewCell {
                 self.smallImage2.alpha = 1
                 self.mainImageView.addSubview(self.smallImage2)
             } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count == 3 {
-                self.smallImage1.frame = CGRect(x: -2, y: 0, width: (UIScreen.main.bounds.width)/2, height: 240)
+                self.smallImage1.frame = CGRect(x: -2, y: 0, width: (UIScreen.main.bounds.width)/2, height: 275)
                 self.smallImage1.contentMode = .scaleAspectFill
                 self.smallImage1.imageView?.contentMode = .scaleAspectFill
                 self.smallImage1.clipsToBounds = true
@@ -421,7 +415,7 @@ class DetailCellImage: UITableViewCell {
                 self.smallImage1.alpha = 1
                 self.mainImageView.addSubview(self.smallImage1)
                 
-                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: -2, width: (UIScreen.main.bounds.width)/2, height: 120)
+                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: -2, width: (UIScreen.main.bounds.width)/2, height: 137.5)
                 self.smallImage2.contentMode = .scaleAspectFill
                 self.smallImage2.imageView?.contentMode = .scaleAspectFill
                 self.smallImage2.clipsToBounds = true
@@ -435,7 +429,7 @@ class DetailCellImage: UITableViewCell {
                 self.smallImage2.alpha = 1
                 self.mainImageView.addSubview(self.smallImage2)
                 
-                self.smallImage3.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: 122, width: (UIScreen.main.bounds.width)/2, height: 120)
+                self.smallImage3.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: 139.5, width: (UIScreen.main.bounds.width)/2, height: 137.5)
                 self.smallImage3.contentMode = .scaleAspectFill
                 self.smallImage3.imageView?.contentMode = .scaleAspectFill
                 self.smallImage3.clipsToBounds = true
@@ -449,7 +443,7 @@ class DetailCellImage: UITableViewCell {
                 self.smallImage3.alpha = 1
                 self.mainImageView.addSubview(self.smallImage3)
             } else if status.reblog?.mediaAttachments.count ?? status.mediaAttachments.count >= 4 {
-                self.smallImage1.frame = CGRect(x: -2, y: -2, width: (UIScreen.main.bounds.width)/2, height: 120)
+                self.smallImage1.frame = CGRect(x: -2, y: -2, width: (UIScreen.main.bounds.width)/2, height: 137.5)
                 self.smallImage1.contentMode = .scaleAspectFill
                 self.smallImage1.imageView?.contentMode = .scaleAspectFill
                 self.smallImage1.clipsToBounds = true
@@ -463,7 +457,7 @@ class DetailCellImage: UITableViewCell {
                 self.smallImage1.alpha = 1
                 self.mainImageView.addSubview(self.smallImage1)
                 
-                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: -2, width: (UIScreen.main.bounds.width)/2, height: 120)
+                self.smallImage2.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: -2, width: (UIScreen.main.bounds.width)/2, height: 137.5)
                 self.smallImage2.contentMode = .scaleAspectFill
                 self.smallImage2.imageView?.contentMode = .scaleAspectFill
                 self.smallImage2.clipsToBounds = true
@@ -477,7 +471,7 @@ class DetailCellImage: UITableViewCell {
                 self.smallImage2.alpha = 1
                 self.mainImageView.addSubview(self.smallImage2)
                 
-                self.smallImage3.frame = CGRect(x: -2, y: 122, width: (UIScreen.main.bounds.width)/2, height: 120)
+                self.smallImage3.frame = CGRect(x: -2, y: 139.5, width: (UIScreen.main.bounds.width)/2, height: 137.5)
                 self.smallImage3.contentMode = .scaleAspectFill
                 self.smallImage3.imageView?.contentMode = .scaleAspectFill
                 self.smallImage3.clipsToBounds = true
@@ -491,7 +485,7 @@ class DetailCellImage: UITableViewCell {
                 self.smallImage3.alpha = 1
                 self.mainImageView.addSubview(self.smallImage3)
                 
-                self.smallImage4.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: 122, width: (UIScreen.main.bounds.width)/2, height: 120)
+                self.smallImage4.frame = CGRect(x: (UIScreen.main.bounds.width)/2 + 2, y: 139.5, width: (UIScreen.main.bounds.width)/2, height: 137.5)
                 self.smallImage4.contentMode = .scaleAspectFill
                 self.smallImage4.imageView?.contentMode = .scaleAspectFill
                 self.smallImage4.clipsToBounds = true
@@ -518,7 +512,7 @@ class DetailCellImage: UITableViewCell {
             DispatchQueue.global(qos: .userInitiated).async {
             self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
             self.mainImageView.pin_updateWithProgress = true
-            self.mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments.first?.previewURL ?? status.mediaAttachments.first?.previewURL ?? "")"))
+            self.mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments.first?.url ?? status.mediaAttachments.first?.url ?? "")"))
             }
         }
         

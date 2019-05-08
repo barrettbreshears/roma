@@ -43,16 +43,18 @@ class FollowersCell: SwipeTableViewCell {
         profileImageView.layer.masksToBounds = true
         
         userName.numberOfLines = 0
-        userTag.numberOfLines = 0
         toot.numberOfLines = 0
         
         userName.textColor = Colours.black
-        userTag.textColor = Colours.black
-        toot.textColor = Colours.grayDark.withAlphaComponent(0.38)
+        userTag.textColor = Colours.grayDark.withAlphaComponent(0.38)
+        toot.textColor = Colours.grayDark.withAlphaComponent(0.74)
         
         userName.font = UIFont.systemFont(ofSize: Colours.fontSize1, weight: .heavy)
         userTag.font = UIFont.systemFont(ofSize: Colours.fontSize1)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize3)
+        
+        userName.setCompressionResistance(LayoutPriority(rawValue: 501), for: .horizontal)
+        userTag.setCompressionResistance(LayoutPriority(rawValue: 478), for: .horizontal)
         
         contentView.addSubview(profileImageView)
         contentView.addSubview(userName)
@@ -66,11 +68,11 @@ class FollowersCell: SwipeTableViewCell {
             "episodes" : toot,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[name]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[artist]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[name]-2-[artist]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-4-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[artist]-4-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -89,6 +91,7 @@ class FollowersCell: SwipeTableViewCell {
         userTag.font = UIFont.systemFont(ofSize: Colours.fontSize1)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         
+        profileImageView.isUserInteractionEnabled = false
         
         if status.emojis.isEmpty {
             userName.text = status.displayName.stripHTML()

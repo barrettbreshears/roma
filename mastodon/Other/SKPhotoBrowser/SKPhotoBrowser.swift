@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 @objc public protocol SKPhotoBrowserDelegate {
     
@@ -454,8 +455,10 @@ open class SKPhotoBrowser: UIViewController, UIScrollViewDelegate {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid"), object: self)
             } else if StoreStruct.currentPage == 1 {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid2"), object: self)
-            } else if StoreStruct.currentPage == 2 {
+            } else if StoreStruct.currentPage == 101010 {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid3"), object: self)
+            } else if StoreStruct.currentPage == 2 {
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid4"), object: self)
             } else if StoreStruct.currentPage == 778 {
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "gotoid778"), object: self)
             } else {
@@ -717,17 +720,56 @@ open class SKPhotoBrowser: UIViewController, UIScrollViewDelegate {
                 }
             }
             
+            if StoreStruct.currentPage == 2 {
+                
+                Alertift.actionSheet(title: nil, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("Share Image".localized), image: nil) { (action, ind) in
+                        self.longShare()
+                    }
+                    .action(.default("Save Image".localized), image: nil) { (action, ind) in
+                        let snapshot: UIImage = self.photoAtIndex(self.currentPageIndex).underlyingImage
+                        PHPhotoLibrary.shared().performChanges({
+                            PHAssetChangeRequest.creationRequestForAsset(from: snapshot)
+                        }, completionHandler: { success, error in
+                            if success {
+                                // Saved
+                                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                    DispatchQueue.main.async {
+                                        let generator = UINotificationFeedbackGenerator()
+                                        generator.notificationOccurred(.success)
+                                    }
+                                }
+                            } else {
+                                // Save failed
+                            }
+                        })
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .show(on: self)
+                
+            } else {
+            
             Alertift.actionSheet(title: nil, message: nil)
                 .backgroundColor(Colours.white)
                 .titleTextColor(Colours.grayDark)
                 .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
                 .messageTextAlignment(.left)
                 .titleTextAlignment(.left)
-                .action(.default("View Post".localized), image: UIImage(named: "share")) { (action, ind) in
-                    self.openURL("com.vm.roma://id=\(StoreStruct.newIDtoGoTo)")
+                .action(.default("View Toot".localized), image: nil) { (action, ind) in
+                    self.openURL("com.shi.mastodon://id=\(StoreStruct.newIDtoGoTo)")
                     self.determineAndClose()
                 }
-                .action(.default("Share Post".localized), image: UIImage(named: "share")) { (action, ind) in
+                .action(.default("Share Toot".localized), image: nil) { (action, ind) in
                     
                     if let myWebsite = StoreStruct.currentImageURL {
                         let objectsToShare = [myWebsite]
@@ -738,8 +780,26 @@ open class SKPhotoBrowser: UIViewController, UIScrollViewDelegate {
                     }
                     
                 }
-                .action(.default("Share Image".localized), image: UIImage(named: "share")) { (action, ind) in
+                .action(.default("Share Image".localized), image: nil) { (action, ind) in
                     self.longShare()
+                }
+                .action(.default("Save Image".localized), image: nil) { (action, ind) in
+                    let snapshot: UIImage = self.photoAtIndex(self.currentPageIndex).underlyingImage
+                    PHPhotoLibrary.shared().performChanges({
+                        PHAssetChangeRequest.creationRequestForAsset(from: snapshot)
+                    }, completionHandler: { success, error in
+                        if success {
+                            // Saved
+                            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                DispatchQueue.main.async {
+                                    let generator = UINotificationFeedbackGenerator()
+                                    generator.notificationOccurred(.success)
+                                }
+                            }
+                        } else {
+                            // Save failed
+                        }
+                    })
                 }
                 .action(.cancel("Dismiss"))
                 .finally { action, index in
@@ -749,6 +809,7 @@ open class SKPhotoBrowser: UIViewController, UIScrollViewDelegate {
                 }
                 .show(on: self)
             
+            }
         }
     }
     
