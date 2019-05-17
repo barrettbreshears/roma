@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "92E0D91FB5C8654BF9979E0E60E8A78A"
+               BlueprintIdentifier = "5D8C128A26CA64913B58FB2A0409C514"
                BuildableName = "Regift.framework"
                BlueprintName = "Regift"
                ReferencedContainer = "container:Pods.xcodeproj">
