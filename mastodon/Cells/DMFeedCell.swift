@@ -117,7 +117,7 @@ class DMFeedCell: SwipeTableViewCell {
         ]
         
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[readIndi(8)]-5-[image(40)]-13-[name]-5-[artist]-(>=5)-[date]-20-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[readIndi(8)]-5-[image(40)]-13-[name]-5-[artist]-(>=5)-[date]-10-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-43-[image2(26)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[readIndi(8)]-5-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
@@ -183,12 +183,34 @@ class DMFeedCell: SwipeTableViewCell {
         toot.hashtagColor = Colours.tabSelected
         toot.URLColor = Colours.tabSelected
         
-        userName.text = status.reblog?.account.displayName ?? status.account.displayName
-        
         if (UserDefaults.standard.object(forKey: "mentionToggle") == nil || UserDefaults.standard.object(forKey: "mentionToggle") as! Int == 0) {
             userTag.setTitle("@\(status.reblog?.account.acct ?? status.account.acct)", for: .normal)
         } else {
             userTag.setTitle("@\(status.reblog?.account.username ?? status.account.username)", for: .normal)
+        }
+        
+        self.profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
+        self.profileImageView.pin_updateWithProgress = true
+        
+        userName.text = status.reblog?.account.displayName ?? status.account.displayName
+        if userName.text == StoreStruct.currentUser.displayName {
+            let request = Accounts.account(id: status.inReplyToAccountID ?? "")
+            StoreStruct.client.run(request) { (statuses) in
+                if let stat = (statuses.value) {
+                    DispatchQueue.main.async {
+                        self.userName.text = stat.displayName
+                        if (UserDefaults.standard.object(forKey: "mentionToggle") == nil || UserDefaults.standard.object(forKey: "mentionToggle") as! Int == 0) {
+                            self.userTag.setTitle("@\(stat.acct)", for: .normal)
+                        } else {
+                            self.userTag.setTitle("@\(stat.username)", for: .normal)
+                        }
+                        self.profileImageView.pin_setImage(from: URL(string: "\(stat.avatar)"))
+                        self.reloadInputViews()
+                    }
+                }
+            }
+        } else {
+            self.profileImageView.pin_setImage(from: URL(string: "\(status.reblog?.account.avatar ?? status.account.avatar)"))
         }
         
         
@@ -357,11 +379,6 @@ class DMFeedCell: SwipeTableViewCell {
         date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
         
-        DispatchQueue.global(qos: .userInitiated).async {
-            self.profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
-            self.profileImageView.pin_updateWithProgress = true
-            self.profileImageView.pin_setImage(from: URL(string: "\(status.reblog?.account.avatar ?? status.account.avatar)"))
-        }
         profileImageView.layer.masksToBounds = true
         profileImageView.layer.borderColor = UIColor.black.cgColor
         profileImageView.layer.borderWidth = 0.2
@@ -377,11 +394,11 @@ class DMFeedCell: SwipeTableViewCell {
         
         self.moreImage.contentMode = .scaleAspectFit
         if (status.reblog?.favourited ?? status.favourited ?? false) && (status.reblog?.reblogged ?? status.reblogged ?? false) {
-            self.moreImage.image = UIImage(named: "fifty")
+            self.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
         } else if status.reblog?.reblogged ?? status.reblogged ?? false {
-            self.moreImage.image = UIImage(named: "boost")
+            self.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
         } else if (status.reblog?.favourited ?? status.favourited ?? false) || StoreStruct.allLikes.contains(status.reblog?.id ?? status.id) {
-            self.moreImage.image = UIImage(named: "like")
+            self.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
         } else {
             if status.reblog?.poll ?? status.poll != nil {
                 self.moreImage.image = UIImage(named: "pollbubble")

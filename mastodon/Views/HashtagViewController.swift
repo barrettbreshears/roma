@@ -121,7 +121,11 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        //self.ai.startAnimating()
+//        if let indexPath = tableView.indexPathForSelectedRow {
+//            self.tableView.deselectRow(at: indexPath, animated: true)
+//        }
+        
+        self.ai.startAnimating()
     }
     
     
@@ -201,6 +205,8 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name: NSNotification.Name(rawValue: "refresh"), object: nil)
         //NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTop1), name: NSNotification.Name(rawValue: "scrollTop1"), object: nil)
         
+        self.ai.frame = CGRect(x: self.view.bounds.width/2 - 20, y: self.view.bounds.height/2 - 20, width: 40, height: 40)
+        
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longAction(sender:)))
         longPress.minimumPressDuration = 0.5
         longPress.delegate = self
@@ -233,11 +239,11 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         case .pad:
             print("nothing")
         default:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         }
         
         self.tableView.alpha = 1
@@ -252,6 +258,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.view.addSubview(self.tableView)
         self.tableView.tableFooterView = UIView()
         
+        self.view.addSubview(self.ai)
         
         //        refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
         //        self.tableView.addSubview(refreshControl)
@@ -285,12 +292,40 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
+        if let indexPath = tableView.indexPathForSelectedRow {
+            self.tableView.deselectRow(at: indexPath, animated: true)
+            let request = Statuses.status(id: self.currentTags[indexPath.row].reblog?.id ?? self.currentTags[indexPath.row].id)
+            StoreStruct.client.run(request) { (statuses) in
+                if let stat = (statuses.value) {
+                    DispatchQueue.main.async {
+                        if let cell = self.tableView.cellForRow(at: indexPath) as? MainFeedCell {
+                            cell.configure0(stat)
+                        }
+                        if let cell2 = self.tableView.cellForRow(at: indexPath) as? MainFeedCellImage {
+                            cell2.configure0(stat)
+                        }
+                    }
+                }
+            }
+        }
+        
 //        self.navigationController?.navigationBar.tintColor = Colours.tabUnselected
 //        self.navigationController?.navigationBar.barTintColor = Colours.tabUnselected
         self.navigationController?.navigationItem.backBarButtonItem?.tintColor = Colours.tabUnselected
         
         StoreStruct.currentPage = 90
         
+        let request = Timelines.tag(self.currentTagTitle, local: false)
+        StoreStruct.client.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                self.currentTags = stat
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                    self.ai.alpha = 0
+                    self.ai.stopAnimating()
+                }
+            }
+        }
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -344,7 +379,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
+        title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 30)
         title.text = "#\(self.currentTagTitle)"
         title.textColor = Colours.grayDark2
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
@@ -369,12 +404,12 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MainFeedCell
             cell.backgroundColor = Colours.white
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else {
         
-        if indexPath.row == self.currentTags.count - 14 {
+        if indexPath.row == self.currentTags.count - 1 {
             self.fetchMoreHome()
         }
         if self.currentTags[indexPath.row].mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
@@ -466,18 +501,18 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 let controller = HashtagViewController()
                 controller.currentTagTitle = string
-                let request = Timelines.tag(string)
-                StoreStruct.client.run(request) { (statuses) in
-                    if let stat = (statuses.value) {
-                        DispatchQueue.main.async {
-                            controller.currentTags = stat
+//                let request = Timelines.tag(string)
+//                StoreStruct.client.run(request) { (statuses) in
+//                    if let stat = (statuses.value) {
+//                        DispatchQueue.main.async {
+//                            controller.currentTags = stat
                             self.navigationController?.pushViewController(controller, animated: true)
-                        }
-                    }
-                }
+//                        }
+//                    }
+//                }
             }
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else {
@@ -581,18 +616,18 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 let controller = HashtagViewController()
                 controller.currentTagTitle = string
-                let request = Timelines.tag(string)
-                StoreStruct.client.run(request) { (statuses) in
-                    if let stat = (statuses.value) {
-                        DispatchQueue.main.async {
-                            controller.currentTags = stat
+//                let request = Timelines.tag(string)
+//                StoreStruct.client.run(request) { (statuses) in
+//                    if let stat = (statuses.value) {
+//                        DispatchQueue.main.async {
+//                            controller.currentTags = stat
                             self.navigationController?.pushViewController(controller, animated: true)
-                        }
-                    }
-                }
+//                        }
+//                    }
+//                }
             }
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         }
@@ -969,7 +1004,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                     if let cell = theTable.cellForRow(at:IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -980,7 +1015,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -1005,11 +1040,11 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         }
                         cell.hideSwipe(animated: true)
                     } else {
@@ -1018,11 +1053,11 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         }
                         cell.hideSwipe(animated: true)
                     }
@@ -1050,7 +1085,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -1061,7 +1096,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -1085,11 +1120,11 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         }
                         cell.hideSwipe(animated: true)
                     } else {
@@ -1098,11 +1133,11 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         }
                         cell.hideSwipe(animated: true)
                     }
@@ -1172,7 +1207,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             if let cell = tableView.cellForRow(at: indexPath) as? MainFeedCell {
                                 if sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "like")
+                                    cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                                 } else {
                                     cell.moreImage.image = nil
                                 }
@@ -1181,7 +1216,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                 let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                                 if sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "like")
+                                    cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                                 } else {
                                     cell.moreImage.image = nil
                                 }
@@ -1201,18 +1236,18 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             if let cell = tableView.cellForRow(at: indexPath) as? MainFeedCell {
                                 if sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "fifty")
+                                    cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                                 } else {
-                                    cell.moreImage.image = UIImage(named: "boost")
+                                    cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                                 }
                                 cell.hideSwipe(animated: true)
                             } else {
                                 let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                                 if sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "fifty")
+                                    cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                                 } else {
-                                    cell.moreImage.image = UIImage(named: "boost")
+                                    cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                                 }
                                 cell.hideSwipe(animated: true)
                             }
@@ -1234,7 +1269,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                 }
             }
             boost.backgroundColor = Colours.white
-            boost.image = UIImage(named: "boost")
+            boost.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
             boost.transitionDelegate = ScaleTransition.default
             boost.textColor = Colours.tabUnselected
             
@@ -1257,7 +1292,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             if let cell = tableView.cellForRow(at: indexPath) as? MainFeedCell {
                                 if sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "boost")
+                                    cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                                 } else {
                                     cell.moreImage.image = nil
                                 }
@@ -1266,7 +1301,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                 let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                                 if sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "boost")
+                                    cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                                 } else {
                                     cell.moreImage.image = nil
                                 }
@@ -1285,18 +1320,18 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             if let cell = tableView.cellForRow(at: indexPath) as? MainFeedCell {
                                 if sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "fifty")
+                                    cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                                 } else {
-                                    cell.moreImage.image = UIImage(named: "like")
+                                    cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                                 }
                                 cell.hideSwipe(animated: true)
                             } else {
                                 let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                                 if sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "fifty")
+                                    cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                                 } else {
-                                    cell.moreImage.image = UIImage(named: "like")
+                                    cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                                 }
                                 cell.hideSwipe(animated: true)
                             }
@@ -1338,7 +1373,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
             
             
-            like.image = UIImage(named: "like")
+            like.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
             like.transitionDelegate = ScaleTransition.default
             like.textColor = Colours.tabUnselected
             
@@ -1386,7 +1421,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             reply.textColor = Colours.tabUnselected
             
             if sto[indexPath.row].reblog?.visibility ?? sto[indexPath.row].visibility == .direct {
-                reply.image = UIImage(named: "direct2")
+                reply.image = UIImage(named: "direct2")?.maskWithColor(color: Colours.lightBlue)
                 if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
                     return [reply, like]
                 } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 1) {
@@ -1401,7 +1436,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                     return [like, reply]
                 }
             } else {
-                reply.image = UIImage(named: "reply")
+                reply.image = UIImage(named: "reply0")?.maskWithColor(color: Colours.lightBlue)
                 if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
                     return [reply, like, boost]
                 } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 1) {
@@ -1496,7 +1531,9 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                         statusAlert.title = "Unpinned".localized
                                         statusAlert.contentColor = Colours.grayDark
                                         statusAlert.message = "This Status"
-                                        statusAlert.show()
+                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                        statusAlert.show()
+                    }
                                     }
                                 }
                             } else {
@@ -1513,7 +1550,9 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                         statusAlert.title = "Pinned".localized
                                         statusAlert.contentColor = Colours.grayDark
                                         statusAlert.message = "This Status"
-                                        statusAlert.show()
+                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                        statusAlert.show()
+                    }
                                     }
                                 }
                             }
@@ -1550,7 +1589,9 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                     statusAlert.title = "Deleted".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Your Status"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                        statusAlert.show()
+                    }
                                     //sto.remove(at: indexPath.row)
                                     //self.tableView.reloadData()
                                 }
@@ -1735,7 +1776,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             statusAlert.title = "Muted".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = sto[indexPath.row].account.displayName
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                             
@@ -1756,7 +1797,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             statusAlert.title = "Unmuted".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = sto[indexPath.row].account.displayName
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                             
@@ -1783,7 +1824,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             statusAlert.title = "Blocked".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = sto[indexPath.row].account.displayName
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                             
@@ -1804,7 +1845,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                             statusAlert.title = "Unblocked".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = sto[indexPath.row].account.displayName
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                             
@@ -1818,7 +1859,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                         }
                         
                     }
-                    .action(.default("Report".localized), image: UIImage(named: "report")) { (action, ind) in
+                    .action(.default("Report".localized), image: UIImage(named: "flagrep")) { (action, ind) in
                          
                         
                         Alertift.actionSheet()
@@ -1840,7 +1881,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                 statusAlert.title = "Reported".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = "Harassment"
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 
@@ -1866,7 +1907,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                 statusAlert.title = "Reported".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = "No Content Warning"
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 
@@ -1892,7 +1933,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
                                 statusAlert.title = "Reported".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = "Spam"
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 
@@ -2113,7 +2154,7 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.tableView.deselectRow(at: indexPath, animated: true)
+//        self.tableView.deselectRow(at: indexPath, animated: true)
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
@@ -2131,19 +2172,18 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
-    var lastThing = ""
     func fetchMoreHome() {
         let request = Timelines.tag(self.currentTagTitle, local: false, range: .max(id: self.currentTags.last?.id ?? "", limit: 5000))
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
-                
                 if stat.isEmpty {} else {
-                    self.lastThing = stat.first?.id ?? ""
-                DispatchQueue.main.async {
                     self.currentTags = self.currentTags + stat
-                    self.currentTags = self.currentTags.removeDuplicates()
-                    self.tableView.reloadData()
-                }
+                    DispatchQueue.main.async {
+                        self.currentTags = self.currentTags.removeDuplicates()
+                        self.tableView.reloadData()
+                        self.ai.alpha = 0
+                        self.ai.stopAnimating()
+                    }
                 }
             }
         }
@@ -2237,6 +2277,12 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
         
         self.view.backgroundColor = Colours.white
         

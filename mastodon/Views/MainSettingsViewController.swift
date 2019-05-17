@@ -39,6 +39,14 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
         super.didReceiveMemoryWarning()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        
+        if let indexPath = tableView.indexPathForSelectedRow {
+            self.tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -66,11 +74,11 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         case .pad:
             self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
         default:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         }
         self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellse")
         self.tableView.register(SettingsCell2.self, forCellReuseIdentifier: "cellse1")
@@ -148,7 +156,7 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
+        title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 30)
         if section == 0 {
             title.text = "General".localized
         } else {
@@ -162,9 +170,9 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
         return vw
     }
     
-    var generalArray = ["General", "Appearance", "Notifications", "Biometric Lock", "Accounts"]
-    var generalArrayDesc = ["From timelines to statuses, and media content to gestures, change how things behave.", "Pick themes and hues, change the app icon, and decide how things look.", "Select which push notifications to subscribe to.", "Add a biometric lock to various sections of the app.", "Add and manage multiple user accounts."]
-    var generalArrayIm = ["setset1", "setnight", "notifs0", "biolock2", "setpro"]
+    var generalArray = ["General", "Appearance", "Notifications", "Biometric Locks", "Toot Filters", "Accounts"]
+    var generalArrayDesc = ["From timelines to toots, and media content to gestures, change how things behave.", "Pick themes and hues, change the app icon, and decide how things look.", "Select which push notifications to subscribe to.", "Add a biometric lock to various sections of the app.", "Add and manage toot filters to decide what you want to see and hide from across the app.", "Add and manage multiple user accounts."]
+    var generalArrayIm = ["setset1", "setnight", "notifs0", "biolock2", "filtset0", "setpro"]
     
     var otherArray = ["Rate Mast \u{2605}\u{2605}\u{2605}\u{2605}\u{2605}", "About Mast", "Tip Mast"]
     var otherArrayDesc = ["If you enjoy using Mast, please consider leaving a review on the App Store.", "Let me tell you a little bit about myself.", "Your generosity is greatly appreciated."]
@@ -172,7 +180,7 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return 5
+            return 6
         } else {
             return 3
         }
@@ -191,7 +199,7 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
             cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
             cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else {
@@ -203,7 +211,7 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             } else {
@@ -214,7 +222,7 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             }
@@ -222,7 +230,6 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 // general
@@ -240,6 +247,10 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
                 // biometrics
                 let controller = LockSettingsViewController()
                 self.navigationController?.pushViewController(controller, animated: true)
+            } else if indexPath.row == 4 {
+                // filters
+                let controller = FiltersViewController()
+                self.navigationController?.pushViewController(controller, animated: true)
             } else {
                 // all accounts
                 let controller = AccountSettingsViewController()
@@ -249,6 +260,7 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
             if indexPath.row == 0 {
                 // rate
                 //                SKStoreReviewController.requestReview()
+                self.tableView.deselectRow(at: indexPath, animated: true)
                 if let reviewURL = URL(string: "itms-apps://itunes.apple.com/us/app/apple-store/1437429129?action=write-review&mt=8"), UIApplication.shared.canOpenURL(reviewURL) {
                     if #available(iOS 10.0, *) {
                         UIApplication.shared.open(reviewURL, options: [:], completionHandler: nil)
@@ -258,6 +270,7 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
                 }
             } else if indexPath.row == 1 {
                 // about
+                self.tableView.deselectRow(at: indexPath, animated: true)
                 Alertift.actionSheet(title: "Mast \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "")", message: "Designed and hand-crafted with \u{2665} by @JPEG@mastodon.technology\n\nI'm an independant 23 year old developer from the UK, creating and crafting Mast in my spare time. It can be daunting manning a project of this magnitude, but I love what I do and Mast is a wonderful place to pour my creativity and effort into. If you like what I do, please consider leaving a tip to encourage great continued support. If you have any questions or concerns, please get in touch and let me know how I can improve and be better!\n\nHappy tooting :)".localized)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -389,6 +402,12 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
         
         self.view.backgroundColor = Colours.white
         

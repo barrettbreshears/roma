@@ -32,9 +32,9 @@ final class SwipeFeedback {
             case .light:
                 feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
             case .medium:
-                feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+                feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
             case .heavy:
-                feedbackGenerator = UIImpactFeedbackGenerator(style: .heavy)
+                feedbackGenerator = UIImpactFeedbackGenerator(style: .light)
             }
         } else {
             _feedbackGenerator = nil

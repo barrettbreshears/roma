@@ -26,6 +26,7 @@ class WOViewController: UIViewController {
 	let panningLength: CGFloat = 400
 	// State
 	var validatingPanning = false
+    var oneTime = true
 	
 	init() {
 		super.init(nibName: nil, bundle: nil)
@@ -38,9 +39,6 @@ class WOViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// UI
-        //view.layer.cornerRadius = 15
-        //view.clipsToBounds = true
-        
 		view.layer.shadowOpacity = 0.4
 		view.layer.shadowOffset = CGSize(width: 0, height: 5)
         view.layer.shadowRadius = 15
@@ -163,7 +161,18 @@ extension WOViewController {
 		case .changed:
 			self.updateFrame(rect: insideFrame(objectFrame: targetRect,
                                                superViewSize: UIScreen.main.bounds.size, inset: 0))
+            if locationInWindow.x < 30 || locationInWindow.x > UIScreen.main.bounds.width - 30 || locationInWindow.y < 30 || locationInWindow.y > UIScreen.main.bounds.height - 30 {
+                if self.oneTime {
+                    let imp = UIImpactFeedbackGenerator(style: .light)
+                    imp.impactOccurred()
+                    self.oneTime = false
+                }
+            }
 		case .ended:
+            if locationInWindow.x < 30 || locationInWindow.x > UIScreen.main.bounds.width - 30 || locationInWindow.y < 30 || locationInWindow.y > UIScreen.main.bounds.height - 30 {
+                WOMaintainer.dismiss(completion: nil)
+            }
+            self.oneTime = true
 			let inside = insideFrame(objectFrame: view.frame,
                                      superViewSize: UIScreen.main.bounds.size, inset: 12)
 			let sided = sidedFrame(objectFrame: inside,
@@ -240,6 +249,8 @@ extension WOViewController {
 		self.trailingConstraint.constant = -(UIScreen.main.bounds.width - rect.size.width - rect.origin.x)
 		self.topConstraint.constant = rect.origin.y
 		self.bottomConstraint.constant = -(UIScreen.main.bounds.height - rect.size.height - rect.origin.y)
+        self.view.layer.cornerRadius = 16
+        self.view.layer.masksToBounds = true
 	}
 }
 

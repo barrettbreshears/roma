@@ -91,11 +91,11 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         case .pad:
             self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
         default:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         }
         self.tableView.register(AppIconsCells.self, forCellReuseIdentifier: "appcell")
         self.tableView.register(ColourCells.self, forCellReuseIdentifier: "colcell")
@@ -177,11 +177,11 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
+        title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 30)
         if section == 0 {
             title.text = "App Icon".localized
         } else if section == 1 {
-            title.text = "App Icon".localized
+            title.text = "App Hue".localized
         } else if section == 2 {
             title.text = "Theme".localized
         } else if section == 3 {
@@ -379,7 +379,7 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
             cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
             cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else if indexPath.section == 3 {
@@ -450,7 +450,7 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             }
@@ -482,7 +482,7 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             }
@@ -494,7 +494,7 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
             cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
             cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else if indexPath.section == 6 {
@@ -505,7 +505,7 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
             cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
             cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else if indexPath.section == 7 {
@@ -544,7 +544,7 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             }
@@ -556,7 +556,7 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
             cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
             cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         }
@@ -648,6 +648,10 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                 var filledSet6 = UIImage(named: "unfilledset")
                 var filledSet7 = UIImage(named: "unfilledset")
                 var filledSet8 = UIImage(named: "unfilledset")
+                var filledSet9 = UIImage(named: "unfilledset")
+                var filledSet10 = UIImage(named: "unfilledset")
+                var filledSet11 = UIImage(named: "unfilledset")
+                var filledSet12 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "systemText") == nil) || (UserDefaults.standard.object(forKey: "systemText") as! Int == 0) {
                     filledSet1 = UIImage(named: "filledset")
                     filledSet2 = UIImage(named: "unfilledset")
@@ -657,6 +661,10 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     filledSet6 = UIImage(named: "unfilledset")
                     filledSet7 = UIImage(named: "unfilledset")
                     filledSet8 = UIImage(named: "unfilledset")
+                    filledSet9 = UIImage(named: "unfilledset")
+                    filledSet10 = UIImage(named: "unfilledset")
+                    filledSet11 = UIImage(named: "unfilledset")
+                    filledSet12 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "fontSize") as! Int == 0) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
@@ -666,6 +674,10 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     filledSet6 = UIImage(named: "unfilledset")
                     filledSet7 = UIImage(named: "unfilledset")
                     filledSet8 = UIImage(named: "unfilledset")
+                    filledSet9 = UIImage(named: "unfilledset")
+                    filledSet10 = UIImage(named: "unfilledset")
+                    filledSet11 = UIImage(named: "unfilledset")
+                    filledSet12 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "fontSize") as! Int == 1) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "unfilledset")
@@ -675,6 +687,10 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     filledSet6 = UIImage(named: "unfilledset")
                     filledSet7 = UIImage(named: "unfilledset")
                     filledSet8 = UIImage(named: "unfilledset")
+                    filledSet9 = UIImage(named: "unfilledset")
+                    filledSet10 = UIImage(named: "unfilledset")
+                    filledSet11 = UIImage(named: "unfilledset")
+                    filledSet12 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "fontSize") as! Int == 2) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "unfilledset")
@@ -684,6 +700,10 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     filledSet6 = UIImage(named: "unfilledset")
                     filledSet7 = UIImage(named: "unfilledset")
                     filledSet8 = UIImage(named: "unfilledset")
+                    filledSet9 = UIImage(named: "unfilledset")
+                    filledSet10 = UIImage(named: "unfilledset")
+                    filledSet11 = UIImage(named: "unfilledset")
+                    filledSet12 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "fontSize") as! Int == 3) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "unfilledset")
@@ -693,6 +713,10 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     filledSet6 = UIImage(named: "unfilledset")
                     filledSet7 = UIImage(named: "unfilledset")
                     filledSet8 = UIImage(named: "unfilledset")
+                    filledSet9 = UIImage(named: "unfilledset")
+                    filledSet10 = UIImage(named: "unfilledset")
+                    filledSet11 = UIImage(named: "unfilledset")
+                    filledSet12 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "fontSize") as! Int == 4) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "unfilledset")
@@ -702,6 +726,10 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     filledSet6 = UIImage(named: "filledset")
                     filledSet7 = UIImage(named: "unfilledset")
                     filledSet8 = UIImage(named: "unfilledset")
+                    filledSet9 = UIImage(named: "unfilledset")
+                    filledSet10 = UIImage(named: "unfilledset")
+                    filledSet11 = UIImage(named: "unfilledset")
+                    filledSet12 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "fontSize") as! Int == 5) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "unfilledset")
@@ -711,6 +739,10 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     filledSet6 = UIImage(named: "unfilledset")
                     filledSet7 = UIImage(named: "filledset")
                     filledSet8 = UIImage(named: "unfilledset")
+                    filledSet9 = UIImage(named: "unfilledset")
+                    filledSet10 = UIImage(named: "unfilledset")
+                    filledSet11 = UIImage(named: "unfilledset")
+                    filledSet12 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "fontSize") as! Int == 6) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "unfilledset")
@@ -720,6 +752,62 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     filledSet6 = UIImage(named: "unfilledset")
                     filledSet7 = UIImage(named: "unfilledset")
                     filledSet8 = UIImage(named: "filledset")
+                    filledSet9 = UIImage(named: "unfilledset")
+                    filledSet10 = UIImage(named: "unfilledset")
+                    filledSet11 = UIImage(named: "unfilledset")
+                    filledSet12 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "fontSize") as! Int == 6) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                    filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
+                    filledSet6 = UIImage(named: "unfilledset")
+                    filledSet7 = UIImage(named: "unfilledset")
+                    filledSet8 = UIImage(named: "unfilledset")
+                    filledSet9 = UIImage(named: "filledset")
+                    filledSet10 = UIImage(named: "unfilledset")
+                    filledSet11 = UIImage(named: "unfilledset")
+                    filledSet12 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "fontSize") as! Int == 6) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                    filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
+                    filledSet6 = UIImage(named: "unfilledset")
+                    filledSet7 = UIImage(named: "unfilledset")
+                    filledSet8 = UIImage(named: "unfilledset")
+                    filledSet9 = UIImage(named: "unfilledset")
+                    filledSet10 = UIImage(named: "filledset")
+                    filledSet11 = UIImage(named: "unfilledset")
+                    filledSet12 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "fontSize") as! Int == 6) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                    filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
+                    filledSet6 = UIImage(named: "unfilledset")
+                    filledSet7 = UIImage(named: "unfilledset")
+                    filledSet8 = UIImage(named: "unfilledset")
+                    filledSet9 = UIImage(named: "unfilledset")
+                    filledSet10 = UIImage(named: "unfilledset")
+                    filledSet11 = UIImage(named: "filledset")
+                    filledSet12 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "fontSize") as! Int == 6) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                    filledSet4 = UIImage(named: "unfilledset")
+                    filledSet5 = UIImage(named: "unfilledset")
+                    filledSet6 = UIImage(named: "unfilledset")
+                    filledSet7 = UIImage(named: "unfilledset")
+                    filledSet8 = UIImage(named: "unfilledset")
+                    filledSet9 = UIImage(named: "unfilledset")
+                    filledSet10 = UIImage(named: "unfilledset")
+                    filledSet11 = UIImage(named: "unfilledset")
+                    filledSet12 = UIImage(named: "filledset")
                 }
                 
                 
@@ -734,46 +822,70 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                         UserDefaults.standard.set(0, forKey: "systemText")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
-                    .action(.default("8 Points".localized), image: filledSet2) { (action, ind) in
+                    .action(.default("8/12 Points".localized), image: filledSet2) { (action, ind) in
                         
                         UserDefaults.standard.set(1, forKey: "systemText")
                         UserDefaults.standard.set(0, forKey: "fontSize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
-                    .action(.default("9 Points".localized), image: filledSet3) { (action, ind) in
+                    .action(.default("9/13 Points".localized), image: filledSet3) { (action, ind) in
                         
                         UserDefaults.standard.set(1, forKey: "systemText")
                         UserDefaults.standard.set(1, forKey: "fontSize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
-                    .action(.default("10 Points".localized), image: filledSet4) { (action, ind) in
+                    .action(.default("10/14 Points".localized), image: filledSet4) { (action, ind) in
                         
                         UserDefaults.standard.set(1, forKey: "systemText")
                         UserDefaults.standard.set(2, forKey: "fontSize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
-                    .action(.default("11 Points".localized), image: filledSet5) { (action, ind) in
+                    .action(.default("11/15 Points".localized), image: filledSet5) { (action, ind) in
                         
                         UserDefaults.standard.set(1, forKey: "systemText")
                         UserDefaults.standard.set(3, forKey: "fontSize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
-                    .action(.default("12 Points".localized), image: filledSet6) { (action, ind) in
+                    .action(.default("12/16 Points".localized), image: filledSet6) { (action, ind) in
                         
                         UserDefaults.standard.set(1, forKey: "systemText")
                         UserDefaults.standard.set(4, forKey: "fontSize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
-                    .action(.default("13 Points".localized), image: filledSet7) { (action, ind) in
+                    .action(.default("13/17 Points".localized), image: filledSet7) { (action, ind) in
                         
                         UserDefaults.standard.set(1, forKey: "systemText")
                         UserDefaults.standard.set(5, forKey: "fontSize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
-                    .action(.default("14 Points".localized), image: filledSet8) { (action, ind) in
+                    .action(.default("14/18 Points".localized), image: filledSet8) { (action, ind) in
                         
                         UserDefaults.standard.set(1, forKey: "systemText")
                         UserDefaults.standard.set(6, forKey: "fontSize")
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
+                    }
+                    .action(.default("15/19 Points".localized), image: filledSet9) { (action, ind) in
+                        
+                        UserDefaults.standard.set(1, forKey: "systemText")
+                        UserDefaults.standard.set(7, forKey: "fontSize")
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
+                    }
+                    .action(.default("16/20 Points".localized), image: filledSet10) { (action, ind) in
+                        
+                        UserDefaults.standard.set(1, forKey: "systemText")
+                        UserDefaults.standard.set(8, forKey: "fontSize")
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
+                    }
+                    .action(.default("17/21 Points".localized), image: filledSet11) { (action, ind) in
+                        
+                        UserDefaults.standard.set(1, forKey: "systemText")
+                        UserDefaults.standard.set(9, forKey: "fontSize")
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
+                    }
+                    .action(.default("18/22 Points".localized), image: filledSet12) { (action, ind) in
+                        
+                        UserDefaults.standard.set(1, forKey: "systemText")
+                        UserDefaults.standard.set(10, forKey: "fontSize")
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                     }
                     .action(.cancel("Dismiss"))
@@ -936,7 +1048,7 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                 var filledSet4 = UIImage(named: "unfilledset")
                 var filledSet5 = UIImage(named: "unfilledset")
                 var filledSet6 = UIImage(named: "unfilledset")
-                if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
+                if (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
                     filledSet1 = UIImage(named: "filledset")
                     filledSet2 = UIImage(named: "unfilledset")
                     filledSet3 = UIImage(named: "unfilledset")
@@ -986,13 +1098,13 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
-                    .action(.default("Reply Like Repost".localized), image: filledSet1) { (action, ind) in
-                        
-                        UserDefaults.standard.set(0, forKey: "sworder")
-                    }
                     .action(.default("Reply Repost Like".localized), image: filledSet2) { (action, ind) in
                         
                         UserDefaults.standard.set(1, forKey: "sworder")
+                    }
+                    .action(.default("Reply Like Repost".localized), image: filledSet1) { (action, ind) in
+                        
+                        UserDefaults.standard.set(0, forKey: "sworder")
                     }
                     .action(.default("Repost Reply Like".localized), image: filledSet3) { (action, ind) in
                         
@@ -1581,12 +1693,19 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
             if indexPath.row == 2 {
                 var filledSet1 = UIImage(named: "unfilledset")
                 var filledSet2 = UIImage(named: "unfilledset")
+                var filledSet3 = UIImage(named: "unfilledset")
                 if (UserDefaults.standard.object(forKey: "seghue1") == nil) || (UserDefaults.standard.object(forKey: "seghue1") as! Int == 0) {
                     filledSet1 = UIImage(named: "filledset")
                     filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "unfilledset")
                 } else if (UserDefaults.standard.object(forKey: "seghue1") as! Int == 1) {
                     filledSet1 = UIImage(named: "unfilledset")
                     filledSet2 = UIImage(named: "filledset")
+                    filledSet3 = UIImage(named: "unfilledset")
+                } else if (UserDefaults.standard.object(forKey: "seghue1") as! Int == 2) {
+                    filledSet1 = UIImage(named: "unfilledset")
+                    filledSet2 = UIImage(named: "unfilledset")
+                    filledSet3 = UIImage(named: "filledset")
                 }
                 
                 Alertift.actionSheet(title: nil, message: nil)
@@ -1602,6 +1721,10 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     .action(.default("Subtle".localized), image: filledSet2) { (action, ind) in
                         
                         UserDefaults.standard.set(1, forKey: "seghue1")
+                    }
+                    .action(.default("None".localized), image: filledSet3) { (action, ind) in
+                        
+                        UserDefaults.standard.set(2, forKey: "seghue1")
                     }
                     .action(.cancel("Dismiss"))
                     .finally { action, index in
@@ -1755,6 +1878,12 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
         
         self.view.backgroundColor = Colours.white
         

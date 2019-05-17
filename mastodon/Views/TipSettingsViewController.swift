@@ -168,11 +168,11 @@ class TipSettingsViewController: UIViewController, UITableViewDelegate, UITableV
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         case .pad:
             self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
         default:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         }
         self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellse")
         self.tableView.alpha = 1
@@ -249,7 +249,7 @@ class TipSettingsViewController: UIViewController, UITableViewDelegate, UITableV
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
+        title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 30)
         title.text = "Support Mast".localized
         title.textColor = Colours.grayDark.withAlphaComponent(0.38)
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
@@ -279,7 +279,7 @@ class TipSettingsViewController: UIViewController, UITableViewDelegate, UITableV
         cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
         cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
         let bgColorView = UIView()
-        bgColorView.backgroundColor = Colours.white
+        bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
         cell.selectedBackgroundView = bgColorView
         return cell
     }
@@ -370,6 +370,12 @@ class TipSettingsViewController: UIViewController, UITableViewDelegate, UITableV
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
         
         self.view.backgroundColor = Colours.white
         

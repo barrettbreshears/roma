@@ -213,8 +213,12 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
                             .titleTextAlignment(.left)
                             .action(.default("Switch".localized), image: UIImage(named: "profile")) { (action, ind) in
                                  
-                                
+                                StoreStruct.switchedNow = true
                                 InstanceData.setCurrentInstance(instance: instances[indexPath.item])
+                                StoreStruct.client = Client(
+                                    baseURL: "https://\(instances[indexPath.item].returnedText)",
+                                    accessToken: instances[indexPath.item].accessToken
+                                )
                                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                                 appDelegate.reloadApplication()
                                 

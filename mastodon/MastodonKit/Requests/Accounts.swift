@@ -112,6 +112,13 @@ public struct Accounts {
         return Request<[Account]>(path: "/api/v1/suggestions", method: .get(.empty))
     }
     
+    /// Delete follow suggestion.
+    ///
+    /// - Returns: Request for `[Account]`.
+    public static func deleteFollowSuggestion(id: String) -> Request<Empty> {
+        return Request<Empty>(path: "/api/v1/suggestions/\(id)", method: .delete(.empty))
+    }
+    
     /// Endorse an account.
     ///
     /// - Parameters:

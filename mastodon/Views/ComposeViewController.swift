@@ -18,8 +18,9 @@ import AVFoundation
 import TesseractOCR
 import Speech
 import Disk
+import CropViewController
 
-class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SwiftyGiphyViewControllerDelegate, DateTimePickerDelegate, SHViewControllerDelegate, SFSpeechRecognizerDelegate, SwipeTableViewCellDelegate {
+class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SwiftyGiphyViewControllerDelegate, DateTimePickerDelegate, SHViewControllerDelegate, SFSpeechRecognizerDelegate, SwipeTableViewCellDelegate, CropViewControllerDelegate {
     
     let gifCont = SwiftyGiphyViewController()
     var isGifVid = false
@@ -78,6 +79,8 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     var emotiLab = UIButton()
     var currentEmot = ""
     var collectionView: UICollectionView!
+    var inArea = 0
+    var cropViewController = CropViewController(image: UIImage())
     
     func giphyControllerDidSelectGif(controller: SwiftyGiphyViewController, item: GiphyItem) {
         print(item.fixedHeightStillImage)
@@ -307,6 +310,15 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 browser.initializePageIndex(0)
                 self.present(browser, animated: true, completion: {})
             }
+            .action(.default("Resize Image".localized), image: nil) { (action, ind) in
+                self.inArea = 0
+                let imageView = self.selectedImage1
+                let frame: CGRect = self.view.convert(imageView.frame, to: self.view)
+                self.cropViewController = CropViewController(image: imageView.image!)
+                self.cropViewController.delegate = self
+                self.cropViewController.title = "Resize Image"
+                self.cropViewController.presentAnimatedFrom(self, fromView: imageView, fromFrame: frame, setup: nil, completion: nil)
+            }
             .action(.default("Filter Image".localized), image: nil) { (action, ind) in
                 self.filterFromWhichImage = 0
                 let imageToBeFiltered = self.selectedImage1.image!
@@ -372,6 +384,15 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.present(browser, animated: true, completion: {})
                 
             }
+            .action(.default("Resize Image".localized), image: nil) { (action, ind) in
+                self.inArea = 1
+                let imageView = self.selectedImage2
+                let frame: CGRect = self.view.convert(imageView.frame, to: self.view)
+                self.cropViewController = CropViewController(image: imageView.image!)
+                self.cropViewController.delegate = self
+                self.cropViewController.title = "Resize Image"
+                self.cropViewController.presentAnimatedFrom(self, fromView: imageView, fromFrame: frame, setup: nil, completion: nil)
+            }
             .action(.default("Filter Image".localized), image: nil) { (action, ind) in
                 self.filterFromWhichImage = 1
                 let imageToBeFiltered = self.selectedImage2.image!
@@ -432,6 +453,15 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         browser.initializePageIndex(0)
         self.present(browser, animated: true, completion: {})
             }
+            .action(.default("Resize Image".localized), image: nil) { (action, ind) in
+                self.inArea = 2
+                let imageView = self.selectedImage3
+                let frame: CGRect = self.view.convert(imageView.frame, to: self.view)
+                self.cropViewController = CropViewController(image: imageView.image!)
+                self.cropViewController.delegate = self
+                self.cropViewController.title = "Resize Image"
+                self.cropViewController.presentAnimatedFrom(self, fromView: imageView, fromFrame: frame, setup: nil, completion: nil)
+            }
             .action(.default("Filter Image".localized), image: nil) { (action, ind) in
                 self.filterFromWhichImage = 2
                 let imageToBeFiltered = self.selectedImage3.image!
@@ -489,6 +519,15 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: sender.view)
         browser.initializePageIndex(0)
         self.present(browser, animated: true, completion: {})
+            }
+            .action(.default("Resize Image".localized), image: nil) { (action, ind) in
+                self.inArea = 3
+                let imageView = self.selectedImage4
+                let frame: CGRect = self.view.convert(imageView.frame, to: self.view)
+                self.cropViewController = CropViewController(image: imageView.image!)
+                self.cropViewController.delegate = self
+                self.cropViewController.title = "Resize Image"
+                self.cropViewController.presentAnimatedFrom(self, fromView: imageView, fromFrame: frame, setup: nil, completion: nil)
             }
             .action(.default("Filter Image".localized), image: nil) { (action, ind) in
                 self.filterFromWhichImage = 3
@@ -807,6 +846,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         StoreStruct.currentPage = 587
         textView.becomeFirstResponder()
         
+        StoreStruct.medType = 0
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -1127,6 +1167,36 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.selectedImage4.image = nil
     }
     
+    func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
+        
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+        }
+        
+        if self.inArea == 0 {
+            let imageView = self.selectedImage1
+            let frame: CGRect = self.view.convert(imageView.frame, to: self.view)
+            self.selectedImage1.image = image
+            self.cropViewController.dismissAnimatedFrom(self, toView: imageView, toFrame: frame, setup: nil, completion: nil)
+        } else if self.inArea == 1 {
+            let imageView = self.selectedImage2
+            let frame: CGRect = self.view.convert(imageView.frame, to: self.view)
+            self.selectedImage2.image = image
+            self.cropViewController.dismissAnimatedFrom(self, toView: imageView, toFrame: frame, setup: nil, completion: nil)
+        } else if self.inArea == 2 {
+            let imageView = self.selectedImage3
+            let frame: CGRect = self.view.convert(imageView.frame, to: self.view)
+            self.selectedImage3.image = image
+            self.cropViewController.dismissAnimatedFrom(self, toView: imageView, toFrame: frame, setup: nil, completion: nil)
+        } else {
+            let imageView = self.selectedImage4
+            let frame: CGRect = self.view.convert(imageView.frame, to: self.view)
+            self.selectedImage4.image = image
+            self.cropViewController.dismissAnimatedFrom(self, toView: imageView, toFrame: frame, setup: nil, completion: nil)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -1169,7 +1239,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             }
         }
         
-        
         bgView.frame = CGRect(x:0, y:Int(self.view.bounds.height) - 40 - Int(self.keyHeight), width:Int(self.view.bounds.width), height:Int(self.keyHeight) + 40)
         if (UserDefaults.standard.object(forKey: "barhue1") == nil) || (UserDefaults.standard.object(forKey: "barhue1") as! Int == 0) {
             bgView.backgroundColor = Colours.tabSelected
@@ -1178,7 +1247,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         }
         self.view.addSubview(bgView)
         
-        
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let imp = UIImpactFeedbackGenerator(style: .light)
+            imp.impactOccurred()
+        }
         
         self.tableView.register(FollowersCell.self, forCellReuseIdentifier: "cellfolfol")
         self.tableView.frame = CGRect(x: 0, y: 0, width: Int(self.view.bounds.width), height: Int(180))
@@ -1798,7 +1870,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     @objc func didTouchUpInsideCamPickButton(_ sender: AnyObject) {
         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
             let impact = UIImpactFeedbackGenerator(style: .light)
-        impact.impactOccurred()
+            impact.impactOccurred()
         }
         
         AVCaptureDevice.requestAccess(for: AVMediaType.video) { response in
@@ -2642,7 +2714,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             statusAlert.title = "Toot Toot!".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Successfully \(successMessage)"
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                 statusAlert.show()
                             }
                             
@@ -2658,7 +2730,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             statusAlert.title = "Could not Toot".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Saved to drafts"
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                 statusAlert.show()
                             }
                         }
@@ -2675,7 +2747,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             statusAlert.title = "Toot Toot!".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Successfully \(successMessage)"
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                 statusAlert.show()
                             }
                             
@@ -2745,7 +2817,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     statusAlert.title = "Toot Toot!".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Successfully \(successMessage)"
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                     
@@ -2761,7 +2833,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     statusAlert.title = "Could not Post".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Saved to drafts"
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 }
@@ -2779,7 +2851,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 statusAlert.title = "Status Posted!".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = "Successfully \(successMessage)"
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 
@@ -2877,7 +2949,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                             statusAlert.title = "Toot Toot!".localized
                                                             statusAlert.contentColor = Colours.grayDark
                                                             statusAlert.message = "Successfully \(successMessage)"
-                                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                                             
@@ -2893,7 +2965,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                             statusAlert.title = "Could not Post".localized
                                                             statusAlert.contentColor = Colours.grayDark
                                                             statusAlert.message = "Saved to drafts"
-                                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                                         }
@@ -2911,7 +2983,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                         statusAlert.title = "Status Posted!".localized
                                                         statusAlert.contentColor = Colours.grayDark
                                                         statusAlert.message = "Successfully \(successMessage)"
-                                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                                         
@@ -2998,7 +3070,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                     statusAlert.title = "Toot Toot!".localized
                                                     statusAlert.contentColor = Colours.grayDark
                                                     statusAlert.message = "Successfully \(successMessage)"
-                                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                                     
@@ -3014,7 +3086,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                     statusAlert.title = "Could not Post".localized
                                                     statusAlert.contentColor = Colours.grayDark
                                                     statusAlert.message = "Saved to drafts"
-                                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                                 }
@@ -3032,7 +3104,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             statusAlert.title = "Status Posted!".localized
                                             statusAlert.contentColor = Colours.grayDark
                                             statusAlert.message = "Successfully \(successMessage)"
-                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                                 
@@ -3107,7 +3179,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             statusAlert.title = "Toot Toot!".localized
                                             statusAlert.contentColor = Colours.grayDark
                                             statusAlert.message = "Successfully \(successMessage)"
-                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                             
@@ -3123,7 +3195,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             statusAlert.title = "Could not Post".localized
                                             statusAlert.contentColor = Colours.grayDark
                                             statusAlert.message = "Saved to drafts"
-                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                         }
@@ -3141,7 +3213,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     statusAlert.title = "Status Posted".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Successfully \(successMessage)"
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                         
@@ -3201,7 +3273,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     statusAlert.title = "Toot Toot!".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Successfully \(successMessage)"
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                     
@@ -3217,7 +3289,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     statusAlert.title = "Could not Toot".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Saved to drafts"
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 }
@@ -3234,7 +3306,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             statusAlert.title = "Status Posted".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Successfully \(successMessage)"
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 
@@ -3282,7 +3354,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             statusAlert.title = "Toot Toot!".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Successfully \(successMessage)"
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                             
@@ -3298,7 +3370,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             statusAlert.title = "Could not Post".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = "Saved to drafts"
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                         }
@@ -3315,7 +3387,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     statusAlert.title = "Status Posted".localized
                     statusAlert.contentColor = Colours.grayDark
                     statusAlert.message = "Successfully \(successMessage)"
-                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                         

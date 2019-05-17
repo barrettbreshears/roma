@@ -123,7 +123,9 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        //self.ai.startAnimating()
+//        if let indexPath = tableView.indexPathForSelectedRow {
+//            self.tableView.deselectRow(at: indexPath, animated: true)
+//        }
     }
     
     
@@ -171,8 +173,24 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
+    func removeTabbarItemsText() {
+        var offset: CGFloat = 6.0
+        if #available(iOS 11.0, *), traitCollection.horizontalSizeClass == .regular {
+            offset = 0.0
+        }
+        if let items = self.tabBarController?.tabBar.items {
+            for item in items {
+                item.title = ""
+                item.imageInsets = UIEdgeInsets(top: offset, left: 0, bottom: -offset, right: 0);
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.title = "Instance"
+        self.removeTabbarItemsText()
         
         //NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.search), name: NSNotification.Name(rawValue: "search"), object: nil)
@@ -209,7 +227,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
         
         self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
         self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
-        self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+        self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         self.tableView.alpha = 1
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -232,7 +250,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                 selection.selectionChanged()
             }
             self?.refreshCont()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                 self?.tableView.cr.endHeaderRefresh()
             })
         }
@@ -267,6 +285,23 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        
+        if let indexPath = tableView.indexPathForSelectedRow {
+            self.tableView.deselectRow(at: indexPath, animated: true)
+            let request = Statuses.status(id: StoreStruct.newInstanceTags[indexPath.row].reblog?.id ?? StoreStruct.newInstanceTags[indexPath.row].id)
+            StoreStruct.client.run(request) { (statuses) in
+                if let stat = (statuses.value) {
+                    DispatchQueue.main.async {
+                        if let cell = self.tableView.cellForRow(at: indexPath) as? MainFeedCell {
+                            cell.configure0(stat)
+                        }
+                        if let cell2 = self.tableView.cellForRow(at: indexPath) as? MainFeedCellImage {
+                            cell2.configure0(stat)
+                        }
+                    }
+                }
+            }
+        }
         
 //        self.navigationController?.navigationBar.tintColor = Colours.tabUnselected
 //        self.navigationController?.navigationBar.barTintColor = Colours.tabUnselected
@@ -333,7 +368,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
+        title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 30)
         title.text = StoreStruct.instanceText.lowercased()
         title.textColor = Colours.grayDark2
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
@@ -357,7 +392,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MainFeedCell
             cell.backgroundColor = Colours.white
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else {
@@ -454,18 +489,18 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     
                     let controller = HashtagViewController()
                     controller.currentTagTitle = string
-                    let request = Timelines.tag(string)
-                    StoreStruct.client.run(request) { (statuses) in
-                        if let stat = (statuses.value) {
-                            DispatchQueue.main.async {
-                                controller.currentTags = stat
+//                    let request = Timelines.tag(string)
+//                    StoreStruct.client.run(request) { (statuses) in
+//                        if let stat = (statuses.value) {
+//                            DispatchQueue.main.async {
+//                                controller.currentTags = stat
                                 self.navigationController?.pushViewController(controller, animated: true)
-                            }
-                        }
-                    }
+//                            }
+//                        }
+//                    }
                 }
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             } else {
@@ -569,18 +604,18 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     
                     let controller = HashtagViewController()
                     controller.currentTagTitle = string
-                    let request = Timelines.tag(string)
-                    StoreStruct.client.run(request) { (statuses) in
-                        if let stat = (statuses.value) {
-                            DispatchQueue.main.async {
-                                controller.currentTags = stat
+//                    let request = Timelines.tag(string)
+//                    StoreStruct.client.run(request) { (statuses) in
+//                        if let stat = (statuses.value) {
+//                            DispatchQueue.main.async {
+//                                controller.currentTags = stat
                                 self.navigationController?.pushViewController(controller, animated: true)
-                            }
-                        }
-                    }
+//                            }
+//                        }
+//                    }
                 }
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             }
@@ -942,7 +977,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     if let cell = theTable.cellForRow(at:IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -953,7 +988,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -978,11 +1013,11 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         }
                         cell.hideSwipe(animated: true)
                     } else {
@@ -991,11 +1026,11 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         }
                         cell.hideSwipe(animated: true)
                     }
@@ -1023,7 +1058,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -1034,7 +1069,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -1058,11 +1093,11 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         }
                         cell.hideSwipe(animated: true)
                     } else {
@@ -1071,11 +1106,11 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         }
                         cell.hideSwipe(animated: true)
                     }
@@ -1172,9 +1207,9 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
             
             
             if sto[indexPath.row].reblog?.visibility ?? sto[indexPath.row].visibility == .direct {
-                reply.image = UIImage(named: "direct2")
+                reply.image = UIImage(named: "direct2")?.maskWithColor(color: Colours.lightBlue)
             } else {
-                reply.image = UIImage(named: "reply")
+                reply.image = UIImage(named: "reply0")?.maskWithColor(color: Colours.lightBlue)
             }
             
             
@@ -1259,7 +1294,9 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                         statusAlert.title = "Unpinned".localized
                                         statusAlert.contentColor = Colours.grayDark
                                         statusAlert.message = "This Status"
-                                        statusAlert.show()
+                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                        statusAlert.show()
+                    }
                                     }
                                 }
                             } else {
@@ -1276,7 +1313,9 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                         statusAlert.title = "Pinned".localized
                                         statusAlert.contentColor = Colours.grayDark
                                         statusAlert.message = "This Status"
-                                        statusAlert.show()
+                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                        statusAlert.show()
+                    }
                                     }
                                 }
                             }
@@ -1312,7 +1351,9 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                     statusAlert.title = "Deleted".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Your Status"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                        statusAlert.show()
+                    }
                                     //sto.remove(at: indexPath.row)
                                     //self.tableView.reloadData()
                                 }
@@ -1498,7 +1539,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                 statusAlert.title = "Muted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 
@@ -1519,7 +1560,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                 statusAlert.title = "Unmuted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 
@@ -1546,7 +1587,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                 statusAlert.title = "Blocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 
@@ -1567,7 +1608,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                 statusAlert.title = "Unblocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 
@@ -1581,7 +1622,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                             }
                             
                         }
-                        .action(.default("Report".localized), image: UIImage(named: "report")) { (action, ind) in
+                        .action(.default("Report".localized), image: UIImage(named: "flagrep")) { (action, ind) in
                              
                             
                             
@@ -1604,7 +1645,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Harassment"
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                     
@@ -1630,7 +1671,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "No Content Warning"
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                     
@@ -1656,7 +1697,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Spam"
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                     
@@ -1877,7 +1918,7 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.tableView.deselectRow(at: indexPath, animated: true)
+//        self.tableView.deselectRow(at: indexPath, animated: true)
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
@@ -1958,15 +1999,15 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
         
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: 5000))
         let testClient = Client(
-            baseURL: "https://\(StoreStruct.shared.currentInstance.instanceText)",
-            accessToken: StoreStruct.client.accessToken ?? ""
+            baseURL: "https://\(StoreStruct.instanceText)",
+            accessToken: StoreStruct.currentInstance.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
                     self.lastThing = stat.first?.id ?? ""
-                DispatchQueue.main.async {
                     StoreStruct.newInstanceTags = StoreStruct.newInstanceTags + stat
+                DispatchQueue.main.async {
                     StoreStruct.newInstanceTags = StoreStruct.newInstanceTags.removeDuplicates()
                     self.tableView.reloadData()
                     }}
@@ -1976,17 +2017,17 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
     
     @objc func refreshCont() {
         
-        
-        let request = Timelines.public(local: true, range: .min(id: StoreStruct.newInstanceTags.first?.id ?? "", limit: 5000))
+        let request = Timelines.public(local: true, range: .since(id: StoreStruct.newInstanceTags.first?.id ?? "", limit: 5000))
         let testClient = Client(
-            baseURL: "https://\(StoreStruct.shared.currentInstance.instanceText)",
-            accessToken: StoreStruct.client.accessToken ?? ""
+            baseURL: "https://\(StoreStruct.instanceText)",
+            accessToken: StoreStruct.currentInstance.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 var newestC = StoreStruct.newInstanceTags.count
+                StoreStruct.newInstanceTags = stat + StoreStruct.newInstanceTags
                 DispatchQueue.main.async {
-                    StoreStruct.newInstanceTags = stat + StoreStruct.newInstanceTags
+                    self.tableView.cr.endHeaderRefresh()
                     StoreStruct.newInstanceTags = StoreStruct.newInstanceTags.removeDuplicates()
                     
                     newestC = StoreStruct.newInstanceTags.count - newestC
@@ -2003,13 +2044,13 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     self.countcount1 = newestC
                     
 //                    UIView.setAnimationsEnabled(false)
-                        self.tableView.cr.endHeaderRefresh()
+//                        self.tableView.cr.endHeaderRefresh()
                     self.tableView.reloadData()
                     self.tableView.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
 //                    UIView.setAnimationsEnabled(true)
                         
                     } else {
-                        self.tableView.cr.endHeaderRefresh()
+//                        self.tableView.cr.endHeaderRefresh()
                         self.tableView.reloadData()
                     }
                 }
@@ -2087,6 +2128,12 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
         
         self.view.backgroundColor = Colours.white
         

@@ -115,7 +115,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: 5000))
         let testClient = Client(
             baseURL: "https://\(StoreStruct.instanceText)",
-            accessToken: StoreStruct.shared.currentInstance.accessToken ?? ""
+            accessToken: StoreStruct.currentInstance.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in
             if let stat = (statuses.value) {
@@ -210,7 +210,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         }
         tableView.removeFromSuperview()
             self.tableView.register(DMFeedCell.self, forCellReuseIdentifier: "cell444")
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - 0)
             self.tableView.alpha = 1
             self.tableView.delegate = self
             self.tableView.dataSource = self
@@ -229,6 +229,10 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        
+        if let indexPath = tableView.indexPathForSelectedRow {
+            self.tableView.deselectRow(at: indexPath, animated: true)
+        }
         
         
         self.ai.startAnimating()
@@ -290,16 +294,21 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         super.didReceiveMemoryWarning()
     }
     
-    
     @objc func goToIDNoti() {
         sleep(2)
         let request = Notifications.notification(id: StoreStruct.curIDNoti)
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
-                    let controller = DetailViewController()
-                    controller.mainStatus.append(stat.status!)
-                    self.navigationController?.pushViewController(controller, animated: true)
+                    if let x = stat.status {
+                        let controller = DetailViewController()
+                        controller.mainStatus.append(x)
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    } else {
+                        let controller = ThirdViewController()
+                        controller.userIDtoUse = stat.account.id
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    }
                 }
             }
         }
@@ -391,7 +400,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToSettings), name: NSNotification.Name(rawValue: "goToSettings3"), object: nil)
         
         self.view.backgroundColor = Colours.white
-        self.title = "Direct Messages"
+        self.title = "Messages"
         self.removeTabbarItemsText()
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
@@ -413,7 +422,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         }
         
         self.tableView.register(DMFeedCell.self, forCellReuseIdentifier: "cell444")
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset + 0 - tabHeight)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - 0 - tabHeight)
             self.tableView.alpha = 1
             self.tableView.delegate = self
             self.tableView.dataSource = self
@@ -428,16 +437,13 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         self.loadLoadLoad()
         
-//        refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
-        //self.tableView.addSubview(refreshControl)
-        
         tableView.cr.addHeadRefresh(animator: NormalHeaderAnimator()) { [weak self] in
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                 let selection = UISelectionFeedbackGenerator()
                 selection.selectionChanged()
             }
             self?.refreshCont()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                 self?.tableView.cr.endHeaderRefresh()
             })
         }
@@ -445,6 +451,11 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         self.ai = NVActivityIndicatorView(frame: CGRect(x: self.view.bounds.width/2 - 20, y: self.view.bounds.height/2, width: 40, height: 40), type: .ballRotateChase, color: Colours.tabSelected)
         self.view.addSubview(self.ai)
+        
+        if StoreStruct.switchedNow {
+            StoreStruct.notificationsDirect = []
+            StoreStruct.switchedNow = false
+        }
         
         if StoreStruct.notificationsDirect.isEmpty {
             self.refreshCont()
@@ -489,6 +500,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         StoreStruct.historyBool = false
         
+        StoreStruct.badgeCount2 = 0
         self.tabBarController?.tabBar.items?[2].badgeValue = nil
         
         if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
@@ -747,7 +759,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
+        title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 30)
         if section == 0 {
             title.text = "Recent"
         } else {
@@ -777,12 +789,12 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cell444", for: indexPath) as! DMFeedCell
                 cell.backgroundColor = Colours.white
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             } else {
                 
-                if indexPath.row == StoreStruct.notificationsDirect.count - 7 {
+                if indexPath.row == StoreStruct.notificationsDirect.count - 1 {
                     self.fetchMoreNotifications()
                 }
                 
@@ -869,18 +881,18 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                             }
                             let controller = HashtagViewController()
                             controller.currentTagTitle = string
-                            let request = Timelines.tag(string)
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    DispatchQueue.main.async {
-                                        controller.currentTags = stat
+//                            let request = Timelines.tag(string)
+//                            StoreStruct.client.run(request) { (statuses) in
+//                                if let stat = (statuses.value) {
+//                                    DispatchQueue.main.async {
+//                                        controller.currentTags = stat
                                         self.navigationController?.pushViewController(controller, animated: true)
-                                    }
-                                }
-                            }
+//                                    }
+//                                }
+//                            }
                         }
                         let bgColorView = UIView()
-                        bgColorView.backgroundColor = Colours.white
+                        bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                         cell.selectedBackgroundView = bgColorView
                         return cell
                     
@@ -963,18 +975,18 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                         }
                         let controller = HashtagViewController()
                         controller.currentTagTitle = string
-                        let request = Timelines.tag(string)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                DispatchQueue.main.async {
-                                    controller.currentTags = stat
+//                        let request = Timelines.tag(string)
+//                        StoreStruct.client.run(request) { (statuses) in
+//                            if let stat = (statuses.value) {
+//                                DispatchQueue.main.async {
+//                                    controller.currentTags = stat
                                     self.navigationController?.pushViewController(controller, animated: true)
-                                }
-                            }
-                        }
+//                                }
+//                            }
+//                        }
                     }
                     let bgColorView = UIView()
-                    bgColorView.backgroundColor = Colours.white
+                    bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                     cell.selectedBackgroundView = bgColorView
                     return cell
                     
@@ -1030,7 +1042,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? DMFeedCell {
                         if sto[sender.tag].lastStatus?.favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].lastStatus?.id ?? "" ) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -1050,9 +1062,9 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? DMFeedCell {
                         if sto[sender.tag].lastStatus!.favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].lastStatus?.id ?? "" ) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         }
                         cell.hideSwipe(animated: true)
                     }
@@ -1086,7 +1098,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? DMFeedCell {
                         if sto[sender.tag].lastStatus?.reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].lastStatus?.id ?? "" ) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -1105,9 +1117,9 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? DMFeedCell {
                         if sto[sender.tag].lastStatus!.reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].lastStatus?.id ?? "" ) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         }
                         cell.hideSwipe(animated: true)
                     }
@@ -1177,7 +1189,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 if let cell = theTable.cellForRow(at: indexPath) as? DMFeedCell {
                                     if sto[indexPath.row].lastStatus?.reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].lastStatus?.id ?? "" ) {
                                         cell.moreImage.image = nil
-                                        cell.moreImage.image = UIImage(named: "boost")
+                                        cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                                     } else {
                                         cell.moreImage.image = nil
                                     }
@@ -1196,9 +1208,9 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 if let cell = theTable.cellForRow(at: indexPath) as? DMFeedCell {
                                     if sto[indexPath.row].lastStatus!.reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].lastStatus?.id ?? "" ) {
                                         cell.moreImage.image = nil
-                                        cell.moreImage.image = UIImage(named: "fifty")
+                                        cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                                     } else {
-                                        cell.moreImage.image = UIImage(named: "like")
+                                        cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                                     }
                                     cell.hideSwipe(animated: true)
                                 }
@@ -1216,7 +1228,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     }
                 }
                 like.backgroundColor = Colours.white
-                like.image = UIImage(named: "like")
+                like.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                 like.transitionDelegate = ScaleTransition.default
                 like.textColor = Colours.tabUnselected
                 
@@ -1239,9 +1251,9 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 }
                 reply.backgroundColor = Colours.white
                 if sto[indexPath.row].lastStatus?.visibility == .direct {
-                    reply.image = UIImage(named: "direct23")
+                    reply.image = UIImage(named: "direct2")?.maskWithColor(color: Colours.lightBlue)
                 } else {
-                    reply.image = UIImage(named: "reply")
+                    reply.image = UIImage(named: "reply0")?.maskWithColor(color: Colours.lightBlue)
                 }
                 reply.transitionDelegate = ScaleTransition.default
                 reply.textColor = Colours.tabUnselected
@@ -1331,7 +1343,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 statusAlert.title = "Muted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].lastStatus!.account.displayName
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                     statusAlert.show()
                                 }
                                 
@@ -1352,7 +1364,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 statusAlert.title = "Unmuted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].lastStatus!.account.displayName
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                     statusAlert.show()
                                 }
                                 
@@ -1379,7 +1391,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 statusAlert.title = "Blocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].lastStatus!.account.displayName
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                     statusAlert.show()
                                 }
                                 
@@ -1400,7 +1412,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 statusAlert.title = "Unblocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].lastStatus!.account.displayName
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                     statusAlert.show()
                                 }
                                 
@@ -1414,7 +1426,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                             }
                             
                         }
-                        .action(.default("Report".localized), image: UIImage(named: "report")) { (action, ind) in
+                        .action(.default("Report".localized), image: UIImage(named: "flagrep")) { (action, ind) in
                              
                             
                             
@@ -1437,7 +1449,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Harassment"
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                         statusAlert.show()
                                     }
                                     
@@ -1463,7 +1475,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "No Content Warning"
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                         statusAlert.show()
                                     }
                                     
@@ -1489,7 +1501,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Spam"
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                         statusAlert.show()
                                     }
                                     
@@ -1671,7 +1683,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        self.tableView.deselectRow(at: indexPath, animated: true)
+//        self.tableView.deselectRow(at: indexPath, animated: true)
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone :
@@ -1690,7 +1702,10 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         StoreStruct.client.run(request2) { (statuses) in
             DispatchQueue.main.async {
                 StoreStruct.markedReadIDs.append(StoreStruct.notificationsDirect[indexPath.row].id)
-                self.tableView.reloadRows(at: [indexPath], with: .none)
+//                self.tableView.reloadRows(at: [indexPath], with: .none)
+                if let cell = self.tableView.cellForRow(at: indexPath) as? DMFeedCell {
+                    cell.configure2(false, id: StoreStruct.notificationsDirect[indexPath.row].id)
+                }
             }
         }
     }
@@ -1700,8 +1715,8 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty {} else {
+                    StoreStruct.notificationsDirect = StoreStruct.notificationsDirect + stat
                     DispatchQueue.main.async {
-                        StoreStruct.notificationsDirect = StoreStruct.notificationsDirect + stat
                         StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                         self.tableView.reloadData()
                     }
@@ -1715,12 +1730,13 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty {} else {
+                    StoreStruct.notificationsDirect = stat + StoreStruct.notificationsDirect
+                    StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.sorted(by: { ($0.lastStatus?.createdAt ?? Date()) > ($1.lastStatus?.createdAt ?? Date()) })
                     DispatchQueue.main.async {
-                        StoreStruct.notificationsDirect = stat + StoreStruct.notificationsDirect
+                        self.tableView.cr.endHeaderRefresh()
                         StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
                         self.ai.stopAnimating()
                         self.ai.alpha = 0
-                        self.tableView.cr.endHeaderRefresh()
                         self.tableView.reloadData()
                     }
                 }
@@ -1798,6 +1814,12 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
         
 //        self.navigationController?.navigationBar.barTintColor = Colours.grayDark
 //        self.navigationController?.navigationBar.tintColor = Colours.grayDark

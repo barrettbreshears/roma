@@ -295,8 +295,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.textField.removeFromSuperview()
         self.termsButton.removeFromSuperview()
         self.safariVC?.dismiss(animated: true, completion: nil)
-
-        var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.currentInstance.authCode)&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&client_id=\(StoreStruct.shared.currentInstance.clientID)&client_secret=\(StoreStruct.shared.currentInstance.clientSecret)&scope=read%20write%20follow%20push")!)
+        
+        var request = URLRequest(url: URL(string: "https://\(StoreStruct.currentInstance.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.currentInstance.authCode)&redirect_uri=\(StoreStruct.currentInstance.redirect)&client_id=\(StoreStruct.currentInstance.clientID)&client_secret=\(StoreStruct.currentInstance.clientSecret)&scope=read%20write%20follow%20push")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
@@ -314,18 +314,19 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         customStyle.backgroundColor = Colours.white
                         self.volumeBar.style = customStyle
                     }
-                    StoreStruct.shared.currentInstance.accessToken = (json["access_token"] as? String ?? "")
-                    StoreStruct.client.accessToken = StoreStruct.shared.currentInstance.accessToken
+                    
+                    StoreStruct.currentInstance.accessToken = (json["access_token"] as? String ?? "")
+                    StoreStruct.client.accessToken = (json["access_token"] as? String ?? "")
                    
-                    let currentInstance = InstanceData(clientID: StoreStruct.shared.currentInstance.clientID, clientSecret: StoreStruct.shared.currentInstance.clientSecret, authCode: StoreStruct.shared.currentInstance.authCode, accessToken: StoreStruct.shared.currentInstance.accessToken, returnedText: StoreStruct.shared.currentInstance.returnedText, redirect:StoreStruct.shared.currentInstance.redirect)
-                    InstanceData.setCurrentInstance(instance: currentInstance)
+//                    let currentInstance = InstanceData(clientID: StoreStruct.currentInstance.clientID, clientSecret: StoreStruct.currentInstance.clientSecret, authCode: StoreStruct.currentInstance.authCode, accessToken: StoreStruct.currentInstance.accessToken, returnedText: StoreStruct.currentInstance.returnedText, redirect:StoreStruct.currentInstance.redirect)
+                    InstanceData.setCurrentInstance(instance: StoreStruct.currentInstance)
                     
                     let request2 = Accounts.currentUser()
                     StoreStruct.client.run(request2) { (statuses) in
                         if let stat = (statuses.value) {
                             DispatchQueue.main.async {
                                 var instances = InstanceData.getAllInstances()
-                                instances.append(currentInstance)
+                                instances.append(StoreStruct.currentInstance)
                                 UserDefaults.standard.set(try? PropertyListEncoder().encode(instances), forKey:"instances")
                                 StoreStruct.currentUser = stat
                                 Account.addAccountToList(account: stat)
@@ -399,29 +400,28 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     
     @objc func newInstanceLogged() {
         
-        
-        var request = URLRequest(url: URL(string: "https://\(StoreStruct.shared.newInstance!.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.shared.newInstance!.authCode)&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&client_id=\(StoreStruct.shared.newInstance!.clientID)&client_secret=\(StoreStruct.shared.newInstance!.clientSecret)&scope=read%20write%20follow%20push")!)
+        var request = URLRequest(url: URL(string: "https://\(StoreStruct.newInstance!.returnedText)/oauth/token?grant_type=authorization_code&code=\(StoreStruct.newInstance!.authCode)&redirect_uri=\(StoreStruct.newInstance!.redirect)&client_id=\(StoreStruct.newInstance!.clientID)&client_secret=\(StoreStruct.newInstance!.clientSecret)&scope=read%20write%20follow%20push")!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
 
-        let task = URLSession.shared.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
+        let task = URLSession.shared.dataTask(with: request) { (data, respose, error) in
             guard error == nil else { print(error);return }
             guard let data = data else { return }
-            guard let newInstance = StoreStruct.shared.newInstance else {
+            guard let newInstance = StoreStruct.newInstance else {
                 return
             }
             do {
                 if let json = try JSONSerialization.jsonObject(with: data, options: .mutableContainers) as? [String: Any] {
                     
                     if let access1 = (json["access_token"] as? String) {
-                        
-                        newInstance.accessToken = access1
-                       InstanceData.setCurrentInstance(instance: newInstance)
+                    
+                    StoreStruct.client = StoreStruct.newClient
+                    newInstance.accessToken = access1
+                    InstanceData.setCurrentInstance(instance: newInstance)
                         
                         let request2 = Accounts.currentUser()
                         StoreStruct.client.run(request2) { (statuses) in
-                            print(statuses)
                             if let stat = (statuses.value) {
                                 DispatchQueue.main.async {
                                     var instances = InstanceData.getAllInstances()
@@ -433,21 +433,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                                 }
                             }
                         }
-                        
-                        let request = Timelines.home()
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                StoreStruct.statusesHome = stat
-                                NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
-                            }
-                        }
-                        
-                        // onboarding
-                        if (UserDefaults.standard.object(forKey: "onb") == nil) || (UserDefaults.standard.object(forKey: "onb") as! Int == 0) {
-                            DispatchQueue.main.async {
-                                self.bulletinManager.prepare()
-                                self.bulletinManager.presentBulletin(above: self, animated: true, completion: nil)
-                            }
+                    
+                    let request = Timelines.home()
+                    StoreStruct.client.run(request) { (statuses) in
+                        if let stat = (statuses.value) {
+                            StoreStruct.statusesHome = stat
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "refresh"), object: nil)
                         }
                         
                         DispatchQueue.main.async {
@@ -460,10 +451,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     }
                     
                 }
+                }
             } catch let error {
                 print(error.localizedDescription)
             }
-        })
+        }
         task.resume()
 
     }
@@ -494,7 +486,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         let page = PageBulletinItem(title: "Notifications")
         page.image = UIImage(named: "notib")
         page.shouldCompactDescriptionText = true
-        page.descriptionText = "Roma can send you realtime push notifications for statuses you're mentioned in, reposted statuses, liked statuses, as well as for new followers."
+        page.descriptionText = "Roma can send you push notifications for statuses you're mentioned in, reposted and liked statuses, as well as for new followers."
         page.actionButtonTitle = "Subscribe"
         page.alternativeButtonTitle = "No thanks"
         page.nextItem = makeSiriPage()
@@ -535,7 +527,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         let page = PageBulletinItem(title: "Theme it Your Way")
         page.image = UIImage(named: "themeb")
         page.shouldCompactDescriptionText = true
-        page.descriptionText = "You can change the theme via the app's settings section, or long-hold anywhere in the app to cycle through them (this action can be changed).\n\nYou can also use Siri to do the same (Settings > Siri & Search > All Shortcuts)."
+        page.descriptionText = "You can change the theme (and a variety of settings) via the app's settings section, or long-hold anywhere in the app to cycle through them.\n\nYou can also use Siri to do the same (Settings > Siri & Search > All Shortcuts)."
         page.actionButtonTitle = "Got it!"
         page.nextItem = makeDonePage()
 
@@ -685,11 +677,15 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     @objc func stopindi() {
         self.ai.alpha = 0
         self.ai.stopAnimating()
-        StoreStruct.newdrafts.remove(at: StoreStruct.newdrafts.count - 1)
+        if StoreStruct.newdrafts.count > 0 {
+            StoreStruct.newdrafts.remove(at: StoreStruct.newdrafts.count - 1)
+        }
+        DispatchQueue.global(qos: .userInitiated).async {
         do {
             try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
         } catch {
             print("err")
+        }
         }
     }
 
@@ -841,7 +837,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     }
     
     @objc func addBadge() {
-        self.tabBar.items?[1].badgeValue = "1"
+        StoreStruct.badgeCount = StoreStruct.badgeCount + 1
+        self.tabBar.items?[1].badgeValue = "\(StoreStruct.badgeCount)" ?? "1"
+        self.tabBar.items?[1].badgeColor = Colours.tabSelected
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "refnoti0"), object: nil)
     }
     
     func streamDataDirect() {
@@ -850,7 +849,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             
             var sss = StoreStruct.client.baseURL.replacingOccurrences(of: "https", with: "wss")
             sss = sss.replacingOccurrences(of: "http", with: "wss")
-            nsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/user?access_token=\(StoreStruct.shared.currentInstance.accessToken)&stream=user")!)
+            nsocket = WebSocket(url: URL(string: "\(sss)/api/v1/streaming/user?access_token=\(StoreStruct.currentInstance.accessToken)&stream=user")!)
             nsocket.onConnect = {
                 print("websocket is connected")
             }
@@ -880,7 +879,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                                     if stat.isEmpty {} else {
 //                                        DispatchQueue.main.async {
                                             if (UserDefaults.standard.object(forKey: "badgeMentd") == nil) || (UserDefaults.standard.object(forKey: "badgeMentd") as! Int == 0) {
-                                                self.tabBar.items?[2].badgeValue = "1"
+                                                StoreStruct.badgeCount2 = StoreStruct.badgeCount2 + 1
+                                                self.tabBar.items?[2].badgeValue = "\(StoreStruct.badgeCount2)" ?? "1"
+                                                self.tabBar.items?[2].badgeColor = Colours.tabSelected
                                             }
                                             StoreStruct.notificationsDirect = stat + StoreStruct.notificationsDirect
                                             StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
@@ -952,7 +953,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         } else if (UserDefaults.standard.object(forKey: "themeaccent") as? Int == 500) {
             if UserDefaults.standard.object(forKey: "hexhex") as? String != nil {
                 let hexText = UserDefaults.standard.object(forKey: "hexhex") as? String ?? "ffffff"
-                StoreStruct.hexCol = UIColor(hexString: hexText) ?? UIColor(red: 84/255.0, green: 102/255.0, blue: 205/255.0, alpha: 1.0)
+                StoreStruct.hexCol = UIColor(hexString: hexText) ?? UIColor(red: 84/250, green: 133/250, blue: 234/250, alpha: 1.0)
                 Colours.tabSelected = StoreStruct.hexCol
                 let appDelegate = UIApplication.shared.delegate as! AppDelegate
                 appDelegate.reloadTint()
@@ -974,7 +975,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         if (UserDefaults.standard.object(forKey: "segsize") == nil) {
             UserDefaults.standard.set(1, forKey: "segsize")
         }
-
+        
+        if (UserDefaults.standard.object(forKey: "sworder") == nil) {
+            UserDefaults.standard.set(1, forKey: "sworder")
+        }
+        
         if (UserDefaults.standard.object(forKey: "instancesLocal") == nil) {
 
         } else {
@@ -1009,6 +1014,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             }
         }
         
+        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cc")
         self.tableView.register(FollowersCell.self, forCellReuseIdentifier: "cellfs")
         self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell00")
         self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell002")
@@ -1038,39 +1044,39 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.delegate = self
         
         if UserDefaults.standard.object(forKey: "clientID") == nil {} else {
-            StoreStruct.shared.currentInstance.clientID = UserDefaults.standard.object(forKey: "clientID") as! String
+            StoreStruct.currentInstance.clientID = UserDefaults.standard.object(forKey: "clientID") as! String
         }
         if UserDefaults.standard.object(forKey: "clientSecret") == nil {} else {
-            StoreStruct.shared.currentInstance.clientSecret = UserDefaults.standard.object(forKey: "clientSecret") as! String
+            StoreStruct.currentInstance.clientSecret = UserDefaults.standard.object(forKey: "clientSecret") as! String
         }
         if UserDefaults.standard.object(forKey: "authCode") == nil {} else {
-            StoreStruct.shared.currentInstance.authCode = UserDefaults.standard.object(forKey: "authCode") as! String
+            StoreStruct.currentInstance.authCode = UserDefaults.standard.object(forKey: "authCode") as! String
         }
         if UserDefaults.standard.object(forKey: "returnedText") == nil {} else {
-            StoreStruct.shared.currentInstance.returnedText = UserDefaults.standard.object(forKey: "returnedText") as! String
+            StoreStruct.currentInstance.returnedText = UserDefaults.standard.object(forKey: "returnedText") as! String
         }
         if UserDefaults.standard.object(forKey: "accessToken") == nil {
             self.createLoginView()
         } else {
-
-            StoreStruct.shared.currentInstance.accessToken = UserDefaults.standard.object(forKey: "accessToken") as! String
+            
+            StoreStruct.currentInstance.accessToken = UserDefaults.standard.object(forKey: "accessToken") as! String
             StoreStruct.client = Client(
-                baseURL: "https://\(StoreStruct.shared.currentInstance.returnedText)",
-                accessToken: StoreStruct.shared.currentInstance.accessToken
+                baseURL: "https://\(StoreStruct.currentInstance.returnedText)",
+                accessToken: StoreStruct.currentInstance.accessToken
             )
 
 
             
 //            do {
-//                let st1 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
+//                let st1 = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
 //                StoreStruct.statusesHome = st1
-//                let st2 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
+//                let st2 = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
 //                StoreStruct.statusesLocal = st2
-//                let st3 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
+//                let st3 = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
 //                StoreStruct.statusesFederated = st3
-//                let st4 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
+//                let st4 = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
 //                StoreStruct.notifications = st4
-//                let st5 = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
+//                let st5 = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
 //                StoreStruct.notificationsMentions = st5
 //            } catch {
 //                print("Couldn't load")
@@ -1308,7 +1314,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 34)
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 26)
+        title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 26)
         if section == 0 {
             title.text = "Your Accounts"
         } else if section == 2 {
@@ -1401,7 +1407,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
             if self.typeOfSearch == 2 {
                 if StoreStruct.statusSearchUser.count > 0 {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cellfs", for: indexPath) as! FollowersCell
+                    if let cell = tableView.dequeueReusableCell(withIdentifier: "cellfs", for: indexPath) as? FollowersCell {
                     cell.configure(StoreStruct.statusSearchUser[indexPath.row])
                     cell.profileImageView.tag = indexPath.row
                     cell.profileImageView.isUserInteractionEnabled = false
@@ -1413,8 +1419,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     bgColorView.backgroundColor = Colours.grayDark3
                     cell.selectedBackgroundView = bgColorView
                     return cell
+                    } else {
+                        let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
+                        return cell
+                    }
                 } else {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! MainFeedCell
+                    if let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as? MainFeedCell {
                     cell.profileImageView.tag = indexPath.row
                     cell.profileImageView.isUserInteractionEnabled = false
                     cell.backgroundColor = Colours.grayDark3
@@ -1426,12 +1436,16 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     bgColorView.backgroundColor = Colours.grayDark3
                     cell.selectedBackgroundView = bgColorView
                     return cell
+                    } else {
+                        let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
+                        return cell
+                    }
                 }
             } else {
 
                 if StoreStruct.statusSearch.count > 0 {
                     if StoreStruct.statusSearch[indexPath.row].mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! MainFeedCell
+                        if let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as? MainFeedCell {
                     cell.configure(StoreStruct.statusSearch[indexPath.row])
                     cell.warningB.backgroundColor = Colours.grayDark3
                     cell.moreImage.backgroundColor = Colours.grayDark3
@@ -1451,9 +1465,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     bgColorView.backgroundColor = Colours.grayDark3
                     cell.selectedBackgroundView = bgColorView
                     return cell
+                        } else {
+                            let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
+                            return cell
+                        }
             } else {
-                        //bhere7
-                        let cell = tableView.dequeueReusableCell(withIdentifier: "cell002", for: indexPath) as! MainFeedCellImage
+                        if let cell = tableView.dequeueReusableCell(withIdentifier: "cell002", for: indexPath) as? MainFeedCellImage {
                         cell.configure(StoreStruct.statusSearch[indexPath.row])
                         cell.warningB.backgroundColor = Colours.grayDark3
                         cell.moreImage.backgroundColor = Colours.grayDark3
@@ -1475,9 +1492,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         bgColorView.backgroundColor = Colours.grayDark3
                         cell.selectedBackgroundView = bgColorView
                         return cell
+                        } else {
+                            let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
+                            return cell
+                        }
                     }
                 } else {
-                    let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as! MainFeedCell
+                    if let cell = tableView.dequeueReusableCell(withIdentifier: "cell00", for: indexPath) as? MainFeedCell {
                     cell.profileImageView.tag = indexPath.row
                     cell.backgroundColor = Colours.grayDark3
                     cell.userName.textColor = UIColor.white
@@ -1488,12 +1509,16 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     bgColorView.backgroundColor = Colours.grayDark3
                     cell.selectedBackgroundView = bgColorView
                     return cell
+                    } else {
+                        let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
+                        return cell
+                    }
                 }
             }
         } else {
             if indexPath.section == 0 {
-
-                let cell = tableView.dequeueReusableCell(withIdentifier: "colcell2", for: indexPath) as! ProCells
+                
+                if let cell = tableView.dequeueReusableCell(withIdentifier: "colcell2", for: indexPath) as? ProCells {
                 cell.configure()
                 cell.backgroundColor = Colours.grayDark3
                 let bgColorView = UIView()
@@ -1502,19 +1527,27 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 cell.frame.size.width = 60
                 cell.frame.size.height = 80
                 return cell
-
+                } else {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
+                    return cell
+                }
+                
             } else if indexPath.section == 1 {
                 if indexPath.row == 0 {
-                    let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as! ListCell
-                    cell.userName.text = "View Other Instance's Timeline"
+                    if let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as? ListCell {
+                    cell.userName.text = "View Other Instance's Timelines"
                     cell.backgroundColor = Colours.grayDark3
                     cell.userName.textColor = Colours.tabSelected
                     let bgColorView = UIView()
                     bgColorView.backgroundColor = Colours.grayDark3
                     cell.selectedBackgroundView = bgColorView
                     return cell
+                    } else {
+                        let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
+                        return cell
+                    }
                 } else if indexPath.row == 1 {
-                    let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as! ListCell
+                    if let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as? ListCell {
                     cell.userName.text = "Create New List +"
                     cell.backgroundColor = Colours.grayDark3
                     cell.userName.textColor = Colours.tabSelected
@@ -1522,8 +1555,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     bgColorView.backgroundColor = Colours.grayDark3
                     cell.selectedBackgroundView = bgColorView
                     return cell
+                    } else {
+                        let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
+                        return cell
+                    }
                 } else {
-                    let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as! ListCell
+                    if let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as? ListCell {
                     cell.userName.text = "Settings"
                     cell.backgroundColor = Colours.grayDark3
                     cell.userName.textColor = Colours.tabSelected
@@ -1531,9 +1568,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     bgColorView.backgroundColor = Colours.grayDark3
                     cell.selectedBackgroundView = bgColorView
                     return cell
+                    } else {
+                        let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
+                        return cell
+                    }
                 }
             } else if indexPath.section == 2 {
-                let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as! ListCell
+                if let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as? ListCell {
                 cell.delegate = self
                 cell.configure(StoreStruct.allLists[indexPath.row])
                 cell.backgroundColor = Colours.grayDark3
@@ -1542,9 +1583,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 bgColorView.backgroundColor = Colours.grayDark3
                 cell.selectedBackgroundView = bgColorView
                 return cell
+                } else {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
+                    return cell
+                }
             } else {
-
-                let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l2", for: indexPath) as! ListCell2
+                
+                if let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l2", for: indexPath) as? ListCell2 {
                 cell.delegate = self
                 cell.configure(StoreStruct.instanceLocalToAdd[indexPath.row])
                 cell.backgroundColor = Colours.grayDark3
@@ -1553,7 +1598,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 bgColorView.backgroundColor = Colours.grayDark3
                 cell.selectedBackgroundView = bgColorView
                 return cell
-
+                } else {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
+                    return cell
+                }
             }
         }
     }
@@ -1637,7 +1685,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     statusAlert.title = "Deleted".localized
                     statusAlert.contentColor = Colours.grayDark
                     statusAlert.message = StoreStruct.allLists[indexPath.row].title
-                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
 
@@ -1696,7 +1744,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         statusAlert.title = "Removed".localized
                         statusAlert.contentColor = Colours.grayDark
                         statusAlert.message = StoreStruct.allLists[indexPath.row].title
-                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                             statusAlert.show()
                         }
 
@@ -1757,7 +1805,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         statusAlert.title = "Removed".localized
                         statusAlert.contentColor = Colours.grayDark
                         statusAlert.message = StoreStruct.instanceLocalToAdd[indexPath.row]
-                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
 
@@ -1864,20 +1912,18 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 // go to list
                 StoreStruct.currentList = []
                 let request = Lists.accounts(id: StoreStruct.allLists[indexPath.row].id)
-                //let request = Lists.list(id: StoreStruct.allLists[indexPath.row - 2].id)
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
                         stat.map({
-                            
                             let request1 = Accounts.statuses(id: $0.id)
                             StoreStruct.client.run(request1) { (statuses) in
                                 if let stat = (statuses.value) {
                                     StoreStruct.currentList = StoreStruct.currentList + stat
                                     StoreStruct.currentList = StoreStruct.currentList.sorted(by: { $0.createdAt > $1.createdAt })
                                     StoreStruct.currentListTitle = StoreStruct.allLists[indexPath.row].title
+                                    StoreStruct.currentListIID = StoreStruct.allLists[indexPath.row].id
                                     NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
                                 }
-
                             }
                         })
                         if StoreStruct.currentPage == 0 {
@@ -2300,12 +2346,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.textField.text = ""
 
         StoreStruct.client = Client(baseURL: "")
-        StoreStruct.shared.currentInstance.redirect = ""
-        StoreStruct.shared.currentInstance.returnedText = ""
-        StoreStruct.shared.currentInstance.clientID = ""
-        StoreStruct.shared.currentInstance.clientSecret = ""
-        StoreStruct.shared.currentInstance.authCode = ""
-        StoreStruct.shared.currentInstance.accessToken = ""
+        StoreStruct.currentInstance.redirect = ""
+        StoreStruct.currentInstance.returnedText = ""
+        StoreStruct.currentInstance.clientID = ""
+        StoreStruct.currentInstance.clientSecret = ""
+        StoreStruct.currentInstance.authCode = ""
+        StoreStruct.currentInstance.accessToken = ""
         StoreStruct.currentPage = 0
         StoreStruct.playerID = ""
 
@@ -2591,15 +2637,15 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             // Send off returnedText to client
             if self.newInstance {
                 
-                StoreStruct.shared.newInstance = InstanceData()
-                StoreStruct.shared.newClient = Client(baseURL: "https://\(returnedText)")
+                StoreStruct.newInstance = InstanceData()
+                StoreStruct.newClient = Client(baseURL: "https://\(returnedText)")
                 let request = Clients.register(
                     clientName: "Roma",
                     redirectURI: "com.vm.roma://addNewInstance",
                     scopes: [.read, .write, .follow, .push],
                     website: "https://pleroma.com"
                 )
-                StoreStruct.shared.newClient.run(request) { (application) in
+                StoreStruct.newClient.run(request) { (application) in
                     
 //                    DispatchQueue.main.async {
                     
@@ -2646,15 +2692,14 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         
                         
                         let application = application.value!
-
-                        StoreStruct.shared.newInstance?.clientID = application.clientID
-                        StoreStruct.shared.newInstance?.clientSecret = application.clientSecret
-                        StoreStruct.shared.newInstance?.returnedText = returnedText
-                        StoreStruct.shared.newInstance?.redirect = "com.vm.roma://addNewInstance".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                        let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&scope=read%20write%20follow&client_id=\(application.clientID)")!
+                        
+                        StoreStruct.newInstance?.clientID = application.clientID
+                        StoreStruct.newInstance?.clientSecret = application.clientSecret
+                        StoreStruct.newInstance?.returnedText = returnedText
+                        
                         DispatchQueue.main.async {
-                            StoreStruct.shared.newInstance?.redirect = "com.vm.roma://addNewInstance".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                            let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.newInstance!.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
+                            StoreStruct.newInstance?.redirect = "com.vm.roma://addNewInstance".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                            let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.newInstance!.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
                             UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
                                     if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
@@ -2718,17 +2763,17 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 
                     } else {
                         let application = application.value!
-
-                        StoreStruct.shared.currentInstance.clientID = application.clientID
-                        StoreStruct.shared.currentInstance.clientSecret = application.clientSecret
-                        StoreStruct.shared.currentInstance.returnedText = returnedText
-
+                        
+                        StoreStruct.currentInstance.clientID = application.clientID
+                        StoreStruct.currentInstance.clientSecret = application.clientSecret
+                        StoreStruct.currentInstance.returnedText = returnedText
+                        
                         DispatchQueue.main.async {
                             
                             self.tagListView.alpha = 0
                             
-                            StoreStruct.shared.currentInstance.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                            let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.shared.currentInstance.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
+                            StoreStruct.currentInstance.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                            let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.currentInstance.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
                             UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
                                     if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
@@ -2777,10 +2822,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     }
     
     override func viewDidAppear(_ animated: Bool) {
-
         super.viewDidAppear(true)
         
-        if StoreStruct.currentUser == nil {
+//        if StoreStruct.currentUser == nil {
             let request2 = Accounts.currentUser()
             StoreStruct.client.run(request2) { (statuses) in
                 if let stat = (statuses.value) {
@@ -2802,21 +2846,21 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     
                 }
             }
-        } else {
-            let request9 = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: false, pinnedOnly: false, excludeReplies: true, excludeReblogs: true, range: .default)
-            StoreStruct.client.run(request9) { (statuses) in
-                if let stat = (statuses.value) {
-                    StoreStruct.profileStatuses0 = stat
-                    
-                    let request = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: true, pinnedOnly: nil, excludeReplies: nil, excludeReblogs: true, range: .default)
-                    StoreStruct.client.run(request) { (statuses) in
-                        if let stat = (statuses.value) {
-                            StoreStruct.profileStatusesHasImage0 = stat
-                        }
-                    }
-                }
-            }
-        }
+//        } else {
+//            let request9 = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: false, pinnedOnly: false, excludeReplies: true, excludeReblogs: true, range: .default)
+//            StoreStruct.client.run(request9) { (statuses) in
+//                if let stat = (statuses.value) {
+//                    StoreStruct.profileStatuses0 = stat
+//
+//                    let request = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: true, pinnedOnly: nil, excludeReplies: nil, excludeReblogs: true, range: .default)
+//                    StoreStruct.client.run(request) { (statuses) in
+//                        if let stat = (statuses.value) {
+//                            StoreStruct.profileStatusesHasImage0 = stat
+//                        }
+//                    }
+//                }
+//            }
+//        }
         
         let request0 = Lists.all()
         StoreStruct.client.run(request0) { (statuses) in
@@ -2842,10 +2886,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         } else {
             UIApplication.shared.statusBarStyle = .lightContent
         }
-
+        
         if let userDefaults = UserDefaults(suiteName: "group.com.vm.roma.wormhole") {
-            userDefaults.set(StoreStruct.shared.currentInstance.accessToken ?? "", forKey: "key1")
-            userDefaults.set(StoreStruct.shared.currentInstance.returnedText, forKey: "key2")
+            userDefaults.set(StoreStruct.currentInstance.accessToken, forKey: "key1")
+            userDefaults.set(StoreStruct.currentInstance.returnedText, forKey: "key2")
             userDefaults.synchronize()
         }
         
@@ -3104,16 +3148,20 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForSelectedSegmentAtIndex index: Int) -> [UIColor] {
         if (UserDefaults.standard.object(forKey: "seghue1") == nil) || (UserDefaults.standard.object(forKey: "seghue1") as! Int == 0) {
             return [Colours.tabSelected, Colours.tabSelected]
-        } else {
+        } else if (UserDefaults.standard.object(forKey: "seghue1") as! Int == 1) {
             return [Colours.grayLight2, Colours.grayLight2]
+        } else {
+            return [Colours.clear, Colours.clear]
         }
     }
 
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForBounce bounce: SJFluidSegmentedControlBounce) -> [UIColor] {
         if (UserDefaults.standard.object(forKey: "seghue1") == nil) || (UserDefaults.standard.object(forKey: "seghue1") as! Int == 0) {
             return [Colours.tabSelected, Colours.tabSelected]
-        } else {
+        } else if (UserDefaults.standard.object(forKey: "seghue1") as! Int == 1) {
             return [Colours.grayLight2, Colours.grayLight2]
+        } else {
+            return [Colours.clear, Colours.clear]
         }
     }
 
@@ -3195,26 +3243,26 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.newestText = textField.text ?? ""
         if self.typeOfSearch == 0 {
             let theText = textField.text?.replacingOccurrences(of: "#", with: "")
-        let request = Timelines.tag(theText ?? "")
-        StoreStruct.client.run(request) { (statuses) in
-            if let stat = (statuses.value) {
-                StoreStruct.statusSearch = stat
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
+            let request = Timelines.tag(theText ?? "")
+            StoreStruct.client.run(request) { (statuses) in
+                if let stat = (statuses.value) {
+                    StoreStruct.statusSearch = stat
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
                 }
             }
         }
-        }
         if self.typeOfSearch == 1 {
-                    let request = Search.search(query: textField.text ?? "")
-                    StoreStruct.client.run(request) { (statuses) in
-                        if let stat = (statuses.value) {
-                            StoreStruct.statusSearch = stat.statuses
-                            DispatchQueue.main.async {
-                                self.tableView.reloadData()
-                            }
-                        }
+            let request = Search.search(query: textField.text ?? "")
+            StoreStruct.client.run(request) { (statuses) in
+                if let stat = (statuses.value) {
+                    StoreStruct.statusSearch = stat.statuses
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
                     }
+                }
+            }
         }
         if self.typeOfSearch == 2 {
 

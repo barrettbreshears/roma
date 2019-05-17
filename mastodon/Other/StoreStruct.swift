@@ -49,11 +49,11 @@ struct StoreStruct {
                            UIColor(red: 38/255.0, green: 38/255.0, blue: 45/255.0, alpha: 1.0),
                            UIColor.clear]
     
-    static var client = Client(baseURL: StoreStruct.shared.currentInstance.returnedText, accessToken:StoreStruct.shared.currentInstance.accessToken)
-    var currentInstance: InstanceData = InstanceData.getCurrentInstance() ?? InstanceData()
-    var allInstances: [InstanceData] = InstanceData.getAllInstances()
-    var newClient = Client(baseURL: "")
-    var newInstance: InstanceData?
+    static var client = Client(baseURL: StoreStruct.currentInstance.returnedText, accessToken: StoreStruct.currentInstance.accessToken)
+    static var currentInstance: InstanceData = InstanceData.getCurrentInstance() ?? InstanceData()
+    static var allInstances: [InstanceData] = InstanceData.getAllInstances()
+    static var newClient = Client(baseURL: "")
+    static var newInstance: InstanceData?
     static var currentPage = 0
     static var playerID = ""
     
@@ -99,6 +99,7 @@ struct StoreStruct {
     static var allListRelID: String = ""
     static var currentList: [Status] = []
     static var currentListTitle: String = ""
+    static var currentListIID: String = ""
 //    static var drafts: [Any] = []
     
     static var allLikes: [String] = []
@@ -160,6 +161,14 @@ struct StoreStruct {
     static var profileStatusesHasImage0: [Status] = []
     
     static var allCurrentFilters: [Filters] = []
+    
+    static var medType = 0
+    static var switchedNow = false
+    static var badgeCount = 0
+    static var badgeCount2 = 0
+    
+    static var avaFile = "avatar"
+    static var heaFile = "header"
 }
 
 struct Drafts: Codable {

@@ -89,7 +89,7 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                                 controller.tootText.setText("\(StoreStruct.allStats[index].reblog?.content.stripHTML() ?? StoreStruct.allStats[index].content.stripHTML())")
                                 
                                 //DispatchQueue.global().async { [weak self] in
-                                    self.getDataFromUrl(url: URL(string: StoreStruct.allStats[index].reblog?.account.avatar ?? StoreStruct.allStats[index].account.avatar ?? "")!) { data, response, error in
+                                    self.getDataFromUrl(url: URL(string: StoreStruct.allStats[index].reblog?.account.avatar ?? StoreStruct.allStats[index].account.avatar)!) { data, response, error in
                                         guard let data = data, error == nil else { return }
                                         //DispatchQueue.main.async() {
                                         if self.isShowing {
@@ -168,16 +168,16 @@ class InterfaceController: WKInterfaceController, WCSessionDelegate {
                     controller.imageView.setWidth(20)
                     controller.tootText.setText("\(StoreStruct.allStats[index].reblog?.content.stripHTML() ?? StoreStruct.allStats[index].content.stripHTML())")
                     
-                    //DispatchQueue.global().async { [weak self] in
-                        self.getDataFromUrl(url: URL(string: StoreStruct.allStats[index].reblog?.account.avatar ?? StoreStruct.allStats[index].account.avatar ?? "")!) { data, response, error in
+                    DispatchQueue.global().async { [weak self] in
+                        self?.getDataFromUrl(url: URL(string: StoreStruct.allStats[index].reblog?.account.avatar ?? StoreStruct.allStats[index].account.avatar)!) { data, response, error in
                             guard let data = data, error == nil else { return }
-                            //DispatchQueue.main.async() {
-                            if self.isShowing {
-                                controller.imageView.setImageData(data)
+                            DispatchQueue.main.async() {
+                                if self?.isShowing ?? false {
+                                    controller.imageView.setImageData(data)
+                                }
                             }
-                            //}
                         }
-                    //}
+                    }
                     
                 }
                 

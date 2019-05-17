@@ -16,8 +16,9 @@ import AVKit
 import AVFoundation
 import SJFluidSegmentedControl
 import MessageUI
+import CropViewController
 
-class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, CrownControlDelegate, MFMailComposeViewControllerDelegate, UIGestureRecognizerDelegate {
+class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, CrownControlDelegate, MFMailComposeViewControllerDelegate, UIGestureRecognizerDelegate, CropViewControllerDelegate {
     
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
@@ -45,6 +46,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var zzz: [String:String] = [:]
     private var crownControl: CrownControl!
     var buttonCenter = CGPoint.zero
+    var inArea = 0
+    var cropViewController = CropViewController(image: UIImage())
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true)
@@ -120,7 +123,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: 5000))
         let testClient = Client(
             baseURL: "https://\(StoreStruct.instanceText)",
-            accessToken: StoreStruct.shared.currentInstance.accessToken ?? ""
+            accessToken: StoreStruct.currentInstance.accessToken ?? ""
         )
         testClient.run(request) { (statuses) in
             if let stat = (statuses.value) {
@@ -137,10 +140,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let request2 = Accounts.currentUser()
         StoreStruct.client.run(request2) { (statuses) in
             if let stat = (statuses.value) {
-                DispatchQueue.main.async {
                 StoreStruct.currentUser = stat
                 self.chosenUser = stat
-                
+                DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
             }
@@ -212,7 +214,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-
+        
+//        if let indexPath = tableView.indexPathForSelectedRow {
+//            self.tableView.deselectRow(at: indexPath, animated: true)
+//        }
+        
         self.ai.startAnimating()
     }
 
@@ -313,10 +319,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 tabHeight = Int(UITabBarController().tabBar.frame.size.height)
             }
         }
-
-
-
-        let request = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: true, pinnedOnly: nil, excludeReplies: true, excludeReblogs: true, range: .min(id: "", limit: 5000))
+        
+        
+        
+        let request = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: true, pinnedOnly: nil, excludeReplies: true, excludeReblogs: true, range: .since(id: "", limit: 5000))
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty {
@@ -496,17 +502,22 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
-
+    
     @objc func goToIDNoti() {
         sleep(2)
         let request = Notifications.notification(id: StoreStruct.curIDNoti)
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
-                    let controller = DetailViewController()
-                    controller.mainStatus.append(stat.status!)
-                    self.navigationController?.pushViewController(controller, animated: true)
+                    if let x = stat.status {
+                        let controller = DetailViewController()
+                        controller.mainStatus.append(x)
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    } else {
+                        let controller = ThirdViewController()
+                        controller.userIDtoUse = stat.account.id
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    }
                 }
             }
         }
@@ -719,6 +730,76 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
     
+    func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
+        
+        self.cropViewController.dismiss(animated: true, completion: nil)
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let impact = UIImpactFeedbackGenerator(style: .light)
+            impact.impactOccurred()
+        }
+        
+        var compression: CGFloat = 1
+        if (UserDefaults.standard.object(forKey: "imqual") == nil) || (UserDefaults.standard.object(forKey: "imqual") as! Int == 0) {
+            compression = 1
+        } else if UserDefaults.standard.object(forKey: "imqual") as! Int == 1 {
+            compression = 0.78
+        } else {
+            compression = 0.5
+        }
+        
+        if self.inArea == 0 {
+            
+            let imageData = image.jpegData(compressionQuality: compression)
+            let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: .jpeg(imageData), header: nil)
+            StoreStruct.client.run(request) { (statuses) in
+                
+                if let stat = (statuses.value) {
+                    DispatchQueue.main.async {
+                        self.updateProfileHere()
+                        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                            let notification = UINotificationFeedbackGenerator()
+                            notification.notificationOccurred(.success)
+                        }
+                        let statusAlert = StatusAlert()
+                        statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
+                        statusAlert.title = "Updated Display Picture".localized
+                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.message = StoreStruct.currentUser.displayName
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                            statusAlert.show()
+                        }
+                    }
+                }
+            }
+            
+        } else {
+            
+            let imageData = image.jpegData(compressionQuality: compression)
+            let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: .jpeg(imageData))
+            StoreStruct.client.run(request) { (statuses) in
+                
+                if let stat = (statuses.value) {
+                    DispatchQueue.main.async {
+                        self.updateProfileHere()
+                        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                            let notification = UINotificationFeedbackGenerator()
+                            notification.notificationOccurred(.success)
+                        }
+                        let statusAlert = StatusAlert()
+                        statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
+                        statusAlert.title = "Updated Header".localized
+                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.message = StoreStruct.currentUser.displayName
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                            statusAlert.show()
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -793,11 +874,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         case .pad:
             print("nothing")
         default:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         }
         self.tableView.register(ProfileHeaderCell.self, forCellReuseIdentifier: "ProfileHeaderCell")
         self.tableView.register(ProfileHeaderCellOwn.self, forCellReuseIdentifier: "ProfileHeaderCellOwn")
@@ -819,7 +900,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         self.setupProfile()
         
-        self.ai = NVActivityIndicatorView(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 20), y: CGFloat(offset + 65), width: 40, height: 40), type: .ballRotateChase, color: Colours.tabSelected)
+        self.ai = NVActivityIndicatorView(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 20), y: CGFloat(offset + 60), width: 40, height: 40), type: .ballRotateChase, color: Colours.tabSelected)
         self.view.addSubview(self.ai)
         self.loadLoadLoad()
         
@@ -831,7 +912,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     selection.selectionChanged()
                 }
                 self?.refreshCont()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                     self?.tableView.cr.endHeaderRefresh()
                 })
             }
@@ -844,7 +925,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     selection.selectionChanged()
                 }
                 self?.refreshCont()
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
                     self?.tableView.cr.endHeaderRefresh()
                 })
             }
@@ -1016,6 +1097,29 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        
+        var zzz = self.profileStatuses
+        if self.currentIndex == 0 {
+            zzz = self.profileStatuses
+        } else {
+            zzz = self.profileStatuses2
+        }
+        if let indexPath = tableView.indexPathForSelectedRow {
+            self.tableView.deselectRow(at: indexPath, animated: true)
+            let request = Statuses.status(id: zzz[indexPath.row].reblog?.id ?? zzz[indexPath.row].id)
+            StoreStruct.client.run(request) { (statuses) in
+                if let stat = (statuses.value) {
+                    DispatchQueue.main.async {
+                        if let cell = self.tableView.cellForRow(at: indexPath) as? MainFeedCell {
+                            cell.configure0(stat)
+                        }
+                        if let cell2 = self.tableView.cellForRow(at: indexPath) as? MainFeedCellImage {
+                            cell2.configure0(stat)
+                        }
+                    }
+                }
+            }
+        }
         
         self.navigationController?.navigationItem.backBarButtonItem?.tintColor = Colours.tabUnselected
 
@@ -1196,16 +1300,20 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForSelectedSegmentAtIndex index: Int) -> [UIColor] {
         if (UserDefaults.standard.object(forKey: "seghue1") == nil) || (UserDefaults.standard.object(forKey: "seghue1") as! Int == 0) {
             return [Colours.tabSelected, Colours.tabSelected]
-        } else {
+        } else if (UserDefaults.standard.object(forKey: "seghue1") as! Int == 1) {
             return [Colours.grayLight2, Colours.grayLight2]
+        } else {
+            return [Colours.clear, Colours.clear]
         }
     }
 
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForBounce bounce: SJFluidSegmentedControlBounce) -> [UIColor] {
         if (UserDefaults.standard.object(forKey: "seghue1") == nil) || (UserDefaults.standard.object(forKey: "seghue1") as! Int == 0) {
             return [Colours.tabSelected, Colours.tabSelected]
-        } else {
+        } else if (UserDefaults.standard.object(forKey: "seghue1") as! Int == 1) {
             return [Colours.grayLight2, Colours.grayLight2]
+        } else {
+            return [Colours.clear, Colours.clear]
         }
     }
 
@@ -1245,8 +1353,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if section == 0 {
             return nil
         } else if section == 1 {
-
-            title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
+            let title = UILabel()
+            title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 30)
             title.textColor = Colours.grayDark2
             title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
             vw.addSubview(title)
@@ -1396,6 +1504,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func editProfileDetails() {
         
+        StoreStruct.avaFile = "\(StoreStruct.avaFile)\(Int.random(in: 10...5000000))"
+        StoreStruct.heaFile = "\(StoreStruct.heaFile)\(Int.random(in: 10...5000000))"
+        
         let isItLocked = StoreStruct.currentUser.locked
         var lockText = "Lock Account"
         var isItGoingToLock = false
@@ -1409,14 +1520,26 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             isItGoingToLockText = "Locked Account"
         }
         
+        
+        var compression: CGFloat = 1
+        if (UserDefaults.standard.object(forKey: "imqual") == nil) || (UserDefaults.standard.object(forKey: "imqual") as! Int == 0) {
+            compression = 1
+        } else if UserDefaults.standard.object(forKey: "imqual") as! Int == 1 {
+            compression = 0.78
+        } else {
+            compression = 0.5
+        }
+        
         Alertift.actionSheet()
             .backgroundColor(Colours.white)
             .titleTextColor(Colours.grayDark)
             .messageTextColor(Colours.grayDark)
             .messageTextAlignment(.left)
             .titleTextAlignment(.left)
-        .action(.default("Edit Display Picture"), image: nil) { (action, ind) in
-             
+        .action(.default("Edit Avatar"), image: nil) { (action, ind) in
+            
+            StoreStruct.medType = 1
+            self.inArea = 0
             
             let pickerController = DKImagePickerController()
             pickerController.didSelectAssets = { (assets: [DKAsset]) in
@@ -1425,29 +1548,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
                 if assets.count > 0 {
                     assets[0].fetchOriginalImage(true, completeBlock: { image, info in
-                        let imageData = (image ?? UIImage()).pngData()
-                        let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: .png(imageData), header: nil)
-                        StoreStruct.client.run(request) { (statuses) in
-                             
-                            if let stat = (statuses.value) {
-                                DispatchQueue.main.async {
-                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
-                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                                        let notification = UINotificationFeedbackGenerator()
-                                        notification.notificationOccurred(.success)
-                                    }
-                                    let statusAlert = StatusAlert()
-                                    statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
-                                    statusAlert.title = "Updated Display Picture".localized
-                                    statusAlert.contentColor = Colours.grayDark
-                                    statusAlert.message = StoreStruct.currentUser.displayName
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
-                                        statusAlert.show()
-                                    }
-                                }
-                            }
-                        }
-                        
+                        self.cropViewController = CropViewController(image: image ?? UIImage())
+                        self.cropViewController.delegate = self
+                        self.cropViewController.aspectRatioPreset = .presetSquare
+                        self.cropViewController.aspectRatioLockEnabled = true
+                        self.cropViewController.resetAspectRatioEnabled = false
+                        self.cropViewController.aspectRatioPickerButtonHidden = true
+                        self.cropViewController.title = "Resize Avatar"
+                        self.present(self.cropViewController, animated: true, completion: nil)
                     })
                 }
             }
@@ -1458,9 +1566,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.present(pickerController, animated: true) {}
             }
             
-            
             .action(.default("Edit Header"), image: nil) { (action, ind) in
-                 
+                
+                StoreStruct.medType = 2
+                self.inArea = 1
                 
                 let pickerController = DKImagePickerController()
                 pickerController.didSelectAssets = { (assets: [DKAsset]) in
@@ -1469,29 +1578,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                     if assets.count > 0 {
                         assets[0].fetchOriginalImage(true, completeBlock: { image, info in
-                            let imageData = (image ?? UIImage()).pngData()
-                            let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: .png(imageData))
-                            StoreStruct.client.run(request) { (statuses) in
-                                 
-                                if let stat = (statuses.value) {
-                                    DispatchQueue.main.async {
-                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
-                                        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                                            let notification = UINotificationFeedbackGenerator()
-                                            notification.notificationOccurred(.success)
-                                        }
-                                        let statusAlert = StatusAlert()
-                                        statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
-                                        statusAlert.title = "Updated Header".localized
-                                        statusAlert.contentColor = Colours.grayDark
-                                        statusAlert.message = StoreStruct.currentUser.displayName
-                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
-                                            statusAlert.show()
-                                        }
-                                    }
-                                }
-                            }
-                            
+                            self.cropViewController = CropViewController(image: image ?? UIImage())
+                            self.cropViewController.delegate = self
+                            self.cropViewController.aspectRatioPreset = .preset3x1
+                            self.cropViewController.aspectRatioLockEnabled = true
+                            self.cropViewController.resetAspectRatioEnabled = false
+                            self.cropViewController.aspectRatioPickerButtonHidden = true
+                            self.cropViewController.title = "Resize Header"
+                            self.present(self.cropViewController, animated: true, completion: nil)
                         })
                     }
                 }
@@ -1602,7 +1696,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             if let stat = (statuses.value) {
                                 
                                 DispatchQueue.main.async {
-                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
+//                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
+                                    self.updateProfileHere()
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -1636,7 +1731,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             if let stat = (statuses.value) {
                                 
                                 DispatchQueue.main.async {
-                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
+//                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
+                                    self.updateProfileHere()
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -1670,7 +1766,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             if let stat = (statuses.value) {
                                 
                                 DispatchQueue.main.async {
-                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
+//                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
+                                    self.updateProfileHere()
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -1704,7 +1801,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             if let stat = (statuses.value) {
                                 
                                 DispatchQueue.main.async {
-                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
+//                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
+                                    self.updateProfileHere()
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -1738,7 +1836,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 StoreStruct.client.run(request) { (statuses) in
                     if let stat = (statuses.value) {
                         DispatchQueue.main.async {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
+//                            NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
+                            self.updateProfileHere()
                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                 let notification = UINotificationFeedbackGenerator()
                                 notification.notificationOccurred(.success)
@@ -1752,7 +1851,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             statusAlert.title = isItGoingToLockText.localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = StoreStruct.currentUser.displayName
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                 statusAlert.show()
                             }
                         }
@@ -1784,7 +1883,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 statusAlert.title = "Follow Request Sent".localized
                 statusAlert.contentColor = Colours.grayDark
                 statusAlert.message = self.chosenUser.displayName
-                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                     statusAlert.show()
                 }
             } else {
@@ -1793,7 +1892,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 statusAlert.title = "Followed".localized
                 statusAlert.contentColor = Colours.grayDark
                 statusAlert.message = self.chosenUser.displayName
-                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                     statusAlert.show()
                 }
             }
@@ -1823,7 +1922,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             statusAlert.title = "Unfollowed".localized
             statusAlert.contentColor = Colours.grayDark
             statusAlert.message = self.chosenUser.displayName
-            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                 statusAlert.show()
             }
 
@@ -1851,35 +1950,35 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
             var title = "Fetching follow status".localized
             if self.isFollowing {
-                self.fo = "Unfollow".localized
+                self.fo = " Unfollow".localized
             } else {
-                self.fo = "Follow".localized
+                self.fo = " Follow".localized
             }
-            var endoTitle = "Endorse"
+            var endoTitle = " Endorse"
             if self.isEndorsed {
-                endoTitle = "Remove Endorsement"
+                endoTitle = " Remove Endorsement"
             } else {
-                endoTitle = "Endorse"
+                endoTitle = " Endorse"
             }
-            var muteTitle = "Mute"
+            var muteTitle = " Mute"
             if self.isMuted {
-                muteTitle = "Unmute"
+                muteTitle = " Unmute"
             } else {
-                muteTitle = "Mute"
+                muteTitle = " Mute"
             }
-            var blockText = "Block"
+            var blockText = " Block"
             if self.isBlocked {
-                blockText = "Unblock"
+                blockText = " Unblock"
             } else {
-                blockText = "Block"
+                blockText = " Block"
             }
-            var rebText = "Disable Boosts"
+            var rebText = " Disable Boosts"
             var rebImage = UIImage(named: "block")
             if self.isShowingBoosts {
-                rebText = "Disable Boosts"
+                rebText = " Disable Boosts"
                 rebImage = UIImage(named: "block")
             } else {
-                rebText = "Enable Boosts"
+                rebText = " Enable Boosts"
                 rebImage = UIImage(named: "boost3")
             }
             
@@ -1889,7 +1988,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
                 .messageTextAlignment(.left)
                 .titleTextAlignment(.left)
-                .action(.default("Pinned".localized), image: UIImage(named: "pinned")) { (action, ind) in
+                .action(.default(" Pinned".localized), image: UIImage(named: "pinned")) { (action, ind) in
                      
                     
                     let controller = PinnedViewController()
@@ -1905,14 +2004,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //                        }
 //                    }
                 }
-                .action(.default("Mention".localized), image: UIImage(named: "reply2")) { (action, ind) in
+                .action(.default(" Mention".localized), image: UIImage(named: "reply2")) { (action, ind) in
                      
                     
                     let controller = ComposeViewController()
                     controller.inReplyText = self.chosenUser.acct
                     self.present(controller, animated: true, completion: nil)
                 }
-                .action(.default("Direct Message".localized), image: UIImage(named: "direct3")) { (action, ind) in
+                .action(.default("Direct Message".localized), image: UIImage(named: "sendm")) { (action, ind) in
                      
                     
                     let controller = ComposeViewController()
@@ -1937,7 +2036,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             statusAlert.title = "Follow Request Sent".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = self.chosenUser.displayName
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                 statusAlert.show()
                             }
                         } else {
@@ -1946,7 +2045,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             statusAlert.title = "Followed".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = self.chosenUser.displayName
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                 statusAlert.show()
                             }
                         }
@@ -1976,7 +2075,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         statusAlert.title = "Unfollowed".localized
                         statusAlert.contentColor = Colours.grayDark
                         statusAlert.message = self.chosenUser.displayName
-                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                             statusAlert.show()
                         }
 
@@ -2010,7 +2109,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     statusAlert.title = "Removed Endorsement".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = self.chosenUser.displayName
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                         statusAlert.show()
                                     }
 
@@ -2032,7 +2131,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     statusAlert.title = "Endorsed".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = self.chosenUser.displayName
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                         statusAlert.show()
                                     }
 
@@ -2042,6 +2141,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     }
 
+                }
+                .action(.default(" Follows/Followers".localized), image: UIImage(named: "profile")) { (action, ind) in
+                    
+                    DispatchQueue.main.async {
+                        let controller = FollowersViewController()
+                        controller.profileStatus = self.chosenUser.id
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    }
                 }
                 
                 
@@ -2076,7 +2183,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             statusAlert.title = "Disabled Boosts".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = self.chosenUser.displayName
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                 statusAlert.show()
                             }
                             let request = Accounts.follow(id: self.chosenUser.id, reblogs: false)
@@ -2095,7 +2202,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             statusAlert.title = "Enabled Boosts".localized
                             statusAlert.contentColor = Colours.grayDark
                             statusAlert.message = self.chosenUser.displayName
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                 statusAlert.show()
                             }
                             let request = Accounts.follow(id: self.chosenUser.id, reblogs: true)
@@ -2112,7 +2219,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 
                 
-                .action(.default("Add to a List".localized), image: UIImage(named: "list")) { (action, ind) in
+                .action(.default(" Add to a List".localized), image: UIImage(named: "list")) { (action, ind) in
                      
                     
                     
@@ -2143,7 +2250,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     statusAlert.title = "Added".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = self.chosenUser.displayName
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                         statusAlert.show()
                                     }
 
@@ -2179,7 +2286,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         statusAlert.title = "Muted".localized
                         statusAlert.contentColor = Colours.grayDark
                         statusAlert.message = self.chosenUser.displayName
-                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                             statusAlert.show()
                         }
 
@@ -2200,7 +2307,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         statusAlert.title = "Unmuted".localized
                         statusAlert.contentColor = Colours.grayDark
                         statusAlert.message = self.chosenUser.displayName
-                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                             statusAlert.show()
                         }
 
@@ -2226,7 +2333,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         statusAlert.title = "Blocked".localized
                         statusAlert.contentColor = Colours.grayDark
                         statusAlert.message = self.chosenUser.displayName
-                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                             statusAlert.show()
                         }
 
@@ -2247,7 +2354,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         statusAlert.title = "Unblocked".localized
                         statusAlert.contentColor = Colours.grayDark
                         statusAlert.message = self.chosenUser.displayName
-                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                             statusAlert.show()
                         }
 
@@ -2261,7 +2368,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
 
                 }
-                .action(.default("Share Profile".localized), image: UIImage(named: "share")) { (action, ind) in
+                .action(.default(" Share Profile".localized), image: UIImage(named: "share")) { (action, ind) in
                      
                     
                     
@@ -2440,6 +2547,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                      
                     DispatchQueue.main.async {
                         let controller = SearchViewController()
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    }
+                }
+                .action(.default(" Follows/Followers".localized), image: UIImage(named: "profile")) { (action, ind) in
+                    
+                    DispatchQueue.main.async {
+                        let controller = FollowersViewController()
+                        controller.profileStatus = self.chosenUser.id
                         self.navigationController?.pushViewController(controller, animated: true)
                     }
                 }
@@ -2707,6 +2822,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         cell.follows.addTarget(self, action: #selector(self.didTouchFollows), for: .touchUpInside)
                         cell.follows.tag = indexPath.row
                         cell.follows.titleLabel?.textColor = Colours.tabSelected
+                        cell.follows.setTitleColor(Colours.tabSelected, for: .normal)
                         cell.more.addTarget(self, action: #selector(self.moreTop), for: .touchUpInside)
                         cell.backgroundColor = Colours.white
                         
@@ -2777,15 +2893,15 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
                             let controller = HashtagViewController()
                             controller.currentTagTitle = string
-                            let request = Timelines.tag(string)
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    DispatchQueue.main.async {
-                                        controller.currentTags = stat
+//                            let request = Timelines.tag(string)
+//                            StoreStruct.client.run(request) { (statuses) in
+//                                if let stat = (statuses.value) {
+//                                    DispatchQueue.main.async {
+//                                        controller.currentTags = stat
                                         self.navigationController?.pushViewController(controller, animated: true)
-                                    }
-                                }
-                            }
+//                                    }
+//                                }
+//                            }
                         }
 
 
@@ -2808,6 +2924,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             cell.follows.addTarget(self, action: #selector(self.didTouchFollows), for: .touchUpInside)
                             cell.follows.tag = indexPath.row
                         cell.follows.titleLabel?.textColor = Colours.tabSelected
+                        cell.follows.setTitleColor(Colours.tabSelected, for: .normal)
                             cell.more.addTarget(self, action: #selector(self.moreTop), for: .touchUpInside)
                             cell.settings.addTarget(self, action: #selector(self.setTop), for: .touchUpInside)
                             cell.backgroundColor = Colours.white
@@ -2879,15 +2996,15 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
                                 let controller = HashtagViewController()
                                 controller.currentTagTitle = string
-                                let request = Timelines.tag(string)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        DispatchQueue.main.async {
-                                            controller.currentTags = stat
+//                                let request = Timelines.tag(string)
+//                                StoreStruct.client.run(request) { (statuses) in
+//                                    if let stat = (statuses.value) {
+//                                        DispatchQueue.main.async {
+//                                            controller.currentTags = stat
                                             self.navigationController?.pushViewController(controller, animated: true)
-                                        }
-                                    }
-                                }
+//                                        }
+//                                    }
+//                                }
                             }
 
                             let bgColorView = UIView()
@@ -2909,6 +3026,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.follows.addTarget(self, action: #selector(self.didTouchFollows), for: .touchUpInside)
                     cell.follows.tag = indexPath.row
                     cell.follows.titleLabel?.textColor = Colours.tabSelected
+                    cell.follows.setTitleColor(Colours.tabSelected, for: .normal)
                     cell.more.addTarget(self, action: #selector(self.moreTop), for: .touchUpInside)
                     cell.settings.addTarget(self, action: #selector(self.didTouchToFol), for: .touchUpInside)
                     cell.backgroundColor = Colours.white
@@ -2980,15 +3098,15 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
                         let controller = HashtagViewController()
                         controller.currentTagTitle = string
-                        let request = Timelines.tag(string)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                DispatchQueue.main.async {
-                                    controller.currentTags = stat
+//                        let request = Timelines.tag(string)
+//                        StoreStruct.client.run(request) { (statuses) in
+//                            if let stat = (statuses.value) {
+//                                DispatchQueue.main.async {
+//                                    controller.currentTags = stat
                                     self.navigationController?.pushViewController(controller, animated: true)
-                                }
-                            }
-                        }
+//                                }
+//                            }
+//                        }
                     }
 
                     let bgColorView = UIView()
@@ -3010,6 +3128,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         cell.follows.addTarget(self, action: #selector(self.didTouchFollows), for: .touchUpInside)
                         cell.follows.tag = indexPath.row
                         cell.follows.titleLabel?.textColor = Colours.tabSelected
+                        cell.follows.setTitleColor(Colours.tabSelected, for: .normal)
                         cell.more.addTarget(self, action: #selector(self.moreTop), for: .touchUpInside)
                         cell.settings.addTarget(self, action: #selector(self.setTop), for: .touchUpInside)
                         cell.backgroundColor = Colours.white
@@ -3081,15 +3200,15 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
                             let controller = HashtagViewController()
                             controller.currentTagTitle = string
-                            let request = Timelines.tag(string)
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    DispatchQueue.main.async {
-                                        controller.currentTags = stat
+//                            let request = Timelines.tag(string)
+//                            StoreStruct.client.run(request) { (statuses) in
+//                                if let stat = (statuses.value) {
+//                                    DispatchQueue.main.async {
+//                                        controller.currentTags = stat
                                         self.navigationController?.pushViewController(controller, animated: true)
-                                    }
-                                }
-                            }
+//                                    }
+//                                }
+//                            }
                         }
 
                         let bgColorView = UIView()
@@ -3110,6 +3229,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         cell.follows.addTarget(self, action: #selector(self.didTouchFollows), for: .touchUpInside)
                         cell.follows.tag = indexPath.row
                         cell.follows.titleLabel?.textColor = Colours.tabSelected
+                        cell.follows.setTitleColor(Colours.tabSelected, for: .normal)
                         cell.more.addTarget(self, action: #selector(self.moreTop), for: .touchUpInside)
                         cell.settings.addTarget(self, action: #selector(self.setTop), for: .touchUpInside)
                         cell.backgroundColor = Colours.white
@@ -3181,15 +3301,15 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
                             let controller = HashtagViewController()
                             controller.currentTagTitle = string
-                            let request = Timelines.tag(string)
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    DispatchQueue.main.async {
-                                        controller.currentTags = stat
+//                            let request = Timelines.tag(string)
+//                            StoreStruct.client.run(request) { (statuses) in
+//                                if let stat = (statuses.value) {
+//                                    DispatchQueue.main.async {
+//                                        controller.currentTags = stat
                                         self.navigationController?.pushViewController(controller, animated: true)
-                                    }
-                                }
-                            }
+//                                    }
+//                                }
+//                            }
                         }
 
                         let bgColorView = UIView()
@@ -3242,8 +3362,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 //cell.configure(zzz[indexPath.row])
                 cell.backgroundColor = Colours.white
                 cell.userName.textColor = Colours.grayDark
-                cell.userTag.setTitleColor(Colours.grayDark, for: .normal)
-                cell.date.textColor = Colours.grayDark
+                cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
                 cell.toot.textColor = Colours.grayDark
                 cell.toot.handleMentionTap { (string) in
                     // mention
@@ -3309,24 +3429,24 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                     let controller = HashtagViewController()
                     controller.currentTagTitle = string
-                    let request = Timelines.tag(string)
-                    StoreStruct.client.run(request) { (statuses) in
-                        if let stat = (statuses.value) {
-                            DispatchQueue.main.async {
-                                controller.currentTags = stat
+//                    let request = Timelines.tag(string)
+//                    StoreStruct.client.run(request) { (statuses) in
+//                        if let stat = (statuses.value) {
+//                            DispatchQueue.main.async {
+//                                controller.currentTags = stat
                                 self.navigationController?.pushViewController(controller, animated: true)
-                            }
-                        }
-                    }
+//                            }
+//                        }
+//                    }
                 }
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
 
             } else {
-
-                if indexPath.row == zzz.count - 14 {
+                
+                if indexPath.row == zzz.count - 1 {
                     self.fetchMoreProfile()
                 }
                 
@@ -3350,8 +3470,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.backgroundColor = Colours.white
                     cell.userName.textColor = Colours.grayDark
-                    cell.userTag.setTitleColor(Colours.grayDark, for: .normal)
-                    cell.date.textColor = Colours.grayDark
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
                     cell.toot.textColor = Colours.grayDark
                     cell.toot.handleMentionTap { (string) in
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -3419,18 +3539,18 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                         let controller = HashtagViewController()
                         controller.currentTagTitle = string
-                        let request = Timelines.tag(string)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                DispatchQueue.main.async {
-                                    controller.currentTags = stat
+//                        let request = Timelines.tag(string)
+//                        StoreStruct.client.run(request) { (statuses) in
+//                            if let stat = (statuses.value) {
+//                                DispatchQueue.main.async {
+//                                    controller.currentTags = stat
                                     self.navigationController?.pushViewController(controller, animated: true)
-                                }
-                            }
-                        }
+//                                }
+//                            }
+//                        }
                     }
                     let bgColorView = UIView()
-                    bgColorView.backgroundColor = Colours.white
+                    bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                     cell.selectedBackgroundView = bgColorView
                     return cell
                 } else {
@@ -3461,8 +3581,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userName.textColor = Colours.grayDark
-                    cell.userTag.setTitleColor(Colours.grayDark, for: .normal)
-                    cell.date.textColor = Colours.grayDark
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
                     cell.toot.textColor = Colours.grayDark
                     cell.mainImageView.backgroundColor = Colours.white
                     cell.mainImageViewBG.backgroundColor = Colours.white
@@ -3532,18 +3652,18 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                         let controller = HashtagViewController()
                         controller.currentTagTitle = string
-                        let request = Timelines.tag(string)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                DispatchQueue.main.async {
-                                    controller.currentTags = stat
+//                        let request = Timelines.tag(string)
+//                        StoreStruct.client.run(request) { (statuses) in
+//                            if let stat = (statuses.value) {
+//                                DispatchQueue.main.async {
+//                                    controller.currentTags = stat
                                     self.navigationController?.pushViewController(controller, animated: true)
-                                }
-                            }
-                        }
+//                                }
+//                            }
+//                        }
                     }
                     let bgColorView = UIView()
-                    bgColorView.backgroundColor = Colours.white
+                    bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                     cell.selectedBackgroundView = bgColorView
                     return cell
                 }
@@ -3575,8 +3695,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userName.textColor = Colours.grayDark
-                    cell.userTag.setTitleColor(Colours.grayDark, for: .normal)
-                    cell.date.textColor = Colours.grayDark
+                    cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+                    cell.date.textColor = Colours.grayDark.withAlphaComponent(0.38)
                     cell.toot.textColor = Colours.grayDark
                     cell.mainImageView.backgroundColor = Colours.white
                     cell.mainImageViewBG.backgroundColor = Colours.white
@@ -3646,18 +3766,18 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                         let controller = HashtagViewController()
                         controller.currentTagTitle = string
-                        let request = Timelines.tag(string)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                DispatchQueue.main.async {
-                                    controller.currentTags = stat
+//                        let request = Timelines.tag(string)
+//                        StoreStruct.client.run(request) { (statuses) in
+//                            if let stat = (statuses.value) {
+//                                DispatchQueue.main.async {
+//                                    controller.currentTags = stat
                                     self.navigationController?.pushViewController(controller, animated: true)
-                                }
-                            }
-                        }
+//                                }
+//                            }
+//                        }
                     }
                     let bgColorView = UIView()
-                    bgColorView.backgroundColor = Colours.white
+                    bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                     cell.selectedBackgroundView = bgColorView
                     return cell
                 }
@@ -3699,18 +3819,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             selection.impactOccurred()
         }
         
-//        let request = Accounts.following(id: self.chosenUser.id)
-//        StoreStruct.client.run(request) { (statuses) in
-//            if let stat = (statuses.value) {
-//                DispatchQueue.main.async {
-                    let controller = FollowersViewController()
-//                    controller.statusFollows = stat
-                    controller.profileStatus = self.chosenUser.id
-                    self.navigationController?.pushViewController(controller, animated: true)
-//                }
-//            }
-//        }
-        
+        let controller = FollowersViewController()
+        controller.profileStatus = self.chosenUser.id
+        self.navigationController?.pushViewController(controller, animated: true)
     }
 
     @objc func touchHeaderImage(_ sender: UIButton) {
@@ -3952,8 +4063,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         StoreStruct.currentImageURL = sto[sender.tag].reblog?.url ?? sto[sender.tag].url
 
         if sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .video || sto[sender.tag].reblog?.mediaAttachments[0].type ?? sto[sender.tag].mediaAttachments[0].type == .gifv {
-
-            let videoURL = URL(string: sto[sender.tag].reblog?.mediaAttachments[0].url ?? sto[sender.tag].mediaAttachments[0].url)!
+            
+            if let videoURL = URL(string: sto[sender.tag].reblog?.mediaAttachments[0].url ?? sto[sender.tag].mediaAttachments[0].url) {
             if (UserDefaults.standard.object(forKey: "vidgif") == nil) || (UserDefaults.standard.object(forKey: "vidgif") as! Int == 0) {
                 XPlayer.play(videoURL)
             } else {
@@ -3964,8 +4075,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     playerViewController.player!.play()
                 }
             }
-
-
+            }
+            
+            
         } else {
 
             let indexPath = IndexPath(row: sender.tag, section: 2)
@@ -4314,7 +4426,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     if let cell = theTable.cellForRow(at:IndexPath(row: sender.tag, section: 2)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -4325,7 +4437,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 2)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -4350,11 +4462,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         }
                         cell.hideSwipe(animated: true)
                     } else {
@@ -4363,11 +4475,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         }
                         cell.hideSwipe(animated: true)
                     }
@@ -4400,7 +4512,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 2)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -4411,7 +4523,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 2)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -4435,11 +4547,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         }
                         cell.hideSwipe(animated: true)
                     } else {
@@ -4448,11 +4560,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         }
                         cell.hideSwipe(animated: true)
                     }
@@ -4524,7 +4636,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 if let cell = tableView.cellForRow(at: indexPath) as? MainFeedCell {
                                     if sto[indexPath.row].reblog?.favourited ?? sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                         cell.moreImage.image = nil
-                                        cell.moreImage.image = UIImage(named: "like")
+                                        cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                                     } else {
                                         cell.moreImage.image = nil
                                     }
@@ -4533,7 +4645,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                                     if sto[indexPath.row].reblog?.favourited ?? sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                         cell.moreImage.image = nil
-                                        cell.moreImage.image = UIImage(named: "like")
+                                        cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                                     } else {
                                         cell.moreImage.image = nil
                                     }
@@ -4553,18 +4665,18 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 if let cell = tableView.cellForRow(at: indexPath) as? MainFeedCell {
                                     if sto[indexPath.row].reblog?.favourited ?? sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                         cell.moreImage.image = nil
-                                        cell.moreImage.image = UIImage(named: "fifty")
+                                        cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                                     } else {
-                                        cell.moreImage.image = UIImage(named: "boost")
+                                        cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                                     }
                                     cell.hideSwipe(animated: true)
                                 } else {
                                     let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                                     if sto[indexPath.row].reblog?.favourited ?? sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                         cell.moreImage.image = nil
-                                        cell.moreImage.image = UIImage(named: "fifty")
+                                        cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                                     } else {
-                                        cell.moreImage.image = UIImage(named: "boost")
+                                        cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                                     }
                                     cell.hideSwipe(animated: true)
                                 }
@@ -4586,7 +4698,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                 }
                 boost.backgroundColor = Colours.white
-                boost.image = UIImage(named: "boost")
+                boost.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                 boost.transitionDelegate = ScaleTransition.default
                 boost.textColor = Colours.tabUnselected
 
@@ -4609,7 +4721,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 if let cell = tableView.cellForRow(at: indexPath) as? MainFeedCell {
                                     if sto[indexPath.row].reblog?.reblogged ?? sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                         cell.moreImage.image = nil
-                                        cell.moreImage.image = UIImage(named: "boost")
+                                        cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                                     } else {
                                         cell.moreImage.image = nil
                                     }
@@ -4618,7 +4730,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                                     if sto[indexPath.row].reblog?.reblogged ?? sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                         cell.moreImage.image = nil
-                                        cell.moreImage.image = UIImage(named: "boost")
+                                        cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                                     } else {
                                         cell.moreImage.image = nil
                                     }
@@ -4637,18 +4749,18 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 if let cell = tableView.cellForRow(at: indexPath) as? MainFeedCell {
                                     if sto[indexPath.row].reblog?.reblogged ?? sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                         cell.moreImage.image = nil
-                                        cell.moreImage.image = UIImage(named: "fifty")
+                                        cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                                     } else {
-                                        cell.moreImage.image = UIImage(named: "like")
+                                        cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                                     }
                                     cell.hideSwipe(animated: true)
                                 } else {
                                     let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                                     if sto[indexPath.row].reblog?.reblogged ?? sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id) {
                                         cell.moreImage.image = nil
-                                        cell.moreImage.image = UIImage(named: "fifty")
+                                        cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                                     } else {
-                                        cell.moreImage.image = UIImage(named: "like")
+                                        cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                                     }
                                     cell.hideSwipe(animated: true)
                                 }
@@ -4671,7 +4783,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     }
                 }
                 like.backgroundColor = Colours.white
-                like.image = UIImage(named: "like")
+                like.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                 like.transitionDelegate = ScaleTransition.default
                 like.textColor = Colours.tabUnselected
 
@@ -4699,7 +4811,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 reply.textColor = Colours.tabUnselected
 
                 if sto[indexPath.row].reblog?.visibility ?? sto[indexPath.row].visibility == .direct {
-                    reply.image = UIImage(named: "direct2")
+                    reply.image = UIImage(named: "direct2")?.maskWithColor(color: Colours.lightBlue)
                     if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
                         return [reply, like]
                     } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 1) {
@@ -4714,7 +4826,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         return [like, reply]
                     }
                 } else {
-                    reply.image = UIImage(named: "reply")
+                    reply.image = UIImage(named: "reply0")?.maskWithColor(color: Colours.lightBlue)
                     if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
                         return [reply, like, boost]
                     } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 1) {
@@ -4809,7 +4921,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                             statusAlert.title = "Unpinned".localized
                                             statusAlert.contentColor = Colours.grayDark
                                             statusAlert.message = "This Toot"
-                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                                 statusAlert.show()
                                             }
                                         }
@@ -4828,7 +4940,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                             statusAlert.title = "Pinned".localized
                                             statusAlert.contentColor = Colours.grayDark
                                             statusAlert.message = "This Toot"
-                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                                 statusAlert.show()
                                             }
                                         }
@@ -4871,7 +4983,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         statusAlert.title = "Deleted".localized
                                         statusAlert.contentColor = Colours.grayDark
                                         statusAlert.message = "Your Toot"
-                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                             statusAlert.show()
                                         }
                                         //sto.remove(at: indexPath.row)
@@ -5062,7 +5174,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     statusAlert.title = "Muted".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                         statusAlert.show()
                                     }
 
@@ -5083,7 +5195,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     statusAlert.title = "Unmuted".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                         statusAlert.show()
                                     }
 
@@ -5110,7 +5222,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     statusAlert.title = "Blocked".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                         statusAlert.show()
                                     }
 
@@ -5131,7 +5243,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     statusAlert.title = "Unblocked".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                         statusAlert.show()
                                     }
 
@@ -5145,7 +5257,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 }
 
                             }
-                            .action(.default("Report".localized), image: UIImage(named: "report")) { (action, ind) in
+                            .action(.default("Report".localized), image: UIImage(named: "flagrep")) { (action, ind) in
                                  
                                 
                                 Alertift.actionSheet()
@@ -5167,7 +5279,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         statusAlert.title = "Reported".localized
                                         statusAlert.contentColor = Colours.grayDark
                                         statusAlert.message = "Harassment"
-                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                             statusAlert.show()
                                         }
 
@@ -5193,7 +5305,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         statusAlert.title = "Reported".localized
                                         statusAlert.contentColor = Colours.grayDark
                                         statusAlert.message = "No Content Warning"
-                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                             statusAlert.show()
                                         }
 
@@ -5219,7 +5331,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         statusAlert.title = "Reported".localized
                                         statusAlert.contentColor = Colours.grayDark
                                         statusAlert.message = "Spam"
-                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                                             statusAlert.show()
                                         }
 
@@ -5424,8 +5536,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        self.tableView.deselectRow(at: indexPath, animated: true)
-
+//        self.tableView.deselectRow(at: indexPath, animated: true)
+        
         var zzz = self.profileStatuses
         if self.currentIndex == 0 {
             zzz = self.profileStatuses
@@ -5504,17 +5616,18 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @objc func refreshCont() {
 
         if self.currentIndex == 0 {
-
-            let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: nil, pinnedOnly: false, excludeReplies: true, excludeReblogs: true, range: .min(id: self.profileStatuses.first?.id ?? "", limit: 5000))
+            
+            let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: nil, pinnedOnly: false, excludeReplies: true, excludeReblogs: true, range: .since(id: self.profileStatuses.first?.id ?? "", limit: 5000))
             //        DispatchQueue.global(qos: .userInitiated).async {
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
                     
                     DispatchQueue.main.async {
+                        self.tableView.cr.endHeaderRefresh()
                         if stat.count > 0 {
                             self.profileStatuses = stat + self.profileStatuses
                             self.profileStatuses = self.profileStatuses.removeDuplicates()
-                            self.tableView.cr.endHeaderRefresh()
+//                            self.tableView.cr.endHeaderRefresh()
                             self.tableView.reloadData()
                         }
                     }
@@ -5530,17 +5643,18 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             } else {
                 zzz = true
             }
-
-            let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: nil, pinnedOnly: false, excludeReplies: false, excludeReblogs: zzz, range: .min(id: self.profileStatuses2.first?.id ?? "", limit: 5000))
+            
+            let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: nil, pinnedOnly: false, excludeReplies: false, excludeReblogs: zzz, range: .since(id: self.profileStatuses2.first?.id ?? "", limit: 5000))
             //            DispatchQueue.global(qos: .userInitiated).async {
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
                     
                     DispatchQueue.main.async {
+                        self.tableView.cr.endHeaderRefresh()
                         if stat.count > 0 {
                             self.profileStatuses2 = stat + self.profileStatuses2
                             self.profileStatuses2 = self.profileStatuses2.removeDuplicates()
-                            self.tableView.cr.endHeaderRefresh()
+//                            self.tableView.cr.endHeaderRefresh()
                             self.tableView.reloadData()
                         }
                     }
@@ -5621,6 +5735,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
         
 //        self.navigationController?.navigationBar.barTintColor = Colours.grayDark
 //        self.navigationController?.navigationBar.tintColor = Colours.grayDark

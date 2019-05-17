@@ -169,26 +169,26 @@ class NotificationCell: SwipeTableViewCell {
             "more1" : more1,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-20-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-10-|", options: [], metrics: nil, views: viewsDict))
 //        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[artist]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[episodes]-10-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[type(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
             
             if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
             } else {
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-15-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-15-[like1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-15-[boost1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-15-[more1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[like1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[boost1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[more1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-107-[rep1(36)]-20-[like1(40)]-11-[boost1(34)]-24-[more1(20)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
             }
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-0-[episodes]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-101-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-101-[warning]-7-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
     }
 
@@ -309,7 +309,7 @@ class NotificationCell: SwipeTableViewCell {
             userName.text = "\(status.account.displayName) mentioned you"
             if status.status?.visibility == .direct {
                 self.boost1.alpha = 0
-                typeImage.setImage(UIImage(named: "direct")?.maskWithColor(color: Colours.purple), for: .normal)
+                typeImage.setImage(UIImage(named: "direct")?.maskWithColor(color: Colours.lightBlue), for: .normal)
             } else if status.status?.visibility == .unlisted {
                 typeImage.setImage(UIImage(named: "rep4"), for: .normal)
             } else if status.status?.visibility == .private {
@@ -325,7 +325,7 @@ class NotificationCell: SwipeTableViewCell {
             more1.alpha = 0
             profileImageView.isUserInteractionEnabled = false
             userName.text = "\(status.account.displayName) followed you"
-            typeImage.setImage(UIImage(named: "follow3")?.maskWithColor(color: UIColor(red: 100/255.0, green: 210/255.0, blue: 110/255.0, alpha: 1.0)), for: .normal)
+            typeImage.setImage(UIImage(named: "follow3")?.maskWithColor(color: Colours.redBright), for: .normal)
             if (UserDefaults.standard.object(forKey: "subtleToggle") == nil) || (UserDefaults.standard.object(forKey: "subtleToggle") as! Int == 0) {
                 toot.textColor = Colours.black
                 userName.textColor = Colours.black
@@ -372,6 +372,7 @@ class NotificationCell: SwipeTableViewCell {
                     attributedString.replaceCharacters(in: range, with: attrStringWithImage)
                 }
             })
+            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
             self.toot.attributedText = attributedString
             self.reloadInputViews()
         }
@@ -394,6 +395,7 @@ class NotificationCell: SwipeTableViewCell {
                     attributedString.replaceCharacters(in: range, with: attrStringWithImage)
                 }
             })
+            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
             self.userName.attributedText = attributedString
             self.reloadInputViews()
         }
@@ -426,18 +428,23 @@ class NotificationCell: SwipeTableViewCell {
         }
 
         if (status.status?.favourited ?? false) && (status.status?.reblogged ?? false) {
-            self.moreImage.image = UIImage(named: "fifty")
+            self.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
+            StoreStruct.allLikes.append(status.status?.id ?? "")
+            StoreStruct.allBoosts.append(status.status?.id ?? "")
         } else if status.status?.reblogged ?? false {
-            self.moreImage.image = UIImage(named: "boost")
+            self.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
+            StoreStruct.allBoosts.append(status.status?.id ?? "")
         } else if (status.status?.favourited ?? false) || StoreStruct.allLikes.contains(status.id) {
-            self.moreImage.image = UIImage(named: "like")
+            self.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
+            StoreStruct.allLikes.append(status.status?.id ?? "")
         } else {
             self.moreImage.image = nil
         }
-
-
-
-
+        
+        StoreStruct.allLikes = StoreStruct.allLikes.removeDuplicates()
+        StoreStruct.allBoosts = StoreStruct.allBoosts.removeDuplicates()
+        
+        
         if (UserDefaults.standard.object(forKey: "senseTog") == nil) || (UserDefaults.standard.object(forKey: "senseTog") as! Int == 0) {
 
             if status.status?.reblog?.sensitive ?? false || status.status?.sensitive ?? false {
@@ -461,9 +468,56 @@ class NotificationCell: SwipeTableViewCell {
             warningB.backgroundColor = Colours.clear
             warningB.alpha = 0
         }
-
-
-
+        
+    }
+    
+    func configure0(_ status: Notificationt) {
+        if (status.status?.favourited ?? false) && (status.status?.reblogged ?? false) {
+            self.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
+            StoreStruct.allLikes.append(status.status?.id ?? "")
+            StoreStruct.allBoosts.append(status.status?.id ?? "")
+        } else if status.status?.reblogged ?? false {
+            self.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
+            StoreStruct.allBoosts.append(status.status?.id ?? "")
+        } else if (status.status?.favourited ?? false) || StoreStruct.allLikes.contains(status.id) {
+            self.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
+            StoreStruct.allLikes.append(status.status?.id ?? "")
+        } else {
+            self.moreImage.image = nil
+        }
+        
+        StoreStruct.allLikes = StoreStruct.allLikes.removeDuplicates()
+        StoreStruct.allBoosts = StoreStruct.allBoosts.removeDuplicates()
+        
+        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {} else {
+            var repc1 = "\(status.status?.reblog?.repliesCount ?? status.status?.repliesCount ?? 0)"
+            if repc1 == "0" {
+                repc1 = ""
+            }
+            var likec1 = "\(status.status?.reblog?.favouritesCount ?? status.status?.favouritesCount ?? 0)"
+            if likec1 == "0" {
+                likec1 = ""
+            }
+            var boostc1 = "\(status.status?.reblog?.reblogsCount ?? status.status?.reblogsCount ?? 0)"
+            if boostc1 == "0" {
+                boostc1 = ""
+            }
+            rep1.setTitle(repc1, for: .normal)
+            rep1.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
+            rep1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            rep1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+            rep1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+            like1.setTitle(likec1, for: .normal)
+            like1.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
+            like1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            like1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+            like1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+            boost1.setTitle(boostc1, for: .normal)
+            boost1.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
+            boost1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            boost1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+            boost1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+        }
     }
 
     @objc func didTouchWarning() {

@@ -39,7 +39,9 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        //self.ai.startAnimating()
+        if let indexPath = tableView.indexPathForSelectedRow {
+            self.tableView.deselectRow(at: indexPath, animated: true)
+        }
     }
     
     
@@ -93,7 +95,7 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
         
         self.tableView.register(ScheduledCell.self, forCellReuseIdentifier: "ScheduledCell")
         self.tableView.register(ScheduledCellImage.self, forCellReuseIdentifier: "ScheduledCellImage")
-        self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+        self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         self.tableView.alpha = 1
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -148,7 +150,7 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
+        title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 30)
         if self.statuses.count == 0 {
             title.text = "No Scheduled Toots"
         } else {
@@ -175,7 +177,7 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
             let cell = tableView.dequeueReusableCell(withIdentifier: "ScheduledCell", for: indexPath) as! ScheduledCell
             cell.backgroundColor = Colours.white
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else {
@@ -187,7 +189,7 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
                 cell.userName.textColor = Colours.grayDark.withAlphaComponent(0.38)
                 cell.toot.textColor = Colours.black
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             } else {
@@ -201,7 +203,7 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
                 cell.mainImageView.backgroundColor = Colours.white
                 cell.mainImageViewBG.backgroundColor = Colours.white
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             }
@@ -291,7 +293,7 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.tableView.deselectRow(at: indexPath, animated: true)
+//        self.tableView.deselectRow(at: indexPath, animated: true)
         
         Alertift.actionSheet(title: nil, message: nil)
             .backgroundColor(Colours.white)
@@ -308,7 +310,7 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
                     statusAlert.title = "Deleted".localized
                     statusAlert.contentColor = Colours.grayDark
                     statusAlert.message = "Not scheduled anymore"
-                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                     
@@ -430,6 +432,12 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
         
         self.view.backgroundColor = Colours.white
         

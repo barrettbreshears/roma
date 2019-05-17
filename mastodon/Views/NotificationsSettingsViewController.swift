@@ -66,11 +66,11 @@ class NotificationsSettingsViewController: UIViewController, UITableViewDelegate
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         case .pad:
             self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
         default:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         }
         self.tableView.register(SettingsCellToggle.self, forCellReuseIdentifier: "cellse2")
         self.tableView.alpha = 1
@@ -147,7 +147,7 @@ class NotificationsSettingsViewController: UIViewController, UITableViewDelegate
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
+        title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 30)
         if section == 0 {
             title.text = "Push Notifications".localized
         } else {
@@ -175,40 +175,40 @@ class NotificationsSettingsViewController: UIViewController, UITableViewDelegate
     
     @objc func handleToggle1(sender: UISwitch) {
         if sender.isOn {
-            UserDefaults.standard.set(0, forKey: "pnmentions")
+            UserDefaults.standard.set(true, forKey: "pnmentions")
             sender.setOn(true, animated: true)
         } else {
-            UserDefaults.standard.set(1, forKey: "pnmentions")
+            UserDefaults.standard.set(false, forKey: "pnmentions")
             sender.setOn(false, animated: true)
         }
     }
     
     @objc func handleToggle2(sender: UISwitch) {
         if sender.isOn {
-            UserDefaults.standard.set(0, forKey: "pnlikes")
+            UserDefaults.standard.set(true, forKey: "pnlikes")
             sender.setOn(true, animated: true)
         } else {
-            UserDefaults.standard.set(1, forKey: "pnlikes")
+            UserDefaults.standard.set(false, forKey: "pnlikes")
             sender.setOn(false, animated: true)
         }
     }
     
     @objc func handleToggle3(sender: UISwitch) {
         if sender.isOn {
-            UserDefaults.standard.set(0, forKey: "pnboosts")
+            UserDefaults.standard.set(true, forKey: "pnboosts")
             sender.setOn(true, animated: true)
         } else {
-            UserDefaults.standard.set(1, forKey: "pnboosts")
+            UserDefaults.standard.set(false, forKey: "pnboosts")
             sender.setOn(false, animated: true)
         }
     }
     
     @objc func handleToggle4(sender: UISwitch) {
         if sender.isOn {
-            UserDefaults.standard.set(0, forKey: "pnfollows")
+            UserDefaults.standard.set(true, forKey: "pnfollows")
             sender.setOn(true, animated: true)
         } else {
-            UserDefaults.standard.set(1, forKey: "pnfollows")
+            UserDefaults.standard.set(false, forKey: "pnfollows")
             sender.setOn(false, animated: true)
         }
     }
@@ -293,14 +293,14 @@ class NotificationsSettingsViewController: UIViewController, UITableViewDelegate
             bgColorView.backgroundColor = Colours.white
             cell.selectedBackgroundView = bgColorView
             if indexPath.row == 0 {
-                if (UserDefaults.standard.object(forKey: "badgeMent") == nil) || (UserDefaults.standard.object(forKey: "badgeMent") as! Bool == true) {
+                if (UserDefaults.standard.object(forKey: "badgeMent") == nil) || (UserDefaults.standard.object(forKey: "badgeMent") as! Int == 0) {
                     cell.switchView.setOn(true, animated: false)
                 } else {
                     cell.switchView.setOn(false, animated: false)
                 }
                 cell.switchView.addTarget(self, action: #selector(self.handleToggleBadgeMent), for: .touchUpInside)
             } else {
-                if (UserDefaults.standard.object(forKey: "badgeMentd") == nil) || (UserDefaults.standard.object(forKey: "badgeMentd") as! Bool == true) {
+                if (UserDefaults.standard.object(forKey: "badgeMentd") == nil) || (UserDefaults.standard.object(forKey: "badgeMentd") as! Int == 0) {
                     cell.switchView.setOn(true, animated: false)
                 } else {
                     cell.switchView.setOn(false, animated: false)
@@ -385,6 +385,12 @@ class NotificationsSettingsViewController: UIViewController, UITableViewDelegate
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
         
         self.view.backgroundColor = Colours.white
         

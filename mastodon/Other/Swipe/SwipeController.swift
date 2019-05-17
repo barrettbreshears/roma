@@ -315,9 +315,9 @@ class SwipeController: NSObject {
         
         switch actionsView.orientation {
         case .left:
-            return (velocity.x < 0 && !actionsView.expanded) ? .center : .left
+            return (velocity.x < 1 && !actionsView.expanded) ? .center : .left
         case .right:
-            return (velocity.x > 0 && !actionsView.expanded) ? .center : .right
+            return (velocity.x > 1 && !actionsView.expanded) ? .center : .right
         }
     }
     

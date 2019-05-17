@@ -84,7 +84,7 @@ class NotificationCellImage: SwipeTableViewCell {
         mainImageViewBG.layer.shadowColor = UIColor.black.cgColor
 //        mainImageViewBG.layer.shadowOffset = CGSize(width: 0, height: 7)
         mainImageViewBG.layer.shadowRadius = 10
-        mainImageViewBG.layer.shadowOpacity = 0.5
+        mainImageViewBG.layer.shadowOpacity = 0.38
         mainImageViewBG.layer.masksToBounds = false
         
         if (UserDefaults.standard.object(forKey: "depthToggle") == nil) || (UserDefaults.standard.object(forKey: "depthToggle") as! Int == 0) {
@@ -244,34 +244,34 @@ class NotificationCellImage: SwipeTableViewCell {
             "more1" : more1,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-20-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-10-|", options: [], metrics: nil, views: viewsDict))
 //        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[artist]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-107-[mainImage]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-117-[mainImageBG]-30-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[episodes]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-107-[mainImage]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-117-[mainImageBG]-20-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[type(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
             
             
             if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-10-[mainImage(160)]-23-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-10-[mainImageBG(160)]-23-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImageBG(160)]-23-|", options: [], metrics: nil, views: viewsDict))
             } else {
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-10-[mainImageBG(160)]-23-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-10-[mainImage(160)]-23-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-10-[mainImage(160)]-23-[like1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-10-[mainImage(160)]-23-[boost1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-10-[mainImage(160)]-23-[more1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImageBG(160)]-23-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-[like1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-[boost1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-[more1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-107-[rep1(36)]-20-[like1(40)]-11-[boost1(34)]-24-[more1(20)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
             }
-
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-0-[episodes]-10-[mainImage(160)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-101-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-101-[warning]-7-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
     }
 
@@ -290,9 +290,9 @@ class NotificationCellImage: SwipeTableViewCell {
 
     override func prepareForReuse() {
         self.profileImageView.imageView?.image = nil
-        self.mainImageView.imageView?.image = nil
-        self.mainImageView.imageView?.image = UIImage()
-        self.mainImageView.pin_clearImages()
+//        self.mainImageView.imageView?.image = nil
+//        self.mainImageView.imageView?.image = UIImage()
+//        self.mainImageView.pin_clearImages()
         self.smallImage1.imageView?.image = nil
         self.smallImage2.imageView?.image = nil
         self.smallImage3.imageView?.image = nil
@@ -400,7 +400,7 @@ class NotificationCellImage: SwipeTableViewCell {
             date.textColor = Colours.grayDark.withAlphaComponent(0.38)
             userName.text = "\(status.account.displayName) mentioned you"
             if status.status?.visibility == .direct {
-                typeImage.setImage(UIImage(named: "direct")?.maskWithColor(color: Colours.purple), for: .normal)
+                typeImage.setImage(UIImage(named: "direct")?.maskWithColor(color: Colours.lightBlue), for: .normal)
             } else if status.status?.visibility == .unlisted {
                 typeImage.setImage(UIImage(named: "rep4"), for: .normal)
             } else if status.status?.visibility == .private {
@@ -412,7 +412,7 @@ class NotificationCellImage: SwipeTableViewCell {
         if status.type == .follow {
             profileImageView.isUserInteractionEnabled = false
             userName.text = "\(status.account.displayName) followed you"
-            typeImage.setImage(UIImage(named: "follow3")?.maskWithColor(color: UIColor(red: 100/255.0, green: 210/255.0, blue: 110/255.0, alpha: 1.0)), for: .normal)
+            typeImage.setImage(UIImage(named: "follow3")?.maskWithColor(color: Colours.redBright), for: .normal)
             //toot.textColor = Colours.black.withAlphaComponent(0.3)
             if (UserDefaults.standard.object(forKey: "subtleToggle") == nil) || (UserDefaults.standard.object(forKey: "subtleToggle") as! Int == 0) {
                 toot.textColor = Colours.black
@@ -460,6 +460,7 @@ class NotificationCellImage: SwipeTableViewCell {
                     attributedString.replaceCharacters(in: range, with: attrStringWithImage)
                 }
             })
+            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
             self.toot.attributedText = attributedString
             self.reloadInputViews()
         }
@@ -484,6 +485,7 @@ class NotificationCellImage: SwipeTableViewCell {
                     attributedString.replaceCharacters(in: range, with: attrStringWithImage)
                 }
             })
+            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
             self.userName.attributedText = attributedString
             self.reloadInputViews()
         }
@@ -527,14 +529,21 @@ class NotificationCellImage: SwipeTableViewCell {
         //mainImageView.layer.borderWidth = 0.2
 
         if (status.status?.favourited ?? false) && (status.status?.reblogged ?? false) {
-            self.moreImage.image = UIImage(named: "fifty")
+            self.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
+            StoreStruct.allLikes.append(status.status?.id ?? "")
+            StoreStruct.allBoosts.append(status.status?.id ?? "")
         } else if status.status?.reblogged ?? false {
-            self.moreImage.image = UIImage(named: "boost")
+            self.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
+            StoreStruct.allBoosts.append(status.status?.id ?? "")
         } else if (status.status?.favourited ?? false) || StoreStruct.allLikes.contains(status.id) {
-            self.moreImage.image = UIImage(named: "like")
+            self.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
+            StoreStruct.allLikes.append(status.status?.id ?? "")
         } else {
             self.moreImage.image = nil
         }
+        
+        StoreStruct.allLikes = StoreStruct.allLikes.removeDuplicates()
+        StoreStruct.allBoosts = StoreStruct.allBoosts.removeDuplicates()
         
         
         self.smallImage1.alpha = 0
@@ -569,6 +578,7 @@ class NotificationCellImage: SwipeTableViewCell {
             imageCountTag.alpha = 1
         } else if status.status?.reblog?.mediaAttachments.count ?? status.status?.mediaAttachments.count ?? 0 > 1 && (UIApplication.shared.isSplitOrSlideOver || UIDevice.current.userInterfaceIdiom == .phone) {
             self.mainImageView.imageView?.image = nil
+            self.mainImageView.setImage(nil, for: .normal)
 //            self.mainImageView.imageView?.image = UIImage()
             if status.status?.reblog?.mediaAttachments.count ?? status.status?.mediaAttachments.count == 2 {
                 self.smallImage1.frame = CGRect(x: -2, y: 0, width: (UIScreen.main.bounds.width - 127)/2, height: 200)
@@ -745,7 +755,56 @@ class NotificationCellImage: SwipeTableViewCell {
 
 
     }
-
+    
+    func configure0(_ status: Notificationt) {
+        if (status.status?.favourited ?? false) && (status.status?.reblogged ?? false) {
+            self.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
+            StoreStruct.allLikes.append(status.status?.id ?? "")
+            StoreStruct.allBoosts.append(status.status?.id ?? "")
+        } else if status.status?.reblogged ?? false {
+            self.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
+            StoreStruct.allBoosts.append(status.status?.id ?? "")
+        } else if (status.status?.favourited ?? false) || StoreStruct.allLikes.contains(status.id) {
+            self.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
+            StoreStruct.allLikes.append(status.status?.id ?? "")
+        } else {
+            self.moreImage.image = nil
+        }
+        
+        StoreStruct.allLikes = StoreStruct.allLikes.removeDuplicates()
+        StoreStruct.allBoosts = StoreStruct.allBoosts.removeDuplicates()
+        
+        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {} else {
+            var repc1 = "\(status.status?.reblog?.repliesCount ?? status.status?.repliesCount ?? 0)"
+            if repc1 == "0" {
+                repc1 = ""
+            }
+            var likec1 = "\(status.status?.reblog?.favouritesCount ?? status.status?.favouritesCount ?? 0)"
+            if likec1 == "0" {
+                likec1 = ""
+            }
+            var boostc1 = "\(status.status?.reblog?.reblogsCount ?? status.status?.reblogsCount ?? 0)"
+            if boostc1 == "0" {
+                boostc1 = ""
+            }
+            rep1.setTitle(repc1, for: .normal)
+            rep1.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
+            rep1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            rep1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+            rep1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+            like1.setTitle(likec1, for: .normal)
+            like1.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
+            like1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            like1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+            like1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+            boost1.setTitle(boostc1, for: .normal)
+            boost1.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
+            boost1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            boost1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+            boost1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+        }
+    }
+    
     @objc func didTouchWarning() {
         warningB.backgroundColor = Colours.clear
         warningB.alpha = 0

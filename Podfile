@@ -27,5 +27,6 @@ pod 'Firebase/Core'
 pod 'Fabric'
 pod 'MessageKit'
 pod 'TesseractOCRiOS'
+pod 'CropViewController'
 
 end

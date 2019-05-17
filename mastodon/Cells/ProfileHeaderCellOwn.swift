@@ -31,7 +31,7 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         profileImageView.backgroundColor = Colours.white
-        headerImageView.backgroundColor = Colours.white
+        headerImageView.backgroundColor = Colours.tabUnselected
         more.backgroundColor = UIColor.clear
         settings.backgroundColor = UIColor.clear
         settings2.backgroundColor = UIColor.clear
@@ -133,10 +133,10 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
         contentView.addSubview(toot)
         contentView.addSubview(more)
         contentView.addSubview(settings)
-        contentView.addSubview(settings2)
         contentView.addSubview(tagListView)
         contentView.addSubview(follows)
         contentView.addSubview(profileImageView)
+        contentView.addSubview(settings2)
         
         let viewsDict = [
             "bgDark" : bgDark,
@@ -154,12 +154,12 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
             ]
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[header]|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=20)-[settings(40)]-28-[image(100)]-28-[more(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[date]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[name]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[artist]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[follows]-20-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=10)-[settings(40)]-28-[image(100)]-28-[more(40)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[episodes]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[date]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[name]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[artist]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[follows]-10-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-60-[more(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-60-[settings(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[image(100)]-50-[name]-4-[artist]-11-[episodes]-9-[follows]-4-[date]-10-[tagListView(60)]-10-|", options: [], metrics: nil, views: viewsDict))
@@ -168,7 +168,7 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[bgDark]|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[image(100)]-30-[bgDark]-0-|", options: [], metrics: nil, views: viewsDict))
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=20)-[settings(40)]-93-[settings2(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=10)-[settings(40)]-93-[settings2(40)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-95-[settings2(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[tagListView]-0-|", options: [], metrics: nil, views: viewsDict))
         
@@ -208,19 +208,21 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
         }
         
         
-        profileImageView.layer.zPosition = 1000
+        profileImageView.layer.zPosition = 999
+        settings2.layer.zPosition = 1000
         bgDark.isUserInteractionEnabled = false
         
         bgDark.backgroundColor = Colours.white
         toot.mentionColor = Colours.grayDark.withAlphaComponent(0.7)
         toot.hashtagColor = Colours.grayDark.withAlphaComponent(0.7)
         toot.URLColor = Colours.grayDark.withAlphaComponent(0.7)
-        headerImageView.backgroundColor = Colours.white
+        headerImageView.backgroundColor = Colours.tabUnselected
         userName.textColor = Colours.grayDark
         userTag.textColor = Colours.grayDark.withAlphaComponent(0.7)
         date.textColor = Colours.grayDark.withAlphaComponent(0.7)
         toot.textColor = Colours.grayDark
         follows.titleLabel?.textColor = Colours.tabSelected
+        follows.setTitleColor(Colours.tabSelected, for: .normal)
         
         blurEffectView.removeFromSuperview()
         if (UserDefaults.standard.object(forKey: "headbg1") == nil) || (UserDefaults.standard.object(forKey: "headbg1") as! Int == 0) {
@@ -352,7 +354,7 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
         numberFormatter2.numberStyle = NumberFormatter.Style.decimal
         let formattedNumber2 = numberFormatter2.string(from: NSNumber(value: status.followersCount))
         
-        follows.setTitle("\(formattedNumber ?? "0") follows     \(formattedNumber2 ?? "0") followers", for: .normal)
+        follows.setTitle("\(formattedNumber2 ?? "0") followers     \(formattedNumber ?? "0") following", for: .normal)
         
         more.setImage(UIImage(named: "more4"), for: .normal)
         settings.backgroundColor = UIColor.white
@@ -417,7 +419,7 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         profileImageView.backgroundColor = Colours.white
-        headerImageView.backgroundColor = Colours.white
+        headerImageView.backgroundColor = Colours.tabUnselected
         more.backgroundColor = UIColor.clear
         settings.backgroundColor = UIColor.clear
         settings2.backgroundColor = UIColor.clear
@@ -499,9 +501,9 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
         contentView.addSubview(toot)
         contentView.addSubview(more)
         contentView.addSubview(settings)
-        contentView.addSubview(settings2)
         contentView.addSubview(follows)
         contentView.addSubview(profileImageView)
+        contentView.addSubview(settings2)
         
         let viewsDict = [
             "bgDark" : bgDark,
@@ -518,12 +520,12 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
             ]
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[header]|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=20)-[settings(40)]-28-[image(100)]-28-[more(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[date]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[name]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[artist]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[follows]-20-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=10)-[settings(40)]-28-[image(100)]-28-[more(40)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[episodes]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[date]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[name]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[artist]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[follows]-10-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-60-[more(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-60-[settings(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[image(100)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
@@ -533,7 +535,7 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[bgDark]|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[image(100)]-30-[bgDark]-0-|", options: [], metrics: nil, views: viewsDict))
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=20)-[settings(40)]-93-[settings2(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=10)-[settings(40)]-93-[settings2(40)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-95-[settings2(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         
         
@@ -554,12 +556,14 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
     
     func configure(_ status: Account) {
         
+        profileImageView.layer.zPosition = 999
+        settings2.layer.zPosition = 1000
         bgDark.isUserInteractionEnabled = false
         
         toot.mentionColor = Colours.grayDark.withAlphaComponent(0.7)
         toot.hashtagColor = Colours.grayDark.withAlphaComponent(0.7)
         toot.URLColor = Colours.grayDark.withAlphaComponent(0.7)
-        headerImageView.backgroundColor = Colours.white
+        headerImageView.backgroundColor = Colours.tabUnselected
         
         bgDark.backgroundColor = Colours.white
         userName.textColor = Colours.grayDark
@@ -567,6 +571,7 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
         date.textColor = Colours.grayDark.withAlphaComponent(0.7)
         toot.textColor = Colours.grayDark
         follows.titleLabel?.textColor = Colours.tabSelected
+        follows.setTitleColor(Colours.tabSelected, for: .normal)
         
         blurEffectView.removeFromSuperview()
         if (UserDefaults.standard.object(forKey: "headbg1") == nil) || (UserDefaults.standard.object(forKey: "headbg1") as! Int == 0) {
@@ -659,7 +664,7 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
         numberFormatter2.numberStyle = NumberFormatter.Style.decimal
         let formattedNumber2 = numberFormatter2.string(from: NSNumber(value: status.followersCount))
         
-        follows.setTitle("\(formattedNumber ?? "0") follows     \(formattedNumber2 ?? "0") followers", for: .normal)
+        follows.setTitle("\(formattedNumber2 ?? "0") followers     \(formattedNumber ?? "0") following", for: .normal)
         
         more.setImage(UIImage(named: "more4"), for: .normal)
         settings.backgroundColor = UIColor.white

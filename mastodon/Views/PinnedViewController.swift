@@ -74,6 +74,10 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
+//        if let indexPath = tableView.indexPathForSelectedRow {
+//            self.tableView.deselectRow(at: indexPath, animated: true)
+//        }
+        
         self.ai.startAnimating()
     }
     
@@ -184,7 +188,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
         
-        self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+        self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         self.tableView.register(MainFeedCell.self, forCellReuseIdentifier: "cell")
         self.tableView.register(MainFeedCellImage.self, forCellReuseIdentifier: "cell2")
         self.tableView.alpha = 1
@@ -211,6 +215,23 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
+        
+        if let indexPath = tableView.indexPathForSelectedRow {
+            self.tableView.deselectRow(at: indexPath, animated: true)
+            let request = Statuses.status(id: self.currentTags[indexPath.row].reblog?.id ?? self.currentTags[indexPath.row].id)
+            StoreStruct.client.run(request) { (statuses) in
+                if let stat = (statuses.value) {
+                    DispatchQueue.main.async {
+                        if let cell = self.tableView.cellForRow(at: indexPath) as? MainFeedCell {
+                            cell.configure0(stat)
+                        }
+                        if let cell2 = self.tableView.cellForRow(at: indexPath) as? MainFeedCellImage {
+                            cell2.configure0(stat)
+                        }
+                    }
+                }
+            }
+        }
         
         self.fetchMoreHome()
         
@@ -245,7 +266,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
             self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
             
-            let request = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: nil, pinnedOnly: true, excludeReplies: nil, excludeReblogs: false, range: .min(id: "", limit: 5000))
+            let request = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: nil, pinnedOnly: true, excludeReplies: nil, excludeReblogs: false, range: .since(id: "", limit: 5000))
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
                     DispatchQueue.main.async {
@@ -272,7 +293,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
+        title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 30)
         if self.currentTags.count == 0 {
             title.text = "No Pinned Statuses"
         } else {
@@ -300,12 +321,12 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! MainFeedCell
             cell.backgroundColor = Colours.white
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else {
             
-        if indexPath.row == self.currentTags.count - 14 {
+        if indexPath.row == self.currentTags.count - 1 {
             self.fetchMoreHome()
         }
         if self.currentTags[indexPath.row].mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
@@ -397,18 +418,18 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 
                 let controller = HashtagViewController()
                 controller.currentTagTitle = string
-                let request = Timelines.tag(string)
-                StoreStruct.client.run(request) { (statuses) in
-                    if let stat = (statuses.value) {
-                        DispatchQueue.main.async {
-                            controller.currentTags = stat
+//                let request = Timelines.tag(string)
+//                StoreStruct.client.run(request) { (statuses) in
+//                    if let stat = (statuses.value) {
+//                        DispatchQueue.main.async {
+//                            controller.currentTags = stat
                             self.navigationController?.pushViewController(controller, animated: true)
-                        }
-                    }
-                }
+//                        }
+//                    }
+//                }
             }
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else {
@@ -512,18 +533,18 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 
                 let controller = HashtagViewController()
                 controller.currentTagTitle = string
-                let request = Timelines.tag(string)
-                StoreStruct.client.run(request) { (statuses) in
-                    if let stat = (statuses.value) {
-                        DispatchQueue.main.async {
-                            controller.currentTags = stat
+//                let request = Timelines.tag(string)
+//                StoreStruct.client.run(request) { (statuses) in
+//                    if let stat = (statuses.value) {
+//                        DispatchQueue.main.async {
+//                            controller.currentTags = stat
                             self.navigationController?.pushViewController(controller, animated: true)
-                        }
-                    }
-                }
+//                        }
+//                    }
+//                }
             }
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         }
@@ -898,7 +919,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     if let cell = theTable.cellForRow(at:IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -909,7 +930,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -934,11 +955,11 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         }
                         cell.hideSwipe(animated: true)
                     } else {
@@ -947,11 +968,11 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         }
                         cell.hideSwipe(animated: true)
                     }
@@ -979,7 +1000,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -990,7 +1011,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "boost")
+                            cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         } else {
                             cell.moreImage.image = nil
                         }
@@ -1014,11 +1035,11 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         }
                         cell.hideSwipe(animated: true)
                     } else {
@@ -1027,11 +1048,11 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
-                            cell.moreImage.image = UIImage(named: "fifty")
+                            cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
                             cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
                             cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
-                            cell.moreImage.image = UIImage(named: "like")
+                            cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         }
                         cell.hideSwipe(animated: true)
                     }
@@ -1102,7 +1123,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             if let cell = tableView.cellForRow(at: indexPath) as? MainFeedCell {
                                 if sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "like")
+                                    cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                                 } else {
                                     cell.moreImage.image = nil
                                 }
@@ -1111,7 +1132,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                                 if sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "like")
+                                    cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                                 } else {
                                     cell.moreImage.image = nil
                                 }
@@ -1131,18 +1152,18 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             if let cell = tableView.cellForRow(at: indexPath) as? MainFeedCell {
                                 if sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "fifty")
+                                    cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                                 } else {
-                                    cell.moreImage.image = UIImage(named: "boost")
+                                    cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                                 }
                                 cell.hideSwipe(animated: true)
                             } else {
                                 let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                                 if sto[indexPath.row].favourited ?? false || StoreStruct.allLikes.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "fifty")
+                                    cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                                 } else {
-                                    cell.moreImage.image = UIImage(named: "boost")
+                                    cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                                 }
                                 cell.hideSwipe(animated: true)
                             }
@@ -1164,7 +1185,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
             }
             boost.backgroundColor = Colours.white
-            boost.image = UIImage(named: "boost")
+            boost.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
             boost.transitionDelegate = ScaleTransition.default
             boost.textColor = Colours.tabUnselected
             
@@ -1187,7 +1208,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             if let cell = tableView.cellForRow(at: indexPath) as? MainFeedCell {
                                 if sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "boost")
+                                    cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                                 } else {
                                     cell.moreImage.image = nil
                                 }
@@ -1196,7 +1217,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                                 if sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "boost")
+                                    cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                                 } else {
                                     cell.moreImage.image = nil
                                 }
@@ -1215,18 +1236,18 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             if let cell = tableView.cellForRow(at: indexPath) as? MainFeedCell {
                                 if sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "fifty")
+                                    cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                                 } else {
-                                    cell.moreImage.image = UIImage(named: "like")
+                                    cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                                 }
                                 cell.hideSwipe(animated: true)
                             } else {
                                 let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
                                 if sto[indexPath.row].reblogged ?? false || StoreStruct.allBoosts.contains(sto[indexPath.row].id) {
                                     cell.moreImage.image = nil
-                                    cell.moreImage.image = UIImage(named: "fifty")
+                                    cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                                 } else {
-                                    cell.moreImage.image = UIImage(named: "like")
+                                    cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                                 }
                                 cell.hideSwipe(animated: true)
                             }
@@ -1249,7 +1270,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
             }
             like.backgroundColor = Colours.white
-            like.image = UIImage(named: "like")
+            like.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
             like.transitionDelegate = ScaleTransition.default
             like.textColor = Colours.tabUnselected
             
@@ -1277,7 +1298,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
             reply.textColor = Colours.tabUnselected
             
             if sto[indexPath.row].reblog?.visibility ?? sto[indexPath.row].visibility == .direct {
-                reply.image = UIImage(named: "direct2")
+                reply.image = UIImage(named: "direct2")?.maskWithColor(color: Colours.lightBlue)
                 if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
                     return [reply, like]
                 } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 1) {
@@ -1292,7 +1313,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     return [like, reply]
                 }
             } else {
-                reply.image = UIImage(named: "reply")
+                reply.image = UIImage(named: "reply0")?.maskWithColor(color: Colours.lightBlue)
                 if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
                     return [reply, like, boost]
                 } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 1) {
@@ -1387,7 +1408,9 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                         statusAlert.title = "Unpinned".localized
                                         statusAlert.contentColor = Colours.grayDark
                                         statusAlert.message = "This Status"
-                                        statusAlert.show()
+                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                        statusAlert.show()
+                    }
                                     }
                                 }
                             } else {
@@ -1404,7 +1427,9 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                         statusAlert.title = "Pinned".localized
                                         statusAlert.contentColor = Colours.grayDark
                                         statusAlert.message = "This Status"
-                                        statusAlert.show()
+                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                        statusAlert.show()
+                    }
                                     }
                                 }
                             }
@@ -1440,7 +1465,9 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     statusAlert.title = "Deleted".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Your Status"
-                                    statusAlert.show()
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                        statusAlert.show()
+                    }
                                     //sto.remove(at: indexPath.row)
                                     //self.tableView.reloadData()
                                 }
@@ -1626,7 +1653,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 statusAlert.title = "Muted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 
@@ -1647,7 +1674,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 statusAlert.title = "Unmuted".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 
@@ -1674,7 +1701,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 statusAlert.title = "Blocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 
@@ -1695,7 +1722,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 statusAlert.title = "Unblocked".localized
                                 statusAlert.contentColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
-                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                 
@@ -1709,7 +1736,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             }
                             
                         }
-                        .action(.default("Report".localized), image: UIImage(named: "report")) { (action, ind) in
+                        .action(.default("Report".localized), image: UIImage(named: "flagrep")) { (action, ind) in
                              
                             
                             Alertift.actionSheet()
@@ -1731,7 +1758,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Harassment"
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                     
@@ -1757,7 +1784,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "No Content Warning"
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                     
@@ -1783,7 +1810,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     statusAlert.title = "Reported".localized
                                     statusAlert.contentColor = Colours.grayDark
                                     statusAlert.message = "Spam"
-                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                                     
@@ -1986,7 +2013,7 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.tableView.deselectRow(at: indexPath, animated: true)
+//        self.tableView.deselectRow(at: indexPath, animated: true)
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
@@ -2093,6 +2120,12 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
         
         self.view.backgroundColor = Colours.white
         

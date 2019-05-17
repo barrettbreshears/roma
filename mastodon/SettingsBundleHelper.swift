@@ -31,16 +31,15 @@ class SettingsBundleHelper {
                 }
             }
             UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+            UserDefaults.standard.set(nil, forKey: "onb")
             UserDefaults.standard.synchronize()
             
-            UserDefaults.standard.set(nil, forKey: "onb")
             StoreStruct.client = Client(baseURL: "")
-            StoreStruct.shared.currentInstance.redirect = ""
-            StoreStruct.shared.currentInstance.returnedText = ""
-            StoreStruct.shared.currentInstance.clientID = ""
-            StoreStruct.shared.currentInstance.clientSecret = ""
-            StoreStruct.shared.currentInstance.authCode = ""
-            StoreStruct.shared.currentInstance.accessToken = ""
+            StoreStruct.newClient = Client(baseURL: "")
+            StoreStruct.newInstance = nil
+            StoreStruct.currentInstance = InstanceData()
+            StoreStruct.newInstance = InstanceData()
+            InstanceData.clearInstances()
             StoreStruct.currentPage = 0
             StoreStruct.playerID = ""
             StoreStruct.caption1 = ""
@@ -111,12 +110,19 @@ class SettingsBundleHelper {
             StoreStruct.markedReadIDs = []
             StoreStruct.newdrafts = []
             StoreStruct.notTypes = []
+            StoreStruct.notifications = []
+            StoreStruct.notificationsMentions = []
+            StoreStruct.notificationsDirect = []
+            StoreStruct.switchedNow = true
             
             do {
                 try Disk.clear(.documents)
             } catch {
                 print("couldn't clear disk")
             }
+            
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.resetApp()
         }
     }
     

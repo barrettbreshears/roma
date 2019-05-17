@@ -2,6 +2,7 @@ PODS:
   - Alamofire (4.7.3)
   - Crashlytics (3.12.0):
     - Fabric (~> 1.9.0)
+  - CropViewController (2.4.0)
   - Disk (0.4.0)
   - Fabric (1.9.0)
   - Firebase/Core (5.20.1):
@@ -108,6 +109,7 @@ PODS:
 DEPENDENCIES:
   - Alamofire
   - Crashlytics
+  - CropViewController
   - Disk
   - Fabric
   - Firebase/Core
@@ -131,6 +133,7 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - Crashlytics
+    - CropViewController
     - Disk
     - Fabric
     - Firebase
@@ -168,6 +171,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
+  CropViewController: a090820b15fc3da68e694d7c192a4708c576828b
   Disk: ef2956657d5bb56034b38b29b352170165226440
   Fabric: f988e33c97f08930a413e08123064d2e5f68d655
   Firebase: 2f5235e62f141cb86181c3af0dfe4509706351ac
@@ -202,6 +206,6 @@ SPEC CHECKSUMS:
   TesseractOCRiOS: 2c189465f86abb030d0c5141c90da9705b647854
   TinyConstraints: 4721a4b303c799328867078ade6560e152df54d1
 
-PODFILE CHECKSUM: 06b1de22bf673744d318fc9ef21477a7df22e1d8
+PODFILE CHECKSUM: 10f7e7cfa6a62d23127eac06cdfb32d664b2dd60
 
 COCOAPODS: 1.6.1

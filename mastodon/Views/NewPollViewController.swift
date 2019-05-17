@@ -65,7 +65,7 @@ class NewPollViewController: UIViewController, UITextFieldDelegate, UITableViewD
         tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(closeB), width: CGFloat(150), height: CGFloat(36))
         tootLabel.setTitle("Create", for: .normal)
         tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
+        tootLabel.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
         tootLabel.contentHorizontalAlignment = .right
         tootLabel.addTarget(self, action: #selector(didTouchUpInsideTootButton), for: .touchUpInside)
         self.view.addSubview(tootLabel)
@@ -169,6 +169,8 @@ class NewPollViewController: UIViewController, UITextFieldDelegate, UITableViewD
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
+        self.textField.becomeFirstResponder()
+        
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .pad:
@@ -236,7 +238,7 @@ class NewPollViewController: UIViewController, UITextFieldDelegate, UITableViewD
         if (textField.text?.count)! > 0 && StoreStruct.currentOptions.count < 2 {
             tootLabel.setTitleColor(Colours.tabSelected, for: .normal)
         } else {
-            tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
+            tootLabel.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
         }
     }
     
@@ -276,7 +278,7 @@ class NewPollViewController: UIViewController, UITextFieldDelegate, UITableViewD
             cell.configure(StoreStruct.currentOptions[indexPath.row], count: "Option \(indexPath.row + 1)")
             cell.backgroundColor = Colours.white
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else if indexPath.section == 1 {
@@ -291,7 +293,7 @@ class NewPollViewController: UIViewController, UITextFieldDelegate, UITableViewD
             cell.configure(dText, count: "This poll will expire on:")
             cell.backgroundColor = Colours.white
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else {
@@ -302,7 +304,7 @@ class NewPollViewController: UIViewController, UITextFieldDelegate, UITableViewD
             cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
             cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             cell.switchView.setOn(false, animated: false)
             if indexPath.row == 0 {
@@ -354,7 +356,7 @@ class NewPollViewController: UIViewController, UITextFieldDelegate, UITableViewD
                     if StoreStruct.currentOptions.count < 2 {
                         self.tootLabel.setTitleColor(Colours.tabSelected, for: .normal)
                     } else {
-                        self.tootLabel.setTitleColor(Colours.gray.withAlphaComponent(0.65), for: .normal)
+                        self.tootLabel.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
                     }
                 }
                 .action(.cancel("Dismiss"))

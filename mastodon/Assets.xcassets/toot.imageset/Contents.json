@@ -2,6 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "toot.png",
       "scale" : "1x"
     },
     {

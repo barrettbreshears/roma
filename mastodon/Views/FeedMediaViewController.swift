@@ -52,8 +52,24 @@ class FeedMediaViewController: UIViewController, UICollectionViewDelegate, UICol
         }
     }
     
+    func removeTabbarItemsText() {
+        var offset: CGFloat = 6.0
+        if #available(iOS 11.0, *), traitCollection.horizontalSizeClass == .regular {
+            offset = 0.0
+        }
+        if let items = self.tabBarController?.tabBar.items {
+            for item in items {
+                item.title = ""
+                item.imageInsets = UIEdgeInsets(top: offset, left: 0, bottom: -offset, right: 0);
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.title = "Media"
+        self.removeTabbarItemsText()
         self.view.backgroundColor = Colours.white
         
         StoreStruct.currentPage = 779

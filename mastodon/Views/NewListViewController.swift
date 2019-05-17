@@ -72,7 +72,7 @@ class NewListViewController: UIViewController, UITextFieldDelegate {
             tootLabel.setTitle("Update", for: .normal)
         }
         tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        tootLabel.setTitleColor(Colours.grayLight2, for: .normal)
+        tootLabel.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
         tootLabel.contentHorizontalAlignment = .right
         tootLabel.addTarget(self, action: #selector(didTouchUpInsideTootButton), for: .touchUpInside)
         self.view.addSubview(tootLabel)
@@ -83,7 +83,7 @@ class NewListViewController: UIViewController, UITextFieldDelegate {
         } else {
             titleV.text = "Edit List Title".localized
         }
-        titleV.textColor = Colours.grayDark2
+        titleV.textColor = Colours.grayDark.withAlphaComponent(0.38)
         titleV.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         self.view.addSubview(titleV)
         
@@ -178,7 +178,7 @@ class NewListViewController: UIViewController, UITextFieldDelegate {
         if (textView.text?.count)! > 0 {
             tootLabel.setTitleColor(Colours.tabSelected, for: .normal)
         } else {
-            tootLabel.setTitleColor(Colours.grayLight2, for: .normal)
+            tootLabel.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
         }
     }
     
@@ -209,7 +209,7 @@ class NewListViewController: UIViewController, UITextFieldDelegate {
                     statusAlert.title = "Created List".localized
                     statusAlert.contentColor = Colours.grayDark
                     statusAlert.message = self.textView.text
-                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                 }
@@ -232,7 +232,7 @@ class NewListViewController: UIViewController, UITextFieldDelegate {
                     statusAlert.title = "Edited List".localized
                     statusAlert.contentColor = Colours.grayDark
                     statusAlert.message = self.textView.text
-                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                     }

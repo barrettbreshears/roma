@@ -97,7 +97,7 @@ class DetailCell: UITableViewCell {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[from]-10-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[faves]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
         
     }
     
@@ -110,11 +110,6 @@ class DetailCell: UITableViewCell {
         toot.mentionColor = Colours.tabSelected
         toot.hashtagColor = Colours.tabSelected
         toot.URLColor = Colours.tabSelected
-        
-        userName.text = status.reblog?.account.displayName ?? status.account.displayName
-        if userName.text == "" {
-            userName.text = " "
-        }
         
         
         if (UserDefaults.standard.object(forKey: "mentionToggle") == nil || UserDefaults.standard.object(forKey: "mentionToggle") as! Int == 0) {
@@ -131,10 +126,29 @@ class DetailCell: UITableViewCell {
             
             
             
-            if status.reblog!.emojis.isEmpty {
-                toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
+            var theUsernameTag = status.account.displayName
+            if (UserDefaults.standard.object(forKey: "boostusern") == nil) || (UserDefaults.standard.object(forKey: "boostusern") as! Int == 0) {
+                
             } else {
-                let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted")
+                theUsernameTag = "@\(status.account.acct)"
+            }
+            
+            if status.reblog!.emojis.isEmpty {
+                let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n")
+                let imageAttachment = NSTextAttachment()
+                imageAttachment.image = UIImage(named:"boost2")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
+                imageAttachment.bounds = CGRect(x: 0, y: -3, width: Int(self.toot.font.lineHeight - 5), height: Int(self.toot.font.lineHeight))
+                let attachmentString2 = NSAttributedString(attachment: imageAttachment)
+                let completeText2 = NSMutableAttributedString(string: "")
+                completeText2.append(attachmentString2)
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
+                let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
+                completeText2.append(textAfterIcon2)
+                attributedString.append(completeText2)
+                self.toot.attributedText = attributedString
+                self.reloadInputViews()
+            } else {
+                let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n", attributes: [NSAttributedString.Key.foregroundColor: Colours.black])
                 status.reblog!.emojis.map({
                     let textAttachment = NSTextAttachment()
                     textAttachment.loadImageUsingCache(withUrl: $0.url.absoluteString)
@@ -143,9 +157,20 @@ class DetailCell: UITableViewCell {
                     while attributedString.mutableString.contains(":\($0.shortcode):") {
                         let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\($0.shortcode):")
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
-                        
                     }
                 })
+                
+                let imageAttachment = NSTextAttachment()
+                imageAttachment.image = UIImage(named:"boost2")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
+                imageAttachment.bounds = CGRect(x: 0, y: -3, width: Int(self.toot.font.lineHeight - 5), height: Int(self.toot.font.lineHeight))
+                let attachmentString2 = NSAttributedString(attachment: imageAttachment)
+                let completeText2 = NSMutableAttributedString(string: "")
+                completeText2.append(attachmentString2)
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
+                let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
+                completeText2.append(textAfterIcon2)
+                attributedString.append(completeText2)
+                
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
             }
@@ -164,6 +189,7 @@ class DetailCell: UITableViewCell {
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
                     }
                 })
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
                 self.userName.attributedText = attributedString
                 self.reloadInputViews()
             }
@@ -188,6 +214,7 @@ class DetailCell: UITableViewCell {
                         
                     }
                 })
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
             }
@@ -208,6 +235,7 @@ class DetailCell: UITableViewCell {
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
                     }
                 })
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
                 self.userName.attributedText = attributedString
                 self.reloadInputViews()
             }
@@ -268,6 +296,11 @@ class DetailCell: UITableViewCell {
         fromClient.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         faves.titleLabel?.font = UIFont.boldSystemFont(ofSize: Colours.fontSize3)
         
+        
+//        userName.text = status.reblog?.account.displayName ?? status.account.displayName
+        if userName.text == "" {
+            userName.text = " "
+        }
         
     }
     

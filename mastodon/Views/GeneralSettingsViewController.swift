@@ -67,11 +67,11 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         case .pad:
             self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
         default:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         }
         self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellse")
         self.tableView.register(SettingsCell2.self, forCellReuseIdentifier: "cellse1")
@@ -156,7 +156,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
+        title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 30)
         title.textColor = Colours.grayDark.withAlphaComponent(0.38)
         if section == 0 {
             title.text = "Timeline"
@@ -374,7 +374,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             }
@@ -406,7 +406,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             }
@@ -438,7 +438,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             }
@@ -470,7 +470,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             }
@@ -482,7 +482,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
             cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
             cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else if indexPath.section == 5 {
@@ -521,7 +521,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             }
@@ -562,7 +562,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                     cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                     cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                     let bgColorView = UIView()
-                    bgColorView.backgroundColor = Colours.white
+                    bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                     cell.selectedBackgroundView = bgColorView
                     return cell
                 } else {
@@ -573,7 +573,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                     cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                     cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                     let bgColorView = UIView()
-                    bgColorView.backgroundColor = Colours.white
+                    bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                     cell.selectedBackgroundView = bgColorView
                     return cell
                 }
@@ -587,7 +587,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             } else if indexPath.row == 1 {
@@ -598,7 +598,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             } else {
@@ -609,7 +609,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             }
@@ -1396,8 +1396,8 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
             StoreStruct.notificationsMentions = []
             StoreStruct.notificationsDirect = []
             do {
-                try Disk.save(StoreStruct.notifications, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)noti.json")
-                try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)ment.json")
+                try Disk.save(StoreStruct.notifications, to: .documents, as: "\(StoreStruct.currentInstance.clientID)noti.json")
+                try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "\(StoreStruct.currentInstance.clientID)ment.json")
             } catch {
                 print("Couldn't save")
             }
@@ -1415,16 +1415,15 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
             }
         }
         UserDefaults.standard.removePersistentDomain(forName: Bundle.main.bundleIdentifier!)
+        UserDefaults.standard.set(nil, forKey: "onb")
         UserDefaults.standard.synchronize()
         
-        UserDefaults.standard.set(nil, forKey: "onb")
         StoreStruct.client = Client(baseURL: "")
-        StoreStruct.shared.currentInstance.redirect = ""
-        StoreStruct.shared.currentInstance.returnedText = ""
-        StoreStruct.shared.currentInstance.clientID = ""
-        StoreStruct.shared.currentInstance.clientSecret = ""
-        StoreStruct.shared.currentInstance.authCode = ""
-        StoreStruct.shared.currentInstance.accessToken = ""
+        StoreStruct.newClient = Client(baseURL: "")
+        StoreStruct.newInstance = nil
+        StoreStruct.currentInstance = InstanceData()
+        StoreStruct.newInstance = InstanceData()
+        InstanceData.clearInstances()
         StoreStruct.currentPage = 0
         StoreStruct.playerID = ""
         StoreStruct.caption1 = ""
@@ -1495,6 +1494,10 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
         StoreStruct.markedReadIDs = []
         StoreStruct.newdrafts = []
         StoreStruct.notTypes = []
+        StoreStruct.notifications = []
+        StoreStruct.notificationsMentions = []
+        StoreStruct.notificationsDirect = []
+        StoreStruct.switchedNow = true
         
         do {
             try Disk.clear(.documents)
@@ -1502,11 +1505,13 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
             print("couldn't clear disk")
         }
         
-        let loginController = ViewController()
-        loginController.createLoginView(newInstance: false)
-        self.present(loginController, animated: true, completion: {
-            loginController.textField.becomeFirstResponder()
-        })
+        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+            let notification = UINotificationFeedbackGenerator()
+            notification.notificationOccurred(.success)
+        }
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.resetApp()
     }
     
     func loadLoadLoad() {
@@ -1579,6 +1584,12 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
         
         self.view.backgroundColor = Colours.white
         

@@ -13,8 +13,9 @@ import SafariServices
 import StatusAlert
 import SAConfettiView
 import UserNotifications
+import MessageUI
 
-class AccountSettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate, UIGestureRecognizerDelegate, UNUserNotificationCenterDelegate {
+class AccountSettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate, UIGestureRecognizerDelegate, UNUserNotificationCenterDelegate, MFMailComposeViewControllerDelegate {
     
     var tap: UITapGestureRecognizer!
     var safariVC: SFSafariViewController?
@@ -24,6 +25,10 @@ class AccountSettingsViewController: UIViewController, UITableViewDelegate, UITa
     var vc: ViewController?
     let z1 = Account.getAccounts()
     let z2 = InstanceData.getAllInstances()
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true)
+    }
     
     @objc func load() {
         DispatchQueue.main.async {
@@ -68,11 +73,11 @@ class AccountSettingsViewController: UIViewController, UITableViewDelegate, UITa
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         case .pad:
             self.tableView.frame = CGRect(x: 0, y: Int(0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height))
         default:
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         }
         self.tableView.register(SettingsCell.self, forCellReuseIdentifier: "cellse")
         self.tableView.alpha = 1
@@ -149,7 +154,7 @@ class AccountSettingsViewController: UIViewController, UITableViewDelegate, UITa
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
+        title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 30)
         title.text = "Your Accounts".localized
         title.textColor = Colours.grayDark.withAlphaComponent(0.38)
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
@@ -183,7 +188,7 @@ class AccountSettingsViewController: UIViewController, UITableViewDelegate, UITa
             cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
             cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else {
@@ -213,7 +218,7 @@ class AccountSettingsViewController: UIViewController, UITableViewDelegate, UITa
                 cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
             }
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         }
@@ -233,6 +238,42 @@ class AccountSettingsViewController: UIViewController, UITableViewDelegate, UITa
                     .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
                     .messageTextAlignment(.left)
                     .titleTextAlignment(.left)
+                    .action(.default(" Instance Details".localized), image: UIImage(named: "instats")) { (action, ind) in
+                        
+                        var instImage = UIImage()
+                        if StoreStruct.currentInstanceDetails.first?.thumbnail != nil {
+                            if let url = URL(string: StoreStruct.currentInstanceDetails.first?.thumbnail ?? "https://mastodon.social/") {
+                                let data = try? Data(contentsOf: url)
+                                instImage = UIImage(data: data!) ?? UIImage()
+                            }
+                        }
+                        Alertift.actionSheet(title: "\(StoreStruct.currentInstanceDetails.first?.title.stripHTML() ?? "Instance") (\(StoreStruct.currentInstanceDetails.first?.version ?? "1.0.0"))", message: "\(StoreStruct.currentInstanceDetails.first?.stats.userCount ?? 0) users\n\(StoreStruct.currentInstanceDetails.first?.stats.statusCount ?? 0) statuses\n\(StoreStruct.currentInstanceDetails.first?.stats.domainCount ?? 0) domains\n\n\(StoreStruct.currentInstanceDetails.first?.description.stripHTML() ?? "")")
+                            .image(instImage)
+                            .backgroundColor(Colours.white)
+                            .titleTextColor(Colours.grayDark)
+                            .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                            .messageTextAlignment(.left)
+                            .titleTextAlignment(.left)
+                            .action(.default("Instance Admin Contact".localized), image: nil) { (action, ind) in
+                                if MFMailComposeViewController.canSendMail() {
+                                    let mail = MFMailComposeViewController()
+                                    mail.mailComposeDelegate = self
+                                    mail.setToRecipients([StoreStruct.currentInstanceDetails.first?.email ?? "shihab.mehboob@hotmail.com"])
+                                    
+                                    self.present(mail, animated: true)
+                                } else {
+                                    // show failure alert
+                                }
+                            }
+                            .action(.cancel("Dismiss"))
+                            .finally { action, index in
+                                if action.style == .cancel {
+                                    return
+                                }
+                            }
+                            .popover(anchorView: self.view)
+                            .show(on: self)
+                    }
                     .action(.cancel("Dismiss"))
                     .finally { action, index in
                         if action.style == .cancel {
@@ -250,7 +291,12 @@ class AccountSettingsViewController: UIViewController, UITableViewDelegate, UITa
                     .action(.default("Switch".localized), image: UIImage(named: "profile")) { (action, ind) in
                         DispatchQueue.main.async {
                             
+                            StoreStruct.switchedNow = true
                             InstanceData.setCurrentInstance(instance: instances[indexPath.row])
+                            StoreStruct.client = Client(
+                                baseURL: "https://\(instances[indexPath.item].returnedText)",
+                                accessToken: instances[indexPath.item].accessToken
+                            )
                             let appDelegate = UIApplication.shared.delegate as! AppDelegate
                             appDelegate.reloadApplication()
                             
@@ -351,6 +397,12 @@ class AccountSettingsViewController: UIViewController, UITableViewDelegate, UITa
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
         
         self.view.backgroundColor = Colours.white
         

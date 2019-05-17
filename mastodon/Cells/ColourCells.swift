@@ -45,10 +45,7 @@ class ColourCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDa
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-    
     func configure() {
-        
         self.collectionView.reloadData()
     }
     
@@ -63,8 +60,8 @@ class ColourCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionColourCell", for: indexPath) as! CollectionColourCell
         
-        
-        if indexPath.row == StoreStruct.colArray.count - 1 {
+        cell.configure()
+        if indexPath.row == 0 {
             // manual hex code
             cell.image.backgroundColor = UIColor.clear
             cell.image.image = UIImage(named: "hex")
@@ -81,9 +78,8 @@ class ColourCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDa
             return cell
             
         } else {
-            cell.configure()
             
-            cell.image.backgroundColor = StoreStruct.colArray[indexPath.row]
+            cell.image.backgroundColor = StoreStruct.colArray[indexPath.row - 1]
             
             cell.image.frame = CGRect(x: 0, y: 0, width: 55, height: 55)
             cell.bgImage.frame = CGRect(x: 0, y: 0, width: 55, height: 55)
@@ -111,17 +107,17 @@ class ColourCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDa
             impact.impactOccurred()
         }
         
-        if indexPath.row == StoreStruct.colArray.count - 1 {
+        if indexPath.row == 0 {
             // manual hex code
             NotificationCenter.default.post(name: Notification.Name(rawValue: "hexnew"), object: self)
         } else {
             
-            Colours.tabSelected = StoreStruct.colArray[indexPath.row]
+            Colours.tabSelected = StoreStruct.colArray[indexPath.row - 1]
             window?.tintColor = Colours.tabSelected
             NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: self)
             NotificationCenter.default.post(name: Notification.Name(rawValue: "themeTopStuff"), object: self)
             NotificationCenter.default.post(name: Notification.Name(rawValue: "segTheme"), object: self)
-            UserDefaults.standard.set(indexPath.row, forKey: "themeaccent")
+            UserDefaults.standard.set(indexPath.row - 1, forKey: "themeaccent")
             
         }
     }

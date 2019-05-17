@@ -69,7 +69,7 @@ class NewProfileNoteViewController: UIViewController, UITextViewDelegate {
         tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(closeB), width: CGFloat(150), height: CGFloat(36))
         tootLabel.setTitle("Update", for: .normal)
         tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        tootLabel.setTitleColor(Colours.grayLight2, for: .normal)
+        tootLabel.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
         tootLabel.contentHorizontalAlignment = .right
         tootLabel.addTarget(self, action: #selector(didTouchUpInsideTootButton), for: .touchUpInside)
         self.view.addSubview(tootLabel)
@@ -176,7 +176,7 @@ class NewProfileNoteViewController: UIViewController, UITextViewDelegate {
         if (textView.text?.count)! > 0 {
             tootLabel.setTitleColor(Colours.tabSelected, for: .normal)
         } else {
-            tootLabel.setTitleColor(Colours.grayLight2, for: .normal)
+            tootLabel.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
         }
     }
     
@@ -207,7 +207,7 @@ class NewProfileNoteViewController: UIViewController, UITextViewDelegate {
                         statusAlert.title = "Updated Note".localized
                         statusAlert.contentColor = Colours.grayDark
                         statusAlert.message = self.textView.text
-                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                     }

@@ -42,23 +42,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 
     func application(_ application: UIApplication, continue userActivity: NSUserActivity, restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
         if userActivity.activityType == "com.vm.roma.confetti" {
-            let viewController = window?.rootViewController as! ViewController
-            viewController.siriConfetti()
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
         } else if userActivity.activityType == "com.vm.roma.light" {
-            let viewController = window?.rootViewController as! ViewController
-            viewController.siriLight()
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "light00"), object: nil)
         } else if userActivity.activityType == "com.vm.roma.dark" {
-            let viewController = window?.rootViewController as! ViewController
-            viewController.siriDark()
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "dark00"), object: nil)
         } else if userActivity.activityType == "com.vm.roma.dark2" {
-            let viewController = window?.rootViewController as! ViewController
-            viewController.siriDark2()
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "darker00"), object: nil)
         } else if userActivity.activityType == "com.vm.roma.bluemid" {
-            let viewController = window?.rootViewController as! ViewController
-            viewController.siriBlue()
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "blue00"), object: nil)
         } else {
-            let viewController = window?.rootViewController as! ViewController
-            viewController.siriOled()
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "black00"), object: nil)
         }
         return true
     }
@@ -106,12 +100,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 //        return true
 //    }
     
+    func resetApp() {
+        if let window = UIApplication.shared.keyWindow {
+            let viewController = ViewController()
+            window.rootViewController = viewController
+            window.makeKeyAndVisible()
+            UINavigationBar.appearance().shadowImage = UIImage()
+            UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+            UINavigationBar.appearance().backgroundColor = Colours.white
+            UINavigationBar.appearance().barTintColor = Colours.black
+            UINavigationBar.appearance().tintColor = Colours.black
+            UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
+        }
+    }
+    
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        
         let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
         let token = tokenParts.joined()
         print("Device Token: \(token)")
         Messaging.messaging().apnsToken = deviceToken
-        guard StoreStruct.shared.currentInstance.returnedText != "" else {
+        
+        guard StoreStruct.currentInstance.returnedText != "" else {
             return
         }
         var state: PushNotificationState!
@@ -123,10 +133,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         
         // change following when pushing to App Store or for local dev
         let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-mast1.your.org/relay-to/production/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
-//        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-mast1-dev.your.org/relay-to/development/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
+        //        let requestParams = PushNotificationSubscriptionRequest(endpoint: "https://pushrelay-mast1-dev.your.org/relay-to/development/\(token)", receiver: receiver, alerts: PushNotificationAlerts.init(favourite: UserDefaults.standard.object(forKey: "pnlikes") as? Bool ?? true, follow: UserDefaults.standard.object(forKey: "pnfollows") as? Bool ?? true, mention: UserDefaults.standard.object(forKey: "pnmentions") as? Bool ?? true, reblog: UserDefaults.standard.object(forKey: "pnboosts") as? Bool ?? true))
         
         //create the url with URL
-        let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
+        let url = URL(string: "https://\(StoreStruct.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
         
         //create the session object
         let session = URLSession.shared
@@ -233,7 +243,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                 print("Response ==> \(url.absoluteString)")
                 let x = url.absoluteString
                 let y = x.split(separator: "=")
-                StoreStruct.shared.newInstance!.authCode = y.last?.description ?? ""
+                StoreStruct.newInstance!.authCode = y.last?.description ?? ""
                 if StoreStruct.tappedSignInCheck == false {
                     StoreStruct.tappedSignInCheck = true
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "newInstancelogged"), object: nil)
@@ -243,7 +253,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                 print("Response ==> \(url.absoluteString)")
                 let x = url.absoluteString
                 let y = x.split(separator: "=")
-                StoreStruct.shared.currentInstance.authCode = y.last?.description ?? ""
+                StoreStruct.currentInstance.authCode = y.last?.description ?? ""
                 if StoreStruct.tappedSignInCheck == false {
                     StoreStruct.tappedSignInCheck = true
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "logged"), object: nil)
@@ -255,23 +265,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
     }
 
     func tempGotoInstance(_ text: String) {
-        StoreStruct.client = Client(baseURL: "https://\(text)")
-        let request = Clients.register(
-            clientName: "Mast",
-            redirectURI: "com.vm.roma://success",
-            scopes: [.read, .write, .follow, .push],
-            website: "https://pleroma.com"
-        )
-        StoreStruct.client.run(request) { (application) in
-
-            if application.value == nil {} else {
-
+//        StoreStruct.client = Client(baseURL: "https://\(text)")
+//        let request = Clients.register(
+//            clientName: "Mast",
+//            redirectURI: "com.vm.roma://success",
+//            scopes: [.read, .write, .follow, .push],
+//            website: "https://twitter.com/jpeguin"
+//        )
+//        StoreStruct.client.run(request) { (application) in
+//
+//            if application.value == nil {} else {
+        
                 DispatchQueue.main.async {
                     // go to next view
-                    StoreStruct.shared.currentInstance.instanceText = text
-
-                    if StoreStruct.instanceLocalToAdd.contains(StoreStruct.shared.currentInstance.instanceText.lowercased()) {} else {
-                        StoreStruct.instanceLocalToAdd.append(StoreStruct.shared.currentInstance.instanceText.lowercased())
+                    StoreStruct.currentInstance.instanceText = text
+                    
+                    if StoreStruct.instanceLocalToAdd.contains(StoreStruct.currentInstance.instanceText.lowercased()) {} else {
+                        StoreStruct.instanceLocalToAdd.append(StoreStruct.currentInstance.instanceText.lowercased())
                         UserDefaults.standard.set(StoreStruct.instanceLocalToAdd, forKey: "instancesLocal")
                     }
 
@@ -286,9 +296,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance4"), object: self)
                     }
                 }
-
-            }
-        }
+                
+//            }
+//        }
     }
 
 
@@ -358,9 +368,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                 
             self.window!.rootViewController = splitViewController
             self.window!.makeKeyAndVisible()
-            
-//            UINavigationBar.appearance().shadowImage = UIImage()
-//            UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+        
             UINavigationBar.appearance().backgroundColor = Colours.white
             UINavigationBar.appearance().barTintColor = Colours.black
             UINavigationBar.appearance().tintColor = Colours.black
@@ -368,43 +376,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 //        }
         
         SwiftyGiphyAPI.shared.apiKey = SwiftyGiphyAPI.publicBetaKey
-
-
+        
         WatchSessionManager.sharedManager.startSession()
-
-
+        
         let BarButtonItemAppearance = UIBarButtonItem.appearance()
         BarButtonItemAppearance.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: Colours.grayLight2], for: .normal)
         BarButtonItemAppearance.tintColor = Colours.grayLight2
-
-
+        
         window?.tintColor = Colours.tabSelected
-
-
+        
         if StoreStruct.currentUser != nil {
-            if (UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)homeid") == nil) {} else {
-                StoreStruct.gapLastHomeID = UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)homeid") as! String
+            if (UserDefaults.standard.object(forKey: "\(StoreStruct.currentInstance.clientID)homeid") == nil) {} else {
+                StoreStruct.gapLastHomeID = UserDefaults.standard.object(forKey: "\(StoreStruct.currentInstance.clientID)homeid") as! String
             }
-            if (UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)localid") == nil) {} else {
-                StoreStruct.gapLastLocalID = UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)localid") as! String
+            if (UserDefaults.standard.object(forKey: "\(StoreStruct.currentInstance.clientID)localid") == nil) {} else {
+                StoreStruct.gapLastLocalID = UserDefaults.standard.object(forKey: "\(StoreStruct.currentInstance.clientID)localid") as! String
             }
-            if (UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)fedid") == nil) {} else {
-                StoreStruct.gapLastFedID = UserDefaults.standard.object(forKey: "\(StoreStruct.shared.currentInstance.clientID)fedid") as! String
+            if (UserDefaults.standard.object(forKey: "\(StoreStruct.currentInstance.clientID)fedid") == nil) {} else {
+                StoreStruct.gapLastFedID = UserDefaults.standard.object(forKey: "\(StoreStruct.currentInstance.clientID)fedid") as! String
             }
         }
 
         do {
-            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)use.json", from: .documents, as: Account.self)
-            StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
-            StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
-            StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
+            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)use.json", from: .documents, as: Account.self)
+            StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
+            StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
+            StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
             
-            StoreStruct.gapLastHomeStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)homestat.json", from: .documents, as: Status.self)
-            StoreStruct.gapLastLocalStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)localstat.json", from: .documents, as: Status.self)
-            StoreStruct.gapLastFedStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fedstat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastHomeStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)homestat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastLocalStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)localstat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastFedStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)fedstat.json", from: .documents, as: Status.self)
             
-            StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
-            StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
+            StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
+            StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
         } catch {
             print("Couldn't load")
         }
@@ -434,26 +438,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 
         if StoreStruct.currentUser != nil {
-            UserDefaults.standard.set(StoreStruct.gapLastHomeID, forKey: "\(StoreStruct.shared.currentInstance.clientID)homeid")
-            UserDefaults.standard.set(StoreStruct.gapLastLocalID, forKey: "\(StoreStruct.shared.currentInstance.clientID)localid")
-            UserDefaults.standard.set(StoreStruct.gapLastFedID, forKey: "\(StoreStruct.shared.currentInstance.clientID)fedid")
-
+            UserDefaults.standard.set(StoreStruct.gapLastHomeID, forKey: "\(StoreStruct.currentInstance.clientID)homeid")
+            UserDefaults.standard.set(StoreStruct.gapLastLocalID, forKey: "\(StoreStruct.currentInstance.clientID)localid")
+            UserDefaults.standard.set(StoreStruct.gapLastFedID, forKey: "\(StoreStruct.currentInstance.clientID)fedid")
+            
             UserDefaults.standard.set(StoreStruct.currentUser.username, forKey: "userN")
+            DispatchQueue.global(qos: .userInitiated).async {
             do {
-                try Disk.save(StoreStruct.currentUser, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)use.json")
-
-                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)home.json")
-                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)local.json")
-                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fed.json")
-
-                try Disk.save(StoreStruct.notifications, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)noti.json")
-                try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)ment.json")
-
-                try Disk.save(StoreStruct.gapLastHomeStat, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)homestat.json")
-                try Disk.save(StoreStruct.gapLastLocalStat, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)localstat.json")
-                try Disk.save(StoreStruct.gapLastFedStat, to: .documents, as: "\(StoreStruct.shared.currentInstance.clientID)fedstat.json")
+                try Disk.save(StoreStruct.currentUser, to: .documents, as: "\(StoreStruct.currentInstance.clientID)use.json")
+                
+                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.currentInstance.clientID)home.json")
+                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.currentInstance.clientID)local.json")
+                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.currentInstance.clientID)fed.json")
+                
+                try Disk.save(StoreStruct.notifications, to: .documents, as: "\(StoreStruct.currentInstance.clientID)noti.json")
+                try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "\(StoreStruct.currentInstance.clientID)ment.json")
+                
+                try Disk.save(StoreStruct.gapLastHomeStat, to: .documents, as: "\(StoreStruct.currentInstance.clientID)homestat.json")
+                try Disk.save(StoreStruct.gapLastLocalStat, to: .documents, as: "\(StoreStruct.currentInstance.clientID)localstat.json")
+                try Disk.save(StoreStruct.gapLastFedStat, to: .documents, as: "\(StoreStruct.currentInstance.clientID)fedstat.json")
             } catch {
                 print("Couldn't save")
+            }
             }
         }
 
@@ -622,16 +628,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 
     func reloadApplication() {
         do {
-            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)use.json", from: .documents, as: Account.self)
-            StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
-            StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
-            StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
-            StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
-            StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
-
-            StoreStruct.gapLastHomeStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)homestat.json", from: .documents, as: Status.self)
-            StoreStruct.gapLastLocalStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)localstat.json", from: .documents, as: Status.self)
-            StoreStruct.gapLastFedStat = try Disk.retrieve("\(StoreStruct.shared.currentInstance.clientID)fedstat.json", from: .documents, as: Status.self)
+            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)use.json", from: .documents, as: Account.self)
+            StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
+            StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
+            StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
+            StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
+            StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
+            
+            StoreStruct.gapLastHomeStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)homestat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastLocalStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)localstat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastFedStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)fedstat.json", from: .documents, as: Status.self)
         } catch {
             print("Couldn't load")
         }
@@ -742,7 +748,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
             ]
         ]
         //create the url with URL
-        let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
+        let url = URL(string: "https://\(StoreStruct.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
         //create the session object
         let session = URLSession.shared
         //now create the URLRequest object using the url object
@@ -761,7 +767,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
             print(error.localizedDescription)
         }
         request.httpMethod = "DELETE"// "POST" //set http method as POST
-        request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue("Bearer \(StoreStruct.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
@@ -769,7 +775,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         let task = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error in
             
             //create the url with URL
-            let url = URL(string: "https://\(StoreStruct.shared.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
+            let url = URL(string: "https://\(StoreStruct.currentInstance.returnedText)/api/v1/push/subscription")! //change the url
             
             //create the session object
             let session = URLSession.shared
@@ -795,7 +801,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
             catch {
                 print(error.localizedDescription)
             }
-            request.setValue("Bearer \(StoreStruct.shared.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
+            request.setValue("Bearer \(StoreStruct.currentInstance.accessToken)", forHTTPHeaderField: "Authorization")
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.addValue("application/json", forHTTPHeaderField: "Accept")
             
@@ -816,7 +822,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                         print(json)
                         // handle json...
                     }
-                    Account.pushSetSuccess(instance: StoreStruct.shared.currentInstance.returnedText)
+                    Account.pushSetSuccess(instance: StoreStruct.currentInstance.returnedText)
                 } catch let error {
                     print(error.localizedDescription)
                 }

@@ -51,13 +51,13 @@ class PollCell: UITableViewCell, CoreChartViewDataSource {
         
         StoreStruct.currentPollSelection = []
         
-        StoreStruct.pollHeight = (self.options.count*32) + (self.options.count*16) + 70
-        barChart.frame = CGRect(x: 20, y: 10, width: Int(CGFloat(UIScreen.main.bounds.width - 40)), height: StoreStruct.pollHeight)
+        StoreStruct.pollHeight = (self.options.count*32) + (self.options.count*16) + 80
+        barChart.frame = CGRect(x: 20, y: 6, width: Int(CGFloat(UIScreen.main.bounds.width - 40)), height: StoreStruct.pollHeight)
         barChart.dataSource = self
         barChart.displayConfig = CoreBarChartsDisplayConfig(barWidth: 32.0,
                                                             barSpace: 16.0,
                                                             bottomSpace: 10.0,
-                                                            topSpace: 10.0,
+                                                            topSpace: 6.0,
                                                             backgroundColor: Colours.white,
                                                             titleFontSize: 14,
                                                             valueFontSize: 16,
@@ -73,7 +73,7 @@ class PollCell: UITableViewCell, CoreChartViewDataSource {
         if thePoll.multiple {
             voteText = "\(voteText) • Multiple choices allowed"
         }
-        countLabel.frame = CGRect(x: 30, y: Int(StoreStruct.pollHeight - 47), width: Int(CGFloat(UIScreen.main.bounds.width - 60)), height: 30)
+        countLabel.frame = CGRect(x: 30, y: Int(StoreStruct.pollHeight - 60), width: Int(CGFloat(UIScreen.main.bounds.width - 60)), height: 30)
         countLabel.text = voteText
         countLabel.font = UIFont.boldSystemFont(ofSize: 13)
         countLabel.textColor = Colours.grayDark
@@ -84,10 +84,10 @@ class PollCell: UITableViewCell, CoreChartViewDataSource {
         if thePoll.expired {
             timeText = "CLOSED"
         }
-        expiryLabel.frame = CGRect(x: 30, y: Int(StoreStruct.pollHeight - 25), width: Int(CGFloat(UIScreen.main.bounds.width - 60)), height: 30)
+        expiryLabel.frame = CGRect(x: 30, y: Int(StoreStruct.pollHeight - 38), width: Int(CGFloat(UIScreen.main.bounds.width - 60)), height: 30)
         expiryLabel.text = timeText
         expiryLabel.font = UIFont.systemFont(ofSize: 13)
-        expiryLabel.textColor = Colours.grayDark.withAlphaComponent(0.6)
+        expiryLabel.textColor = Colours.grayDark.withAlphaComponent(0.38)
         expiryLabel.textAlignment = .left
         contentView.addSubview(self.expiryLabel)
     }

@@ -58,15 +58,17 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        //self.ai.startAnimating()
+        if let indexPath = tableView.indexPathForSelectedRow {
+            self.tableView.deselectRow(at: indexPath, animated: true)
+        }
     }
     
     @objc func refreshfilter() {
         let request = FilterToots.all()
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
+                self.currentTags = self.currentTags + stat
                 DispatchQueue.main.async {
-                    self.currentTags = self.currentTags + stat
                     self.currentTags = self.currentTags.removeDuplicates()
                     self.tableView.reloadData()
                 }
@@ -78,8 +80,24 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.didReceiveMemoryWarning()
     }
     
+    func removeTabbarItemsText() {
+        var offset: CGFloat = 6.0
+        if #available(iOS 11.0, *), traitCollection.horizontalSizeClass == .regular {
+            offset = 0.0
+        }
+        if let items = self.tabBarController?.tabBar.items {
+            for item in items {
+                item.title = ""
+                item.imageInsets = UIEdgeInsets(top: offset, left: 0, bottom: -offset, right: 0);
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.title = "Toot Filters"
+        self.removeTabbarItemsText()
         
         //NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.search), name: NSNotification.Name(rawValue: "search"), object: nil)
@@ -108,7 +126,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         
         self.tableView.register(FiltersCell.self, forCellReuseIdentifier: "FiltersCell")
-        self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
+        self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         self.tableView.alpha = 1
         self.tableView.delegate = self
         self.tableView.dataSource = self
@@ -180,12 +198,13 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 40)
         let title = UILabel()
-        title.frame = CGRect(x: 20, y: 8, width: self.view.bounds.width, height: 30)
-        if self.currentTags.count == 0 {
-            title.text = "No Status Filters"
-        } else {
-            title.text = "Status Filters"
-        }
+        title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 30)
+//        if self.currentTags.count == 0 {
+//            title.text = "No Toot Filters"
+//        } else {
+//            title.text = "Toot Filters"
+//        }
+        title.text = "Add New"
         title.textColor = Colours.grayDark2
         title.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
         vw.addSubview(title)
@@ -224,7 +243,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             let cell = tableView.dequeueReusableCell(withIdentifier: "cellf", for: indexPath) as! MainFeedCell
             cell.backgroundColor = Colours.white
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
         } else {
@@ -240,7 +259,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             cell.userName.textColor = Colours.black
             cell.toot.textColor = Colours.grayDark.withAlphaComponent(0.38)
             let bgColorView = UIView()
-            bgColorView.backgroundColor = Colours.white
+            bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
             cell.selectedBackgroundView = bgColorView
             return cell
             
@@ -249,7 +268,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        self.tableView.deselectRow(at: indexPath, animated: true)
+//        self.tableView.deselectRow(at: indexPath, animated: true)
         
         Alertift.actionSheet(title: nil, message: nil)
             .backgroundColor(Colours.white)
@@ -268,7 +287,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 statusAlert.title = "Removed Filter".localized
                 statusAlert.contentColor = Colours.grayDark
                 statusAlert.message = self.currentTags[indexPath.row].phrase
-                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
+                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
                         statusAlert.show()
                     }
                 
@@ -302,8 +321,8 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 
                 if stat.isEmpty {} else {
                     self.lastThing = stat.first?.id ?? ""
+                    self.currentTags = self.currentTags + stat
                     DispatchQueue.main.async {
-                        self.currentTags = self.currentTags + stat
                         self.currentTags = self.currentTags.removeDuplicates()
                         self.tableView.reloadData()
                     }
@@ -382,6 +401,12 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
         
         self.view.backgroundColor = Colours.white
         

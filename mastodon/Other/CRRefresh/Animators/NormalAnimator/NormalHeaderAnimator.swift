@@ -32,7 +32,7 @@ open class NormalHeaderAnimator: UIView, CRRefreshProtocol {
     open var pullToRefreshDescription = crBundle?.localizedString(key: "CRRefreshHeaderIdleText") {
         didSet {
             if pullToRefreshDescription != oldValue {
-                titleLabel.text = pullToRefreshDescription;
+                titleLabel.text = "";
             }
         }
     }
@@ -73,7 +73,7 @@ open class NormalHeaderAnimator: UIView, CRRefreshProtocol {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        titleLabel.text = pullToRefreshDescription
+        titleLabel.text = ""
         self.addSubview(imageView)
         self.addSubview(titleLabel)
         self.addSubview(indicatorView)
@@ -87,7 +87,7 @@ open class NormalHeaderAnimator: UIView, CRRefreshProtocol {
         indicatorView.startAnimating()
         indicatorView.isHidden = false
         imageView.isHidden     = true
-        titleLabel.text        = loadingDescription
+        titleLabel.text        = ""
         imageView.transform    = CGAffineTransform(rotationAngle: 0.000001 - CGFloat(Double.pi))
     }
   
@@ -98,7 +98,7 @@ open class NormalHeaderAnimator: UIView, CRRefreshProtocol {
             imageView.isHidden = false
             imageView.transform = CGAffineTransform.identity
         }else {
-            titleLabel.text = pullToRefreshDescription
+            titleLabel.text = ""
             setNeedsLayout()
         }
     }
@@ -114,11 +114,11 @@ open class NormalHeaderAnimator: UIView, CRRefreshProtocol {
     open func refresh(view: CRRefreshComponent, stateDidChange state: CRRefreshState) {
         switch state {
         case .refreshing:
-            titleLabel.text = loadingDescription
+            titleLabel.text = ""
             setNeedsLayout()
             break
         case .pulling:
-            titleLabel.text = releaseToRefreshDescription
+            titleLabel.text = ""
             self.setNeedsLayout()
             UIView.animate(withDuration: 0.2, delay: 0.0, options: UIView.AnimationOptions(), animations: {
                 [weak self] in
@@ -126,7 +126,7 @@ open class NormalHeaderAnimator: UIView, CRRefreshProtocol {
             }) { (animated) in }
             break
         case .idle:
-            titleLabel.text = pullToRefreshDescription
+            titleLabel.text = ""
             self.setNeedsLayout()
             UIView.animate(withDuration: 0.2, delay: 0.0, options: UIView.AnimationOptions(), animations: {
                 [weak self] in
@@ -147,8 +147,8 @@ open class NormalHeaderAnimator: UIView, CRRefreshProtocol {
         UIView.performWithoutAnimation {
             titleLabel.sizeToFit()
             titleLabel.center = .init(x: w / 2.0, y: h / 2.0)
-            indicatorView.center = .init(x: titleLabel.frame.origin.x - 16.0, y: h / 2.0)
-            imageView.frame = CGRect.init(x: titleLabel.frame.origin.x - 28.0, y: (h - 18.0) / 2.0, width: 18.0, height: 18.0)
+            indicatorView.center = .init(x: titleLabel.frame.origin.x, y: h / 2.0)
+            imageView.frame = CGRect.init(x: titleLabel.frame.origin.x - 9.0, y: (h - 18.0) / 2.0, width: 18.0, height: 18.0)
         }
     }
     

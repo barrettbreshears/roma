@@ -141,11 +141,11 @@ class DetailCellImage: UITableViewCell {
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImage(275)]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImageBG(275)]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImage(275)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImageBG(275)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
         case .pad:
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImage(500)]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImageBG(500)]-10-[faves]-10-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImage(500)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImageBG(500)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
         default:
             print("nothing")
         }
@@ -164,23 +164,36 @@ class DetailCellImage: UITableViewCell {
         toot.hashtagColor = Colours.tabSelected
         toot.URLColor = Colours.tabSelected
         
-        userName.text = status.reblog?.account.displayName ?? status.account.displayName
-        if userName.text == "" {
-            userName.text = " "
-        }
-        
         if (UserDefaults.standard.object(forKey: "mentionToggle") == nil || UserDefaults.standard.object(forKey: "mentionToggle") as! Int == 0) {
             userTag.setTitle("@\(status.reblog?.account.acct ?? status.account.acct)", for: .normal)
         } else {
             userTag.setTitle("@\(status.reblog?.account.username ?? status.account.username)", for: .normal)
         }
         if status.reblog?.content.stripHTML() != nil {
-//            toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.username) reposted"
+            
+            var theUsernameTag = status.account.displayName
+            if (UserDefaults.standard.object(forKey: "boostusern") == nil) || (UserDefaults.standard.object(forKey: "boostusern") as! Int == 0) {
+                
+            } else {
+                theUsernameTag = "@\(status.account.acct)"
+            }
             
             if status.reblog!.emojis.isEmpty {
-                toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
+                let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n")
+                let imageAttachment = NSTextAttachment()
+                imageAttachment.image = UIImage(named:"boost2")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
+                imageAttachment.bounds = CGRect(x: 0, y: -3, width: Int(self.toot.font.lineHeight - 5), height: Int(self.toot.font.lineHeight))
+                let attachmentString2 = NSAttributedString(attachment: imageAttachment)
+                let completeText2 = NSMutableAttributedString(string: "")
+                completeText2.append(attachmentString2)
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
+                let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
+                completeText2.append(textAfterIcon2)
+                attributedString.append(completeText2)
+                self.toot.attributedText = attributedString
+                self.reloadInputViews()
             } else {
-                let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted")
+                let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n", attributes: [NSAttributedString.Key.foregroundColor: Colours.black])
                 status.reblog!.emojis.map({
                     let textAttachment = NSTextAttachment()
                     textAttachment.loadImageUsingCache(withUrl: $0.url.absoluteString)
@@ -189,9 +202,20 @@ class DetailCellImage: UITableViewCell {
                     while attributedString.mutableString.contains(":\($0.shortcode):") {
                         let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\($0.shortcode):")
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
-                        
                     }
                 })
+                
+                let imageAttachment = NSTextAttachment()
+                imageAttachment.image = UIImage(named:"boost2")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
+                imageAttachment.bounds = CGRect(x: 0, y: -3, width: Int(self.toot.font.lineHeight - 5), height: Int(self.toot.font.lineHeight))
+                let attachmentString2 = NSAttributedString(attachment: imageAttachment)
+                let completeText2 = NSMutableAttributedString(string: "")
+                completeText2.append(attachmentString2)
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
+                let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
+                completeText2.append(textAfterIcon2)
+                attributedString.append(completeText2)
+                
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
             }
@@ -213,6 +237,7 @@ class DetailCellImage: UITableViewCell {
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
                     }
                 })
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
                 self.userName.attributedText = attributedString
                 self.reloadInputViews()
             }
@@ -240,6 +265,7 @@ class DetailCellImage: UITableViewCell {
                         
                     }
                 })
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
             }
@@ -260,6 +286,7 @@ class DetailCellImage: UITableViewCell {
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
                     }
                 })
+                attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
                 self.userName.attributedText = attributedString
                 self.reloadInputViews()
             }
@@ -514,6 +541,11 @@ class DetailCellImage: UITableViewCell {
             self.mainImageView.pin_updateWithProgress = true
             self.mainImageView.pin_setImage(from: URL(string: "\(status.reblog?.mediaAttachments.first?.url ?? status.mediaAttachments.first?.url ?? "")"))
             }
+        }
+        
+//        userName.text = status.reblog?.account.displayName ?? status.account.displayName
+        if userName.text == "" {
+            userName.text = " "
         }
         
     }

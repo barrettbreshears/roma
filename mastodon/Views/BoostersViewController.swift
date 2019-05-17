@@ -11,7 +11,7 @@ import UIKit
 import SJFluidSegmentedControl
 import StatusAlert
 
-class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource {
+class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate {
     
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var segmentedControl: SJFluidSegmentedControl!
@@ -38,7 +38,15 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         
-        //self.ai.startAnimating()
+        if self.currentIndex == 0 {
+            if let indexPath = tableView.indexPathForSelectedRow {
+                self.tableView.deselectRow(at: indexPath, animated: true)
+            }
+        } else {
+            if let indexPath = tableView2.indexPathForSelectedRow {
+                self.tableView2.deselectRow(at: indexPath, animated: true)
+            }
+        }
     }
     
     
@@ -136,7 +144,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             self.navigationController?.view.addSubview(segmentedControl)
             
             self.tableView.register(FollowersCell.self, forCellReuseIdentifier: "cellf")
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 15)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
             self.tableView.alpha = 1
             self.tableView.delegate = self
             self.tableView.dataSource = self
@@ -149,7 +157,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             self.view.addSubview(self.tableView)
             
             self.tableView2.register(FollowersCell.self, forCellReuseIdentifier: "cellf2")
-            self.tableView2.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 15)
+            self.tableView2.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
             self.tableView2.alpha = 1
             self.tableView2.delegate = self
             self.tableView2.dataSource = self
@@ -172,6 +180,10 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
         
         self.ai.frame = CGRect(x: self.view.bounds.width/2 - 20, y: self.view.bounds.height/2, width: 40, height: 40)
         self.view.backgroundColor = Colours.white
+        UINavigationBar.appearance().backgroundColor = Colours.white
+        UINavigationBar.appearance().barTintColor = Colours.black
+        UINavigationBar.appearance().tintColor = Colours.black
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -254,7 +266,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             self.navigationController?.view.addSubview(segmentedControl)
             
             self.tableView.register(FollowersCell.self, forCellReuseIdentifier: "cellf")
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 15)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
             self.tableView.alpha = 1
             self.tableView.delegate = self
             self.tableView.dataSource = self
@@ -268,7 +280,7 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             self.tableView.tableFooterView = UIView()
             
             self.tableView2.register(FollowersCell.self, forCellReuseIdentifier: "cellf2")
-            self.tableView2.frame = CGRect(x: 0, y: Int(offset + 10), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 15)
+            self.tableView2.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
             self.tableView2.alpha = 1
             self.tableView2.delegate = self
             self.tableView2.dataSource = self
@@ -356,25 +368,29 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
     
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, titleForSegmentAtIndex index: Int) -> String? {
         if index == 0 {
-            return "\(statusLiked.count) Likes".localized
+            return "Likes".localized
         } else {
-            return "\(statusBoosted.count) Boosts".localized
+            return "Boosts".localized
         }
     }
     
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForSelectedSegmentAtIndex index: Int) -> [UIColor] {
         if (UserDefaults.standard.object(forKey: "seghue1") == nil) || (UserDefaults.standard.object(forKey: "seghue1") as! Int == 0) {
             return [Colours.tabSelected, Colours.tabSelected]
-        } else {
+        } else if (UserDefaults.standard.object(forKey: "seghue1") as! Int == 1) {
             return [Colours.grayLight2, Colours.grayLight2]
+        } else {
+            return [Colours.clear, Colours.clear]
         }
     }
     
     func segmentedControl(_ segmentedControl: SJFluidSegmentedControl, gradientColorsForBounce bounce: SJFluidSegmentedControlBounce) -> [UIColor] {
         if (UserDefaults.standard.object(forKey: "seghue1") == nil) || (UserDefaults.standard.object(forKey: "seghue1") as! Int == 0) {
             return [Colours.tabSelected, Colours.tabSelected]
-        } else {
+        } else if (UserDefaults.standard.object(forKey: "seghue1") as! Int == 1) {
             return [Colours.grayLight2, Colours.grayLight2]
+        } else {
+            return [Colours.clear, Colours.clear]
         }
     }
     
@@ -425,12 +441,12 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellf", for: indexPath) as! FollowersCell
                 cell.backgroundColor = Colours.white
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             } else {
                 
-                if indexPath.row == self.statusLiked.count - 6 {
+                if indexPath.row == self.statusLiked.count - 1 {
                     self.fetchFollows()
                 }
                 
@@ -443,8 +459,9 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
                 cell.userTag.textColor = Colours.grayDark.withAlphaComponent(0.38)
                 cell.toot.textColor = Colours.grayDark.withAlphaComponent(0.74)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
+                cell.delegate = self
                 return cell
                 
             }
@@ -455,12 +472,12 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellf2", for: indexPath) as! FollowersCell
                 cell.backgroundColor = Colours.white
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
                 return cell
             } else {
                 
-                if indexPath.row == self.statusBoosted.count - 6 {
+                if indexPath.row == self.statusBoosted.count - 1 {
                     self.fetchFollowers()
                 }
                 
@@ -473,17 +490,443 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
                 cell.userTag.textColor = Colours.grayDark.withAlphaComponent(0.38)
                 cell.toot.textColor = Colours.grayDark.withAlphaComponent(0.74)
                 let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
                 cell.selectedBackgroundView = bgColorView
+                cell.delegate = self
                 return cell
                 
             }
         }
     }
     
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        
+        var sto = self.statusLiked
+        if self.currentIndex == 0 {
+            sto = self.statusLiked
+        } else {
+            sto = self.statusBoosted
+        }
+        
+        if orientation == .right {
+            let impact = UIImpactFeedbackGenerator(style: .medium)
+            
+            let more = SwipeAction(style: .default, title: nil) { action, indexPath in
+                
+                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                    impact.impactOccurred()
+                }
+                
+                
+                Alertift.actionSheet(title: nil, message: nil)
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.default("Pinned".localized), image: UIImage(named: "pinned")) { (action, ind) in
+                        
+                        
+                        let controller = PinnedViewController()
+                        controller.currentTagTitle = "Pinned"
+                        controller.curID = sto[indexPath.row].id
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    }
+                    .action(.default("Mention".localized), image: UIImage(named: "reply2")) { (action, ind) in
+                        
+                        
+                        let controller = ComposeViewController()
+                        controller.inReplyText = sto[indexPath.row].acct
+                        self.present(controller, animated: true, completion: nil)
+                    }
+                    .action(.default("Direct Message".localized), image: UIImage(named: "direct3")) { (action, ind) in
+                        
+                        
+                        let controller = ComposeViewController()
+                        controller.inReplyText = sto[indexPath.row].acct
+                        controller.profileDirect = true
+                        self.present(controller, animated: true, completion: nil)
+                    }
+                    .action(.default("Follow/Unfollow"), image: UIImage(named: "profile")) { (action, ind) in
+                        
+                        let chosen = sto[indexPath.row]
+                        let request02 = Accounts.relationships(ids: [StoreStruct.currentUser.id, chosen.id])
+                        StoreStruct.client.run(request02) { (statuses) in
+                            if let stat = (statuses.value) {
+                                if stat[1].following {
+                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                        let notification = UINotificationFeedbackGenerator()
+                                        notification.notificationOccurred(.success)
+                                    }
+                                    let statusAlert = StatusAlert()
+                                    statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
+                                    statusAlert.title = "Unfollowed".localized
+                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.message = sto[indexPath.row].displayName
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                                        statusAlert.show()
+                                    }
+                                    
+                                    let request = Accounts.unfollow(id: sto[indexPath.row].id)
+                                    StoreStruct.client.run(request) { (statuses) in
+                                        if let stat = (statuses.value) {
+                                            
+                                        }
+                                    }
+                                } else {
+                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                        let notification = UINotificationFeedbackGenerator()
+                                        notification.notificationOccurred(.success)
+                                    }
+                                    
+                                    if sto[indexPath.row].locked {
+                                        let statusAlert = StatusAlert()
+                                        statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
+                                        statusAlert.title = "Follow Request Sent".localized
+                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.message = sto[indexPath.row].displayName
+                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                                            statusAlert.show()
+                                        }
+                                    } else {
+                                        let statusAlert = StatusAlert()
+                                        statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
+                                        statusAlert.title = "Followed".localized
+                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.message = sto[indexPath.row].displayName
+                                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                                            statusAlert.show()
+                                        }
+                                    }
+                                    
+                                    if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
+                                        NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreate"), object: nil)
+                                    }
+                                    
+                                    let request = Accounts.follow(id: sto[indexPath.row].id, reblogs: true)
+                                    StoreStruct.client.run(request) { (statuses) in
+                                        if let stat = (statuses.value) {
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+                    
+                    // change below endorse
+                    .action(.default("Endorse"), image: UIImage(named: "endo")) { (action, ind) in
+                        
+                        let request00 = Accounts.allEndorsements()
+                        StoreStruct.client.run(request00) { (statuses) in
+                            if let stat = (statuses.value) {
+                                let chosen = sto[indexPath.row]
+                                let s = stat.filter { $0.id == chosen.id }
+                                if s.isEmpty {
+                                    let request = Accounts.endorse(id: sto[indexPath.row].id)
+                                    StoreStruct.client.run(request) { (statuses) in
+                                        if let stat = (statuses.value) {
+                                            DispatchQueue.main.async {
+                                                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                                    let notification = UINotificationFeedbackGenerator()
+                                                    notification.notificationOccurred(.success)
+                                                }
+                                                let statusAlert = StatusAlert()
+                                                statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
+                                                statusAlert.title = "Endorsed".localized
+                                                statusAlert.contentColor = Colours.grayDark
+                                                statusAlert.message = sto[indexPath.row].displayName
+                                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                                                    statusAlert.show()
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    let request = Accounts.endorseRemove(id: sto[indexPath.row].id)
+                                    StoreStruct.client.run(request) { (statuses) in
+                                        if let stat = (statuses.value) {
+                                            DispatchQueue.main.async {
+                                                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                                    let notification = UINotificationFeedbackGenerator()
+                                                    notification.notificationOccurred(.success)
+                                                }
+                                                let statusAlert = StatusAlert()
+                                                statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
+                                                statusAlert.title = "Removed Endorsement".localized
+                                                statusAlert.contentColor = Colours.grayDark
+                                                statusAlert.message = sto[indexPath.row].displayName
+                                                if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                                                    statusAlert.show()
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+                    .action(.default("Add to a List".localized), image: UIImage(named: "list")) { (action, ind) in
+                        
+                        let request = Lists.all()
+                        StoreStruct.client.run(request) { (statuses) in
+                            if let stat = (statuses.value) {
+                                StoreStruct.allLists = stat
+                                StoreStruct.allLists.map({
+                                    var zzz: [String:String] = [:]
+                                    zzz[$0.title] = $0.id
+                                    
+                                    let z1 = Alertift.actionSheet()
+                                        .backgroundColor(Colours.white)
+                                        .titleTextColor(Colours.grayDark)
+                                        .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                                        .messageTextAlignment(.left)
+                                        .titleTextAlignment(.left)
+                                        .action(.cancel("Dismiss"))
+                                        .finally { action, index in
+                                            if action.style == .cancel {
+                                                return
+                                            }
+                                    }
+                                    zzz.map({
+                                        let aa = $0
+                                        z1.action(.default($0.key), image: nil) { (action, ind) in
+                                            let request = Lists.add(accountIDs: [sto[indexPath.row].id], toList: aa.value)
+                                            StoreStruct.client.run(request) { (statuses) in
+                                                DispatchQueue.main.async {
+                                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                                        let notification = UINotificationFeedbackGenerator()
+                                                        notification.notificationOccurred(.success)
+                                                    }
+                                                    let statusAlert = StatusAlert()
+                                                    statusAlert.image = UIImage(named: "listbig")?.maskWithColor(color: Colours.grayDark)
+                                                    statusAlert.title = "Added".localized
+                                                    statusAlert.contentColor = Colours.grayDark
+                                                    statusAlert.message = sto[indexPath.row].displayName
+                                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                                                        statusAlert.show()
+                                                    }
+                                                    
+                                                }
+                                            }
+                                        }
+                                    })
+                                    
+                                    if zzz.count == 0 {
+                                        z1.action(.default("Create New List"), image: nil) { (action, ind) in
+                                            let controller = NewListViewController()
+                                            self.present(controller, animated: true, completion: nil)
+                                        }
+                                    }
+                                    
+                                    z1.popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.contentView ?? self.view)
+                                    z1.show(on: self, completion: nil)
+                                })
+                            }
+                        }
+                        
+                    }
+                    .action(.default("Mute/Unmute"), image: UIImage(named: "block")) { (action, ind) in
+                        
+                        let request0 = Mutes.all()
+                        StoreStruct.client.run(request0) { (statuses) in
+                            if let stat = (statuses.value) {
+                                let chosen = sto[indexPath.row]
+                                let s = stat.filter { $0.id == chosen.id }
+                                if s.isEmpty {
+                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                        let notification = UINotificationFeedbackGenerator()
+                                        notification.notificationOccurred(.success)
+                                    }
+                                    let statusAlert = StatusAlert()
+                                    statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
+                                    statusAlert.title = "Muted".localized
+                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.message = sto[indexPath.row].displayName
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                                        statusAlert.show()
+                                    }
+                                    
+                                    let request = Accounts.mute(id: sto[indexPath.row].id)
+                                    StoreStruct.client.run(request) { (statuses) in
+                                        if let stat = (statuses.value) {
+                                            
+                                            
+                                        }
+                                    }
+                                } else {
+                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                        let notification = UINotificationFeedbackGenerator()
+                                        notification.notificationOccurred(.success)
+                                    }
+                                    let statusAlert = StatusAlert()
+                                    statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
+                                    statusAlert.title = "Unmuted".localized
+                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.message = sto[indexPath.row].displayName
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                                        statusAlert.show()
+                                    }
+                                    
+                                    let request = Accounts.unmute(id: sto[indexPath.row].id)
+                                    StoreStruct.client.run(request) { (statuses) in
+                                        if let stat = (statuses.value) {
+                                            
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .action(.default("Block/Unblock"), image: UIImage(named: "block2")) { (action, ind) in
+                        
+                        let request01 = Blocks.all()
+                        StoreStruct.client.run(request01) { (statuses) in
+                            if let stat = (statuses.value) {
+                                let chosen = sto[indexPath.row]
+                                let s = stat.filter { $0.id == chosen.id }
+                                if s.isEmpty {
+                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                        let notification = UINotificationFeedbackGenerator()
+                                        notification.notificationOccurred(.success)
+                                    }
+                                    let statusAlert = StatusAlert()
+                                    statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
+                                    statusAlert.title = "Blocked".localized
+                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.message = sto[indexPath.row].displayName
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                                        statusAlert.show()
+                                    }
+                                    
+                                    let request = Accounts.block(id: sto[indexPath.row].id)
+                                    StoreStruct.client.run(request) { (statuses) in
+                                        if let stat = (statuses.value) {
+                                            
+                                            
+                                        }
+                                    }
+                                } else {
+                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                                        let notification = UINotificationFeedbackGenerator()
+                                        notification.notificationOccurred(.success)
+                                    }
+                                    let statusAlert = StatusAlert()
+                                    statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
+                                    statusAlert.title = "Unblocked".localized
+                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.message = sto[indexPath.row].displayName
+                                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                                        statusAlert.show()
+                                    }
+                                    
+                                    let request = Accounts.unblock(id: sto[indexPath.row].id)
+                                    StoreStruct.client.run(request) { (statuses) in
+                                        if let stat = (statuses.value) {
+                                            
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                    }
+                    .action(.default("Share Profile".localized), image: UIImage(named: "share")) { (action, ind) in
+                        
+                        
+                        
+                        Alertift.actionSheet()
+                            .backgroundColor(Colours.white)
+                            .titleTextColor(Colours.grayDark)
+                            .messageTextColor(Colours.grayDark)
+                            .messageTextAlignment(.left)
+                            .titleTextAlignment(.left)
+                            .action(.default("Share Link".localized), image: UIImage(named: "share")) { (action, ind) in
+                                
+                                
+                                let objectsToShare = [sto[indexPath.row].url]
+                                let vc = VisualActivityViewController(activityItems: objectsToShare, applicationActivities: nil)
+                                vc.popoverPresentationController?.sourceView = self.view
+                                vc.previewNumberOfLines = 5
+                                vc.previewFont = UIFont.systemFont(ofSize: 14)
+                                self.present(vc, animated: true, completion: nil)
+                            }
+                            .action(.default("Share QR Code".localized), image: UIImage(named: "share")) { (action, ind) in
+                                
+                                
+                                let controller = NewQRViewController()
+                                controller.ur = sto[indexPath.row].displayName
+                                self.present(controller, animated: true, completion: nil)
+                                
+                            }
+                            .action(.cancel("Dismiss"))
+                            .finally { action, index in
+                                if action.style == .cancel {
+                                    return
+                                }
+                            }
+                            .show(on: self)
+                        
+                        
+                        
+                        
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.contentView ?? self.view)
+                    .show(on: self)
+                
+                
+                if let cell = tableView.cellForRow(at: indexPath) as? FollowersCell {
+                    cell.hideSwipe(animated: true)
+                } else {
+                    let cell = tableView.cellForRow(at: indexPath) as! FollowersCell
+                    cell.hideSwipe(animated: true)
+                }
+                
+            }
+            
+            more.backgroundColor = Colours.white
+            more.image = UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected)
+            more.transitionDelegate = ScaleTransition.default
+            more.textColor = Colours.tabUnselected
+            return [more]
+        } else {
+            return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        if (UserDefaults.standard.object(forKey: "selectSwipe") == nil) || (UserDefaults.standard.object(forKey: "selectSwipe") as! Int == 0) {
+            options.expansionStyle = .selection
+        } else {
+            options.expansionStyle = .none
+        }
+        options.transitionStyle = .drag
+        options.buttonSpacing = 0
+        options.buttonPadding = 0
+        options.maximumButtonWidth = 60
+        options.backgroundColor = Colours.white
+        options.expansionDelegate = ScaleAndAlphaExpansion.default
+        return options
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        self.tableView.deselectRow(at: indexPath, animated: true)
+//        if self.currentIndex == 0 {
+//            self.tableView.deselectRow(at: indexPath, animated: true)
+//        } else {
+//            self.tableView2.deselectRow(at: indexPath, animated: true)
+//        }
         
         let controller = ThirdViewController()
         controller.fromOtherUser = true
@@ -508,9 +951,9 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
+                    self.lastThing = stat.first?.id ?? ""
+                    self.statusLiked = self.statusLiked + stat
                     DispatchQueue.main.async {
-                        self.lastThing = stat.first?.id ?? ""
-                        self.statusLiked = self.statusLiked + stat
                         self.statusLiked = self.statusLiked.removeDuplicates()
                         self.tableView.reloadData()
                     }
@@ -525,9 +968,9 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty || self.lastThing2 == stat.first?.id ?? "" {} else {
+                    self.lastThing2 = stat.first?.id ?? ""
+                    self.statusBoosted = self.statusBoosted + stat
                     DispatchQueue.main.async {
-                        self.lastThing2 = stat.first?.id ?? ""
-                        self.statusBoosted = self.statusBoosted + stat
                         self.statusBoosted = self.statusBoosted.removeDuplicates()
                         self.tableView2.reloadData()
                     }
@@ -606,6 +1049,12 @@ class BoostersViewController: UIViewController, SJFluidSegmentedControlDataSourc
             Colours.black = UIColor.white
             UIApplication.shared.statusBarStyle = .lightContent
         }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
         
         self.view.backgroundColor = Colours.white
         if (UserDefaults.standard.object(forKey: "systemText") == nil) || (UserDefaults.standard.object(forKey: "systemText") as! Int == 0) {
