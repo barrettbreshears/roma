@@ -96,7 +96,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Toot Filters"
+        self.title = "Status Filters"
         self.removeTabbarItemsText()
         
         //NotificationCenter.default.addObserver(self, selector: #selector(self.goLists), name: NSNotification.Name(rawValue: "goLists"), object: nil)
