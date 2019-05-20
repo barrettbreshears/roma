@@ -1676,6 +1676,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     
     
     func streamDataHome() {
+        StoreStruct.tempStatusesHome = StoreStruct.statusesHome
         if UserDefaults.standard.object(forKey: "accessToken") == nil {} else {
             if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
                 self.hStream = true
@@ -1715,19 +1716,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     self.hMod = self.hMod.reversed()
                                     if let st = self.hMod.last {
                                         if StoreStruct.statusesHome.contains(st) {
-                                            StoreStruct.statusesHome = self.hMod + StoreStruct.statusesHome
-                                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                                            StoreStruct.tempStatusesHome = self.hMod + StoreStruct.tempStatusesHome
+                                            StoreStruct.tempStatusesHome = StoreStruct.tempStatusesHome.removeDuplicates()
                                         } else {
                                             StoreStruct.gapLastHomeID = self.hMod.last?.id ?? ""
                                             let z = st
                                             z.id = "loadmorehere"
                                             StoreStruct.gapLastHomeStat = z
-                                            StoreStruct.statusesHome = self.hMod + StoreStruct.statusesHome
-                                            StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                                            StoreStruct.tempStatusesHome = self.hMod + StoreStruct.tempStatusesHome
+                                            StoreStruct.tempStatusesHome = StoreStruct.tempStatusesHome.removeDuplicates()
                                         }
                                     } else {
-                                        StoreStruct.statusesHome = self.hMod + StoreStruct.statusesHome
-                                        StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
+                                        StoreStruct.tempStatusesHome = self.hMod + StoreStruct.tempStatusesHome
+                                        StoreStruct.tempStatusesHome = StoreStruct.tempStatusesHome.removeDuplicates()
                                     }
                                     
                                     if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
@@ -1742,12 +1743,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                         self.countcount1 = self.hMod.count
                                         
                                         UIView.setAnimationsEnabled(false)
+                                        StoreStruct.statusesHome = StoreStruct.tempStatusesHome
                                         self.tableView.reloadData()
                                         //                                    self.refreshControl.endRefreshing()
                                         self.tableView.scrollToRow(at: IndexPath(row: self.hMod.count - 1, section: 0), at: .top, animated: false)
                                         UIView.setAnimationsEnabled(true)
                                     } else {
                                         
+                                        StoreStruct.statusesHome = StoreStruct.tempStatusesHome
                                         self.tableView.reloadData()
                                         //                                    self.refreshControl.endRefreshing()
                                         
@@ -1778,6 +1781,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     }
     
     func streamDataLocal() {
+        StoreStruct.tempStatusesLocal = StoreStruct.statusesLocal
         if UserDefaults.standard.object(forKey: "accessToken") == nil {} else {
             if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
                 self.lStream = true
@@ -1817,19 +1821,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     self.lMod = self.lMod.reversed()
                                     if let st = self.lMod.last {
                                         if StoreStruct.statusesLocal.contains(st) {
-                                            StoreStruct.statusesLocal = self.lMod + StoreStruct.statusesLocal
-                                            StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                                            StoreStruct.tempStatusesLocal = self.lMod + StoreStruct.tempStatusesLocal
+                                            StoreStruct.tempStatusesLocal = StoreStruct.tempStatusesLocal.removeDuplicates()
                                         } else {
                                             StoreStruct.gapLastLocalID = self.lMod.last?.id ?? ""
                                             let z = st
                                             z.id = "loadmorehere"
                                             StoreStruct.gapLastLocalStat = z
-                                            StoreStruct.statusesLocal = self.lMod + StoreStruct.statusesLocal
-                                            StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                                            StoreStruct.tempStatusesLocal = self.lMod + StoreStruct.tempStatusesLocal
+                                            StoreStruct.tempStatusesLocal = StoreStruct.tempStatusesLocal.removeDuplicates()
                                         }
                                     } else {
-                                        StoreStruct.statusesLocal = self.lMod + StoreStruct.statusesLocal
-                                        StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
+                                        StoreStruct.tempStatusesLocal = self.lMod + StoreStruct.tempStatusesLocal
+                                        StoreStruct.tempStatusesLocal = StoreStruct.tempStatusesLocal.removeDuplicates()
                                     }
                                     
                                     if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
@@ -1844,12 +1848,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                         self.countcount2 = self.lMod.count
                                         
                                         UIView.setAnimationsEnabled(false)
+                                        StoreStruct.statusesLocal = StoreStruct.tempStatusesLocal
                                         self.tableViewL.reloadData()
                                         //                                    self.refreshControl.endRefreshing()
                                         self.tableViewL.scrollToRow(at: IndexPath(row: self.lMod.count - 1, section: 0), at: .top, animated: false)
                                         UIView.setAnimationsEnabled(true)
                                     } else {
                                         
+                                        StoreStruct.statusesLocal = StoreStruct.tempStatusesLocal
                                         self.tableViewL.reloadData()
                                         //                                    self.refreshControl.endRefreshing()
                                         
@@ -1880,6 +1886,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     }
     
     func streamDataFed() {
+        StoreStruct.tempStatusesFederated = StoreStruct.statusesFederated
         if UserDefaults.standard.object(forKey: "accessToken") == nil {} else {
             if (UserDefaults.standard.object(forKey: "streamToggle") == nil) || (UserDefaults.standard.object(forKey: "streamToggle") as! Int == 0) {
                 self.fStream = true
@@ -1922,19 +1929,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     self.fMod = self.fMod.reversed()
                                     if let st = self.fMod.last {
                                         if StoreStruct.statusesFederated.contains(st) {
-                                            StoreStruct.statusesFederated = self.fMod + StoreStruct.statusesFederated
-                                            StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                                            StoreStruct.tempStatusesFederated = self.fMod + StoreStruct.tempStatusesFederated
+                                            StoreStruct.tempStatusesFederated = StoreStruct.tempStatusesFederated.removeDuplicates()
                                         } else {
                                             StoreStruct.gapLastFedID = self.fMod.last?.id ?? ""
                                             let z = st
                                             z.id = "loadmorehere"
                                             StoreStruct.gapLastFedStat = z
-                                            StoreStruct.statusesFederated = self.fMod + StoreStruct.statusesFederated
-                                            StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                                            StoreStruct.tempStatusesFederated = self.fMod + StoreStruct.tempStatusesFederated
+                                            StoreStruct.tempStatusesFederated = StoreStruct.tempStatusesFederated.removeDuplicates()
                                         }
                                     } else {
-                                        StoreStruct.statusesFederated = self.fMod + StoreStruct.statusesFederated
-                                        StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
+                                        StoreStruct.tempStatusesFederated = self.fMod + StoreStruct.tempStatusesFederated
+                                        StoreStruct.tempStatusesFederated = StoreStruct.tempStatusesFederated.removeDuplicates()
                                     }
                                     
                                     
@@ -1951,6 +1958,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                         self.countcount3 = self.fMod.count
                                         
                                         UIView.setAnimationsEnabled(false)
+                                        StoreStruct.statusesFederated = StoreStruct.tempStatusesFederated
                                         self.tableViewF.reloadData()
                                         //                                    self.refreshControl.endRefreshing()
                                         self.tableViewF.scrollToRow(at: IndexPath(row: self.fMod.count - 1, section: 0), at: .top, animated: false)
@@ -1958,6 +1966,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                         
                                     } else {
                                         
+                                        StoreStruct.statusesFederated = StoreStruct.tempStatusesFederated
                                         self.tableViewF.reloadData()
                                         //                                    self.refreshControl.endRefreshing()
                                         

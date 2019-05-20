@@ -69,11 +69,16 @@ struct StoreStruct {
     static var mainResult2: [NSAttributedString] = []
     static var instanceLocalToAdd: [String] = []
     
+    static var tempStatusesHome: [Status] = []
     static var statusesHome: [Status] = []
+    static var tempStatusesLocal: [Status] = []
     static var statusesLocal: [Status] = []
+    static var tempStatusesFederated: [Status] = []
     static var statusesFederated: [Status] = []
     
+    static var tempNotifications: [Notificationt] = []
     static var notifications: [Notificationt] = []
+    static var tempNotificationsMentions: [Notificationt] = []
     static var notificationsMentions: [Notificationt] = []
     static var notificationsDirect: [Conversation] = []
     

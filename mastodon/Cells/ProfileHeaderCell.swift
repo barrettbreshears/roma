@@ -275,6 +275,7 @@ class ProfileHeaderCell: SwipeTableViewCell {
         
         
         
+        profileImageView.imageView?.contentMode = .scaleAspectFill
         profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
         profileImageView.pin_updateWithProgress = true
         profileImageView.pin_setImage(from: URL(string: "\(status.avatar)"))
@@ -298,7 +299,7 @@ class ProfileHeaderCell: SwipeTableViewCell {
             profileImageView.layer.cornerRadius = 0
         }
         
-        headerImageView.contentMode = .scaleAspectFill
+        headerImageView.imageView?.contentMode = .scaleAspectFill
         headerImageView.pin_updateWithProgress = true
         headerImageView.pin_setImage(from: URL(string: "\(status.header)"))
         headerImageView.layer.masksToBounds = true
@@ -635,6 +636,7 @@ class ProfileHeaderCell2: SwipeTableViewCell {
         
         
         
+        profileImageView.imageView?.contentMode = .scaleAspectFill
         profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
         profileImageView.pin_updateWithProgress = true
         profileImageView.pin_setImage(from: URL(string: "\(status.avatar)"))
@@ -658,7 +660,7 @@ class ProfileHeaderCell2: SwipeTableViewCell {
             profileImageView.layer.cornerRadius = 0
         }
         
-        headerImageView.contentMode = .scaleAspectFill
+        headerImageView.imageView?.contentMode = .scaleAspectFill
         headerImageView.pin_updateWithProgress = true
         headerImageView.pin_setImage(from: URL(string: "\(status.header)"))
         headerImageView.layer.masksToBounds = true

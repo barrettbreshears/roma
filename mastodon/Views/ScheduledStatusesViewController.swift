@@ -13,7 +13,7 @@ import StatusAlert
 import AVKit
 import AVFoundation
 
-class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate {
+class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate, SwipeTableViewCellDelegate {
     
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var segmentedControl: SJFluidSegmentedControl!
@@ -184,6 +184,7 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
             
             if self.statuses[indexPath.row].mediaAttachments.isEmpty {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ScheduledCell", for: indexPath) as! ScheduledCell
+                cell.delegate = self
                 cell.configure(self.statuses[indexPath.row])
                 cell.backgroundColor = Colours.white
                 cell.userName.textColor = Colours.grayDark.withAlphaComponent(0.38)
@@ -194,6 +195,7 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
                 return cell
             } else {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "ScheduledCellImage", for: indexPath) as! ScheduledCellImage
+                cell.delegate = self
                 cell.configure(self.statuses[indexPath.row])
                 cell.backgroundColor = Colours.white
                 cell.userName.textColor = Colours.grayDark.withAlphaComponent(0.38)
@@ -293,63 +295,105 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        self.tableView.deselectRow(at: indexPath, animated: true)
+        self.tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
         
-        Alertift.actionSheet(title: nil, message: nil)
-            .backgroundColor(Colours.white)
-            .titleTextColor(Colours.grayDark)
-            .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
-            .messageTextAlignment(.left)
-            .titleTextAlignment(.left)
-            .action(.default("Delete".localized), image: UIImage(named: "block")) { (action, ind) in
-                
-                let request = Statuses.deleteScheduled(id: self.statuses[indexPath.row].id)
-                StoreStruct.client.run(request) { (statuses) in
-                    let statusAlert = StatusAlert()
-                    statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
-                    statusAlert.title = "Deleted".localized
-                    statusAlert.contentColor = Colours.grayDark
-                    statusAlert.message = "Not scheduled anymore"
-                    if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
-                    }
+        guard orientation == .right else { return nil }
+        
+        var sto = self.statuses
+        
+        let impact = UIImpactFeedbackGenerator(style: .medium)
+        
+        let more = SwipeAction(style: .default, title: nil) { action, indexPath in
+            
+            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                impact.impactOccurred()
+            }
+            Alertift.actionSheet(title: nil, message: nil)
+                .backgroundColor(Colours.white)
+                .titleTextColor(Colours.grayDark)
+                .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                .messageTextAlignment(.left)
+                .titleTextAlignment(.left)
+                .action(.default("Delete".localized), image: UIImage(named: "block")) { (action, ind) in
                     
-                    let request0 = Statuses.allScheduled()
-                    StoreStruct.client.run(request0) { (statuses) in
-                         
-                        if let stat = (statuses.value) {
-                            DispatchQueue.main.async {
-                                self.statuses = stat
-                                self.tableView.reloadData()
+                    let request = Statuses.deleteScheduled(id: self.statuses[indexPath.row].id)
+                    StoreStruct.client.run(request) { (statuses) in
+                        
+                        DispatchQueue.main.async {
+                        let statusAlert = StatusAlert()
+                        statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
+                        statusAlert.title = "Deleted".localized
+                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.message = "Not scheduled anymore"
+                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
+                            statusAlert.show()
+                        }
+                        
+                        let request0 = Statuses.allScheduled()
+                        StoreStruct.client.run(request0) { (statuses) in
+                            
+                            if let stat = (statuses.value) {
+                                DispatchQueue.main.async {
+                                    self.statuses = stat
+                                    self.tableView.reloadData()
+                                }
                             }
+                        }
                         }
                     }
                     
                 }
-                
-            }
-            .action(.default("Delete and Redraft".localized), image: UIImage(named: "block")) { (action, ind) in
-                
-                let controller = ComposeViewController()
-                controller.idToDelSc = self.statuses[indexPath.row].id
-                controller.isScheduled = true
-                self.present(controller, animated: true, completion: nil)
-                
-            }
-            .action(.cancel("Dismiss"))
-            .finally { action, index in
-                if action.style == .cancel {
-                    return
+                .action(.default("Delete and Redraft".localized), image: UIImage(named: "block")) { (action, ind) in
+                    
+                    let controller = ComposeViewController()
+                    controller.idToDelSc = self.statuses[indexPath.row].id
+                    controller.isScheduled = true
+                    controller.filledTextFieldText = self.statuses[indexPath.row].params.text
+                    self.present(controller, animated: true, completion: nil)
+                    
                 }
+                .action(.cancel("Dismiss"))
+                .finally { action, index in
+                    if action.style == .cancel {
+                        return
+                    }
+                }
+                .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: indexPath.section))?.contentView ?? self.view)
+                .show(on: self)
+            
+            
+            if let cell = tableView.cellForRow(at: indexPath) as? FollowersCell {
+                cell.hideSwipe(animated: true)
             }
-            .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: indexPath.section))?.contentView ?? self.view)
-            .show(on: self)
-        
-        
-        
-        
-        
+        }
+        more.backgroundColor = Colours.white
+        more.image = UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected)
+        more.transitionDelegate = ScaleTransition.default
+        more.textColor = Colours.tabUnselected
+        return [more]
     }
+    
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        if (UserDefaults.standard.object(forKey: "selectSwipe") == nil) || (UserDefaults.standard.object(forKey: "selectSwipe") as! Int == 0) {
+            options.expansionStyle = .selection
+        } else {
+            options.expansionStyle = .none
+        }
+        options.transitionStyle = .drag
+        options.buttonSpacing = 0
+        options.buttonPadding = 0
+        options.maximumButtonWidth = 60
+        options.backgroundColor = Colours.white
+        options.expansionDelegate = ScaleAndAlphaExpansion.default
+        return options
+    }
+    
+    
     
     @objc func didTouchProfile(sender: UIButton) {
 //        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {

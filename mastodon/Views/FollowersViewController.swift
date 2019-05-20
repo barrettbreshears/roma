@@ -273,7 +273,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
-        self.fetchFollows()
+        self.fetchFollowers()
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -958,9 +958,11 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                 
                 if stat.isEmpty {} else {
                     self.lastThing2 = stat.first?.id ?? ""
-                self.statusFollows = self.statusFollows + stat
-                    self.statusFollows = self.statusFollows.removeDuplicates()
+                self.statusFollowers = self.statusFollowers + stat
+                    self.statusFollowers = self.statusFollowers.removeDuplicates()
                 DispatchQueue.main.async {
+                    self.ai.stopAnimating()
+                    self.ai.alpha = 0
                     self.tableView.reloadData()
                 }
                 }

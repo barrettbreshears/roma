@@ -3500,6 +3500,9 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.bringBackDrawer()
         if self.picker.isDescendant(of: self.view) {
             self.picker.removeFromSuperview()
+            self.cameraCollectionView.alpha = 0
+            self.camPickButton.alpha = 0
+            self.galPickButton.alpha = 0
         }
     }
     
@@ -3604,6 +3607,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 self.warningButton.alpha = 0
                 self.emotiButton.alpha = 0
                     self.tableView.alpha = 1
+                    self.selectedImage1.alpha = 0
+                    self.selectedImage2.alpha = 0
+                    self.selectedImage3.alpha = 0
+                    self.selectedImage4.alpha = 0
                 })
                 
             } else {
@@ -3639,6 +3646,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 self.warningButton.alpha = 1
                 self.emotiButton.alpha = 1
                     self.tableView.alpha = 0
+                    self.selectedImage1.alpha = 1
+                    self.selectedImage2.alpha = 1
+                    self.selectedImage3.alpha = 1
+                    self.selectedImage4.alpha = 1
                 }, completion: { finished in
                     self.cameraCollectionView.alpha = 1
                 })

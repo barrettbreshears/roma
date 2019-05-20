@@ -943,8 +943,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell8000", for: indexPath) as! RepliesCell
                     cell.delegate = self
-                    cell.configure(self.allPrevious[indexPath.row])
                     cell.configure2(0)
+                    cell.configure(self.allPrevious[indexPath.row])
                     cell.profileImageView.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfileP), for: .touchUpInside)
                     cell.backgroundColor = Colours.white
@@ -1082,8 +1082,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell9000", for: indexPath) as! RepliesCellImage
                     cell.delegate = self
-                    cell.configure(self.allPrevious[indexPath.row])
                     cell.configure2(0)
+                    cell.configure(self.allPrevious[indexPath.row])
                     cell.profileImageView.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfileP), for: .touchUpInside)
                     cell.mainImageView.addTarget(self, action: #selector(self.tappedImagePrev(_:)), for: .touchUpInside)
@@ -1766,7 +1766,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 if self.allReplies[indexPath.row].mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
                     
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell80", for: indexPath) as! RepliesCell
-                    cell.preservesSuperviewLayoutMargins = false
                     cell.delegate = self
                     cell.configure(self.allReplies[indexPath.row])
                     cell.profileImageView.tag = indexPath.row
@@ -1889,9 +1888,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     if self.allReplies[indexPath.row].inReplyToID == self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id {
                         // top level reply
                         
-                        self.replyDepth = 0
-                        cell.configure2(self.replyDepth)
-                        cell.tag = 0
+                        if cell.tag == 1 {} else {
+                            self.replyDepth = 0
+                            cell.configure2(self.replyDepth)
+                            cell.tag = 1
+                        }
                         
                     } else {
                         // check previous reply's state
@@ -1979,21 +1980,21 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         }
                         if self.allReplies[indexPath.row].inReplyToID == self.allReplies[indexPath.row - 1].id {
                             // shift the cell one depth in (it's a reply of the one above)
-                            if cell.tag > 0 {} else {
-                                self.replyDepth = self.replyDepth + 30
+                            if cell.tag > 1 {} else {
+                                self.replyDepth = self.replyDepth + 25
                                 cell.configure2(self.replyDepth)
                                 cell.tag = self.replyDepth
                             }
                         } else if self.allReplies[indexPath.row].inReplyToID == self.allReplies[indexPath.row - 1].inReplyToID ?? "" {
                             // same level as previous
-                            if cell.tag > 0 {} else {
+                            if cell.tag > 1 {} else {
                                 cell.configure2(self.replyDepth)
                                 cell.tag = self.replyDepth
                             }
                         } else {
                             // one level behind/previous to the left
-                            if cell.tag > 0 {} else {
-                                self.replyDepth = self.replyDepth - 30
+                            if cell.tag > 1 {} else {
+                                self.replyDepth = self.replyDepth - 25
                                 cell.configure2(self.replyDepth)
                                 cell.tag = self.replyDepth
                             }
@@ -2004,13 +2005,22 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 } else {
                     
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell90", for: indexPath) as! RepliesCellImage
-                    cell.preservesSuperviewLayoutMargins = false
                     cell.delegate = self
                     cell.configure(self.allReplies[indexPath.row])
                     cell.profileImageView.tag = indexPath.row
                     cell.userTag.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                     cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                    cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
+                    cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
+                    cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
+                    cell.smallImage3.addTarget(self, action: #selector(self.tappedImageS3(_:)), for: .touchUpInside)
+                    cell.smallImage4.addTarget(self, action: #selector(self.tappedImageS4(_:)), for: .touchUpInside)
+                    cell.mainImageView.tag = indexPath.row
+                    cell.smallImage1.tag = indexPath.row
+                    cell.smallImage2.tag = indexPath.row
+                    cell.smallImage3.tag = indexPath.row
+                    cell.smallImage4.tag = indexPath.row
                     cell.backgroundColor = Colours.white
                     cell.userName.textColor = Colours.black
                     cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
@@ -2127,9 +2137,11 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     if self.allReplies[indexPath.row].inReplyToID == self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id {
                         // top level reply
                         
-                        self.replyDepth = 0
-                        cell.configure2(self.replyDepth)
-                        cell.tag = 0
+                        if cell.tag == 1 {} else {
+                            self.replyDepth = 0
+                            cell.configure2(self.replyDepth)
+                            cell.tag = 1
+                        }
                         
                     } else {
                         // check previous reply's state
@@ -2217,21 +2229,21 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         }
                         if self.allReplies[indexPath.row].inReplyToID == self.allReplies[indexPath.row - 1].id {
                             // shift the cell one depth in (it's a reply of the one above)
-                            if cell.tag > 0 {} else {
-                                self.replyDepth = self.replyDepth + 30
+                            if cell.tag > 1 {} else {
+                                self.replyDepth = self.replyDepth + 25
                                 cell.configure2(self.replyDepth)
                                 cell.tag = self.replyDepth
                             }
                         } else if self.allReplies[indexPath.row].inReplyToID == self.allReplies[indexPath.row - 1].inReplyToID ?? "" {
                             // same level as previous
-                            if cell.tag > 0 {} else {
+                            if cell.tag > 1 {} else {
                                 cell.configure2(self.replyDepth)
                                 cell.tag = self.replyDepth
                             }
                         } else {
                             // one level behind/previous to the left
-                            if cell.tag > 0 {} else {
-                                self.replyDepth = self.replyDepth - 30
+                            if cell.tag > 1 {} else {
+                                self.replyDepth = self.replyDepth - 25
                                 cell.configure2(self.replyDepth)
                                 cell.tag = self.replyDepth
                             }
@@ -3728,8 +3740,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         } else {
 
             if self.allPrevious[indexPath.row].inReplyToID == self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id {
-
-                let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                
+                let cell = tableView.cellForRow(at: indexPath) as! RepliesCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 sto[indexPath.row].mediaAttachments.map({
@@ -3769,8 +3781,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
 
             } else {
-
-                let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                
+                let cell = tableView.cellForRow(at: indexPath) as! RepliesCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 sto[indexPath.row].mediaAttachments.map({
@@ -3835,8 +3847,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         } else {
 
             if self.allReplies[indexPath.row].inReplyToID == self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id {
-
-                let cell = tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                
+                let cell = tableView.cellForRow(at: indexPath) as! RepliesCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 sto[indexPath.row].mediaAttachments.map({
@@ -3943,7 +3955,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
 
                 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = self.tableView.cellForRow(at: indexPath) as! RepliesCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -4007,7 +4019,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
 
                 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = self.tableView.cellForRow(at: indexPath) as! RepliesCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -4071,7 +4083,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
 
                 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = self.tableView.cellForRow(at: indexPath) as! RepliesCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -4136,7 +4148,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
 
                 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = self.tableView.cellForRow(at: indexPath) as! RepliesCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -4205,7 +4217,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
 
                 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = self.tableView.cellForRow(at: indexPath) as! RepliesCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -4267,7 +4279,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
 
                 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = self.tableView.cellForRow(at: indexPath) as! RepliesCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -4330,7 +4342,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
 
                 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = self.tableView.cellForRow(at: indexPath) as! RepliesCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({
@@ -4394,7 +4406,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
 
                 //                let indexPath = IndexPath(row: sender.tag, section: 0)
-                let cell = self.tableView.cellForRow(at: indexPath) as! MainFeedCellImage
+                let cell = self.tableView.cellForRow(at: indexPath) as! RepliesCellImage
                 var images = [SKPhoto]()
                 var coun = 0
                 (sto[indexPath.row].reblog?.mediaAttachments ?? sto[indexPath.row].mediaAttachments).map({

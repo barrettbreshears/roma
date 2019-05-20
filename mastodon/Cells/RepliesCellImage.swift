@@ -28,10 +28,6 @@ class RepliesCellImage: SwipeTableViewCell {
     var smallImage4 = UIButton()
     var warningB = MultiLineButton()
     var indi = UIView()
-    var indi2 = UIView()
-    var indi3 = UIView()
-    var indi4 = UIView()
-    var indi5 = UIView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -40,16 +36,8 @@ class RepliesCellImage: SwipeTableViewCell {
         moreImage.backgroundColor = Colours.clear
         warningB.backgroundColor = Colours.clear
         
-        indi.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-        indi.layer.cornerRadius = 2
-        indi2.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-        indi2.layer.cornerRadius = 2
-        indi3.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-        indi3.layer.cornerRadius = 2
-        indi4.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-        indi4.layer.cornerRadius = 2
-        indi5.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-        indi5.layer.cornerRadius = 2
+        indi.backgroundColor = Colours.tabSelected
+        indi.layer.cornerRadius = 1
         
 //        userName.adjustsFontForContentSizeCategory = true
 //        userTag.titleLabel?.adjustsFontForContentSizeCategory = true
@@ -66,10 +54,6 @@ class RepliesCellImage: SwipeTableViewCell {
         moreImage.translatesAutoresizingMaskIntoConstraints = false
         warningB.translatesAutoresizingMaskIntoConstraints = false
         indi.translatesAutoresizingMaskIntoConstraints = false
-        indi2.translatesAutoresizingMaskIntoConstraints = false
-        indi3.translatesAutoresizingMaskIntoConstraints = false
-        indi4.translatesAutoresizingMaskIntoConstraints = false
-        indi5.translatesAutoresizingMaskIntoConstraints = false
         
         if (UserDefaults.standard.object(forKey: "proCorner") == nil || UserDefaults.standard.object(forKey: "proCorner") as! Int == 0) {
             profileImageView.layer.cornerRadius = 20
@@ -170,10 +154,6 @@ class RepliesCellImage: SwipeTableViewCell {
         contentView.addSubview(moreImage)
         contentView.addSubview(warningB)
         contentView.addSubview(indi)
-        contentView.addSubview(indi2)
-        contentView.addSubview(indi3)
-        contentView.addSubview(indi4)
-        contentView.addSubview(indi5)
         
         imageCountTag.backgroundColor = Colours.clear
         imageCountTag.translatesAutoresizingMaskIntoConstraints = false
@@ -185,7 +165,50 @@ class RepliesCellImage: SwipeTableViewCell {
         imageCountTag.layer.shadowOpacity = 0.22
         imageCountTag.layer.masksToBounds = false
         mainImageView.addSubview(imageCountTag)
-
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure2(_ replyDepth: Int) {
+        //        let contentViewFrame = self.contentView.frame
+        //        let insetContentViewFrame = contentViewFrame.inset(by: UIEdgeInsets(top: 0, left: -CGFloat(replyDepth), bottom: 0, right: 0))
+        //        self.contentView.bounds = insetContentViewFrame
+        
+//        let depth = replyDepth/30
+//        if depth == 0 {
+//            self.indi.backgroundColor = Colours.tabSelected
+//            self.indi2.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
+//            self.indi3.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
+//            self.indi4.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
+//            self.indi5.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
+//        } else if depth == 1 {
+//            self.indi.backgroundColor = Colours.tabSelected
+//            self.indi2.backgroundColor = Colours.tabSelected
+//            self.indi3.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
+//            self.indi4.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
+//            self.indi5.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
+//        } else if depth == 2 {
+//            self.indi.backgroundColor = Colours.tabSelected
+//            self.indi2.backgroundColor = Colours.tabSelected
+//            self.indi3.backgroundColor = Colours.tabSelected
+//            self.indi4.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
+//            self.indi5.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
+//        } else if depth == 3 {
+//            self.indi.backgroundColor = Colours.tabSelected
+//            self.indi2.backgroundColor = Colours.tabSelected
+//            self.indi3.backgroundColor = Colours.tabSelected
+//            self.indi4.backgroundColor = Colours.tabSelected
+//            self.indi5.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
+//        } else {
+//            self.indi.backgroundColor = Colours.tabSelected
+//            self.indi2.backgroundColor = Colours.tabSelected
+//            self.indi3.backgroundColor = Colours.tabSelected
+//            self.indi4.backgroundColor = Colours.tabSelected
+//            self.indi5.backgroundColor = Colours.tabSelected
+//        }
+        
         let viewsDict = [
             "image" : profileImageView,
             "mainImage" : mainImageView,
@@ -198,25 +221,29 @@ class RepliesCellImage: SwipeTableViewCell {
             "countTag" : imageCountTag,
             "warning" : warningB,
             "indi" : indi,
-            "indi2" : indi2,
-            "indi3" : indi3,
-            "indi4" : indi4,
-            "indi5" : indi5,
-            ]
+        ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[indi(4)]-5-[indi2(4)]-5-[indi3(4)]-5-[indi4(4)]-5-[indi5(4)]", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-10-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[image(40)]-13-[episodes]-10-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-63-[mainImage]-10-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[mainImageBG]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-61-[warning]-7-|", options: [], metrics: nil, views: viewsDict))
+        let metrics = [
+            "first": 29 + replyDepth,
+            "second": 10 + replyDepth,
+            "third": 61 + replyDepth,
+            "fourth": 63 + replyDepth,
+            "fifth": 73 + replyDepth,
+        ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-68-[indi(>=4)]-16-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-68-[indi2(>=4)]-16-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-68-[indi3(>=4)]-16-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-68-[indi4(>=4)]-16-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-68-[indi5(>=4)]-16-|", options: [], metrics: nil, views: viewsDict))
+        contentView.constraints.map({
+            contentView.removeConstraint($0)
+        })
+        
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-first-[indi(2)]", options: [], metrics: metrics, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-second-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-10-|", options: [], metrics: metrics, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-second-[image(40)]-13-[episodes]-10-|", options: [], metrics: metrics, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-fourth-[mainImage]-10-|", options: [], metrics: metrics, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-fifth-[mainImageBG]-20-|", options: [], metrics: metrics, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=10)-|", options: [], metrics: metrics, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-third-[warning]-7-|", options: [], metrics: metrics, views: viewsDict))
+        
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-64-[indi(>=0)]-16-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
@@ -225,51 +252,8 @@ class RepliesCellImage: SwipeTableViewCell {
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-10-[mainImageBG(210)]-23-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
-    }
-
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func configure2(_ replyDepth: Int) {
-        //        let contentViewFrame = self.contentView.frame
-        //        let insetContentViewFrame = contentViewFrame.inset(by: UIEdgeInsets(top: 0, left: -CGFloat(replyDepth), bottom: 0, right: 0))
-        //        self.contentView.bounds = insetContentViewFrame
         
-        let depth = replyDepth/30
-        if depth == 0 {
-            self.indi.backgroundColor = Colours.tabSelected
-            self.indi2.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-            self.indi3.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-            self.indi4.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-            self.indi5.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-        } else if depth == 1 {
-            self.indi.backgroundColor = Colours.tabSelected
-            self.indi2.backgroundColor = Colours.tabSelected
-            self.indi3.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-            self.indi4.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-            self.indi5.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-        } else if depth == 2 {
-            self.indi.backgroundColor = Colours.tabSelected
-            self.indi2.backgroundColor = Colours.tabSelected
-            self.indi3.backgroundColor = Colours.tabSelected
-            self.indi4.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-            self.indi5.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-        } else if depth == 3 {
-            self.indi.backgroundColor = Colours.tabSelected
-            self.indi2.backgroundColor = Colours.tabSelected
-            self.indi3.backgroundColor = Colours.tabSelected
-            self.indi4.backgroundColor = Colours.tabSelected
-            self.indi5.backgroundColor = Colours.grayDark.withAlphaComponent(0.21)
-        } else {
-            self.indi.backgroundColor = Colours.tabSelected
-            self.indi2.backgroundColor = Colours.tabSelected
-            self.indi3.backgroundColor = Colours.tabSelected
-            self.indi4.backgroundColor = Colours.tabSelected
-            self.indi5.backgroundColor = Colours.tabSelected
-        }
-        
-        contentView.layoutSubviews()
+//        contentView.layoutSubviews()
     }
     
     func configure(_ status: Status) {
@@ -370,7 +354,6 @@ class RepliesCellImage: SwipeTableViewCell {
 //        DispatchQueue.global(qos: .userInitiated).async {
         self.mainImageView.pin_setPlaceholder(with: UIImage(named: "imagebg")?.maskWithColor(color: UIColor(red: 30/250, green: 30/250, blue: 30/250, alpha: 1.0)))
         self.mainImageView.pin_updateWithProgress = true
-        self.mainImageView.pin_setImage(from: URL(string: "\(status.mediaAttachments[0].url)"))
 //        }
         mainImageView.layer.masksToBounds = true
         mainImageView.layer.borderColor = UIColor.black.cgColor
@@ -414,17 +397,21 @@ class RepliesCellImage: SwipeTableViewCell {
             imageCountTag.setTitle("\u{25b6}", for: .normal)
             imageCountTag.backgroundColor = Colours.tabSelected
             imageCountTag.alpha = 1
+            self.mainImageView.pin_setImage(from: URL(string: "\(status.mediaAttachments[0].previewURL)"))
         } else if status.mediaAttachments[0].type == .gifv {
             imageCountTag.setTitle("GIF", for: .normal)
             imageCountTag.backgroundColor = Colours.tabSelected
             imageCountTag.alpha = 1
+            self.mainImageView.pin_setImage(from: URL(string: "\(status.mediaAttachments[0].previewURL)"))
         } else if status.mediaAttachments.count > 1 {
             imageCountTag.setTitle("\(status.mediaAttachments.count)", for: .normal)
             imageCountTag.backgroundColor = Colours.tabSelected
             imageCountTag.alpha = 1
+            self.mainImageView.pin_setImage(from: URL(string: "\(status.mediaAttachments[0].url)"))
         } else {
             imageCountTag.backgroundColor = Colours.clear
             imageCountTag.alpha = 0
+            self.mainImageView.pin_setImage(from: URL(string: "\(status.mediaAttachments[0].url)"))
         }
         
         if (UserDefaults.standard.object(forKey: "senseTog") == nil) || (UserDefaults.standard.object(forKey: "senseTog") as! Int == 0) {

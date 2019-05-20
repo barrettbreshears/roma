@@ -19,4 +19,6 @@ public enum NotificationType: String, Codable {
     case follow
     /// The user has a new direct message.
     case direct
+    /// A poll the user has voted on has ended.
+    case poll
 }

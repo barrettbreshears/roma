@@ -980,6 +980,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             UserDefaults.standard.set(1, forKey: "sworder")
         }
         
+        if (UserDefaults.standard.object(forKey: "notifToggle") == nil) {
+            UserDefaults.standard.set(1, forKey: "notifToggle")
+        }
+        
         if (UserDefaults.standard.object(forKey: "instancesLocal") == nil) {
 
         } else {
@@ -1335,9 +1339,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             return 1
         } else {
             if StoreStruct.instanceLocalToAdd.count > 0 {
-                return 4
-            } else {
                 return 3
+            } else {
+                return 2
             }
         }
     }
@@ -1353,9 +1357,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             if section == 0 {
                 return 1
             } else if section == 1 {
-                return 3
+                return 1
             } else if section == 2 {
-                return StoreStruct.allLists.count
+                return 0
             } else {
                 
                 let z1 = Account.getAccounts().count
@@ -1533,34 +1537,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 }
                 
             } else if indexPath.section == 1 {
-                if indexPath.row == 0 {
-                    if let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as? ListCell {
-                    cell.userName.text = "View Other Instance's Timelines"
-                    cell.backgroundColor = Colours.grayDark3
-                    cell.userName.textColor = Colours.tabSelected
-                    let bgColorView = UIView()
-                    bgColorView.backgroundColor = Colours.grayDark3
-                    cell.selectedBackgroundView = bgColorView
-                    return cell
-                    } else {
-                        let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
-                        return cell
-                    }
-                } else if indexPath.row == 1 {
-                    if let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as? ListCell {
-                    cell.userName.text = "Create New List +"
-                    cell.backgroundColor = Colours.grayDark3
-                    cell.userName.textColor = Colours.tabSelected
-                    let bgColorView = UIView()
-                    bgColorView.backgroundColor = Colours.grayDark3
-                    cell.selectedBackgroundView = bgColorView
-                    return cell
-                    } else {
-                        let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
-                        return cell
-                    }
-                } else {
-                    if let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as? ListCell {
+                if let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as? ListCell {
                     cell.userName.text = "Settings"
                     cell.backgroundColor = Colours.grayDark3
                     cell.userName.textColor = Colours.tabSelected
@@ -1568,10 +1545,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     bgColorView.backgroundColor = Colours.grayDark3
                     cell.selectedBackgroundView = bgColorView
                     return cell
-                    } else {
-                        let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
-                        return cell
-                    }
+                } else {
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "cc", for: indexPath)
+                    return cell
                 }
             } else if indexPath.section == 2 {
                 if let cell = tableViewLists.dequeueReusableCell(withIdentifier: "cell002l", for: indexPath) as? ListCell {
@@ -1886,26 +1862,16 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             if indexPath.section == 0 {
 
             } else if indexPath.section == 1 {
-                if indexPath.row == 0 {
-                    // other instance
-                    let controller = NewInstanceViewController()
-                    controller.editListName = ""
-                    self.present(controller, animated: true, completion: nil)
-                } else if indexPath.row == 1 {
-                    // create new list
-                    let controller = NewListViewController()
-                    self.present(controller, animated: true, completion: nil)
+               
+                // go to settings
+                if StoreStruct.currentPage == 0 {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "goToSettings"), object: self)
+                } else if StoreStruct.currentPage == 1 {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "goToSettings2"), object: self)
+                } else if StoreStruct.currentPage == 101010 {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "goToSettings3"), object: self)
                 } else {
-                    // go to settings
-                    if StoreStruct.currentPage == 0 {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goToSettings"), object: self)
-                    } else if StoreStruct.currentPage == 1 {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goToSettings2"), object: self)
-                    } else if StoreStruct.currentPage == 101010 {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goToSettings3"), object: self)
-                    } else {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goToSettings4"), object: self)
-                    }
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "goToSettings4"), object: self)
                 }
             } else if indexPath.section == 2 {
 
