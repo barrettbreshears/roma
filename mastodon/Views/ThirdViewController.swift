@@ -903,7 +903,6 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.ai = NVActivityIndicatorView(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 20), y: CGFloat(offset + 60), width: 40, height: 40), type: .ballRotateChase, color: Colours.tabSelected)
         self.view.addSubview(self.ai)
         self.loadLoadLoad()
-        
         switch (deviceIdiom) {
         case .phone:
             tableView.cr.addHeadRefresh(animator: NormalHeaderAnimator()) { [weak self] in
@@ -1104,6 +1103,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         } else {
             zzz = self.profileStatuses2
         }
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        
         if let indexPath = tableView.indexPathForSelectedRow {
             self.tableView.deselectRow(at: indexPath, animated: true)
             let request = Statuses.status(id: zzz[indexPath.row].reblog?.id ?? zzz[indexPath.row].id)
@@ -1137,7 +1138,6 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //            }
 //        }
         
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .pad:
             self.ai.startAnimating()
@@ -1246,6 +1246,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 })
             }
         }
+        
+        refProf()
     }
 
 
