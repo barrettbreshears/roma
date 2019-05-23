@@ -808,8 +808,8 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                         cell.moreImage.image = nil
                         cell.profileImageView.tag = indexPath.row
                         cell.userTag.tag = indexPath.row
-                        cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
-                        cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                        // cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
+                        // cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.backgroundColor = Colours.white
                         cell.userName.textColor = Colours.black
                     cell.userTag.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
