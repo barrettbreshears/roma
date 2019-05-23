@@ -1087,12 +1087,14 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 //                print("Couldn't load")
 //            }
         }
-
-
+        
         let request = Instances.customEmojis()
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 StoreStruct.emotiFace = stat
+                StoreStruct.mainResult = []
+                StoreStruct.mainResult1 = []
+                StoreStruct.mainResult2 = []
                 stat.map({
                     let attributedString = NSAttributedString(string: "    \($0.shortcode)")
                     let textAttachment = NSTextAttachment()
@@ -2415,7 +2417,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     tabHeight = Int(UITabBarController().tabBar.frame.size.height)
                 }
             }
-            self.closeButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 20, y: closeB, width: 32, height: 32)))
+            self.closeButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: closeB, width: 32, height: 32)))
             self.closeButton.setImage(UIImage(named: "block")?.maskWithColor(color: Colours.grayLight2), for: .normal)
             self.closeButton.alpha = 0.3
             self.closeButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)

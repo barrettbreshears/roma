@@ -149,15 +149,22 @@ class RepliesCell: SwipeTableViewCell {
             "indi" : indi,
         ]
         
+        var repdep = replyDepth
+        if (UserDefaults.standard.object(forKey: "indent1") == nil) || (UserDefaults.standard.object(forKey: "indent1") as! Int == 0) {
+            
+        } else {
+            repdep = 0
+        }
+        
         let metrics = [
-            "first": 29 + replyDepth,
-            "second": 10 + replyDepth,
-            "third": 61 + replyDepth
+            "first": 29 + repdep,
+            "second": 10 + repdep,
+            "third": 61 + repdep
         ]
         
-        contentView.constraints.map({
-            contentView.removeConstraint($0)
-        })
+//        contentView.constraints.map({
+//            contentView.removeConstraint($0)
+//        })
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-first-[indi(2)]", options: [], metrics: metrics, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-second-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-10-|", options: [], metrics: metrics, views: viewsDict))

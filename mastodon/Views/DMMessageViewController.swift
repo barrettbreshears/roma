@@ -160,11 +160,11 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
             let request = Statuses.context(id: self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id)
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
+                    self.allPrevious = (stat.ancestors)
+                    self.allReplies = (stat.descendants)
                     DispatchQueue.main.async {
-                        self.allPrevious = (stat.ancestors)
-                        self.allReplies = (stat.descendants)
                         
-                        (self.allPrevious + self.mainStatus + self.allReplies).map({
+                        (stat.ancestors + self.mainStatus + stat.descendants).map({
                             var theType = "0"
                             if $0.account.acct == StoreStruct.currentUser.acct {
                                 theType = "1"
@@ -211,10 +211,10 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                             self.ai.stopAnimating()
                             self.ai.alpha = 0
                             self.ai.removeFromSuperview()
-                            
-                            self.messagesCollectionView.reloadData()
-                            self.messagesCollectionView.scrollToBottom()
                         })
+                        
+                        self.messagesCollectionView.reloadData()
+                        self.messagesCollectionView.scrollToBottom()
                     }
                 }
             }
@@ -237,8 +237,9 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                         var theType = "0"
                         if $0.account.acct == StoreStruct.currentUser.acct {
                             theType = "1"
+                        } else {
+                            self.lastUser = $0.account.acct
                         }
-                        self.lastUser = $0.account.acct
                         
                         let sender = Sender(id: theType, displayName: "\($0.account.acct)")
                         let x = MockMessage.init(text: $0.content.stripHTML(), sender: sender, messageId: $0.id, date: $0.createdAt)

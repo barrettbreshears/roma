@@ -241,9 +241,9 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
     var thArrayDesc = ["Select from a white day theme, a dark dusk theme, an even darker night theme, a truly black OLED-friendly theme, or a midnight blue theme.", "Always be able to read posts with adjustable text sizing.", "Select a theme for the background when pinching to toot a screenshot, or when long-holding a back button to enter the history view.", "Select the hue for the keyboard bar when composing toots.", "Select the hue for the activity graph columns."]
     var thArrayIm = ["setnight", "settext", "pinchset", "barcol", "acthue"]
     
-    var tiArray = ["Swipe Action Order", "Activity Graph", "Activity Graph Animation", "Status Action Placement", "Full Usernames", "Full Usernames in Boosts", "Time Style", "Subtle Activity Notifications", "Highlight Direct Messages", "Hide Images"]
-    var tiArrayDesc = ["Select the order of swipe action elements.", "Display an activity graph showing recent activity in the mentions tab.", "Animate the activity graph when displaying it.", "Choose whether to display post actions on the status cell or behind a swipe. This will require restarting the app to take effect.", "Display the user's full username, with the instance, in toots.", "Display the user's full username in boosts.", "Pick between displaying absolute or relative time in timelines.", "Dim activity notification text, whilst keeping mentions untouched.", "Highlight direct messages in timelines with a subtle, distinct, or themed background.", "Timelines without media, for a distraction-free browsing experience."]
-    var tiArrayIm = ["swipeact3", "setgraph", "setgraph2", "like", "userat", "userat2", "timese", "subtleno", "direct23", "setima2"]
+    var tiArray = ["Swipe Action Order", "Activity Graph", "Activity Graph Animation", "Status Action Placement", "Full Usernames", "Full Usernames in Reposts", "Time Style", "Subtle Activity Notifications", "Highlight Direct Messages", "Hide Images",  "Reply Indentation"]
+    var tiArrayDesc = ["Select the order of swipe action elements.", "Display an activity graph showing recent activity in the mentions tab.", "Animate the activity graph when displaying it.", "Choose whether to display post actions on the status cell or behind a swipe. This will require restarting the app to take effect.", "Display the user's full username, with the instance, in toots.", "Display the user's full username in boosts.", "Pick between displaying absolute or relative time in timelines.", "Dim activity notification text, whilst keeping mentions untouched.", "Highlight direct messages in timelines with a subtle, distinct, or themed background.", "Timelines without media, for a distraction-free browsing experience.", "Indent replies in conversations to provide a better readability flow."]
+    var tiArrayIm = ["swipeact3", "setgraph", "setgraph2", "like", "userat", "userat2", "timese", "subtleno", "direct23", "setima2", "indentset1"]
     
     var prArray = ["Profile Corner Radius", "Profile Header Background", "Profile Header Blur", "Profile Display Picture Border", "Profile Display Picture in Toot Composition"]
     var prArrayDesc = ["Circle or square, your choice.", "Change the style of the profile header background.", "Change the blur of the profile header background.", "Select a size for the border around display pictures.", "Choose whether to display the current account's display picture in the top-left when composing toots."]
@@ -349,6 +349,15 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
             sender.setOn(false, animated: true)
         }
     }
+    @objc func handleToggleIndent(sender: UISwitch) {
+        if sender.isOn {
+            UserDefaults.standard.set(0, forKey: "indent1")
+            sender.setOn(true, animated: true)
+        } else {
+            UserDefaults.standard.set(1, forKey: "indent1")
+            sender.setOn(false, animated: true)
+        }
+    }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
@@ -383,7 +392,7 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
             cell.selectedBackgroundView = bgColorView
             return cell
         } else if indexPath.section == 3 {
-            if indexPath.row == 1 || indexPath.row == 2 || indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 7 || indexPath.row == 9 {
+            if indexPath.row == 1 || indexPath.row == 2 || indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 7 || indexPath.row == 9 || indexPath.row == 10 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellse2", for: indexPath) as! SettingsCellToggle
                 cell.configure(status: tiArray[indexPath.row], status2: tiArrayDesc[indexPath.row], image: tiArrayIm[indexPath.row])
                 cell.backgroundColor = Colours.white
@@ -440,6 +449,14 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                         cell.switchView.setOn(true, animated: false)
                     }
                     cell.switchView.addTarget(self, action: #selector(self.handleToggleSensitive), for: .touchUpInside)
+                }
+                if indexPath.row == 10 {
+                    if (UserDefaults.standard.object(forKey: "indent1") == nil) || (UserDefaults.standard.object(forKey: "indent1") as! Int == 0) {
+                        cell.switchView.setOn(true, animated: false)
+                    } else {
+                        cell.switchView.setOn(false, animated: false)
+                    }
+                    cell.switchView.addTarget(self, action: #selector(self.handleToggleIndent), for: .touchUpInside)
                 }
                 return cell
             } else {

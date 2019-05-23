@@ -1433,6 +1433,8 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
         StoreStruct.emotiSize = 16
         StoreStruct.emotiFace = []
         StoreStruct.mainResult = []
+        StoreStruct.mainResult1 = []
+        StoreStruct.mainResult2 = []
         StoreStruct.instanceLocalToAdd = []
         StoreStruct.statusesHome = []
         StoreStruct.statusesLocal = []

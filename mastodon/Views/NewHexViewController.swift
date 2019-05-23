@@ -60,7 +60,7 @@ class NewHexViewController: UIViewController, UITextViewDelegate {
         bgView.alpha = 0
         self.view.addSubview(bgView)
         
-        self.closeButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 20, y: closeB, width: 32, height: 32)))
+        self.closeButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: closeB, width: 32, height: 32)))
         self.closeButton.setImage(UIImage(named: "block")?.maskWithColor(color: Colours.grayLight2), for: .normal)
         self.closeButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
         self.closeButton.adjustsImageWhenHighlighted = false

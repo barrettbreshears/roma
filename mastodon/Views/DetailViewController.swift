@@ -469,7 +469,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                         self.refDetailCountPoll()
 
                                         let statusAlert = StatusAlert()
-                                        statusAlert.image = UIImage(named: "listbig")?.maskWithColor(color: Colours.grayDark)
+                                        statusAlert.image = UIImage(named: "pollbubbleL")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Voted"
                                         statusAlert.contentColor = Colours.grayDark
                                         statusAlert.message = StoreStruct.currentPollSelectionTitle
@@ -2663,7 +2663,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.mainImageView.currentImage ?? nil)
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                        photo.caption = sto[0].reblog?.content.stripHTML() ?? sto[0].content.stripHTML()
+                        photo.caption = cell.toot.text ?? ""
                     } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                         photo.caption = $0.description ?? ""
                     } else {
@@ -2674,7 +2674,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                     photo.shouldCachePhotoURLImage = true
                     if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                        photo.caption = sto[0].reblog?.content.stripHTML() ?? sto[0].content.stripHTML()
+                        photo.caption = cell.toot.text ?? ""
                     } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                         photo.caption = $0.description ?? ""
                     } else {
@@ -3749,7 +3749,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.mainImageView.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
+                            photo.caption = cell.toot.text ?? "" ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -3760,7 +3760,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
+                            photo.caption = cell.toot.text ?? "" ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -3790,7 +3790,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.mainImageView.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
+                            photo.caption = cell.toot.text ?? "" ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -3801,7 +3801,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
+                            photo.caption = cell.toot.text ?? "" ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -3856,7 +3856,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.mainImageView.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
+                            photo.caption = cell.toot.text ?? "" ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -3867,7 +3867,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
+                            photo.caption = cell.toot.text ?? "" ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -3897,7 +3897,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.mainImageView.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
+                            photo.caption = cell.toot.text ?? "" ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -3908,7 +3908,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].content.stripHTML() ?? ""
+                            photo.caption = cell.toot.text ?? "" ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -3963,7 +3963,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage1.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -3974,7 +3974,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4027,7 +4027,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage2.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4038,7 +4038,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4091,7 +4091,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage3.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4102,7 +4102,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4156,7 +4156,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage4.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4167,7 +4167,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4225,7 +4225,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage1.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4236,7 +4236,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4287,7 +4287,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage2.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4298,7 +4298,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4350,7 +4350,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage3.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4361,7 +4361,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4414,7 +4414,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage4.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4425,7 +4425,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4482,7 +4482,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage1.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4493,7 +4493,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4544,7 +4544,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage2.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4555,7 +4555,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4607,7 +4607,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage3.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4618,7 +4618,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4671,7 +4671,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: cell.smallImage4.currentImage ?? nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {
@@ -4682,7 +4682,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let photo = SKPhoto.photoWithImageURL($0.url, holder: nil)
                         photo.shouldCachePhotoURLImage = true
                         if (UserDefaults.standard.object(forKey: "captionset") == nil) || (UserDefaults.standard.object(forKey: "captionset") as! Int == 0) {
-                            photo.caption = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
+                            photo.caption = cell.toot.text ?? ""
                         } else if UserDefaults.standard.object(forKey: "captionset") as! Int == 1 {
                             photo.caption = $0.description ?? ""
                         } else {

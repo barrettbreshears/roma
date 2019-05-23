@@ -876,11 +876,11 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         case .phone:
             print("nothing")
         case .pad:
-            self.closeButton.frame = CGRect(x: 20, y: 30, width: 32, height: 32)
+            self.closeButton.frame = CGRect(x: 15, y: 30, width: 32, height: 32)
             self.avatarButton.frame = CGRect(x: 70, y: 30, width: 32, height: 32)
             countLabel.frame = CGRect(x: CGFloat(self.view.bounds.width/2 - 50), y: CGFloat(30), width: CGFloat(100), height: CGFloat(36))
             tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(30), width: CGFloat(150), height: CGFloat(36))
-            textView.frame = CGRect(x:20, y: (70), width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(170) - Int(self.keyHeight))
+            textView.frame = CGRect(x:10, y: (70), width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(220) - Int(self.keyHeight))
         default:
             print("nothing")
         }
@@ -1455,23 +1455,23 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            self.closeButton.frame = CGRect(x: 20, y: closeB, width: 32, height: 32)
+            self.closeButton.frame = CGRect(x: 15, y: closeB, width: 32, height: 32)
             self.avatarButton.frame = CGRect(x: 70, y: closeB, width: 32, height: 32)
             countLabel.frame = CGRect(x: CGFloat(self.view.bounds.width/2 - 50), y: CGFloat(closeB), width: CGFloat(100), height: CGFloat(36))
             tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(closeB), width: CGFloat(150), height: CGFloat(36))
-            textView.frame = CGRect(x:20, y: offset, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(160) - Int(self.keyHeight))
+            textView.frame = CGRect(x:10, y: offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(210) - Int(self.keyHeight))
         case .pad:
-            self.closeButton.frame = CGRect(x: 20, y: 30, width: 32, height: 32)
+            self.closeButton.frame = CGRect(x: 15, y: 30, width: 32, height: 32)
             self.avatarButton.frame = CGRect(x: 70, y: 30, width: 32, height: 32)
             countLabel.frame = CGRect(x: CGFloat(self.view.bounds.width/2 - 50), y: CGFloat(30), width: CGFloat(100), height: CGFloat(36))
             tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(30), width: CGFloat(150), height: CGFloat(36))
-            textView.frame = CGRect(x:20, y: (70), width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(170) - Int(self.keyHeight))
+            textView.frame = CGRect(x:10, y: (70), width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(220) - Int(self.keyHeight))
         default:
-            self.closeButton.frame = CGRect(x: 20, y: closeB, width: 32, height: 32)
+            self.closeButton.frame = CGRect(x: 15, y: closeB, width: 32, height: 32)
             self.avatarButton.frame = CGRect(x: 70, y: closeB, width: 32, height: 32)
             countLabel.frame = CGRect(x: CGFloat(self.view.bounds.width/2 - 50), y: CGFloat(closeB), width: CGFloat(100), height: CGFloat(36))
             tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(closeB), width: CGFloat(150), height: CGFloat(36))
-            textView.frame = CGRect(x:20, y: offset, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(160) - Int(self.keyHeight))
+            textView.frame = CGRect(x:10, y: offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(210) - Int(self.keyHeight))
         }
         
         
@@ -3480,11 +3480,11 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            textView.frame = CGRect(x:20, y:offset, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(offset) - Int(70) - Int(self.keyHeight))
+            textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(120) - Int(self.keyHeight))
         case .pad:
-            textView.frame = CGRect(x:20, y:70, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(70) - Int(70) - Int(self.keyHeight))
+            textView.frame = CGRect(x:10, y:70, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(70) - Int(120) - Int(self.keyHeight))
         default:
-            textView.frame = CGRect(x:20, y:offset, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(offset) - Int(70) - Int(self.keyHeight))
+            textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(120) - Int(self.keyHeight))
         }
         
         self.tableViewDrafts.frame = CGRect(x: 0, y: 60, width: Int(self.view.bounds.width), height: Int(self.bgView.bounds.height - 60))
@@ -3537,8 +3537,6 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             }
         }
         
-//        self.textView.normalizeText()
-        
         let newCount = StoreStruct.maxChars - (textView.text?.count)!
         countLabel.text = "\(newCount)"
         
@@ -3560,100 +3558,92 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             tootLabel.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
         }
         
-        
         self.emotiLab.alpha = 0
         
-        let regex = try! NSRegularExpression(pattern: "\\S+$")
-        let textRange = NSRange(location: 0, length: textView.text.count)
-        
-        let regex2 = try! NSRegularExpression(pattern: "\\S+")
-        let textRange2 = NSRange(location: 0, length: textView.text.count)
-        
-        if let range = regex.firstMatch(in: textView.text, range: textRange)?.range {
-            let range2 = regex2.firstMatch(in: textView.text, range: textRange2)?.range
-            let x1 = (String(textView.text[Range(range, in: textView.text) ?? Range(range2 ?? NSRange(location: 0, length: 0), in: textView.text) ?? Range(NSRange(location: 0, length: 0), in: "")!]))
-            if x1.first == "@" && x1.count > 1 {
-                // search @ users in compose
-                self.theReg = x1
-                
-                let request = Accounts.search(query: x1)
-                StoreStruct.client.run(request) { (statuses) in
-                    if let stat = (statuses.value) {
-                        DispatchQueue.main.async {
-                            StoreStruct.statusSearchUser = stat
-                            self.tableView.reloadData()
-                        }
+        let arr = textView.text.components(separatedBy: " ")
+        let x1 = arr.last
+        let chara: Character = "."
+        if x1?.first ?? chara == "@" && (x1?.count ?? 0) > 1 {
+            
+            self.theReg = x1 ?? ""
+            
+            let request = Accounts.search(query: x1 ?? "")
+            StoreStruct.client.run(request) { (statuses) in
+                if let stat = (statuses.value) {
+                    DispatchQueue.main.async {
+                        StoreStruct.statusSearchUser = stat
+                        self.tableView.reloadData()
                     }
                 }
-                
-                self.cameraCollectionView.alpha = 0
-                UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.8, options: [], animations: {
+            }
+            
+            self.cameraCollectionView.alpha = 0
+            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.8, options: [], animations: {
                 self.bgView.frame = CGRect(x:0, y:Int(self.view.bounds.height) - 180 - Int(self.keyHeight), width:Int(self.view.bounds.width), height:Int(self.keyHeight) + 180)
-                    
-                    
-                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-                    switch (deviceIdiom) {
-                    case .phone:
-                        textView.frame = CGRect(x:20, y:offset, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(offset) - Int(200) - Int(self.keyHeight))
-                    case .pad:
-                        textView.frame = CGRect(x:20, y:70, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(70) - Int(200) - Int(self.keyHeight))
-                    default:
-                        textView.frame = CGRect(x:20, y:offset, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(offset) - Int(200) - Int(self.keyHeight))
-                    }
-                    
+                
+                
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .phone:
+                    textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(250) - Int(self.keyHeight))
+                case .pad:
+                    textView.frame = CGRect(x:10, y:70, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(70) - Int(250) - Int(self.keyHeight))
+                default:
+                    textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(250) - Int(self.keyHeight))
+                }
+                
                 self.removeLabel.alpha = 0
                 self.cameraButton.alpha = 0
                 self.visibilityButton.alpha = 0
                 self.warningButton.alpha = 0
                 self.emotiButton.alpha = 0
-                    self.tableView.alpha = 1
-                    self.selectedImage1.alpha = 0
-                    self.selectedImage2.alpha = 0
-                    self.selectedImage3.alpha = 0
-                    self.selectedImage4.alpha = 0
-                })
-                
-            } else {
-                
-                if (UserDefaults.standard.object(forKey: "emotisug") == nil) || (UserDefaults.standard.object(forKey: "emotisug") as! Int == 0) {
-                    var iCo = 0
-                    for i in StoreStruct.mainResult2 {
-                        if i.string.lowercased().replacingOccurrences(of: "￼    ", with: "").contains(x1.lowercased()) {
-                            self.emotiLab.setAttributedTitle(StoreStruct.mainResult1[iCo], for: .normal)
-                            self.currentEmot = i.string.lowercased().replacingOccurrences(of: "￼    ", with: "")
-                            self.emotiLab.alpha = 1
-                        }
-                        iCo += 1
+                self.tableView.alpha = 1
+                self.selectedImage1.alpha = 0
+                self.selectedImage2.alpha = 0
+                self.selectedImage3.alpha = 0
+                self.selectedImage4.alpha = 0
+            })
+            
+        } else {
+            
+            if (UserDefaults.standard.object(forKey: "emotisug") == nil) || (UserDefaults.standard.object(forKey: "emotisug") as! Int == 0) {
+                var iCo = 0
+                for i in StoreStruct.mainResult2 {
+                    if i.string.lowercased().replacingOccurrences(of: "￼    ", with: "").contains((x1 ?? "").lowercased()) {
+                        self.emotiLab.setAttributedTitle(StoreStruct.mainResult1[iCo], for: .normal)
+                        self.currentEmot = i.string.lowercased().replacingOccurrences(of: "￼    ", with: "")
+                        self.emotiLab.alpha = 1
                     }
+                    iCo += 1
+                }
+            }
+            
+            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.8, options: [], animations: {
+                self.bgView.frame = CGRect(x:0, y:Int(self.view.bounds.height) - 50 - Int(self.keyHeight), width:Int(self.view.bounds.width), height:Int(self.keyHeight) + 50)
+                
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .phone:
+                    textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(120) - Int(self.keyHeight))
+                case .pad:
+                    textView.frame = CGRect(x:10, y:70, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(70) - Int(120) - Int(self.keyHeight))
+                default:
+                    textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(120) - Int(self.keyHeight))
                 }
                 
-                UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.8, options: [], animations: {
-                self.bgView.frame = CGRect(x:0, y:Int(self.view.bounds.height) - 50 - Int(self.keyHeight), width:Int(self.view.bounds.width), height:Int(self.keyHeight) + 50)
-                    
-                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-                    switch (deviceIdiom) {
-                    case .phone:
-                        textView.frame = CGRect(x:20, y:offset, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(offset) - Int(70) - Int(self.keyHeight))
-                    case .pad:
-                        textView.frame = CGRect(x:20, y:70, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(70) - Int(70) - Int(self.keyHeight))
-                    default:
-                        textView.frame = CGRect(x:20, y:offset, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(offset) - Int(70) - Int(self.keyHeight))
-                    }
-                    
                 self.removeLabel.alpha = 0
                 self.cameraButton.alpha = 1
                 self.visibilityButton.alpha = 1
                 self.warningButton.alpha = 1
                 self.emotiButton.alpha = 1
-                    self.tableView.alpha = 0
-                    self.selectedImage1.alpha = 1
-                    self.selectedImage2.alpha = 1
-                    self.selectedImage3.alpha = 1
-                    self.selectedImage4.alpha = 1
-                }, completion: { finished in
-                    self.cameraCollectionView.alpha = 1
-                })
-            }
+                self.tableView.alpha = 0
+                self.selectedImage1.alpha = 1
+                self.selectedImage2.alpha = 1
+                self.selectedImage3.alpha = 1
+                self.selectedImage4.alpha = 1
+            }, completion: { finished in
+                self.cameraCollectionView.alpha = 0
+            })
         }
         
         StoreStruct.savedComposeText = textView.text ?? ""
@@ -3977,11 +3967,11 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
             switch (deviceIdiom) {
             case .phone:
-                self.textView.frame = CGRect(x:20, y:offset, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(offset) - Int(70) - Int(self.keyHeight))
+                self.textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(120) - Int(self.keyHeight))
             case .pad:
-                self.textView.frame = CGRect(x:20, y:70, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(70) - Int(70) - Int(self.keyHeight))
+                self.textView.frame = CGRect(x:10, y:70, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(70) - Int(120) - Int(self.keyHeight))
             default:
-                self.textView.frame = CGRect(x:20, y:offset, width:Int(self.view.bounds.width - 40), height:Int(self.view.bounds.height) - Int(offset) - Int(70) - Int(self.keyHeight))
+                self.textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(120) - Int(self.keyHeight))
             }
             
             self.removeLabel.alpha = 1
@@ -3991,7 +3981,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             self.emotiButton.alpha = 1
             self.tableView.alpha = 0
         }, completion: { finished in
-            self.cameraCollectionView.alpha = 1
+            self.cameraCollectionView.alpha = 0
         })
         } else if tableView == self.tableViewASCII {
             self.tableViewASCII.deselectRow(at: indexPath, animated: true)
