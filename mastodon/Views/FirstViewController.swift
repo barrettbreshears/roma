@@ -847,6 +847,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             view.addInteraction(pencilInteraction)
         }
         
+        
+        
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
         var newoff = 45

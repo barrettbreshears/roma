@@ -946,13 +946,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         NotificationCenter.default.addObserver(self, selector: #selector(self.didTouchSearch), name: NSNotification.Name(rawValue: "searchthething"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.addBadge), name: NSNotification.Name(rawValue: "addBadge"), object: nil)
         
-        let center = UNUserNotificationCenter.current()
-        center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
-            // Enable or disable features based on authorization.
-            DispatchQueue.main.async {
-                UIApplication.shared.registerForRemoteNotifications()
-            }
-        }
         
         if (UserDefaults.standard.object(forKey: "themeaccent") == nil) || (UserDefaults.standard.object(forKey: "themeaccent") as! Int == 0) {
             Colours.tabSelected = StoreStruct.colArray[0]
@@ -1094,7 +1087,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 //                print("Couldn't load")
 //            }
         }
-
 
 
         let request = Instances.customEmojis()

@@ -25,6 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
     var blurEffect0 = UIBlurEffect()
     var blurEffectView0 = UIVisualEffectView()
 
+    var instanceID : Any?
     var oneTime = false
 
     func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
@@ -121,7 +122,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         print("Device Token: \(token)")
         Messaging.messaging().apnsToken = deviceToken
         
-        InstanceID.instanceID().instanceID { (result, error) in
+        instanceID = InstanceID.instanceID().instanceID { (result, error) in
             
             
             if let error = error {
