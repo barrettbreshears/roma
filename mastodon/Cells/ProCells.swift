@@ -111,10 +111,11 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionColourCell", for: indexPath) as! CollectionProCells
         
         if indexPath.item >= InstanceData.getAllInstances().count {
-            
-            cell.image.image = UIImage(named: "newac2")?.maskWithColor(color: Colours.tabSelected)
-            cell.image.layer.borderColor = Colours.clear.cgColor
-            cell.image.layer.borderWidth = 0
+            DispatchQueue.main.async {
+                cell.image.image = UIImage(named: "newac2")?.maskWithColor(color: Colours.tabSelected)
+                cell.image.layer.borderColor = Colours.clear.cgColor
+                cell.image.layer.borderWidth = 0
+            }
 
         } else {
 
@@ -128,10 +129,11 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
                     cell.image.layer.borderWidth = 0
                 }
                 cell.image.layer.borderColor = Colours.tabSelected.cgColor
-                
-                let account = Account.getAccounts()[indexPath.item]
-                cell.image.pin_setImage(from: URL(string: account.avatar))
-                cell.name.text = account.username
+                DispatchQueue.main.async {
+                    let account = Account.getAccounts()[indexPath.item]
+                    cell.image.pin_setImage(from: URL(string: account.avatar))
+                    cell.name.text = account.username
+                }
                 
                 cell.image.backgroundColor = Colours.clear
             }

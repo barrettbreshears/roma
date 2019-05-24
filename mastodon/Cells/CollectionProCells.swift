@@ -45,6 +45,8 @@ class CollectionProCells: UICollectionViewCell {
         self.name.font = UIFont.boldSystemFont(ofSize: 12)
         self.name.textColor = Colours.grayDark2.withAlphaComponent(0.35)
         self.name.textAlignment = .center
+        self.name.minimumScaleFactor = 0.75
+        self.name.adjustsFontSizeToFitWidth = true
         contentView.addSubview(name)
     }
     
