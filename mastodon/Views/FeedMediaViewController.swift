@@ -12,7 +12,7 @@ import PINRemoteImage
 import AVKit
 import AVFoundation
 
-class FeedMediaViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate {
+class FeedMediaViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, UIGestureRecognizerDelegate {
     
     var collectionView: UICollectionView!
     var statusesLocal: [Status] = []
@@ -73,6 +73,12 @@ class FeedMediaViewController: UIViewController, UICollectionViewDelegate, UICol
         self.view.backgroundColor = Colours.white
         
         StoreStruct.currentPage = 779
+        
+        NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
+            self?.player.seek(to: CMTime.zero)
+            self?.player.play()
+            self?.player.rate = self?.playerRate ?? 1
+        }
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid779"), object: nil)
         if (UserDefaults.standard.object(forKey: "medcolgrid") == nil) || (UserDefaults.standard.object(forKey: "medcolgrid") as! Int == 0) {
@@ -173,6 +179,55 @@ class FeedMediaViewController: UIViewController, UICollectionViewDelegate, UICol
         return cell
     }
     
+    
+    @objc func longVid(sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            if (UserDefaults.standard.object(forKey: "otherhaptics") == nil) || (UserDefaults.standard.object(forKey: "otherhaptics") as! Int == 0) {
+                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                    let selection = UISelectionFeedbackGenerator()
+                    selection.selectionChanged()
+                }
+            }
+            let z = Alertift.actionSheet(title: nil, message: nil)
+                .backgroundColor(Colours.white)
+                .titleTextColor(Colours.grayDark)
+                .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                .messageTextAlignment(.left)
+                .titleTextAlignment(.left)
+                .action(.default("Speed Up 2x".localized), image: nil) { (action, ind) in
+                    self.playerRate = 2
+                    self.player.rate = 2
+                }
+                .action(.default("Speed Up 3x".localized), image: nil) { (action, ind) in
+                    self.playerRate = 3
+                    self.player.rate = 3
+                }
+                .action(.default("Speed Up 4x".localized), image: nil) { (action, ind) in
+                    self.playerRate = 4
+                    self.player.rate = 4
+                }
+                .action(.default("Slow Down".localized), image: nil) { (action, ind) in
+                    self.playerRate = 0.5
+                    self.player.rate = 0.5
+                }
+                .action(.cancel("Dismiss"))
+                .finally { action, index in
+                    if action.style == .cancel {
+                        return
+                    }
+            }
+            if self.player.rate != 1 {
+                z.action(.default("Regular Speed".localized), image: nil) { (action, ind) in
+                    self.playerRate = 1
+                    self.player.rate = 1
+                }
+            }
+            z.show(on: self.playerViewController)
+        }
+    }
+    
+    let playerViewController = AVPlayerViewController()
+    var playerRate: Float = 1
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 //        if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
 //            let selection = UISelectionFeedbackGenerator()
@@ -190,10 +245,14 @@ class FeedMediaViewController: UIViewController, UICollectionViewDelegate, UICol
                 XPlayer.play(videoURL)
             } else {
                 self.player = AVPlayer(url: videoURL)
-                let playerViewController = AVPlayerViewController()
-                playerViewController.player = self.player
+                
+                let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longVid(sender:)))
+                longPress.minimumPressDuration = 0.5
+                longPress.delegate = self
+                self.playerViewController.view.addGestureRecognizer(longPress)
+                self.playerViewController.player = self.player
                 self.present(playerViewController, animated: true) {
-                    playerViewController.player!.play()
+                    self.playerViewController.player!.play()
                 }
             }
             
