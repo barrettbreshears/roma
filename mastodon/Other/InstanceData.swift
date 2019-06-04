@@ -63,6 +63,7 @@ class InstanceData: Codable {
         StoreStruct.statusesLocal = []
         StoreStruct.statusesFederated = []
         StoreStruct.notifications = []
+        StoreStruct.notificationsDirect = []
         StoreStruct.notificationsMentions = []
         StoreStruct.currentInstance = instance
     }

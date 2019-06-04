@@ -1250,23 +1250,26 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         self.restoreScroll()
         
         self.resetCurSeg = true
-        
-        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
+        if StoreStruct.currentUser != nil {
+            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
+            
+            DispatchQueue.main.async {
+                self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            }
+            
+            
+            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            settingsButton.imageView?.layer.cornerRadius = 18
+            settingsButton.imageView?.contentMode = .scaleAspectFill
+            settingsButton.layer.masksToBounds = true
+        } else {
             settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 32, height: 32)
             settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
             settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
             settingsButton.imageView?.layer.cornerRadius = 0
             settingsButton.imageView?.contentMode = .scaleAspectFill
             settingsButton.layer.masksToBounds = true
-        } else {
-            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
-            if StoreStruct.currentUser != nil {
-                settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
-            }
-            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            settingsButton.imageView?.layer.cornerRadius = 18
-            settingsButton.imageView?.contentMode = .scaleAspectFill
-            settingsButton.layer.masksToBounds = true
+            
         }
         settingsButton.adjustsImageWhenHighlighted = false
         settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
@@ -1380,22 +1383,49 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             print("nothing")
         }
         
-        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
+        
+        
+        if StoreStruct.currentUser != nil {
+            
+            if Account.isPushSet(instance:"\(StoreStruct.currentUser.username)@\(StoreStruct.currentInstance.returnedText)") == false {
+                let center = UNUserNotificationCenter.current()
+                center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
+                    // Enable or disable features based on authorization.
+                    DispatchQueue.main.async {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    }
+                }
+            }
+            
+            if Account.isPushSet(instance:"\(StoreStruct.currentUser.username)@\(StoreStruct.currentInstance.returnedText)") == false {
+                let center = UNUserNotificationCenter.current()
+                center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
+                    // Enable or disable features based on authorization.
+                    DispatchQueue.main.async {
+                        UIApplication.shared.registerForRemoteNotifications()
+                    }
+                }
+            }
+            
+            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
+            
+            DispatchQueue.main.async {
+                self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            }
+            
+            
+            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            settingsButton.imageView?.layer.cornerRadius = 18
+            settingsButton.imageView?.contentMode = .scaleAspectFill
+            settingsButton.layer.masksToBounds = true
+        } else {
             settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 32, height: 32)
             settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
             settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
             settingsButton.imageView?.layer.cornerRadius = 0
             settingsButton.imageView?.contentMode = .scaleAspectFill
             settingsButton.layer.masksToBounds = true
-        } else {
-            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
-            if StoreStruct.currentUser != nil {
-                settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatar)"))
-            }
-            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            settingsButton.imageView?.layer.cornerRadius = 18
-            settingsButton.imageView?.contentMode = .scaleAspectFill
-            settingsButton.layer.masksToBounds = true
+            
         }
         settingsButton.adjustsImageWhenHighlighted = false
         settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)

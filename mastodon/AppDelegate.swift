@@ -800,7 +800,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                         print(json)
                         // handle json...
                     }
-                    Account.pushSetSuccess(instance: StoreStruct.currentInstance.returnedText)
+                    Account.pushSetSuccess(instance: "\(StoreStruct.currentUser.username)@\(StoreStruct.currentInstance.returnedText)")
                 } catch let error {
                     print(error.localizedDescription)
                 }
