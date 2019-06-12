@@ -207,43 +207,14 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
 
                     DispatchQueue.main.async {
                         
-                        Alertift.actionSheet(title: nil, message: nil)
-                            .backgroundColor(Colours.white)
-                            .titleTextColor(Colours.grayDark)
-                            .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
-                            .messageTextAlignment(.left)
-                            .titleTextAlignment(.left)
-                            .action(.default("Switch".localized), image: UIImage(named: "profile")) { (action, ind) in
-                                 
-                                StoreStruct.switchedNow = true
-                                InstanceData.setCurrentInstance(instance: instances[indexPath.item])
-                                StoreStruct.client = Client(
-                                    baseURL: "https://\(instances[indexPath.item].returnedText)",
-                                    accessToken: instances[indexPath.item].accessToken
-                                )
-                                let appDelegate = UIApplication.shared.delegate as! AppDelegate
-                                appDelegate.reloadApplication()
-                                
-                            }
-                            .action(.default("Remove".localized), image: UIImage(named: "block")) { (action, ind) in
-                                 
-                                
-                                var instance = InstanceData.getAllInstances()
-                                var account = Account.getAccounts()
-                                account.remove(at: indexPath.item)
-                                UserDefaults.standard.set(try? PropertyListEncoder().encode(account), forKey:"allAccounts")
-                                instance.remove(at: indexPath.item)
-                                UserDefaults.standard.set(try? PropertyListEncoder().encode(instance), forKey:"instances")
-                                self.collectionView.reloadData()
-                                
-                            }
-                            .action(.cancel("Dismiss"))
-                            .finally { action, index in
-                                if action.style == .cancel {
-                                    return
-                                }
-                            }
-                            .show(on: self.window?.rootViewController)
+                        StoreStruct.switchedNow = true
+                        InstanceData.setCurrentInstance(instance: instances[indexPath.item])
+                        StoreStruct.client = Client(
+                            baseURL: "https://\(instances[indexPath.item].returnedText)",
+                            accessToken: instances[indexPath.item].accessToken
+                        )
+                        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+                        appDelegate.reloadApplication()
                         
                         
                     }

@@ -616,15 +616,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             settingsButton.imageView?.layer.cornerRadius = 18
             settingsButton.imageView?.contentMode = .scaleAspectFill
             settingsButton.layer.masksToBounds = true
-        } else {
-            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 32, height: 32)
-            settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
-            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-            settingsButton.imageView?.layer.cornerRadius = 0
-            settingsButton.imageView?.contentMode = .scaleAspectFill
-            settingsButton.layer.masksToBounds = true
-            
-        }
+        } 
         settingsButton.adjustsImageWhenHighlighted = false
         settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
         self.navigationController?.view.addSubview(settingsButton)
