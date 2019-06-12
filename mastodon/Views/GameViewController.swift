@@ -83,7 +83,7 @@ class GameViewController: UIViewController {
         }
         
         clockLabel.frame = CGRect(x: 0, y: Int(newoff), width: Int(self.view.bounds.width), height: 40)
-        clockLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        clockLabel.font = UIFont.monospacedDigitSystemFont(ofSize: 20, weight: .heavy)
         clockLabel.textColor = Colours.tabSelected
         clockLabel.textAlignment = .center
         self.view.addSubview(clockLabel)

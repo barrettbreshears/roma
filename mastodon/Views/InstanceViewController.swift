@@ -1974,20 +1974,20 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 //        self.tableView.deselectRow(at: indexPath, animated: true)
         
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .phone :
-        let controller = DetailViewController()
-        controller.mainStatus.append(StoreStruct.newInstanceTags[indexPath.row])
-        self.navigationController?.pushViewController(controller, animated: true)
-        case .pad:
+//        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+//        switch (deviceIdiom) {
+//        case .phone :
             let controller = DetailViewController()
             controller.mainStatus.append(StoreStruct.newInstanceTags[indexPath.row])
-            self.splitViewController?.showDetailViewController(controller, sender: self)
-            NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
-        default:
-            print("nothing")
-        }
+            self.navigationController?.pushViewController(controller, animated: true)
+//        case .pad:
+//            let controller = DetailViewController()
+//            controller.mainStatus.append(StoreStruct.newInstanceTags[indexPath.row])
+//            self.splitViewController?.showDetailViewController(controller, sender: self)
+//            NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+//        default:
+//            print("nothing")
+//        }
     }
     
     

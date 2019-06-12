@@ -849,9 +849,15 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         settingsButton.adjustsImageWhenHighlighted = false
         settingsButton.addTarget(self, action: #selector(self.setTop1), for: .touchUpInside)
         
-        if self.fromOtherUser {} else {
-            let done = UIBarButtonItem.init(customView: settingsButton)
-            self.navigationItem.setLeftBarButton(done, animated: false)
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone:
+            if self.fromOtherUser {} else {
+                let done = UIBarButtonItem.init(customView: settingsButton)
+                self.navigationItem.setLeftBarButton(done, animated: false)
+            }
+        default:
+            print("nil")
         }
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
@@ -871,13 +877,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if self.isPeeking == true {
             offset = -5
         }
-
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
+        
+        let deviceIdiom0 = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom0) {
         case .phone:
             self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         case .pad:
-            print("nothing")
+//            print("nothing")
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         default:
             self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         }
@@ -917,7 +924,17 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 })
             }
         case .pad:
-            print("nothing")
+//            print("nothing")
+            tableView.cr.addHeadRefresh(animator: NormalHeaderAnimator()) { [weak self] in
+                if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
+                    let selection = UISelectionFeedbackGenerator()
+                    selection.selectionChanged()
+                }
+                self?.refreshCont()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                    self?.tableView.cr.endHeaderRefresh()
+                })
+            }
         default:
             tableView.cr.addHeadRefresh(animator: NormalHeaderAnimator()) { [weak self] in
                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -1155,14 +1172,21 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 self.searchButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
                 self.searchButton.adjustsImageWhenHighlighted = false
                 self.searchButton.addTarget(self, action: #selector(search9), for: .touchUpInside)
-                self.navigationController?.view.addSubview(self.searchButton)
+                
+                let deviceIdiom2 = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom2) {
+                case .phone:
+                    self.navigationController?.view.addSubview(self.searchButton)
+                    
+                    self.searchButton.translatesAutoresizingMaskIntoConstraints = false
+                    self.searchButton.widthAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
+                    self.searchButton.heightAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
+                    self.searchButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+                    self.searchButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
+                default:
+                    print("nil")
+                }
                 self.maybeDoOnce = true
-
-                self.searchButton.translatesAutoresizingMaskIntoConstraints = false
-                self.searchButton.widthAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
-                self.searchButton.heightAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
-                self.searchButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-                self.searchButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
             }
         default:
             print("nothing")
@@ -5614,20 +5638,20 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
 
         if indexPath.section == 2 {
-            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-            switch (deviceIdiom) {
-            case .phone :
+//            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+//            switch (deviceIdiom) {
+//            case .phone :
                 let controller = DetailViewController()
                 controller.mainStatus.append(zzz[indexPath.row])
                 self.navigationController?.pushViewController(controller, animated: true)
-            case .pad:
-                let controller = DetailViewController()
-                controller.mainStatus.append(zzz[indexPath.row])
-                self.splitViewController?.showDetailViewController(controller, sender: self)
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
-            default:
-                print("nothing")
-            }
+//            case .pad:
+//                let controller = DetailViewController()
+//                controller.mainStatus.append(zzz[indexPath.row])
+//                self.splitViewController?.showDetailViewController(controller, sender: self)
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+//            default:
+//                print("nothing")
+//            }
         }
     }
 

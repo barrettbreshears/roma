@@ -3469,7 +3469,14 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         self.searchButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
                         self.searchButton.adjustsImageWhenHighlighted = false
                         self.searchButton.addTarget(self, action: #selector(self.didTouchSearch), for: .touchUpInside)
-                        x.view.addSubview(self.searchButton)
+                        
+                        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                        switch (deviceIdiom) {
+                        case .phone :
+                            x.view.addSubview(self.searchButton)
+                        default :
+                            print("nil")
+                        }
                     case 2436, 1792:
                         print("iPhone X")
                         let topIcon = UIButton(frame:(CGRect(x: self.view.bounds.width/2 - 100, y: 50, width: 200, height: 30)))
@@ -3480,7 +3487,14 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         self.searchButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
                         self.searchButton.adjustsImageWhenHighlighted = false
                         self.searchButton.addTarget(self, action: #selector(self.didTouchSearch), for: .touchUpInside)
-                        x.view.addSubview(self.searchButton)
+                        
+                        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                        switch (deviceIdiom) {
+                        case .phone :
+                            x.view.addSubview(self.searchButton)
+                        default :
+                            print("nil")
+                        }
                     default:
                         let topIcon = UIButton(frame:(CGRect(x: self.view.bounds.width/2 - 100, y: 26, width: 200, height: 30)))
                         topIcon.setTitleColor(Colours.grayDark, for: .normal)
@@ -3490,7 +3504,14 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         self.searchButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
                         self.searchButton.adjustsImageWhenHighlighted = false
                         self.searchButton.addTarget(self, action: #selector(self.didTouchSearch), for: .touchUpInside)
-                        x.view.addSubview(self.searchButton)
+                        
+                        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                        switch (deviceIdiom) {
+                        case .phone :
+                            x.view.addSubview(self.searchButton)
+                        default :
+                            print("nil")
+                        }
                     }
                 }
 

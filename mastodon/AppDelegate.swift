@@ -289,7 +289,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 //        } else {
             self.window = UIWindow(frame: UIScreen.main.bounds)
             self.window!.backgroundColor = Colours.white
-
+        
+        
             let splitViewController =  UISplitViewController()
             let rootViewController = ViewController()
             let detailViewController = DetailViewController()
@@ -342,9 +343,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                 splitViewController.minimumPrimaryColumnWidth = (minimumWidth/4)*3
                 splitViewController.maximumPrimaryColumnWidth = minimumWidth
             }
+ 
                 
-            self.window!.rootViewController = splitViewController
+        self.window?.rootViewController = splitViewController
+        
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            let rootController = ColumnViewController()
+            rootViewController.viewControllers = [UINavigationController(), UITabBarController(), UIViewController()]
+            self.window?.rootViewController = rootController
             self.window!.makeKeyAndVisible()
+        default:
+            print("nil")
+        }
+        
+        
         
             UINavigationBar.appearance().backgroundColor = Colours.white
             UINavigationBar.appearance().barTintColor = Colours.black
@@ -450,115 +465,134 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "startStream"), object: self)
-
-        UIApplication.shared.applicationIconBadgeNumber = 0
-
-        if (UserDefaults.standard.object(forKey: "composeSaved") == nil) || (UserDefaults.standard.object(forKey: "composeSaved") as? String == "") {
-
-        } else {
-            if let x = UserDefaults.standard.object(forKey: "composeSaved") as? String {
-                StoreStruct.savedComposeText = x
-                if let y = UserDefaults.standard.object(forKey: "savedInReplyText") as? String {
-                    StoreStruct.savedInReplyText = y
-                    StoreStruct.savedComposeText = x
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "savedComposePresent"), object: nil)
-                }
-            }
-        }
-
-        SettingsBundleHelper.checkAndExecuteSettings()
-        SettingsBundleHelper.setVersionAndBuildNumber()
-
-        if self.oneTime == false {
-            if (UserDefaults.standard.object(forKey: "biometrics") == nil) || (UserDefaults.standard.object(forKey: "biometrics") as! Int == 0) {} else {
-                self.biometricAuthenticationClicked(self)
-                self.oneTime = true
-            }
-        }
-        
-        
-//        if UIApplication.shared.isSplitOrSlideOver {
-//            self.window?.rootViewController = ViewController()
-//            self.window?.makeKeyAndVisible()
-//            StoreStruct.isSplit = true
+//        NotificationCenter.default.post(name: Notification.Name(rawValue: "startStream"), object: self)
+//
+//        UIApplication.shared.applicationIconBadgeNumber = 0
+//
+//        if (UserDefaults.standard.object(forKey: "composeSaved") == nil) || (UserDefaults.standard.object(forKey: "composeSaved") as? String == "") {
+//
 //        } else {
-//            if StoreStruct.isSplit {
-            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-            switch (deviceIdiom) {
-            case .phone:
-                print("nothing")
-            case .pad:
-                self.window = UIWindow(frame: UIScreen.main.bounds)
-                self.window!.backgroundColor = Colours.white
-
-                let splitViewController =  UISplitViewController()
-                let rootViewController = ViewController()
-                let detailViewController = DetailViewController()
-                splitViewController.viewControllers = [rootViewController, detailViewController]
-                splitViewController.preferredDisplayMode = .allVisible
-                let minimumWidth = min(splitViewController.view.bounds.width, splitViewController.view.bounds.height)
-                
-                if (UserDefaults.standard.object(forKey: "splitra") == nil) || (UserDefaults.standard.object(forKey: "splitra") as? Int == 0) {
-                    splitViewController.preferredPrimaryColumnWidthFraction = 0.5
-                    splitViewController.minimumPrimaryColumnWidth = minimumWidth/2
-                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
-                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 1 {
-                    splitViewController.preferredPrimaryColumnWidthFraction = 0.25
-                    splitViewController.minimumPrimaryColumnWidth = minimumWidth/4
-                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
-                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 2 {
-                    splitViewController.preferredPrimaryColumnWidthFraction = 0.3
-                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/10)*3
-                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
-                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 3 {
-                    splitViewController.preferredPrimaryColumnWidthFraction = 0.35
-                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/20)*7
-                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
-                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 4 {
-                    splitViewController.preferredPrimaryColumnWidthFraction = 0.4
-                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/5)*2
-                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
-                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 5 {
-                    splitViewController.preferredPrimaryColumnWidthFraction = 0.45
-                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/20)*9
-                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
-                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 6 {
-                    splitViewController.preferredPrimaryColumnWidthFraction = 0.55
-                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/20)*11
-                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
-                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 7 {
-                    splitViewController.preferredPrimaryColumnWidthFraction = 0.6
-                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/5)*4
-                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
-                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 8 {
-                    splitViewController.preferredPrimaryColumnWidthFraction = 0.65
-                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/20)*13
-                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
-                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 9 {
-                    splitViewController.preferredPrimaryColumnWidthFraction = 0.7
-                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/10)*7
-                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
-                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 10 {
-                    splitViewController.preferredPrimaryColumnWidthFraction = 0.75
-                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/4)*3
-                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
-                }
-                self.window!.rootViewController = splitViewController
-                self.window!.makeKeyAndVisible()
-                
-//                UINavigationBar.appearance().shadowImage = UIImage()
-//                UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-                UINavigationBar.appearance().backgroundColor = Colours.white
-                UINavigationBar.appearance().barTintColor = Colours.black
-                UINavigationBar.appearance().tintColor = Colours.black
-                UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
-            default:
-                print("nothing")
-            }
-//                StoreStruct.isSplit = false
+//            if let x = UserDefaults.standard.object(forKey: "composeSaved") as? String {
+//                StoreStruct.savedComposeText = x
+//                if let y = UserDefaults.standard.object(forKey: "savedInReplyText") as? String {
+//                    StoreStruct.savedInReplyText = y
+//                    StoreStruct.savedComposeText = x
+//                    NotificationCenter.default.post(name: Notification.Name(rawValue: "savedComposePresent"), object: nil)
+//                }
 //            }
 //        }
+//
+//        SettingsBundleHelper.checkAndExecuteSettings()
+//        SettingsBundleHelper.setVersionAndBuildNumber()
+//
+//        if self.oneTime == false {
+//            if (UserDefaults.standard.object(forKey: "biometrics") == nil) || (UserDefaults.standard.object(forKey: "biometrics") as! Int == 0) {} else {
+//                self.biometricAuthenticationClicked(self)
+//                self.oneTime = true
+//            }
+//        }
+//
+//
+////        if UIApplication.shared.isSplitOrSlideOver {
+////            self.window?.rootViewController = ViewController()
+////            self.window?.makeKeyAndVisible()
+////            StoreStruct.isSplit = true
+////        } else {
+////            if StoreStruct.isSplit {
+//            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+//            switch (deviceIdiom) {
+//            case .phone:
+//                print("nothing")
+//            case .pad:
+//                self.window = UIWindow(frame: UIScreen.main.bounds)
+//                self.window!.backgroundColor = Colours.white
+//
+//                let splitViewController =  UISplitViewController()
+//                let rootViewController = ViewController()
+//                let detailViewController = DetailViewController()
+//                splitViewController.viewControllers = [rootViewController, detailViewController]
+//                splitViewController.preferredDisplayMode = .allVisible
+//                let minimumWidth = min(splitViewController.view.bounds.width, splitViewController.view.bounds.height)
+//
+//                if (UserDefaults.standard.object(forKey: "splitra") == nil) || (UserDefaults.standard.object(forKey: "splitra") as? Int == 0) {
+//                    splitViewController.preferredPrimaryColumnWidthFraction = 0.5
+//                    splitViewController.minimumPrimaryColumnWidth = minimumWidth/2
+//                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
+//                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 1 {
+//                    splitViewController.preferredPrimaryColumnWidthFraction = 0.25
+//                    splitViewController.minimumPrimaryColumnWidth = minimumWidth/4
+//                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
+//                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 2 {
+//                    splitViewController.preferredPrimaryColumnWidthFraction = 0.3
+//                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/10)*3
+//                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
+//                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 3 {
+//                    splitViewController.preferredPrimaryColumnWidthFraction = 0.35
+//                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/20)*7
+//                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
+//                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 4 {
+//                    splitViewController.preferredPrimaryColumnWidthFraction = 0.4
+//                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/5)*2
+//                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
+//                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 5 {
+//                    splitViewController.preferredPrimaryColumnWidthFraction = 0.45
+//                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/20)*9
+//                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
+//                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 6 {
+//                    splitViewController.preferredPrimaryColumnWidthFraction = 0.55
+//                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/20)*11
+//                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
+//                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 7 {
+//                    splitViewController.preferredPrimaryColumnWidthFraction = 0.6
+//                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/5)*4
+//                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
+//                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 8 {
+//                    splitViewController.preferredPrimaryColumnWidthFraction = 0.65
+//                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/20)*13
+//                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
+//                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 9 {
+//                    splitViewController.preferredPrimaryColumnWidthFraction = 0.7
+//                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/10)*7
+//                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
+//                } else if UserDefaults.standard.object(forKey: "splitra") as? Int == 10 {
+//                    splitViewController.preferredPrimaryColumnWidthFraction = 0.75
+//                    splitViewController.minimumPrimaryColumnWidth = (minimumWidth/4)*3
+//                    splitViewController.maximumPrimaryColumnWidth = minimumWidth
+//                }
+//                self.window!.rootViewController = splitViewController
+//                self.window!.makeKeyAndVisible()
+//
+////                UINavigationBar.appearance().shadowImage = UIImage()
+////                UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+//                UINavigationBar.appearance().backgroundColor = Colours.white
+//                UINavigationBar.appearance().barTintColor = Colours.black
+//                UINavigationBar.appearance().tintColor = Colours.black
+//                UINavigationBar.appearance().titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
+//            default:
+//                print("nothing")
+//            }
+////                StoreStruct.isSplit = false
+////            }
+////        }
+//
+//        UserDefaults.standard.synchronize()
+        
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            let rootController = ColumnViewController()
+            let nav0 = UINavigationController(rootViewController: VerticalTabBarController())
+            let nav1 = UINavigationController(rootViewController: FirstViewController())
+            let nav2 = UINavigationController(rootViewController: SecondViewController())
+            let nav3 = UINavigationController(rootViewController: ThirdViewController())
+            rootController.viewControllers = [nav0, nav1, nav2, nav3]
+            self.window?.rootViewController = rootController
+            self.window!.makeKeyAndVisible()
+        default:
+            print("nil")
+        }
+        
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

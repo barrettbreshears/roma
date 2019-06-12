@@ -1273,7 +1273,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
         settingsButton.adjustsImageWhenHighlighted = false
         settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
-        self.navigationController?.view.addSubview(settingsButton)
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone :
+            self.navigationController?.view.addSubview(settingsButton)
+        default :
+            print("nil")
+        }
         
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
         var offset = 88
@@ -1293,8 +1300,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
         }
         
-        
-        //bh4
         var newSize = offset + 65
         if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
             newSize = offset + 65
@@ -1302,8 +1307,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             newSize = offset + 15
         }
         
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
+        let deviceIdiom1 = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom1) {
         case .pad:
             
             segmentedControl.translatesAutoresizingMaskIntoConstraints = false
@@ -1367,15 +1372,20 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 self.searchButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
                 self.searchButton.adjustsImageWhenHighlighted = false
                 self.searchButton.addTarget(self, action: #selector(search9), for: .touchUpInside)
-                self.navigationController?.view.addSubview(self.searchButton)
                 
-                
-                self.searchButton.translatesAutoresizingMaskIntoConstraints = false
-                self.searchButton.widthAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
-                self.searchButton.heightAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
-                self.searchButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-                self.searchButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
-                
+                let deviceIdiom2 = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom2) {
+                case .phone:
+                    self.navigationController?.view.addSubview(self.searchButton)
+                    
+                    self.searchButton.translatesAutoresizingMaskIntoConstraints = false
+                    self.searchButton.widthAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
+                    self.searchButton.heightAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
+                    self.searchButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+                    self.searchButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
+                default:
+                    print("nil")
+                }
                 
                 self.maybeDoOnce = true
             }
@@ -1429,7 +1439,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
         settingsButton.adjustsImageWhenHighlighted = false
         settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
-        self.navigationController?.view.addSubview(settingsButton)
+        
+        let deviceIdiom0 = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom0) {
+        case .phone:
+            self.navigationController?.view.addSubview(settingsButton)
+        default:
+            print("nil")
+        }
         
         self.newUpdatesB1.frame = CGRect(x: CGFloat(self.view.bounds.width - 42), y: CGFloat(newSize + 15), width: CGFloat(56), height: CGFloat(30))
         self.newUpdatesB1.backgroundColor = Colours.grayLight19
@@ -4942,9 +4959,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .phone :
+//        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+//        switch (deviceIdiom) {
+//        case .phone :
             let controller = DetailViewController()
             if self.currentIndex == 0 {
 //                self.tableView.deselectRow(at: indexPath, animated: true)
@@ -4971,39 +4988,39 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     self.navigationController?.pushViewController(controller, animated: true)
                 }
             }
-        case .pad:
-            let controller = DetailViewController()
-            if self.currentIndex == 0 {
-                self.tableView.deselectRow(at: indexPath, animated: true)
-                if StoreStruct.statusesHome[indexPath.row].id == "loadmorehere" {
-                    self.fetchGap()
-                } else {
-                    controller.mainStatus.append(StoreStruct.statusesHome[indexPath.row])
-                    self.splitViewController?.showDetailViewController(controller, sender: self)
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
-                }
-            } else if self.currentIndex == 1 {
-                self.tableViewL.deselectRow(at: indexPath, animated: true)
-                if StoreStruct.statusesLocal[indexPath.row].id == "loadmorehere" {
-                    self.fetchGap()
-                } else {
-                    controller.mainStatus.append(StoreStruct.statusesLocal[indexPath.row])
-                    self.splitViewController?.showDetailViewController(controller, sender: self)
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
-                }
-            } else {
-                self.tableViewF.deselectRow(at: indexPath, animated: true)
-                if StoreStruct.statusesFederated[indexPath.row].id == "loadmorehere" {
-                    self.fetchGap()
-                } else {
-                    controller.mainStatus.append(StoreStruct.statusesFederated[indexPath.row])
-                    self.splitViewController?.showDetailViewController(controller, sender: self)
-                    NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
-                }
-            }
-        default:
-            print("nothing")
-        }
+//        case .pad:
+//            let controller = DetailViewController()
+//            if self.currentIndex == 0 {
+//                self.tableView.deselectRow(at: indexPath, animated: true)
+//                if StoreStruct.statusesHome[indexPath.row].id == "loadmorehere" {
+//                    self.fetchGap()
+//                } else {
+//                    controller.mainStatus.append(StoreStruct.statusesHome[indexPath.row])
+//                    self.splitViewController?.showDetailViewController(controller, sender: self)
+//                    NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+//                }
+//            } else if self.currentIndex == 1 {
+//                self.tableViewL.deselectRow(at: indexPath, animated: true)
+//                if StoreStruct.statusesLocal[indexPath.row].id == "loadmorehere" {
+//                    self.fetchGap()
+//                } else {
+//                    controller.mainStatus.append(StoreStruct.statusesLocal[indexPath.row])
+//                    self.splitViewController?.showDetailViewController(controller, sender: self)
+//                    NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+//                }
+//            } else {
+//                self.tableViewF.deselectRow(at: indexPath, animated: true)
+//                if StoreStruct.statusesFederated[indexPath.row].id == "loadmorehere" {
+//                    self.fetchGap()
+//                } else {
+//                    controller.mainStatus.append(StoreStruct.statusesFederated[indexPath.row])
+//                    self.splitViewController?.showDetailViewController(controller, sender: self)
+//                    NotificationCenter.default.post(name: Notification.Name(rawValue: "splitload"), object: nil)
+//                }
+//            }
+//        default:
+//            print("nothing")
+//        }
     }
     
     func fetchGap() {

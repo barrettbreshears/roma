@@ -87,13 +87,9 @@ class SchemesSettingsViewController: UIViewController, UITableViewDelegate, UITa
         self.view.addSubview(self.tableView)
         self.tableView.tableFooterView = UIView()
         self.loadLoadLoad()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
-        self.navigationController?.navigationItem.backBarButtonItem?.tintColor = Colours.tabUnselected
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
+        
+        let deviceIdiom0 = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom0) {
         case .pad:
             self.tableView.translatesAutoresizingMaskIntoConstraints = false
             self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
@@ -103,6 +99,11 @@ class SchemesSettingsViewController: UIViewController, UITableViewDelegate, UITa
         default:
             print("nothing")
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        self.navigationController?.navigationItem.backBarButtonItem?.tintColor = Colours.tabUnselected
         
         tap = UITapGestureRecognizer(target: self, action: #selector(onTap(sender:)))
         tap.numberOfTapsRequired = 1

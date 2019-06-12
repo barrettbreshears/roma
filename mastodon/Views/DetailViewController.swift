@@ -268,102 +268,6 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 tabHeight = Int(UITabBarController().tabBar.frame.size.height)
             }
         }
-
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .pad:
-
-            self.tableView.translatesAutoresizingMaskIntoConstraints = false
-            self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
-            self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
-            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-            
-            splitButton.backgroundColor = Colours.white
-            splitButton.layer.masksToBounds = true
-            splitButton.setImage(UIImage(named: "splitRatio")?.maskWithColor(color: Colours.grayLight2), for: .normal)
-            splitButton.addTarget(self, action: #selector(self.didTouchSplit), for: .touchUpInside)
-            self.view.addSubview(self.splitButton)
-            
-            self.splitButton.translatesAutoresizingMaskIntoConstraints = false
-            self.splitButton.widthAnchor.constraint(equalToConstant: 28).isActive = true
-            self.splitButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
-            self.splitButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
-            self.splitButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 9).isActive = true
-            
-            if self.mainStatus.isEmpty {
-                
-                self.tableView.alpha = 0
-                let introLogo = UIImageView()
-                introLogo.contentMode = .scaleAspectFit
-                self.view.addSubview(introLogo)
-                introLogo.translatesAutoresizingMaskIntoConstraints = false
-                introLogo.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-                introLogo.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
-                introLogo.widthAnchor.constraint(equalToConstant: CGFloat(120)).isActive = true
-                introLogo.heightAnchor.constraint(equalToConstant: CGFloat(120)).isActive = true
-                introLogo.image = UIImage(named: "launcgLogo")?.maskWithColor(color: Colours.tabUnselected.withAlphaComponent(0.2))
-
-            } else {
-                
-                self.tableView.alpha = 1
-                replyButton.backgroundColor = Colours.white
-                likeButton.backgroundColor = Colours.white
-                boostButton.backgroundColor = Colours.white
-                moreButton.backgroundColor = Colours.white
-
-                replyButton.layer.cornerRadius = 20
-                replyButton.layer.masksToBounds = true
-                likeButton.layer.cornerRadius = 20
-                likeButton.layer.masksToBounds = true
-                boostButton.layer.cornerRadius = 20
-                boostButton.layer.masksToBounds = true
-                moreButton.layer.cornerRadius = 20
-                moreButton.layer.masksToBounds = true
-                
-                replyButton.setImage(UIImage(named: "reply0")?.maskWithColor(color: Colours.tabSelected), for: .normal)
-                moreButton.setImage(UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected), for: .normal)
-                likeButton.setImage(UIImage(named: "like0")?.maskWithColor(color: Colours.tabSelected), for: .normal)
-                boostButton.setImage(UIImage(named: "boost0")?.maskWithColor(color: Colours.tabSelected), for: .normal)
-                
-                replyButton.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
-                likeButton.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
-                boostButton.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
-                moreButton.addTarget(self, action: #selector(self.didTouchMore), for: .touchUpInside)
-
-                self.view.addSubview(self.moreButton)
-                self.view.addSubview(self.boostButton)
-                self.view.addSubview(self.likeButton)
-                self.view.addSubview(self.replyButton)
-
-                self.moreButton.translatesAutoresizingMaskIntoConstraints = false
-                self.moreButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-                self.moreButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-                self.moreButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-                self.moreButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
-
-                self.boostButton.translatesAutoresizingMaskIntoConstraints = false
-                self.boostButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-                self.boostButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-                self.boostButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -85).isActive = true
-                self.boostButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
-
-                self.likeButton.translatesAutoresizingMaskIntoConstraints = false
-                self.likeButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-                self.likeButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-                self.likeButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -150).isActive = true
-                self.likeButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
-
-                self.replyButton.translatesAutoresizingMaskIntoConstraints = false
-                self.replyButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-                self.replyButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-                self.replyButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -215).isActive = true
-                self.replyButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
-
-            }
-        default:
-            print("nothing")
-        }
         
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
             self?.player.seek(to: CMTime.zero)
@@ -645,6 +549,103 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if (traitCollection.forceTouchCapability == .available) {
             registerForPreviewing(with: self, sourceView: self.tableView)
         }
+        
+        
+        let deviceIdiom3 = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom3) {
+        case .pad:
+            
+            self.tableView.translatesAutoresizingMaskIntoConstraints = false
+            self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+            self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+            
+            splitButton.backgroundColor = Colours.white
+            splitButton.layer.masksToBounds = true
+            splitButton.setImage(UIImage(named: "splitRatio")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+            splitButton.addTarget(self, action: #selector(self.didTouchSplit), for: .touchUpInside)
+            self.view.addSubview(self.splitButton)
+            
+            self.splitButton.translatesAutoresizingMaskIntoConstraints = false
+            self.splitButton.widthAnchor.constraint(equalToConstant: 28).isActive = true
+            self.splitButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
+            self.splitButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
+            self.splitButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 9).isActive = true
+            
+            if self.mainStatus.isEmpty {
+                
+                self.tableView.alpha = 0
+                let introLogo = UIImageView()
+                introLogo.contentMode = .scaleAspectFit
+                self.view.addSubview(introLogo)
+                introLogo.translatesAutoresizingMaskIntoConstraints = false
+                introLogo.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+                introLogo.centerYAnchor.constraint(equalTo: self.view.centerYAnchor).isActive = true
+                introLogo.widthAnchor.constraint(equalToConstant: CGFloat(120)).isActive = true
+                introLogo.heightAnchor.constraint(equalToConstant: CGFloat(120)).isActive = true
+                introLogo.image = UIImage(named: "launcgLogo")?.maskWithColor(color: Colours.tabUnselected.withAlphaComponent(0.2))
+                
+            } else {
+                
+                self.tableView.alpha = 1
+                replyButton.backgroundColor = Colours.white
+                likeButton.backgroundColor = Colours.white
+                boostButton.backgroundColor = Colours.white
+                moreButton.backgroundColor = Colours.white
+                
+                replyButton.layer.cornerRadius = 20
+                replyButton.layer.masksToBounds = true
+                likeButton.layer.cornerRadius = 20
+                likeButton.layer.masksToBounds = true
+                boostButton.layer.cornerRadius = 20
+                boostButton.layer.masksToBounds = true
+                moreButton.layer.cornerRadius = 20
+                moreButton.layer.masksToBounds = true
+                
+                replyButton.setImage(UIImage(named: "reply0")?.maskWithColor(color: Colours.tabSelected), for: .normal)
+                moreButton.setImage(UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected), for: .normal)
+                likeButton.setImage(UIImage(named: "like0")?.maskWithColor(color: Colours.tabSelected), for: .normal)
+                boostButton.setImage(UIImage(named: "boost0")?.maskWithColor(color: Colours.tabSelected), for: .normal)
+                
+                replyButton.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                likeButton.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                boostButton.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                moreButton.addTarget(self, action: #selector(self.didTouchMore), for: .touchUpInside)
+                
+                self.view.addSubview(self.moreButton)
+                self.view.addSubview(self.boostButton)
+                self.view.addSubview(self.likeButton)
+                self.view.addSubview(self.replyButton)
+                
+                self.moreButton.translatesAutoresizingMaskIntoConstraints = false
+                self.moreButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+                self.moreButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+                self.moreButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+                self.moreButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
+                
+                self.boostButton.translatesAutoresizingMaskIntoConstraints = false
+                self.boostButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+                self.boostButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+                self.boostButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -85).isActive = true
+                self.boostButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
+                
+                self.likeButton.translatesAutoresizingMaskIntoConstraints = false
+                self.likeButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+                self.likeButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+                self.likeButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -150).isActive = true
+                self.likeButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
+                
+                self.replyButton.translatesAutoresizingMaskIntoConstraints = false
+                self.replyButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+                self.replyButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+                self.replyButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -215).isActive = true
+                self.replyButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
+                
+            }
+        default:
+            print("nothing")
+        }
     }
     
     @objc func didTouchDetailPrev() {
@@ -773,15 +774,15 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .pad:
-            if indexPath.section == 4 {
-                return 0
-            }
-        default:
-            print("nothing")
-        }
+//        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+//        switch (deviceIdiom) {
+//        case .pad:
+//            if indexPath.section == 4 {
+//                return 0
+//            }
+//        default:
+//            print("nothing")
+//        }
         if indexPath.section == 2 {
             if self.mainStatus.isEmpty {
                 return 0
@@ -1553,33 +1554,33 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         } else if indexPath.section == 4 {
 
             // Action buttons
-
-            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-            switch (deviceIdiom) {
-            case .pad:
-
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell10", for: indexPath) as! ActionButtonCell
-                cell.replyButton.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
-                cell.likeButton.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
-                cell.boostButton.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
-                cell.moreButton.addTarget(self, action: #selector(self.didTouchMore), for: .touchUpInside)
-                cell.replyButton.tag = indexPath.row
-                cell.likeButton.tag = indexPath.row
-                cell.boostButton.tag = indexPath.row
-                cell.moreButton.tag = indexPath.row
-                cell.replyButton.alpha = 0
-                cell.likeButton.alpha = 0
-                cell.boostButton.alpha = 0
-                cell.shareButton.alpha = 0
-                cell.moreButton.alpha = 0
-                cell.backgroundColor = Colours.white
-                let bgColorView = UIView()
-                bgColorView.backgroundColor = Colours.white
-                cell.selectedBackgroundView = bgColorView
-                return cell
-
-            default:
-                
+            
+//            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+//            switch (deviceIdiom) {
+//            case .pad:
+//
+//                let cell = tableView.dequeueReusableCell(withIdentifier: "cell10", for: indexPath) as! ActionButtonCell
+//                cell.replyButton.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+//                cell.likeButton.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+//                cell.boostButton.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+//                cell.moreButton.addTarget(self, action: #selector(self.didTouchMore), for: .touchUpInside)
+//                cell.replyButton.tag = indexPath.row
+//                cell.likeButton.tag = indexPath.row
+//                cell.boostButton.tag = indexPath.row
+//                cell.moreButton.tag = indexPath.row
+//                cell.replyButton.alpha = 0
+//                cell.likeButton.alpha = 0
+//                cell.boostButton.alpha = 0
+//                cell.shareButton.alpha = 0
+//                cell.moreButton.alpha = 0
+//                cell.backgroundColor = Colours.white
+//                let bgColorView = UIView()
+//                bgColorView.backgroundColor = Colours.white
+//                cell.selectedBackgroundView = bgColorView
+//                return cell
+//
+//            default:
+            
                 if self.mainStatus.isEmpty {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell10", for: indexPath) as! ActionButtonCell
                     cell.replyButton.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
@@ -1638,8 +1639,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
                     }
                 }
-
-            }
+                
+//            }
         } else {
 
             // All replies
@@ -5563,9 +5564,9 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
 //        self.tableView.deselectRow(at: indexPath, animated: true)
         
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .phone :
+//        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+//        switch (deviceIdiom) {
+//        case .phone :
             if indexPath.section == 0 {
                 let controller = DetailViewController()
                 controller.mainStatus.append(self.allPrevious[indexPath.row])
@@ -5576,40 +5577,40 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 controller.mainStatus.append(self.allReplies[indexPath.row])
                 self.navigationController?.pushViewController(controller, animated: true)
             }
-        case .pad:
-            if indexPath.section == 0 {
-                let controller = DetailViewController()
-                controller.mainStatus.append(self.allPrevious[indexPath.row])
-                if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
-                    if StoreStruct.currentPage == 0 {
-                        nav.firstView.navigationController?.pushViewController(controller, animated: true)
-                    }
-                    if StoreStruct.currentPage == 1 {
-                        nav.secondView.navigationController?.pushViewController(controller, animated: true)
-                    }
-                    if StoreStruct.currentPage == 2 {
-                        nav.thirdView.navigationController?.pushViewController(controller, animated: true)
-                    }
-                }
-            }
-            if indexPath.section == 5 {
-                let controller = DetailViewController()
-                controller.mainStatus.append(self.allReplies[indexPath.row])
-                if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
-                    if StoreStruct.currentPage == 0 {
-                        nav.firstView.navigationController?.pushViewController(controller, animated: true)
-                    }
-                    if StoreStruct.currentPage == 1 {
-                        nav.secondView.navigationController?.pushViewController(controller, animated: true)
-                    }
-                    if StoreStruct.currentPage == 2 {
-                        nav.thirdView.navigationController?.pushViewController(controller, animated: true)
-                    }
-                }
-            }
-        default:
-            print("nothing")
-        }
+//        case .pad:
+//            if indexPath.section == 0 {
+//                let controller = DetailViewController()
+//                controller.mainStatus.append(self.allPrevious[indexPath.row])
+//                if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+//                    if StoreStruct.currentPage == 0 {
+//                        nav.firstView.navigationController?.pushViewController(controller, animated: true)
+//                    }
+//                    if StoreStruct.currentPage == 1 {
+//                        nav.secondView.navigationController?.pushViewController(controller, animated: true)
+//                    }
+//                    if StoreStruct.currentPage == 2 {
+//                        nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+//                    }
+//                }
+//            }
+//            if indexPath.section == 5 {
+//                let controller = DetailViewController()
+//                controller.mainStatus.append(self.allReplies[indexPath.row])
+//                if let nav = self.splitViewController?.viewControllers[0] as? ViewController {
+//                    if StoreStruct.currentPage == 0 {
+//                        nav.firstView.navigationController?.pushViewController(controller, animated: true)
+//                    }
+//                    if StoreStruct.currentPage == 1 {
+//                        nav.secondView.navigationController?.pushViewController(controller, animated: true)
+//                    }
+//                    if StoreStruct.currentPage == 2 {
+//                        nav.thirdView.navigationController?.pushViewController(controller, animated: true)
+//                    }
+//                }
+//            }
+//        default:
+//            print("nothing")
+//        }
     }
 
 
