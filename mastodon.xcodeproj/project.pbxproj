@@ -762,8 +762,6 @@
 		A96F5CBB2278CBE70014B048 /* TermsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96F5CB92278CBE70014B048 /* TermsController.swift */; };
 		A96F5CBC2278CC800014B048 /* CrownIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A6A5225FA0100005AB1F /* CrownIndicatorView.swift */; };
 		A973AF2521D432AE009D7D21 /* CollectionProCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7806850A21CC227100072C41 /* CollectionProCells.swift */; };
-		A97C042922B4185F00755B41 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97C042822B4185F00755B41 /* NotificationService.swift */; };
-		A97C042D22B4185F00755B41 /* roma push.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A97C042622B4185F00755B41 /* roma push.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A992A64F225F9E370005AB1F /* SwiftGCM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A649225F9E370005AB1F /* SwiftGCM.swift */; };
 		A992A650225F9E370005AB1F /* DecryptNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A64A225F9E370005AB1F /* DecryptNotification.swift */; };
 		A992A651225F9E370005AB1F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A992A64B225F9E370005AB1F /* README.md */; };
@@ -853,13 +851,6 @@
 			remoteGlobalIDString = 536A4FCC216B843A00A3D483;
 			remoteInfo = "MastWatch Extension";
 		};
-		A97C042B22B4185F00755B41 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 5373C9CC215173EE00676F3D /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A97C042522B4185F00755B41;
-			remoteInfo = "roma push";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -869,7 +860,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
-				A97C042D22B4185F00755B41 /* roma push.appex in Embed App Extensions */,
 				A9594D80221F193E00AF7A0E /* MastShare.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
@@ -1710,9 +1700,6 @@
 		A9296DD722160B5100BEE7A7 /* mastodon-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mastodon-Bridging-Header.h"; sourceTree = "<group>"; };
 		A96F5CB82278CBE70014B048 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		A96F5CB92278CBE70014B048 /* TermsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsController.swift; sourceTree = "<group>"; };
-		A97C042622B4185F00755B41 /* roma push.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "roma push.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A97C042822B4185F00755B41 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
-		A97C042A22B4185F00755B41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A992A649225F9E370005AB1F /* SwiftGCM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftGCM.swift; sourceTree = "<group>"; };
 		A992A64A225F9E370005AB1F /* DecryptNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecryptNotification.swift; sourceTree = "<group>"; };
 		A992A64B225F9E370005AB1F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -1821,13 +1808,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		7AC61BDF3FD076DD6C519248 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A97C042322B4185F00755B41 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2783,7 +2763,6 @@
 				536A4FC2216B843700A3D483 /* MastWatch */,
 				536A4FD1216B843A00A3D483 /* MastWatch Extension */,
 				531B04B72171119D00D31715 /* MastStickers */,
-				A97C042722B4185F00755B41 /* roma push */,
 				5373C9D5215173EE00676F3D /* Products */,
 				C27DCB277D141E1273E766A3 /* Pods */,
 				A968E888220A06AD000EED23 /* Recovered References */,
@@ -2801,7 +2780,6 @@
 				536A4FCD216B843A00A3D483 /* MastWatch Extension.appex */,
 				531B04B62171119D00D31715 /* MastStickers.appex */,
 				A910C7E02221D9EE0023AD76 /* OneSignalNotificationServiceExtension.appex */,
-				A97C042622B4185F00755B41 /* roma push.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -3296,15 +3274,6 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
-		A97C042722B4185F00755B41 /* roma push */ = {
-			isa = PBXGroup;
-			children = (
-				A97C042822B4185F00755B41 /* NotificationService.swift */,
-				A97C042A22B4185F00755B41 /* Info.plist */,
-			);
-			path = "roma push";
-			sourceTree = "<group>";
-		};
 		A992A648225F9E370005AB1F /* push */ = {
 			isa = PBXGroup;
 			children = (
@@ -3603,29 +3572,11 @@
 				5354BA222163F89E0094C545 /* PBXTargetDependency */,
 				5354BAFC21668D5A0094C545 /* PBXTargetDependency */,
 				5322D7E02167659900B952F5 /* PBXTargetDependency */,
-				A97C042C22B4185F00755B41 /* PBXTargetDependency */,
 			);
 			name = mastodon;
 			productName = mastodon;
 			productReference = 5373C9D4215173EE00676F3D /* mastodon.app */;
 			productType = "com.apple.product-type.application";
-		};
-		A97C042522B4185F00755B41 /* roma push */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A97C042E22B4185F00755B41 /* Build configuration list for PBXNativeTarget "roma push" */;
-			buildPhases = (
-				A97C042222B4185F00755B41 /* Sources */,
-				A97C042322B4185F00755B41 /* Frameworks */,
-				A97C042422B4185F00755B41 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "roma push";
-			productName = "roma push";
-			productReference = A97C042622B4185F00755B41 /* roma push.appex */;
-			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -3696,9 +3647,6 @@
 							};
 						};
 					};
-					A97C042522B4185F00755B41 = {
-						CreatedOnToolsVersion = 10.2.1;
-					};
 				};
 			};
 			buildConfigurationList = 5373C9CF215173EE00676F3D /* Build configuration list for PBXProject "mastodon" */;
@@ -3730,7 +3678,6 @@
 				536A4FC0216B843700A3D483 /* MastWatch */,
 				536A4FCC216B843A00A3D483 /* MastWatch Extension */,
 				531B04B52171119D00D31715 /* MastStickers */,
-				A97C042522B4185F00755B41 /* roma push */,
 			);
 		};
 /* End PBXProject section */
@@ -3918,13 +3865,6 @@
 				5352D0B3215E679300901B60 /* icon4@2x.png in Resources */,
 				5352D0AD215E679300901B60 /* icon5@2x.png in Resources */,
 				530976AC2179D8D900640D84 /* icon18.png in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A97C042422B4185F00755B41 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4759,14 +4699,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A97C042222B4185F00755B41 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A97C042922B4185F00755B41 /* NotificationService.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -4789,11 +4721,6 @@
 			isa = PBXTargetDependency;
 			target = 536A4FCC216B843A00A3D483 /* MastWatch Extension */;
 			targetProxy = 536A4FCF216B843A00A3D483 /* PBXContainerItemProxy */;
-		};
-		A97C042C22B4185F00755B41 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A97C042522B4185F00755B41 /* roma push */;
-			targetProxy = A97C042B22B4185F00755B41 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -5296,48 +5223,6 @@
 			};
 			name = Release;
 		};
-		A97C042F22B4185F00755B41 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5877VK992M;
-				INFOPLIST_FILE = "roma push/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vm.roma.roma-push";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		A97C043022B4185F00755B41 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5877VK992M;
-				INFOPLIST_FILE = "roma push/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vm.roma.roma-push";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -5409,15 +5294,6 @@
 			buildConfigurations = (
 				5373C9E7215173F000676F3D /* Debug */,
 				5373C9E8215173F000676F3D /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A97C042E22B4185F00755B41 /* Build configuration list for PBXNativeTarget "roma push" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A97C042F22B4185F00755B41 /* Debug */,
-				A97C043022B4185F00755B41 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -1411,15 +1411,6 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         
         if StoreStruct.currentUser != nil {
             
-            if Account.isPushSet(instance:"\(StoreStruct.currentUser.username)@\(StoreStruct.currentInstance.returnedText)") == false {
-                let center = UNUserNotificationCenter.current()
-                center.requestAuthorization(options:[.badge, .alert, .sound]) { (granted, error) in
-                    // Enable or disable features based on authorization.
-                    DispatchQueue.main.async {
-                        UIApplication.shared.registerForRemoteNotifications()
-                    }
-                }
-            }
             
             if Account.isPushSet(instance:"\(StoreStruct.currentUser.username)@\(StoreStruct.currentInstance.returnedText)") == false {
                 let center = UNUserNotificationCenter.current()
