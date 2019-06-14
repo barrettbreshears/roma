@@ -282,6 +282,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         FirebaseApp.configure()
         UserDefaults.standard.set(1, forKey: "tootpl")
+        
+        if let userDefaults = UserDefaults(suiteName: "group.com.vm.roma.wormhole") {
+            
+            let badgeCount = 0
+            userDefaults.set(badgeCount, forKey: "badge-count")
+            UIApplication.shared.applicationIconBadgeNumber = badgeCount
+            
+        }
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window!.backgroundColor = Colours.white
         
@@ -576,7 +584,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
                             ["p256dh":"BEpPCn0cfs3P0E0fY-gyOuahx5dW5N8quUowlrPyfXlMa6tABLqqcSpOpMnC1-o_UB_s4R8NQsqMLbASjnqSbqw=",
                              "auth":"T5bhIIyre5TDC1LyX4mFAQ=="
                             ],
-                         "endpoint":"https://pushrelay-roma1-fcm.your.org/push/\(fcmToken)?account=test&server=server&device=iOS"
+                         // "endpoint":"https://pushrelay-roma1-fcm.your.org/push/\(fcmToken)?account=test&server=server&device=iOS"
+                            "endpoint":"https://rails-toot-test.herokuapp.com/push/\(fcmToken)?account=test&server=server&device=iOS"
             ]
         ]
         //create the url with URL
