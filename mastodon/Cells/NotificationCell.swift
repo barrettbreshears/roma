@@ -169,8 +169,8 @@ class NotificationCell: SwipeTableViewCell {
             "more1" : more1,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-10-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[type(40)]-4-[image(40)]-13-[episodes]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[type(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
@@ -183,11 +183,11 @@ class NotificationCell: SwipeTableViewCell {
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[like1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[boost1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
                 contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[more1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-107-[rep1(36)]-20-[like1(40)]-11-[boost1(34)]-24-[more1(20)]-(>=10)-|", options: [], metrics: nil, views: viewsDict))
+                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-109-[rep1(36)]-20-[like1(40)]-11-[boost1(34)]-24-[more1(20)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
             }
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-0-[episodes]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-101-[warning]-7-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-101-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
     }
 

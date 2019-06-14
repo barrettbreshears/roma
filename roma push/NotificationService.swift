@@ -1,8 +1,8 @@
 //
 //  NotificationService.swift
-//  Roma Push Extentsion
+//  roma push
 //
-//  Created by Barrett Breshears on 2/15/19.
+//  Created by Barrett Breshears on 6/14/19.
 //  Copyright © 2019 Shihab Mehboob. All rights reserved.
 //
 
@@ -19,22 +19,9 @@ class NotificationService: UNNotificationServiceExtension {
         
         if let bestAttemptContent = bestAttemptContent {
             // Modify the notification content here...
+            bestAttemptContent.title = "\(bestAttemptContent.title) [modified]"
             
-            guard let storedState = PushNotificationReceiver.getSate() else {
-                contentHandler(bestAttemptContent)
-                return
-            }
-            
-            if let content = try? bestAttemptContent.decrypt(state: storedState) {
-                
-                // Mark the message as still encrypted.
-                bestAttemptContent.title = content.title
-                bestAttemptContent.body = content.body
-                
-            }
-            if (bestAttemptContent.body != "🎺") {
-                contentHandler(bestAttemptContent)
-            }
+            contentHandler(bestAttemptContent)
         }
     }
     

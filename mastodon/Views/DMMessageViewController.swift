@@ -17,6 +17,7 @@ import MobileCoreServices
 
 class DMMessageViewController: MessagesViewController, MessagesDataSource, MessagesLayoutDelegate, MessagesDisplayDelegate, MessageCellDelegate, SKPhotoBrowserDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
     
+    var statusBarView = UIView()
     var messages: [MessageType] = []
     var mainStatus: [Status] = []
     var allPrevious: [Status] = []
@@ -73,6 +74,10 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         self.removeTabbarItemsText()
         
         self.view.backgroundColor = Colours.white
+        
+        statusBarView = UIView(frame: UIApplication.shared.statusBarFrame)
+        statusBarView.backgroundColor = Colours.white
+        view.addSubview(statusBarView)
         
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
             self?.player.seek(to: CMTime.zero)
@@ -700,6 +705,13 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         }
         
         let controller = ComposeViewController()
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            controller.modalPresentationStyle = .pageSheet
+        default:
+            print("nil")
+        }
         StoreStruct.spoilerText = self.mainStatus[0].reblog?.spoilerText ?? self.mainStatus[0].spoilerText
         controller.inReply = [self.mainStatus[0]]
         controller.inReplyText = self.mainStatus[0].account.acct

@@ -232,6 +232,13 @@ class EndorsedViewController: UIViewController, UITableViewDelegate, UITableView
                         
                         
                         let controller = ComposeViewController()
+                        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                        switch (deviceIdiom) {
+                        case .pad:
+                            controller.modalPresentationStyle = .pageSheet
+                        default:
+                            print("nil")
+                        }
                         controller.inReplyText = sto[indexPath.row].acct
                         self.present(controller, animated: true, completion: nil)
                     }
@@ -239,6 +246,13 @@ class EndorsedViewController: UIViewController, UITableViewDelegate, UITableView
                         
                         
                         let controller = ComposeViewController()
+                        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                        switch (deviceIdiom) {
+                        case .pad:
+                            controller.modalPresentationStyle = .pageSheet
+                        default:
+                            print("nil")
+                        }
                         controller.inReplyText = sto[indexPath.row].acct
                         controller.profileDirect = true
                         self.present(controller, animated: true, completion: nil)

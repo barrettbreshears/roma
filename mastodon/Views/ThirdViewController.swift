@@ -141,6 +141,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         StoreStruct.client.run(request2) { (statuses) in
             if let stat = (statuses.value) {
                 StoreStruct.currentUser = stat
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: nil)
                 self.chosenUser = stat
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
@@ -292,16 +293,22 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
 
     @objc func setLeft() {
-        //        var settingsButton = MNGExpandedTouchAreaButton()
-        //        settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 32, height: 32)))
-        //        settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
-        //        settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-        //        settingsButton.adjustsImageWhenHighlighted = false
-        //        settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
-        //
-        //        let done = UIBarButtonItem.init(customView: settingsButton)
-        //        self.navigationItem.setLeftBarButton(done, animated: false)
-
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone :
+                var settingsButton = MNGExpandedTouchAreaButton()
+                settingsButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 32, height: 32)))
+                settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+                settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+                settingsButton.adjustsImageWhenHighlighted = false
+                settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
+        
+                let done = UIBarButtonItem.init(customView: settingsButton)
+                self.navigationItem.setLeftBarButton(done, animated: false)
+        default:
+            print("nil")
+        }
+        
     }
 
     @objc func refProf() {
@@ -404,8 +411,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 StoreStruct.client.run(request2) { (statuses) in
                     if let stat = (statuses.value) {
                         StoreStruct.currentUser = stat
-
-
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: nil)
+                        
+                        
                         self.userIDtoUse = StoreStruct.currentUser.id
                         let request = Accounts.statuses(id: StoreStruct.currentUser.id)
                         StoreStruct.client.run(request) { (statuses) in
@@ -884,7 +892,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         case .pad:
 //            print("nothing")
-            self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
+            self.tableView.frame = CGRect(x: 0, y: Int(offset + 60), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 60)
         default:
             self.tableView.frame = CGRect(x: 0, y: Int(offset + 0), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 0)
         }
@@ -1029,6 +1037,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     if let stat = (statuses.value) {
                         DispatchQueue.main.async {
                             StoreStruct.currentUser = stat
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: nil)
                             self.userIDtoUse = StoreStruct.currentUser.id
                             self.chosenUser = StoreStruct.currentUser
                             self.tableView.reloadData()
@@ -1111,7 +1120,48 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @objc func search9() {
         NotificationCenter.default.post(name: Notification.Name(rawValue: "searchthething"), object: self)
     }
-
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            self.ai.startAnimating()
+            
+            self.tableView.translatesAutoresizingMaskIntoConstraints = false
+            self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+            self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(self.navigationController?.navigationBar.frame.size.height ?? 0)).isActive = true
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
+            
+            if self.maybeDoOnce == false {
+                self.searchButton = MNGExpandedTouchAreaButton()
+                self.searchButton.setImage(UIImage(named: "search")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+                self.searchButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+                self.searchButton.adjustsImageWhenHighlighted = false
+                self.searchButton.addTarget(self, action: #selector(search9), for: .touchUpInside)
+                
+                let deviceIdiom2 = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom2) {
+                case .phone:
+                    self.navigationController?.view.addSubview(self.searchButton)
+                    
+                    self.searchButton.translatesAutoresizingMaskIntoConstraints = false
+                    self.searchButton.widthAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
+                    self.searchButton.heightAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
+                    self.searchButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+                    self.searchButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
+                default:
+                    print("nil")
+                }
+                self.maybeDoOnce = true
+            }
+        default:
+            print("nothing")
+        }
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
@@ -1156,41 +1206,6 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //            }
 //        }
         
-        switch (deviceIdiom) {
-        case .pad:
-            self.ai.startAnimating()
-
-            self.tableView.translatesAutoresizingMaskIntoConstraints = false
-            self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
-            self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-
-            if self.maybeDoOnce == false {
-                self.searchButton = MNGExpandedTouchAreaButton()
-                self.searchButton.setImage(UIImage(named: "search")?.maskWithColor(color: Colours.grayLight2), for: .normal)
-                self.searchButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-                self.searchButton.adjustsImageWhenHighlighted = false
-                self.searchButton.addTarget(self, action: #selector(search9), for: .touchUpInside)
-                
-                let deviceIdiom2 = UIScreen.main.traitCollection.userInterfaceIdiom
-                switch (deviceIdiom2) {
-                case .phone:
-                    self.navigationController?.view.addSubview(self.searchButton)
-                    
-                    self.searchButton.translatesAutoresizingMaskIntoConstraints = false
-                    self.searchButton.widthAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
-                    self.searchButton.heightAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
-                    self.searchButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-                    self.searchButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
-                default:
-                    print("nil")
-                }
-                self.maybeDoOnce = true
-            }
-        default:
-            print("nothing")
-        }
         
         if self.fromOtherUser && (self.isPeeking == false) && (self.userIDtoUse != StoreStruct.currentUser.id) {
             let request00 = Accounts.allEndorsements()
@@ -1233,6 +1248,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             StoreStruct.client.run(request2) { (statuses) in
                 if let stat = (statuses.value) {
                     StoreStruct.currentUser = stat
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: nil)
                     guard let chosen = self.chosenUser else { return }
                     let request02 = Accounts.relationships(ids: [StoreStruct.currentUser.id, chosen.id])
                     StoreStruct.client.run(request02) { (statuses) in
@@ -2035,6 +2051,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                      
                     
                     let controller = ComposeViewController()
+                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                    switch (deviceIdiom) {
+                    case .pad:
+                        controller.modalPresentationStyle = .pageSheet
+                    default:
+                        print("nil")
+                    }
                     controller.inReplyText = self.chosenUser.acct
                     self.present(controller, animated: true, completion: nil)
                 }
@@ -2042,6 +2065,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                      
                     
                     let controller = ComposeViewController()
+                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                    switch (deviceIdiom) {
+                    case .pad:
+                        controller.modalPresentationStyle = .pageSheet
+                    default:
+                        print("nil")
+                    }
                     controller.inReplyText = self.chosenUser.acct
                     controller.profileDirect = true
                     self.present(controller, animated: true, completion: nil)
@@ -4682,6 +4712,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
         
         let controller = ComposeViewController()
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            controller.modalPresentationStyle = .pageSheet
+        default:
+            print("nil")
+        }
         StoreStruct.spoilerText = sto[sender.tag].reblog?.spoilerText ?? sto[sender.tag].spoilerText
         controller.inReply = [sto[sender.tag].reblog ?? sto[sender.tag]]
         controller.prevTextReply = sto[sender.tag].reblog?.content.stripHTML() ?? sto[sender.tag].content.stripHTML()
@@ -4885,6 +4922,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         impact.impactOccurred()
                     }
                     let controller = ComposeViewController()
+                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                    switch (deviceIdiom) {
+                    case .pad:
+                        controller.modalPresentationStyle = .pageSheet
+                    default:
+                        print("nil")
+                    }
                     StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                     controller.inReply = [sto[indexPath.row].reblog ?? sto[indexPath.row]]
                     controller.inReplyText = sto[indexPath.row].reblog?.account.username ?? sto[indexPath.row].account.username
@@ -5043,6 +5087,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                  
                                 
                                 let controller = ComposeViewController()
+                                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                switch (deviceIdiom) {
+                                case .pad:
+                                    controller.modalPresentationStyle = .pageSheet
+                                default:
+                                    print("nil")
+                                }
                                 StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                                 controller.idToDel = sto[indexPath.row].id
                                 controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
@@ -5136,6 +5187,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                  
                                 
                                 let controller = ComposeViewController()
+                                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                switch (deviceIdiom) {
+                                case .pad:
+                                    controller.modalPresentationStyle = .pageSheet
+                                default:
+                                    print("nil")
+                                }
                                 controller.inReply = []
                                 controller.inReplyText = ""
                                 controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
@@ -5501,6 +5559,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                  
                                 
                                 let controller = ComposeViewController()
+                                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                                switch (deviceIdiom) {
+                                case .pad:
+                                    controller.modalPresentationStyle = .pageSheet
+                                default:
+                                    print("nil")
+                                }
                                 controller.inReply = []
                                 controller.inReplyText = ""
                                 controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()

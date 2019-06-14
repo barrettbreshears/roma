@@ -594,6 +594,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 //                imp.impactOccurred()
 //            }
             let controller = ComposeViewController()
+            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+            switch (deviceIdiom) {
+            case .pad:
+                controller.modalPresentationStyle = .pageSheet
+            default:
+                print("nil")
+            }
             controller.inReply = []
             controller.inReplyText = ""
             self.present(controller, animated: true, completion: nil)
@@ -616,6 +623,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     }
     @objc func switch44() {
         let controller = ComposeViewController()
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            controller.modalPresentationStyle = .pageSheet
+        default:
+            print("nil")
+        }
         controller.inReply = []
         controller.inReplyText = ""
         self.present(controller, animated: true, completion: nil)
@@ -1069,23 +1083,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 baseURL: "https://\(StoreStruct.currentInstance.returnedText)",
                 accessToken: StoreStruct.currentInstance.accessToken
             )
-
-
-            
-//            do {
-//                let st1 = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
-//                StoreStruct.statusesHome = st1
-//                let st2 = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
-//                StoreStruct.statusesLocal = st2
-//                let st3 = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
-//                StoreStruct.statusesFederated = st3
-//                let st4 = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
-//                StoreStruct.notifications = st4
-//                let st5 = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
-//                StoreStruct.notificationsMentions = st5
-//            } catch {
-//                print("Couldn't load")
-//            }
         }
         
         let request = Instances.customEmojis()
@@ -1268,6 +1265,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         self.doOnce = true
                         self.doOncePinch = true
                         let controller = ComposeViewController()
+                        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                        switch (deviceIdiom) {
+                        case .pad:
+                            controller.modalPresentationStyle = .pageSheet
+                        default:
+                            print("nil")
+                        }
                         controller.inReply = []
                         controller.inReplyText = ""
                         controller.selectedImage1.image = self.screenshot
@@ -2039,6 +2043,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
 //                imp.impactOccurred()
 //            }
             let controller = ComposeViewController()
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .pad:
+                    controller.modalPresentationStyle = .pageSheet
+                default:
+                    print("nil")
+                }
             controller.inReply = []
             controller.inReplyText = ""
             self.present(controller, animated: true, completion: nil)

@@ -133,36 +133,36 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
         super.viewDidAppear(true)
         self.navigationController?.navigationItem.backBarButtonItem?.tintColor = Colours.tabUnselected
         
-        tap = UITapGestureRecognizer(target: self, action: #selector(onTap(sender:)))
-        tap.numberOfTapsRequired = 1
-        tap.numberOfTouchesRequired = 1
-        tap.cancelsTouchesInView = false
-        tap.delegate = self
-        self.view.window?.addGestureRecognizer(tap)
+//        tap = UITapGestureRecognizer(target: self, action: #selector(onTap(sender:)))
+//        tap.numberOfTapsRequired = 1
+//        tap.numberOfTouchesRequired = 1
+//        tap.cancelsTouchesInView = false
+//        tap.delegate = self
+//        self.view.window?.addGestureRecognizer(tap)
         
         StoreStruct.currentPage = 90
     }
     
-    internal func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
-    }
-    
-    internal func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-        let location = touch.location(in: self.view)
-        
-        if self.view.point(inside: location, with: nil) {
-            return false
-        }
-        else {
-            return true
-        }
-    }
-    
-    @objc private func onTap(sender: UITapGestureRecognizer) {
-        
-        self.view.window?.removeGestureRecognizer(sender)
-        self.dismiss(animated: true, completion: nil)
-    }
+//    internal func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+//        return true
+//    }
+//    
+//    internal func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+//        let location = touch.location(in: self.view)
+//        
+//        if self.view.point(inside: location, with: nil) {
+//            return false
+//        }
+//        else {
+//            return true
+//        }
+//    }
+//    
+//    @objc private func onTap(sender: UITapGestureRecognizer) {
+//        
+//        self.view.window?.removeGestureRecognizer(sender)
+//        self.dismiss(animated: true, completion: nil)
+//    }
     
     // Table stuff
     
@@ -1809,10 +1809,26 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     .action(.default("List Icon".localized), image: filledSet1) { (action, ind) in
                         
                         UserDefaults.standard.set(0, forKey: "insicon1")
+                        
+                        let deviceIdiom1 = UIScreen.main.traitCollection.userInterfaceIdiom
+                        switch (deviceIdiom1) {
+                        case .pad:
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: nil)
+                        default:
+                            print("nil")
+                        }
                     }
                     .action(.default("Profile Icon".localized), image: filledSet2) { (action, ind) in
                         
                         UserDefaults.standard.set(1, forKey: "insicon1")
+                        
+                        let deviceIdiom1 = UIScreen.main.traitCollection.userInterfaceIdiom
+                        switch (deviceIdiom1) {
+                        case .pad:
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: nil)
+                        default:
+                            print("nil")
+                        }
                     }
                     .action(.cancel("Dismiss"))
                     .finally { action, index in
@@ -1951,6 +1967,12 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                 Colours.fontSize3 = 14
             }
         }
+        
+        
+        self.navigationController?.navigationBar.backgroundColor = Colours.white
+        self.navigationController?.navigationBar.tintColor = Colours.black
+        self.navigationController?.navigationBar.barTintColor = Colours.black
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
         
         self.tableView.backgroundColor = Colours.white
         self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)

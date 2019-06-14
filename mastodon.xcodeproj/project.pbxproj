@@ -691,6 +691,7 @@
 		53865FCB216CE5540041E686 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53865FCA216CE5540041E686 /* Date.swift */; };
 		53865FCD216CF3540041E686 /* TootController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53865FCC216CF3540041E686 /* TootController.swift */; };
 		53865FCF216CFFA40041E686 /* LocalTimelineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53865FCE216CFFA40041E686 /* LocalTimelineController.swift */; };
+		5389F21E22B2C42100065DC6 /* PadLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5389F21D22B2C42100065DC6 /* PadLoginViewController.swift */; };
 		538B2150222BE00A0034977E /* FlickType.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 538B214F222BE0090034977E /* FlickType.storyboard */; };
 		538B2152222BE01A0034977E /* keyboard.png in Resources */ = {isa = PBXBuildFile; fileRef = 538B2151222BE0190034977E /* keyboard.png */; };
 		5392DBF92275EF8000D17F5F /* AccountSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5392DBF82275EF8000D17F5F /* AccountSettingsViewController.swift */; };
@@ -706,6 +707,7 @@
 		53BC45BC215AC8EE0092223F /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BC45BB215AC8EE0092223F /* SettingsCell.swift */; };
 		53BC45C2215AE4F10092223F /* SettingsCellToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53BC45C1215AE4F10092223F /* SettingsCellToggle.swift */; };
 		53C037B0220A2A6F0047EBC4 /* NewQRViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53C037AF220A2A6F0047EBC4 /* NewQRViewController.swift */; };
+		53CF184A22B2494D000DC32B /* ScrollMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53CF184922B2494D000DC32B /* ScrollMainViewController.swift */; };
 		53DE98872275C8BF00077D18 /* MainSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53DE98862275C8BF00077D18 /* MainSettingsViewController.swift */; };
 		53DE98892275DCC300077D18 /* TipSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53DE98882275DCC300077D18 /* TipSettingsViewController.swift */; };
 		53E095632270B4D4008C8762 /* AllMediaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53E095622270B4D4008C8762 /* AllMediaViewController.swift */; };
@@ -755,24 +757,19 @@
 		53EBE6BD222E7C4D000D007E /* Polls.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53EBE6BC222E7C4D000D007E /* Polls.swift */; };
 		53F4C060226E1F27002D5BDF /* Joke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53F4C05F226E1F27002D5BDF /* Joke.swift */; };
 		7806850921CC222F00072C41 /* ProCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7806850821CC222F00072C41 /* ProCells.swift */; };
-		A9296DE222176F7C00BEE7A7 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9296DE122176F7C00BEE7A7 /* NotificationService.swift */; };
 		A9594D80221F193E00AF7A0E /* MastShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 5354BA192163F89E0094C545 /* MastShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A96F5CBA2278CBE70014B048 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96F5CB82278CBE70014B048 /* SettingsViewController.swift */; };
 		A96F5CBB2278CBE70014B048 /* TermsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96F5CB92278CBE70014B048 /* TermsController.swift */; };
 		A96F5CBC2278CC800014B048 /* CrownIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A6A5225FA0100005AB1F /* CrownIndicatorView.swift */; };
 		A973AF2521D432AE009D7D21 /* CollectionProCells.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7806850A21CC227100072C41 /* CollectionProCells.swift */; };
+		A97C042922B4185F00755B41 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A97C042822B4185F00755B41 /* NotificationService.swift */; };
+		A97C042D22B4185F00755B41 /* roma push.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = A97C042622B4185F00755B41 /* roma push.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A992A64F225F9E370005AB1F /* SwiftGCM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A649225F9E370005AB1F /* SwiftGCM.swift */; };
 		A992A650225F9E370005AB1F /* DecryptNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A64A225F9E370005AB1F /* DecryptNotification.swift */; };
 		A992A651225F9E370005AB1F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A992A64B225F9E370005AB1F /* README.md */; };
 		A992A652225F9E370005AB1F /* PushNotificationReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A64C225F9E370005AB1F /* PushNotificationReceiver.swift */; };
 		A992A653225F9E370005AB1F /* PushNotificationDataObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A64D225F9E370005AB1F /* PushNotificationDataObjects.swift */; };
 		A992A654225F9E370005AB1F /* Decode85.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A64E225F9E370005AB1F /* Decode85.swift */; };
-		A992A655225F9E4C0005AB1F /* SwiftGCM.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A649225F9E370005AB1F /* SwiftGCM.swift */; };
-		A992A656225F9E4C0005AB1F /* DecryptNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A64A225F9E370005AB1F /* DecryptNotification.swift */; };
-		A992A657225F9E4C0005AB1F /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A992A64B225F9E370005AB1F /* README.md */; };
-		A992A658225F9E4C0005AB1F /* PushNotificationReceiver.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A64C225F9E370005AB1F /* PushNotificationReceiver.swift */; };
-		A992A659225F9E4C0005AB1F /* PushNotificationDataObjects.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A64D225F9E370005AB1F /* PushNotificationDataObjects.swift */; };
-		A992A65A225F9E4C0005AB1F /* Decode85.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A64E225F9E370005AB1F /* Decode85.swift */; };
 		A992A664225F9FB40005AB1F /* SAHistoryViewAnimatedTransitioning.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A65C225F9FB40005AB1F /* SAHistoryViewAnimatedTransitioning.swift */; };
 		A992A665225F9FB40005AB1F /* SAHistoryExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A65D225F9FB40005AB1F /* SAHistoryExtension.swift */; };
 		A992A666225F9FB40005AB1F /* UIView+Screenshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A65E225F9FB40005AB1F /* UIView+Screenshot.swift */; };
@@ -856,6 +853,13 @@
 			remoteGlobalIDString = 536A4FCC216B843A00A3D483;
 			remoteInfo = "MastWatch Extension";
 		};
+		A97C042B22B4185F00755B41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5373C9CC215173EE00676F3D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A97C042522B4185F00755B41;
+			remoteInfo = "roma push";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -865,6 +869,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				A97C042D22B4185F00755B41 /* roma push.appex in Embed App Extensions */,
 				A9594D80221F193E00AF7A0E /* MastShare.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
@@ -1634,6 +1639,7 @@
 		53865FCA216CE5540041E686 /* Date.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Date.swift; sourceTree = "<group>"; };
 		53865FCC216CF3540041E686 /* TootController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TootController.swift; sourceTree = "<group>"; };
 		53865FCE216CFFA40041E686 /* LocalTimelineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalTimelineController.swift; sourceTree = "<group>"; };
+		5389F21D22B2C42100065DC6 /* PadLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadLoginViewController.swift; sourceTree = "<group>"; };
 		538B214F222BE0090034977E /* FlickType.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = FlickType.storyboard; path = "FlickTypeKit/App Resources/FlickType.storyboard"; sourceTree = "<group>"; };
 		538B2151222BE0190034977E /* keyboard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = keyboard.png; path = "FlickTypeKit/App Resources/keyboard.png"; sourceTree = "<group>"; };
 		5392DBF82275EF8000D17F5F /* AccountSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSettingsViewController.swift; sourceTree = "<group>"; };
@@ -1650,6 +1656,7 @@
 		53BC45BB215AC8EE0092223F /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
 		53BC45C1215AE4F10092223F /* SettingsCellToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCellToggle.swift; sourceTree = "<group>"; };
 		53C037AF220A2A6F0047EBC4 /* NewQRViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewQRViewController.swift; sourceTree = "<group>"; };
+		53CF184922B2494D000DC32B /* ScrollMainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollMainViewController.swift; sourceTree = "<group>"; };
 		53DE98862275C8BF00077D18 /* MainSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSettingsViewController.swift; sourceTree = "<group>"; };
 		53DE98882275DCC300077D18 /* TipSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipSettingsViewController.swift; sourceTree = "<group>"; };
 		53E095622270B4D4008C8762 /* AllMediaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllMediaViewController.swift; sourceTree = "<group>"; };
@@ -1701,13 +1708,11 @@
 		78F6FFEAB47575DB49E46173 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 		A910C7E02221D9EE0023AD76 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9296DD722160B5100BEE7A7 /* mastodon-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mastodon-Bridging-Header.h"; sourceTree = "<group>"; };
-		A9296DDF22176F7C00BEE7A7 /* Roma Push Extentsion.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Roma Push Extentsion.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A9296DE122176F7C00BEE7A7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
-		A9296DE322176F7C00BEE7A7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A9296DEF221771DC00BEE7A7 /* Roma Push Extentsion-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Roma Push Extentsion-Bridging-Header.h"; sourceTree = "<group>"; };
-		A9296DF42217A3B100BEE7A7 /* Roma Push Extentsion.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Roma Push Extentsion.entitlements"; sourceTree = "<group>"; };
 		A96F5CB82278CBE70014B048 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		A96F5CB92278CBE70014B048 /* TermsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TermsController.swift; sourceTree = "<group>"; };
+		A97C042622B4185F00755B41 /* roma push.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "roma push.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A97C042822B4185F00755B41 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+		A97C042A22B4185F00755B41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A992A649225F9E370005AB1F /* SwiftGCM.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftGCM.swift; sourceTree = "<group>"; };
 		A992A64A225F9E370005AB1F /* DecryptNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DecryptNotification.swift; sourceTree = "<group>"; };
 		A992A64B225F9E370005AB1F /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -1822,7 +1827,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9296DDC22176F7C00BEE7A7 /* Frameworks */ = {
+		A97C042322B4185F00755B41 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2778,9 +2783,9 @@
 				536A4FC2216B843700A3D483 /* MastWatch */,
 				536A4FD1216B843A00A3D483 /* MastWatch Extension */,
 				531B04B72171119D00D31715 /* MastStickers */,
+				A97C042722B4185F00755B41 /* roma push */,
 				5373C9D5215173EE00676F3D /* Products */,
 				C27DCB277D141E1273E766A3 /* Pods */,
-				7138629AB3761F8644F6E477 /* Roma Push Extentsion */,
 				A968E888220A06AD000EED23 /* Recovered References */,
 				F465D8F15025C2A95BFEA24C /* Frameworks */,
 			);
@@ -2795,8 +2800,8 @@
 				536A4FC1216B843700A3D483 /* MastWatch.app */,
 				536A4FCD216B843A00A3D483 /* MastWatch Extension.appex */,
 				531B04B62171119D00D31715 /* MastStickers.appex */,
-				A9296DDF22176F7C00BEE7A7 /* Roma Push Extentsion.appex */,
 				A910C7E02221D9EE0023AD76 /* OneSignalNotificationServiceExtension.appex */,
+				A97C042622B4185F00755B41 /* roma push.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2939,6 +2944,8 @@
 				5373C9D9215173EE00676F3D /* ViewController.swift */,
 				5335CCAC22AAE3DD00E8984A /* ColumnViewController.swift */,
 				530041DD22ADC48900783C3B /* VerticalTabBarController.swift */,
+				53CF184922B2494D000DC32B /* ScrollMainViewController.swift */,
+				5389F21D22B2C42100065DC6 /* PadLoginViewController.swift */,
 				5373C9E92151753800676F3D /* FirstViewController.swift */,
 				5373C9EF2151953C00676F3D /* SecondViewController.swift */,
 				531B420A224E0FFB00D1B132 /* DMViewController.swift */,
@@ -3276,17 +3283,6 @@
 			path = BatteryIndicator;
 			sourceTree = "<group>";
 		};
-		7138629AB3761F8644F6E477 /* Roma Push Extentsion */ = {
-			isa = PBXGroup;
-			children = (
-				A9296DF42217A3B100BEE7A7 /* Roma Push Extentsion.entitlements */,
-				A9296DE122176F7C00BEE7A7 /* NotificationService.swift */,
-				A9296DE322176F7C00BEE7A7 /* Info.plist */,
-				A9296DEF221771DC00BEE7A7 /* Roma Push Extentsion-Bridging-Header.h */,
-			);
-			path = "Roma Push Extentsion";
-			sourceTree = "<group>";
-		};
 		A968E888220A06AD000EED23 /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
@@ -3298,6 +3294,15 @@
 				5354BAF221668D5A0094C545 /* NotificationCenter.framework */,
 			);
 			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		A97C042722B4185F00755B41 /* roma push */ = {
+			isa = PBXGroup;
+			children = (
+				A97C042822B4185F00755B41 /* NotificationService.swift */,
+				A97C042A22B4185F00755B41 /* Info.plist */,
+			);
+			path = "roma push";
 			sourceTree = "<group>";
 		};
 		A992A648225F9E370005AB1F /* push */ = {
@@ -3598,27 +3603,28 @@
 				5354BA222163F89E0094C545 /* PBXTargetDependency */,
 				5354BAFC21668D5A0094C545 /* PBXTargetDependency */,
 				5322D7E02167659900B952F5 /* PBXTargetDependency */,
+				A97C042C22B4185F00755B41 /* PBXTargetDependency */,
 			);
 			name = mastodon;
 			productName = mastodon;
 			productReference = 5373C9D4215173EE00676F3D /* mastodon.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A9296DDE22176F7C00BEE7A7 /* Roma Push Extentsion */ = {
+		A97C042522B4185F00755B41 /* roma push */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A9296DE722176F7C00BEE7A7 /* Build configuration list for PBXNativeTarget "Roma Push Extentsion" */;
+			buildConfigurationList = A97C042E22B4185F00755B41 /* Build configuration list for PBXNativeTarget "roma push" */;
 			buildPhases = (
-				A9296DDB22176F7C00BEE7A7 /* Sources */,
-				A9296DDC22176F7C00BEE7A7 /* Frameworks */,
-				A9296DDD22176F7C00BEE7A7 /* Resources */,
+				A97C042222B4185F00755B41 /* Sources */,
+				A97C042322B4185F00755B41 /* Frameworks */,
+				A97C042422B4185F00755B41 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "Roma Push Extentsion";
-			productName = "Roma Push Extentsion";
-			productReference = A9296DDF22176F7C00BEE7A7 /* Roma Push Extentsion.appex */;
+			name = "roma push";
+			productName = "roma push";
+			productReference = A97C042622B4185F00755B41 /* roma push.appex */;
 			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
@@ -3627,7 +3633,7 @@
 		5373C9CC215173EE00676F3D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1010;
+				LastSwiftUpdateCheck = 1020;
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Shihab Mehboob";
 				TargetAttributes = {
@@ -3690,14 +3696,8 @@
 							};
 						};
 					};
-					A9296DDE22176F7C00BEE7A7 = {
-						CreatedOnToolsVersion = 10.1;
-						LastSwiftMigration = 1020;
-						SystemCapabilities = {
-							com.apple.ApplicationGroups.iOS = {
-								enabled = 1;
-							};
-						};
+					A97C042522B4185F00755B41 = {
+						CreatedOnToolsVersion = 10.2.1;
 					};
 				};
 			};
@@ -3730,7 +3730,7 @@
 				536A4FC0216B843700A3D483 /* MastWatch */,
 				536A4FCC216B843A00A3D483 /* MastWatch Extension */,
 				531B04B52171119D00D31715 /* MastStickers */,
-				A9296DDE22176F7C00BEE7A7 /* Roma Push Extentsion */,
+				A97C042522B4185F00755B41 /* roma push */,
 			);
 		};
 /* End PBXProject section */
@@ -3921,11 +3921,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9296DDD22176F7C00BEE7A7 /* Resources */ = {
+		A97C042422B4185F00755B41 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A992A657225F9E4C0005AB1F /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4300,6 +4299,7 @@
 				5373CA9D2152C68000676F3D /* ClientType.swift in Sources */,
 				A992A6B0225FA0110005AB1F /* CrownAttributes+Sizes.swift in Sources */,
 				5317C7B821DA334500746197 /* ScrollableGraphViewDrawingDelegate.swift in Sources */,
+				5389F21E22B2C42100065DC6 /* PadLoginViewController.swift in Sources */,
 				53205823215D287700ED0C36 /* DKImagePickerController.swift in Sources */,
 				5373CB4C2156686300676F3D /* ActionButtonCell.swift in Sources */,
 				53DE98872275C8BF00077D18 /* MainSettingsViewController.swift in Sources */,
@@ -4738,6 +4738,7 @@
 				5373CAB72152C68000676F3D /* Notification.swift in Sources */,
 				530F5B3721E267CA00A910B3 /* FullDateCollectionViewCell.swift in Sources */,
 				535B33B4215C0EC6001A2A7F /* XPlayer.swift in Sources */,
+				53CF184A22B2494D000DC32B /* ScrollMainViewController.swift in Sources */,
 				5354BACD216577FD0094C545 /* FastAnimator.swift in Sources */,
 				5365941E222EB73400BFF3CD /* CoreChartEntry.swift in Sources */,
 				5320581C215D287700ED0C36 /* FontAwesomeImageView.swift in Sources */,
@@ -4758,16 +4759,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A9296DDB22176F7C00BEE7A7 /* Sources */ = {
+		A97C042222B4185F00755B41 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A9296DE222176F7C00BEE7A7 /* NotificationService.swift in Sources */,
-				A992A659225F9E4C0005AB1F /* PushNotificationDataObjects.swift in Sources */,
-				A992A658225F9E4C0005AB1F /* PushNotificationReceiver.swift in Sources */,
-				A992A65A225F9E4C0005AB1F /* Decode85.swift in Sources */,
-				A992A656225F9E4C0005AB1F /* DecryptNotification.swift in Sources */,
-				A992A655225F9E4C0005AB1F /* SwiftGCM.swift in Sources */,
+				A97C042922B4185F00755B41 /* NotificationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4793,6 +4789,11 @@
 			isa = PBXTargetDependency;
 			target = 536A4FCC216B843A00A3D483 /* MastWatch Extension */;
 			targetProxy = 536A4FCF216B843A00A3D483 /* PBXContainerItemProxy */;
+		};
+		A97C042C22B4185F00755B41 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A97C042522B4185F00755B41 /* roma push */;
+			targetProxy = A97C042B22B4185F00755B41 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -5295,51 +5296,44 @@
 			};
 			name = Release;
 		};
-		A9296DE822176F7C00BEE7A7 /* Debug */ = {
+		A97C042F22B4185F00755B41 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "Roma Push Extentsion/Roma Push Extentsion.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5877VK992M;
-				INFOPLIST_FILE = "Roma Push Extentsion/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				INFOPLIST_FILE = "roma push/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vm.roma.Roma-Push-Extentsion";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vm.roma.roma-push";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Roma Push Extentsion/Roma Push Extentsion-Bridging-Header.h";
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
-		A9296DE922176F7C00BEE7A7 /* Release */ = {
+		A97C043022B4185F00755B41 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "Roma Push Extentsion/Roma Push Extentsion.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5877VK992M;
-				INFOPLIST_FILE = "Roma Push Extentsion/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				INFOPLIST_FILE = "roma push/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.vm.roma.Roma-Push-Extentsion";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.vm.roma.roma-push";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "Roma Push Extentsion/Roma Push Extentsion-Bridging-Header.h";
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -5419,11 +5413,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A9296DE722176F7C00BEE7A7 /* Build configuration list for PBXNativeTarget "Roma Push Extentsion" */ = {
+		A97C042E22B4185F00755B41 /* Build configuration list for PBXNativeTarget "roma push" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A9296DE822176F7C00BEE7A7 /* Debug */,
-				A9296DE922176F7C00BEE7A7 /* Release */,
+				A97C042F22B4185F00755B41 /* Debug */,
+				A97C043022B4185F00755B41 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

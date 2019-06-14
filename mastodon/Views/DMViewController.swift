@@ -29,7 +29,6 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     var notifications: [Notificationt] = []
     var maybeDoOnce = false
-    var searchButton = MNGExpandedTouchAreaButton()
     var settingsButton = UIButton(type: .custom)
     var blurEffectViewMain = UIView()
     var blurEffect0 = UIBlurEffect()
@@ -103,14 +102,12 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         self.navigationController?.pushViewController(controller, animated: true)
     }
     
-    
     @objc func goLists() {
         DispatchQueue.main.async {
             let controller = ListViewController()
             self.navigationController?.pushViewController(controller, animated: true)
         }
     }
-    
     
     @objc func goInstance() {
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: 5000))
@@ -128,7 +125,6 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             }
         }
     }
-    
     
     @objc func goMembers() {
         let request = Lists.accounts(id: StoreStruct.allListRelID)
@@ -187,9 +183,6 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             }
         }
     }
-    
-    
-    
     
     @objc func changeSeg() {
         var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
@@ -483,25 +476,8 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             self.tableView.translatesAutoresizingMaskIntoConstraints = false
             self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
             self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
-            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
-            
-            
-            if self.maybeDoOnce == false {
-                self.searchButton = MNGExpandedTouchAreaButton()
-                self.searchButton.setImage(UIImage(named: "search")?.maskWithColor(color: Colours.grayLight2), for: .normal)
-                self.searchButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-                self.searchButton.adjustsImageWhenHighlighted = false
-                self.searchButton.addTarget(self, action: #selector(search9), for: .touchUpInside)
-                self.navigationController?.view.addSubview(self.searchButton)
-                self.maybeDoOnce = true
-                
-                self.searchButton.translatesAutoresizingMaskIntoConstraints = false
-                self.searchButton.widthAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
-                self.searchButton.heightAnchor.constraint(equalToConstant: CGFloat(32)).isActive = true
-                self.searchButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-                self.searchButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
-            }
+            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(UIApplication.shared.statusBarFrame.height + 5)).isActive = true
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
         default:
             print("nothing")
         }
@@ -568,7 +544,14 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         }
         settingsButton.adjustsImageWhenHighlighted = false
         settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
-        self.navigationController?.view.addSubview(settingsButton)
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone :
+            self.navigationController?.view.addSubview(settingsButton)
+        default:
+            print("nil")
+        }
         
 //        self.refreshCont()
         
@@ -619,7 +602,14 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         } 
         settingsButton.adjustsImageWhenHighlighted = false
         settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
-        self.navigationController?.view.addSubview(settingsButton)
+        
+        let deviceIdiom3 = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom3) {
+        case .phone :
+            self.navigationController?.view.addSubview(settingsButton)
+        default:
+            print("nil")
+        }
         
     }
     
@@ -1154,6 +1144,13 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         var sto = StoreStruct.notificationsDirect
         
         let controller = ComposeViewController()
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            controller.modalPresentationStyle = .pageSheet
+        default:
+            print("nil")
+        }
         StoreStruct.spoilerText = sto[sender.tag].lastStatus?.spoilerText ?? ""
         controller.inReply = [sto[sender.tag].lastStatus!]
         controller.inReplyText = sto[sender.tag].lastStatus!.account.username
@@ -1253,6 +1250,13 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                         impact.impactOccurred()
                     }
                     let controller = ComposeViewController()
+                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                    switch (deviceIdiom) {
+                    case .pad:
+                        controller.modalPresentationStyle = .pageSheet
+                    default:
+                        print("nil")
+                    }
                     StoreStruct.spoilerText = sto[indexPath.row].lastStatus?.spoilerText ?? ""
                     controller.inReply = [sto[indexPath.row].lastStatus!]
                     controller.inReplyText = sto[indexPath.row].lastStatus!.account.username
@@ -1594,6 +1598,13 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                              
                             
                             let controller = ComposeViewController()
+                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                            switch (deviceIdiom) {
+                            case .pad:
+                                controller.modalPresentationStyle = .pageSheet
+                            default:
+                                print("nil")
+                            }
                             controller.inReply = []
                             controller.inReplyText = ""
                             controller.filledTextFieldText = sto[indexPath.row].lastStatus?.content.stripHTML() ?? ""
@@ -1888,6 +1899,8 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 Colours.fontSize3 = 14
             }
         }
+        
+        self.navigationController?.navigationBar.backgroundColor = Colours.white
         
         self.tableView.backgroundColor = Colours.white
         self.tableView.separatorColor = Colours.grayDark.withAlphaComponent(0.21)

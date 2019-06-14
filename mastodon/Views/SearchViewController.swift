@@ -16,6 +16,7 @@ import SafariServices
 
 class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate, SwipeTableViewCellDelegate, UIGestureRecognizerDelegate {
     
+    var closeButton = MNGExpandedTouchAreaButton()
     var searchTextField = SearchField()
     var segmentedControl: SJFluidSegmentedControl!
     var tableView = UITableView()
@@ -173,21 +174,75 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
         self.searchIcon.image = UIImage(named: "search")?.maskWithColor(color: Colours.tabUnselected)
         self.searchTextField.addSubview(self.searchIcon)
         
+        let navHe: Int = Int(self.navigationController?.navigationBar.frame.size.height ?? 0)
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-        segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: 20, y: Int(offset + 60), width: Int(wid), height: Int(40)))
-        segmentedControl.dataSource = self
-        segmentedControl.shapeStyle = .roundedRect
-        segmentedControl.textFont = .systemFont(ofSize: 15, weight: .heavy)
-        segmentedControl.cornerRadius = 12
-        segmentedControl.shadowsEnabled = false
-        segmentedControl.transitionStyle = .slide
-        segmentedControl.delegate = self
-        self.view.addSubview(segmentedControl)
+            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: 20, y: Int(offset + 60), width: Int(wid), height: Int(40)))
+            segmentedControl.dataSource = self
+            segmentedControl.shapeStyle = .roundedRect
+            segmentedControl.textFont = .systemFont(ofSize: 15, weight: .heavy)
+            segmentedControl.cornerRadius = 12
+            segmentedControl.shadowsEnabled = false
+            segmentedControl.transitionStyle = .slide
+            segmentedControl.delegate = self
+            self.view.addSubview(segmentedControl)
+        case .pad:
+//            self.segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: 20, y: Int(navHe + 65), width: Int(wid), height: Int(40)))
+            searchTextField.frame = CGRect(x: 10, y: Int(navHe + 10), width: Int(wid), height: 40)
+            self.tableView.frame = CGRect(x: 0, y: Int(navHe + 115), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - navHe - 115)
         default:
             print("nothing")
         }
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let navHe: Int = Int(self.navigationController?.navigationBar.frame.size.height ?? 0)
+        let wid = self.view.bounds.width - 40
+        var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
+        var offset = 88
+        if UIDevice().userInterfaceIdiom == .phone {
+            switch UIScreen.main.nativeBounds.height {
+            case 2688:
+                offset = 88
+            case 2436, 1792:
+                offset = 88
+            default:
+                offset = 64
+                tabHeight = Int(UITabBarController().tabBar.frame.size.height)
+            }
+        }
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            self.segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: 20, y: Int(navHe + 65), width: Int(wid), height: Int(40)))
+            segmentedControl.dataSource = self
+            segmentedControl.shapeStyle = .roundedRect
+            segmentedControl.textFont = .systemFont(ofSize: 15, weight: .heavy)
+            segmentedControl.cornerRadius = 12
+            segmentedControl.shadowsEnabled = false
+            segmentedControl.transitionStyle = .slide
+            segmentedControl.delegate = self
+            self.view.addSubview(segmentedControl)
+            searchTextField.frame = CGRect(x: 10, y: Int(navHe + 10), width: Int(wid), height: 40)
+            self.tableView.frame = CGRect(x: 0, y: Int(navHe + 115), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - navHe - 115)
+            
+            self.closeButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: self.view.bounds.width - 45, y: 10, width: 30, height: 30)))
+            self.closeButton.setImage(UIImage(named: "block")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+            self.closeButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+            self.closeButton.adjustsImageWhenHighlighted = false
+            self.closeButton.addTarget(self, action: #selector(didTouchUpInsideCloseButton), for: .touchUpInside)
+            self.navigationController?.navigationBar.addSubview(self.closeButton)
+        default:
+            print("nothing")
+        }
+    }
+    
+    @objc func didTouchUpInsideCloseButton() {
+        self.dismiss(animated: true, completion: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -209,25 +264,15 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
             }
         }
         
-        let wid = self.view.bounds.width - 20
+        let navHe: Int = Int(self.navigationController?.navigationBar.frame.size.height ?? 0)
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .pad:
-            self.segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: 20, y: Int(offset + 60), width: Int(wid), height: Int(40)))
-            segmentedControl.dataSource = self
-            segmentedControl.shapeStyle = .roundedRect
-            segmentedControl.textFont = .systemFont(ofSize: 15, weight: .heavy)
-            segmentedControl.cornerRadius = 12
-            segmentedControl.shadowsEnabled = false
-            segmentedControl.transitionStyle = .slide
-            segmentedControl.delegate = self
-            self.view.addSubview(segmentedControl)
-            
             self.tableView.translatesAutoresizingMaskIntoConstraints = false
             self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
             self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 110)).isActive = true
-            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(navHe + 115)).isActive = true
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
         default:
             print("nothing")
         }
@@ -509,6 +554,13 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
         var sto = StoreStruct.statusSearch
         
         let controller = ComposeViewController()
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            controller.modalPresentationStyle = .pageSheet
+        default:
+            print("nil")
+        }
         StoreStruct.spoilerText = sto[sender.tag].spoilerText
         controller.inReply = [sto[sender.tag]]
         controller.prevTextReply = sto[sender.tag].content.stripHTML()
@@ -1394,6 +1446,13 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                     impact.impactOccurred()
                 }
                 let controller = ComposeViewController()
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .pad:
+                    controller.modalPresentationStyle = .pageSheet
+                default:
+                    print("nil")
+                }
                 StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                 controller.inReply = [sto[indexPath.row]]
                 controller.inReplyText = sto[indexPath.row].account.username
@@ -1573,6 +1632,13 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                              
                             
                             let controller = ComposeViewController()
+                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                            switch (deviceIdiom) {
+                            case .pad:
+                                controller.modalPresentationStyle = .pageSheet
+                            default:
+                                print("nil")
+                            }
                             StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                             controller.idToDel = sto[indexPath.row].id
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
@@ -1662,6 +1728,13 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                              
                             
                             let controller = ComposeViewController()
+                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                            switch (deviceIdiom) {
+                            case .pad:
+                                controller.modalPresentationStyle = .pageSheet
+                            default:
+                                print("nil")
+                            }
                             controller.inReply = []
                             controller.inReplyText = ""
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
@@ -2024,6 +2097,13 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                              
                             
                             let controller = ComposeViewController()
+                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                            switch (deviceIdiom) {
+                            case .pad:
+                                controller.modalPresentationStyle = .pageSheet
+                            default:
+                                print("nil")
+                            }
                             controller.inReply = []
                             controller.inReplyText = ""
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
@@ -2170,22 +2250,31 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
 //        self.tableView.deselectRow(at: indexPath, animated: true)
         if self.typeOfSearch == 2 {
             StoreStruct.searchIndex = indexPath.row
-            if StoreStruct.currentPage == 0 {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "searchUser"), object: self)
-            } else if StoreStruct.currentPage == 1 {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "searchUser2"), object: self)
-            } else {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "searchUser3"), object: self)
-            }
+            let controller = ThirdViewController()
+            controller.fromOtherUser = true
+            controller.userIDtoUse = StoreStruct.statusSearchUser[StoreStruct.searchIndex].id
+            self.navigationController?.pushViewController(controller, animated: true)
+            
+//            if StoreStruct.currentPage == 0 {
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "searchUser"), object: self)
+//            } else if StoreStruct.currentPage == 1 {
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "searchUser2"), object: self)
+//            } else {
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "searchUser3"), object: self)
+//            }
         } else {
             StoreStruct.searchIndex = indexPath.row
-            if StoreStruct.currentPage == 0 {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "search"), object: self)
-            } else if StoreStruct.currentPage == 1 {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "search2"), object: self)
-            } else {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "search3"), object: self)
-            }
+            let controller = DetailViewController()
+            controller.mainStatus.append(StoreStruct.statusSearch[StoreStruct.searchIndex])
+            self.navigationController?.pushViewController(controller, animated: true)
+            
+//            if StoreStruct.currentPage == 0 {
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "search"), object: self)
+//            } else if StoreStruct.currentPage == 1 {
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "search2"), object: self)
+//            } else {
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "search3"), object: self)
+//            }
         }
     }
     

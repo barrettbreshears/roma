@@ -167,9 +167,9 @@ class RepliesCell: SwipeTableViewCell {
 //        })
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-first-[indi(2)]", options: [], metrics: metrics, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-second-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-10-|", options: [], metrics: metrics, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-second-[image(40)]-13-[episodes]-10-|", options: [], metrics: metrics, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-third-[warning]-7-|", options: [], metrics: metrics, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-second-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-12-|", options: [], metrics: metrics, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-second-[image(40)]-13-[episodes]-12-|", options: [], metrics: metrics, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-third-[warning]-9-|", options: [], metrics: metrics, views: viewsDict))
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-64-[indi(>=0)]-16-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))

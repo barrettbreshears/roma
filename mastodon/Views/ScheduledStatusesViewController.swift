@@ -404,6 +404,13 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
                 .action(.default("Delete and Redraft".localized), image: UIImage(named: "block")) { (action, ind) in
                     
                     let controller = ComposeViewController()
+                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                    switch (deviceIdiom) {
+                    case .pad:
+                        controller.modalPresentationStyle = .pageSheet
+                    default:
+                        print("nil")
+                    }
                     controller.idToDelSc = self.statuses[indexPath.row].id
                     controller.isScheduled = true
                     controller.filledTextFieldText = self.statuses[indexPath.row].params.text

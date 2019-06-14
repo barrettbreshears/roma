@@ -892,6 +892,49 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         StoreStruct.spoilerText = self.textField.text ?? ""
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
+        var offset = 88
+        var closeB = 47
+        var botbot = 20
+        if UIDevice().userInterfaceIdiom == .phone {
+            switch UIScreen.main.nativeBounds.height {
+            case 2688:
+                offset = 88
+                closeB = 47
+                botbot = 40
+            case 2436, 1792:
+                offset = 88
+                closeB = 47
+                botbot = 40
+            default:
+                offset = 64
+                closeB = 24
+                botbot = 20
+                tabHeight = Int(UITabBarController().tabBar.frame.size.height)
+            }
+        }
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .phone:
+            print("nothing")
+        case .pad:
+            self.closeButton.frame = CGRect(x: 15, y: 10, width: 32, height: 32)
+            self.avatarButton.frame = CGRect(x: 70, y: 30, width: 32, height: 32)
+            countLabel.frame = CGRect(x: CGFloat(self.view.bounds.width/2 - 50), y: CGFloat(10), width: CGFloat(100), height: CGFloat(36))
+            tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(10), width: CGFloat(150), height: CGFloat(36))
+            textView.frame = CGRect(x:10, y: (60), width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(210) - Int(self.keyHeight))
+            self.emotiButton.frame = CGRect(x: self.view.bounds.width - 60, y: 0, width: 50, height: 50)
+            self.camPickButton.frame = CGRect(x: CGFloat(20), y: CGFloat(self.view.bounds.height) - CGFloat(botbot) - CGFloat(80), width: CGFloat(self.view.bounds.width/2 - 30), height: CGFloat(60))
+            self.galPickButton.frame = CGRect(x: CGFloat(10) + CGFloat(self.view.bounds.width/2), y: CGFloat(self.view.bounds.height) - CGFloat(botbot) - CGFloat(80), width: CGFloat(self.view.bounds.width/2 - 30), height: CGFloat(60))
+        default:
+            print("nothing")
+        }
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
@@ -933,7 +976,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             self.avatarButton.frame = CGRect(x: 70, y: 30, width: 32, height: 32)
             countLabel.frame = CGRect(x: CGFloat(self.view.bounds.width/2 - 50), y: CGFloat(30), width: CGFloat(100), height: CGFloat(36))
             tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(30), width: CGFloat(150), height: CGFloat(36))
-            textView.frame = CGRect(x:10, y: (70), width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(220) - Int(self.keyHeight))
+            textView.frame = CGRect(x:10, y: (60), width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(210) - Int(self.keyHeight))
+            self.emotiButton.frame = CGRect(x: self.view.bounds.width - 60, y: 0, width: 50, height: 50)
+            self.camPickButton.frame = CGRect(x: CGFloat(20), y: CGFloat(self.view.bounds.height) - CGFloat(botbot) - CGFloat(80), width: CGFloat(self.view.bounds.width/2 - 30), height: CGFloat(60))
+            self.galPickButton.frame = CGRect(x: CGFloat(10) + CGFloat(self.view.bounds.width/2), y: CGFloat(self.view.bounds.height) - CGFloat(botbot) - CGFloat(80), width: CGFloat(self.view.bounds.width/2 - 30), height: CGFloat(60))
         default:
             print("nothing")
         }
@@ -1524,7 +1570,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             self.avatarButton.frame = CGRect(x: 70, y: 30, width: 32, height: 32)
             countLabel.frame = CGRect(x: CGFloat(self.view.bounds.width/2 - 50), y: CGFloat(30), width: CGFloat(100), height: CGFloat(36))
             tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(30), width: CGFloat(150), height: CGFloat(36))
-            textView.frame = CGRect(x:10, y: (70), width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(220) - Int(self.keyHeight))
+            textView.frame = CGRect(x:10, y: (60), width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(210) - Int(self.keyHeight))
+            self.emotiButton.frame = CGRect(x: self.view.bounds.width - 60, y: 0, width: 50, height: 50)
+            self.camPickButton.frame = CGRect(x: CGFloat(20), y: CGFloat(self.view.bounds.height) - CGFloat(botbot) - CGFloat(80), width: CGFloat(self.view.bounds.width/2 - 30), height: CGFloat(60))
+            self.galPickButton.frame = CGRect(x: CGFloat(10) + CGFloat(self.view.bounds.width/2), y: CGFloat(self.view.bounds.height) - CGFloat(botbot) - CGFloat(80), width: CGFloat(self.view.bounds.width/2 - 30), height: CGFloat(60))
         default:
             self.closeButton.frame = CGRect(x: 15, y: closeB, width: 32, height: 32)
             self.avatarButton.frame = CGRect(x: 70, y: closeB, width: 32, height: 32)
@@ -2456,8 +2505,16 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             .action(.default(" Add Poll"), image: UIImage(named: "pollbubble")) { (action, ind) in
                  
                 
-                let controller = NewPollViewController()
-                self.present(controller, animated: true, completion: nil)
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .pad:
+                    let controller = NewPollViewController()
+                    controller.modalPresentationStyle = .pageSheet
+                    self.present(controller, animated: true, completion: nil)
+                default:
+                    let controller = NewPollViewController()
+                    self.present(controller, animated: true, completion: nil)
+                }
             }
             .action(.default("  Add Now Playing"), image: UIImage(named: "music")) { (action, ind) in
                  
@@ -2531,10 +2588,20 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 self.gifCont.delegate = self
 //                self.present(self.gifCont, animated: true, completion: nil)
                 
-                let navController = UINavigationController(rootViewController: self.gifCont)
-                navController.navigationBar.barTintColor = Colours.white
-                navController.navigationBar.backgroundColor = Colours.white
-                self.present(navController, animated:true, completion: nil)
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .pad:
+                    let navController = UINavigationController(rootViewController: self.gifCont)
+                    navController.navigationBar.barTintColor = Colours.white
+                    navController.navigationBar.backgroundColor = Colours.white
+                    navController.modalPresentationStyle = .pageSheet
+                    self.present(navController, animated:true, completion: nil)
+                default:
+                    let navController = UINavigationController(rootViewController: self.gifCont)
+                    navController.navigationBar.barTintColor = Colours.white
+                    navController.navigationBar.backgroundColor = Colours.white
+                    self.present(navController, animated:true, completion: nil)
+                }
                 
             }
             .action(.default("Schedule Toot"), image: UIImage(named: "schedule")) { (action, ind) in
@@ -3541,7 +3608,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         case .phone:
             textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(120) - Int(self.keyHeight))
         case .pad:
-            textView.frame = CGRect(x:10, y:70, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(70) - Int(120) - Int(self.keyHeight))
+            textView.frame = CGRect(x:10, y:60, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(70) - Int(110) - Int(self.keyHeight))
         default:
             textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(120) - Int(self.keyHeight))
         }
@@ -3646,7 +3713,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 case .phone:
                     textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(250) - Int(self.keyHeight))
                 case .pad:
-                    textView.frame = CGRect(x:10, y:70, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(70) - Int(250) - Int(self.keyHeight))
+                    textView.frame = CGRect(x:10, y:60, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(70) - Int(240) - Int(self.keyHeight))
                 default:
                     textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(250) - Int(self.keyHeight))
                 }
@@ -3685,7 +3752,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 case .phone:
                     textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(120) - Int(self.keyHeight))
                 case .pad:
-                    textView.frame = CGRect(x:10, y:70, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(70) - Int(120) - Int(self.keyHeight))
+                    textView.frame = CGRect(x:10, y:60, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(70) - Int(110) - Int(self.keyHeight))
                 default:
                     textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(120) - Int(self.keyHeight))
                 }
@@ -4028,7 +4095,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             case .phone:
                 self.textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(120) - Int(self.keyHeight))
             case .pad:
-                self.textView.frame = CGRect(x:10, y:70, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(70) - Int(120) - Int(self.keyHeight))
+                self.textView.frame = CGRect(x:10, y:60, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(70) - Int(110) - Int(self.keyHeight))
             default:
                 self.textView.frame = CGRect(x:10, y:offset, width:Int(self.view.bounds.width - 20), height:Int(self.view.bounds.height) - Int(offset) - Int(120) - Int(self.keyHeight))
             }

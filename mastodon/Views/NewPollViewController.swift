@@ -108,6 +108,8 @@ class NewPollViewController: UIViewController, UITextFieldDelegate, UITableViewD
         self.tableView.tableFooterView = UIView()
         
         self.openTimePicker()
+        
+        self.closeButton.frame = CGRect(x: 15, y: closeB, width: 32, height: 32)
     }
     
     func openTimePicker()  {
@@ -171,13 +173,36 @@ class NewPollViewController: UIViewController, UITextFieldDelegate, UITableViewD
         
         self.textField.becomeFirstResponder()
         
+        var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
+        var offset = 88
+        var closeB = 47
+        var botbot = 20
+        if UIDevice().userInterfaceIdiom == .phone {
+            switch UIScreen.main.nativeBounds.height {
+            case 2688:
+                offset = 88
+                closeB = 47
+                botbot = 40
+            case 2436, 1792:
+                offset = 88
+                closeB = 47
+                botbot = 40
+            default:
+                offset = 64
+                closeB = 24
+                botbot = 20
+                tabHeight = Int(UITabBarController().tabBar.frame.size.height)
+            }
+        }
+        
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .pad:
+            self.closeButton.frame = CGRect(x: 15, y: closeB, width: 32, height: 32)
             self.tableView.translatesAutoresizingMaskIntoConstraints = false
             self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
             self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 30).isActive = true
+            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(closeB + 40)).isActive = true
             self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
         default:
             print("nothing")

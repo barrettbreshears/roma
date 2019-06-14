@@ -550,7 +550,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             registerForPreviewing(with: self, sourceView: self.tableView)
         }
         
-        
+        let navHe: Int = Int(self.navigationController?.navigationBar.frame.size.height ?? 0)
         let deviceIdiom3 = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom3) {
         case .pad:
@@ -558,20 +558,20 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             self.tableView.translatesAutoresizingMaskIntoConstraints = false
             self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
             self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset)).isActive = true
+            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(navHe)).isActive = true
             self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
             
-            splitButton.backgroundColor = Colours.white
-            splitButton.layer.masksToBounds = true
-            splitButton.setImage(UIImage(named: "splitRatio")?.maskWithColor(color: Colours.grayLight2), for: .normal)
-            splitButton.addTarget(self, action: #selector(self.didTouchSplit), for: .touchUpInside)
-            self.view.addSubview(self.splitButton)
-            
-            self.splitButton.translatesAutoresizingMaskIntoConstraints = false
-            self.splitButton.widthAnchor.constraint(equalToConstant: 28).isActive = true
-            self.splitButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
-            self.splitButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
-            self.splitButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 9).isActive = true
+//            splitButton.backgroundColor = Colours.white
+//            splitButton.layer.masksToBounds = true
+//            splitButton.setImage(UIImage(named: "splitRatio")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+//            splitButton.addTarget(self, action: #selector(self.didTouchSplit), for: .touchUpInside)
+//            self.view.addSubview(self.splitButton)
+//
+//            self.splitButton.translatesAutoresizingMaskIntoConstraints = false
+//            self.splitButton.widthAnchor.constraint(equalToConstant: 28).isActive = true
+//            self.splitButton.heightAnchor.constraint(equalToConstant: 24).isActive = true
+//            self.splitButton.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 20).isActive = true
+//            self.splitButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 9).isActive = true
             
             if self.mainStatus.isEmpty {
                 
@@ -589,58 +589,58 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
                 
                 self.tableView.alpha = 1
-                replyButton.backgroundColor = Colours.white
-                likeButton.backgroundColor = Colours.white
-                boostButton.backgroundColor = Colours.white
-                moreButton.backgroundColor = Colours.white
+//                replyButton.backgroundColor = Colours.white
+//                likeButton.backgroundColor = Colours.white
+//                boostButton.backgroundColor = Colours.white
+//                moreButton.backgroundColor = Colours.white
+//
+//                replyButton.layer.cornerRadius = 20
+//                replyButton.layer.masksToBounds = true
+//                likeButton.layer.cornerRadius = 20
+//                likeButton.layer.masksToBounds = true
+//                boostButton.layer.cornerRadius = 20
+//                boostButton.layer.masksToBounds = true
+//                moreButton.layer.cornerRadius = 20
+//                moreButton.layer.masksToBounds = true
+//
+//                replyButton.setImage(UIImage(named: "reply0")?.maskWithColor(color: Colours.tabSelected), for: .normal)
+//                moreButton.setImage(UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected), for: .normal)
+//                likeButton.setImage(UIImage(named: "like0")?.maskWithColor(color: Colours.tabSelected), for: .normal)
+//                boostButton.setImage(UIImage(named: "boost0")?.maskWithColor(color: Colours.tabSelected), for: .normal)
+//
+//                replyButton.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+//                likeButton.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+//                boostButton.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+//                moreButton.addTarget(self, action: #selector(self.didTouchMore), for: .touchUpInside)
                 
-                replyButton.layer.cornerRadius = 20
-                replyButton.layer.masksToBounds = true
-                likeButton.layer.cornerRadius = 20
-                likeButton.layer.masksToBounds = true
-                boostButton.layer.cornerRadius = 20
-                boostButton.layer.masksToBounds = true
-                moreButton.layer.cornerRadius = 20
-                moreButton.layer.masksToBounds = true
+//                self.view.addSubview(self.moreButton)
+//                self.view.addSubview(self.boostButton)
+//                self.view.addSubview(self.likeButton)
+//                self.view.addSubview(self.replyButton)
                 
-                replyButton.setImage(UIImage(named: "reply0")?.maskWithColor(color: Colours.tabSelected), for: .normal)
-                moreButton.setImage(UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected), for: .normal)
-                likeButton.setImage(UIImage(named: "like0")?.maskWithColor(color: Colours.tabSelected), for: .normal)
-                boostButton.setImage(UIImage(named: "boost0")?.maskWithColor(color: Colours.tabSelected), for: .normal)
-                
-                replyButton.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
-                likeButton.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
-                boostButton.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
-                moreButton.addTarget(self, action: #selector(self.didTouchMore), for: .touchUpInside)
-                
-                self.view.addSubview(self.moreButton)
-                self.view.addSubview(self.boostButton)
-                self.view.addSubview(self.likeButton)
-                self.view.addSubview(self.replyButton)
-                
-                self.moreButton.translatesAutoresizingMaskIntoConstraints = false
-                self.moreButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-                self.moreButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-                self.moreButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
-                self.moreButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
-                
-                self.boostButton.translatesAutoresizingMaskIntoConstraints = false
-                self.boostButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-                self.boostButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-                self.boostButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -85).isActive = true
-                self.boostButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
-                
-                self.likeButton.translatesAutoresizingMaskIntoConstraints = false
-                self.likeButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-                self.likeButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-                self.likeButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -150).isActive = true
-                self.likeButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
-                
-                self.replyButton.translatesAutoresizingMaskIntoConstraints = false
-                self.replyButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
-                self.replyButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-                self.replyButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -215).isActive = true
-                self.replyButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
+//                self.moreButton.translatesAutoresizingMaskIntoConstraints = false
+//                self.moreButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+//                self.moreButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+//                self.moreButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -20).isActive = true
+//                self.moreButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
+//
+//                self.boostButton.translatesAutoresizingMaskIntoConstraints = false
+//                self.boostButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+//                self.boostButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+//                self.boostButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -85).isActive = true
+//                self.boostButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
+//
+//                self.likeButton.translatesAutoresizingMaskIntoConstraints = false
+//                self.likeButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+//                self.likeButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+//                self.likeButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -150).isActive = true
+//                self.likeButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
+//
+//                self.replyButton.translatesAutoresizingMaskIntoConstraints = false
+//                self.replyButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
+//                self.replyButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+//                self.replyButton.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -215).isActive = true
+//                self.replyButton.topAnchor.constraint(equalTo: self.view.topAnchor, constant: UIApplication.shared.statusBarFrame.height + 5).isActive = true
                 
             }
         default:
@@ -2271,13 +2271,20 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         var sto = self.allPrevious
 
         let controller = ComposeViewController()
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            controller.modalPresentationStyle = .pageSheet
+        default:
+            print("nil")
+        }
         StoreStruct.spoilerText = sto[sender.tag].reblog?.spoilerText ?? sto[sender.tag].spoilerText
         controller.inReply = [sto[sender.tag].reblog ?? sto[sender.tag]]
         controller.prevTextReply = sto[sender.tag].reblog?.content.stripHTML() ?? sto[sender.tag].content.stripHTML()
         controller.inReplyText = sto[sender.tag].reblog?.account.username ?? sto[sender.tag].account.username
         
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
+        let deviceIdiom3 = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom3) {
         case .phone :
             self.navigationController?.pushViewController(controller, animated: true)
         case .pad:
@@ -2307,6 +2314,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         var sto = self.allReplies
 
         let controller = ComposeViewController()
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            controller.modalPresentationStyle = .pageSheet
+        default:
+            print("nil")
+        }
         StoreStruct.spoilerText = sto[sender.tag].reblog?.spoilerText ?? sto[sender.tag].spoilerText
         controller.inReply = [sto[sender.tag].reblog ?? sto[sender.tag]]
         controller.prevTextReply = sto[sender.tag].reblog?.content.stripHTML() ?? sto[sender.tag].content.stripHTML()
@@ -2816,6 +2830,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             impact.impactOccurred()
         }
         let controller = ComposeViewController()
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            controller.modalPresentationStyle = .pageSheet
+        default:
+            print("nil")
+        }
         StoreStruct.spoilerText = self.mainStatus[sender.tag].reblog?.spoilerText ?? self.mainStatus[sender.tag].spoilerText
         controller.inReply = [self.mainStatus[sender.tag].reblog ?? self.mainStatus[sender.tag]]
         controller.inReplyText = self.mainStatus[sender.tag].reblog?.account.username ?? self.mainStatus[sender.tag].account.username
@@ -3011,7 +3032,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             return
         }
         
-        Alertift.actionSheet()
+        let zz = Alertift.actionSheet()
             .backgroundColor(Colours.white)
             .titleTextColor(Colours.grayDark)
             .messageTextColor(Colours.grayDark)
@@ -3054,8 +3075,15 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     return
                 }
             }
-            .popover(anchorView: self.moreButton ?? self.view)
-            .show(on: self)
+        
+        if self.mainStatus[0].visibility == .direct {
+            let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell2
+                zz.popover(anchorView: cell.shareButton ?? self.view)
+        } else {
+            let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell
+                zz.popover(anchorView: cell.shareButton ?? self.view)
+        }
+            zz.show(on: self)
     }
     
     @objc func didTouchMore(sender: UIButton) {
@@ -3116,7 +3144,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 newSecondsText = "\(self.mainStatus[0].spoilerText)\n\n\(newSecondsText)"
             }
             
-            Alertift.actionSheet(title: nil, message: newSecondsText)
+            let zz = Alertift.actionSheet(title: nil, message: newSecondsText)
                 .backgroundColor(Colours.white)
                 .titleTextColor(Colours.grayDark)
                 .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
@@ -3168,6 +3196,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                      
                     
                     let controller = ComposeViewController()
+                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                    switch (deviceIdiom) {
+                    case .pad:
+                        controller.modalPresentationStyle = .pageSheet
+                    default:
+                        print("nil")
+                    }
                     StoreStruct.spoilerText = self.mainStatus[0].reblog?.spoilerText ?? self.mainStatus[0].spoilerText
                     controller.idToDel = self.mainStatus[0].id
                     controller.filledTextFieldText = self.mainStatus[0].content.stripHTML()
@@ -3254,6 +3289,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                      
                     
                     let controller = ComposeViewController()
+                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                    switch (deviceIdiom) {
+                    case .pad:
+                        controller.modalPresentationStyle = .pageSheet
+                    default:
+                        print("nil")
+                    }
                     controller.inReply = []
                     controller.inReplyText = ""
                     controller.filledTextFieldText = self.mainStatus[0].content.stripHTML()
@@ -3264,7 +3306,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     
                     
                     
-                    Alertift.actionSheet()
+                    let zz = Alertift.actionSheet()
                         .backgroundColor(Colours.white)
                         .titleTextColor(Colours.grayDark)
                         .messageTextColor(Colours.grayDark)
@@ -3307,12 +3349,18 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 return
                             }
                         }
-                        .popover(anchorView: self.moreButton ?? self.view)
-                        .show(on: self)
-
-
-
-
+                    if self.mainStatus[0].visibility == .direct {
+                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell2
+                        zz.popover(anchorView: cell.moreButton ?? self.view)
+                    } else {
+                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell
+                        zz.popover(anchorView: cell.moreButton ?? self.view)
+                    }
+                        zz.show(on: self)
+                    
+                    
+                    
+                    
                 }
                 .action(.cancel("Dismiss"))
                 .finally { action, index in
@@ -3320,11 +3368,17 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         return
                     }
                 }
-                .popover(anchorView: self.moreButton ?? self.view)
-                .show(on: self)
-
-
-
+            if self.mainStatus[0].visibility == .direct {
+                let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell2
+                zz.popover(anchorView: cell.moreButton ?? self.view)
+            } else {
+                let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell
+                zz.popover(anchorView: cell.moreButton ?? self.view)
+            }
+                zz.show(on: self)
+            
+            
+            
         } else {
 
             let wordsInThis = self.mainStatus[0].content.stripHTML().components(separatedBy: .punctuationCharacters).joined().components(separatedBy: " ").filter{!$0.isEmpty}.count
@@ -3342,7 +3396,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 newSecondsText = "\(self.mainStatus[0].spoilerText)\n\n\(newSecondsText)"
             }
             
-            Alertift.actionSheet(title: nil, message: newSecondsText)
+            let zz = Alertift.actionSheet(title: nil, message: newSecondsText)
                 .backgroundColor(Colours.white)
                 .titleTextColor(Colours.grayDark)
                 .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
@@ -3597,6 +3651,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                      
                     
                     let controller = ComposeViewController()
+                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                    switch (deviceIdiom) {
+                    case .pad:
+                        controller.modalPresentationStyle = .pageSheet
+                    default:
+                        print("nil")
+                    }
                     controller.inReply = []
                     controller.inReplyText = ""
                     controller.filledTextFieldText = self.mainStatus[0].content.stripHTML()
@@ -3607,7 +3668,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     
                     
                     
-                    Alertift.actionSheet()
+                    let zz = Alertift.actionSheet()
                         .backgroundColor(Colours.white)
                         .titleTextColor(Colours.grayDark)
                         .messageTextColor(Colours.grayDark)
@@ -3650,11 +3711,17 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 return
                             }
                         }
-                        .popover(anchorView: self.moreButton ?? self.view)
-                        .show(on: self)
-
-
-
+                    if self.mainStatus[0].visibility == .direct {
+                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell2
+                        zz.popover(anchorView: cell.moreButton ?? self.view)
+                    } else {
+                        let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell
+                        zz.popover(anchorView: cell.moreButton ?? self.view)
+                    }
+                        zz.show(on: self)
+                    
+                    
+                    
                 }
                 .action(.cancel("Dismiss"))
                 .finally { action, index in
@@ -3662,9 +3729,15 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         return
                     }
                 }
-                .popover(anchorView: self.moreButton ?? self.view)
-                .show(on: self)
-
+            if self.mainStatus[0].visibility == .direct {
+                let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell2
+                zz.popover(anchorView: cell.moreButton ?? self.view)
+            } else {
+                let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 4)) as! ActionButtonCell
+                zz.popover(anchorView: cell.moreButton ?? self.view)
+            }
+                zz.show(on: self)
+            
         }
 
     }
@@ -4926,6 +4999,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
 
                 let controller = ComposeViewController()
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .pad:
+                    controller.modalPresentationStyle = .pageSheet
+                default:
+                    print("nil")
+                }
                 StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                 controller.inReply = [sto[indexPath.row]]
                 controller.inReplyText = sto[indexPath.row].account.username
@@ -5071,6 +5151,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                              
                             
                             let controller = ComposeViewController()
+                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                            switch (deviceIdiom) {
+                            case .pad:
+                                controller.modalPresentationStyle = .pageSheet
+                            default:
+                                print("nil")
+                            }
                             StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                             controller.idToDel = sto[indexPath.row].id
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
@@ -5107,6 +5194,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                              
                             
                             let controller = ComposeViewController()
+                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                            switch (deviceIdiom) {
+                            case .pad:
+                                controller.modalPresentationStyle = .pageSheet
+                            default:
+                                print("nil")
+                            }
                             controller.inReply = []
                             controller.inReplyText = ""
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
@@ -5451,6 +5545,13 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                              
                             
                             let controller = ComposeViewController()
+                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                            switch (deviceIdiom) {
+                            case .pad:
+                                controller.modalPresentationStyle = .pageSheet
+                            default:
+                                print("nil")
+                            }
                             controller.inReply = []
                             controller.inReplyText = ""
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()

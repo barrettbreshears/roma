@@ -699,6 +699,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 .titleTextAlignment(.left)
                 .action(.default("Resume Composing Toot".localized), image: nil) { (action, ind) in
                     let controller = ComposeViewController()
+                    let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                    switch (deviceIdiom) {
+                    case .pad:
+                        controller.modalPresentationStyle = .pageSheet
+                    default:
+                        print("nil")
+                    }
                     controller.inReply = []
                     controller.inReplyText = StoreStruct.savedInReplyText
                     controller.filledTextFieldText = StoreStruct.savedComposeText
@@ -737,6 +744,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     @available(iOS 12.1, *)
     func pencilInteractionDidTap(_ interaction: UIPencilInteraction) {
         let controller = ComposeViewController()
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            controller.modalPresentationStyle = .pageSheet
+        default:
+            print("nil")
+        }
         controller.inReply = []
         controller.inReplyText = ""
         self.present(controller, animated: true, completion: nil)
@@ -1328,19 +1342,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
                 self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
                 self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
-                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
                 
                 self.tableViewL.translatesAutoresizingMaskIntoConstraints = false
                 self.tableViewL.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
                 self.tableViewL.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
                 self.tableViewL.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
-                self.tableViewL.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableViewL.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
                 
                 self.tableViewF.translatesAutoresizingMaskIntoConstraints = false
                 self.tableViewF.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
                 self.tableViewF.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
                 self.tableViewF.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
-                self.tableViewF.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableViewF.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
                 
             } else {
                 
@@ -1348,19 +1362,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
                 self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
                 self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 5)).isActive = true
-                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
                 
                 self.tableViewL.translatesAutoresizingMaskIntoConstraints = false
                 self.tableViewL.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
                 self.tableViewL.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
                 self.tableViewL.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 5)).isActive = true
-                self.tableViewL.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableViewL.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
                 
                 self.tableViewF.translatesAutoresizingMaskIntoConstraints = false
                 self.tableViewF.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
                 self.tableViewF.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
                 self.tableViewF.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 5)).isActive = true
-                self.tableViewF.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableViewF.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
                 
             }
             
@@ -3994,6 +4008,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         }
         
         let controller = ComposeViewController()
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            controller.modalPresentationStyle = .pageSheet
+        default:
+            print("nil")
+        }
         StoreStruct.spoilerText = sto[sender.tag].reblog?.spoilerText ?? sto[sender.tag].spoilerText
         controller.inReply = [sto[sender.tag].reblog ?? sto[sender.tag]]
         controller.prevTextReply = sto[sender.tag].reblog?.content.stripHTML() ?? sto[sender.tag].content.stripHTML()
@@ -4221,6 +4242,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 }
                 
                 let controller = ComposeViewController()
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .pad:
+                    controller.modalPresentationStyle = .pageSheet
+                default:
+                    print("nil")
+                }
                 StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                 controller.inReply = [sto[indexPath.row].reblog ?? sto[indexPath.row]]
                 controller.prevTextReply = sto[indexPath.row].reblog?.content.stripHTML() ?? sto[indexPath.row].content.stripHTML()
@@ -4398,6 +4426,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             
                             let controller = ComposeViewController()
+                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                            switch (deviceIdiom) {
+                            case .pad:
+                                controller.modalPresentationStyle = .pageSheet
+                            default:
+                                print("nil")
+                            }
                             StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                             controller.idToDel = sto[indexPath.row].id
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
@@ -4492,6 +4527,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             
                             let controller = ComposeViewController()
+                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                            switch (deviceIdiom) {
+                            case .pad:
+                                controller.modalPresentationStyle = .pageSheet
+                            default:
+                                print("nil")
+                            }
                             controller.inReply = []
                             controller.inReplyText = ""
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
@@ -4831,6 +4873,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             
                             let controller = ComposeViewController()
+                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                            switch (deviceIdiom) {
+                            case .pad:
+                                controller.modalPresentationStyle = .pageSheet
+                            default:
+                                print("nil")
+                            }
                             controller.inReply = []
                             controller.inReplyText = ""
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
@@ -5746,6 +5795,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
         }
         
+        self.navigationController?.navigationBar.backgroundColor = Colours.white
+        
         self.ai.alpha = 0
         self.ai.removeFromSuperview()
         
@@ -5809,19 +5860,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
                 self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
                 self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
-                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
                 
                 self.tableViewL.translatesAutoresizingMaskIntoConstraints = false
                 self.tableViewL.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
                 self.tableViewL.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
                 self.tableViewL.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
-                self.tableViewL.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableViewL.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
                 
                 self.tableViewF.translatesAutoresizingMaskIntoConstraints = false
                 self.tableViewF.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
                 self.tableViewF.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
                 self.tableViewF.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 60)).isActive = true
-                self.tableViewF.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset + 60)).isActive = true
+                self.tableViewF.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
             default:
                 print("nothing")
             }
@@ -5851,19 +5902,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
                 self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
                 self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 5)).isActive = true
-                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
                 
                 self.tableViewL.translatesAutoresizingMaskIntoConstraints = false
                 self.tableViewL.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
                 self.tableViewL.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
                 self.tableViewL.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 5)).isActive = true
-                self.tableViewL.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableViewL.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
                 
                 self.tableViewF.translatesAutoresizingMaskIntoConstraints = false
                 self.tableViewF.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
                 self.tableViewF.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
                 self.tableViewF.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 5)).isActive = true
-                self.tableViewF.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                self.tableViewF.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(0)).isActive = true
             default:
                 print("nothing")
             }

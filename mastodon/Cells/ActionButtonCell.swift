@@ -108,23 +108,23 @@ class ActionButtonCell: UITableViewCell {
         
         
         
-        let verticalFormat = "V:|-10-[reply(40)]-10-|"
+        let verticalFormat = "V:|-10-[reply(40)]-12-|"
         let verticalConstraints = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
         contentView.addConstraints(verticalConstraints)
         
-        let verticalFormat2 = "V:|-10-[like(40)]-10-|"
+        let verticalFormat2 = "V:|-10-[like(40)]-12-|"
         let verticalConstraints2 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat2, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
         contentView.addConstraints(verticalConstraints2)
         
-        let verticalFormat3 = "V:|-10-[boost(40)]-10-|"
+        let verticalFormat3 = "V:|-10-[boost(40)]-12-|"
         let verticalConstraints3 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat3, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
         contentView.addConstraints(verticalConstraints3)
         
-        let verticalFormat34 = "V:|-10-[share(40)]-10-|"
+        let verticalFormat34 = "V:|-10-[share(40)]-12-|"
         let verticalConstraints34 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat34, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
         contentView.addConstraints(verticalConstraints34)
         
-        let verticalFormat4 = "V:|-10-[more(40)]-10-|"
+        let verticalFormat4 = "V:|-10-[more(40)]-12-|"
         let verticalConstraints4 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat4, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
         contentView.addConstraints(verticalConstraints4)
         
@@ -224,19 +224,19 @@ class ActionButtonCell2: UITableViewCell {
         let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
         contentView.addConstraints(horizontalConstraints)
         
-        let verticalFormat = "V:|-10-[reply(40)]-10-|"
+        let verticalFormat = "V:|-10-[reply(40)]-12-|"
         let verticalConstraints = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
         contentView.addConstraints(verticalConstraints)
         
-        let verticalFormat2 = "V:|-10-[like(40)]-10-|"
+        let verticalFormat2 = "V:|-10-[like(40)]-12-|"
         let verticalConstraints2 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat2, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
         contentView.addConstraints(verticalConstraints2)
         
-        let verticalFormat34 = "V:|-10-[share(40)]-10-|"
+        let verticalFormat34 = "V:|-10-[share(40)]-12-|"
         let verticalConstraints34 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat34, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
         contentView.addConstraints(verticalConstraints34)
         
-        let verticalFormat4 = "V:|-10-[more(40)]-10-|"
+        let verticalFormat4 = "V:|-10-[more(40)]-12-|"
         let verticalConstraints4 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat4, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
         contentView.addConstraints(verticalConstraints4)
         

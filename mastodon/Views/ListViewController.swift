@@ -1298,6 +1298,13 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         
         let controller = ComposeViewController()
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            controller.modalPresentationStyle = .pageSheet
+        default:
+            print("nil")
+        }
         StoreStruct.spoilerText = sto[sender.tag].reblog?.spoilerText ?? sto[sender.tag].spoilerText
         controller.inReply = [sto[sender.tag].reblog ?? sto[sender.tag]]
         controller.prevTextReply = sto[sender.tag].reblog?.content.stripHTML() ?? sto[sender.tag].content.stripHTML()
@@ -1533,6 +1540,13 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                 impact.impactOccurred()
                 }
                 let controller = ComposeViewController()
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .pad:
+                    controller.modalPresentationStyle = .pageSheet
+                default:
+                    print("nil")
+                }
                 StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                 controller.inReply = [sto[indexPath.row].reblog ?? sto[indexPath.row]]
                 controller.inReplyText = sto[indexPath.row].reblog?.account.username ?? sto[indexPath.row].account.username
@@ -1711,6 +1725,13 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                              
                             
                             let controller = ComposeViewController()
+                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                            switch (deviceIdiom) {
+                            case .pad:
+                                controller.modalPresentationStyle = .pageSheet
+                            default:
+                                print("nil")
+                            }
                             StoreStruct.spoilerText = sto[indexPath.row].reblog?.spoilerText ?? sto[indexPath.row].spoilerText
                             controller.idToDel = sto[indexPath.row].id
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
@@ -1801,6 +1822,13 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                              
                             
                             let controller = ComposeViewController()
+                            let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                            switch (deviceIdiom) {
+                            case .pad:
+                                controller.modalPresentationStyle = .pageSheet
+                            default:
+                                print("nil")
+                            }
                             controller.inReply = []
                             controller.inReplyText = ""
                             controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()
@@ -2159,6 +2187,13 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
                          
                         
                         let controller = ComposeViewController()
+                        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                        switch (deviceIdiom) {
+                        case .pad:
+                            controller.modalPresentationStyle = .pageSheet
+                        default:
+                            print("nil")
+                        }
                         controller.inReply = []
                         controller.inReplyText = ""
                         controller.filledTextFieldText = sto[indexPath.row].content.stripHTML()

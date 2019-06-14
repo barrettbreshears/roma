@@ -74,7 +74,7 @@ class DetailCellLink: UITableViewCell {
             ]
         
         contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[containerView]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[containerView(90)]-10-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[containerView(90)]-12-|", options: [], metrics: nil, views: viewsDict))
     }
     
     required init?(coder aDecoder: NSCoder) {
