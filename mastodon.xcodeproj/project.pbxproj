@@ -237,6 +237,7 @@
 		5329F3942174DBDF00C4A23C /* SSLSecurity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5329F3902174DBDF00C4A23C /* SSLSecurity.swift */; };
 		5329F3952174DBDF00C4A23C /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5329F3912174DBDF00C4A23C /* WebSocket.swift */; };
 		5335CCAD22AAE3DD00E8984A /* ColumnViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5335CCAC22AAE3DD00E8984A /* ColumnViewController.swift */; };
+		5346A0BC22B4192200639360 /* PadListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5346A0BB22B4192200639360 /* PadListsViewController.swift */; };
 		5351B98E2167ADF400002069 /* NewListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5351B98D2167ADF400002069 /* NewListViewController.swift */; };
 		5351D75721617FC40012960F /* VolumeBarAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5351D74E21617FC40012960F /* VolumeBarAnimation.swift */; };
 		5351D75821617FC40012960F /* VolumeBarStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5351D75021617FC40012960F /* VolumeBarStackView.swift */; };
@@ -1136,6 +1137,7 @@
 		5329F3902174DBDF00C4A23C /* SSLSecurity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSLSecurity.swift; sourceTree = "<group>"; };
 		5329F3912174DBDF00C4A23C /* WebSocket.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
 		5335CCAC22AAE3DD00E8984A /* ColumnViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColumnViewController.swift; sourceTree = "<group>"; };
+		5346A0BB22B4192200639360 /* PadListsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PadListsViewController.swift; sourceTree = "<group>"; };
 		5351B98D2167ADF400002069 /* NewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewListViewController.swift; sourceTree = "<group>"; };
 		5351D74E21617FC40012960F /* VolumeBarAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VolumeBarAnimation.swift; sourceTree = "<group>"; };
 		5351D75021617FC40012960F /* VolumeBarStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VolumeBarStackView.swift; sourceTree = "<group>"; };
@@ -2924,6 +2926,7 @@
 				530041DD22ADC48900783C3B /* VerticalTabBarController.swift */,
 				53CF184922B2494D000DC32B /* ScrollMainViewController.swift */,
 				5389F21D22B2C42100065DC6 /* PadLoginViewController.swift */,
+				5346A0BB22B4192200639360 /* PadListsViewController.swift */,
 				5373C9E92151753800676F3D /* FirstViewController.swift */,
 				5373C9EF2151953C00676F3D /* SecondViewController.swift */,
 				531B420A224E0FFB00D1B132 /* DMViewController.swift */,
@@ -4317,6 +4320,7 @@
 				5351D75C21617FC40012960F /* VolumeBar.swift in Sources */,
 				5316C88F219D94A00003AB97 /* GiphyUser.swift in Sources */,
 				531E0F95216E2BA2003E8890 /* NVActivityIndicatorAnimationBallZigZagDeflect.swift in Sources */,
+				5346A0BC22B4192200639360 /* PadListsViewController.swift in Sources */,
 				532057D8215CF4D500ED0C36 /* BlockedViewController.swift in Sources */,
 				531CCD3722072BC500A56145 /* Filters.swift in Sources */,
 				5316C898219D94A00003AB97 /* SwiftyGiphyCollectionViewCell.swift in Sources */,

@@ -954,6 +954,27 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                 }
                 
                 
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .pad:
+                    
+                    Alertift.actionSheet(title: "This is an iPhone-only setting", message: nil)
+                        .backgroundColor(Colours.white)
+                        .titleTextColor(Colours.grayDark)
+                        .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                        .messageTextAlignment(.left)
+                        .titleTextAlignment(.left)
+                        .action(.cancel("Dismiss"))
+                        .finally { action, index in
+                            if action.style == .cancel {
+                                return
+                            }
+                        }
+                        .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 6))?.contentView ?? self.view)
+                        .show(on: self)
+                    
+                default:
+                
                 Alertift.actionSheet(title: nil, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -988,6 +1009,8 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     }
                     .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 2))?.contentView ?? self.view)
                     .show(on: self)
+                    
+                }
             }
             if indexPath.row == 3 {
                 var filledSet1 = UIImage(named: "unfilledset")
@@ -1647,30 +1670,53 @@ class AppearanceSettingsViewController: UIViewController, UITableViewDelegate, U
                     filledSet2 = UIImage(named: "filledset")
                 }
                 
-                Alertift.actionSheet(title: nil, message: nil)
-                    .backgroundColor(Colours.white)
-                    .titleTextColor(Colours.grayDark)
-                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
-                    .messageTextAlignment(.left)
-                    .titleTextAlignment(.left)
-                    .action(.default("Small".localized), image: filledSet2) { (action, ind) in
-                        
-                        UserDefaults.standard.set(1, forKey: "segsize")
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "changeSeg"), object: self)
-                    }
-                    .action(.default("Large".localized), image: filledSet1) { (action, ind) in
-                        
-                        UserDefaults.standard.set(0, forKey: "segsize")
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "changeSeg"), object: self)
-                    }
-                    .action(.cancel("Dismiss"))
-                    .finally { action, index in
-                        if action.style == .cancel {
-                            return
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .pad:
+                    
+                    Alertift.actionSheet(title: "This is an iPhone-only setting", message: nil)
+                        .backgroundColor(Colours.white)
+                        .titleTextColor(Colours.grayDark)
+                        .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                        .messageTextAlignment(.left)
+                        .titleTextAlignment(.left)
+                        .action(.cancel("Dismiss"))
+                        .finally { action, index in
+                            if action.style == .cancel {
+                                return
+                            }
                         }
-                    }
-                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 6))?.contentView ?? self.view)
-                    .show(on: self)
+                        .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 6))?.contentView ?? self.view)
+                        .show(on: self)
+                    
+                default:
+                    
+                    Alertift.actionSheet(title: nil, message: nil)
+                        .backgroundColor(Colours.white)
+                        .titleTextColor(Colours.grayDark)
+                        .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                        .messageTextAlignment(.left)
+                        .titleTextAlignment(.left)
+                        .action(.default("Small".localized), image: filledSet2) { (action, ind) in
+                            
+                            UserDefaults.standard.set(1, forKey: "segsize")
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "changeSeg"), object: self)
+                        }
+                        .action(.default("Large".localized), image: filledSet1) { (action, ind) in
+                            
+                            UserDefaults.standard.set(0, forKey: "segsize")
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "changeSeg"), object: self)
+                        }
+                        .action(.cancel("Dismiss"))
+                        .finally { action, index in
+                            if action.style == .cancel {
+                                return
+                            }
+                        }
+                        .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 6))?.contentView ?? self.view)
+                        .show(on: self)
+                    
+                }
             }
             if indexPath.row == 1 {
                 var filledSet1 = UIImage(named: "unfilledset")

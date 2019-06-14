@@ -145,6 +145,23 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         //        self.tableView.addSubview(refreshControl)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        
+        switch (deviceIdiom) {
+        case .pad:
+            self.tableView.translatesAutoresizingMaskIntoConstraints = false
+            self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+            self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+        default:
+            print("nothing")
+        }
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
@@ -157,12 +174,6 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         switch (deviceIdiom) {
         case .pad:
-            self.tableView.translatesAutoresizingMaskIntoConstraints = false
-            self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
-            self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-            
             let request = FilterToots.all()
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
@@ -182,16 +193,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // Table stuff
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .phone:
-            return 40
-        case .pad:
-            return 0
-        default:
-            return 40
-        }
+        return 40
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

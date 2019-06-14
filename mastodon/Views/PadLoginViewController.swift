@@ -94,6 +94,10 @@ class PadLoginViewController: UIViewController, UITextFieldDelegate {
         self.dismiss(animated: true, completion: nil)
     }
     
+    @objc func didTouchUpInsideCloseButton(_ sender: AnyObject) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -125,13 +129,13 @@ class PadLoginViewController: UIViewController, UITextFieldDelegate {
                     tabHeight = Int(UITabBarController().tabBar.frame.size.height)
                 }
             }
-            self.closeButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: closeB, width: 32, height: 32)))
+            self.closeButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 20, width: 32, height: 32)))
             self.closeButton.setImage(UIImage(named: "block")?.maskWithColor(color: Colours.grayLight2), for: .normal)
             self.closeButton.alpha = 0.3
             self.closeButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
             self.closeButton.adjustsImageWhenHighlighted = false
-//            self.closeButton.addTarget(self, action: #selector(didTouchUpInsideCloseButton), for: .touchUpInside)
-//            self.view.addSubview(self.closeButton)
+            self.closeButton.addTarget(self, action: #selector(didTouchUpInsideCloseButton), for: .touchUpInside)
+            self.view.addSubview(self.closeButton)
         }
         
         let urlStr = "https://instances.social/api/1.0/instances/list?count=\(100)&include_closed=\(false)&include_down=\(false)"

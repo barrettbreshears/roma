@@ -27,6 +27,44 @@ class NewCaptionViewController: UIViewController, UITextViewDelegate {
         super.didReceiveMemoryWarning()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
+        var offset = 88
+        var closeB = 47
+        var botbot = 20
+        if UIDevice().userInterfaceIdiom == .phone {
+            switch UIScreen.main.nativeBounds.height {
+            case 2688:
+                offset = 88
+                closeB = 47
+                botbot = 40
+            case 2436, 1792:
+                offset = 88
+                closeB = 47
+                botbot = 40
+            default:
+                offset = 64
+                closeB = 24
+                botbot = 20
+                tabHeight = Int(UITabBarController().tabBar.frame.size.height)
+            }
+        }
+        
+        tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(closeB), width: CGFloat(150), height: CGFloat(36))
+        if self.editListName == "" {
+            tootLabel.setTitle("Add", for: .normal)
+        } else {
+            tootLabel.setTitle("Add", for: .normal)
+        }
+        tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
+        tootLabel.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
+        tootLabel.contentHorizontalAlignment = .right
+        tootLabel.addTarget(self, action: #selector(didTouchUpInsideTootButton), for: .touchUpInside)
+        self.view.addSubview(tootLabel)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = Colours.white
@@ -66,18 +104,6 @@ class NewCaptionViewController: UIViewController, UITextViewDelegate {
         self.closeButton.adjustsImageWhenHighlighted = false
         self.closeButton.addTarget(self, action: #selector(didTouchUpInsideCloseButton), for: .touchUpInside)
         self.view.addSubview(self.closeButton)
-        
-        tootLabel.frame = CGRect(x: CGFloat(self.view.bounds.width - 175), y: CGFloat(closeB), width: CGFloat(150), height: CGFloat(36))
-        if self.editListName == "" {
-            tootLabel.setTitle("Add", for: .normal)
-        } else {
-            tootLabel.setTitle("Add", for: .normal)
-        }
-        tootLabel.titleLabel?.font = UIFont.systemFont(ofSize: 20, weight: .heavy)
-        tootLabel.setTitleColor(Colours.grayDark.withAlphaComponent(0.38), for: .normal)
-        tootLabel.contentHorizontalAlignment = .right
-        tootLabel.addTarget(self, action: #selector(didTouchUpInsideTootButton), for: .touchUpInside)
-        self.view.addSubview(tootLabel)
         
         titleV.frame = CGRect(x: 24, y: offset + 6, width: Int(self.view.bounds.width), height: 30)
         if self.editListName == "" {

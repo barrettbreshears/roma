@@ -29,12 +29,11 @@ class ColumnViewController: UIViewController, UIGestureRecognizerDelegate, UNUse
     override var keyCommands: [UIKeyCommand]? {
         //shortkeys
         let newToot = UIKeyCommand(input: "n", modifierFlags: .command, action: #selector(comp1), discoverabilityTitle: "New Toot")
-        let listThing = UIKeyCommand(input: "l", modifierFlags: .control, action: #selector(list1), discoverabilityTitle: "Lists")
         let searchThing = UIKeyCommand(input: "f", modifierFlags: .command, action: #selector(search1), discoverabilityTitle: "Search")
         let leftAr = UIKeyCommand(input: UIKeyCommand.inputLeftArrow, modifierFlags: [], action: #selector(left1), discoverabilityTitle: "Scroll to Start")
         let rightAr = UIKeyCommand(input: UIKeyCommand.inputRightArrow, modifierFlags: [], action: #selector(right1), discoverabilityTitle: "Scroll to End")
         return [
-            newToot, listThing, searchThing, leftAr, rightAr
+            newToot, searchThing, leftAr, rightAr
         ]
     }
     
@@ -50,10 +49,6 @@ class ColumnViewController: UIViewController, UIGestureRecognizerDelegate, UNUse
         controller.inReply = []
         controller.inReplyText = ""
         self.present(controller, animated: true, completion: nil)
-    }
-    
-    @objc func list1() {
-        
     }
     
     @objc func search1() {
@@ -91,6 +86,15 @@ class ColumnViewController: UIViewController, UIGestureRecognizerDelegate, UNUse
         }
     }
     
+    @objc func signOutNewInstance() {
+        DispatchQueue.main.async {
+            let con = PadLoginViewController()
+            con.newInstance = true
+            con.modalPresentationStyle = .pageSheet
+            self.show(con, sender: self)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -108,6 +112,7 @@ class ColumnViewController: UIViewController, UIGestureRecognizerDelegate, UNUse
         NotificationCenter.default.addObserver(self, selector: #selector(self.confettiCreateLi), name: NSNotification.Name(rawValue: "confettiCreateLi"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.logged), name: NSNotification.Name(rawValue: "logged"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.newInstanceLogged), name: NSNotification.Name(rawValue: "newInstancelogged"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.signOutNewInstance), name: NSNotification.Name(rawValue: "signOut2"), object: nil)
         
         if (UserDefaults.standard.object(forKey: "themeaccent") == nil) || (UserDefaults.standard.object(forKey: "themeaccent") as! Int == 0) {
             Colours.tabSelected = StoreStruct.colArray[0]

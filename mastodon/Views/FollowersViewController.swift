@@ -211,11 +211,7 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                 print("nothing")
             }
         } else {
-            if UIApplication.shared.isSplitOrSlideOver {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(30), width: CGFloat(200), height: CGFloat(40)))
-            } else {
-                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(newoff), width: CGFloat(200), height: CGFloat(40)))
-            }
+            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(30), width: CGFloat(200), height: CGFloat(40)))
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
                 segmentedControl.shapeStyle = .roundedRect
@@ -251,11 +247,12 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                     self.tableView.frame = CGRect(x: 0, y: Int(offset + 5), width: Int(self.view.bounds.width), height: Int(self.view.bounds.height) - offset - tabHeight - 5)
                 }
             case .pad:
-                self.tableView.translatesAutoresizingMaskIntoConstraints = false
-                self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
-                self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-                self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 5)).isActive = true
-                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
+                self.segmentedControl.widthAnchor.constraint(equalToConstant: CGFloat(self.view.bounds.width - 40)).isActive = true
+//                self.tableView.translatesAutoresizingMaskIntoConstraints = false
+//                self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+//                self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+//                self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 5)).isActive = true
+//                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
             default:
                 print("nothing")
             }
@@ -268,6 +265,36 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
         
         self.loadLoadLoad()
         
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        let navHe: Int = Int(self.navigationController?.navigationBar.frame.size.height ?? 0)
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+            segmentedControl.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+            segmentedControl.heightAnchor.constraint(equalToConstant: CGFloat(40)).isActive = true
+            if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
+                self.segmentedControl.widthAnchor.constraint(equalToConstant: CGFloat(self.view.bounds.width - 40)).isActive = true
+                self.segmentedControl.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(navHe + 20)).isActive = true
+            } else {
+//                self.segmentedControl.widthAnchor.constraint(equalToConstant: CGFloat(240)).isActive = true
+                self.segmentedControl.widthAnchor.constraint(equalToConstant: CGFloat(self.view.bounds.width - 40)).isActive = true
+                self.segmentedControl.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(45)).isActive = true
+            }
+            self.segmentedControl.setCurrentSegmentIndex(0, animated: false)
+            
+            self.tableView.translatesAutoresizingMaskIntoConstraints = false
+            self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+            self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+            self.tableView.topAnchor.constraint(equalTo: self.segmentedControl.bottomAnchor, constant: 10).isActive = true
+            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+        default:
+            print("nothing")
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -291,30 +318,6 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                 newoff = 24
                 tabHeight = Int(UITabBarController().tabBar.frame.size.height)
             }
-        }
-        
-        
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-        switch (deviceIdiom) {
-        case .pad:
-            segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-            segmentedControl.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
-            segmentedControl.heightAnchor.constraint(equalToConstant: CGFloat(40)).isActive = true
-            if (UserDefaults.standard.object(forKey: "segsize") == nil) || (UserDefaults.standard.object(forKey: "segsize") as! Int == 0) {
-                self.segmentedControl.widthAnchor.constraint(equalToConstant: CGFloat(self.view.bounds.width - 40)).isActive = true
-                self.segmentedControl.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 5)).isActive = true
-            } else {
-                self.segmentedControl.widthAnchor.constraint(equalToConstant: CGFloat(240)).isActive = true
-                self.segmentedControl.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(30)).isActive = true
-            }
-            
-            self.tableView.translatesAutoresizingMaskIntoConstraints = false
-            self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
-            self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-            self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
-            self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-        default:
-            print("nothing")
         }
         
         springWithDelay(duration: 0.4, delay: 0, animations: {

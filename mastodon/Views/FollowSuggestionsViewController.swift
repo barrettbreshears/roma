@@ -107,8 +107,8 @@ class FollowSuggestionsViewController: UIViewController, UITableViewDelegate, UI
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         
@@ -119,7 +119,18 @@ class FollowSuggestionsViewController: UIViewController, UITableViewDelegate, UI
             self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
             self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
             self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
-            
+        default:
+            print("nothing")
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        
+        switch (deviceIdiom) {
+        case .pad:
             let request = Accounts.followSuggestions()
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {

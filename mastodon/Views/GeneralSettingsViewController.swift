@@ -1046,6 +1046,27 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                     filledSet3 = UIImage(named: "filledset")
                 }
                 
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .pad:
+                    
+                    Alertift.actionSheet(title: "This is an iPhone-only setting", message: nil)
+                        .backgroundColor(Colours.white)
+                        .titleTextColor(Colours.grayDark)
+                        .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                        .messageTextAlignment(.left)
+                        .titleTextAlignment(.left)
+                        .action(.cancel("Dismiss"))
+                        .finally { action, index in
+                            if action.style == .cancel {
+                                return
+                            }
+                        }
+                        .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 6))?.contentView ?? self.view)
+                        .show(on: self)
+                    
+                default:
+                
                 Alertift.actionSheet(title: nil, message: nil)
                     .backgroundColor(Colours.white)
                     .titleTextColor(Colours.grayDark)
@@ -1072,6 +1093,8 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                     }
                     .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 4))?.contentView ?? self.view)
                     .show(on: self)
+                    
+                }
             }
         }
         if indexPath.section == 5 {
