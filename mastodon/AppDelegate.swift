@@ -472,6 +472,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        if let userDefaults = UserDefaults(suiteName: "group.com.vm.roma.wormhole") {
+            
+            let badgeCount = 0
+            userDefaults.set(badgeCount, forKey: "badge-count")
+            UIApplication.shared.applicationIconBadgeNumber = badgeCount
+            
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
