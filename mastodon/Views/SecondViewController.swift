@@ -18,8 +18,9 @@ import AVKit
 import AVFoundation
 import Disk
 import UserNotifications
+import MobileCoreServices
 
-class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate, UIGestureRecognizerDelegate {
+class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate, UIGestureRecognizerDelegate, UITableViewDragDelegate {
     
     var newUpdatesB1 = UIButton()
     var newUpdatesB2 = UIButton()
@@ -51,6 +52,21 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     private var crownControl3: CrownControl!
     var newLast: RequestRange = .max(id: "", limit: nil)
     var newLast2: RequestRange = .max(id: "", limit: nil)
+    
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        var string = ""
+        
+        if tableView == self.tableView2 {
+            string = StoreStruct.notifications[indexPath.row].status?.url?.absoluteString ?? StoreStruct.notifications[indexPath.row].status?.content.stripHTML() ?? ""
+        } else {
+            string = StoreStruct.notificationsMentions[indexPath.row].status?.url?.absoluteString ?? StoreStruct.notificationsMentions[indexPath.row].status?.content.stripHTML() ?? ""
+        }
+        
+        guard let data = string.data(using: .utf8) else { return [] }
+        let itemProvider = NSItemProvider(item: data as NSData, typeIdentifier: kUTTypePlainText as String)
+        
+        return [UIDragItem(itemProvider: itemProvider)]
+    }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         
@@ -781,6 +797,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.view.addSubview(self.tableView2)
             self.tableView2.tableFooterView = UIView()
         }
+        
+        self.tableView.dragDelegate = self
+        self.tableView2.dragDelegate = self
         
         tableView.cr.addHeadRefresh(animator: NormalHeaderAnimator()) { [weak self] in
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -1869,8 +1888,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     var filtersAr: [Bool] = []
                     let _ = StoreStruct.allCurrentFilters.map({
                         if $0.context.contains(Context2.notifications) {
-                            if (StoreStruct.notifications[indexPath.row].status?.content ?? "").lowercased().contains($0.phrase.lowercased()) {
-                                filtersAr.append(true)
+                            if (StoreStruct.notifications[indexPath.row].status?.content ?? "").lowercased().contains(((" \($0.phrase)").lowercased())) || (StoreStruct.notifications[indexPath.row].status?.content ?? "").lowercased().contains((("\($0.phrase) ").lowercased())) {
                             } else {
                                 filtersAr.append(false)
                             }
@@ -2409,8 +2427,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 var filtersAr: [Bool] = []
                 let _ = StoreStruct.allCurrentFilters.map({
                     if $0.context.contains(Context2.notifications) {
-                        if (StoreStruct.notifications[indexPath.row].status?.content ?? "").lowercased().contains($0.phrase.lowercased()) {
-                            filtersAr.append(true)
+                        if (StoreStruct.notifications[indexPath.row].status?.content ?? "").lowercased().contains(((" \($0.phrase)").lowercased())) || (StoreStruct.notifications[indexPath.row].status?.content ?? "").lowercased().contains((("\($0.phrase) ").lowercased())) {
                         } else {
                             filtersAr.append(false)
                         }

@@ -211,7 +211,11 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                 print("nothing")
             }
         } else {
-            segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(30), width: CGFloat(200), height: CGFloat(40)))
+            if UIApplication.shared.isSplitOrSlideOver {
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(30), width: CGFloat(200), height: CGFloat(40)))
+            } else {
+                segmentedControl = SJFluidSegmentedControl(frame: CGRect(x: CGFloat(self.view.bounds.width/2 - 100), y: CGFloat(newoff), width: CGFloat(200), height: CGFloat(40)))
+            }
             segmentedControl.dataSource = self
             if (UserDefaults.standard.object(forKey: "segstyle") == nil) || (UserDefaults.standard.object(forKey: "segstyle") as! Int == 0) {
                 segmentedControl.shapeStyle = .roundedRect
@@ -248,11 +252,6 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                 }
             case .pad:
                 self.segmentedControl.widthAnchor.constraint(equalToConstant: CGFloat(self.view.bounds.width - 40)).isActive = true
-//                self.tableView.translatesAutoresizingMaskIntoConstraints = false
-//                self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
-//                self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
-//                self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(offset + 5)).isActive = true
-//                self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: CGFloat(offset)).isActive = true
             default:
                 print("nothing")
             }
@@ -281,7 +280,6 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                 self.segmentedControl.widthAnchor.constraint(equalToConstant: CGFloat(self.view.bounds.width - 40)).isActive = true
                 self.segmentedControl.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(navHe + 20)).isActive = true
             } else {
-//                self.segmentedControl.widthAnchor.constraint(equalToConstant: CGFloat(240)).isActive = true
                 self.segmentedControl.widthAnchor.constraint(equalToConstant: CGFloat(self.view.bounds.width - 40)).isActive = true
                 self.segmentedControl.topAnchor.constraint(equalTo: self.view.topAnchor, constant: CGFloat(45)).isActive = true
             }

@@ -20,7 +20,7 @@ class AllEmotiCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        self.emoti.text = ""
+//        self.emoti.text = ""
     }
     
     public func configure() {

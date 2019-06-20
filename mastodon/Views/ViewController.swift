@@ -55,13 +55,13 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     var typeOfSearch = 0
     var newestText = ""
     var searchIcon = UIImageView()
-
-    var tabOne = SAHistoryNavigationViewController()
-    var tabTwo = SAHistoryNavigationViewController()
-    var tabDM = SAHistoryNavigationViewController()
-    var tabThree = SAHistoryNavigationViewController()
-    var tabFour = SAHistoryNavigationViewController()
-
+    
+    var tabOne = UINavigationController()
+    var tabTwo = UINavigationController()
+    var tabDM = UINavigationController()
+    var tabThree = UINavigationController()
+    var tabFour = UINavigationController()
+    
     var firstView = FirstViewController()
     var secondView = SecondViewController()
     var dmView = DMViewController()
@@ -3352,26 +3352,25 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.searcherView.alpha = 0
         })
     }
-
-
-
+    
+//    public override var additionalSafeAreaInsets: UIEdgeInsets {
+//        didSet {
+//            if #available(iOS 13.0, *) {
+//                guard additionalSafeAreaInsets.bottom != 0 else {
+//                    return
+//                }
+//                viewControllers?.forEach { $0.additionalSafeAreaInsets.bottom = additionalSafeAreaInsets.bottom }
+//                additionalSafeAreaInsets.bottom = 0
+//            }
+//        }
+//    }
+    
     func createTabBar() {
 
         DispatchQueue.main.async {
 
             // Create Tab one
-            self.tabOne = SAHistoryNavigationViewController(rootViewController: self.firstView)
-            if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
-                self.tabOne.historyBackgroundColor = Colours.tabSelected
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
-                self.tabOne.historyBackgroundColor = UIColor(red: 53/250, green: 53/250, blue: 64/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
-                self.tabOne.historyBackgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
-                self.tabOne.historyBackgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
-                self.tabOne.historyBackgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
-            }
+            self.tabOne = UINavigationController(rootViewController: self.firstView)
             let tabOneBarItem = UITabBarItem(title: "", image: UIImage(named: "feed")?.maskWithColor(color: Colours.gray), selectedImage: UIImage(named: "feed")?.maskWithColor(color: Colours.gray))
             tabOneBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
             self.tabOne.tabBarItem = tabOneBarItem
@@ -3381,18 +3380,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabOne.tabBarItem.tag = 1
 
             // Create Tab two
-            self.tabTwo = SAHistoryNavigationViewController(rootViewController: self.secondView)
-            if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
-                self.tabTwo.historyBackgroundColor = Colours.tabSelected
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
-                self.tabTwo.historyBackgroundColor = UIColor(red: 53/250, green: 53/250, blue: 64/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
-                self.tabTwo.historyBackgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
-                self.tabTwo.historyBackgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
-                self.tabTwo.historyBackgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
-            }
+            self.tabTwo = UINavigationController(rootViewController: self.secondView)
             let tabTwoBarItem2 = UITabBarItem(title: "", image: UIImage(named: "notifications")?.maskWithColor(color: Colours.gray), selectedImage: UIImage(named: "notifications")?.maskWithColor(color: Colours.gray))
             tabTwoBarItem2.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
             self.tabTwo.tabBarItem = tabTwoBarItem2
@@ -3402,18 +3390,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabTwo.tabBarItem.tag = 2
             
             // Create Tab DM
-            self.tabDM = SAHistoryNavigationViewController(rootViewController: self.dmView)
-            if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
-                self.tabDM.historyBackgroundColor = Colours.tabSelected
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
-                self.tabDM.historyBackgroundColor = UIColor(red: 53/250, green: 53/250, blue: 64/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
-                self.tabDM.historyBackgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
-                self.tabDM.historyBackgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
-                self.tabDM.historyBackgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
-            }
+            self.tabDM = UINavigationController(rootViewController: self.dmView)
             let tabDMBarItem2 = UITabBarItem(title: "", image: UIImage(named: "direct")?.maskWithColor(color: Colours.gray), selectedImage: UIImage(named: "direct")?.maskWithColor(color: Colours.gray))
             tabDMBarItem2.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
             self.tabDM.tabBarItem = tabDMBarItem2
@@ -3423,18 +3400,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabDM.tabBarItem.tag = 3
             
             // Create Tab three
-            self.tabThree = SAHistoryNavigationViewController(rootViewController: self.thirdView)
-            if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
-                self.tabThree.historyBackgroundColor = Colours.tabSelected
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
-                self.tabThree.historyBackgroundColor = UIColor(red: 53/250, green: 53/250, blue: 64/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
-                self.tabThree.historyBackgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
-                self.tabThree.historyBackgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
-                self.tabThree.historyBackgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
-            }
+            self.tabThree = UINavigationController(rootViewController: self.thirdView)
             let tabThreeBarItem = UITabBarItem(title: "", image: UIImage(named: "profile")?.maskWithColor(color: Colours.gray), selectedImage: UIImage(named: "profile")?.maskWithColor(color: Colours.gray))
             tabThreeBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
             self.tabThree.tabBarItem = tabThreeBarItem
@@ -3444,18 +3410,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             self.tabThree.tabBarItem.tag = 4
             
             // Create Tab four
-            self.tabFour = SAHistoryNavigationViewController(rootViewController: self.fourthView)
-            if (UserDefaults.standard.object(forKey: "screenshotcol") == nil) || (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 0) {
-                self.tabFour.historyBackgroundColor = Colours.tabSelected
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 1) {
-                self.tabFour.historyBackgroundColor = UIColor(red: 53/250, green: 53/250, blue: 64/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 2) {
-                self.tabFour.historyBackgroundColor = UIColor(red: 36/250, green: 33/250, blue: 37/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 3) {
-                self.tabFour.historyBackgroundColor = UIColor(red: 0/250, green: 0/250, blue: 0/250, alpha: 1.0)
-            } else if (UserDefaults.standard.object(forKey: "screenshotcol") as! Int == 4) {
-                self.tabFour.historyBackgroundColor = UIColor(red: 18/250, green: 42/250, blue: 111/250, alpha: 1.0)
-            }
+            self.tabFour = UINavigationController(rootViewController: self.fourthView)
             let tabFourBarItem = UITabBarItem(title: "", image: UIImage(named: "toot")?.maskWithColor(color: Colours.gray), selectedImage: UIImage(named: "toot")?.maskWithColor(color: Colours.gray))
             tabFourBarItem.imageInsets = UIEdgeInsets(top: 6, left: 0, bottom: -6, right: 0)
             self.tabFour.tabBarItem = tabFourBarItem

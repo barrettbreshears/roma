@@ -20,6 +20,10 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
         self.view.backgroundColor = Colours.white
         self.title = "Accounts and Lists"
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.load), name: NSNotification.Name(rawValue: "load"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.liload), name: NSNotification.Name(rawValue: "liload"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.goInstance), name: NSNotification.Name(rawValue: "goInstance5"), object: nil)
+        
         let wid = self.view.bounds.width
         self.tableViewLists.frame = CGRect(x: 0, y: 0, width: Int(wid), height: Int(0))
         self.tableViewLists.alpha = 1
@@ -37,11 +41,60 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
         self.tableViewLists.register(ListCell.self, forCellReuseIdentifier: "cell002l")
         self.tableViewLists.register(ListCell2.self, forCellReuseIdentifier: "cell002l2")
         self.tableViewLists.register(ProCells.self, forCellReuseIdentifier: "colcell2")
+        
+        let request0 = Lists.all()
+        StoreStruct.client.run(request0) { (statuses) in
+            if let stat = (statuses.value) {
+                StoreStruct.allLists = stat
+                DispatchQueue.main.async {
+                    self.tableViewLists.reloadData()
+                }
+            }
+        }
+        
+        if (UserDefaults.standard.object(forKey: "instancesLocal") == nil) {
+            
+        } else {
+            StoreStruct.instanceLocalToAdd = UserDefaults.standard.object(forKey: "instancesLocal") as! [String]
+            DispatchQueue.main.async {
+                self.tableViewLists.reloadData()
+            }
+        }
+        
+        self.tableViewLists.reloadData()
+    }
+    
+    @objc func goInstance() {
+        let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: nil))
+        let testClient = Client(
+            baseURL: "https://\(StoreStruct.instanceText)",
+            accessToken: StoreStruct.currentInstance.accessToken
+        )
+        testClient.run(request) { (statuses) in
+            if let stat = (statuses.value) {
+                StoreStruct.newInstanceTags = stat
+                DispatchQueue.main.async {
+                    let controller = InstanceViewController()
+                    self.navigationController?.pushViewController(controller, animated: true)
+                }
+            }
+        }
+    }
+    
+    @objc func liload() {
+        let request0 = Lists.all()
+        StoreStruct.client.run(request0) { (statuses) in
+            if let stat = (statuses.value) {
+                StoreStruct.allLists = stat
+                DispatchQueue.main.async {
+                    self.tableViewLists.reloadData()
+                }
+            }
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
-        self.tableViewLists.reloadData()
     }
     
     override func viewDidLayoutSubviews() {
@@ -102,9 +155,9 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
     
     func numberOfSections(in tableView: UITableView) -> Int {
         if StoreStruct.instanceLocalToAdd.count > 0 {
-            return 3
+            return 4
         } else {
-            return 2
+            return 3
         }
     }
     
@@ -181,7 +234,13 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.delegate = self
                 cell.configure(StoreStruct.allLists[indexPath.row])
                 cell.backgroundColor = Colours.white
-                cell.userName.textColor = UIColor.white
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .pad:
+                    cell.userName.textColor = Colours.grayDark
+                default:
+                    cell.userName.textColor = UIColor.white
+                }
                 let bgColorView = UIView()
                 bgColorView.backgroundColor = Colours.white
                 cell.selectedBackgroundView = bgColorView
@@ -196,7 +255,13 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.delegate = self
                 cell.configure(StoreStruct.instanceLocalToAdd[indexPath.row])
                 cell.backgroundColor = Colours.white
-                cell.userName.textColor = UIColor.white
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .pad:
+                    cell.userName.textColor = Colours.grayDark
+                default:
+                    cell.userName.textColor = UIColor.white
+                }
                 let bgColorView = UIView()
                 bgColorView.backgroundColor = Colours.white
                 cell.selectedBackgroundView = bgColorView
@@ -238,15 +303,26 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
                     .action(.default("View List Members".localized), image: UIImage(named: "profile")) { (action, ind) in
                         
                         StoreStruct.allListRelID = StoreStruct.allLists[indexPath.row].id
-                        if StoreStruct.currentPage == 0 {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goMembers"), object: self)
-                        } else if StoreStruct.currentPage == 1 {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goMembers2"), object: self)
-                        } else if StoreStruct.currentPage == 101010 {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goMembers3"), object: self)
-                        } else {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goMembers3"), object: self)
+                        let request = Lists.accounts(id: StoreStruct.allListRelID)
+                        StoreStruct.client.run(request) { (statuses) in
+                            if let stat = (statuses.value) {
+                                DispatchQueue.main.async {
+                                    let controller = ListMembersViewController()
+                                    controller.currentTagTitle = "List Members".localized
+                                    controller.currentTags = stat
+                                    self.navigationController?.pushViewController(controller, animated: true)
+                                }
+                            }
                         }
+//                        if StoreStruct.currentPage == 0 {
+//                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goMembers"), object: self)
+//                        } else if StoreStruct.currentPage == 1 {
+//                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goMembers2"), object: self)
+//                        } else if StoreStruct.currentPage == 101010 {
+//                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goMembers3"), object: self)
+//                        } else {
+//                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goMembers3"), object: self)
+//                        }
                     }
                     .action(.default("Delete List".localized), image: UIImage(named: "block")) { (action, ind) in
                         
@@ -279,6 +355,7 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
                             return
                         }
                     }
+                    .popover(anchorView: self.tableViewLists.cellForRow(at: indexPath)?.contentView ?? self.view)
                     .show(on: self)
                 
                 
@@ -338,6 +415,7 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
                             return
                         }
                     }
+                    .popover(anchorView: self.tableViewLists.cellForRow(at: indexPath)?.contentView ?? self.view)
                     .show(on: self)
                 
                 
@@ -396,6 +474,7 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
                             return
                         }
                     }
+                    .popover(anchorView: self.tableViewLists.cellForRow(at: indexPath)?.contentView ?? self.view)
                     .show(on: self)
                 
                 
@@ -424,8 +503,6 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
         options.expansionDelegate = ScaleAndAlphaExpansion.default
         return options
     }
-    
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
@@ -462,14 +539,9 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
                             }
                         }
                     })
-                    if StoreStruct.currentPage == 0 {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists"), object: self)
-                    } else if StoreStruct.currentPage == 1 {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists2"), object: self)
-                    } else if StoreStruct.currentPage == 101010 {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists3"), object: self)
-                    } else {
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "goLists4"), object: self)
+                    DispatchQueue.main.async {
+                        let controller = ListViewController()
+                        self.navigationController?.pushViewController(controller, animated: true)
                     }
                 }
             }
@@ -483,16 +555,165 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
                 StoreStruct.instanceText = StoreStruct.instanceLocalToAdd[indexPath.row]
             }
             
-            if StoreStruct.currentPage == 0 {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance"), object: self)
-            } else if StoreStruct.currentPage == 1 {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance2"), object: self)
-            } else if StoreStruct.currentPage == 101010 {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance3"), object: self)
-            } else {
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance4"), object: self)
+            let request = Timelines.public(local: true, range: .max(id: StoreStruct.newInstanceTags.last?.id ?? "", limit: nil))
+            let testClient = Client(
+                baseURL: "https://\(StoreStruct.instanceText)",
+                accessToken: StoreStruct.currentInstance.accessToken
+            )
+            testClient.run(request) { (statuses) in
+                if let stat = (statuses.value) {
+                    StoreStruct.newInstanceTags = stat
+                    DispatchQueue.main.async {
+                        let controller = InstanceViewController()
+                        self.navigationController?.pushViewController(controller, animated: true)
+                    }
+                }
             }
         }
+    }
+    
+    @objc func load() {
+        DispatchQueue.main.async {
+            self.loadLoadLoad()
+        }
+    }
+    
+    func loadLoadLoad() {
+        if (UserDefaults.standard.object(forKey: "theme") == nil || UserDefaults.standard.object(forKey: "theme") as! Int == 0) {
+            Colours.white = UIColor.white
+            Colours.white2 = UIColor(red: 203/255.0, green: 202/255.0, blue: 206/255.0, alpha: 1.0)
+            Colours.grayDark = UIColor(red: 40/250, green: 40/250, blue: 40/250, alpha: 1.0)
+            Colours.grayDark2 = UIColor(red: 110/250, green: 113/250, blue: 121/250, alpha: 1.0)
+            Colours.cellNorm = Colours.white
+            Colours.cellQuote = UIColor(red: 243/255.0, green: 242/255.0, blue: 246/255.0, alpha: 1.0)
+            Colours.cellSelected = UIColor(red: 240/255.0, green: 240/255.0, blue: 240/255.0, alpha: 1.0)
+            Colours.tabUnselected = UIColor(red: 225/255.0, green: 225/255.0, blue: 225/255.0, alpha: 1.0)
+            Colours.blackUsual = UIColor(red: 40/255.0, green: 40/255.0, blue: 40/255.0, alpha: 1.0)
+            Colours.cellOwn = UIColor(red: 243/255.0, green: 242/255.0, blue: 246/255.0, alpha: 1.0)
+            Colours.cellAlternative = UIColor(red: 243/255.0, green: 242/255.0, blue: 246/255.0, alpha: 1.0)
+            Colours.black = UIColor.black
+            UIApplication.shared.statusBarStyle = .default
+        } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 1) {
+            Colours.white = UIColor(red: 46/255.0, green: 46/255.0, blue: 52/255.0, alpha: 1.0)
+            Colours.white2 = UIColor(red: 28/255.0, green: 28/255.0, blue: 38/255.0, alpha: 1.0)
+            Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
+            Colours.grayDark2 = UIColor.white
+            Colours.cellNorm = Colours.white
+            Colours.cellQuote = UIColor(red: 33/255.0, green: 33/255.0, blue: 43/255.0, alpha: 1.0)
+            Colours.cellSelected = UIColor(red: 34/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
+            Colours.tabUnselected = UIColor(red: 80/255.0, green: 80/255.0, blue: 90/255.0, alpha: 1.0)
+            Colours.blackUsual = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)
+            Colours.cellOwn = UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0)
+            Colours.cellAlternative = UIColor(red: 20/255.0, green: 20/255.0, blue: 30/255.0, alpha: 1.0)
+            Colours.black = UIColor.white
+            UIApplication.shared.statusBarStyle = .lightContent
+        } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 2) {
+            Colours.white = UIColor(red: 36/255.0, green: 33/255.0, blue: 37/255.0, alpha: 1.0)
+            Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
+            Colours.grayDark2 = UIColor.white
+            Colours.cellNorm = Colours.white
+            Colours.cellQuote = UIColor(red: 33/255.0, green: 33/255.0, blue: 43/255.0, alpha: 1.0)
+            Colours.cellSelected = UIColor(red: 34/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
+            Colours.tabUnselected = UIColor(red: 80/255.0, green: 80/255.0, blue: 90/255.0, alpha: 1.0)
+            Colours.blackUsual = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)
+            Colours.cellOwn = UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0)
+            Colours.cellAlternative = UIColor(red: 20/255.0, green: 20/255.0, blue: 30/255.0, alpha: 1.0)
+            Colours.black = UIColor.white
+            UIApplication.shared.statusBarStyle = .lightContent
+        } else if (UserDefaults.standard.object(forKey: "theme") != nil && UserDefaults.standard.object(forKey: "theme") as! Int == 4) {
+            Colours.white = UIColor(red: 41/255.0, green: 50/255.0, blue: 78/255.0, alpha: 1.0)
+            Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
+            Colours.grayDark2 = UIColor.white
+            Colours.cellNorm = Colours.white
+            Colours.cellQuote = UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)
+            Colours.cellSelected = UIColor(red: 34/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
+            Colours.tabUnselected = UIColor(red: 80/255.0, green: 80/255.0, blue: 90/255.0, alpha: 1.0)
+            Colours.blackUsual = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)
+            Colours.cellOwn = UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0)
+            Colours.cellAlternative = UIColor(red: 20/255.0, green: 20/255.0, blue: 30/255.0, alpha: 1.0)
+            Colours.black = UIColor.white
+            UIApplication.shared.statusBarStyle = .lightContent
+        } else {
+            Colours.white = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0)
+            Colours.white2 = UIColor(red: 36/255.0, green: 36/255.0, blue: 46/255.0, alpha: 1.0)
+            Colours.grayDark = UIColor(red: 250/250, green: 250/250, blue: 250/250, alpha: 1.0)
+            Colours.grayDark2 = UIColor.white
+            Colours.cellNorm = Colours.white
+            Colours.cellQuote = UIColor(red: 30/255.0, green: 30/255.0, blue: 30/255.0, alpha: 1.0)
+            Colours.cellSelected = UIColor(red: 34/255.0, green: 34/255.0, blue: 44/255.0, alpha: 1.0)
+            Colours.tabUnselected = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)
+            Colours.blackUsual = UIColor(red: 70/255.0, green: 70/255.0, blue: 80/255.0, alpha: 1.0)
+            Colours.cellOwn = UIColor(red: 10/255.0, green: 10/255.0, blue: 20/255.0, alpha: 1.0)
+            Colours.cellAlternative = UIColor(red: 20/255.0, green: 20/255.0, blue: 30/255.0, alpha: 1.0)
+            Colours.black = UIColor.white
+            UIApplication.shared.statusBarStyle = .lightContent
+        }
+        
+        let topBorder = CALayer()
+        topBorder.frame = CGRect(x: 0, y: 0, width: view.frame.size.width, height: 0.45)
+        topBorder.backgroundColor = Colours.tabUnselected.cgColor
+        self.tabBarController?.tabBar.layer.addSublayer(topBorder)
+        
+        
+        self.view.backgroundColor = Colours.white
+        
+        if (UserDefaults.standard.object(forKey: "systemText") == nil) || (UserDefaults.standard.object(forKey: "systemText") as! Int == 0) {
+            Colours.fontSize1 = CGFloat(UIFont.systemFontSize)
+            Colours.fontSize3 = CGFloat(UIFont.systemFontSize)
+        } else {
+            if (UserDefaults.standard.object(forKey: "fontSize") == nil) {
+                Colours.fontSize0 = 14
+                Colours.fontSize2 = 10
+                Colours.fontSize1 = 14
+                Colours.fontSize3 = 10
+            } else if (UserDefaults.standard.object(forKey: "fontSize") as! Int == 0) {
+                Colours.fontSize0 = 12
+                Colours.fontSize2 = 8
+                Colours.fontSize1 = 12
+                Colours.fontSize3 = 8
+            } else if (UserDefaults.standard.object(forKey: "fontSize") != nil && UserDefaults.standard.object(forKey: "fontSize") as! Int == 1) {
+                Colours.fontSize0 = 13
+                Colours.fontSize2 = 9
+                Colours.fontSize1 = 13
+                Colours.fontSize3 = 9
+            } else if (UserDefaults.standard.object(forKey: "fontSize") != nil && UserDefaults.standard.object(forKey: "fontSize") as! Int == 2) {
+                Colours.fontSize0 = 14
+                Colours.fontSize2 = 10
+                Colours.fontSize1 = 14
+                Colours.fontSize3 = 10
+            } else if (UserDefaults.standard.object(forKey: "fontSize") != nil && UserDefaults.standard.object(forKey: "fontSize") as! Int == 3) {
+                Colours.fontSize0 = 15
+                Colours.fontSize2 = 11
+                Colours.fontSize1 = 15
+                Colours.fontSize3 = 11
+            } else if (UserDefaults.standard.object(forKey: "fontSize") != nil && UserDefaults.standard.object(forKey: "fontSize") as! Int == 4) {
+                Colours.fontSize0 = 16
+                Colours.fontSize2 = 12
+                Colours.fontSize1 = 16
+                Colours.fontSize3 = 12
+            } else if (UserDefaults.standard.object(forKey: "fontSize") != nil && UserDefaults.standard.object(forKey: "fontSize") as! Int == 5) {
+                Colours.fontSize0 = 17
+                Colours.fontSize2 = 13
+                Colours.fontSize1 = 17
+                Colours.fontSize3 = 13
+            } else {
+                Colours.fontSize0 = 18
+                Colours.fontSize2 = 14
+                Colours.fontSize1 = 18
+                Colours.fontSize3 = 14
+            }
+        }
+        
+        
+        self.navigationController?.navigationBar.backgroundColor = Colours.white
+        self.navigationController?.navigationBar.tintColor = Colours.black
+        self.navigationController?.navigationBar.barTintColor = Colours.black
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : Colours.black]
+        
+        self.tableViewLists.backgroundColor = Colours.white
+        self.tableViewLists.separatorColor = Colours.grayDark.withAlphaComponent(0.21)
+        self.tableViewLists.reloadData()
+        self.tableViewLists.reloadInputViews()
     }
     
     

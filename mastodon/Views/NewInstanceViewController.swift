@@ -68,6 +68,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         self.view.backgroundColor = Colours.white
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.tappedOnTag), name: NSNotification.Name(rawValue: "tappedOnTag"), object: nil)
         
@@ -268,7 +269,14 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
             let keyboardHeight = keyboardRectangle.height
             self.keyHeight = Int(keyboardHeight)
             self.updateTweetView()
+            self.tagListView.frame = CGRect(x: 0, y: Int(self.view.bounds.height) - self.keyHeight - 70, width: Int(self.view.bounds.width), height: 60)
         }
+    }
+    
+    @objc func keyboardWillHide(notification: Notification) {
+        self.keyHeight = Int(0)
+        self.updateTweetView()
+        self.tagListView.frame = CGRect(x: 0, y: Int(self.view.bounds.height) - self.keyHeight - 70, width: Int(self.view.bounds.width), height: 60)
     }
     
     func updateTweetView() {
@@ -408,19 +416,28 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
                             UserDefaults.standard.set(StoreStruct.instanceLocalToAdd, forKey: "instancesLocal")
                         }
                         self.textView.resignFirstResponder()
-                        self.dismiss(animated: true, completion: nil)
                         
-                        if StoreStruct.currentPage == 0 {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance"), object: self)
-                        } else if StoreStruct.currentPage == 1 {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance2"), object: self)
-                        } else if StoreStruct.currentPage == 101010 {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance3"), object: self)
-                        } else {
-                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance4"), object: self)
+                        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                        switch (deviceIdiom) {
+                        case .pad:
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance5"), object: nil)
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "liload"), object: nil)
+                            self.dismiss(animated: true, completion: nil)
+                        default:
+                            
+                            if StoreStruct.currentPage == 0 {
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance"), object: self)
+                            } else if StoreStruct.currentPage == 1 {
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance2"), object: self)
+                            } else if StoreStruct.currentPage == 101010 {
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance3"), object: self)
+                            } else {
+                                NotificationCenter.default.post(name: Notification.Name(rawValue: "goInstance4"), object: self)
+                            }
+
+                            NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadLists"), object: nil)
+                            
                         }
-                        
-                        NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadLists"), object: nil)
                     }
                     
 //                }

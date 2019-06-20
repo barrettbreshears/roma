@@ -185,8 +185,9 @@ class MainFeedCell: SwipeTableViewCell {
     }
 
     override func prepareForReuse() {
-        self.profileImageView.imageView?.image = nil
-        self.profileImageView2.imageView?.image = nil
+        super.prepareForReuse()
+//        self.profileImageView.imageView?.image = nil
+//        self.profileImageView2.imageView?.image = nil
     }
 
     func configure(_ status: Status) {
@@ -200,6 +201,16 @@ class MainFeedCell: SwipeTableViewCell {
         boost1.backgroundColor = Colours.clear
         more1.backgroundColor = Colours.clear
         toot.textColor = Colours.black
+        
+        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
+            self.rep1.alpha = 0
+            self.like1.alpha = 0
+            self.boost1.alpha = 0
+        } else {
+            self.rep1.alpha = 1
+            self.like1.alpha = 1
+            self.boost1.alpha = 1
+        }
         
         rep1.setImage(UIImage(named: "reply3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
         more1.setImage(UIImage(named: "more")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)

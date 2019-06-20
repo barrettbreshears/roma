@@ -224,6 +224,7 @@ class NewListViewController: UIViewController, UITextFieldDelegate {
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
+                    NotificationCenter.default.post(name: Notification.Name(rawValue: "liload"), object: nil)
                     self.textView.resignFirstResponder()
                     self.dismiss(animated: true, completion: nil)
                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -247,6 +248,7 @@ class NewListViewController: UIViewController, UITextFieldDelegate {
             StoreStruct.client.run(request) { (statuses) in
                 if let stat = (statuses.value) {
                     DispatchQueue.main.async {
+                        NotificationCenter.default.post(name: Notification.Name(rawValue: "liload"), object: nil)
                     self.textView.resignFirstResponder()
                     self.dismiss(animated: true, completion: nil)
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {

@@ -91,7 +91,10 @@ class PadLoginViewController: UIViewController, UITextFieldDelegate {
     @objc func padIsLogged() {
         self.safariVC?.dismiss(animated: true, completion: nil)
         NotificationCenter.default.post(name: Notification.Name(rawValue: "refpush1"), object: nil)
-        self.dismiss(animated: true, completion: nil)
+        
+        self.dismiss(animated: true, completion: {
+            NotificationCenter.default.post(name: Notification.Name(rawValue: "presentIntro00"), object: nil)
+        })
     }
     
     @objc func didTouchUpInsideCloseButton(_ sender: AnyObject) {

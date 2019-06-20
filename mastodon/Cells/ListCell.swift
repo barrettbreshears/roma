@@ -21,7 +21,13 @@ class ListCell: SwipeTableViewCell {
         
         userName.translatesAutoresizingMaskIntoConstraints = false
         userName.numberOfLines = 0
-        userName.textColor = UIColor.white
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            userName.textColor = Colours.grayDark
+        default:
+            userName.textColor = UIColor.white
+        }
         userName.font = UIFont.boldSystemFont(ofSize: 16)
         
         contentView.addSubview(userName)
@@ -40,11 +46,24 @@ class ListCell: SwipeTableViewCell {
     
     func configure(_ status: List) {
         userName.text = status.title
-        
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            userName.textColor = Colours.grayDark
+        default:
+            print("nil")
+        }
     }
     
     func configureInstance(instanceName:String){
         userName.text = instanceName
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            userName.textColor = Colours.grayDark
+        default:
+            print("nil")
+        }
     }
     
 }
@@ -60,7 +79,13 @@ class ListCell2: SwipeTableViewCell {
         
         userName.translatesAutoresizingMaskIntoConstraints = false
         userName.numberOfLines = 0
-        userName.textColor = UIColor.white
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            userName.textColor = Colours.grayDark
+        default:
+            userName.textColor = UIColor.white
+        }
         userName.font = UIFont.boldSystemFont(ofSize: 16)
         
         contentView.addSubview(userName)
@@ -79,6 +104,13 @@ class ListCell2: SwipeTableViewCell {
     
     func configure(_ status: String) {
         userName.text = status
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            userName.textColor = Colours.grayDark
+        default:
+            print("nil")
+        }
     }
     
 }

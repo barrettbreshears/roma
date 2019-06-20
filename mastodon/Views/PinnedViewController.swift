@@ -13,8 +13,9 @@ import SafariServices
 import StatusAlert
 import AVKit
 import AVFoundation
+import MobileCoreServices
 
-class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, UIGestureRecognizerDelegate {
+class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, UIGestureRecognizerDelegate, UITableViewDragDelegate {
     
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
@@ -24,6 +25,15 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
     var currentTagTitle = ""
     var currentTags: [Status] = []
     var curID = ""
+    
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        var string = self.currentTags[indexPath.row].url?.absoluteString ?? self.currentTags[indexPath.row].content.stripHTML()
+        
+        guard let data = string.data(using: .utf8) else { return [] }
+        let itemProvider = NSItemProvider(item: data as NSData, typeIdentifier: kUTTypePlainText as String)
+        
+        return [UIDragItem(itemProvider: itemProvider)]
+    }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard let indexPath = self.tableView.indexPathForRow(at: location) else { return nil }
@@ -220,6 +230,8 @@ class PinnedViewController: UIViewController, UITableViewDelegate, UITableViewDa
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
         self.tableView.tableFooterView = UIView()
+        
+        self.tableView.dragDelegate = self
         
         self.view.addSubview(self.ai)
         

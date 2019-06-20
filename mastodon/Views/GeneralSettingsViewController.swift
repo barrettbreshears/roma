@@ -14,6 +14,7 @@ import StatusAlert
 import SAConfettiView
 import UserNotifications
 import Disk
+import PINRemoteImage
 
 class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate, UIGestureRecognizerDelegate, UNUserNotificationCenterDelegate {
     
@@ -200,7 +201,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
         } else if section == 6 {
             return otArray.count
         } else {
-            return 3
+            return 4
         }
     }
     
@@ -594,6 +595,28 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
             } else if indexPath.row == 1 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cellse3", for: indexPath) as! SettingsCell3
                 cell.configure(status: "Clear All Notifications", status2: "Clearing all notifications will clear all received notifications and direct messages from the server.")
+                cell.backgroundColor = Colours.white
+                cell.userName.textColor = Colours.black
+                cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                let bgColorView = UIView()
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
+                cell.selectedBackgroundView = bgColorView
+                return cell
+            } else if indexPath.row == 2 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellse3", for: indexPath) as! SettingsCell3
+                cell.configure(status: "Clear Scroll Positions", status2: "Clearing scroll positions will reset timelines to the top.")
+                cell.backgroundColor = Colours.white
+                cell.userName.textColor = Colours.black
+                cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
+                cell.toot.textColor = Colours.black.withAlphaComponent(0.5)
+                let bgColorView = UIView()
+                bgColorView.backgroundColor = Colours.grayDark.withAlphaComponent(0.1)
+                cell.selectedBackgroundView = bgColorView
+                return cell
+            } else if indexPath.row == 3 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cellse3", for: indexPath) as! SettingsCell3
+                cell.configure(status: "Clear Cache", status2: "Clearing cache will clear all timeline stored content and scroll positions.")
                 cell.backgroundColor = Colours.white
                 cell.userName.textColor = Colours.black
                 cell.userTag.textColor = Colours.black.withAlphaComponent(0.8)
@@ -1195,44 +1218,68 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                 }
                 
                 
-                Alertift.actionSheet(title: nil, message: nil)
-                    .backgroundColor(Colours.white)
-                    .titleTextColor(Colours.grayDark)
-                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
-                    .messageTextAlignment(.left)
-                    .titleTextAlignment(.left)
-                    .action(.default("Cycle Through Themes".localized), image: filledSet1) { (action, ind) in
-                        
-                        UserDefaults.standard.set(0, forKey: "longToggle")
-                    }
-                    .action(.default("Invoke Share Sheet".localized), image: filledSet4) { (action, ind) in
-                        
-                        UserDefaults.standard.set(3, forKey: "longToggle")
-                    }
-                    .action(.default("Invoke Lists".localized), image: filledSet2) { (action, ind) in
-                        
-                        UserDefaults.standard.set(1, forKey: "longToggle")
-                    }
-                    .action(.default("Invoke Search".localized), image: filledSet5) { (action, ind) in
-                        
-                        UserDefaults.standard.set(4, forKey: "longToggle")
-                    }
-                    .action(.default("Invoke Toot Composer".localized), image: filledSet3) { (action, ind) in
-                        
-                        UserDefaults.standard.set(2, forKey: "longToggle")
-                    }
-                    .action(.default("Do Nothing".localized), image: filledSet6) { (action, ind) in
-                        
-                        UserDefaults.standard.set(6, forKey: "longToggle")
-                    }
-                    .action(.cancel("Dismiss"))
-                    .finally { action, index in
-                        if action.style == .cancel {
-                            return
+                
+                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+                switch (deviceIdiom) {
+                case .pad:
+                    
+                    Alertift.actionSheet(title: "This is an iPhone-only setting", message: nil)
+                        .backgroundColor(Colours.white)
+                        .titleTextColor(Colours.grayDark)
+                        .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                        .messageTextAlignment(.left)
+                        .titleTextAlignment(.left)
+                        .action(.cancel("Dismiss"))
+                        .finally { action, index in
+                            if action.style == .cancel {
+                                return
+                            }
                         }
-                    }
-                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 4))?.contentView ?? self.view)
-                    .show(on: self)
+                        .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 6))?.contentView ?? self.view)
+                        .show(on: self)
+                    
+                default:
+                    
+                    Alertift.actionSheet(title: nil, message: nil)
+                        .backgroundColor(Colours.white)
+                        .titleTextColor(Colours.grayDark)
+                        .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                        .messageTextAlignment(.left)
+                        .titleTextAlignment(.left)
+                        .action(.default("Cycle Through Themes".localized), image: filledSet1) { (action, ind) in
+                            
+                            UserDefaults.standard.set(0, forKey: "longToggle")
+                        }
+                        .action(.default("Invoke Share Sheet".localized), image: filledSet4) { (action, ind) in
+                            
+                            UserDefaults.standard.set(3, forKey: "longToggle")
+                        }
+                        .action(.default("Invoke Lists".localized), image: filledSet2) { (action, ind) in
+                            
+                            UserDefaults.standard.set(1, forKey: "longToggle")
+                        }
+                        .action(.default("Invoke Search".localized), image: filledSet5) { (action, ind) in
+                            
+                            UserDefaults.standard.set(4, forKey: "longToggle")
+                        }
+                        .action(.default("Invoke Toot Composer".localized), image: filledSet3) { (action, ind) in
+                            
+                            UserDefaults.standard.set(2, forKey: "longToggle")
+                        }
+                        .action(.default("Do Nothing".localized), image: filledSet6) { (action, ind) in
+                            
+                            UserDefaults.standard.set(6, forKey: "longToggle")
+                        }
+                        .action(.cancel("Dismiss"))
+                        .finally { action, index in
+                            if action.style == .cancel {
+                                return
+                            }
+                        }
+                        .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 4))?.contentView ?? self.view)
+                        .show(on: self)
+                    
+                }
             }
         }
         if indexPath.section == 6 {
@@ -1382,6 +1429,42 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                     }
                     .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 7))?.contentView ?? self.view)
                     .show(on: self)
+            } else if indexPath.row == 2 {
+                Alertift.actionSheet(title: "Are you sure?", message: "Clearing scroll positions will reset timelines to the top.")
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.destructive("Clear Scroll Positions".localized), image: nil) { (action, ind) in
+                        self.clearAllNotifications()
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 7))?.contentView ?? self.view)
+                    .show(on: self)
+            } else if indexPath.row == 3 {
+                Alertift.actionSheet(title: "Are you sure?", message: "Clearing cache will clear all timeline stored content and scroll positions.")
+                    .backgroundColor(Colours.white)
+                    .titleTextColor(Colours.grayDark)
+                    .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
+                    .messageTextAlignment(.left)
+                    .titleTextAlignment(.left)
+                    .action(.destructive("Clear Cache".localized), image: nil) { (action, ind) in
+                        self.clearAllNotifications()
+                    }
+                    .action(.cancel("Dismiss"))
+                    .finally { action, index in
+                        if action.style == .cancel {
+                            return
+                        }
+                    }
+                    .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 7))?.contentView ?? self.view)
+                    .show(on: self)
             } else {
                 Alertift.actionSheet(title: "Are you sure?", message: "Resetting the app will clear all content and data, remove all accounts, and return you to the log-in screen.")
                     .backgroundColor(Colours.white)
@@ -1426,6 +1509,28 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
                 print("Couldn't save")
             }
         }
+    }
+    
+    func clearPosition() {
+        UserDefaults.standard.set(0, forKey: "savedRowHome1")
+        UserDefaults.standard.set(0, forKey: "savedRowLocal1")
+        UserDefaults.standard.set(0, forKey: "savedRowFed1")
+        UserDefaults.standard.set(0, forKey: "savedRowNotif")
+        UserDefaults.standard.set(0, forKey: "savedRowMent")
+    }
+    
+    func clearCache() {
+        do {
+            try Disk.clear(.documents)
+        } catch {
+            print("couldn't clear disk")
+        }
+        imageCache.removeAllObjects()
+        UserDefaults.standard.set(0, forKey: "savedRowHome1")
+        UserDefaults.standard.set(0, forKey: "savedRowLocal1")
+        UserDefaults.standard.set(0, forKey: "savedRowFed1")
+        UserDefaults.standard.set(0, forKey: "savedRowNotif")
+        UserDefaults.standard.set(0, forKey: "savedRowMent")
     }
     
     func clearAll() {

@@ -21,9 +21,8 @@ class AddInstanceCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         // Set the cell's imageView's image to nil
-        self.bgImage.image = nil
-        self.label.text = nil
-        
+//        self.bgImage.image = nil
+//        self.label.text = nil
     }
     
     public func configure() {

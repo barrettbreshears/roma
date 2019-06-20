@@ -179,6 +179,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 if let stat = (statuses.value) {
                     DispatchQueue.main.async {
                         self.currentTags = stat
+                        self.tableView.reloadData()
                         self.loadLoadLoad()
                     }
                 }
@@ -229,6 +230,13 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         
         let controller = NewFilterViewController()
+        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
+        switch (deviceIdiom) {
+        case .pad:
+            controller.modalPresentationStyle = .pageSheet
+        default:
+            print("nil")
+        }
         self.present(controller, animated: true, completion: nil)
     }
     
@@ -311,7 +319,7 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                     return
                 }
             }
-            .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: 0, section: 2))?.contentView ?? self.view)
+            .popover(anchorView: self.tableView.cellForRow(at: indexPath)?.contentView ?? self.view)
             .show(on: self)
     }
     

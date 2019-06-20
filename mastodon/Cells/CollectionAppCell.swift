@@ -22,9 +22,8 @@ class CollectionAppCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         // Set the cell's imageView's image to nil
-        self.bgImage.image = nil
-        self.image.image = nil
-        
+//        self.bgImage.image = nil
+//        self.image.image = nil
     }
     
     public func configure() {

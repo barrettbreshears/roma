@@ -32,10 +32,11 @@ public struct FilterToots {
     ///   - context: The context to filter on.
     /// - Returns: Request for `Status`.
     public static func create(phrase: String, context: [Context2]) -> Request<Filters> {
+        let res: Bool? = true
         let parameters = [
             Parameter(name: "phrase", value: phrase),
             Parameter(name: "irreversible", value: nil),
-            Parameter(name: "whole_word", value: nil),
+            Parameter(name: "whole_word", value: res.flatMap(trueOrNil)),
             Parameter(name: "expires_in", value: nil),
         ] + context.map(toArrayOfParameters(withName: "context"))
         

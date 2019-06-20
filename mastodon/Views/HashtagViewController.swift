@@ -14,8 +14,9 @@ import StatusAlert
 import SAConfettiView
 import AVKit
 import AVFoundation
+import MobileCoreServices
 
-class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate, UIGestureRecognizerDelegate {
+class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate, UIGestureRecognizerDelegate, UITableViewDragDelegate {
     
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
@@ -26,6 +27,15 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
     var currentTagTitle = ""
     var currentTags: [Status] = []
     private var crownControl: CrownControl!
+    
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        var string = self.currentTags[indexPath.row].url?.absoluteString ?? self.currentTags[indexPath.row].content.stripHTML()
+        
+        guard let data = string.data(using: .utf8) else { return [] }
+        let itemProvider = NSItemProvider(item: data as NSData, typeIdentifier: kUTTypePlainText as String)
+        
+        return [UIDragItem(itemProvider: itemProvider)]
+    }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard let indexPath = self.tableView.indexPathForRow(at: location) else { return nil }
@@ -258,6 +268,8 @@ class HashtagViewController: UIViewController, UITableViewDelegate, UITableViewD
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
         self.tableView.tableFooterView = UIView()
+        
+        self.tableView.dragDelegate = self
         
         self.view.addSubview(self.ai)
         

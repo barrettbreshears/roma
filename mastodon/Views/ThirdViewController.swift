@@ -17,8 +17,9 @@ import AVFoundation
 import SJFluidSegmentedControl
 import MessageUI
 import CropViewController
+import MobileCoreServices
 
-class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, CrownControlDelegate, MFMailComposeViewControllerDelegate, UIGestureRecognizerDelegate, CropViewControllerDelegate {
+class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, CrownControlDelegate, MFMailComposeViewControllerDelegate, UIGestureRecognizerDelegate, CropViewControllerDelegate, UITableViewDragDelegate {
     
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
@@ -48,6 +49,21 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var buttonCenter = CGPoint.zero
     var inArea = 0
     var cropViewController = CropViewController(image: UIImage())
+    
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        var string = ""
+        
+        if self.currentIndex == 0 {
+            string = self.profileStatuses[indexPath.row].url?.absoluteString ?? self.profileStatuses[indexPath.row].content.stripHTML()
+        } else {
+            string = self.profileStatuses2[indexPath.row].url?.absoluteString ?? self.profileStatuses2[indexPath.row].content.stripHTML()
+        }
+        
+        guard let data = string.data(using: .utf8) else { return [] }
+        let itemProvider = NSItemProvider(item: data as NSData, typeIdentifier: kUTTypePlainText as String)
+        
+        return [UIDragItem(itemProvider: itemProvider)]
+    }
     
     func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true)
@@ -913,6 +929,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.tableView.rowHeight = UITableView.automaticDimension
         self.view.addSubview(self.tableView)
         self.tableView.tableFooterView = UIView()
+        
+        self.tableView.dragDelegate = self
         
         self.setupProfile()
         

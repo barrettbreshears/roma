@@ -18,8 +18,9 @@ import SAConfettiView
 import Disk
 import AVKit
 import AVFoundation
+import MobileCoreServices
 
-class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, URLSessionDataDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate, UIPencilInteractionDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate {
+class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, URLSessionDataDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate, UIPencilInteractionDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, UITableViewDragDelegate {
     
     var socket: WebSocket!
     var lsocket: WebSocket!
@@ -57,6 +58,23 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     var cellHeightsDictionary: [IndexPath: CGFloat] = [:]
     var cellHeightsDictionary2: [IndexPath: CGFloat] = [:]
     var cellHeightsDictionary3: [IndexPath: CGFloat] = [:]
+    
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        var string = ""
+        
+        if tableView == self.tableView {
+            string = StoreStruct.statusesHome[indexPath.row].url?.absoluteString ?? StoreStruct.statusesHome[indexPath.row].content.stripHTML()
+        } else if tableView == self.tableViewL {
+            string = StoreStruct.statusesLocal[indexPath.row].url?.absoluteString ?? StoreStruct.statusesLocal[indexPath.row].content.stripHTML()
+        } else {
+            string = StoreStruct.statusesFederated[indexPath.row].url?.absoluteString ?? StoreStruct.statusesFederated[indexPath.row].content.stripHTML()
+        }
+        
+        guard let data = string.data(using: .utf8) else { return [] }
+        let itemProvider = NSItemProvider(item: data as NSData, typeIdentifier: kUTTypePlainText as String)
+        
+        return [UIDragItem(itemProvider: itemProvider)]
+    }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         if self.currentIndex == 0 {
@@ -1017,6 +1035,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             self.view.addSubview(self.tableViewF)
             self.tableViewF.tableFooterView = UIView()
         }
+        
+        self.tableView.dragDelegate = self
+        self.tableViewL.dragDelegate = self
+        self.tableViewF.dragDelegate = self
         
         if (UserDefaults.standard.object(forKey: "thumbsc") == nil) || (UserDefaults.standard.object(forKey: "thumbsc") as! Int == 0) {} else {
             self.crownScroll()
@@ -2343,7 +2365,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 var filtersAr: [Bool] = []
                 let _ = StoreStruct.allCurrentFilters.map({
                     if $0.context.contains(Context2.home) {
-                        if (StoreStruct.statusesHome[indexPath.row].reblog?.content ?? StoreStruct.statusesHome[indexPath.row].content).lowercased().contains($0.phrase.lowercased()) {
+                        if (StoreStruct.statusesHome[indexPath.row].reblog?.content ?? StoreStruct.statusesHome[indexPath.row].content).lowercased().contains(((" \($0.phrase)").lowercased())) || (StoreStruct.statusesHome[indexPath.row].reblog?.content ?? StoreStruct.statusesHome[indexPath.row].content).lowercased().contains((("\($0.phrase) ").lowercased())) {
                             filtersAr.append(true)
                         } else {
                             filtersAr.append(false)
@@ -2648,8 +2670,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 var filtersAr: [Bool] = []
                 let _ = StoreStruct.allCurrentFilters.map({
                     if $0.context.contains(Context2.public) {
-                        if (StoreStruct.statusesHome[indexPath.row].reblog?.content ?? StoreStruct.statusesHome[indexPath.row].content).lowercased().contains($0.phrase.lowercased()) {
-                            filtersAr.append(true)
+                        if (StoreStruct.statusesLocal[indexPath.row].reblog?.content ?? StoreStruct.statusesLocal[indexPath.row].content).lowercased().contains(((" \($0.phrase)").lowercased())) || (StoreStruct.statusesLocal[indexPath.row].reblog?.content ?? StoreStruct.statusesLocal[indexPath.row].content).lowercased().contains((("\($0.phrase) ").lowercased())) {
                         } else {
                             filtersAr.append(false)
                         }
@@ -2947,8 +2968,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 var filtersAr: [Bool] = []
                 let _ = StoreStruct.allCurrentFilters.map({
                     if $0.context.contains(Context2.public) {
-                        if (StoreStruct.statusesHome[indexPath.row].reblog?.content ?? StoreStruct.statusesHome[indexPath.row].content).lowercased().contains($0.phrase.lowercased()) {
-                            filtersAr.append(true)
+                        if (StoreStruct.statusesFederated[indexPath.row].reblog?.content ?? StoreStruct.statusesFederated[indexPath.row].content).lowercased().contains(((" \($0.phrase)").lowercased())) || (StoreStruct.statusesFederated[indexPath.row].reblog?.content ?? StoreStruct.statusesFederated[indexPath.row].content).lowercased().contains((("\($0.phrase) ").lowercased())) {
                         } else {
                             filtersAr.append(false)
                         }

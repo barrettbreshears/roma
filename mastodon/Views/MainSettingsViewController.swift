@@ -175,15 +175,15 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
     var generalArrayDesc = ["From timelines to toots, and media content to gestures, change how things behave.", "Pick themes and hues, change the app icon, and decide how things look.", "Select which push notifications to subscribe to.", "Add a biometric lock to various sections of the app.", "Add and manage status filters to decide what you want to see and hide from across the app.", "Add and manage multiple user accounts."]
     var generalArrayIm = ["setset1", "setnight", "notifs0", "biolock2", "filtset0", "setpro"]
     
-    var otherArray = ["Rate Mast \u{2605}\u{2605}\u{2605}\u{2605}\u{2605}", "About Mast", "Tip Mast"]
-    var otherArrayDesc = ["If you enjoy using Mast, please consider leaving a review on the App Store.", "Let me tell you a little bit about myself.", "Your generosity is greatly appreciated."]
-    var otherArrayIm = ["like", "setmas", "heart4"]
+    var otherArray = ["Rate Mast \u{2605}\u{2605}\u{2605}\u{2605}\u{2605}", "About Mast"]
+    var otherArrayDesc = ["If you enjoy using Mast, please consider leaving a review on the App Store.", "Let me tell you a little bit about myself."]
+    var otherArrayIm = ["like", "setmas"]
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 6
         } else {
-            return 3
+            return 2
         }
     }
     
@@ -272,7 +272,7 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
                         UIApplication.shared.openURL(reviewURL)
                     }
                 }
-            } else if indexPath.row == 1 {
+            } else {
                 // about
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 Alertift.actionSheet(title: "Mast \(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") ?? "")", message: "Designed and hand-crafted with \u{2665} by @JPEG@mastodon.technology\n\nI'm an independant 23 year old developer from the UK, creating and crafting Mast in my spare time. It can be daunting manning a project of this magnitude, but I love what I do and Mast is a wonderful place to pour my creativity and effort into. If you like what I do, please consider leaving a tip to encourage great continued support. If you have any questions or concerns, please get in touch and let me know how I can improve and be better!\n\nHappy tooting :)".localized)
@@ -328,10 +328,6 @@ class MainSettingsViewController: UIViewController, UITableViewDelegate, UITable
                     }
                     .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: indexPath.row, section: 4))?.contentView ?? self.view)
                     .show(on: self)
-            } else {
-                // tip mast
-                let controller = TipSettingsViewController()
-                self.navigationController?.pushViewController(controller, animated: true)
             }
         }
     }

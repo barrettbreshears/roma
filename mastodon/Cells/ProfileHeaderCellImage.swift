@@ -26,11 +26,7 @@ class ProfileHeaderCellImage: UITableViewCell, UICollectionViewDelegate, UIColle
             sectionInset: UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         )
         layout.scrollDirection = .horizontal
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            collectionView = UICollectionView(frame: CGRect(x: CGFloat(0), y: CGFloat(-10), width: CGFloat(UIScreen.main.bounds.width), height: CGFloat(308)), collectionViewLayout: layout)
-        } else {
-            collectionView = UICollectionView(frame: CGRect(x: CGFloat(0), y: CGFloat(-10), width: CGFloat(UIScreen.main.bounds.width), height: CGFloat(208)), collectionViewLayout: layout)
-        }
+        collectionView = UICollectionView(frame: CGRect(x: CGFloat(0), y: CGFloat(-10), width: CGFloat(UIScreen.main.bounds.width), height: CGFloat(208)), collectionViewLayout: layout)
         collectionView.backgroundColor = Colours.clear
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -81,13 +77,8 @@ class ProfileHeaderCellImage: UITableViewCell, UICollectionViewDelegate, UIColle
             cell.image.layer.borderColor = UIColor.black.cgColor
             //cell.image.layer.borderWidth = 0.2
             
-                if UIDevice.current.userInterfaceIdiom == .pad {
-                    cell.image.frame.size.width = 290
-                    cell.image.frame.size.height = 250
-                } else {
-                    cell.image.frame.size.width = 190
-                    cell.image.frame.size.height = 150
-                }
+                cell.image.frame.size.width = 190
+                cell.image.frame.size.height = 150
                
                 
                 cell.bgImage.layer.masksToBounds = false

@@ -13,6 +13,7 @@ class VerticalTabBarController: UIViewController {
     
     var button1 = UIButton()
     var button2 = UIButton()
+    var button3 = UIButton()
     
     @objc func load() {
         DispatchQueue.main.async {
@@ -25,17 +26,24 @@ class VerticalTabBarController: UIViewController {
         
         self.button1.frame = CGRect(x: 10, y: self.view.bounds.height - 90, width: 60, height: 60)
         self.button1.backgroundColor = .clear
-        self.button1.setImage(UIImage(named: "addac1")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.5)), for: .normal)
+        self.button1.setImage(UIImage(named: "newac2")?.maskWithColor(color: Colours.tabSelected), for: .normal)
         self.button1.adjustsImageWhenHighlighted = false
         self.button1.addTarget(self, action: #selector(self.compose), for: .touchUpInside)
         self.view.addSubview(self.button1)
         
-        self.button2.frame = CGRect(x: 20, y: self.view.bounds.height - 157, width: 40, height: 40)
+        self.button2.frame = CGRect(x: 10, y: self.view.bounds.height - 160, width: 60, height: 60)
         self.button2.backgroundColor = .clear
-        self.button2.setImage(UIImage(named: "se3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.5)), for: .normal)
+        self.button2.setImage(UIImage(named: "se3")?.maskWithColor(color: Colours.tabSelected), for: .normal)
         self.button2.adjustsImageWhenHighlighted = false
         self.button2.addTarget(self, action: #selector(self.search), for: .touchUpInside)
         self.view.addSubview(self.button2)
+        
+        self.button3.frame = CGRect(x: 10, y: self.view.bounds.height - 230, width: 60, height: 60)
+        self.button3.backgroundColor = .clear
+        self.button3.setImage(UIImage(named: "togtheme")?.maskWithColor(color: Colours.tabSelected), for: .normal)
+        self.button3.adjustsImageWhenHighlighted = false
+        self.button3.addTarget(self, action: #selector(self.togTheme), for: .touchUpInside)
+        self.view.addSubview(self.button3)
     }
     
     override func viewDidLoad() {
@@ -44,6 +52,10 @@ class VerticalTabBarController: UIViewController {
         self.navigationController?.navigationBar.backgroundColor = Colours.whitePad
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.load), name: NSNotification.Name(rawValue: "load"), object: nil)
+    }
+    
+    @objc func togTheme() {
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "genericTheme"), object: self)
     }
     
     @objc func search() {
@@ -206,10 +218,9 @@ class VerticalTabBarController: UIViewController {
         
         self.navigationController?.navigationBar.backgroundColor = Colours.whitePad
         
-        
-        let offset = self.navigationController?.navigationBar.frame.size.height ?? 100
-        self.button1.setImage(UIImage(named: "addac1")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.5)), for: .normal)
-        self.button2.setImage(UIImage(named: "search2")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.5)), for: .normal)
+        self.button1.setImage(UIImage(named: "newac2")?.maskWithColor(color: Colours.tabSelected), for: .normal)
+        self.button2.setImage(UIImage(named: "se3")?.maskWithColor(color: Colours.tabSelected), for: .normal)
+        self.button3.setImage(UIImage(named: "togtheme")?.maskWithColor(color: Colours.tabSelected), for: .normal)
     }
     
 }

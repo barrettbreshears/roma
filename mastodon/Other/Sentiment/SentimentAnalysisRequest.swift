@@ -137,7 +137,7 @@ class SentimentAnalysisTextView: UITextView {
         let gradientLayer = CAGradientLayer()
         gradientLayer.frame = CGRect(x:self.bounds.origin.x, y:0, width:self.bounds.size.width, height:self.bounds.size.height)
         gradientLayer.colors = [transparent, opaque, opaque, transparent]
-        gradientLayer.locations = [0.0, 15/self.bounds.size.height, 1.0 - (15/self.bounds.size.height), 1.0] as [NSNumber]
+        gradientLayer.locations = [0.0, 0.1, 0.9, 1.0] as [NSNumber]
         
         maskLayer.addSublayer(gradientLayer)
         self.layer.mask = maskLayer

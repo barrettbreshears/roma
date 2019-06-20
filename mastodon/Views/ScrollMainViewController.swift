@@ -57,15 +57,27 @@ class ScrollMainViewController: UIViewController, UIGestureRecognizerDelegate {
         
         let width: CGFloat = 380
         
-        self.scrollView.contentSize = CGSize(width: (CGFloat(width * CGFloat(viewControllers.count))) + (CGFloat(25 * CGFloat(viewControllers.count))), height: CGFloat(self.view.bounds.height))
+        var spacer: CGFloat = 25
+        if UIDevice.current.userInterfaceIdiom == .pad && ScreenSize.SCREEN_MAX_LENGTH <= 1024.0 {
+            spacer = 15
+        }
+        
+        self.scrollView.contentSize = CGSize(width: (CGFloat(width * CGFloat(viewControllers.count))) + (CGFloat(spacer * CGFloat(viewControllers.count))), height: CGFloat(self.view.bounds.height))
         
         var idx: Int = 0
         var widthOffset: CGFloat = 0
         for viewController in viewControllers {
             self.scrollView.touchesShouldCancel(in: viewController.view)
             viewController.view.frame = CGRect(x: widthOffset, y: 25, width: width, height: self.view.bounds.height - 50)
-            widthOffset += viewController.view.frame.size.width + 25
+            widthOffset += viewController.view.frame.size.width + spacer
             idx += 1
         }
     }
+}
+
+private struct ScreenSize {
+    static let SCREEN_WIDTH         = UIScreen.main.bounds.size.width
+    static let SCREEN_HEIGHT        = UIScreen.main.bounds.size.height
+    static let SCREEN_MAX_LENGTH    = max(ScreenSize.SCREEN_WIDTH, ScreenSize.SCREEN_HEIGHT)
+    static let SCREEN_MIN_LENGTH    = min(ScreenSize.SCREEN_WIDTH, ScreenSize.SCREEN_HEIGHT)
 }

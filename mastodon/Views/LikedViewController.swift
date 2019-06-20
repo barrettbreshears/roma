@@ -14,8 +14,9 @@ import StatusAlert
 import SAConfettiView
 import AVKit
 import AVFoundation
+import MobileCoreServices
 
-class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, UIGestureRecognizerDelegate {
+class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, UIGestureRecognizerDelegate, UITableViewDragDelegate {
     
     var ai = NVActivityIndicatorView(frame: CGRect(x:0,y:0,width:0,height:0), type: .ballRotateChase, color: Colours.tabSelected)
     var safariVC: SFSafariViewController?
@@ -26,6 +27,15 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
     var currentTagTitle = ""
     var currentTags: [Status] = []
     var newLast: RequestRange = .max(id: "", limit: nil)
+    
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        var string = self.currentTags[indexPath.row].url?.absoluteString ?? self.currentTags[indexPath.row].content.stripHTML()
+        
+        guard let data = string.data(using: .utf8) else { return [] }
+        let itemProvider = NSItemProvider(item: data as NSData, typeIdentifier: kUTTypePlainText as String)
+        
+        return [UIDragItem(itemProvider: itemProvider)]
+    }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         guard let indexPath = self.tableView.indexPathForRow(at: location) else { return nil }
@@ -254,6 +264,8 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
         self.tableView.tableFooterView = UIView()
         //        refreshControl.addTarget(self, action: #selector(refreshCont), for: .valueChanged)
         //        self.tableView.addSubview(refreshControl)
+        
+        self.tableView.dragDelegate = self
         
         self.view.addSubview(self.ai)
         

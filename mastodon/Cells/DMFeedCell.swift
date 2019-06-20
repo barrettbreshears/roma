@@ -137,8 +137,9 @@ class DMFeedCell: SwipeTableViewCell {
     }
     
     override func prepareForReuse() {
-        self.profileImageView.imageView?.image = nil
-        self.profileImageView2.imageView?.image = nil
+        super.prepareForReuse()
+//        self.profileImageView.imageView?.image = nil
+//        self.profileImageView2.imageView?.image = nil
     }
     
     func configure2(_ unread: Bool, id: String) {

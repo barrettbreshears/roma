@@ -35,7 +35,7 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .pad:
-            collectionView.backgroundColor = Colours.white
+            collectionView.backgroundColor = Colours.clear
         default:
             collectionView.backgroundColor = Colours.grayDark3
         }
@@ -164,7 +164,7 @@ class ProCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataS
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .pad:
-            cell.backgroundColor = Colours.white
+            cell.backgroundColor = Colours.clear
         default:
             cell.backgroundColor = Colours.grayDark3
         }
