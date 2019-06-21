@@ -21,7 +21,7 @@ class NotificationService: UNNotificationServiceExtension {
         
         if let bestAttemptContent = bestAttemptContent {
             // Modify the notification content here...
-            bestAttemptContent.title = "\(bestAttemptContent.title) modified"
+            bestAttemptContent.title = "\(bestAttemptContent.title)"
             NotificationCenter.default.post(name: Notification.Name(rawValue: "refpush1"), object: nil)
             if let userDefaults = UserDefaults(suiteName: "group.com.vm.roma.wormhole") {
                 
