@@ -329,7 +329,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     @objc func refProf() {
         
-        var tabHeight = Int(UITabBarController().tabBar.frame.size.height) + Int(34)
+        var tabHeight = 132
         var offset = 88
         if UIDevice().userInterfaceIdiom == .phone {
             switch UIScreen.main.nativeBounds.height {
@@ -339,7 +339,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 offset = 88
             default:
                 offset = 64
-                tabHeight = Int(UITabBarController().tabBar.frame.size.height)
+                tabHeight = 98
             }
         }
         
@@ -855,10 +855,6 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self?.player.rate = self?.playerRate ?? 1
         }
         
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longAction(sender:)))
-        longPress.minimumPressDuration = 0.5
-        longPress.delegate = self
-        self.view.addGestureRecognizer(longPress)
         
         UserDefaults.standard.set(1, forKey: "onb")
         
@@ -1306,7 +1302,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
         }
         
-        refProf()
+        // refProf()
     }
 
 

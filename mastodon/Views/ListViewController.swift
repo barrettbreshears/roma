@@ -203,12 +203,7 @@ class ListViewController: UIViewController, UITableViewDelegate, UITableViewData
         NotificationCenter.default.addObserver(self, selector: #selector(self.load), name: NSNotification.Name(rawValue: "load"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.refresh), name: NSNotification.Name(rawValue: "refresh"), object: nil)
         //NotificationCenter.default.addObserver(self, selector: #selector(self.scrollTop1), name: NSNotification.Name(rawValue: "scrollTop1"), object: nil)
-        
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longAction(sender:)))
-        longPress.minimumPressDuration = 0.5
-        longPress.delegate = self
-        self.view.addGestureRecognizer(longPress)
-        
+                
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
             self?.player.seek(to: CMTime.zero)
             self?.player.play()

@@ -886,8 +886,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         }
                         
                         if (model.status?.visibility) ?? Visibility.private == .direct {
-                            
-                            let request = Timelines.conversations(range: .since(id: StoreStruct.notificationsDirect.first?.id ?? "", limit: nil))
+                            let request = Timelines.direct(range: .since(id: StoreStruct.notificationsDirect.first?.id ?? "", limit: nil))
+                            // let request = Timelines.conversations(range: .since(id: StoreStruct.notificationsDirect.first?.id ?? "", limit: nil))
                             StoreStruct.client.run(request) { (statuses) in
                                 if let stat = (statuses.value) {
                                     if stat.isEmpty {} else {
@@ -1041,10 +1041,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.tableViewLists.register(ListCell2.self, forCellReuseIdentifier: "cell002l2")
         self.tableViewLists.register(ProCells.self, forCellReuseIdentifier: "colcell2")
 
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longAction(sender:)))
-        longPress.minimumPressDuration = 0.5
-        longPress.delegate = self
-        self.view.addGestureRecognizer(longPress)
         
         self.view0pinch.frame = self.view.frame
         self.view1pinch.frame = self.view.frame
@@ -1085,6 +1081,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             )
         }
         
+        DispatchQueue.main.async {
+            self.settingsButton.imageView?.image = nil
+        }
+        
         let request = Instances.customEmojis()
         StoreStruct.client.run(request) { (statuses) in
             if let stat = (statuses.value) {
@@ -1092,7 +1092,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                 StoreStruct.mainResult = []
                 StoreStruct.mainResult1 = []
                 StoreStruct.mainResult2 = []
-                stat.map({
+                _ = stat.map({
                     let attributedString = NSAttributedString(string: "    \($0.shortcode)")
                     let textAttachment = NSTextAttachment()
                     textAttachment.loadImageUsingCache(withUrl: $0.staticURL.absoluteString)
@@ -2814,6 +2814,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         if let stat = (statuses.value) {
                             StoreStruct.profileStatuses0 = stat
                             
+                            DispatchQueue.main.async {
+                                self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+                            }
                             let request = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: true, pinnedOnly: nil, excludeReplies: nil, excludeReblogs: true, range: .default)
                             StoreStruct.client.run(request) { (statuses) in
                                 if let stat = (statuses.value) {

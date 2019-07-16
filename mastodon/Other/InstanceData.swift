@@ -47,6 +47,11 @@ class InstanceData: Codable {
         guard let instanceData = try? JSONEncoder().encode(instance) else {
            return
         }
+        do {
+            try Disk.clear(.documents)
+        } catch {
+            print("unable to clear disk")
+        }
         
         UserDefaults.standard.set(instanceData, forKey: "currentInstance")
         StoreStruct.client.accessToken = instance.accessToken

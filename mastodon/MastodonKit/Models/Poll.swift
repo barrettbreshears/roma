@@ -33,6 +33,25 @@ public class Poll: Codable {
         case voted
         case options
     }
+    
+    
+    required public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        
+        do {
+            id = String(try values.decode(Int.self, forKey: .id))
+        } catch {
+            id = try values.decode(String.self, forKey: .id)
+        }
+        expired = try values.decode(Bool.self, forKey: .expired)
+        expiresAt = try? values.decode(Date.self, forKey: .expiresAt)
+        multiple = try values.decode(Bool.self, forKey: .multiple)
+        votesCount = try values.decode(Int.self, forKey: .votesCount)
+        voted = try values.decode(Bool.self, forKey: .voted)
+        options = try values.decode([PollOptions].self, forKey: .options)
+        
+    }
+    
 }
 
 public class PollOptions: Codable {

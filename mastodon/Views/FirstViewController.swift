@@ -863,11 +863,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         
         self.view.backgroundColor = Colours.white
         
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longAction(sender:)))
-        longPress.minimumPressDuration = 0.5
-        longPress.delegate = self
-        self.view.addGestureRecognizer(longPress)
-        
+       
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
             self?.player.seek(to: CMTime.zero)
             self?.player.play()
@@ -1532,7 +1528,8 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
         }
         
-        let request3 = Timelines.conversations(range: .max(id: StoreStruct.notificationsDirect.last?.id ?? "", limit: 5000))
+        let request3 = Timelines.direct(range: .max(id: StoreStruct.notificationsDirect.last?.id ?? "", limit: 5000))
+        // let request3 = Timelines.conversations(range: .max(id: StoreStruct.notificationsDirect.last?.id ?? "", limit: 5000))
         StoreStruct.client.run(request3) { (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty {} else {
@@ -1839,7 +1836,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             }
                             
                             do {
-                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.currentInstance.clientID)home.json")
+                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
                             } catch {
                                 print("Couldn't save")
                             }
@@ -1944,7 +1941,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             }
                             
                             do {
-                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.currentInstance.clientID)local.json")
+                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
                             } catch {
                                 print("Couldn't save")
                             }
@@ -2057,7 +2054,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             }
                             
                             do {
-                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.currentInstance.clientID)fed.json")
+                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                             } catch {
                                 print("Couldn't save")
                             }
@@ -5154,7 +5151,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 
                                 DispatchQueue.global(qos: .userInitiated).async {
                                 do {
-                                    try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.currentInstance.clientID)home.json")
+                                    try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
                                 } catch {
                                     print("Couldn't save")
                                 }
@@ -5237,7 +5234,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 
                                 DispatchQueue.global(qos: .userInitiated).async {
                                 do {
-                                    try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.currentInstance.clientID)local.json")
+                                    try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
                                 } catch {
                                     print("Couldn't save")
                                 }
@@ -5317,7 +5314,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 
                                 DispatchQueue.global(qos: .userInitiated).async {
                                 do {
-                                    try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.currentInstance.clientID)fed.json")
+                                    try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                                 } catch {
                                     print("Couldn't save")
                                 }
@@ -5355,9 +5352,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     }
                     
                     do {
-                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.currentInstance.clientID)home.json")
-                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.currentInstance.clientID)local.json")
-                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.currentInstance.clientID)fed.json")
+                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                     } catch {
                         print("Couldn't save")
                     }
@@ -5384,9 +5381,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     }
                     
                     do {
-                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.currentInstance.clientID)home.json")
-                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.currentInstance.clientID)local.json")
-                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.currentInstance.clientID)fed.json")
+                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                     } catch {
                         print("Couldn't save")
                     }
@@ -5412,9 +5409,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     }
                     
                     do {
-                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.currentInstance.clientID)home.json")
-                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.currentInstance.clientID)local.json")
-                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.currentInstance.clientID)fed.json")
+                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                     } catch {
                         print("Couldn't save")
                     }
@@ -5497,9 +5494,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     }
                     
                     do {
-                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.currentInstance.clientID)home.json")
-                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.currentInstance.clientID)local.json")
-                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.currentInstance.clientID)fed.json")
+                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                     } catch {
                         print("Couldn't save")
                     }
@@ -5580,9 +5577,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     }
                     
                     do {
-                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.currentInstance.clientID)home.json")
-                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.currentInstance.clientID)local.json")
-                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.currentInstance.clientID)fed.json")
+                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                     } catch {
                         print("Couldn't save")
                     }
@@ -5662,9 +5659,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     }
                     
                     do {
-                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.currentInstance.clientID)home.json")
-                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.currentInstance.clientID)local.json")
-                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.currentInstance.clientID)fed.json")
+                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                     } catch {
                         print("Couldn't save")
                     }

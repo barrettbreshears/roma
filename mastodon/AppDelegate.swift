@@ -404,22 +404,42 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
         }
 
         do {
-            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)use.json", from: .documents, as: Account.self)
-            StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
-            StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
-            StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
+            try Disk.clear(.documents)
+            StoreStruct.currentUser = try Disk.retrieve("use.json", from: .documents, as: Account.self)
+            StoreStruct.statusesHome = try Disk.retrieve("home.json", from: .documents, as: [Status].self)
+            StoreStruct.statusesLocal = try Disk.retrieve("local.json", from: .documents, as: [Status].self)
+            StoreStruct.statusesFederated = try Disk.retrieve("fed.json", from: .documents, as: [Status].self)
             
-            StoreStruct.gapLastHomeStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)homestat.json", from: .documents, as: Status.self)
-            StoreStruct.gapLastLocalStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)localstat.json", from: .documents, as: Status.self)
-            StoreStruct.gapLastFedStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)fedstat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastHomeStat = try Disk.retrieve("homestat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastLocalStat = try Disk.retrieve("localstat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastFedStat = try Disk.retrieve("fedstat.json", from: .documents, as: Status.self)
             
-            StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
-            StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
+            StoreStruct.notifications = try Disk.retrieve("noti.json", from: .documents, as: [Notificationt].self)
+            StoreStruct.notificationsMentions = try Disk.retrieve("ment.json", from: .documents, as: [Notificationt].self)
+            
+//            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)use.json", from: .documents, as: Account.self)
+//            StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
+//            StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
+//            StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
+//
+//            StoreStruct.gapLastHomeStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)homestat.json", from: .documents, as: Status.self)
+//            StoreStruct.gapLastLocalStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)localstat.json", from: .documents, as: Status.self)
+//            StoreStruct.gapLastFedStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)fedstat.json", from: .documents, as: Status.self)
+//
+//            StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
+//            StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
+            
+            
         } catch {
             print("Couldn't load")
         }
 
         return true
+    }
+    
+    
+    func clearDisk(){
+        
     }
     
     func applicationWillResignActive(_ application: UIApplication) {
@@ -447,18 +467,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
             UserDefaults.standard.set(StoreStruct.currentUser.username, forKey: "userN")
             DispatchQueue.global(qos: .userInitiated).async {
                 do {
-                    try Disk.save(StoreStruct.currentUser, to: .documents, as: "\(StoreStruct.currentInstance.clientID)use.json")
+                    try Disk.save(StoreStruct.currentUser, to: .documents, as: "use.json")
                     
-                    try Disk.save(StoreStruct.statusesHome, to: .documents, as: "\(StoreStruct.currentInstance.clientID)home.json")
-                    try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "\(StoreStruct.currentInstance.clientID)local.json")
-                    try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "\(StoreStruct.currentInstance.clientID)fed.json")
+                    try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                    try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                    try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                     
-                    try Disk.save(StoreStruct.notifications, to: .documents, as: "\(StoreStruct.currentInstance.clientID)noti.json")
-                    try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "\(StoreStruct.currentInstance.clientID)ment.json")
+                    try Disk.save(StoreStruct.notifications, to: .documents, as: "noti.json")
+                    try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "ment.json")
                     
-                    try Disk.save(StoreStruct.gapLastHomeStat, to: .documents, as: "\(StoreStruct.currentInstance.clientID)homestat.json")
-                    try Disk.save(StoreStruct.gapLastLocalStat, to: .documents, as: "\(StoreStruct.currentInstance.clientID)localstat.json")
-                    try Disk.save(StoreStruct.gapLastFedStat, to: .documents, as: "\(StoreStruct.currentInstance.clientID)fedstat.json")
+                    try Disk.save(StoreStruct.gapLastHomeStat, to: .documents, as: "homestat.json")
+                    try Disk.save(StoreStruct.gapLastLocalStat, to: .documents, as: "localstat.json")
+                    try Disk.save(StoreStruct.gapLastFedStat, to: .documents, as: "fedstat.json")
                 } catch {
                     print("Couldn't save")
                 }
@@ -551,16 +571,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 
     func reloadApplication() {
         do {
-            StoreStruct.currentUser = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)use.json", from: .documents, as: Account.self)
-            StoreStruct.statusesHome = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)home.json", from: .documents, as: [Status].self)
-            StoreStruct.statusesLocal = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)local.json", from: .documents, as: [Status].self)
-            StoreStruct.statusesFederated = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)fed.json", from: .documents, as: [Status].self)
-            StoreStruct.notifications = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)noti.json", from: .documents, as: [Notificationt].self)
-            StoreStruct.notificationsMentions = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)ment.json", from: .documents, as: [Notificationt].self)
+            try Disk.clear(.documents)
+            StoreStruct.currentUser = try Disk.retrieve("use.json", from: .documents, as: Account.self)
+            StoreStruct.statusesHome = try Disk.retrieve("home.json", from: .documents, as: [Status].self)
+            StoreStruct.statusesLocal = try Disk.retrieve("local.json", from: .documents, as: [Status].self)
+            StoreStruct.statusesFederated = try Disk.retrieve("fed.json", from: .documents, as: [Status].self)
+            StoreStruct.notifications = try Disk.retrieve("noti.json", from: .documents, as: [Notificationt].self)
+            StoreStruct.notificationsMentions = try Disk.retrieve("ment.json", from: .documents, as: [Notificationt].self)
             
-            StoreStruct.gapLastHomeStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)homestat.json", from: .documents, as: Status.self)
-            StoreStruct.gapLastLocalStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)localstat.json", from: .documents, as: Status.self)
-            StoreStruct.gapLastFedStat = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)fedstat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastHomeStat = try Disk.retrieve("homestat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastLocalStat = try Disk.retrieve("localstat.json", from: .documents, as: Status.self)
+            StoreStruct.gapLastFedStat = try Disk.retrieve("fedstat.json", from: .documents, as: Status.self)
         } catch {
             print("Couldn't load")
         }

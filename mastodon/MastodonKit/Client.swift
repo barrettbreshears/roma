@@ -60,6 +60,15 @@ public struct Client: ClientType {
                     return
             }
 
+            let stringData = String(decoding: data, as: UTF8.self);
+            print(stringData)
+            
+            do {
+                try Model.decode(data: data)
+            } catch let error {
+                print(error)
+            }
+            
             guard let model = try? Model.decode(data: data) else {
                 completion(.failure(ClientError.invalidModel))
                 return

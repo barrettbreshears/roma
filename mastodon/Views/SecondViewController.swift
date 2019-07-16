@@ -657,10 +657,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         
         self.view.backgroundColor = Colours.white
         
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(self.longAction(sender:)))
-        longPress.minimumPressDuration = 0.5
-        longPress.delegate = self
-        self.view.addGestureRecognizer(longPress)
         
         NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime, object: self.player.currentItem, queue: .main) { [weak self] _ in
             self?.player.seek(to: CMTime.zero)
@@ -669,7 +665,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         }
         
         do {
-            StoreStruct.notTypes = try Disk.retrieve("\(StoreStruct.currentInstance.clientID)nottypes1.json", from: .documents, as: [NotificationType].self)
+            StoreStruct.notTypes = try Disk.retrieve("nottypes1.json", from: .documents, as: [NotificationType].self)
         } catch {
             print("Couldn't load")
         }
@@ -1815,7 +1811,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     }
                 }
                 do {
-                    try Disk.save(StoreStruct.notTypes, to: .documents, as: "\(StoreStruct.currentInstance.clientID)nottypes1.json")
+                    try Disk.save(StoreStruct.notTypes, to: .documents, as: "nottypes1.json")
                 } catch {
                     print("Couldn't save")
                 }

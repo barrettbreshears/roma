@@ -56,7 +56,7 @@ class PadLoginViewController: UIViewController, UITextFieldDelegate {
                                                                   attributes: [NSAttributedString.Key.foregroundColor: Colours.tabSelected])
         self.view.addSubview(self.textField)
         
-        tagListView.alpha = 1
+        tagListView.alpha = 0
         tagListView.frame = CGRect(x: 0, y: Int(self.view.bounds.height) - self.keyHeight - 70, width: Int(self.view.bounds.width), height: 60)
         self.view.addSubview(tagListView)
     }
@@ -217,10 +217,10 @@ class PadLoginViewController: UIViewController, UITextFieldDelegate {
                         StoreStruct.newInstance = InstanceData()
                         StoreStruct.newClient = Client(baseURL: "https://\(returnedText)")
                         let request = Clients.register(
-                            clientName: "Mast",
-                            redirectURI: "com.shi.mastodon://addNewInstance",
+                            clientName: "Roma",
+                            redirectURI: "com.vm.roma://addNewInstance",
                             scopes: [.read, .write, .follow, .push],
-                            website: "https://twitter.com/jpeguin"
+                            website: "https://pleroma.com"
                         )
                         StoreStruct.newClient.run(request) { (application) in
                             if application.value == nil {
@@ -272,7 +272,7 @@ class PadLoginViewController: UIViewController, UITextFieldDelegate {
                                 StoreStruct.newInstance?.returnedText = returnedText
                                 
                                 DispatchQueue.main.async {
-                                    StoreStruct.newInstance?.redirect = "com.shi.mastodon://addNewInstance".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                                    StoreStruct.newInstance?.redirect = "com.vm.roma://addNewInstance".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                                     let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.newInstance!.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
                                     UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
                                         if !success {
@@ -290,10 +290,10 @@ class PadLoginViewController: UIViewController, UITextFieldDelegate {
                     } else {
                         StoreStruct.client = Client(baseURL: "https://\(returnedText)")
                         let request = Clients.register(
-                            clientName: "Mast",
-                            redirectURI: "com.shi.mastodon://success",
+                            clientName: "Roma",
+                            redirectURI: "com.vm.roma://success",
                             scopes: [.read, .write, .follow, .push],
-                            website: "https://twitter.com/jpeguin"
+                            website: "https://pleroma.com"
                         )
                         StoreStruct.client.run(request) { (application) in
                             if application.value == nil {
@@ -343,7 +343,7 @@ class PadLoginViewController: UIViewController, UITextFieldDelegate {
                                     
                                     self.tagListView.alpha = 0
                                     
-                                    StoreStruct.currentInstance.redirect = "com.shi.mastodon://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
+                                    StoreStruct.currentInstance.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                                     let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.currentInstance.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
                                     UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
                                         if !success {

@@ -80,7 +80,7 @@ struct StoreStruct {
     static var notifications: [Notificationt] = []
     static var tempNotificationsMentions: [Notificationt] = []
     static var notificationsMentions: [Notificationt] = []
-    static var notificationsDirect: [Conversation] = []
+    static var notificationsDirect: [Status] = []
     
     static var fromOtherUser = false
     static var userIDtoUse = ""

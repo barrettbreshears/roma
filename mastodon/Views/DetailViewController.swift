@@ -383,7 +383,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                              
                             
                             if let poll = self.mainStatus[0].reblog?.poll ?? self.mainStatus[0].poll {
-                                let request = Polls.vote(id: poll.id, choices: StoreStruct.currentPollSelection)
+                                let request = Polls.vote(id: String(poll.id), choices: StoreStruct.currentPollSelection)
                                 StoreStruct.client.run(request) { (statuses) in
                                     DispatchQueue.main.async {
                                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
