@@ -581,25 +581,17 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             newSize = offset + 15
         }
         
+        self.settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        self.settingsButton.imageView?.layer.cornerRadius = 18
+        self.settingsButton.imageView?.contentMode = .scaleAspectFill
+        self.settingsButton.layer.masksToBounds = true
         
-        if (UserDefaults.standard.object(forKey: "insicon1") == nil) || (UserDefaults.standard.object(forKey: "insicon1") as! Int == 0) {
-            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 32, height: 32)
-            settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)
-            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
-            settingsButton.imageView?.layer.cornerRadius = 0
-            settingsButton.imageView?.contentMode = .scaleAspectFill
-            settingsButton.layer.masksToBounds = true
-        } else {
-            settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
-            
-            DispatchQueue.main.async {
-                self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
-            }
-            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            settingsButton.imageView?.layer.cornerRadius = 18
-            settingsButton.imageView?.contentMode = .scaleAspectFill
-            settingsButton.layer.masksToBounds = true
-        } 
+        settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
+        
+        DispatchQueue.main.async {
+            self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+        }
+        
         settingsButton.adjustsImageWhenHighlighted = false
         settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
         

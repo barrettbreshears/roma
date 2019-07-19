@@ -926,6 +926,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         super.viewDidLoad()
         self.view.backgroundColor = Colours.white
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.setUpProfileImage), name: NSNotification.Name(rawValue: "setUpProfileImage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.siriLight00), name: NSNotification.Name(rawValue: "light00"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.siriDark00), name: NSNotification.Name(rawValue: "dark00"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.siriDark200), name: NSNotification.Name(rawValue: "darker00"), object: nil)
@@ -1081,9 +1082,6 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
             )
         }
         
-        DispatchQueue.main.async {
-            self.settingsButton.imageView?.image = nil
-        }
         
         let request = Instances.customEmojis()
         StoreStruct.client.run(request) { (statuses) in
@@ -2800,6 +2798,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         self.tagListView.frame = CGRect(x: 0, y: Int(self.view.bounds.height) - self.keyHeight - 70, width: Int(self.view.bounds.width), height: 60)
     }
     
+    
+    @objc func setUpProfileImage(){
+            self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         
@@ -2814,9 +2817,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         if let stat = (statuses.value) {
                             StoreStruct.profileStatuses0 = stat
                             
-                            DispatchQueue.main.async {
-                                self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
-                            }
+                            NotificationCenter.default.post(name: NSNotification.Name("setUpProfileImage"), object: nil)
+                            
                             let request = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: true, pinnedOnly: nil, excludeReplies: nil, excludeReblogs: true, range: .default)
                             StoreStruct.client.run(request) { (statuses) in
                                 if let stat = (statuses.value) {

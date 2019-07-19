@@ -250,6 +250,15 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         } 
     }
     
+    @objc func setUpProfileImage(){
+        
+        self.settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        self.settingsButton.imageView?.layer.cornerRadius = 18
+        self.settingsButton.imageView?.contentMode = .scaleAspectFill
+        self.settingsButton.layer.masksToBounds = true
+        self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+    }
+    
     @objc func goMembers() {
         let request = Lists.accounts(id: StoreStruct.allListRelID)
         StoreStruct.client.run(request) { (statuses) in
@@ -840,6 +849,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        NotificationCenter.default.addObserver(self, selector: #selector(self.setUpProfileImage), name: NSNotification.Name(rawValue: "setUpProfileImage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.currentSegIndex), name: NSNotification.Name(rawValue: "setCurrentSegmentIndex"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.savedComposePresent), name: NSNotification.Name(rawValue: "savedComposePresent"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.goToID), name: NSNotification.Name(rawValue: "gotoid"), object: nil)
@@ -1285,15 +1295,15 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         if StoreStruct.currentUser != nil {
             settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
             
+            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            settingsButton.imageView?.layer.cornerRadius = 18
+            settingsButton.imageView?.contentMode = .scaleAspectFill
+            settingsButton.layer.masksToBounds = true
             DispatchQueue.main.async {
                 self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
             }
             
             
-            settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            settingsButton.imageView?.layer.cornerRadius = 18
-            settingsButton.imageView?.contentMode = .scaleAspectFill
-            settingsButton.layer.masksToBounds = true
         } else {
             settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 32, height: 32)
             settingsButton.setImage(UIImage(named: "list")?.maskWithColor(color: Colours.grayLight2), for: .normal)

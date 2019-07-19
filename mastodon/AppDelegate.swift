@@ -586,11 +586,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
             print("Couldn't load")
         }
 
+        self.window?.rootViewController = nil
         if UIApplication.shared.isSplitOrSlideOver {
             //            self.window?.rootViewController = ViewController()
             //            self.window?.makeKeyAndVisible()
         } else {
 
+            
+            
             let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
             switch (deviceIdiom) {
             case .phone:
