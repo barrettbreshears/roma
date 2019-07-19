@@ -97,6 +97,9 @@ PODS:
     - SDWebImage/Core
   - SJFluidSegmentedControl (1.1.2)
   - StatusAlert (0.9.4)
+  - SwiftMessages (6.0.2):
+    - SwiftMessages/App (= 6.0.2)
+  - SwiftMessages/App (6.0.2)
   - SwiftyGiphy (1.1.1):
     - FLAnimatedImage (~> 1.0)
     - NSTimer-Blocks
@@ -124,6 +127,7 @@ DEPENDENCIES:
   - SAConfettiView
   - SJFluidSegmentedControl
   - StatusAlert
+  - SwiftMessages
   - SwiftyGiphy
   - SwiftyJSON
   - TesseractOCRiOS
@@ -163,6 +167,7 @@ SPEC REPOS:
     - SDWebImage
     - SJFluidSegmentedControl
     - StatusAlert
+    - SwiftMessages
     - SwiftyGiphy
     - SwiftyJSON
     - TesseractOCRiOS
@@ -201,11 +206,12 @@ SPEC CHECKSUMS:
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SJFluidSegmentedControl: efd26ea5f0832c715e2750314a2dc0cc81e39ae5
   StatusAlert: 7f8a54b6031f7805bc3ac960cee531b61757ab2d
+  SwiftMessages: 8b3cc68dba2f1c91aac1a74c90b10287aac35371
   SwiftyGiphy: 87930387b007b84c463bee2ec2a2d28d88b78b93
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
   TesseractOCRiOS: 2c189465f86abb030d0c5141c90da9705b647854
   TinyConstraints: 4721a4b303c799328867078ade6560e152df54d1
 
-PODFILE CHECKSUM: 10f7e7cfa6a62d23127eac06cdfb32d664b2dd60
+PODFILE CHECKSUM: 764fc0f522d13205af48d7d60f3035bdf0396d46
 
 COCOAPODS: 1.6.1

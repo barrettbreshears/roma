@@ -1116,6 +1116,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         
     }
     
+    
     @objc func activateCrown() {
         self.crownScroll()
         self.crownScroll2()
@@ -1609,7 +1610,17 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 if StoreStruct.statusesLocal.isEmpty {
                     let request = Timelines.public(local: true, range: .default)
                     StoreStruct.client.run(request) { (statuses) in
+                        if statuses.error != nil {
+                            NavAlerts.showError(controller:self)
+                        }
+                        
+                        if statuses.value?.count == 0 {
+                            NavAlerts.showUpToDate(controller:self)
+                        }
+                        
                         if let stat = (statuses.value) {
+                            
+                            
                             DispatchQueue.main.async {
                                 StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
                                 StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
@@ -1649,6 +1660,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 if StoreStruct.statusesFederated.isEmpty {
                     let request = Timelines.public(local: false, range: .default)
                     StoreStruct.client.run(request) { (statuses) in
+                        if statuses.error != nil {
+                            NavAlerts.showError(controller:self)
+                        }
+                        
+                        if statuses.value?.count == 0 {
+                            NavAlerts.showUpToDate(controller:self)
+                        }
                         if let stat = (statuses.value) {
                             DispatchQueue.main.async {
                                 StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
@@ -2196,6 +2214,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             if StoreStruct.statusesLocal.isEmpty {
                 let request = Timelines.public(local: true, range: .default)
                 StoreStruct.client.run(request) { (statuses) in
+                    if statuses.error != nil {
+                        NavAlerts.showError(controller:self)
+                    }
+                    
+                    if statuses.value?.count == 0 {
+                        NavAlerts.showUpToDate(controller:self)
+                    }
                     if let stat = (statuses.value) {
                         StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
                         DispatchQueue.main.async {
@@ -2243,6 +2268,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             if StoreStruct.statusesFederated.isEmpty {
                 let request = Timelines.public(local: false, range: .default)
                 StoreStruct.client.run(request) { (statuses) in
+                    if statuses.error != nil {
+                        NavAlerts.showError(controller:self)
+                    }
+                    
+                    if statuses.value?.count == 0 {
+                        NavAlerts.showUpToDate(controller:self)
+                    }
                     if let stat = (statuses.value) {
                         StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
                         DispatchQueue.main.async {
@@ -5350,6 +5382,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         let request = Timelines.home(range: .max(id: StoreStruct.statusesHome.last?.id ?? "", limit: nil))
         //        DispatchQueue.global(qos: .userInitiated).async {
         StoreStruct.client.run(request) { (statuses) in
+            if statuses.error != nil {
+                NavAlerts.showError(controller:self)
+            }
+            
+            if statuses.value?.count == 0 {
+                NavAlerts.showUpToDate(controller:self)
+            }
             if let stat = (statuses.value) {
                 
                 if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
@@ -5380,6 +5419,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.statusesLocal.last?.id ?? "", limit: nil))
         //        DispatchQueue.global(qos: .userInitiated).async {
         StoreStruct.client.run(request) { (statuses) in
+            if statuses.error != nil {
+                NavAlerts.showError(controller:self)
+            }
+            
+            if statuses.value?.count == 0 {
+                NavAlerts.showUpToDate(controller:self)
+            }
             if let stat = (statuses.value) {
                 
                 if stat.isEmpty || self.lastThing2 == stat.first?.id ?? "" {} else {
@@ -5408,6 +5454,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         let request = Timelines.public(local: false, range: .max(id: StoreStruct.statusesFederated.last?.id ?? "", limit: nil))
         //        DispatchQueue.global(qos: .userInitiated).async {
         StoreStruct.client.run(request) { (statuses) in
+            if statuses.error != nil {
+                NavAlerts.showError(controller:self)
+            }
+            
+            if statuses.value?.count == 0 {
+                NavAlerts.showUpToDate(controller:self)
+            }
             if let stat = (statuses.value) {
                 
                 if stat.isEmpty || self.lastThing3 == stat.first?.id ?? "" {} else {
@@ -5437,6 +5490,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             let request = Timelines.home(range: .since(id: StoreStruct.statusesHome.first?.id ?? "", limit: nil))
             //            DispatchQueue.global(qos: .userInitiated).async {
             StoreStruct.client.run(request) { (statuses) in
+                if statuses.error != nil {
+                    NavAlerts.showError(controller:self)
+                }
+                
+                if statuses.value?.count == 0 {
+                    NavAlerts.showUpToDate(controller:self)
+                }
                 if let stat = (statuses.value) {
                     
                     var newestC = StoreStruct.statusesHome.count
@@ -5517,6 +5577,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             let request = Timelines.public(local: true, range: .since(id: StoreStruct.statusesLocal.first?.id ?? "", limit: nil))
             //            DispatchQueue.global(qos: .userInitiated).async {
             StoreStruct.client.run(request) { (statuses) in
+                if statuses.error != nil {
+                    NavAlerts.showError(controller:self)
+                } 
+                
+                if statuses.value?.count == 0 {
+                    NavAlerts.showUpToDate(controller:self)
+                }
                 if let stat = (statuses.value) {
                     
                     var newestC = StoreStruct.statusesLocal.count
@@ -5600,6 +5667,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             let request = Timelines.public(local: false, range: .since(id: StoreStruct.statusesFederated.first?.id ?? "", limit: nil))
             //            DispatchQueue.global(qos: .userInitiated).async {
             StoreStruct.client.run(request) { (statuses) in
+                if statuses.error != nil {
+                    NavAlerts.showError(controller:self)
+                }
+                
+                if statuses.value?.count == 0 {
+                    NavAlerts.showUpToDate(controller:self)
+                }
                 if let stat = (statuses.value) {
                     
                     var newestC = StoreStruct.statusesFederated.count

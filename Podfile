@@ -28,5 +28,6 @@ pod 'Fabric'
 pod 'MessageKit'
 pod 'TesseractOCRiOS'
 pod 'CropViewController'
+pod 'SwiftMessages'
 
 end

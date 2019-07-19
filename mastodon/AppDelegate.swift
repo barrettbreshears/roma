@@ -586,7 +586,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
             print("Couldn't load")
         }
 
-        self.window?.rootViewController = nil
         if UIApplication.shared.isSplitOrSlideOver {
             //            self.window?.rootViewController = ViewController()
             //            self.window?.makeKeyAndVisible()

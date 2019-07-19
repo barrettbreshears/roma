@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "1ED20FC65B44BB5D0962C7FBE687F278"
+               BlueprintIdentifier = "3AE7624FEC2F85A99F7A7B5146136D7D"
                BuildableName = "ReactiveSSE.framework"
                BlueprintName = "ReactiveSSE"
                ReferencedContainer = "container:Pods.xcodeproj">
