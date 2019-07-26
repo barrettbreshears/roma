@@ -467,18 +467,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
             UserDefaults.standard.set(StoreStruct.currentUser.username, forKey: "userN")
             DispatchQueue.global(qos: .userInitiated).async {
                 do {
-                    try Disk.save(StoreStruct.currentUser, to: .documents, as: "use.json")
+                    // ** try Disk.save(StoreStruct.currentUser, to: .documents, as: "use.json")
                     
-                    try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
-                    try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
-                    try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                    // ** try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                    // ** try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                    // ** try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                     
-                    try Disk.save(StoreStruct.notifications, to: .documents, as: "noti.json")
-                    try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "ment.json")
+                    // ** try Disk.save(StoreStruct.notifications, to: .documents, as: "noti.json")
+                    // ** try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "ment.json")
                     
-                    try Disk.save(StoreStruct.gapLastHomeStat, to: .documents, as: "homestat.json")
-                    try Disk.save(StoreStruct.gapLastLocalStat, to: .documents, as: "localstat.json")
-                    try Disk.save(StoreStruct.gapLastFedStat, to: .documents, as: "fedstat.json")
+                    // ** try Disk.save(StoreStruct.gapLastHomeStat, to: .documents, as: "homestat.json")
+                    // ** try Disk.save(StoreStruct.gapLastLocalStat, to: .documents, as: "localstat.json")
+                    // ** try Disk.save(StoreStruct.gapLastFedStat, to: .documents, as: "fedstat.json")
                 } catch {
                     print("Couldn't save")
                 }

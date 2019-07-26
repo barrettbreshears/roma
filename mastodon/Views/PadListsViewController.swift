@@ -43,11 +43,11 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
         self.tableViewLists.register(ProCells.self, forCellReuseIdentifier: "colcell2")
         
         let request0 = Lists.all()
-        StoreStruct.client.run(request0) { (statuses) in
+        StoreStruct.client.run(request0) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 StoreStruct.allLists = stat
                 DispatchQueue.main.async {
-                    self.tableViewLists.reloadData()
+                    self?.tableViewLists.reloadData()
                 }
             }
         }
@@ -83,11 +83,11 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
     
     @objc func liload() {
         let request0 = Lists.all()
-        StoreStruct.client.run(request0) { (statuses) in
+        StoreStruct.client.run(request0) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 StoreStruct.allLists = stat
                 DispatchQueue.main.async {
-                    self.tableViewLists.reloadData()
+                    self?.tableViewLists.reloadData()
                 }
             }
         }
@@ -304,13 +304,13 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
                         
                         StoreStruct.allListRelID = StoreStruct.allLists[indexPath.row].id
                         let request = Lists.accounts(id: StoreStruct.allListRelID)
-                        StoreStruct.client.run(request) { (statuses) in
+                        StoreStruct.client.run(request) {[weak self] (statuses) in
                             if let stat = (statuses.value) {
                                 DispatchQueue.main.async {
                                     let controller = ListMembersViewController()
                                     controller.currentTagTitle = "List Members".localized
                                     controller.currentTags = stat
-                                    self.navigationController?.pushViewController(controller, animated: true)
+                                    self?.navigationController?.pushViewController(controller, animated: true)
                                 }
                             }
                         }
@@ -342,10 +342,10 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
                         }
                         
                         let request = Lists.delete(id: StoreStruct.allLists[indexPath.row].id)
-                        StoreStruct.client.run(request) { (statuses) in
+                        StoreStruct.client.run(request) {[weak self] (statuses) in
                             DispatchQueue.main.async {
                                 StoreStruct.allLists.remove(at: indexPath.row)
-                                self.tableViewLists.reloadData()
+                                self?.tableViewLists.reloadData()
                             }
                         }
                     }
@@ -402,10 +402,10 @@ class PadListsViewController: UIViewController, UITableViewDelegate, UITableView
                         }
                         
                         let request = Lists.delete(id: StoreStruct.allLists[indexPath.row].id)
-                        StoreStruct.client.run(request) { (statuses) in
+                        StoreStruct.client.run(request) { [weak self] (statuses) in
                             DispatchQueue.main.async {
                                 StoreStruct.allLists.remove(at: indexPath.row)
-                                self.tableViewLists.reloadData()
+                                self?.tableViewLists.reloadData()
                             }
                         }
                     }

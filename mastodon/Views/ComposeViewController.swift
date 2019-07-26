@@ -2808,7 +2808,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
         StoreStruct.newdrafts.append(newDraft)
         do {
-            try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+            // ** try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
         } catch {
             print("err")
         }
@@ -3796,7 +3796,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 
                 StoreStruct.newdrafts.append(newDraft)
                 do {
-                    try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                    // ** try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
                 } catch {
                     print("err")
                 }
@@ -3897,7 +3897,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             .action(.destructive("Clear All Drafts".localized), image: nil) { (action, ind) in
                 StoreStruct.newdrafts = []
                 do {
-                    try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                    // ** try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
                 } catch {
                     print("err")
                 }
@@ -4028,7 +4028,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     self.tableViewDrafts.endUpdates()
                     
                     do {
-                        try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                        // ** try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
                     } catch {
                         print("err")
                     }
@@ -4147,7 +4147,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             
             StoreStruct.newdrafts.remove(at: indexPath.row)
             do {
-                try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+                // ** try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
             } catch {
                 print("err")
             }

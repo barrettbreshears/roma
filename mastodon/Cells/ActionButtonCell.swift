@@ -140,7 +140,7 @@ class ActionButtonCell: UITableViewCell {
     
     func configure(mainStatus: Status) {
         replyButton.setImage(UIImage(named: "reply0")?.maskWithColor(color: Colours.tabSelected), for: .normal)
-        shareButton.setImage(UIImage(named: "jumptop2")?.maskWithColor(color: Colours.tabSelected), for: .normal)
+        shareButton.setImage(UIImage(named: "share2")?.maskWithColor(color: Colours.tabSelected), for: .normal)
         moreButton.setImage(UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected), for: .normal)
         
         if mainStatus.reblog?.favourited ?? mainStatus.favourited ?? false || StoreStruct.allLikes.contains(mainStatus.reblog?.id ?? mainStatus.id) {
@@ -252,7 +252,7 @@ class ActionButtonCell2: UITableViewCell {
     
     func configure(mainStatus: Status) {
         replyButton.setImage(UIImage(named: "direct2")?.maskWithColor(color: Colours.tabSelected), for: .normal)
-        shareButton.setImage(UIImage(named: "jumptop2")?.maskWithColor(color: Colours.tabSelected), for: .normal)
+        shareButton.setImage(UIImage(named: "share2")?.maskWithColor(color: Colours.tabSelected), for: .normal)
         moreButton.setImage(UIImage(named: "more2")?.maskWithColor(color: Colours.tabSelected), for: .normal)
         
         if mainStatus.reblog?.favourited ?? mainStatus.favourited ?? false || StoreStruct.allLikes.contains(mainStatus.reblog?.id ?? mainStatus.id) {

@@ -169,18 +169,23 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         
         if self.mainStatus.isEmpty {} else {
             let request = Statuses.context(id: self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id)
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
+                
+                guard let ref = self else {
+                    return
+                }
+                
                 if let stat = (statuses.value) {
-                    self.allPrevious = (stat.ancestors)
-                    self.allReplies = (stat.descendants)
+                    ref.allPrevious = (stat.ancestors)
+                    ref.allReplies = (stat.descendants)
                     DispatchQueue.main.async {
                         
-                        (stat.ancestors + self.mainStatus + stat.descendants).map({
+                        (stat.ancestors + ref.mainStatus + stat.descendants).map({
                             var theType = "0"
                             if $0.account.acct == StoreStruct.currentUser.acct {
                                 theType = "1"
                             } else {
-                                self.lastUser = $0.account.acct
+                                ref.lastUser = $0.account.acct
                             }
                             
                             var theText = NSMutableAttributedString(string: $0.content.stripHTML())
@@ -207,25 +212,25 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                             
                             let sender = Sender(id: theType, displayName: "\($0.account.acct)")
                             let x = MockMessage.init(attributedText: theText, sender: sender, messageId: $0.id, date: $0.createdAt)
-                            self.messages.append(x)
-                            self.allPosts.append($0)
+                            ref.messages.append(x)
+                            ref.allPosts.append($0)
                             
                             if $0.mediaAttachments.isEmpty {} else {
                                 let url = URL(string: $0.mediaAttachments.first?.previewURL ?? "")
                                 let imageData = try! Data(contentsOf: url!)
                                 let image1 = UIImage(data: imageData)
                                 let y = MockMessage.init(image: image1!, sender: sender, messageId: $0.id, date: $0.createdAt)
-                                self.messages.append(y)
-                                self.allPosts.append($0)
+                                ref.messages.append(y)
+                                ref.allPosts.append($0)
                             }
                             
-                            self.ai.stopAnimating()
-                            self.ai.alpha = 0
-                            self.ai.removeFromSuperview()
+                            ref.ai.stopAnimating()
+                            ref.ai.alpha = 0
+                            ref.ai.removeFromSuperview()
                         })
                         
-                        self.messagesCollectionView.reloadData()
-                        self.messagesCollectionView.scrollToBottom()
+                        ref.messagesCollectionView.reloadData()
+                        ref.messagesCollectionView.scrollToBottom()
                     }
                 }
             }
@@ -235,42 +240,46 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
     
     @objc func updateThread() {
         let request = Statuses.context(id: self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id)
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) { [weak self] (statuses) in
+            guard let ref = self else {
+                return
+            }
+            
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
-                    self.allPrevious = (stat.ancestors)
-                    self.allReplies = (stat.descendants)
+                    ref.allPrevious = (stat.ancestors)
+                    ref.allReplies = (stat.descendants)
                     
-                    self.messages = []
-                    self.allPosts = []
+                    ref.messages = []
+                    ref.allPosts = []
                     
-                    (self.allPrevious + self.mainStatus + self.allReplies).map({
+                    (ref.allPrevious + ref.mainStatus + ref.allReplies).map({
                         var theType = "0"
                         if $0.account.acct == StoreStruct.currentUser.acct {
                             theType = "1"
                         } else {
-                            self.lastUser = $0.account.acct
+                            ref.lastUser = $0.account.acct
                         }
                         
                         let sender = Sender(id: theType, displayName: "\($0.account.acct)")
                         let x = MockMessage.init(text: $0.content.stripHTML(), sender: sender, messageId: $0.id, date: $0.createdAt)
-                        self.messages.append(x)
-                        self.allPosts.append($0)
+                        ref.messages.append(x)
+                        ref.allPosts.append($0)
                         
                         if $0.mediaAttachments.isEmpty {} else {
                             let url = URL(string: $0.mediaAttachments.first?.previewURL ?? "")
                             let imageData = try! Data(contentsOf: url!)
                             let image1 = UIImage(data: imageData)
                             let y = MockMessage.init(image: image1!, sender: sender, messageId: $0.id, date: $0.createdAt)
-                            self.messages.append(y)
-                            self.allPosts.append($0)
+                            self?.messages.append(y)
+                            self?.allPosts.append($0)
                         }
                         
-                        self.ai.stopAnimating()
-                        self.ai.alpha = 0
-                        self.ai.removeFromSuperview()
+                        ref.ai.stopAnimating()
+                        ref.ai.alpha = 0
+                        ref.ai.removeFromSuperview()
                         
-                        self.messagesCollectionView.reloadData()
+                        ref.messagesCollectionView.reloadData()
                     })
                 }
             }
@@ -375,15 +384,15 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         let x = MockMessage.init(text: thText, sender: sender, messageId: "18982", date: Date())
         
         let request0 = Statuses.create(status: "@\(self.lastUser) \(String(describing: thText))", replyToID: self.mainStatus[0].id, mediaIDs: [], sensitive: self.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
-        StoreStruct.client.run(request0) { (statuses) in
+        StoreStruct.client.run(request0) { [weak self] (statuses) in
             
             DispatchQueue.main.async {
                 if let stat = statuses.value {
-                    self.allPosts.append(stat)
-                    self.messages.append(x)
-                    self.messagesCollectionView.reloadData()
-                    self.messagesCollectionView.scrollToBottom()
-                    self.messageInputBar.inputTextView.text = ""
+                    self?.allPosts.append(stat)
+                    self?.messages.append(x)
+                    self?.messagesCollectionView.reloadData()
+                    self?.messagesCollectionView.scrollToBottom()
+                    self?.messageInputBar.inputTextView.text = ""
                 }
             }
         }
@@ -427,26 +436,25 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                         let image = self.thumbnailForVideoAtURL(url: videoURL)
                         
                         let request = Media.upload(media: .gif(yy))
-                        StoreStruct.client.run(request) { (statuses) in
+                        StoreStruct.client.run(request) {[weak self](statuses) in
+                            guard let ref = self else {
+                                return
+                            }
                             if let stat = (statuses.value) {
                                 mediaIDs.append(stat.id)
-                                let request7 = Media.updateDescription(description: "", id: stat.id)
-                                StoreStruct.client.run(request7) { (statuses) in
-                                    
-                                }
                                 
                                 let sender = Sender(id: "1", displayName: "\(StoreStruct.currentUser.acct)")
                                 let x = MockMessage.init(image: image ?? UIImage(), sender: sender, messageId: "18982", date: Date())
                                 
-                                let request0 = Statuses.create(status: "@\(self.lastUser)", replyToID: self.mainStatus[0].id, mediaIDs: mediaIDs, sensitive: self.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
+                                let request0 = Statuses.create(status: "@\(ref.lastUser)", replyToID: ref.mainStatus[0].id, mediaIDs: mediaIDs, sensitive: ref.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
                                 StoreStruct.client.run(request0) { (statuses) in
                                     
                                     DispatchQueue.main.async {
                                         if let stat = statuses.value {
-                                            self.allPosts.append(stat)
-                                            self.messages.append(x)
-                                            self.messagesCollectionView.reloadData()
-                                            self.messagesCollectionView.scrollToBottom()
+                                            ref.allPosts.append(stat)
+                                            ref.messages.append(x)
+                                            ref.messagesCollectionView.reloadData()
+                                            ref.messagesCollectionView.scrollToBottom()
                                         }
                                     }
                                 }
@@ -479,26 +487,28 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                     
                     let imageData = (StoreStruct.photoNew).jpegData(compressionQuality: compression)
                     let request = Media.upload(media: .jpeg(imageData))
-                    StoreStruct.client.run(request) { (statuses) in
+                    StoreStruct.client.run(request) {[weak self] (statuses) in
+                        
+                        guard let ref = self else {
+                            return
+                        }
+                        
                         if let stat = (statuses.value) {
                             mediaIDs.append(stat.id)
-                            let request7 = Media.updateDescription(description: "", id: stat.id)
-                            StoreStruct.client.run(request7) { (statuses) in
-                                
-                            }
+                            
                             
                             let sender = Sender(id: "1", displayName: "\(StoreStruct.currentUser.acct)")
                             let x = MockMessage.init(image: StoreStruct.photoNew, sender: sender, messageId: "18982", date: Date())
                             
-                            let request0 = Statuses.create(status: "@\(self.lastUser)", replyToID: self.mainStatus[0].id, mediaIDs: mediaIDs, sensitive: self.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
+                            let request0 = Statuses.create(status: "@\(ref.lastUser)", replyToID: ref.mainStatus[0].id, mediaIDs: mediaIDs, sensitive: ref.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
                             StoreStruct.client.run(request0) { (statuses) in
                                 
                                 DispatchQueue.main.async {
                                     if let stat = statuses.value {
-                                        self.allPosts.append(stat)
-                                        self.messages.append(x)
-                                        self.messagesCollectionView.reloadData()
-                                        self.messagesCollectionView.scrollToBottom()
+                                        ref.allPosts.append(stat)
+                                        ref.messages.append(x)
+                                        ref.messagesCollectionView.reloadData()
+                                        ref.messagesCollectionView.scrollToBottom()
                                     }
                                 }
                             }
@@ -622,26 +632,26 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                         guard let yy = try? Data(contentsOf: avassetURL.url) else { return }
                         
                         let request = Media.upload(media: .gif(yy))
-                        StoreStruct.client.run(request) { (statuses) in
+                        StoreStruct.client.run(request) { [weak self] (statuses) in
+                            guard let ref = self else {
+                                return
+                            }
                             if let stat = (statuses.value) {
                                 mediaIDs.append(stat.id)
-                                let request7 = Media.updateDescription(description: "", id: stat.id)
-                                StoreStruct.client.run(request7) { (statuses) in
-                                    
-                                }
+                                
                                 
                                 let sender = Sender(id: "1", displayName: "\(StoreStruct.currentUser.acct)")
                                 let x = MockMessage.init(image: imageDa, sender: sender, messageId: "18982", date: Date())
                                 
-                                let request0 = Statuses.create(status: "@\(self.lastUser)", replyToID: self.mainStatus[0].id, mediaIDs: mediaIDs, sensitive: self.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
+                                let request0 = Statuses.create(status: "@\(ref.lastUser)", replyToID: ref.mainStatus[0].id, mediaIDs: mediaIDs, sensitive: ref.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
                                 StoreStruct.client.run(request0) { (statuses) in
                                     
                                     DispatchQueue.main.async {
                                         if let stat = statuses.value {
-                                            self.allPosts.append(stat)
-                                            self.messages.append(x)
-                                            self.messagesCollectionView.reloadData()
-                                            self.messagesCollectionView.scrollToBottom()
+                                            ref.allPosts.append(stat)
+                                            ref.messages.append(x)
+                                            ref.messagesCollectionView.reloadData()
+                                            ref.messagesCollectionView.scrollToBottom()
                                         }
                                     }
                                 }
@@ -659,26 +669,26 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                         
                         let imageData = (image ?? UIImage()).jpegData(compressionQuality: compression)
                         let request = Media.upload(media: .jpeg(imageData))
-                        StoreStruct.client.run(request) { (statuses) in
+                        StoreStruct.client.run(request) { [weak self] (statuses) in
+                            guard let ref = self else {
+                                return
+                            }
                             if let stat = (statuses.value) {
                                 mediaIDs.append(stat.id)
-                                let request7 = Media.updateDescription(description: "", id: stat.id)
-                                StoreStruct.client.run(request7) { (statuses) in
-                                    
-                                }
+                                
                                 
                                 let sender = Sender(id: "1", displayName: "\(StoreStruct.currentUser.acct)")
                                 let x = MockMessage.init(image: image ?? UIImage(), sender: sender, messageId: "18982", date: Date())
                                 
-                                let request0 = Statuses.create(status: "@\(self.lastUser)", replyToID: self.mainStatus[0].id, mediaIDs: mediaIDs, sensitive: self.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
+                                let request0 = Statuses.create(status: "@\(ref.lastUser)", replyToID: ref.mainStatus[0].id, mediaIDs: mediaIDs, sensitive: ref.mainStatus[0].sensitive, spoilerText: StoreStruct.spoilerText, scheduledAt: nil, poll: nil, visibility: .direct)
                                 StoreStruct.client.run(request0) { (statuses) in
                                     
                                     DispatchQueue.main.async {
                                         if let stat = statuses.value {
-                                            self.allPosts.append(stat)
-                                            self.messages.append(x)
-                                            self.messagesCollectionView.reloadData()
-                                            self.messagesCollectionView.scrollToBottom()
+                                            ref.allPosts.append(stat)
+                                            ref.messages.append(x)
+                                            ref.messagesCollectionView.reloadData()
+                                            ref.messagesCollectionView.scrollToBottom()
                                         }
                                     }
                                 }

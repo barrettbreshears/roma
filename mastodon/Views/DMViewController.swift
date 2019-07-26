@@ -128,13 +128,13 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     @objc func goMembers() {
         let request = Lists.accounts(id: StoreStruct.allListRelID)
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
                     let controller = ListMembersViewController()
                     controller.currentTagTitle = "List Members".localized
                     controller.currentTags = stat
-                    self.navigationController?.pushViewController(controller, animated: true)
+                    self?.navigationController?.pushViewController(controller, animated: true)
                 }
             }
         }
@@ -291,17 +291,17 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     @objc func goToIDNoti() {
         sleep(2)
         let request = Notifications.notification(id: StoreStruct.curIDNoti)
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) { [weak self] (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
                     if let x = stat.status {
                         let controller = DetailViewController()
                         controller.mainStatus.append(x)
-                        self.navigationController?.pushViewController(controller, animated: true)
+                        self?.navigationController?.pushViewController(controller, animated: true)
                     } else {
                         let controller = ThirdViewController()
                         controller.userIDtoUse = stat.account.id
-                        self.navigationController?.pushViewController(controller, animated: true)
+                        self?.navigationController?.pushViewController(controller, animated: true)
                     }
                 }
             }
@@ -311,12 +311,12 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     @objc func goToID() {
         sleep(2)
         let request = Statuses.status(id: StoreStruct.curID)
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
                     let controller = DetailViewController()
                     controller.mainStatus.append(stat)
-                    self.navigationController?.pushViewController(controller, animated: true)
+                    self?.navigationController?.pushViewController(controller, animated: true)
                 }
             }
         }
@@ -525,7 +525,10 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
             settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
             
             DispatchQueue.main.async {
-                self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+                
+                if StoreStruct.currentUser != nil {
+                    self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+                }
             }
             
             
@@ -589,7 +592,9 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
         
         DispatchQueue.main.async {
-            self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            if StoreStruct.currentUser != nil {
+                self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            }
         }
         
         settingsButton.adjustsImageWhenHighlighted = false
@@ -1033,7 +1038,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         if sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].id ) {
             StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != sto[sender.tag].id }
             let request2 = Statuses.unreblog(id: sto[sender.tag].id )
-            StoreStruct.client.run(request2) { (statuses) in
+            StoreStruct.client.run(request2) {(statuses) in
                 DispatchQueue.main.async {
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: rrr)) as? DMFeedCell {
                         if sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].id ) {
@@ -1357,13 +1362,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     statusAlert.show()
                                 }
                                 
-                                let request = Accounts.mute(id: sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                         
-                                    }
-                                }
+                                
                             } else {
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
@@ -1378,13 +1377,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     statusAlert.show()
                                 }
                                 
-                                let request = Accounts.unmute(id: sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                         
-                                    }
-                                }
+                                
                             }
                             
                         }
@@ -1405,13 +1398,6 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     statusAlert.show()
                                 }
                                 
-                                let request = Accounts.block(id: sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                         
-                                    }
-                                }
                             } else {
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
@@ -1426,13 +1412,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     statusAlert.show()
                                 }
                                 
-                                let request = Accounts.unblock(id: sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                         
-                                    }
-                                }
+                                
                             }
                             
                         }
@@ -1463,13 +1443,6 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                         statusAlert.show()
                                     }
                                     
-                                    let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].id ], reason: "Harassment")
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                             
-                                        }
-                                    }
                                     
                                 }
                                 .action(.default("No Content Warning"), image: nil) { (action, ind) in
@@ -1489,13 +1462,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                         statusAlert.show()
                                     }
                                     
-                                    let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].id ], reason: "No Content Warning")
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                             
-                                        }
-                                    }
+                                    
                                     
                                 }
                                 .action(.default("Spam"), image: nil) { (action, ind) in
@@ -1515,13 +1482,7 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                         statusAlert.show()
                                     }
                                     
-                                    let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].id ], reason: "Spam")
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                             
-                                        }
-                                    }
+                                    
                                     
                                 }
                                 .action(.cancel("Dismiss"))
@@ -1716,11 +1677,11 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
 //        }
         
         let request2 = Timelines.markRead(id: StoreStruct.notificationsDirect[indexPath.row].id)
-        StoreStruct.client.run(request2) { (statuses) in
+        StoreStruct.client.run(request2) {[weak self](statuses) in
             DispatchQueue.main.async {
                 StoreStruct.markedReadIDs.append(StoreStruct.notificationsDirect[indexPath.row].id)
 //                self.tableView.reloadRows(at: [indexPath], with: .none)
-                if let cell = self.tableView.cellForRow(at: indexPath) as? DMFeedCell {
+                if let cell = self?.tableView.cellForRow(at: indexPath) as? DMFeedCell {
                     cell.configure2(false, id: StoreStruct.notificationsDirect[indexPath.row].id)
                 }
             }
@@ -1730,13 +1691,13 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
     func fetchMoreNotifications() {
         let request = Timelines.direct(range: .max(id: StoreStruct.notificationsDirect.last?.id ?? "", limit: 5000))
        // let request = Timelines.conversations(range: .max(id: StoreStruct.notificationsDirect.last?.id ?? "", limit: 5000))
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty {} else {
                     StoreStruct.notificationsDirect = StoreStruct.notificationsDirect + stat
                     DispatchQueue.main.async {
                         StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
-                        self.tableView.reloadData()
+                        self?.tableView.reloadData()
                     }
                 }
             }
@@ -1747,17 +1708,17 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         let request = Timelines.direct(range: .since(id: StoreStruct.notificationsDirect.first?.id ?? "", limit: 5000))
         // let request = Timelines.conversations(range: .since(id: StoreStruct.notificationsDirect.first?.id ?? "", limit: 5000))
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 if stat.isEmpty {} else {
                     StoreStruct.notificationsDirect = stat + StoreStruct.notificationsDirect
                     StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.sorted(by: { ($0.createdAt ?? Date()) > ($1.createdAt ?? Date()) })
                     DispatchQueue.main.async {
-                        self.tableView.cr.endHeaderRefresh()
+                        self?.tableView.cr.endHeaderRefresh()
                         StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
-                        self.ai.stopAnimating()
-                        self.ai.alpha = 0
-                        self.tableView.reloadData()
+                        self?.ai.stopAnimating()
+                        self?.ai.alpha = 0
+                        self?.tableView.reloadData()
                     }
                 }
             }

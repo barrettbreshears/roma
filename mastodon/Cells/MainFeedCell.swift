@@ -470,10 +470,10 @@ class MainFeedCell: SwipeTableViewCell {
         date.font = UIFont.systemFont(ofSize: Colours.fontSize3)
         toot.font = UIFont.systemFont(ofSize: Colours.fontSize1)
 
-        DispatchQueue.global(qos: .userInitiated).async {
-        self.profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
-        self.profileImageView.pin_updateWithProgress = true
-        self.profileImageView.pin_setImage(from: URL(string: "\(status.reblog?.account.avatar ?? status.account.avatar)"))
+        DispatchQueue.main.async { [weak self]  in
+            self?.profileImageView.pin_setPlaceholder(with: UIImage(named: "logo"))
+            self?.profileImageView.pin_updateWithProgress = true
+            self?.profileImageView.pin_setImage(from: URL(string: "\(status.reblog?.account.avatar ?? status.account.avatar)"))
         }
         profileImageView.layer.masksToBounds = true
         profileImageView.layer.borderColor = UIColor.black.cgColor

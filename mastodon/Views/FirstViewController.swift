@@ -171,17 +171,17 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     @objc func goToIDNoti() {
         sleep(2)
         let request = Notifications.notification(id: StoreStruct.curIDNoti)
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
                     if let x = stat.status {
                         let controller = DetailViewController()
                         controller.mainStatus.append(x)
-                        self.navigationController?.pushViewController(controller, animated: true)
+                        self?.navigationController?.pushViewController(controller, animated: true)
                     } else {
                         let controller = ThirdViewController()
                         controller.userIDtoUse = stat.account.id
-                        self.navigationController?.pushViewController(controller, animated: true)
+                        self?.navigationController?.pushViewController(controller, animated: true)
                     }
                 }
             }
@@ -191,12 +191,12 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     @objc func goToID() {
         sleep(2)
         let request = Statuses.status(id: StoreStruct.curID)
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
                     let controller = DetailViewController()
                     controller.mainStatus.append(stat)
-                    self.navigationController?.pushViewController(controller, animated: true)
+                    self?.navigationController?.pushViewController(controller, animated: true)
                 }
             }
         }
@@ -252,22 +252,29 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     
     @objc func setUpProfileImage(){
         
-        self.settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        self.settingsButton.imageView?.layer.cornerRadius = 18
-        self.settingsButton.imageView?.contentMode = .scaleAspectFill
-        self.settingsButton.layer.masksToBounds = true
-        self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+        DispatchQueue.main.async {
+            
+            
+            self.settingsButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            self.settingsButton.imageView?.layer.cornerRadius = 18
+            self.settingsButton.imageView?.contentMode = .scaleAspectFill
+            self.settingsButton.layer.masksToBounds = true
+            
+            if StoreStruct.currentUser != nil {
+                self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+            }
+        }
     }
     
     @objc func goMembers() {
         let request = Lists.accounts(id: StoreStruct.allListRelID)
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
                     let controller = ListMembersViewController()
                     controller.currentTagTitle = "List Members".localized
                     controller.currentTags = stat
-                    self.navigationController?.pushViewController(controller, animated: true)
+                    self?.navigationController?.pushViewController(controller, animated: true)
                 }
             }
         }
@@ -1098,11 +1105,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         
         if StoreStruct.statusesHome.isEmpty {
             let request = Timelines.home()
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
                     StoreStruct.statusesHome = stat
                     DispatchQueue.main.async {
-                        self.tableView.reloadData()
+                        self?.tableView.reloadData()
                     }
                 }
             }
@@ -1241,13 +1248,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             if let indexPath = tableView.indexPathForSelectedRow {
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 let request = Statuses.status(id: StoreStruct.statusesHome[indexPath.row].reblog?.id ?? StoreStruct.statusesHome[indexPath.row].id)
-                StoreStruct.client.run(request) { (statuses) in
+                StoreStruct.client.run(request) {[weak self] (statuses) in
                     if let stat = (statuses.value) {
                         DispatchQueue.main.async {
-                            if let cell = self.tableView.cellForRow(at: indexPath) as? MainFeedCell {
+                            if let cell = self?.tableView.cellForRow(at: indexPath) as? MainFeedCell {
                                 cell.configure0(stat)
                             }
-                            if let cell2 = self.tableView.cellForRow(at: indexPath) as? MainFeedCellImage {
+                            if let cell2 = self?.tableView.cellForRow(at: indexPath) as? MainFeedCellImage {
                                 cell2.configure0(stat)
                             }
                         }
@@ -1258,13 +1265,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             if let indexPath = tableViewL.indexPathForSelectedRow {
                 self.tableViewL.deselectRow(at: indexPath, animated: true)
                 let request = Statuses.status(id: StoreStruct.statusesLocal[indexPath.row].reblog?.id ?? StoreStruct.statusesLocal[indexPath.row].id)
-                StoreStruct.client.run(request) { (statuses) in
+                StoreStruct.client.run(request) { [weak self] (statuses) in
                     if let stat = (statuses.value) {
                         DispatchQueue.main.async {
-                            if let cell = self.tableViewL.cellForRow(at: indexPath) as? MainFeedCell {
+                            if let cell = self?.tableViewL.cellForRow(at: indexPath) as? MainFeedCell {
                                 cell.configure0(stat)
                             }
-                            if let cell2 = self.tableViewL.cellForRow(at: indexPath) as? MainFeedCellImage {
+                            if let cell2 = self?.tableViewL.cellForRow(at: indexPath) as? MainFeedCellImage {
                                 cell2.configure0(stat)
                             }
                         }
@@ -1275,13 +1282,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             if let indexPath = tableViewF.indexPathForSelectedRow {
                 self.tableViewF.deselectRow(at: indexPath, animated: true)
                 let request = Statuses.status(id: StoreStruct.statusesFederated[indexPath.row].reblog?.id ?? StoreStruct.statusesFederated[indexPath.row].id)
-                StoreStruct.client.run(request) { (statuses) in
+                StoreStruct.client.run(request) {[weak self] (statuses) in
                     if let stat = (statuses.value) {
                         DispatchQueue.main.async {
-                            if let cell = self.tableViewF.cellForRow(at: indexPath) as? MainFeedCell {
+                            if let cell = self?.tableViewF.cellForRow(at: indexPath) as? MainFeedCell {
                                 cell.configure0(stat)
                             }
-                            if let cell2 = self.tableViewF.cellForRow(at: indexPath) as? MainFeedCellImage {
+                            if let cell2 = self?.tableViewF.cellForRow(at: indexPath) as? MainFeedCellImage {
                                 cell2.configure0(stat)
                             }
                         }
@@ -1301,7 +1308,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             settingsButton.imageView?.contentMode = .scaleAspectFill
             settingsButton.layer.masksToBounds = true
             DispatchQueue.main.async {
-                self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+                if StoreStruct.currentUser != nil {
+                    self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+                }
             }
             
             
@@ -1454,7 +1463,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
             
             DispatchQueue.main.async {
-                self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+                if StoreStruct.currentUser != nil {
+                    self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+                }
             }
             
             
@@ -1659,7 +1670,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                 
                 if StoreStruct.statusesFederated.isEmpty {
                     let request = Timelines.public(local: false, range: .default)
-                    StoreStruct.client.run(request) { (statuses) in
+                    StoreStruct.client.run(request) { [weak self] (statuses) in
                         if statuses.error != nil {
                             NavAlerts.showError(controller:self)
                         }
@@ -1671,7 +1682,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             DispatchQueue.main.async {
                                 StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
                                 StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
-                                self.tableViewF.reloadData()
+                                self?.tableViewF.reloadData()
                                 
                             }
                         }
@@ -1864,7 +1875,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             }
                             
                             do {
-                                try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                                // ** try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
                             } catch {
                                 print("Couldn't save")
                             }
@@ -1969,7 +1980,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             }
                             
                             do {
-                                try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                                // ** try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
                             } catch {
                                 print("Couldn't save")
                             }
@@ -2082,7 +2093,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             }
                             
                             do {
-                                try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                                // ** try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                             } catch {
                                 print("Couldn't save")
                             }
@@ -2213,7 +2224,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             if StoreStruct.statusesLocal.isEmpty {
                 let request = Timelines.public(local: true, range: .default)
-                StoreStruct.client.run(request) { (statuses) in
+                StoreStruct.client.run(request) {[weak self] (statuses) in
                     if statuses.error != nil {
                         NavAlerts.showError(controller:self)
                     }
@@ -2225,7 +2236,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         StoreStruct.statusesLocal = stat + StoreStruct.statusesLocal
                         DispatchQueue.main.async {
                             StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
-                            self.tableViewL.reloadData()
+                            self?.tableViewL.reloadData()
                             
                         }
                     }
@@ -2267,7 +2278,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             if StoreStruct.statusesFederated.isEmpty {
                 let request = Timelines.public(local: false, range: .default)
-                StoreStruct.client.run(request) { (statuses) in
+                StoreStruct.client.run(request) {[weak self] (statuses) in
                     if statuses.error != nil {
                         NavAlerts.showError(controller:self)
                     }
@@ -2279,7 +2290,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         StoreStruct.statusesFederated = stat + StoreStruct.statusesFederated
                         DispatchQueue.main.async {
                             StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
-                            self.tableViewF.reloadData()
+                            self?.tableViewF.reloadData()
                             
                         }
                     }
@@ -3879,7 +3890,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
             StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
             let request2 = Statuses.unreblog(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
-            StoreStruct.client.run(request2) { (statuses) in
+            StoreStruct.client.run(request2) {[weak self] (statuses) in
                 DispatchQueue.main.async {
                     if let cell = theTable.cellForRow(at:IndexPath(row: sender.tag, section: 0)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
@@ -4700,11 +4711,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 }
                                 
                                 let request = Accounts.mute(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                    }
-                                }
+                                
                             } else {
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
@@ -4720,11 +4727,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 }
                                 
                                 let request = Accounts.unmute(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                    }
-                                }
+                               
                             }
                             
                         }
@@ -4766,11 +4769,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 }
                                 
                                 let request = Accounts.unblock(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                    }
-                                }
+                                
                             }
                             
                         }
@@ -4801,11 +4800,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Harassment")
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                        }
-                                    }
+                                    
                                     
                                 }
                                 .action(.default("No Content Warning"), image: nil) { (action, ind) in
@@ -4826,11 +4821,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "No Content Warning")
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                        }
-                                    }
+                                   
                                     
                                 }
                                 .action(.default("Spam"), image: nil) { (action, ind) in
@@ -4851,11 +4842,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Spam")
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                        }
-                                    }
+                                   
                                     
                                 }
                                 .action(.cancel("Dismiss"))
@@ -5132,7 +5119,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         if self.currentIndex == 0 {
             let request = Timelines.home(range: .max(id: StoreStruct.gapLastHomeID, limit: nil))
             //            DispatchQueue.global(qos: .userInitiated).async {
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
                     
                     if stat.isEmpty {} else {
@@ -5158,24 +5145,27 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         let newestC = y.first!.count + stat.count - 1
                         
                         DispatchQueue.main.async {
+                            guard let ref = self else {
+                                return
+                            }
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
-                                self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
-                                self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                ref.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
+                                ref.newUpdatesB1.frame.origin.x = CGFloat(ref.view.bounds.width + 78)
                                 springWithDelay(duration: 0.5, delay: 0, animations: {
-                                    self.newUpdatesB1.alpha = 1
-                                    self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                    ref.newUpdatesB1.alpha = 1
+                                    ref.newUpdatesB1.frame.origin.x = CGFloat(ref.view.bounds.width - 42)
                                 })
-                                self.countcount1 = stat.count
+                                ref.countcount1 = stat.count
                                 
                                 DispatchQueue.main.async {
                                     UIView.setAnimationsEnabled(false)
 //                                    self.tableView.reloadData()
-                                    let afterContentOffset = self.tableView.contentOffset
-                                    let beforeContentSize = self.tableView.contentSize
-                                    self.tableView.reloadData()
-                                    let afterContentSize = self.tableView.contentSize
+                                    let afterContentOffset = ref.tableView.contentOffset
+                                    let beforeContentSize = ref.tableView.contentSize
+                                    ref.tableView.reloadData()
+                                    let afterContentSize = ref.tableView.contentSize
                                     let newContentOffset = CGPoint(x: 0, y: afterContentOffset.y + afterContentSize.height - beforeContentSize.height)
-                                    self.tableView.contentOffset = newContentOffset
+                                    ref.tableView.contentOffset = newContentOffset
 //                                    if newestC == 0 {
 //
 //                                    } else {
@@ -5193,7 +5183,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 
                                 DispatchQueue.global(qos: .userInitiated).async {
                                 do {
-                                    try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                                    // ** try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
                                 } catch {
                                     print("Couldn't save")
                                 }
@@ -5201,7 +5191,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             } else {
                                 
                                 DispatchQueue.main.async {
-                                    self.tableView.reloadData()
+                                    ref.tableView.reloadData()
                                 }
                                 
                             }
@@ -5215,7 +5205,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             
             let request = Timelines.public(local: true, range: .max(id: StoreStruct.gapLastLocalID, limit: nil))
             //            DispatchQueue.global(qos: .userInitiated).async {
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) { [weak self] (statuses) in
                 if let stat = (statuses.value) {
                     
                     if stat.isEmpty {} else {
@@ -5239,27 +5229,30 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         }
                         
                         
+                        guard let ref = self else{
+                            return
+                        }
                         let newestC = y.first!.count + stat.count - 1
                         
                         DispatchQueue.main.async {
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
-                                self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
-                                self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                ref.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
+                                ref.newUpdatesB1.frame.origin.x = CGFloat(ref.view.bounds.width + 78)
                                 springWithDelay(duration: 0.5, delay: 0, animations: {
-                                    self.newUpdatesB1.alpha = 1
-                                    self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                    ref.newUpdatesB1.alpha = 1
+                                    ref.newUpdatesB1.frame.origin.x = CGFloat(ref.view.bounds.width - 42)
                                 })
-                                self.countcount1 = stat.count
+                                ref.countcount1 = stat.count
                                 
                                 DispatchQueue.main.async {
                                     UIView.setAnimationsEnabled(false)
 //                                    self.tableViewL.reloadData()
-                                    let afterContentOffset = self.tableViewL.contentOffset
-                                    let beforeContentSize = self.tableViewL.contentSize
-                                    self.tableViewL.reloadData()
-                                    let afterContentSize = self.tableViewL.contentSize
+                                    let afterContentOffset = ref.tableViewL.contentOffset
+                                    let beforeContentSize = ref.tableViewL.contentSize
+                                    ref.tableViewL.reloadData()
+                                    let afterContentSize = ref.tableViewL.contentSize
                                     let newContentOffset = CGPoint(x: 0, y: afterContentOffset.y + afterContentSize.height - beforeContentSize.height)
-                                    self.tableViewL.contentOffset = newContentOffset
+                                    ref.tableViewL.contentOffset = newContentOffset
 //                                    if newestC == 0 {
 //
 //                                    } else {
@@ -5276,7 +5269,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 
                                 DispatchQueue.global(qos: .userInitiated).async {
                                 do {
-                                    try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                                    // ** try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
                                 } catch {
                                     print("Couldn't save")
                                 }
@@ -5284,7 +5277,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             } else {
                                 
                                 DispatchQueue.main.async {
-                                    self.tableViewL.reloadData()
+                                    ref.tableViewL.reloadData()
                                 }
                                 
                             }
@@ -5297,7 +5290,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         } else {
             let request = Timelines.public(local: false, range: .max(id: StoreStruct.gapLastFedID, limit: nil))
             //            DispatchQueue.global(qos: .userInitiated).async {
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
                     
                     if stat.isEmpty {} else {
@@ -5318,28 +5311,31 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                         }
                         
+                        guard let ref = self else{
+                            return
+                        }
                         
                         let newestC = y.first!.count + stat.count - 1
                         
                         DispatchQueue.main.async {
                             if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
-                                self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
-                                self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                                ref.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
+                                ref.newUpdatesB1.frame.origin.x = CGFloat(ref.view.bounds.width + 78)
                                 springWithDelay(duration: 0.5, delay: 0, animations: {
-                                    self.newUpdatesB1.alpha = 1
-                                    self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                    ref.newUpdatesB1.alpha = 1
+                                    ref.newUpdatesB1.frame.origin.x = CGFloat(ref.view.bounds.width - 42)
                                 })
-                                self.countcount1 = stat.count
+                                ref.countcount1 = stat.count
                                 
                                 DispatchQueue.main.async {
                                     UIView.setAnimationsEnabled(false)
 //                                    self.tableViewF.reloadData()
-                                    let afterContentOffset = self.tableViewF.contentOffset
-                                    let beforeContentSize = self.tableViewF.contentSize
-                                    self.tableViewF.reloadData()
-                                    let afterContentSize = self.tableViewF.contentSize
+                                    let afterContentOffset = ref.tableViewF.contentOffset
+                                    let beforeContentSize = ref.tableViewF.contentSize
+                                    ref.tableViewF.reloadData()
+                                    let afterContentSize = ref.tableViewF.contentSize
                                     let newContentOffset = CGPoint(x: 0, y: afterContentOffset.y + afterContentSize.height - beforeContentSize.height)
-                                    self.tableViewF.contentOffset = newContentOffset
+                                    ref.tableViewF.contentOffset = newContentOffset
 //                                    if newestC == 0 {
 //
 //                                    } else {
@@ -5356,7 +5352,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 
                                 DispatchQueue.global(qos: .userInitiated).async {
                                 do {
-                                    try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                                    // ** try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                                 } catch {
                                     print("Couldn't save")
                                 }
@@ -5364,7 +5360,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             } else {
                                 
                                 DispatchQueue.main.async {
-                                    self.tableViewF.reloadData()
+                                    ref.tableViewF.reloadData()
                                 }
                                 
                             }
@@ -5381,7 +5377,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     func fetchMoreHome() {
         let request = Timelines.home(range: .max(id: StoreStruct.statusesHome.last?.id ?? "", limit: nil))
         //        DispatchQueue.global(qos: .userInitiated).async {
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) { [weak self] (statuses) in
             if statuses.error != nil {
                 NavAlerts.showError(controller:self)
             }
@@ -5391,19 +5387,23 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
             if let stat = (statuses.value) {
                 
-                if stat.isEmpty || self.lastThing == stat.first?.id ?? "" {} else {
-                    self.lastThing = stat.first?.id ?? ""
+                guard let ref = self else {
+                    return
+                }
+                
+                if stat.isEmpty || ref.lastThing == stat.first?.id ?? "" {} else {
+                    self?.lastThing = stat.first?.id ?? ""
                     
                     StoreStruct.statusesHome = StoreStruct.statusesHome + stat
                     DispatchQueue.main.async {
                         StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
-                        self.tableView.reloadData()
+                        self?.tableView.reloadData()
                     }
                     
                     do {
-                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
-                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
-                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                        // ** try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                        // ** try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                        // ** try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                     } catch {
                         print("Couldn't save")
                     }
@@ -5418,7 +5418,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     func fetchMoreLocal() {
         let request = Timelines.public(local: true, range: .max(id: StoreStruct.statusesLocal.last?.id ?? "", limit: nil))
         //        DispatchQueue.global(qos: .userInitiated).async {
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) { [weak self] (statuses) in
             if statuses.error != nil {
                 NavAlerts.showError(controller:self)
             }
@@ -5428,18 +5428,18 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
             if let stat = (statuses.value) {
                 
-                if stat.isEmpty || self.lastThing2 == stat.first?.id ?? "" {} else {
-                    self.lastThing2 = stat.first?.id ?? ""
+                if stat.isEmpty || self?.lastThing2 == stat.first?.id ?? "" {} else {
+                    self?.lastThing2 = stat.first?.id ?? ""
                     StoreStruct.statusesLocal = StoreStruct.statusesLocal + stat
                     DispatchQueue.main.async {
                         StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
-                        self.tableViewL.reloadData()
+                        self?.tableViewL.reloadData()
                     }
                     
                     do {
-                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
-                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
-                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                        // ** try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                        // ** try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                        // ** try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                     } catch {
                         print("Couldn't save")
                     }
@@ -5453,7 +5453,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     func fetchMoreFederated() {
         let request = Timelines.public(local: false, range: .max(id: StoreStruct.statusesFederated.last?.id ?? "", limit: nil))
         //        DispatchQueue.global(qos: .userInitiated).async {
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) {[weak self] (statuses) in
             if statuses.error != nil {
                 NavAlerts.showError(controller:self)
             }
@@ -5463,18 +5463,18 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
             }
             if let stat = (statuses.value) {
                 
-                if stat.isEmpty || self.lastThing3 == stat.first?.id ?? "" {} else {
-                    self.lastThing3 = stat.first?.id ?? ""
+                if stat.isEmpty || self?.lastThing3 == stat.first?.id ?? "" {} else {
+                    self?.lastThing3 = stat.first?.id ?? ""
                     StoreStruct.statusesFederated = StoreStruct.statusesFederated + stat
                     DispatchQueue.main.async {
                         StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
-                        self.tableViewF.reloadData()
+                        self?.tableViewF.reloadData()
                     }
                     
                     do {
-                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
-                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
-                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                        // ** try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                        // ** try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                        // ** try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                     } catch {
                         print("Couldn't save")
                     }
@@ -5489,7 +5489,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         if self.currentIndex == 0 {
             let request = Timelines.home(range: .since(id: StoreStruct.statusesHome.first?.id ?? "", limit: nil))
             //            DispatchQueue.global(qos: .userInitiated).async {
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
                 if statuses.error != nil {
                     NavAlerts.showError(controller:self)
                 }
@@ -5519,9 +5519,12 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                     }
                     
+                    guard let ref = self else {
+                        return
+                    }
                     
                     DispatchQueue.main.async {
-                        self.tableView.cr.endHeaderRefresh()
+                        ref.tableView.cr.endHeaderRefresh()
                         StoreStruct.statusesHome = StoreStruct.statusesHome.removeDuplicates()
                         newestC = StoreStruct.statusesHome.count - newestC - 1
                         if newestC < 0 {
@@ -5529,19 +5532,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         }
                         
                         if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
-                            self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
-                            self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                            ref.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
+                            ref.newUpdatesB1.frame.origin.x = CGFloat(ref.view.bounds.width + 78)
                             if newestC != 0 {
                                 springWithDelay(duration: 0.5, delay: 0, animations: {
-                                    self.newUpdatesB1.alpha = 1
-                                    self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                    ref.newUpdatesB1.alpha = 1
+                                    ref.newUpdatesB1.frame.origin.x = CGFloat(ref.view.bounds.width ?? 0 - 42)
                                 })
                             }
-                            self.countcount1 = stat.count
+                            ref.countcount1 = stat.count
                             
                             if stat.count > 0 {
 //                                self.tableView.cr.endHeaderRefresh()
-                                self.tableView.reloadData()
+                                ref.tableView.reloadData()
                             }
                             //                                self.refreshControl.endRefreshing()
                             if stat.count == 0 {
@@ -5550,13 +5553,13 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if StoreStruct.statusesHome.count == 0 || stat.count == 0 || StoreStruct.statusesHome.count == stat.count {
                                     
                                 } else {
-                                    self.tableView.scrollToRow(at: IndexPath(row: stat.count, section: 0), at: .top, animated: false)
+                                    self?.tableView.scrollToRow(at: IndexPath(row: stat.count, section: 0), at: .top, animated: false)
                                 }
                             }
                         } else {
                             if stat.count > 0 {
 //                                self.tableView.cr.endHeaderRefresh()
-                                self.tableView.reloadData()
+                                self?.tableView.reloadData()
                             }
                             //                                self.refreshControl.endRefreshing()
                         }
@@ -5564,9 +5567,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     }
                     
                     do {
-                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
-                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
-                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                        // ** try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                        // ** try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                        // ** try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                     } catch {
                         print("Couldn't save")
                     }
@@ -5576,7 +5579,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         } else if self.currentIndex == 1 {
             let request = Timelines.public(local: true, range: .since(id: StoreStruct.statusesLocal.first?.id ?? "", limit: nil))
             //            DispatchQueue.global(qos: .userInitiated).async {
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) { [weak self] (statuses) in
                 if statuses.error != nil {
                     NavAlerts.showError(controller:self)
                 } 
@@ -5608,8 +5611,12 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     }
                     
                     
+                    guard let ref = self else {
+                        return
+                    }
+                    
                     DispatchQueue.main.async {
-                        self.tableView.cr.endHeaderRefresh()
+                        ref.tableView.cr.endHeaderRefresh()
                         StoreStruct.statusesLocal = StoreStruct.statusesLocal.removeDuplicates()
                         newestC = StoreStruct.statusesLocal.count - newestC - 1
                         if newestC < 0 {
@@ -5617,19 +5624,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         }
                         
                         if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
-                            self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
-                            self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                            ref.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
+                            ref.newUpdatesB1.frame.origin.x = CGFloat(ref.view.bounds.width + 78)
                             if newestC != 0 {
                                 springWithDelay(duration: 0.5, delay: 0, animations: {
-                                    self.newUpdatesB1.alpha = 1
-                                    self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                    ref.newUpdatesB1.alpha = 1
+                                    ref.newUpdatesB1.frame.origin.x = CGFloat(ref.view.bounds.width - 42)
                                 })
                             }
-                            self.countcount2 = stat.count
+                            ref.countcount2 = stat.count
                             
                             if stat.count > 0 {
 //                                self.tableViewL.cr.endHeaderRefresh()
-                                self.tableViewL.reloadData()
+                                ref.tableViewL.reloadData()
                             }
                             //                                self.refreshControl.endRefreshing()
                             if stat.count == 0 {
@@ -5638,14 +5645,14 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if StoreStruct.statusesLocal.count == 0 || stat.count == 0 || StoreStruct.statusesLocal.count == stat.count{
                                     
                                 } else {
-                                    self.tableViewL.scrollToRow(at: IndexPath(row: stat.count, section: 0), at: .top, animated: false)
+                                    ref.tableViewL.scrollToRow(at: IndexPath(row: stat.count, section: 0), at: .top, animated: false)
                                 }
                             }
                         } else {
                             
                             if stat.count > 0 {
 //                                self.tableViewL.cr.endHeaderRefresh()
-                                self.tableViewL.reloadData()
+                                ref.tableViewL.reloadData()
                             }
                             //                                self.refreshControl.endRefreshing()
                             
@@ -5654,9 +5661,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     }
                     
                     do {
-                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
-                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
-                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                        // ** try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                        // ** try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                        // ** try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                     } catch {
                         print("Couldn't save")
                     }
@@ -5666,7 +5673,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         } else {
             let request = Timelines.public(local: false, range: .since(id: StoreStruct.statusesFederated.first?.id ?? "", limit: nil))
             //            DispatchQueue.global(qos: .userInitiated).async {
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) { [weak self] (statuses) in
                 if statuses.error != nil {
                     NavAlerts.showError(controller:self)
                 }
@@ -5695,9 +5702,12 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                     }
                     
+                    guard let ref = self else {
+                        return
+                    }
                     
                     DispatchQueue.main.async {
-                        self.tableView.cr.endHeaderRefresh()
+                        ref.tableView.cr.endHeaderRefresh()
                         StoreStruct.statusesFederated = StoreStruct.statusesFederated.removeDuplicates()
                         newestC = StoreStruct.statusesFederated.count - newestC - 1
                         if newestC < 0 {
@@ -5705,19 +5715,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         }
                         
                         if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
-                            self.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
-                            self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                            ref.newUpdatesB1.setTitle("\(newestC)  ", for: .normal)
+                            ref.newUpdatesB1.frame.origin.x = CGFloat(ref.view.bounds.width + 78)
                             if newestC != 0 {
                                 springWithDelay(duration: 0.5, delay: 0, animations: {
-                                    self.newUpdatesB1.alpha = 1
-                                    self.newUpdatesB1.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                    ref.newUpdatesB1.alpha = 1
+                                    ref.newUpdatesB1.frame.origin.x = CGFloat(ref.view.bounds.width - 42)
                                 })
                             }
-                            self.countcount3 = stat.count
+                            ref.countcount3 = stat.count
                             
                             if stat.count > 0 {
 //                                self.tableViewF.cr.endHeaderRefresh()
-                                self.tableViewF.reloadData()
+                                ref.tableViewF.reloadData()
                             }
                             //                                self.refreshControl.endRefreshing()
                             if stat.count == 0 {
@@ -5726,7 +5736,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 if StoreStruct.statusesFederated.count == 0 || stat.count == 0 || StoreStruct.statusesFederated.count == stat.count{
                                     
                                 } else {
-                                    self.tableViewF.scrollToRow(at: IndexPath(row: stat.count, section: 0), at: .top, animated: false)
+                                    ref.tableViewF.scrollToRow(at: IndexPath(row: stat.count, section: 0), at: .top, animated: false)
                                 }
                             }
                             
@@ -5734,7 +5744,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                             
                             if stat.count > 0 {
 //                                self.tableViewF.cr.endHeaderRefresh()
-                                self.tableViewF.reloadData()
+                                ref.tableViewF.reloadData()
                             }
                             //                                self.refreshControl.endRefreshing()
                             
@@ -5743,9 +5753,9 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                     }
                     
                     do {
-                        try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
-                        try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
-                        try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
+                        // ** try Disk.save(StoreStruct.statusesHome, to: .documents, as: "home.json")
+                        // ** try Disk.save(StoreStruct.statusesLocal, to: .documents, as: "local.json")
+                        // ** try Disk.save(StoreStruct.statusesFederated, to: .documents, as: "fed.json")
                     } catch {
                         print("Couldn't save")
                     }

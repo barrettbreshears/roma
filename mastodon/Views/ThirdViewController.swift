@@ -154,13 +154,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     @objc func updateProfileHere() {
         let request2 = Accounts.currentUser()
-        StoreStruct.client.run(request2) { (statuses) in
+        StoreStruct.client.run(request2) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 StoreStruct.currentUser = stat
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: nil)
-                self.chosenUser = stat
+                self?.chosenUser = stat
                 DispatchQueue.main.async {
-                    self.tableView.reloadData()
+                    self?.tableView.reloadData()
                 }
             }
         }
@@ -168,13 +168,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
     @objc func goMembers() {
         let request = Lists.accounts(id: StoreStruct.allListRelID)
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
                     let controller = ListMembersViewController()
                     controller.currentTagTitle = "List Members".localized
                     controller.currentTags = stat
-                    self.navigationController?.pushViewController(controller, animated: true)
+                    self?.navigationController?.pushViewController(controller, animated: true)
                 }
             }
         }
@@ -346,30 +346,35 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         
         let request = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: true, pinnedOnly: nil, excludeReplies: true, excludeReblogs: true, range: .since(id: "", limit: 5000))
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) {[weak self] (statuses) in
+            
+            guard let ref = self else {
+                return
+            }
+            
             if let stat = (statuses.value) {
                 if stat.isEmpty {
                     DispatchQueue.main.async {
-                        self.profileStatusesHasImage = []
-                        self.tableView.reloadData()
+                        ref.profileStatusesHasImage = []
+                        ref.tableView.reloadData()
                     }
                 } else {
                     DispatchQueue.main.async {
-                        self.profileStatusesHasImage = stat
-                        self.tableView.reloadData()
+                        ref.profileStatusesHasImage = stat
+                        ref.tableView.reloadData()
                     }
                     let request2 = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: true, pinnedOnly: nil, excludeReplies: true, excludeReblogs: true, range: .max(id: stat.last?.id ?? "", limit: 5000))
                     StoreStruct.client.run(request2) { (statuses) in
                         if let stat = (statuses.value) {
                             if stat.isEmpty {
                                 DispatchQueue.main.async {
-                                    self.profileStatusesHasImage = []
-                                    self.tableView.reloadData()
+                                    ref.profileStatusesHasImage = []
+                                    ref.tableView.reloadData()
                                 }
                             } else {
                                 DispatchQueue.main.async {
-                                    self.profileStatusesHasImage = self.profileStatusesHasImage + stat
-                                    self.tableView.reloadData()
+                                    ref.profileStatusesHasImage = ref.profileStatusesHasImage + stat
+                                    ref.tableView.reloadData()
                                 }
                             }
                         }
@@ -381,36 +386,39 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if self.fromOtherUser == true {
             let request = Accounts.statuses(id: self.userIDtoUse)
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
+                guard let ref = self else {
+                    return
+                }
                 if let stat = (statuses.value) {
                     if stat.isEmpty {
                         
-                        let request09 = Accounts.account(id: self.userIDtoUse)
+                        let request09 = Accounts.account(id: ref.userIDtoUse)
                         StoreStruct.client.run(request09) { (statuses) in
                             if let stat = (statuses.value) {
                                 DispatchQueue.main.async {
-                                    self.chosenUser = stat
-                                    self.tableView.reloadData()
+                                    ref.chosenUser = stat
+                                    ref.tableView.reloadData()
                                 }
                             }
                         }
 
                     } else {
                         DispatchQueue.main.async {
-                            self.profileStatuses = stat
-                            self.chosenUser = self.profileStatuses.first?.account ?? nil
+                            ref.profileStatuses = stat
+                            ref.chosenUser = ref.profileStatuses.first?.account ?? nil
                             
-                            self.ai.alpha = 0
-                            self.ai.removeFromSuperview()
-                            self.tableView.reloadData()
+                            ref.ai.alpha = 0
+                            ref.ai.removeFromSuperview()
+                            ref.tableView.reloadData()
                             
-                            if self.chosenUser == nil {
-                                let request9 = Accounts.account(id: self.userIDtoUse)
+                            if ref.chosenUser == nil {
+                                let request9 = Accounts.account(id: ref.userIDtoUse)
                                 StoreStruct.client.run(request9) { (statuses) in
                                     if let stat = (statuses.value) {
                                         DispatchQueue.main.async {
-                                            self.chosenUser = stat
-                                            self.tableView.reloadData()
+                                            ref.chosenUser = stat
+                                            ref.tableView.reloadData()
                                         }
                                     }
                                 }
@@ -424,13 +432,16 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
             if StoreStruct.currentUser == nil {
                 let request2 = Accounts.currentUser()
-                StoreStruct.client.run(request2) { (statuses) in
+                StoreStruct.client.run(request2) {[weak self](statuses) in
                     if let stat = (statuses.value) {
                         StoreStruct.currentUser = stat
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: nil)
                         
+                        guard let ref = self else {
+                            return
+                        }
                         
-                        self.userIDtoUse = StoreStruct.currentUser.id
+                        ref.userIDtoUse = StoreStruct.currentUser.id
                         let request = Accounts.statuses(id: StoreStruct.currentUser.id)
                         StoreStruct.client.run(request) { (statuses) in
                             if let stat = (statuses.value) {
@@ -438,27 +449,27 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 if stat.isEmpty {
 
                                     DispatchQueue.main.async {
-                                        self.chosenUser = StoreStruct.currentUser
-                                        self.tableView.reloadData()
+                                        ref.chosenUser = StoreStruct.currentUser
+                                        ref.tableView.reloadData()
                                     }
 
                                 } else {
                                     
                                     DispatchQueue.main.async {
-                                        self.profileStatuses = stat
-                                        self.chosenUser = self.profileStatuses.first?.account ?? nil
+                                        ref.profileStatuses = stat
+                                        ref.chosenUser = ref.profileStatuses.first?.account ?? nil
                                         
-                                        self.ai.alpha = 0
-                                        self.ai.removeFromSuperview()
-                                        self.tableView.reloadData()
+                                        ref.ai.alpha = 0
+                                        ref.ai.removeFromSuperview()
+                                        ref.tableView.reloadData()
                                         
-                                        if self.chosenUser == nil {
-                                            let request9 = Accounts.account(id: self.userIDtoUse)
+                                        if ref.chosenUser == nil {
+                                            let request9 = Accounts.account(id: ref.userIDtoUse)
                                             StoreStruct.client.run(request9) { (statuses) in
                                                 if let stat = (statuses.value) {
                                                     DispatchQueue.main.async {
-                                                        self.chosenUser = stat
-                                                        self.tableView.reloadData()
+                                                        ref.chosenUser = stat
+                                                        ref.tableView.reloadData()
                                                     }
                                                 }
                                             }
@@ -477,33 +488,36 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
                 self.userIDtoUse = StoreStruct.currentUser.id
                 let request = Accounts.statuses(id: self.userIDtoUse)
-                StoreStruct.client.run(request) { (statuses) in
+                StoreStruct.client.run(request) { [weak self] (statuses) in
                     if let stat = (statuses.value) {
 
+                        guard let ref = self else {
+                            return
+                        }
                         if stat.isEmpty {
 
                             DispatchQueue.main.async {
-                                self.chosenUser = StoreStruct.currentUser
-                                self.tableView.reloadData()
+                                ref.chosenUser = StoreStruct.currentUser
+                                ref.tableView.reloadData()
                             }
 
                         } else {
                             
                             DispatchQueue.main.async {
-                                self.profileStatuses = stat
-                                self.chosenUser = self.profileStatuses.first?.account ?? nil
+                                ref.profileStatuses = stat
+                                ref.chosenUser = ref.profileStatuses.first?.account ?? nil
                                 
-                                self.ai.alpha = 0
-                                self.ai.removeFromSuperview()
-                                self.tableView.reloadData()
+                                ref.ai.alpha = 0
+                                ref.ai.removeFromSuperview()
+                                ref.tableView.reloadData()
                                 
-                                if self.chosenUser == nil {
-                                    let request9 = Accounts.account(id: self.userIDtoUse)
+                                if ref.chosenUser == nil {
+                                    let request9 = Accounts.account(id: ref.userIDtoUse)
                                     StoreStruct.client.run(request9) { (statuses) in
                                         if let stat = (statuses.value) {
                                             DispatchQueue.main.async {
-                                                self.chosenUser = stat
-                                                self.tableView.reloadData()
+                                                ref.chosenUser = stat
+                                                ref.tableView.reloadData()
                                             }
                                         }
                                     }
@@ -530,17 +544,17 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @objc func goToIDNoti() {
         sleep(2)
         let request = Notifications.notification(id: StoreStruct.curIDNoti)
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
                     if let x = stat.status {
                         let controller = DetailViewController()
                         controller.mainStatus.append(x)
-                        self.navigationController?.pushViewController(controller, animated: true)
+                        self?.navigationController?.pushViewController(controller, animated: true)
                     } else {
                         let controller = ThirdViewController()
                         controller.userIDtoUse = stat.account.id
-                        self.navigationController?.pushViewController(controller, animated: true)
+                        self?.navigationController?.pushViewController(controller, animated: true)
                     }
                 }
             }
@@ -550,12 +564,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     @objc func goToID() {
         sleep(2)
         let request = Statuses.status(id: StoreStruct.curID)
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
                     let controller = DetailViewController()
                     controller.mainStatus.append(stat)
-                    self.navigationController?.pushViewController(controller, animated: true)
+                    self?.navigationController?.pushViewController(controller, animated: true)
                 }
             }
         }
@@ -775,11 +789,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             let imageData = image.jpegData(compressionQuality: compression)
             let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: .jpeg(imageData), header: nil)
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self](statuses) in
                 
                 if let stat = (statuses.value) {
                     DispatchQueue.main.async {
-                        self.updateProfileHere()
+                        self?.updateProfileHere()
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let notification = UINotificationFeedbackGenerator()
                             notification.notificationOccurred(.success)
@@ -800,11 +814,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             let imageData = image.jpegData(compressionQuality: compression)
             let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: .jpeg(imageData))
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
                 
                 if let stat = (statuses.value) {
                     DispatchQueue.main.async {
-                        self.updateProfileHere()
+                        self?.updateProfileHere()
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let notification = UINotificationFeedbackGenerator()
                             notification.notificationOccurred(.success)
@@ -1004,30 +1018,35 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if self.fromOtherUser == true {
             let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: false, pinnedOnly: false, excludeReplies: true, excludeReblogs: true, range: .default)
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
+                    
+                    guard let ref = self else {
+                        return
+                    }
+                    
                     if stat.isEmpty {
-                        let request9 = Accounts.account(id: self.userIDtoUse)
+                        let request9 = Accounts.account(id: ref.userIDtoUse)
                         StoreStruct.client.run(request9) { (statuses) in
                             if let stat = (statuses.value) {
                                 DispatchQueue.main.async {
-                                    self.chosenUser = stat
-                                    self.ai.alpha = 0
-                                    self.ai.removeFromSuperview()
-                                    self.tableView.reloadData()
+                                    ref.chosenUser = stat
+                                    ref.ai.alpha = 0
+                                    ref.ai.removeFromSuperview()
+                                    ref.tableView.reloadData()
                                 }
                             }
                         }
                     } else {
                         DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                            if self.chosenUser == nil {
-                                let request9 = Accounts.account(id: self.userIDtoUse)
+                            ref.tableView.reloadData()
+                            if ref.chosenUser == nil {
+                                let request9 = Accounts.account(id: ref.userIDtoUse)
                                 StoreStruct.client.run(request9) { (statuses) in
                                     if let stat = (statuses.value) {
                                         DispatchQueue.main.async {
-                                            self.chosenUser = stat
-                                            self.tableView.reloadData()
+                                            ref.chosenUser = stat
+                                            ref.tableView.reloadData()
                                         }
                                     }
                                 }
@@ -1037,24 +1056,24 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
             }
             let request8 = Accounts.statuses(id: self.userIDtoUse, mediaOnly: false, pinnedOnly: false, excludeReplies: false, excludeReblogs: zzz, range: .default)
-            StoreStruct.client.run(request8) { (statuses) in
+            StoreStruct.client.run(request8) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
                     if stat.isEmpty {} else {
-                        self.profileStatuses2 = stat
+                        self?.profileStatuses2 = stat
                     }
                 }
             }
         } else {
             if StoreStruct.currentUser == nil {
                 let request2 = Accounts.currentUser()
-                StoreStruct.client.run(request2) { (statuses) in
+                StoreStruct.client.run(request2) {[weak self] (statuses) in
                     if let stat = (statuses.value) {
                         DispatchQueue.main.async {
                             StoreStruct.currentUser = stat
                             NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: nil)
-                            self.userIDtoUse = StoreStruct.currentUser.id
-                            self.chosenUser = StoreStruct.currentUser
-                            self.tableView.reloadData()
+                            self?.userIDtoUse = StoreStruct.currentUser.id
+                            self?.chosenUser = StoreStruct.currentUser
+                            self?.tableView.reloadData()
                         }
                         
                         let request = Accounts.statuses(id: stat.id, mediaOnly: false, pinnedOnly: false, excludeReplies: true, excludeReblogs: true, range: .default)
@@ -1062,10 +1081,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             if let stat = (statuses.value) {
                                 if stat.isEmpty {} else {
                                     DispatchQueue.main.async {
-                                        self.profileStatuses = stat
-                                        self.ai.alpha = 0
-                                        self.ai.removeFromSuperview()
-                                        self.tableView.reloadData()
+                                        self?.profileStatuses = stat
+                                        self?.ai.alpha = 0
+                                        self?.ai.removeFromSuperview()
+                                        self?.tableView.reloadData()
                                     }
                                 }
                             }
@@ -1083,14 +1102,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 
                 if StoreStruct.profileStatuses0.isEmpty {
                     let request = Accounts.statuses(id: StoreStruct.currentUser.id, mediaOnly: false, pinnedOnly: false, excludeReplies: true, excludeReblogs: true, range: .default)
-                    StoreStruct.client.run(request) { (statuses) in
+                    StoreStruct.client.run(request) {[weak self] (statuses) in
                         if let stat = (statuses.value) {
                             if stat.isEmpty {} else {
                                 DispatchQueue.main.async {
-                                    self.profileStatuses = stat
-                                    self.ai.alpha = 0
-                                    self.ai.removeFromSuperview()
-                                    self.tableView.reloadData()
+                                    self?.profileStatuses = stat
+                                    self?.ai.alpha = 0
+                                    self?.ai.removeFromSuperview()
+                                    self?.tableView.reloadData()
                                 }
                             }
                             
@@ -1106,10 +1125,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 }
                 
                 let request8 = Accounts.statuses(id: self.userIDtoUse, mediaOnly: false, pinnedOnly: false, excludeReplies: false, excludeReblogs: zzz, range: .default)
-                StoreStruct.client.run(request8) { (statuses) in
+                StoreStruct.client.run(request8) {[weak self] (statuses) in
                     if let stat = (statuses.value) {
                         if stat.isEmpty {} else {
-                            self.profileStatuses2 = stat
+                            self?.profileStatuses2 = stat
                         }
                     }
                 }
@@ -1118,12 +1137,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
 //        DispatchQueue.global(qos: .userInitiated).async {
             let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: true, pinnedOnly: nil, excludeReplies: nil, excludeReblogs: true, range: .default)
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
                     if stat.isEmpty {} else {
                         DispatchQueue.main.async {
-                            self.profileStatusesHasImage = stat
-                            self.tableView.reloadData()
+                            self?.profileStatusesHasImage = stat
+                            self?.tableView.reloadData()
                         }
                     }
                 }
@@ -1190,13 +1209,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if let indexPath = tableView.indexPathForSelectedRow {
             self.tableView.deselectRow(at: indexPath, animated: true)
             let request = Statuses.status(id: zzz[indexPath.row].reblog?.id ?? zzz[indexPath.row].id)
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
                     DispatchQueue.main.async {
-                        if let cell = self.tableView.cellForRow(at: indexPath) as? MainFeedCell {
+                        if let cell = self?.tableView.cellForRow(at: indexPath) as? MainFeedCell {
                             cell.configure0(stat)
                         }
-                        if let cell2 = self.tableView.cellForRow(at: indexPath) as? MainFeedCellImage {
+                        if let cell2 = self?.tableView.cellForRow(at: indexPath) as? MainFeedCellImage {
                             cell2.configure0(stat)
                         }
                     }
@@ -1223,44 +1242,48 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if self.fromOtherUser && (self.isPeeking == false) && (self.userIDtoUse != StoreStruct.currentUser.id) {
             let request00 = Accounts.allEndorsements()
-            StoreStruct.client.run(request00) { (statuses) in
+            StoreStruct.client.run(request00) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
-                    guard let chosen = self.chosenUser else { return }
+                    guard let chosen = self?.chosenUser else { return }
                     let s = stat.filter { $0.id == chosen.id }
                     if s.isEmpty {
-                        self.isEndorsed = false
+                        self?.isEndorsed = false
                     } else {
-                        self.isEndorsed = true
+                        self?.isEndorsed = true
                     }
                 }
             }
             let request0 = Mutes.all()
-            StoreStruct.client.run(request0) { (statuses) in
+            StoreStruct.client.run(request0) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
-                    guard let chosen = self.chosenUser else { return }
+                    guard let chosen = self?.chosenUser else { return }
                     let s = stat.filter { $0.id == chosen.id }
                     if s.isEmpty {
-                        self.isMuted = false
+                        self?.isMuted = false
                     } else {
-                        self.isMuted = true
+                        self?.isMuted = true
                     }
                 }
             }
             let request01 = Blocks.all()
-            StoreStruct.client.run(request01) { (statuses) in
+            StoreStruct.client.run(request01) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
-                    guard let chosen = self.chosenUser else { return }
+                    guard let chosen = self?.chosenUser else { return }
                     let s = stat.filter { $0.id == chosen.id }
                     if s.isEmpty {
-                        self.isBlocked = false
+                        self?.isBlocked = false
                     } else {
-                        self.isBlocked = true
+                        self?.isBlocked = true
                     }
                 }
             }
             let request2 = Accounts.currentUser()
-            StoreStruct.client.run(request2) { (statuses) in
+            StoreStruct.client.run(request2) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
+                    
+                    guard let self = self else {
+                        return
+                    }
                     StoreStruct.currentUser = stat
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "load"), object: nil)
                     guard let chosen = self.chosenUser else { return }
@@ -1763,12 +1786,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         let url = textFields?.last?.text ?? ""
                         
                         let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: nil, locked: nil, fieldName1: name, fieldValue1: url, fieldName2: field02, fieldValue2: fieldVal2, fieldName3: field03, fieldValue3: fieldVal3, fieldName4: field04, fieldValue4: fieldVal4)
-                        StoreStruct.client.run(request) { (statuses) in
+                        StoreStruct.client.run(request) {[weak self] (statuses) in
                             if let stat = (statuses.value) {
                                 
                                 DispatchQueue.main.async {
 //                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
-                                    self.updateProfileHere()
+                                    self?.updateProfileHere()
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -1798,12 +1821,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         let url = textFields?.last?.text ?? ""
                         
                         let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: nil, locked: nil, fieldName1: field01, fieldValue1: fieldVal1, fieldName2: name, fieldValue2: url, fieldName3: field03, fieldValue3: fieldVal3, fieldName4: field04, fieldValue4: fieldVal4)
-                        StoreStruct.client.run(request) { (statuses) in
+                        StoreStruct.client.run(request) {[weak self] (statuses) in
                             if let stat = (statuses.value) {
                                 
                                 DispatchQueue.main.async {
 //                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
-                                    self.updateProfileHere()
+                                    self?.updateProfileHere()
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -1833,12 +1856,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         let url = textFields?.last?.text ?? ""
                         
                         let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: nil, locked: nil, fieldName1: field01, fieldValue1: fieldVal1, fieldName2: field02, fieldValue2: fieldVal2, fieldName3: name, fieldValue3: url, fieldName4: field04, fieldValue4: fieldVal4)
-                        StoreStruct.client.run(request) { (statuses) in
+                        StoreStruct.client.run(request) {[weak self] (statuses) in
                             if let stat = (statuses.value) {
                                 
                                 DispatchQueue.main.async {
 //                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
-                                    self.updateProfileHere()
+                                    self?.updateProfileHere()
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -1868,12 +1891,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         let url = textFields?.last?.text ?? ""
                         
                         let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: nil, locked: nil, fieldName1: field01, fieldValue1: fieldVal1, fieldName2: field02, fieldValue2: fieldVal2, fieldName3: field03, fieldValue3: fieldVal3, fieldName4: name, fieldValue4: url)
-                        StoreStruct.client.run(request) { (statuses) in
+                        StoreStruct.client.run(request) {[weak self] (statuses) in
                             if let stat = (statuses.value) {
                                 
                                 DispatchQueue.main.async {
 //                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
-                                    self.updateProfileHere()
+                                    self?.updateProfileHere()
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
                                         notification.notificationOccurred(.success)
@@ -1904,11 +1927,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 //bh2
                 
                 let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: nil, locked: isItGoingToLock)
-                StoreStruct.client.run(request) { (statuses) in
+                StoreStruct.client.run(request) {[weak self] (statuses) in
                     if let stat = (statuses.value) {
                         DispatchQueue.main.async {
 //                            NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
-                            self.updateProfileHere()
+                            self?.updateProfileHere()
                             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                 let notification = UINotificationFeedbackGenerator()
                                 notification.notificationOccurred(.success)
@@ -1975,13 +1998,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.isFollowing = true
             let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! ProfileHeaderCell
             cell.changeFollowStatus(self.isFollowing)
-            let request = Accounts.follow(id: self.chosenUser.id, reblogs: true)
-            StoreStruct.client.run(request) { (statuses) in
-                if let stat = (statuses.value) {
-                    
-                     
-                }
-            }
+            
         } else {
 
             if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
@@ -2000,13 +2017,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             self.isFollowing = false
             let cell = self.tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! ProfileHeaderCell
             cell.changeFollowStatus(self.isFollowing)
-            let request = Accounts.unfollow(id: self.chosenUser.id)
-            StoreStruct.client.run(request) { (statuses) in
-                if let stat = (statuses.value) {
-                    
-                     
-                }
-            }
+            
         }
     }
 
@@ -2143,13 +2154,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
 
                         self.isFollowing = true
-                        let request = Accounts.follow(id: self.chosenUser.id, reblogs: true)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                
-                                 
-                            }
-                        }
+                        
                     } else {
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let notification = UINotificationFeedbackGenerator()
@@ -2165,13 +2170,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
 
                         self.isFollowing = false
-                        let request = Accounts.unfollow(id: self.chosenUser.id)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                
-                                 
-                            }
-                        }
+                       
                     }
 
                 }
@@ -2182,8 +2181,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     
                     if self.isEndorsed {
                         let request = Accounts.endorseRemove(id: self.chosenUser.id)
-                        StoreStruct.client.run(request) { (statuses) in
+                        StoreStruct.client.run(request) { [weak self] (statuses) in
                             if let stat = (statuses.value) {
+                                guard let self = self else {
+                                    return
+                                }
                                 DispatchQueue.main.async {
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
@@ -2204,8 +2206,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                     } else {
                         let request = Accounts.endorse(id: self.chosenUser.id)
-                        StoreStruct.client.run(request) { (statuses) in
+                        StoreStruct.client.run(request) {[weak self] (statuses) in
                             if let stat = (statuses.value) {
+                                guard let self = self else {
+                                    return
+                                }
                                 DispatchQueue.main.async {
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
@@ -2272,9 +2277,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 statusAlert.show()
                             }
                             let request = Accounts.follow(id: self.chosenUser.id, reblogs: false)
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    self.isShowingBoosts = false
+                            StoreStruct.client.run(request) {[weak self] (statuses) in
+                                if let _ = (statuses.value) {
+                                    self?.isShowingBoosts = false
                                 }
                             }
                         } else {
@@ -2291,9 +2296,9 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 statusAlert.show()
                             }
                             let request = Accounts.follow(id: self.chosenUser.id, reblogs: true)
-                            StoreStruct.client.run(request) { (statuses) in
-                                if let stat = (statuses.value) {
-                                    self.isShowingBoosts = true
+                            StoreStruct.client.run(request) {[weak self] (statuses) in
+                                if let _ = (statuses.value) {
+                                    self?.isShowingBoosts = true
                                 }
                             }
                         }
@@ -2346,14 +2351,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     
                     
                     if self.zzz.count == 0 {
-                        z1.action(.default("Create New List"), image: nil) { (action, ind) in
+                        _ = z1.action(.default("Create New List"), image: nil) { (action, ind) in
                             let controller = NewListViewController()
                             self.present(controller, animated: true, completion: nil)
                         }
                     }
 
 
-                    z1.popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.contentView ?? self.view)
+                    _ = z1.popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.contentView ?? self.view)
                     z1.show(on: self, completion: nil)
 
 
@@ -2375,13 +2380,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             statusAlert.show()
                         }
 
-                        let request = Accounts.mute(id: self.chosenUser.id)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                
-                                 
-                            }
-                        }
+                        
                     } else {
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let notification = UINotificationFeedbackGenerator()
@@ -2396,13 +2395,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             statusAlert.show()
                         }
 
-                        let request = Accounts.unmute(id: self.chosenUser.id)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                
-                                 
-                            }
-                        }
+                       
                     }
                 }
                 .action(.default(blockText), image: UIImage(named: "block2")) { (action, ind) in
@@ -2422,13 +2415,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             statusAlert.show()
                         }
 
-                        let request = Accounts.block(id: self.chosenUser.id)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                
-                                 
-                            }
-                        }
+                        
                     } else {
                         if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                             let notification = UINotificationFeedbackGenerator()
@@ -2443,13 +2430,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             statusAlert.show()
                         }
 
-                        let request = Accounts.unblock(id: self.chosenUser.id)
-                        StoreStruct.client.run(request) { (statuses) in
-                            if let stat = (statuses.value) {
-                                
-                                 
-                            }
-                        }
+                       
                     }
 
                 }
@@ -2601,13 +2582,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                      
                     
                     let request = FilterToots.all()
-                    StoreStruct.client.run(request) { (statuses) in
+                    StoreStruct.client.run(request) {[weak self] (statuses) in
                         if let stat = (statuses.value) {
                             DispatchQueue.main.async {
                                 let controller = FiltersViewController()
                                 controller.currentTagTitle = "Status Filters"
                                 controller.currentTags = stat
-                                self.navigationController?.pushViewController(controller, animated: true)
+                                self?.navigationController?.pushViewController(controller, animated: true)
                             }
                         }
                     }
@@ -2616,14 +2597,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                      
                     
                     let request = Statuses.allScheduled()
-                    StoreStruct.client.run(request) { (statuses) in
+                    StoreStruct.client.run(request) {[weak self] (statuses) in
                         print("scheduled stats")
                          
                         if let stat = (statuses.value) {
                             DispatchQueue.main.async {
                                 let controller = ScheduledStatusesViewController()
                                 controller.statuses = stat
-                                self.navigationController?.pushViewController(controller, animated: true)
+                                self?.navigationController?.pushViewController(controller, animated: true)
                             }
                         }
                     }
@@ -2647,12 +2628,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                      
                     
                     let request = Accounts.followSuggestions()
-                    StoreStruct.client.run(request) { (statuses) in
+                    StoreStruct.client.run(request) {[weak self] (statuses) in
                         if let stat = (statuses.value) {
                             DispatchQueue.main.async {
                                 let controller = FollowSuggestionsViewController()
                                 controller.statusFollows = stat
-                                self.navigationController?.pushViewController(controller, animated: true)
+                                self?.navigationController?.pushViewController(controller, animated: true)
                             }
                         }
                     }
@@ -2661,12 +2642,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                      
                     
                     let request = Accounts.allEndorsements()
-                    StoreStruct.client.run(request) { (statuses) in
+                    StoreStruct.client.run(request) {[weak self] (statuses) in
                         if let stat = (statuses.value) {
                             DispatchQueue.main.async {
                                 let controller = EndorsedViewController()
                                 controller.statusFollows = stat
-                                self.navigationController?.pushViewController(controller, animated: true)
+                                self?.navigationController?.pushViewController(controller, animated: true)
                             }
                         }
                     }
@@ -2825,13 +2806,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 z1.action(.default("Follow Requests"), image: UIImage(named: "profile")) { (action, ind) in
                     
                     let request = FollowRequests.all()
-                    StoreStruct.client.run(request) { (statuses) in
+                    StoreStruct.client.run(request) { [weak self](statuses) in
                         if let stat = (statuses.value) {
                             DispatchQueue.main.async {
 
                                 let controller = FollowRequestsViewController()
                                 controller.currentTags = stat
-                                self.navigationController?.pushViewController(controller, animated: true)
+                                self?.navigationController?.pushViewController(controller, animated: true)
 
                             }
                         }
@@ -2844,7 +2825,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
 
 
-            z1.popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.contentView ?? self.view)
+            _ = z1.popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.contentView ?? self.view)
             z1.show(on: self)
 
         }
@@ -2935,12 +2916,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 controller.fromOtherUser = true
                             }
                             let request = Accounts.search(query: string)
-                            StoreStruct.client.run(request) { (statuses) in
+                            StoreStruct.client.run(request) {[weak self] (statuses) in
                                 if let stat = (statuses.value) {
                                     if stat.count > 0 {
                                         DispatchQueue.main.async {
                                             controller.userIDtoUse = stat[0].id
-                                            self.navigationController?.pushViewController(controller, animated: true)
+                                            self?.navigationController?.pushViewController(controller, animated: true)
                                         }
                                     }
                                 }
@@ -3038,12 +3019,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     controller.fromOtherUser = true
                                 }
                                 let request = Accounts.search(query: string)
-                                StoreStruct.client.run(request) { (statuses) in
+                                StoreStruct.client.run(request) {[weak self] (statuses) in
                                     if let stat = (statuses.value) {
                                         if stat.count > 0 {
                                             DispatchQueue.main.async {
                                                 controller.userIDtoUse = stat[0].id
-                                                self.navigationController?.pushViewController(controller, animated: true)
+                                                self?.navigationController?.pushViewController(controller, animated: true)
                                             }
                                         }
                                     }
@@ -3140,12 +3121,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             controller.fromOtherUser = true
                         }
                         let request = Accounts.search(query: string)
-                        StoreStruct.client.run(request) { (statuses) in
+                        StoreStruct.client.run(request) {[weak self] (statuses) in
                             if let stat = (statuses.value) {
                                 if stat.count > 0 {
                                     DispatchQueue.main.async {
                                         controller.userIDtoUse = stat[0].id
-                                        self.navigationController?.pushViewController(controller, animated: true)
+                                        self?.navigationController?.pushViewController(controller, animated: true)
                                     }
                                 }
                             }
@@ -3242,12 +3223,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 controller.fromOtherUser = true
                             }
                             let request = Accounts.search(query: string)
-                            StoreStruct.client.run(request) { (statuses) in
+                            StoreStruct.client.run(request) {[weak self] (statuses) in
                                 if let stat = (statuses.value) {
                                     if stat.count > 0 {
                                         DispatchQueue.main.async {
                                             controller.userIDtoUse = stat[0].id
-                                            self.navigationController?.pushViewController(controller, animated: true)
+                                            self?.navigationController?.pushViewController(controller, animated: true)
                                         }
                                     }
                                 }
@@ -3343,12 +3324,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                 controller.fromOtherUser = true
                             }
                             let request = Accounts.search(query: string)
-                            StoreStruct.client.run(request) { (statuses) in
+                            StoreStruct.client.run(request) {[weak self] (statuses) in
                                 if let stat = (statuses.value) {
                                     if stat.count > 0 {
                                         DispatchQueue.main.async {
                                             controller.userIDtoUse = stat[0].id
-                                            self.navigationController?.pushViewController(controller, animated: true)
+                                            self?.navigationController?.pushViewController(controller, animated: true)
                                         }
                                     }
                                 }
@@ -4566,7 +4547,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
             StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
             let request2 = Statuses.unreblog(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
-            StoreStruct.client.run(request2) { (statuses) in
+            StoreStruct.client.run(request2) {[weak self] (statuses) in
+                guard let self = self else {
+                    return
+                }
                 DispatchQueue.main.async {
                     if sto[sender.tag].account.username == self.chosenUser.username {} else {
                         self.profileStatuses = self.profileStatuses.filter { $0 != self.profileStatuses[sender.tag] }
@@ -4600,7 +4584,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         } else {
             StoreStruct.allBoosts.append(sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
             let request2 = Statuses.reblog(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
-            StoreStruct.client.run(request2) { (statuses) in
+            StoreStruct.client.run(request2) { [weak self] (statuses) in
+                guard let self = self else {
+                    return
+                }
                 DispatchQueue.main.async {
 
                     if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
@@ -4657,7 +4644,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
             StoreStruct.allLikes = StoreStruct.allLikes.filter { $0 != sto[sender.tag].reblog?.id ?? sto[sender.tag].id }
             let request2 = Statuses.unfavourite(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
-            StoreStruct.client.run(request2) { (statuses) in
+            StoreStruct.client.run(request2) { [weak self] (statuses) in
+                guard let self = self else {
+                    return
+                }
                 DispatchQueue.main.async {
                     if let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 2)) as? MainFeedCell {
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
@@ -4686,7 +4676,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         } else {
             StoreStruct.allLikes.append(sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
             let request2 = Statuses.favourite(id: sto[sender.tag].reblog?.id ?? sto[sender.tag].id)
-            StoreStruct.client.run(request2) { (statuses) in
+            StoreStruct.client.run(request2) {(statuses) in
+                
                 DispatchQueue.main.async {
                     if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {
                         NotificationCenter.default.post(name: Notification.Name(rawValue: "confettiCreateLi"), object: nil)
@@ -5356,13 +5347,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         statusAlert.show()
                                     }
 
-                                    let request = Accounts.mute(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                             
-                                        }
-                                    }
+                                   
                                 } else {
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
@@ -5377,13 +5362,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         statusAlert.show()
                                     }
 
-                                    let request = Accounts.unmute(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                             
-                                        }
-                                    }
+                                   
                                 }
 
                             }
@@ -5404,13 +5383,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         statusAlert.show()
                                     }
 
-                                    let request = Accounts.block(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                             
-                                        }
-                                    }
+                                    
                                 } else {
                                     if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                         let notification = UINotificationFeedbackGenerator()
@@ -5425,13 +5398,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         statusAlert.show()
                                     }
 
-                                    let request = Accounts.unblock(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                             
-                                        }
-                                    }
+                                    
                                 }
 
                             }
@@ -5461,13 +5428,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                             statusAlert.show()
                                         }
 
-                                        let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Harassment")
-                                        StoreStruct.client.run(request) { (statuses) in
-                                            if let stat = (statuses.value) {
-                                                
-                                                 
-                                            }
-                                        }
+                                        
 
                                     }
                                     .action(.default("No Content Warning"), image: nil) { (action, ind) in
@@ -5487,13 +5448,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                             statusAlert.show()
                                         }
 
-                                        let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "No Content Warning")
-                                        StoreStruct.client.run(request) { (statuses) in
-                                            if let stat = (statuses.value) {
-                                                
-                                                 
-                                            }
-                                        }
+                                        
 
                                     }
                                     .action(.default("Spam"), image: nil) { (action, ind) in
@@ -5513,13 +5468,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                             statusAlert.show()
                                         }
 
-                                        let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Spam")
-                                        StoreStruct.client.run(request) { (statuses) in
-                                            if let stat = (statuses.value) {
-                                                
-                                                 
-                                            }
-                                        }
+                                        
 
                                     }
                                     .action(.cancel("Dismiss"))
@@ -5760,9 +5709,12 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 
         if self.currentIndex == 0 {
             let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: nil, pinnedOnly: false, excludeReplies: true, excludeReblogs: true, range: .max(id: self.profileStatuses.last?.id ?? "", limit: 5000))
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
                     if stat.isEmpty {} else {
+                        guard let self = self else {
+                            return
+                        }
                         DispatchQueue.main.async {
                             self.profileStatuses = self.profileStatuses + stat
                             self.profileStatuses = self.profileStatuses.removeDuplicates()
@@ -5782,7 +5734,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             }
 
             let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: nil, pinnedOnly: false, excludeReplies: false, excludeReblogs: zzz, range: .max(id: self.profileStatuses2.last?.id ?? "", limit: 5000))
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
+                guard let self = self else {
+                    return
+                }
                 if let stat = (statuses.value) {
                     if stat.isEmpty {} else {
                         DispatchQueue.main.async {
@@ -5804,9 +5759,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: nil, pinnedOnly: false, excludeReplies: true, excludeReblogs: true, range: .since(id: self.profileStatuses.first?.id ?? "", limit: 5000))
             //        DispatchQueue.global(qos: .userInitiated).async {
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
-                    
+                    guard let self = self else {
+                        return
+                    }
                     DispatchQueue.main.async {
                         self.tableView.cr.endHeaderRefresh()
                         if stat.count > 0 {
@@ -5831,9 +5788,11 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             
             let request = Accounts.statuses(id: self.userIDtoUse, mediaOnly: nil, pinnedOnly: false, excludeReplies: false, excludeReblogs: zzz, range: .since(id: self.profileStatuses2.first?.id ?? "", limit: 5000))
             //            DispatchQueue.global(qos: .userInitiated).async {
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
-                    
+                    guard let self = self else {
+                        return
+                    }
                     DispatchQueue.main.async {
                         self.tableView.cr.endHeaderRefresh()
                         if stat.count > 0 {

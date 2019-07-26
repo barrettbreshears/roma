@@ -442,11 +442,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
 //        self.title = "Toot"
         let repC = self.mainStatus.first?.reblog?.repliesCount ?? self.mainStatus.first?.repliesCount ?? 0
-        if repC == 1 {
-            self.title = "1 Reply"
-        } else {
-            self.title = "\(repC) Replies"
-        }
+        self.title = "Status"
         
         self.removeTabbarItemsText()
         

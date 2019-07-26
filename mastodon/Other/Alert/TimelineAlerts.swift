@@ -11,11 +11,8 @@ import SwiftMessages
 
 class NavAlerts {
     static func showError(errorMsg:String? = nil, controller:UIViewController? = nil){
-        let error:MessageView = try! SwiftMessages.viewFromNib()
-        error.configureTheme(.error)
-        error.iconLabel?.isHidden = true
-        error.button?.isHidden = true
-        error.configureContent(title: "Error", body: errorMsg ?? "Unable to fetch statuses at this time")
+        let error:ErrorAlertView = ErrorAlertView.instanceFromNib()
+        error.bodyLabel?.text = "Unable to fetch new data."
         var config = SwiftMessages.defaultConfig
         if let presentationController = controller {
             config.presentationContext = .viewController(presentationController)
@@ -27,13 +24,8 @@ class NavAlerts {
     }
     
     static func showUpToDate(controller:UIViewController? = nil){
-        let info:MessageView = try! SwiftMessages.viewFromNib()
-        info.configureTheme(.info)
-        info.iconImageView?.isHidden = true
-        info.titleLabel?.isHidden = true
-        info.button?.isHidden = true
-        info.iconLabel?.isHidden = true
-        info.configureContent(title: "Time", body: "Everything is up to date!")
+        let info:TimelineInfoAlertView = TimelineInfoAlertView.instanceFromNib()
+        info.bodyLabel?.text = "Everything is up to date!"
         var config = SwiftMessages.defaultConfig
         if let presentationController = controller {
             config.presentationContext = .viewController(presentationController)

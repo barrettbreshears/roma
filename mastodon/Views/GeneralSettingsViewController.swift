@@ -1490,7 +1490,7 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
     func clearAllDrafts() {
         StoreStruct.newdrafts = []
         do {
-            try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+            // ** try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
         } catch {
             print("err")
         }
@@ -1503,8 +1503,8 @@ class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITa
             StoreStruct.notificationsMentions = []
             StoreStruct.notificationsDirect = []
             do {
-                try Disk.save(StoreStruct.notifications, to: .documents, as: "noti.json")
-                try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "ment.json")
+                // ** try Disk.save(StoreStruct.notifications, to: .documents, as: "noti.json")
+                // ** try Disk.save(StoreStruct.notificationsMentions, to: .documents, as: "ment.json")
             } catch {
                 print("Couldn't save")
             }

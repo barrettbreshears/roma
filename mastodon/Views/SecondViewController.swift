@@ -240,13 +240,13 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     
     @objc func goMembers() {
         let request = Lists.accounts(id: StoreStruct.allListRelID)
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) { [weak self] (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
                     let controller = ListMembersViewController()
                     controller.currentTagTitle = "List Members".localized
                     controller.currentTags = stat
-                    self.navigationController?.pushViewController(controller, animated: true)
+                    self?.navigationController?.pushViewController(controller, animated: true)
                 }
             }
         }
@@ -511,17 +511,17 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     @objc func goToIDNoti() {
         sleep(2)
         let request = Notifications.notification(id: StoreStruct.curIDNoti)
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) { [weak self] (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
                     if let x = stat.status {
                         let controller = DetailViewController()
                         controller.mainStatus.append(x)
-                        self.navigationController?.pushViewController(controller, animated: true)
+                        self?.navigationController?.pushViewController(controller, animated: true)
                     } else {
                         let controller = ThirdViewController()
                         controller.userIDtoUse = stat.account.id
-                        self.navigationController?.pushViewController(controller, animated: true)
+                        self?.navigationController?.pushViewController(controller, animated: true)
                     }
                 }
             }
@@ -531,12 +531,12 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     @objc func goToID() {
         sleep(2)
         let request = Statuses.status(id: StoreStruct.curID)
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
                     let controller = DetailViewController()
                     controller.mainStatus.append(stat)
-                    self.navigationController?.pushViewController(controller, animated: true)
+                    self?.navigationController?.pushViewController(controller, animated: true)
                 }
             }
         }
@@ -905,13 +905,13 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             if let indexPath = tableView2.indexPathForSelectedRow {
                 self.tableView2.deselectRow(at: indexPath, animated: true)
                 let request = Notifications.notification(id: StoreStruct.notifications[indexPath.row].id)
-                StoreStruct.client.run(request) { (statuses) in
+                StoreStruct.client.run(request) {[weak self] (statuses) in
                     if let stat = (statuses.value) {
                         DispatchQueue.main.async {
-                            if let cell = self.tableView2.cellForRow(at: indexPath) as? NotificationCell {
+                            if let cell = self?.tableView2.cellForRow(at: indexPath) as? NotificationCell {
                                 cell.configure0(stat)
                             }
-                            if let cell2 = self.tableView2.cellForRow(at: indexPath) as? NotificationCellImage {
+                            if let cell2 = self?.tableView2.cellForRow(at: indexPath) as? NotificationCellImage {
                                 cell2.configure0(stat)
                             }
                         }
@@ -922,13 +922,13 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             if let indexPath = tableView.indexPathForSelectedRow {
                 self.tableView.deselectRow(at: indexPath, animated: true)
                 let request = Notifications.notification(id: StoreStruct.notificationsMentions[indexPath.row].id)
-                StoreStruct.client.run(request) { (statuses) in
+                StoreStruct.client.run(request) {[weak self] (statuses) in
                     if let stat = (statuses.value) {
                         DispatchQueue.main.async {
-                            if let cell = self.tableView.cellForRow(at: indexPath) as? NotificationCell {
+                            if let cell = self?.tableView.cellForRow(at: indexPath) as? NotificationCell {
                                 cell.configure0(stat)
                             }
-                            if let cell2 = self.tableView.cellForRow(at: indexPath) as? NotificationCellImage {
+                            if let cell2 = self?.tableView.cellForRow(at: indexPath) as? NotificationCellImage {
                                 cell2.configure0(stat)
                             }
                         }
@@ -951,7 +951,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
             
             DispatchQueue.main.async {
-                self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+                if StoreStruct.currentUser != nil {
+                    self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+                }
             }
             
             
@@ -1106,7 +1108,9 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             settingsButton.frame = CGRect(x: 15, y: UIApplication.shared.statusBarFrame.height + 5, width: 36, height: 36)
             
             DispatchQueue.main.async {
-                self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+                if StoreStruct.currentUser != nil {
+                    self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+                }
             }
             
             
@@ -1585,13 +1589,13 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             self.tableView2.reloadData()
             if StoreStruct.notifications.isEmpty {
                 let request = Notifications.all(range: .default, typesToExclude: StoreStruct.notTypes)
-                StoreStruct.client.run(request) { (statuses) in
+                StoreStruct.client.run(request) {[weak self] (statuses) in
                     if let stat = (statuses.value) {
                         StoreStruct.notifications = stat + StoreStruct.notifications
                         DispatchQueue.main.async {
                             StoreStruct.notifications = StoreStruct.notifications.sorted(by: { $0.createdAt > $1.createdAt })
                             StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
-                            self.tableView2.reloadData()
+                            self?.tableView2.reloadData()
                         }
                         
                     }
@@ -1800,18 +1804,18 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     func filterNots() {
         let request = Notifications.all(range: .default, typesToExclude: StoreStruct.notTypes)
         //        DispatchQueue.global(qos: .userInitiated).async {
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) {[weak self] (statuses) in
             if let stat = (statuses.value) {
                 DispatchQueue.main.async {
                     //                        StoreStruct.notifications = StoreStruct.notifications.sorted(by: { $0.createdAt > $1.createdAt })
                     StoreStruct.notifications = stat
                     
                     if stat.count > 0 {
-                        self.tableView2.reloadData()
+                        self?.tableView2.reloadData()
                     }
                 }
                 do {
-                    try Disk.save(StoreStruct.notTypes, to: .documents, as: "nottypes1.json")
+                    // ** try Disk.save(StoreStruct.notTypes, to: .documents, as: "nottypes1.json")
                 } catch {
                     print("Couldn't save")
                 }
@@ -3803,11 +3807,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 }
                                 
                                 let request = Accounts.mute(id: sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                    }
-                                }
+                                
                             } else {
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
@@ -3823,12 +3823,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 }
                                 
                                 let request = Accounts.unmute(id: sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                        
-                                    }
-                                }
+                               
                             }
                             
                         }
@@ -3848,13 +3843,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     statusAlert.show()
                                 }
                                 
-                                let request = Accounts.block(id: sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                        
-                                    }
-                                }
+                                
                             } else {
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
@@ -3869,13 +3858,6 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     statusAlert.show()
                                 }
                                 
-                                let request = Accounts.unblock(id: sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                        
-                                    }
-                                }
                             }
                             
                         }
@@ -3904,13 +3886,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                         statusAlert.show()
                                     }
                                     
-                                    let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "Harassment")
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                            
-                                        }
-                                    }
+                                  
                                     
                                 }
                                 .action(.default("No Content Warning"), image: nil) { (action, ind) in
@@ -3929,13 +3905,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                         statusAlert.show()
                                     }
                                     
-                                    let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "No Content Warning")
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                            
-                                        }
-                                    }
+                                   
                                     
                                 }
                                 .action(.default("Spam"), image: nil) { (action, ind) in
@@ -3955,13 +3925,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                         statusAlert.show()
                                     }
                                     
-                                    let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "Spam")
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                            
-                                        }
-                                    }
+                                   
                                     
                                 }
                                 .action(.cancel("Dismiss"))
@@ -4463,13 +4427,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     statusAlert.show()
                                 }
                                 
-                                let request = Accounts.mute(id: sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                        
-                                    }
-                                }
+                                
                             } else {
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
@@ -4484,13 +4442,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     statusAlert.show()
                                 }
                                 
-                                let request = Accounts.unmute(id: sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                        
-                                    }
-                                }
+                               
                             }
                             
                         }
@@ -4511,13 +4463,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     statusAlert.show()
                                 }
                                 
-                                let request = Accounts.block(id: sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                        
-                                    }
-                                }
+                                
                             } else {
                                 if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
                                     let notification = UINotificationFeedbackGenerator()
@@ -4532,13 +4478,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     statusAlert.show()
                                 }
                                 
-                                let request = Accounts.unblock(id: sto[indexPath.row].account.id)
-                                StoreStruct.client.run(request) { (statuses) in
-                                    if let stat = (statuses.value) {
-                                        
-                                        
-                                    }
-                                }
+                                
                             }
                             
                         }
@@ -4569,13 +4509,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                         statusAlert.show()
                                     }
                                     
-                                    let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "Harassment")
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                            
-                                        }
-                                    }
+                                   
                                     
                                 }
                                 .action(.default("No Content Warning"), image: nil) { (action, ind) in
@@ -4621,13 +4555,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                         statusAlert.show()
                                     }
                                     
-                                    let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "Spam")
-                                    StoreStruct.client.run(request) { (statuses) in
-                                        if let stat = (statuses.value) {
-                                            
-                                            
-                                        }
-                                    }
+                                   
                                     
                                 }
                                 .action(.cancel("Dismiss"))
@@ -5062,15 +4990,15 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             return
         }
         let request = Notifications.all(range: self.newLast2, typesToExclude: StoreStruct.notTypes)
-        StoreStruct.client.run(request) { (statuses) in
-            self.newLast2 = statuses.pagination?.next ?? RequestRange.max(id: "0", limit: nil) as! RequestRange
+        StoreStruct.client.run(request) {[weak self] (statuses) in
+            self?.newLast2 = statuses.pagination?.next ?? RequestRange.max(id: "0", limit: nil) as! RequestRange
             if let stat = (statuses.value) {
                 
                 StoreStruct.notifications = StoreStruct.notifications + stat
                 StoreStruct.notifications = StoreStruct.notifications.sorted(by: { $0.createdAt > $1.createdAt })
                 DispatchQueue.main.async {
                     StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
-                    self.tableView2.reloadData()
+                    self?.tableView2.reloadData()
                 }
                 //                    if StoreStruct.notifications.isEmpty {
                 //                        self.fetchMoreNotifications()
@@ -5082,15 +5010,15 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
             return
         }
         let request2 = Notifications.all(range: self.newLast, typesToExclude: [.favourite, .follow, .reblog, .poll])
-        StoreStruct.client.run(request2) { (statuses) in
-            self.newLast = statuses.pagination?.next ?? RequestRange.max(id: "0", limit: nil) as! RequestRange
+        StoreStruct.client.run(request2) { [weak self] (statuses) in
+            self?.newLast = statuses.pagination?.next ?? RequestRange.max(id: "0", limit: nil) as! RequestRange
             if let stat = (statuses.value) {
                 
                 StoreStruct.notificationsMentions = StoreStruct.notificationsMentions + stat
                 StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
                 DispatchQueue.main.async {
                     StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
-                    self.tableView.reloadData()
+                    self?.tableView.reloadData()
                 }
                 //                    if StoreStruct.notificationsMentions.isEmpty {
                 //                        self.fetchMoreNotifications()
@@ -5104,7 +5032,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
     @objc func refreshCont() {
         let request = Notifications.all(range: .since(id: StoreStruct.notifications.first?.id ?? "", limit: nil), typesToExclude: StoreStruct.notTypes)
         //        DispatchQueue.global(qos: .userInitiated).async {
-        StoreStruct.client.run(request) { (statuses) in
+        StoreStruct.client.run(request) { [weak self] (statuses) in
             if let stat = (statuses.value) {
 //                if stat == nil { return }
                 var newestC = StoreStruct.notifications.count
@@ -5113,8 +5041,12 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 StoreStruct.notifications = StoreStruct.notifications.sorted(by: { $0.createdAt > $1.createdAt })
                 StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
                 
+                
+                guard let ref = self else {
+                    return
+                }
                 DispatchQueue.main.async {
-                    self.tableView.cr.endHeaderRefresh()
+                    ref.tableView.cr.endHeaderRefresh()
                     StoreStruct.notifications = StoreStruct.notifications.removeDuplicates()
                     
                     newestC = StoreStruct.notifications.count - newestC
@@ -5122,29 +5054,29 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                         
                         
-                        if self.currentIndex == 1 {
+                        if ref.currentIndex == 1 {
                             
                         } else {
                             
-                            self.newUpdatesB2.setTitle("\(newestC)  ", for: .normal)
-                            self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                            ref.newUpdatesB2.setTitle("\(newestC)  ", for: .normal)
+                            ref.newUpdatesB2.frame.origin.x = CGFloat(ref.view.bounds.width + 78)
                             if newestC != 0 {
                                 springWithDelay(duration: 0.5, delay: 0, animations: {
-                                    self.newUpdatesB2.alpha = 1
-                                    self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                    ref.newUpdatesB2.alpha = 1
+                                    ref.newUpdatesB2.frame.origin.x = CGFloat(ref.view.bounds.width - 42)
                                 })
                             }
-                            self.countcount2 = stat.count
+                            ref.countcount2 = stat.count
                             
                             
                         }
                         
                         if stat.count > 0 {
 //                            self.tableView2.cr.endHeaderRefresh()
-                            self.tableView2.reloadData()
+                            ref.tableView2.reloadData()
                         }
                         
-                        if self.currentIndex == 1 {
+                        if ref.currentIndex == 1 {
                             if newestC <= 0 {} else {
 //                                self.tableView2.scrollToRow(at: IndexPath(row: newestC, section: 0), at: .top, animated: false)
                             }
@@ -5153,7 +5085,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     } else {
                         if stat.count > 0 {
 //                            self.tableView2.cr.endHeaderRefresh()
-                            self.tableView2.reloadData()
+                            ref.tableView2.reloadData()
                         }
                         
                     }
@@ -5165,7 +5097,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
         
         let request2 = Notifications.all(range: .since(id: StoreStruct.notificationsMentions.first?.id ?? "", limit: nil), typesToExclude: [.favourite, .follow, .reblog, .poll])
         //        DispatchQueue.global(qos: .userInitiated).async {
-        StoreStruct.client.run(request2) { (statuses) in
+        StoreStruct.client.run(request2) { [weak self] (statuses) in
             if let stat = (statuses.value) {
 //                if stat == nil { return }
                 var newestC2 = StoreStruct.notificationsMentions.count
@@ -5174,8 +5106,13 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.sorted(by: { $0.createdAt > $1.createdAt })
                 StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
                 
+                
+                guard let ref = self else {
+                    return
+                }
+                
                 DispatchQueue.main.async {
-                    self.tableView.cr.endHeaderRefresh()
+                    ref.tableView.cr.endHeaderRefresh()
                     StoreStruct.notificationsMentions = StoreStruct.notificationsMentions.removeDuplicates()
                     
                     newestC2 = StoreStruct.notificationsMentions.count - newestC2
@@ -5183,24 +5120,24 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     if (UserDefaults.standard.object(forKey: "posset") == nil) || (UserDefaults.standard.object(forKey: "posset") as! Int == 0) {
                         
                         
-                        if self.currentIndex == 1 {
-                            self.newUpdatesB1.setTitle("\(newestC2)  ", for: .normal)
-                            self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width + 78)
+                        if ref.currentIndex == 1 {
+                            ref.newUpdatesB1.setTitle("\(newestC2)  ", for: .normal)
+                            ref.newUpdatesB2.frame.origin.x = CGFloat(ref.view.bounds.width + 78)
                             if newestC2 != 0 {
                                 springWithDelay(duration: 0.5, delay: 0, animations: {
-                                    self.newUpdatesB1.alpha = 1
-                                    self.newUpdatesB2.frame.origin.x = CGFloat(self.view.bounds.width - 42)
+                                    ref.newUpdatesB1.alpha = 1
+                                    ref.newUpdatesB2.frame.origin.x = CGFloat(ref.view.bounds.width - 42)
                                 })
                             }
-                            self.countcount1 = stat.count
+                            ref.countcount1 = stat.count
                         }
                         
                         if stat.count > 0 {
 //                            self.tableView.cr.endHeaderRefresh()
-                            self.tableView.reloadData()
+                            ref.tableView.reloadData()
                         }
                         
-                        if self.currentIndex == 1 {
+                        if ref.currentIndex == 1 {
                             if newestC2 <= 0 {} else {
 //                                self.tableView.scrollToRow(at: IndexPath(row: newestC2, section: 0), at: .top, animated: false)
                             }
@@ -5209,7 +5146,7 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     } else {
                         if stat.count > 0 {
 //                            self.tableView.cr.endHeaderRefresh()
-                            self.tableView.reloadData()
+                            ref.tableView.reloadData()
                         }
                         
                     }

@@ -696,7 +696,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         }
         DispatchQueue.global(qos: .userInitiated).async {
         do {
-            try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
+            // ** try Disk.save(StoreStruct.newdrafts, to: .documents, as: "drafts1.json")
         } catch {
             print("err")
         }
@@ -888,14 +888,14 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         if (model.status?.visibility) ?? Visibility.private == .direct {
                             let request = Timelines.direct(range: .since(id: StoreStruct.notificationsDirect.first?.id ?? "", limit: nil))
                             // let request = Timelines.conversations(range: .since(id: StoreStruct.notificationsDirect.first?.id ?? "", limit: nil))
-                            StoreStruct.client.run(request) { (statuses) in
+                            StoreStruct.client.run(request) { [weak self] (statuses) in
                                 if let stat = (statuses.value) {
                                     if stat.isEmpty {} else {
 //                                        DispatchQueue.main.async {
                                             if (UserDefaults.standard.object(forKey: "badgeMentd") == nil) || (UserDefaults.standard.object(forKey: "badgeMentd") as! Int == 0) {
                                                 StoreStruct.badgeCount2 = StoreStruct.badgeCount2 + 1
-                                                self.tabBar.items?[2].badgeValue = "\(StoreStruct.badgeCount2)" ?? "1"
-                                                self.tabBar.items?[2].badgeColor = Colours.tabSelected
+                                                self?.tabBar.items?[2].badgeValue = "\(StoreStruct.badgeCount2)" ?? "1"
+                                                self?.tabBar.items?[2].badgeColor = Colours.tabSelected
                                             }
                                             StoreStruct.notificationsDirect = stat + StoreStruct.notificationsDirect
                                             StoreStruct.notificationsDirect = StoreStruct.notificationsDirect.removeDuplicates()
@@ -1670,10 +1670,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     }
 
                     let request = Lists.delete(id: StoreStruct.allLists[indexPath.row].id)
-                    StoreStruct.client.run(request) { (statuses) in
+                    StoreStruct.client.run(request) { [weak self] (statuses) in
                         DispatchQueue.main.async {
                             StoreStruct.allLists.remove(at: indexPath.row)
-                            self.tableViewLists.reloadData()
+                            self?.tableViewLists.reloadData()
                         }
                     }
                 }
@@ -1729,10 +1729,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         }
 
                         let request = Lists.delete(id: StoreStruct.allLists[indexPath.row].id)
-                        StoreStruct.client.run(request) { (statuses) in
+                        StoreStruct.client.run(request) {[weak self] (statuses) in
                             DispatchQueue.main.async {
                                 StoreStruct.allLists.remove(at: indexPath.row)
-                                self.tableViewLists.reloadData()
+                                self?.tableViewLists.reloadData()
                             }
                         }
                     }
@@ -2699,8 +2699,12 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     scopes: [.read, .write, .follow, .push],
                     website: "https://pleroma.com"
                 )
-                StoreStruct.client.run(request) { (application) in
+                StoreStruct.client.run(request) { [weak self] (application) in
                     
+                    
+                    guard let ref = self else {
+                        return
+                    }
 //                    DispatchQueue.main.async {
                     if application.value == nil {
 
@@ -2719,8 +2723,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                                     UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
                                         if !success {
                                             if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
-                                            self.safariVC = SFSafariViewController(url: queryURL)
-                                            self.present(self.safariVC!, animated: true, completion: nil)
+                                            ref.safariVC = SFSafariViewController(url: queryURL)
+                                            ref.present(ref.safariVC!, animated: true, completion: nil)
                                             } else {
                                                 UIApplication.shared.openURL(queryURL)
                                             }
@@ -2733,8 +2737,8 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                                         return
                                     }
                                 }
-                                .popover(anchorView: self.view)
-                                .show(on: self)
+                                .popover(anchorView: ref.view)
+                                .show(on: ref)
                             
                         }
 
@@ -2747,15 +2751,15 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         
                         DispatchQueue.main.async {
                             
-                            self.tagListView.alpha = 0
+                            ref.tagListView.alpha = 0
                             
                             StoreStruct.currentInstance.redirect = "com.vm.roma://success".addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
                             let queryURL = URL(string: "https://\(returnedText)/oauth/authorize?response_type=code&redirect_uri=\(StoreStruct.currentInstance.redirect)&scope=read%20write%20follow%20push&client_id=\(application.clientID)")!
                             UIApplication.shared.open(queryURL, options: [.universalLinksOnly: true]) { (success) in
                                 if !success {
                                     if (UserDefaults.standard.object(forKey: "linkdest") == nil) || (UserDefaults.standard.object(forKey: "linkdest") as! Int == 0) {
-                                    self.safariVC = SFSafariViewController(url: queryURL)
-                                    self.present(self.safariVC!, animated: true, completion: nil)
+                                    ref.safariVC = SFSafariViewController(url: queryURL)
+                                    ref.present(ref.safariVC!, animated: true, completion: nil)
                                     } else {
                                         UIApplication.shared.openURL(queryURL)
                                     }
@@ -2800,7 +2804,9 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     
     
     @objc func setUpProfileImage(){
+        if StoreStruct.currentUser != nil {
             self.settingsButton.pin_setImage(from: URL(string: "\(StoreStruct.currentUser.avatarStatic)"))
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -3228,22 +3234,22 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         if self.typeOfSearch == 0 {
             let theText = textField.text?.replacingOccurrences(of: "#", with: "")
             let request = Timelines.tag(theText ?? "")
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) { [weak self] (statuses) in
                 if let stat = (statuses.value) {
                     StoreStruct.statusSearch = stat
                     DispatchQueue.main.async {
-                        self.tableView.reloadData()
+                        self?.tableView.reloadData()
                     }
                 }
             }
         }
         if self.typeOfSearch == 1 {
             let request = Search.search(query: textField.text ?? "")
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
                     StoreStruct.statusSearch = stat.statuses
                     DispatchQueue.main.async {
-                        self.tableView.reloadData()
+                        self?.tableView.reloadData()
                     }
                 }
             }
@@ -3251,11 +3257,11 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
         if self.typeOfSearch == 2 {
 
             let request = Accounts.search(query: self.newestText)
-            StoreStruct.client.run(request) { (statuses) in
+            StoreStruct.client.run(request) {[weak self] (statuses) in
                 if let stat = (statuses.value) {
                     StoreStruct.statusSearchUser = stat
                     DispatchQueue.main.async {
-                        self.tableView.reloadData()
+                        self?.tableView.reloadData()
                     }
                 }
             }
