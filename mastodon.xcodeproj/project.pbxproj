@@ -814,6 +814,8 @@
 		A992A6C5225FA0110005AB1F /* CrownSurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A6A6225FA0100005AB1F /* CrownSurfaceView.swift */; };
 		A992A6C6225FA0110005AB1F /* CrownControlDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A6A7225FA0100005AB1F /* CrownControlDelegate.swift */; };
 		A992A6C7225FA0110005AB1F /* CrownSurfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A6A8225FA0100005AB1F /* CrownSurfaceController.swift */; };
+		A9A85F8322F4A4FE00CDC2BC /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A85F8222F4A4FE00CDC2BC /* EditProfileViewController.swift */; };
+		A9A85F8522F4D27700CDC2BC /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9A85F8422F4D27700CDC2BC /* Profile.storyboard */; };
 		A9D80EE721B84B3900020ECE /* AddInstanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EE621B84B3900020ECE /* AddInstanceCell.swift */; };
 		A9D80EED21B8F27A00020ECE /* InstanceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EEC21B8F27A00020ECE /* InstanceData.swift */; };
 		A9D80EEF21BB154200020ECE /* AccountExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EEE21BB154200020ECE /* AccountExtension.swift */; };
@@ -1788,6 +1790,8 @@
 		A992A6A6225FA0100005AB1F /* CrownSurfaceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrownSurfaceView.swift; sourceTree = "<group>"; };
 		A992A6A7225FA0100005AB1F /* CrownControlDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrownControlDelegate.swift; sourceTree = "<group>"; };
 		A992A6A8225FA0100005AB1F /* CrownSurfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrownSurfaceController.swift; sourceTree = "<group>"; };
+		A9A85F8222F4A4FE00CDC2BC /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		A9A85F8422F4D27700CDC2BC /* Profile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
 		A9D80EE621B84B3900020ECE /* AddInstanceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddInstanceCell.swift; sourceTree = "<group>"; };
 		A9D80EEC21B8F27A00020ECE /* InstanceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceData.swift; sourceTree = "<group>"; };
 		A9D80EEE21BB154200020ECE /* AccountExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountExtension.swift; sourceTree = "<group>"; };
@@ -2845,6 +2849,7 @@
 		5373C9D6215173EE00676F3D /* mastodon */ = {
 			isa = PBXGroup;
 			children = (
+				A9A85F8122F4A47A00CDC2BC /* Controllers */,
 				A961A5B822D67825000610E8 /* Storyboards */,
 				A9F2EC6121EBAD96006AD130 /* GoogleService-Info.plist */,
 				5354BA282163F9200094C545 /* mastodon.entitlements */,
@@ -3355,6 +3360,7 @@
 			isa = PBXGroup;
 			children = (
 				A961A5B922D67840000610E8 /* Messages.storyboard */,
+				A9A85F8422F4D27700CDC2BC /* Profile.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -3533,6 +3539,14 @@
 				A992A6A8225FA0100005AB1F /* CrownSurfaceController.swift */,
 			);
 			path = CrownInterfaces;
+			sourceTree = "<group>";
+		};
+		A9A85F8122F4A47A00CDC2BC /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A9A85F8222F4A4FE00CDC2BC /* EditProfileViewController.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 		A9F33BD222DD368B00E87E43 /* Toast */ = {
@@ -3962,6 +3976,7 @@
 				5352D0AC215E679300901B60 /* icon3@3x.png in Resources */,
 				530976A82179D8D900640D84 /* icon16@2x.png in Resources */,
 				53E826E22236C32D00153721 /* battery_charging.pdf in Resources */,
+				A9A85F8522F4D27700CDC2BC /* Profile.storyboard in Resources */,
 				5352D0A6215E679300901B60 /* icon3.png in Resources */,
 				530976C02179D8D900640D84 /* icon18@2x.png in Resources */,
 				A992A67C225F9FCA0005AB1F /* SHCollectionViewCell.xib in Resources */,
@@ -4392,6 +4407,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9A85F8322F4A4FE00CDC2BC /* EditProfileViewController.swift in Sources */,
 				531CCD6122073CCA00A56145 /* ChromaHandle.swift in Sources */,
 				5316C89D219D94A00003AB97 /* SwiftyGiphyViewController.swift in Sources */,
 				A992A6BA225FA0110005AB1F /* StyleView.swift in Sources */,
