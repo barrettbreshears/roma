@@ -762,6 +762,7 @@
 		A94903AD22E612D1008E91AE /* TimelineInfoAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94903AC22E612D1008E91AE /* TimelineInfoAlertView.swift */; };
 		A94903AF22E61327008E91AE /* TimelineInfoAlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94903AE22E61327008E91AE /* TimelineInfoAlertView.xib */; };
 		A94903B122E6133C008E91AE /* ErrorAlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94903B022E6133C008E91AE /* ErrorAlertView.xib */; };
+		A957EEAF22F777650090A66A /* EditProfileViewController+CropperExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A957EEAE22F777650090A66A /* EditProfileViewController+CropperExtension.swift */; };
 		A958C40C22BBF4FB008AB22A /* UIView+PositionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A69E225FA0100005AB1F /* UIView+PositionUtils.swift */; };
 		A9594D80221F193E00AF7A0E /* MastShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 5354BA192163F89E0094C545 /* MastShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A961A5BA22D67840000610E8 /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A961A5B922D67840000610E8 /* Messages.storyboard */; };
@@ -1720,6 +1721,7 @@
 		A94903AC22E612D1008E91AE /* TimelineInfoAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineInfoAlertView.swift; sourceTree = "<group>"; };
 		A94903AE22E61327008E91AE /* TimelineInfoAlertView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TimelineInfoAlertView.xib; sourceTree = "<group>"; };
 		A94903B022E6133C008E91AE /* ErrorAlertView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ErrorAlertView.xib; sourceTree = "<group>"; };
+		A957EEAE22F777650090A66A /* EditProfileViewController+CropperExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditProfileViewController+CropperExtension.swift"; sourceTree = "<group>"; };
 		A958C3FC22BBEFA0008AB22A /* SAHistoryViewAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAHistoryViewAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		A958C3FD22BBEFA0008AB22A /* SAHistoryExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAHistoryExtension.swift; sourceTree = "<group>"; };
 		A958C3FE22BBEFA0008AB22A /* UIView+Screenshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Screenshot.swift"; sourceTree = "<group>"; };
@@ -3341,6 +3343,15 @@
 			path = AlertViiews;
 			sourceTree = "<group>";
 		};
+		A957EEAD22F777460090A66A /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				A9A85F8222F4A4FE00CDC2BC /* EditProfileViewController.swift */,
+				A957EEAE22F777650090A66A /* EditProfileViewController+CropperExtension.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		A958C3FB22BBEFA0008AB22A /* SAHistoryNavigationViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -3544,7 +3555,7 @@
 		A9A85F8122F4A47A00CDC2BC /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				A9A85F8222F4A4FE00CDC2BC /* EditProfileViewController.swift */,
+				A957EEAD22F777460090A66A /* Profile */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -4820,6 +4831,7 @@
 				531E0FA4216E2BA2003E8890 /* NVActivityIndicatorAnimationBallScaleMultiple.swift in Sources */,
 				A992A6C2225FA0110005AB1F /* PinIndicatorView.swift in Sources */,
 				A958C40C22BBF4FB008AB22A /* UIView+PositionUtils.swift in Sources */,
+				A957EEAF22F777650090A66A /* EditProfileViewController+CropperExtension.swift in Sources */,
 				5373CB4E21566E6500676F3D /* DetailCell.swift in Sources */,
 				5315ECE021FDE0AE00A3F1A9 /* FollowSuggestionsViewController.swift in Sources */,
 				5373CAFB2152EDB800676F3D /* SwipeActionTransitioning.swift in Sources */,
