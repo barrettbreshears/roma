@@ -1213,7 +1213,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
+        super.viewDidAppear(animated)
         
         var zzz = self.profileStatuses
         if self.currentIndex == 0 {
@@ -1221,7 +1221,6 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         } else {
             zzz = self.profileStatuses2
         }
-        let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         
         if let indexPath = tableView.indexPathForSelectedRow {
             self.tableView.deselectRow(at: indexPath, animated: true)

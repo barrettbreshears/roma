@@ -725,7 +725,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     @objc func savedComposePresent() {
         DispatchQueue.main.async {
             
-            Alertift.actionSheet(title: nil, message: "Oops! Looks like the app was quit while you were in the middle of a great toot. Would you like to get back to composing it?")
+            Alertift.actionSheet(title: nil, message: "Oops! Looks like the app was quit while you were in the middle of a great post. Would you like to get back to composing it?")
                 .backgroundColor(Colours.white)
                 .titleTextColor(Colours.grayDark)
                 .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
@@ -2032,7 +2032,11 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                         if self.currentIndex == 2 {
                             
                             
-                            DispatchQueue.main.async {
+                            DispatchQueue.main.async {[weak self] in
+                                
+                                guard let self = self else{
+                                    return
+                                }
                                 
                                 if self.fMod.count == 1 {
                                     return
@@ -2070,11 +2074,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                         })
                                         self.countcount3 = self.fMod.count
                                         
-                                        UIView.setAnimationsEnabled(false)
                                         StoreStruct.statusesFederated = StoreStruct.tempStatusesFederated
                                         self.tableViewF.reloadData()
                                         //                                    self.refreshControl.endRefreshing()
-                                        self.tableViewF.scrollToRow(at: IndexPath(row: self.fMod.count - 1, section: 0), at: .top, animated: false)
+                                        // self.tableViewF.scrollToRow(at: IndexPath(row: self.fMod.count - 1, section: 0), at: .top, animated: false)
                                         UIView.setAnimationsEnabled(true)
                                         
                                     } else {
@@ -2328,17 +2331,19 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if tableView == self.tableViewL || tableView == self.tableViewF {
-            return 26
+            return 0 // 26
         } else {
             return 0
         }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        // media
         let vw = UIView()
         vw.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: 26)
         let title = UILabel()
         title.frame = CGRect(x: 10, y: 8, width: self.view.bounds.width, height: 26)
+        
         
         if tableView == self.tableViewL || tableView == self.tableViewF {
             title.text = ""
@@ -2354,7 +2359,7 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
         vw.addSubview(title)
         vw.backgroundColor = Colours.white
         
-        return vw
+        return nil //vw
     }
     
     @objc func tapMoreActivity() {

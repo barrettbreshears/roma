@@ -2810,7 +2810,7 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
+        // super.viewDidAppear(animated)
         
 //        if StoreStruct.currentUser == nil {
             let request2 = Accounts.currentUser()

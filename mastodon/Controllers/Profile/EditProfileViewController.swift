@@ -24,13 +24,14 @@ class EditProfileViewController: UITableViewController {
     @IBOutlet var displayName:UITextField?
     @IBOutlet var bio:UITextView?
     @IBOutlet var lock:UIButton?
-    
+    @IBOutlet var displayNameLabel:UILabel?
+    @IBOutlet var bioLabel:UILabel?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Edit Profile"
         checkUser()
-        
+        setUpTheme()
         let editBar = UIToolbar(frame:CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
         editBar.barStyle = .default
         editBar.items = [
@@ -44,6 +45,14 @@ class EditProfileViewController: UITableViewController {
         bio?.inputAccessoryView = editBar
         
         // Do any additional setup after loading the view.
+    }
+    
+    func setUpTheme(){
+        self.view.backgroundColor = Colours.white
+        displayNameLabel?.textColor = Colours.black
+        displayName?.textColor = Colours.black
+        bioLabel?.textColor = Colours.black
+        bio?.textColor = Colours.black
     }
     
     func checkUser(){
