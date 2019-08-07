@@ -762,6 +762,7 @@
 		A94903AD22E612D1008E91AE /* TimelineInfoAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A94903AC22E612D1008E91AE /* TimelineInfoAlertView.swift */; };
 		A94903AF22E61327008E91AE /* TimelineInfoAlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94903AE22E61327008E91AE /* TimelineInfoAlertView.xib */; };
 		A94903B122E6133C008E91AE /* ErrorAlertView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A94903B022E6133C008E91AE /* ErrorAlertView.xib */; };
+		A957EEAF22F777650090A66A /* EditProfileViewController+CropperExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A957EEAE22F777650090A66A /* EditProfileViewController+CropperExtension.swift */; };
 		A958C40C22BBF4FB008AB22A /* UIView+PositionUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A69E225FA0100005AB1F /* UIView+PositionUtils.swift */; };
 		A9594D80221F193E00AF7A0E /* MastShare.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 5354BA192163F89E0094C545 /* MastShare.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		A961A5BA22D67840000610E8 /* Messages.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A961A5B922D67840000610E8 /* Messages.storyboard */; };
@@ -814,6 +815,12 @@
 		A992A6C5225FA0110005AB1F /* CrownSurfaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A6A6225FA0100005AB1F /* CrownSurfaceView.swift */; };
 		A992A6C6225FA0110005AB1F /* CrownControlDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A6A7225FA0100005AB1F /* CrownControlDelegate.swift */; };
 		A992A6C7225FA0110005AB1F /* CrownSurfaceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A992A6A8225FA0100005AB1F /* CrownSurfaceController.swift */; };
+		A9A85F8322F4A4FE00CDC2BC /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A85F8222F4A4FE00CDC2BC /* EditProfileViewController.swift */; };
+		A9A85F8522F4D27700CDC2BC /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9A85F8422F4D27700CDC2BC /* Profile.storyboard */; };
+		A9A85F8C22F9F21D00CDC2BC /* ViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A85F8B22F9F21D00CDC2BC /* ViewControllerExtensions.swift */; };
+		A9A85F9122FA38A800CDC2BC /* LoadingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A85F8F22FA38A800CDC2BC /* LoadingViewController.swift */; };
+		A9A85F9222FA38A800CDC2BC /* LoadingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = A9A85F9022FA38A800CDC2BC /* LoadingViewController.xib */; };
+		A9A85F9422FA3BC300CDC2BC /* EditProfileViewController+TextDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A85F9322FA3BC300CDC2BC /* EditProfileViewController+TextDelegate.swift */; };
 		A9D80EE721B84B3900020ECE /* AddInstanceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EE621B84B3900020ECE /* AddInstanceCell.swift */; };
 		A9D80EED21B8F27A00020ECE /* InstanceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EEC21B8F27A00020ECE /* InstanceData.swift */; };
 		A9D80EEF21BB154200020ECE /* AccountExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9D80EEE21BB154200020ECE /* AccountExtension.swift */; };
@@ -1718,6 +1725,7 @@
 		A94903AC22E612D1008E91AE /* TimelineInfoAlertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineInfoAlertView.swift; sourceTree = "<group>"; };
 		A94903AE22E61327008E91AE /* TimelineInfoAlertView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TimelineInfoAlertView.xib; sourceTree = "<group>"; };
 		A94903B022E6133C008E91AE /* ErrorAlertView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ErrorAlertView.xib; sourceTree = "<group>"; };
+		A957EEAE22F777650090A66A /* EditProfileViewController+CropperExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditProfileViewController+CropperExtension.swift"; sourceTree = "<group>"; };
 		A958C3FC22BBEFA0008AB22A /* SAHistoryViewAnimatedTransitioning.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAHistoryViewAnimatedTransitioning.swift; sourceTree = "<group>"; };
 		A958C3FD22BBEFA0008AB22A /* SAHistoryExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAHistoryExtension.swift; sourceTree = "<group>"; };
 		A958C3FE22BBEFA0008AB22A /* UIView+Screenshot.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Screenshot.swift"; sourceTree = "<group>"; };
@@ -1788,6 +1796,12 @@
 		A992A6A6225FA0100005AB1F /* CrownSurfaceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrownSurfaceView.swift; sourceTree = "<group>"; };
 		A992A6A7225FA0100005AB1F /* CrownControlDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrownControlDelegate.swift; sourceTree = "<group>"; };
 		A992A6A8225FA0100005AB1F /* CrownSurfaceController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrownSurfaceController.swift; sourceTree = "<group>"; };
+		A9A85F8222F4A4FE00CDC2BC /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		A9A85F8422F4D27700CDC2BC /* Profile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
+		A9A85F8B22F9F21D00CDC2BC /* ViewControllerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExtensions.swift; sourceTree = "<group>"; };
+		A9A85F8F22FA38A800CDC2BC /* LoadingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingViewController.swift; sourceTree = "<group>"; };
+		A9A85F9022FA38A800CDC2BC /* LoadingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LoadingViewController.xib; sourceTree = "<group>"; };
+		A9A85F9322FA3BC300CDC2BC /* EditProfileViewController+TextDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditProfileViewController+TextDelegate.swift"; sourceTree = "<group>"; };
 		A9D80EE621B84B3900020ECE /* AddInstanceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddInstanceCell.swift; sourceTree = "<group>"; };
 		A9D80EEC21B8F27A00020ECE /* InstanceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstanceData.swift; sourceTree = "<group>"; };
 		A9D80EEE21BB154200020ECE /* AccountExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountExtension.swift; sourceTree = "<group>"; };
@@ -2845,6 +2859,8 @@
 		5373C9D6215173EE00676F3D /* mastodon */ = {
 			isa = PBXGroup;
 			children = (
+				A9A85F8A22F9F20900CDC2BC /* Extensions */,
+				A9A85F8122F4A47A00CDC2BC /* Controllers */,
 				A961A5B822D67825000610E8 /* Storyboards */,
 				A9F2EC6121EBAD96006AD130 /* GoogleService-Info.plist */,
 				5354BA282163F9200094C545 /* mastodon.entitlements */,
@@ -3336,6 +3352,16 @@
 			path = AlertViiews;
 			sourceTree = "<group>";
 		};
+		A957EEAD22F777460090A66A /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				A9A85F8222F4A4FE00CDC2BC /* EditProfileViewController.swift */,
+				A957EEAE22F777650090A66A /* EditProfileViewController+CropperExtension.swift */,
+				A9A85F9322FA3BC300CDC2BC /* EditProfileViewController+TextDelegate.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
 		A958C3FB22BBEFA0008AB22A /* SAHistoryNavigationViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -3355,6 +3381,7 @@
 			isa = PBXGroup;
 			children = (
 				A961A5B922D67840000610E8 /* Messages.storyboard */,
+				A9A85F8422F4D27700CDC2BC /* Profile.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -3533,6 +3560,40 @@
 				A992A6A8225FA0100005AB1F /* CrownSurfaceController.swift */,
 			);
 			path = CrownInterfaces;
+			sourceTree = "<group>";
+		};
+		A9A85F8122F4A47A00CDC2BC /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A9A85F8D22F9F23F00CDC2BC /* Helpers */,
+				A957EEAD22F777460090A66A /* Profile */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		A9A85F8A22F9F20900CDC2BC /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A9A85F8B22F9F21D00CDC2BC /* ViewControllerExtensions.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A9A85F8D22F9F23F00CDC2BC /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				A9A85F8E22F9F24B00CDC2BC /* Loading */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		A9A85F8E22F9F24B00CDC2BC /* Loading */ = {
+			isa = PBXGroup;
+			children = (
+				A9A85F8F22FA38A800CDC2BC /* LoadingViewController.swift */,
+				A9A85F9022FA38A800CDC2BC /* LoadingViewController.xib */,
+			);
+			path = Loading;
 			sourceTree = "<group>";
 		};
 		A9F33BD222DD368B00E87E43 /* Toast */ = {
@@ -3962,6 +4023,7 @@
 				5352D0AC215E679300901B60 /* icon3@3x.png in Resources */,
 				530976A82179D8D900640D84 /* icon16@2x.png in Resources */,
 				53E826E22236C32D00153721 /* battery_charging.pdf in Resources */,
+				A9A85F8522F4D27700CDC2BC /* Profile.storyboard in Resources */,
 				5352D0A6215E679300901B60 /* icon3.png in Resources */,
 				530976C02179D8D900640D84 /* icon18@2x.png in Resources */,
 				A992A67C225F9FCA0005AB1F /* SHCollectionViewCell.xib in Resources */,
@@ -3970,6 +4032,7 @@
 				53205815215D287700ED0C36 /* LICENSE in Resources */,
 				5354BAD2216577FD0094C545 /* NormalHeader.bundle in Resources */,
 				530976BF2179D8D900640D84 /* icon14@2x.png in Resources */,
+				A9A85F9222FA38A800CDC2BC /* LoadingViewController.xib in Resources */,
 				A992A6AF225FA0110005AB1F /* terms.rtf in Resources */,
 				5352D0BA215E679400901B60 /* icon8.png in Resources */,
 				53E826DB2236C32D00153721 /* battery.png in Resources */,
@@ -4392,6 +4455,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9A85F8322F4A4FE00CDC2BC /* EditProfileViewController.swift in Sources */,
 				531CCD6122073CCA00A56145 /* ChromaHandle.swift in Sources */,
 				5316C89D219D94A00003AB97 /* SwiftyGiphyViewController.swift in Sources */,
 				A992A6BA225FA0110005AB1F /* StyleView.swift in Sources */,
@@ -4552,6 +4616,7 @@
 				5373CAC82152C68000676F3D /* Clients.swift in Sources */,
 				531E0F8C216E2BA2003E8890 /* NVActivityIndicatorShape.swift in Sources */,
 				5373CACA2152C68000676F3D /* Favourites.swift in Sources */,
+				A9A85F8C22F9F21D00CDC2BC /* ViewControllerExtensions.swift in Sources */,
 				5317C7C021DA334500746197 /* LinePlot.swift in Sources */,
 				A992A652225F9E370005AB1F /* PushNotificationReceiver.swift in Sources */,
 				531E0F9B216E2BA2003E8890 /* NVActivityIndicatorAnimationBallClipRotatePulse.swift in Sources */,
@@ -4610,6 +4675,7 @@
 				536A4FBC216B73D600A3D483 /* HighlightButton.swift in Sources */,
 				5373CB4821565FFC00676F3D /* DetailViewController.swift in Sources */,
 				A992A64F225F9E370005AB1F /* SwiftGCM.swift in Sources */,
+				A9A85F9422FA3BC300CDC2BC /* EditProfileViewController+TextDelegate.swift in Sources */,
 				5373CABD2152C68000676F3D /* Status.swift in Sources */,
 				536A4FB2216B73D600A3D483 /* BulletinViewController.swift in Sources */,
 				5316C890219D94A00003AB97 /* GiphyMeta.swift in Sources */,
@@ -4713,6 +4779,7 @@
 				5329F38A2174D0CB00C4A23C /* CollectionColourCell.swift in Sources */,
 				5320580C215D287700ED0C36 /* DKCameraResource.swift in Sources */,
 				A9D80EE721B84B3900020ECE /* AddInstanceCell.swift in Sources */,
+				A9A85F9122FA38A800CDC2BC /* LoadingViewController.swift in Sources */,
 				5317C7BF21DA334500746197 /* Plot.swift in Sources */,
 				5320581B215D287700ED0C36 /* FontAwesomeImageRepresentable.swift in Sources */,
 				5365941D222EB73400BFF3CD /* HCoreBarChart.swift in Sources */,
@@ -4804,6 +4871,7 @@
 				531E0FA4216E2BA2003E8890 /* NVActivityIndicatorAnimationBallScaleMultiple.swift in Sources */,
 				A992A6C2225FA0110005AB1F /* PinIndicatorView.swift in Sources */,
 				A958C40C22BBF4FB008AB22A /* UIView+PositionUtils.swift in Sources */,
+				A957EEAF22F777650090A66A /* EditProfileViewController+CropperExtension.swift in Sources */,
 				5373CB4E21566E6500676F3D /* DetailCell.swift in Sources */,
 				5315ECE021FDE0AE00A3F1A9 /* FollowSuggestionsViewController.swift in Sources */,
 				5373CAFB2152EDB800676F3D /* SwipeActionTransitioning.swift in Sources */,

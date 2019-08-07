@@ -320,6 +320,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 settingsButton.addTarget(self, action: #selector(self.touchList), for: .touchUpInside)
         
                 let done = UIBarButtonItem.init(customView: settingsButton)
+                
                 self.navigationItem.setLeftBarButton(done, animated: false)
         default:
             print("nil")
@@ -883,12 +884,20 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         settingsButton.adjustsImageWhenHighlighted = false
         settingsButton.addTarget(self, action: #selector(self.setTop1), for: .touchUpInside)
         
+        var editProfileButton = MNGExpandedTouchAreaButton()
+        editProfileButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 15, y: 47, width: 36, height: 36)))
+        editProfileButton.setImage(UIImage(named: "edit")?.maskWithColor(color: Colours.grayLight2), for: .normal)
+        editProfileButton.imageEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
+        editProfileButton.adjustsImageWhenHighlighted = false
+        editProfileButton.addTarget(self, action: #selector(self.goToEdit), for: .touchUpInside)
+        
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
             if self.fromOtherUser {} else {
                 let done = UIBarButtonItem.init(customView: settingsButton)
-                self.navigationItem.setLeftBarButton(done, animated: false)
+                let edit = UIBarButtonItem.init(customView: editProfileButton)
+                self.navigationItem.setLeftBarButtonItems([done, edit], animated: false)
             }
         default:
             print("nil")
@@ -994,6 +1003,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         }
     }
 
+    @objc func goToEdit(){
+        
+        let storyboard = UIStoryboard(name: "Profile", bundle: nil)
+        let editProfileVC = storyboard.instantiateViewController(withIdentifier: "EditProfileViewController") as! EditProfileViewController
+        self.navigationController?.pushViewController(editProfileVC, animated: true);
+        
+    }
+    
     func crownScroll() {
         var attributes = CrownAttributes(scrollView: self.tableView, scrollAxis: .vertical)
         attributes.backgroundStyle.content = .gradient(gradient: .init(colors: [UIColor(red: 55/255.0, green: 55/255.0, blue: 65/255.0, alpha: 1.0), UIColor(red: 20/255.0, green: 20/255.0, blue: 29/255.0, alpha: 1.0)], startPoint: .zero, endPoint: CGPoint(x: 1, y: 1)))
@@ -1575,394 +1592,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //                    }
 //                }
 //            }
-        } else {
-            
-            self.editProfileDetails()
-            
         }
     }
     
-    func editProfileDetails() {
-        
-        StoreStruct.avaFile = "\(StoreStruct.avaFile)\(Int.random(in: 10...5000000))"
-        StoreStruct.heaFile = "\(StoreStruct.heaFile)\(Int.random(in: 10...5000000))"
-        
-        let isItLocked = StoreStruct.currentUser.locked
-        var lockText = "Lock Account"
-        var isItGoingToLock = false
-        var isItGoingToLockText = "Locked Account"
-        if isItLocked {
-            isItGoingToLock = false
-            lockText = "Unlock Account"
-            isItGoingToLockText = "Unlocked Account"
-        } else {
-            isItGoingToLock = true
-            isItGoingToLockText = "Locked Account"
-        }
-        
-        
-        var compression: CGFloat = 1
-        if (UserDefaults.standard.object(forKey: "imqual") == nil) || (UserDefaults.standard.object(forKey: "imqual") as! Int == 0) {
-            compression = 1
-        } else if UserDefaults.standard.object(forKey: "imqual") as! Int == 1 {
-            compression = 0.78
-        } else {
-            compression = 0.5
-        }
-        
-        Alertift.actionSheet()
-            .backgroundColor(Colours.white)
-            .titleTextColor(Colours.grayDark)
-            .messageTextColor(Colours.grayDark)
-            .messageTextAlignment(.left)
-            .titleTextAlignment(.left)
-        .action(.default("Edit Avatar"), image: nil) { (action, ind) in
-            
-            StoreStruct.medType = 1
-            self.inArea = 0
-            
-            let pickerController = DKImagePickerController()
-            pickerController.didSelectAssets = { (assets: [DKAsset]) in
-                if assets.count == 0 {
-                    return
-                }
-                if assets.count > 0 {
-                    assets[0].fetchOriginalImage(true, completeBlock: { image, info in
-                        self.cropViewController = CropViewController(image: image ?? UIImage())
-                        self.cropViewController.delegate = self
-                        self.cropViewController.aspectRatioPreset = .presetSquare
-                        self.cropViewController.aspectRatioLockEnabled = true
-                        self.cropViewController.resetAspectRatioEnabled = false
-                        self.cropViewController.aspectRatioPickerButtonHidden = true
-                        self.cropViewController.title = "Resize Avatar"
-                        self.present(self.cropViewController, animated: true, completion: nil)
-                    })
-                }
-            }
-            pickerController.showsCancelButton = true
-            pickerController.maxSelectableCount = 1
-            pickerController.allowMultipleTypes = false
-            pickerController.assetType = .allPhotos
-            self.present(pickerController, animated: true) {}
-            }
-            
-            .action(.default("Edit Header"), image: nil) { (action, ind) in
-                
-                StoreStruct.medType = 2
-                self.inArea = 1
-                
-                let pickerController = DKImagePickerController()
-                pickerController.didSelectAssets = { (assets: [DKAsset]) in
-                    if assets.count == 0 {
-                        return
-                    }
-                    if assets.count > 0 {
-                        assets[0].fetchOriginalImage(true, completeBlock: { image, info in
-                            self.cropViewController = CropViewController(image: image ?? UIImage())
-                            self.cropViewController.delegate = self
-                            self.cropViewController.aspectRatioPreset = .preset3x1
-                            self.cropViewController.aspectRatioLockEnabled = true
-                            self.cropViewController.resetAspectRatioEnabled = false
-                            self.cropViewController.aspectRatioPickerButtonHidden = true
-                            self.cropViewController.title = "Resize Header"
-                            self.present(self.cropViewController, animated: true, completion: nil)
-                        })
-                    }
-                }
-                pickerController.showsCancelButton = true
-                pickerController.maxSelectableCount = 1
-                pickerController.allowMultipleTypes = false
-                pickerController.assetType = .allPhotos
-                self.present(pickerController, animated: true) {}
-            }
-            
-            
-            .action(.default("Edit Display Name"), image: nil) { (action, ind) in
-                 
-                
-                let controller = NewProfileViewController()
-                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-                switch (deviceIdiom) {
-                case .pad:
-                    controller.modalPresentationStyle = .pageSheet
-                default:
-                    print("nil")
-                }
-                controller.editListName = self.chosenUser.displayName
-                self.present(controller, animated: true, completion: nil)
-                
-            }
-            .action(.default("Edit Bio"), image: nil) { (action, ind) in
-                 
-                
-                let controller = NewProfileNoteViewController()
-                let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
-                switch (deviceIdiom) {
-                case .pad:
-                    controller.modalPresentationStyle = .pageSheet
-                default:
-                    print("nil")
-                }
-                controller.editListName = self.chosenUser.note.stripHTML()
-                self.present(controller, animated: true, completion: nil)
-                
-            }
-            .action(.default("Edit Links"), image: nil) { (action, ind) in
-                 
-                
-                var field1 = "Link 1"
-                var field2 = "Link 2"
-                var field3 = "Link 3"
-                var field4 = "Link 4"
-                var field01: String? = ""
-                var field02: String? = ""
-                var field03: String? = ""
-                var field04: String? = ""
-                var fieldVal1: String? = ""
-                var fieldVal2: String? = ""
-                var fieldVal3: String? = ""
-                var fieldVal4: String? = ""
-                
-                if self.chosenUser.fields.count > 0 {
-                    field1 = self.chosenUser.fields[0].name
-                    field01 = field1
-                    fieldVal1 = self.chosenUser.fields[0].value
-                    if field1 == "" {
-                        field1 = "Link 1"
-                        field01 = nil
-                        fieldVal1 = nil
-                    }
-                    if self.chosenUser.fields.count > 1 {
-                        field2 = self.chosenUser.fields[1].name
-                        field02 = field2
-                        fieldVal2 = self.chosenUser.fields[1].value
-                        if field2 == "" {
-                            field2 = "Link 2"
-                            field02 = nil
-                            fieldVal2 = nil
-                        }
-                        if self.chosenUser.fields.count > 2 {
-                            field3 = self.chosenUser.fields[2].name
-                            field03 = field3
-                            fieldVal3 = self.chosenUser.fields[2].value
-                            if field3 == "" {
-                                field3 = "Link 3"
-                                field03 = nil
-                                fieldVal3 = nil
-                            }
-                            if self.chosenUser.fields.count > 3 {
-                                field4 = self.chosenUser.fields[3].name
-                                field04 = field4
-                                fieldVal4 = self.chosenUser.fields[3].value
-                                if field4 == "" {
-                                    field4 = "Link 4"
-                                    field04 = nil
-                                    fieldVal4 = nil
-                                }
-                            }
-                        }
-                    }
-                }
-
-        Alertift.actionSheet()
-            .backgroundColor(Colours.white)
-            .titleTextColor(Colours.grayDark)
-            .messageTextColor(Colours.grayDark)
-            .messageTextAlignment(.left)
-            .titleTextAlignment(.left)
-            .action(.default(field1), image: nil) { (action, ind) in
-                 
-                
-                Alertift.alert(title: field4, message: "Input the link name and URL")
-                    .textField { textField in
-                        textField.placeholder = "Name"
-                    }
-                    .textField { textField in
-                        textField.placeholder = "URL"
-                    }
-                    .action(.cancel("Cancel"))
-                    .action(.default("Update")) { _, _, textFields in
-                        let name = textFields?.first?.text ?? ""
-                        let url = textFields?.last?.text ?? ""
-                        
-                        let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: nil, locked: nil, fieldName1: name, fieldValue1: url, fieldName2: field02, fieldValue2: fieldVal2, fieldName3: field03, fieldValue3: fieldVal3, fieldName4: field04, fieldValue4: fieldVal4)
-                        StoreStruct.client.run(request) {[weak self] (statuses) in
-                            if let stat = (statuses.value) {
-                                
-                                DispatchQueue.main.async {
-//                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
-                                    self?.updateProfileHere()
-                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                                        let notification = UINotificationFeedbackGenerator()
-                                        notification.notificationOccurred(.success)
-                                    }
-                                }
-                                
-                            }
-                        }
-                        
-                    }
-                    .show()
-                
-            }
-            .action(.default(field2), image: nil) { (action, ind) in
-                 
-                
-                Alertift.alert(title: field4, message: "Input the link name and URL")
-                    .textField { textField in
-                        textField.placeholder = "Name"
-                    }
-                    .textField { textField in
-                        textField.placeholder = "URL"
-                    }
-                    .action(.cancel("Cancel"))
-                    .action(.default("Update")) { _, _, textFields in
-                        let name = textFields?.first?.text ?? ""
-                        let url = textFields?.last?.text ?? ""
-                        
-                        let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: nil, locked: nil, fieldName1: field01, fieldValue1: fieldVal1, fieldName2: name, fieldValue2: url, fieldName3: field03, fieldValue3: fieldVal3, fieldName4: field04, fieldValue4: fieldVal4)
-                        StoreStruct.client.run(request) {[weak self] (statuses) in
-                            if let stat = (statuses.value) {
-                                
-                                DispatchQueue.main.async {
-//                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
-                                    self?.updateProfileHere()
-                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                                        let notification = UINotificationFeedbackGenerator()
-                                        notification.notificationOccurred(.success)
-                                    }
-                                }
-                                
-                            }
-                        }
-                        
-                    }
-                    .show()
-                
-            }
-            .action(.default(field3), image: nil) { (action, ind) in
-                 
-                
-                Alertift.alert(title: field4, message: "Input the link name and URL")
-                    .textField { textField in
-                        textField.placeholder = "Name"
-                    }
-                    .textField { textField in
-                        textField.placeholder = "URL"
-                    }
-                    .action(.cancel("Cancel"))
-                    .action(.default("Update")) { _, _, textFields in
-                        let name = textFields?.first?.text ?? ""
-                        let url = textFields?.last?.text ?? ""
-                        
-                        let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: nil, locked: nil, fieldName1: field01, fieldValue1: fieldVal1, fieldName2: field02, fieldValue2: fieldVal2, fieldName3: name, fieldValue3: url, fieldName4: field04, fieldValue4: fieldVal4)
-                        StoreStruct.client.run(request) {[weak self] (statuses) in
-                            if let stat = (statuses.value) {
-                                
-                                DispatchQueue.main.async {
-//                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
-                                    self?.updateProfileHere()
-                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                                        let notification = UINotificationFeedbackGenerator()
-                                        notification.notificationOccurred(.success)
-                                    }
-                                }
-                                
-                            }
-                        }
-                        
-                    }
-                    .show()
-                
-            }
-            .action(.default(field4), image: nil) { (action, ind) in
-                 
-                
-                Alertift.alert(title: field4, message: "Input the link name and URL")
-                    .textField { textField in
-                        textField.placeholder = "Name"
-                    }
-                    .textField { textField in
-                        textField.placeholder = "URL"
-                    }
-                    .action(.cancel("Cancel"))
-                    .action(.default("Update")) { _, _, textFields in
-                        let name = textFields?.first?.text ?? ""
-                        let url = textFields?.last?.text ?? ""
-                        
-                        let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: nil, locked: nil, fieldName1: field01, fieldValue1: fieldVal1, fieldName2: field02, fieldValue2: fieldVal2, fieldName3: field03, fieldValue3: fieldVal3, fieldName4: name, fieldValue4: url)
-                        StoreStruct.client.run(request) {[weak self] (statuses) in
-                            if let stat = (statuses.value) {
-                                
-                                DispatchQueue.main.async {
-//                                    NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
-                                    self?.updateProfileHere()
-                                    if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                                        let notification = UINotificationFeedbackGenerator()
-                                        notification.notificationOccurred(.success)
-                                    }
-                                }
-                                
-                            }
-                        }
-                        
-                    }
-                    .show()
-                
-            }
-            .action(.cancel("Dismiss"))
-            .finally { action, index in
-                if action.style == .cancel {
-                    return
-                }
-            }
-            .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.contentView ?? self.view)
-            .show(on: self)
-
-                
-
-            }
-            .action(.default(lockText), image: nil) { (action, ind) in
-                
-                //bh2
-                
-                let request = Accounts.updateCurrentUser(displayName: nil, note: nil, avatar: nil, header: nil, locked: isItGoingToLock)
-                StoreStruct.client.run(request) {[weak self] (statuses) in
-                    if let stat = (statuses.value) {
-                        DispatchQueue.main.async {
-//                            NotificationCenter.default.post(name: Notification.Name(rawValue: "updateProfileHere"), object: nil)
-                            self?.updateProfileHere()
-                            if (UserDefaults.standard.object(forKey: "hapticToggle") == nil) || (UserDefaults.standard.object(forKey: "hapticToggle") as! Int == 0) {
-                                let notification = UINotificationFeedbackGenerator()
-                                notification.notificationOccurred(.success)
-                            }
-                            let statusAlert = StatusAlert()
-                            if stat.locked {
-                                statusAlert.image = UIImage(named: "largelock")?.maskWithColor(color: Colours.grayDark)
-                            } else {
-                                statusAlert.image = UIImage(named: "largeunlock")?.maskWithColor(color: Colours.grayDark)
-                            }
-                            statusAlert.title = isItGoingToLockText.localized
-                            statusAlert.contentColor = Colours.grayDark
-                            statusAlert.message = StoreStruct.currentUser.displayName
-                            if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                statusAlert.show()
-                            }
-                        }
-                    }
-                }
-                
-                
-            }
-            .action(.cancel("Dismiss"))
-            .finally { action, index in
-                if action.style == .cancel {
-                    return
-                }
-            }
-            .popover(anchorView: self.tableView.cellForRow(at: IndexPath(row: 0, section: 0))?.contentView ?? self.view)
-            .show(on: self)
-    }
+    
     
     @objc func didTouchToFol() {
         if self.isFollowing == false {
@@ -2688,13 +2321,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         .popover(anchorView: self.view)
                         .show(on: self)
                 }
-                .action(.default(" Edit Profile".localized), image: UIImage(named: "profile")) { (action, ind) in
-                     
-                    
-                        self.editProfileDetails()
-                    
-                }
-                .action(.default(" Add Account".localized), image: UIImage(named: "addac1")) { (action, ind) in
+               .action(.default(" Add Account".localized), image: UIImage(named: "addac1")) { (action, ind) in
                      
                     
                     NotificationCenter.default.post(name: Notification.Name(rawValue: "signOut2"), object: nil)
