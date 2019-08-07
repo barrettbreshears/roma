@@ -22,7 +22,7 @@ public class Account: Codable {
     /// URL of the user's profile page (can be remote).
     public let url: String
     /// URL to the avatar image.
-    public let avatar: String
+    public var avatar: String
     /// URL to the avatar static image
     public let avatarStatic: String
     /// URL to the header image.
