@@ -318,11 +318,17 @@ class DMFeedCell: SwipeTableViewCell {
             }
         } else {
             
+            var statusText = "";
             
+            if userName.text == StoreStruct.currentUser.displayName {
+                statusText = "You: "
+            }
             if status.emojis.isEmpty {
-                toot.text = status.content.stripHTML()
+                statusText = statusText + status.content.stripHTML()
+                toot.text = statusText
             } else {
-                let attributedString = NSMutableAttributedString(string: status.content.stripHTML())
+                statusText = statusText + status.content.stripHTML()
+                let attributedString = NSMutableAttributedString(string: statusText)
                 status.emojis.map({
                     let textAttachment = NSTextAttachment()
                     textAttachment.loadImageUsingCache(withUrl: $0.url.absoluteString)
@@ -336,7 +342,6 @@ class DMFeedCell: SwipeTableViewCell {
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
             }
-            
             
             
             if status.account.emojis.isEmpty {
