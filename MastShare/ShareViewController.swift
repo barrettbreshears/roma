@@ -86,19 +86,23 @@ class ShareViewController: UIViewController, UITextViewDelegate {
         self.bringBackDrawer()
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Public", style: .default , handler:{ (UIAlertAction) in
-            self.visibilityButton.setImage(UIImage(named: "eye")?.maskWithColor(color: UIColor.white), for: .normal)
+            self.visibilityButton.setImage(UIImage(named: "globe")?.maskWithColor(color: UIColor.white), for: .normal)
+            self.visibilityButton.setTitle("  Public", for: .normal);
             self.currentVisibility = .public
         }))
         alert.addAction(UIAlertAction(title: "Unlisted", style: .default , handler:{ (UIAlertAction) in
             self.visibilityButton.setImage(UIImage(named: "unlisted")?.maskWithColor(color: UIColor.white), for: .normal)
+            self.visibilityButton.setTitle("  Unlisted", for: .normal);
             self.currentVisibility = .unlisted
         }))
         alert.addAction(UIAlertAction(title: "Private", style: .default , handler:{ (UIAlertAction) in
             self.visibilityButton.setImage(UIImage(named: "private")?.maskWithColor(color: UIColor.white), for: .normal)
+            self.visibilityButton.setTitle("  Private", for: .normal);
             self.currentVisibility = .private
         }))
         alert.addAction(UIAlertAction(title: "Direct", style: .default , handler:{ (UIAlertAction) in
             self.visibilityButton.setImage(UIImage(named: "direct")?.maskWithColor(color: UIColor.white), for: .normal)
+            self.visibilityButton.setTitle("  Direct", for: .normal);
             self.currentVisibility = .direct
         }))
         alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler:{ (UIAlertAction) in
@@ -176,7 +180,8 @@ class ShareViewController: UIViewController, UITextViewDelegate {
         self.view.addSubview(bgView)
         
         visibilityButton.frame = CGRect(x: 0, y: 0, width: 80, height: 50)
-        visibilityButton.setImage(UIImage(named: "eye")?.maskWithColor(color: UIColor.white), for: .normal)
+        visibilityButton.setImage(UIImage(named: "globe")?.maskWithColor(color: UIColor.white), for: .normal)
+        self.visibilityButton.setTitle("Public", for: .normal);
         visibilityButton.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         visibilityButton.adjustsImageWhenHighlighted = false
         visibilityButton.addTarget(self, action: #selector(didTouchUpInsideVisibilityButton), for: .touchUpInside)

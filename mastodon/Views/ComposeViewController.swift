@@ -28,6 +28,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
     var closeButton = MNGExpandedTouchAreaButton()
     var avatarButton = MNGExpandedTouchAreaButton()
     var cameraButton = MNGExpandedTouchAreaButton()
+    var galleryButton = MNGExpandedTouchAreaButton()
     var visibilityButton = MNGExpandedTouchAreaButton()
     var warningButton = MNGExpandedTouchAreaButton()
     var emotiButton = MNGExpandedTouchAreaButton()
@@ -634,6 +635,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     self.bgView.backgroundColor = Colours.red
                     self.removeLabel.alpha = 1
                     self.cameraButton.alpha = 0
+                     self.galleryButton.alpha = 0
                     self.visibilityButton.alpha = 0
                     self.warningButton.alpha = 0
                     self.emotiButton.alpha = 0
@@ -696,6 +698,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 self.bgView.backgroundColor = Colours.red
                 self.removeLabel.alpha = 1
                 self.cameraButton.alpha = 0
+                 self.galleryButton.alpha = 0
                 self.visibilityButton.alpha = 0
                 self.warningButton.alpha = 0
                 self.emotiButton.alpha = 0
@@ -748,6 +751,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 self.bgView.backgroundColor = Colours.red
                 self.removeLabel.alpha = 1
                 self.cameraButton.alpha = 0
+                 self.galleryButton.alpha = 0
                 self.visibilityButton.alpha = 0
                 self.warningButton.alpha = 0
                 self.emotiButton.alpha = 0
@@ -799,6 +803,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 self.bgView.backgroundColor = Colours.red
                 self.removeLabel.alpha = 1
                 self.cameraButton.alpha = 0
+                 self.galleryButton.alpha = 0
                 self.visibilityButton.alpha = 0
                 self.warningButton.alpha = 0
                 self.emotiButton.alpha = 0
@@ -848,6 +853,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 self.bgView.backgroundColor = Colours.red
                 self.removeLabel.alpha = 1
                 self.cameraButton.alpha = 0
+                 self.galleryButton.alpha = 0
                 self.visibilityButton.alpha = 0
                 self.warningButton.alpha = 0
                 self.emotiButton.alpha = 0
@@ -1431,14 +1437,33 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.textField.alpha = 0
         self.bgView.addSubview(self.textField)
         
+        
+        
         self.cameraButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 10, y: 0, width: 50, height: 50)))
-        self.cameraButton.setImage(UIImage(named: "frame1")?.maskWithColor(color: UIColor.white), for: .normal)
+        self.cameraButton.setImage(UIImage(named: "camera")?.maskWithColor(color: UIColor.white), for: .normal)
         self.cameraButton.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         self.cameraButton.adjustsImageWhenHighlighted = false
-        self.cameraButton.addTarget(self, action: #selector(didTouchUpInsideCameraButton), for: .touchUpInside)
+        // self.cameraButton.addTarget(self, action: #selector(didTouchUpInsideCameraButton), for: .touchUpInside)
+        self.cameraButton.addTarget(self, action: #selector(didTouchUpInsideCamPickButton), for: .touchUpInside)
+        
         self.bgView.addSubview(self.cameraButton)
         
-        self.visibilityButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 60, y: 0, width: 80, height: 50)))
+        self.galleryButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 60, y: 0, width: 50, height: 50)))
+        self.galleryButton.setImage(UIImage(named: "frame1")?.maskWithColor(color: UIColor.white), for: .normal)
+        self.galleryButton.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        self.galleryButton.adjustsImageWhenHighlighted = false
+        //self.galleryButton.addTarget(self, action: #selector(didTouchUpInsideCameraButton), for: .touchUpInside)
+        self.galleryButton.addTarget(self, action: #selector(didTouchUpInsideGalPickButton), for: .touchUpInside)
+        self.bgView.addSubview(self.galleryButton)
+        
+        self.warningButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 110, y: -4, width: 50, height: 58)))
+        self.warningButton.setImage(UIImage(named: "reporttiny")?.maskWithColor(color: UIColor.white), for: .normal)
+        self.warningButton.imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 2, right: 4)
+        self.warningButton.adjustsImageWhenHighlighted = false
+        self.warningButton.addTarget(self, action: #selector(didTouchUpInsideWarningButton), for: .touchUpInside)
+        self.bgView.addSubview(self.warningButton)
+        
+        self.visibilityButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 160, y: 0, width: 110, height: 50)))
         
         if inReply.count > 0 {
             self.textField.text = inReply[0].spoilerText
@@ -1448,22 +1473,27 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             
             if inReply[0].visibility == .direct {
                 self.visibility = .direct
-                self.visibilityButton.setImage(UIImage(named: "direct")?.maskWithColor(color: UIColor.white), for: .normal)
+                self.visibilityButton.setImage(UIImage(named: "direct3")?.maskWithColor(color: UIColor.white), for: .normal)
+                self.visibilityButton.setTitle("    Direct", for: .normal);
             } else {
                 
                 
                 if inReply[0].visibility == .public {
                     self.visibility = .public
-                    self.visibilityButton.setImage(UIImage(named: "eye")?.maskWithColor(color: UIColor.white), for: .normal)
+                    self.visibilityButton.setImage(UIImage(named: "globe")?.maskWithColor(color: UIColor.white), for: .normal)
+                    self.visibilityButton.setTitle("  Public", for: .normal);
                 } else if inReply[0].visibility == .unlisted {
                     self.visibility = .unlisted
                     self.visibilityButton.setImage(UIImage(named: "unlisted")?.maskWithColor(color: UIColor.white), for: .normal)
+                    self.visibilityButton.setTitle("  Unlisted", for: .normal);
                 } else if inReply[0].visibility == .private {
                     self.visibility = .private
                     self.visibilityButton.setImage(UIImage(named: "private")?.maskWithColor(color: UIColor.white), for: .normal)
+                    self.visibilityButton.setTitle("  Private", for: .normal);
                 } else {
                     self.visibility = .direct
-                    self.visibilityButton.setImage(UIImage(named: "direct")?.maskWithColor(color: UIColor.white), for: .normal)
+                    self.visibilityButton.setImage(UIImage(named: "direct3")?.maskWithColor(color: UIColor.white), for: .normal)
+                    self.visibilityButton.setTitle("    Direct", for: .normal);
                 }
                 
                 
@@ -1472,21 +1502,26 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         
         if (UserDefaults.standard.object(forKey: "privToot") == nil) || (UserDefaults.standard.object(forKey: "privToot") as! Int == 0) {
             self.visibility = .public
-            self.visibilityButton.setImage(UIImage(named: "eye")?.maskWithColor(color: UIColor.white), for: .normal)
+            self.visibilityButton.setImage(UIImage(named: "globe")?.maskWithColor(color: UIColor.white), for: .normal)
+            self.visibilityButton.setTitle("  Public", for: .normal);
         } else if (UserDefaults.standard.object(forKey: "privToot") as! Int == 1) {
             self.visibility = .unlisted
             self.visibilityButton.setImage(UIImage(named: "unlisted")?.maskWithColor(color: UIColor.white), for: .normal)
+            self.visibilityButton.setTitle("  Unlisted", for: .normal);
         } else if (UserDefaults.standard.object(forKey: "privToot") as! Int == 2) {
             self.visibility = .private
             self.visibilityButton.setImage(UIImage(named: "private")?.maskWithColor(color: UIColor.white), for: .normal)
+            self.visibilityButton.setTitle("  Private", for: .normal);
         } else if (UserDefaults.standard.object(forKey: "privToot") as! Int == 3) {
             self.visibility = .direct
-            self.visibilityButton.setImage(UIImage(named: "direct")?.maskWithColor(color: UIColor.white), for: .normal)
+            self.visibilityButton.setImage(UIImage(named: "direct3")?.maskWithColor(color: UIColor.white), for: .normal)
+            self.visibilityButton.setTitle("    Direct", for: .normal);
         }
             
             if self.profileDirect {
                 self.visibility = .direct
-                self.visibilityButton.setImage(UIImage(named: "direct")?.maskWithColor(color: UIColor.white), for: .normal)
+                self.visibilityButton.setImage(UIImage(named: "direct3")?.maskWithColor(color: UIColor.white), for: .normal)
+                self.visibilityButton.setTitle("    Direct", for: .normal);
             }
             
         }
@@ -1497,12 +1532,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.visibilityButton.addTarget(self, action: #selector(didTouchUpInsideVisibilityButton), for: .touchUpInside)
         self.bgView.addSubview(self.visibilityButton)
         
-        self.warningButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: 138, y: -4, width: 50, height: 58)))
-        self.warningButton.setImage(UIImage(named: "reporttiny")?.maskWithColor(color: UIColor.white), for: .normal)
-        self.warningButton.imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 2, right: 4)
-        self.warningButton.adjustsImageWhenHighlighted = false
-        self.warningButton.addTarget(self, action: #selector(didTouchUpInsideWarningButton), for: .touchUpInside)
-        self.bgView.addSubview(self.warningButton)
+        
         
         self.emotiButton = MNGExpandedTouchAreaButton(frame:(CGRect(x: self.view.bounds.width - 60, y: 0, width: 50, height: 50)))
         self.emotiButton.setImage(UIImage(named: "more")?.maskWithColor(color: UIColor.white), for: .normal)
@@ -2226,6 +2256,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.textView.resignFirstResponder()
         springWithDelay(duration: 0.5, delay: 0, animations: {
             self.cameraButton.alpha = 1
+             self.galleryButton.alpha = 1
             self.visibilityButton.alpha = 0.45
             self.warningButton.alpha = 0.45
             self.emotiButton.alpha = 0.45
@@ -2253,6 +2284,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.textView.resignFirstResponder()
         springWithDelay(duration: 0.5, delay: 0, animations: {
             self.cameraButton.alpha = 0.45
+             self.galleryButton.alpha = 0.45
             self.visibilityButton.alpha = 1
             self.warningButton.alpha = 0.45
             self.emotiButton.alpha = 0.45
@@ -2269,28 +2301,32 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             .messageTextColor(Colours.grayDark.withAlphaComponent(0.8))
             .messageTextAlignment(.left)
             .titleTextAlignment(.left)
-            .action(.default("Public - Post to public timelines".localized), image: UIImage(named: "eye")) { (action, ind) in
+            .action(.default("Public - Post to public timelines".localized), image: UIImage(named: "globe")) { (action, ind) in
                  
                 self.visibility = .public
-                self.visibilityButton.setImage(UIImage(named: "eye"), for: .normal)
+                self.visibilityButton.setImage(UIImage(named: "globe")?.maskWithColor(color: UIColor.white), for: .normal)
+                self.visibilityButton.setTitle("  Public", for: .normal);
                 self.bringBackDrawer()
             }
             .action(.default("   Unlisted - Do not post to public timelines".localized), image: UIImage(named: "unlisted")) { (action, ind) in
                  
                 self.visibility = .unlisted
                 self.visibilityButton.setImage(UIImage(named: "unlisted"), for: .normal)
+                self.visibilityButton.setTitle("  Unlisted", for: .normal);
                 self.bringBackDrawer()
             }
             .action(.default("Private - Post only to followers".localized), image: UIImage(named: "private")) { (action, ind) in
                  
                 self.visibility = .private
                 self.visibilityButton.setImage(UIImage(named: "private"), for: .normal)
+                self.visibilityButton.setTitle("  Private", for: .normal);
                 self.bringBackDrawer()
             }
-            .action(.default("Direct - Post to mentioned users only".localized), image: UIImage(named: "direct")) { (action, ind) in
+            .action(.default("Direct - Post to mentioned users only".localized), image: UIImage(named: "direct3")) { (action, ind) in
                  
                 self.visibility = .direct
-                self.visibilityButton.setImage(UIImage(named: "direct"), for: .normal)
+                self.visibilityButton.setImage(UIImage(named: "direct3"), for: .normal)
+                self.visibilityButton.setTitle("    Direct", for: .normal);
                 self.bringBackDrawer()
             }
             .action(.cancel("Dismiss"))
@@ -2316,6 +2352,8 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.textField.becomeFirstResponder()
         springWithDelay(duration: 0.5, delay: 0, animations: {
             self.cameraButton.alpha = 0
+             self.galleryButton.alpha = 0
+            self.galleryButton.alpha = 0
             self.visibilityButton.alpha = 0
             self.warningButton.alpha = 0
             self.emotiButton.alpha = 0
@@ -2336,6 +2374,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.textView.resignFirstResponder()
         springWithDelay(duration: 0.5, delay: 0, animations: {
             self.cameraButton.alpha = 0.45
+             self.galleryButton.alpha = 0.45
             self.visibilityButton.alpha = 0.45
             self.warningButton.alpha = 0.45
             self.emotiButton.alpha = 1
@@ -2705,6 +2744,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
         self.textView.becomeFirstResponder()
         springWithDelay(duration: 0.5, delay: 0, animations: {
             self.cameraButton.alpha = 1
+             self.galleryButton.alpha = 1
             self.visibilityButton.alpha = 1
             self.warningButton.alpha = 1
             self.emotiButton.alpha = 1
@@ -3720,6 +3760,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 
                 self.removeLabel.alpha = 0
                 self.cameraButton.alpha = 0
+                 self.galleryButton.alpha = 0
                 self.visibilityButton.alpha = 0
                 self.warningButton.alpha = 0
                 self.emotiButton.alpha = 0
@@ -3759,6 +3800,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 
                 self.removeLabel.alpha = 0
                 self.cameraButton.alpha = 1
+                 self.galleryButton.alpha = 1
                 self.visibilityButton.alpha = 1
                 self.warningButton.alpha = 1
                 self.emotiButton.alpha = 1
@@ -4102,6 +4144,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             
             self.removeLabel.alpha = 1
             self.cameraButton.alpha = 1
+             self.galleryButton.alpha = 1
             self.visibilityButton.alpha = 1
             self.warningButton.alpha = 1
             self.emotiButton.alpha = 1

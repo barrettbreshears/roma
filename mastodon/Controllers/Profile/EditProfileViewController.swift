@@ -74,7 +74,7 @@ class EditProfileViewController: UITableViewController {
         avatar?.pin_setImage(from: URL(string: StoreStruct.currentUser.avatar))
         header?.pin_setImage(from: URL(string: StoreStruct.currentUser.header))
         displayName?.text = StoreStruct.currentUser.displayName
-        bio?.text = StoreStruct.currentUser.note
+        bio?.text = StoreStruct.currentUser.note.stripHTML()
         let title = StoreStruct.currentUser.locked ? "Unlock Account" : "Lock Account"
         lock?.setTitle(title, for: .normal)
         
