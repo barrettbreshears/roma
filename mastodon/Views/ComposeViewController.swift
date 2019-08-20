@@ -2020,8 +2020,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     self.imag.sourceType = UIImagePickerController.SourceType.camera
                     self.imag.mediaTypes = [kUTTypeMovie as String, kUTTypeImage as String]
                     self.imag.allowsEditing = false
+                    DispatchQueue.main.async {
+                        self.present(self.imag, animated: true, completion: nil)
+                    }
                     
-                    self.present(self.imag, animated: true, completion: nil)
                 }
                 
             } else {
