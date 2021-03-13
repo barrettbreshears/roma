@@ -9,7 +9,7 @@ public struct SSEvent {
     }
 
     init(_ eses: [EventStream.Event]) {
-        self = eses.flatMap { e -> EventStream.Field? in
+        self = eses.compactMap { e -> EventStream.Field? in
             switch e {
             case .comment: return nil // ignored
             case .field(let f): return f

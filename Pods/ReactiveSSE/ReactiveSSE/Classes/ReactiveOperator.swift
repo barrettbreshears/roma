@@ -1,3 +1,4 @@
+import Foundation
 import ReactiveSwift
 
 private let defaultMaxBuffer = 10_000_000

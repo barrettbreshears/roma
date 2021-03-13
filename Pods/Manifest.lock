@@ -39,7 +39,7 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 5.3)
     - Protobuf (~> 3.1)
   - FLAnimatedImage (1.0.12)
-  - FootlessParser (0.4.1)
+  - FootlessParser (0.5.2)
   - GoogleAppMeasurement (5.8.0):
     - GoogleUtilities/AppDelegateSwizzler (~> 5.2)
     - GoogleUtilities/MethodSwizzler (~> 5.2)
@@ -64,7 +64,9 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (5.5.0):
     - GoogleUtilities/Logger
-  - MessageKit (1.0.0)
+  - InputBarAccessoryView (4.2.2)
+  - MessageKit (3.0.0):
+    - InputBarAccessoryView (~> 4.2.2)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
@@ -83,20 +85,20 @@ PODS:
     - PINRemoteImage/Core
   - Protobuf (3.7.0)
   - QuickLayout (2.1.1)
-  - ReactiveSSE (0.1.0):
-    - FootlessParser (~> 0.4)
-    - ReactiveSwift (~> 3.0)
-  - ReactiveSwift (3.0.0):
-    - Result (~> 3.2)
+  - ReactiveSSE (0.3.1):
+    - FootlessParser (~> 0.5)
+    - ReactiveSwift (~> 4.0)
+  - ReactiveSwift (4.0.0):
+    - Result (~> 4.0)
   - Regift (1.3.0)
-  - Result (3.2.4)
+  - Result (4.1.0)
   - SAConfettiView (0.1.8)
   - SDWebImage/Core (4.4.2)
   - SDWebImage/GIF (4.4.2):
     - FLAnimatedImage (~> 1.0)
     - SDWebImage/Core
   - SJFluidSegmentedControl (1.1.2)
-  - StatusAlert (0.9.4)
+  - StatusAlert (1.0.0)
   - SwiftMessages (6.0.2):
     - SwiftMessages/App (= 6.0.2)
   - SwiftMessages/App (6.0.2)
@@ -117,16 +119,16 @@ DEPENDENCIES:
   - Fabric
   - Firebase/Core
   - Firebase/Messaging
-  - MessageKit
+  - MessageKit (~> 3.0.0)
   - NextLevel
   - PINRemoteImage
   - QuickLayout
-  - ReactiveSSE
-  - ReactiveSwift
+  - ReactiveSSE (~> 0.3.0)
+  - ReactiveSwift (~> 4.0.0)
   - Regift
   - SAConfettiView
   - SJFluidSegmentedControl
-  - StatusAlert
+  - StatusAlert (~> 1.0.0)
   - SwiftMessages
   - SwiftyGiphy
   - SwiftyJSON
@@ -134,7 +136,7 @@ DEPENDENCIES:
   - TinyConstraints
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - Alamofire
     - Crashlytics
     - CropViewController
@@ -150,6 +152,7 @@ SPEC REPOS:
     - FootlessParser
     - GoogleAppMeasurement
     - GoogleUtilities
+    - InputBarAccessoryView
     - MessageKit
     - nanopb
     - NextLevel
@@ -175,10 +178,10 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
-  Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
+  Crashlytics: a33af323773f73904037dc2e684cd2f0d29f4fe2
   CropViewController: a090820b15fc3da68e694d7c192a4708c576828b
   Disk: ef2956657d5bb56034b38b29b352170165226440
-  Fabric: f988e33c97f08930a413e08123064d2e5f68d655
+  Fabric: 09ef2d9b99b104702bede1acaf469fb8f20a9146
   Firebase: 2f5235e62f141cb86181c3af0dfe4509706351ac
   FirebaseAnalytics: fd72a26bf8dac84cefba2f0864366f718555a5b0
   FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
@@ -186,10 +189,11 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: a122b0c258720cf250551bb2bedf48c699f80d90
   FirebaseMessaging: 4235f949ce1c4e827aeb19705ba5c53f9b85aa10
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  FootlessParser: 4705a9a740675b7439d9563f2fad83f7b84fc773
+  FootlessParser: 521916d592fa6cba06cfca6f4b5d4f5a2d49175a
   GoogleAppMeasurement: 1624046ab1bcc5e170061a56ef5679000b079c8e
   GoogleUtilities: 6481e6318c5fcabaaa8513ef8120f329055d7c10
-  MessageKit: 16160036b16476b04bd0e9f2c7ce67e662e503e4
+  InputBarAccessoryView: 2b937602598e2fab3149f37f51dd7ad795653812
+  MessageKit: e892a9ca49ebe6d82684d3a93ad84021fa23e2c6
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   NextLevel: 6a40968816dc1ae737944559378343cf2057dece
   NSTimer-Blocks: 88faf9aef5f250ead087f3f67ae642517083bf36
@@ -198,20 +202,20 @@ SPEC CHECKSUMS:
   PINRemoteImage: 4ac4011c5caefd6befd99758e09becede05d3226
   Protobuf: 7a877b7f3e5964e3fce995e2eb323dbc6831bb5a
   QuickLayout: 9af2b7fd89a6552828f51a5aba28d1bcdb8b340c
-  ReactiveSSE: 1a9bb744c8b2b2c14da6bb0dfb5007b133b04394
-  ReactiveSwift: d9fe0db33c1aaabecb092e8de83cf52875c0de6f
+  ReactiveSSE: c127ae1baff76d4fe1209622b4e90affd1151716
+  ReactiveSwift: a2bb9ace428a109e9c0209615645d9d286c8c433
   Regift: 43c5e057949a9e2b16de0bcf0a221a5dbd033211
-  Result: d2d07204ce72856f1fd9130bbe42c35a7b0fea10
+  Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   SAConfettiView: c87031a2280659261b730fce3669fb10e73636ee
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SJFluidSegmentedControl: efd26ea5f0832c715e2750314a2dc0cc81e39ae5
-  StatusAlert: 7f8a54b6031f7805bc3ac960cee531b61757ab2d
+  StatusAlert: 329dc305de42c63811782729c3a38ca49662afc9
   SwiftMessages: 8b3cc68dba2f1c91aac1a74c90b10287aac35371
   SwiftyGiphy: 87930387b007b84c463bee2ec2a2d28d88b78b93
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
   TesseractOCRiOS: 2c189465f86abb030d0c5141c90da9705b647854
   TinyConstraints: 4721a4b303c799328867078ade6560e152df54d1
 
-PODFILE CHECKSUM: 764fc0f522d13205af48d7d60f3035bdf0396d46
+PODFILE CHECKSUM: 3528b5d577a635e3af069d8bf553a2f05e43143d
 
-COCOAPODS: 1.6.1
+COCOAPODS: 1.10.1

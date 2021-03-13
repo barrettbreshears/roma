@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+platform :ios, '11.0'
 
 target 'mastodon' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
@@ -10,10 +10,10 @@ target 'mastodon' do
 pod 'SJFluidSegmentedControl'
 pod 'PINRemoteImage'
 pod 'Regift'
-pod 'ReactiveSSE'
-pod 'ReactiveSwift'
+pod 'ReactiveSSE', '~> 0.3.0'
+pod 'ReactiveSwift', '~> 4.0.0'
 pod 'TinyConstraints'
-pod 'StatusAlert'
+pod 'StatusAlert', '~> 1.0.0'
 pod 'NextLevel'
 pod 'SAConfettiView'
 pod 'Disk'
@@ -25,7 +25,7 @@ pod 'Firebase/Messaging'
 pod 'Crashlytics'
 pod 'Firebase/Core'
 pod 'Fabric'
-pod 'MessageKit'
+pod 'MessageKit', '~> 3.0.0'
 pod 'TesseractOCRiOS'
 pod 'CropViewController'
 pod 'SwiftMessages'
