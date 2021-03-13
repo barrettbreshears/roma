@@ -230,7 +230,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
         //                    let statusAlert = StatusAlert()
         //                    statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
         //                    statusAlert.title = "Not a valid Instance".localized
-        //                    statusAlert.contentColor = Colours.grayDark
+        //                    statusAlert.tintColor = Colours.grayDark
         //                    statusAlert.message = "Please enter an Instance name like mastodon.technology"
         //                    statusAlert.show(in: self.view, withVerticalPosition: .top(offset: CGFloat(offset + 10)))
         //                }
@@ -398,7 +398,7 @@ class NewInstanceViewController: UIViewController, UITextFieldDelegate {
 //                        let statusAlert = StatusAlert()
 //                        statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
 //                        statusAlert.title = "Not a valid Instance (may be closed or dead)".localized
-//                        statusAlert.contentColor = Colours.grayDark
+//                        statusAlert.tintColor = Colours.grayDark
 //                        statusAlert.message = "Please enter an Instance name like mastodon.technology"
 //                        statusAlert.show(in: self.view, withVerticalPosition: .top(offset: CGFloat(offset + 10)))
 //                    }

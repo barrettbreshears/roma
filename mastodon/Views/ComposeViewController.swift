@@ -2880,10 +2880,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Toot Toot!".localized
-                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.tintColor = Colours.grayDark
                             statusAlert.message = "Successfully \(successMessage)"
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                statusAlert.show()
+                                statusAlert.show(withOffset: CGFloat(0))
                             }
                             
                             StoreStruct.caption1 = ""
@@ -2896,10 +2896,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Could not Toot".localized
-                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.tintColor = Colours.grayDark
                             statusAlert.message = "Saved to drafts"
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                statusAlert.show()
+                                statusAlert.show(withOffset: CGFloat(0))
                             }
                         }
                     } else {
@@ -2913,10 +2913,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Toot Toot!".localized
-                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.tintColor = Colours.grayDark
                             statusAlert.message = "Successfully \(successMessage)"
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                statusAlert.show()
+                                statusAlert.show(withOffset: CGFloat(0))
                             }
                             
                             StoreStruct.caption1 = ""
@@ -2983,10 +2983,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Toot Toot!".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Successfully \(successMessage)"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                     
                                     StoreStruct.caption1 = ""
@@ -2999,10 +2999,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Could not Post".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Saved to drafts"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                 }
                             } else {
@@ -3017,10 +3017,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Status Posted!".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = "Successfully \(successMessage)"
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                 
                                 StoreStruct.caption1 = ""
@@ -3115,10 +3115,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                             let statusAlert = StatusAlert()
                                                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                                             statusAlert.title = "Toot Toot!".localized
-                                                            statusAlert.contentColor = Colours.grayDark
+                                                            statusAlert.tintColor = Colours.grayDark
                                                             statusAlert.message = "Successfully \(successMessage)"
                                                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                                             
                                                             StoreStruct.caption1 = ""
@@ -3131,10 +3131,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                             let statusAlert = StatusAlert()
                                                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                                             statusAlert.title = "Could not Post".localized
-                                                            statusAlert.contentColor = Colours.grayDark
+                                                            statusAlert.tintColor = Colours.grayDark
                                                             statusAlert.message = "Saved to drafts"
                                                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                                         }
                                                     } else {
@@ -3149,10 +3149,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                         let statusAlert = StatusAlert()
                                                         statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                                         statusAlert.title = "Status Posted!".localized
-                                                        statusAlert.contentColor = Colours.grayDark
+                                                        statusAlert.tintColor = Colours.grayDark
                                                         statusAlert.message = "Successfully \(successMessage)"
                                                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                                         
                                                         StoreStruct.caption1 = ""
@@ -3236,10 +3236,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                     let statusAlert = StatusAlert()
                                                     statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                                     statusAlert.title = "Toot Toot!".localized
-                                                    statusAlert.contentColor = Colours.grayDark
+                                                    statusAlert.tintColor = Colours.grayDark
                                                     statusAlert.message = "Successfully \(successMessage)"
                                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                                     
                                                     StoreStruct.caption1 = ""
@@ -3252,10 +3252,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                                     let statusAlert = StatusAlert()
                                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                                     statusAlert.title = "Could not Post".localized
-                                                    statusAlert.contentColor = Colours.grayDark
+                                                    statusAlert.tintColor = Colours.grayDark
                                                     statusAlert.message = "Saved to drafts"
                                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                                 }
                                             } else {
@@ -3270,10 +3270,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             let statusAlert = StatusAlert()
                                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                             statusAlert.title = "Status Posted!".localized
-                                            statusAlert.contentColor = Colours.grayDark
+                                            statusAlert.tintColor = Colours.grayDark
                                             statusAlert.message = "Successfully \(successMessage)"
                                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                                 
                                                 StoreStruct.caption1 = ""
@@ -3345,10 +3345,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             let statusAlert = StatusAlert()
                                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                             statusAlert.title = "Toot Toot!".localized
-                                            statusAlert.contentColor = Colours.grayDark
+                                            statusAlert.tintColor = Colours.grayDark
                                             statusAlert.message = "Successfully \(successMessage)"
                                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                             
                                             StoreStruct.caption1 = ""
@@ -3361,10 +3361,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                             let statusAlert = StatusAlert()
                                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                             statusAlert.title = "Could not Post".localized
-                                            statusAlert.contentColor = Colours.grayDark
+                                            statusAlert.tintColor = Colours.grayDark
                                             statusAlert.message = "Saved to drafts"
                                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                         }
                                     } else {
@@ -3379,10 +3379,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Status Posted".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Successfully \(successMessage)"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                         
                                         StoreStruct.caption1 = ""
@@ -3439,10 +3439,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Toot Toot!".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Successfully \(successMessage)"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                     
                                     StoreStruct.caption1 = ""
@@ -3455,10 +3455,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Could not Toot".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Saved to drafts"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                 }
                             } else {
@@ -3472,10 +3472,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Status Posted".localized
-                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.tintColor = Colours.grayDark
                             statusAlert.message = "Successfully \(successMessage)"
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                 
                                 StoreStruct.caption1 = ""
@@ -3520,10 +3520,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Toot Toot!".localized
-                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.tintColor = Colours.grayDark
                             statusAlert.message = "Successfully \(successMessage)"
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                             
                             StoreStruct.caption1 = ""
@@ -3536,10 +3536,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Could not Post".localized
-                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.tintColor = Colours.grayDark
                             statusAlert.message = "Saved to drafts"
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                         }
                     } else {
@@ -3553,10 +3553,10 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     let statusAlert = StatusAlert()
                     statusAlert.image = UIImage(named: "notificationslarge")?.maskWithColor(color: Colours.grayDark)
                     statusAlert.title = "Status Posted".localized
-                    statusAlert.contentColor = Colours.grayDark
+                    statusAlert.tintColor = Colours.grayDark
                     statusAlert.message = "Successfully \(successMessage)"
                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                         
                         StoreStruct.caption1 = ""

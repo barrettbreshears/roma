@@ -396,10 +396,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                         let statusAlert = StatusAlert()
                                         statusAlert.image = UIImage(named: "pollbubbleL")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Voted"
-                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.tintColor = Colours.grayDark
                                         statusAlert.message = StoreStruct.currentPollSelectionTitle
                                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                            statusAlert.show()
+                                            statusAlert.show(withOffset: CGFloat(0))
                                         }
                                     }
                                 }
@@ -2920,10 +2920,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let statusAlert = StatusAlert()
             statusAlert.image = UIImage(named: "likelarge")?.maskWithColor(color: Colours.grayDark)
             statusAlert.title = "Unliked".localized
-            statusAlert.contentColor = Colours.grayDark
+            statusAlert.tintColor = Colours.grayDark
             statusAlert.message = "Toot"
             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                statusAlert.show()
+                statusAlert.show(withOffset: CGFloat(0))
             }
 
             StoreStruct.allLikes = StoreStruct.allLikes.filter { $0 != self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id }
@@ -2952,10 +2952,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let statusAlert = StatusAlert()
             statusAlert.image = UIImage(named: "likelarge")?.maskWithColor(color: Colours.grayDark)
             statusAlert.title = "Liked".localized
-            statusAlert.contentColor = Colours.grayDark
+            statusAlert.tintColor = Colours.grayDark
             statusAlert.message = "Toot"
             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                statusAlert.show()
+                statusAlert.show(withOffset: CGFloat(0))
             }
 
             StoreStruct.allLikes.append(self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id)
@@ -2991,10 +2991,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let statusAlert = StatusAlert()
             statusAlert.image = UIImage(named: "boostlarge")?.maskWithColor(color: Colours.grayDark)
             statusAlert.title = "Un reposted".localized
-            statusAlert.contentColor = Colours.grayDark
+            statusAlert.tintColor = Colours.grayDark
             statusAlert.message = "Status"
             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                statusAlert.show()
+                statusAlert.show(withOffset: CGFloat(0))
             }
 
             StoreStruct.allBoosts = StoreStruct.allBoosts.filter { $0 != self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id }
@@ -3016,10 +3016,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let statusAlert = StatusAlert()
             statusAlert.image = UIImage(named: "boostlarge")?.maskWithColor(color: Colours.grayDark)
             statusAlert.title = "Reposted".localized
-            statusAlert.contentColor = Colours.grayDark
+            statusAlert.tintColor = Colours.grayDark
             statusAlert.message = "Status"
             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                statusAlert.show()
+                statusAlert.show(withOffset: CGFloat(0))
             }
 
             StoreStruct.allBoosts.append(self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id)
@@ -3180,10 +3180,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Unpinned".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = "This Toot"
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                             }
                         }
@@ -3199,10 +3199,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Pinned".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = "This Toot"
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                             }
                         }
@@ -3240,10 +3240,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Deleted".localized
-                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.tintColor = Colours.grayDark
                             statusAlert.message = "Your Toot"
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                statusAlert.show()
+                                statusAlert.show(withOffset: CGFloat(0))
                             }
                             self.navigationController?.popViewController(animated: true)
                             //sto.remove(at: indexPath.row)
@@ -3429,10 +3429,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Muted".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = self.mainStatus[0].reblog?.account.displayName ?? self.mainStatus[0].account.displayName
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                            statusAlert.show()
+                            statusAlert.show(withOffset: CGFloat(0))
                         }
 
                         let request = Accounts.mute(id: self.mainStatus[0].reblog?.account.id ?? self.mainStatus[0].account.id)
@@ -3450,10 +3450,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Unmuted".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = self.mainStatus[0].reblog?.account.displayName ?? self.mainStatus[0].account.displayName
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                            statusAlert.show()
+                            statusAlert.show(withOffset: CGFloat(0))
                         }
 
                         let request = Accounts.unmute(id: self.mainStatus[0].reblog?.account.id ?? self.mainStatus[0].account.id)
@@ -3477,10 +3477,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Blocked".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = self.mainStatus[0].reblog?.account.displayName ?? self.mainStatus[0].account.displayName
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                            statusAlert.show()
+                            statusAlert.show(withOffset: CGFloat(0))
                         }
 
                         let request = Accounts.block(id: self.mainStatus[0].reblog?.account.id ?? self.mainStatus[0].account.id)
@@ -3498,10 +3498,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Unblocked".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = self.mainStatus[0].reblog?.account.displayName ?? self.mainStatus[0].account.displayName
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                            statusAlert.show()
+                            statusAlert.show(withOffset: CGFloat(0))
                         }
 
                         let request = Accounts.unblock(id: self.mainStatus[0].reblog?.account.id ?? self.mainStatus[0].account.id)
@@ -3535,10 +3535,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Reported".localized
-                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.tintColor = Colours.grayDark
                             statusAlert.message = "Harassment"
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                statusAlert.show()
+                                statusAlert.show(withOffset: CGFloat(0))
                             }
 
                             let request = Reports.report(accountID: self.mainStatus[0].reblog?.account.id ?? self.mainStatus[0].account.id, statusIDs: [self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id], reason: "Harassment")
@@ -3561,10 +3561,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Reported".localized
-                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.tintColor = Colours.grayDark
                             statusAlert.message = "No Content Warning"
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                statusAlert.show()
+                                statusAlert.show(withOffset: CGFloat(0))
                             }
 
                             let request = Reports.report(accountID: self.mainStatus[0].reblog?.account.id ?? self.mainStatus[0].account.id, statusIDs: [self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id], reason: "No Content Warning")
@@ -3587,10 +3587,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Reported".localized
-                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.tintColor = Colours.grayDark
                             statusAlert.message = "Spam"
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                statusAlert.show()
+                                statusAlert.show(withOffset: CGFloat(0))
                             }
 
                             let request = Reports.report(accountID: self.mainStatus[0].reblog?.account.id ?? self.mainStatus[0].account.id, statusIDs: [self.mainStatus[0].reblog?.id ?? self.mainStatus[0].id], reason: "Spam")
@@ -5135,10 +5135,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                         let statusAlert = StatusAlert()
                                         statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Unpinned".localized
-                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.tintColor = Colours.grayDark
                                         statusAlert.message = "This Toot"
                                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                            statusAlert.show()
+                                            statusAlert.show(withOffset: CGFloat(0))
                                         }
                                     }
                                 }
@@ -5154,10 +5154,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                         let statusAlert = StatusAlert()
                                         statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Pinned".localized
-                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.tintColor = Colours.grayDark
                                         statusAlert.message = "This Toot"
                                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                            statusAlert.show()
+                                            statusAlert.show(withOffset: CGFloat(0))
                                         }
                                     }
                                 }
@@ -5195,10 +5195,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Deleted".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Your Toot"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     self.navigationController?.popViewController(animated: true)
                                     //sto.remove(at: indexPath.row)
@@ -5325,10 +5325,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Muted".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
 
                                 let request = Accounts.mute(id: sto[indexPath.row].account.id)
@@ -5346,10 +5346,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Unmuted".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
 
                                 let request = Accounts.unmute(id: sto[indexPath.row].account.id)
@@ -5372,10 +5372,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Blocked".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
 
                                 let request = Accounts.block(id: sto[indexPath.row].account.id)
@@ -5393,10 +5393,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Unblocked".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
 
                                 let request = Accounts.unblock(id: sto[indexPath.row].account.id)
@@ -5429,10 +5429,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Harassment"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
 
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Harassment")
@@ -5455,10 +5455,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "No Content Warning"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
 
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "No Content Warning")
@@ -5481,10 +5481,10 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Spam"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
 
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Spam")

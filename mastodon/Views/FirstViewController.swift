@@ -4460,10 +4460,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                         let statusAlert = StatusAlert()
                                         statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Unpinned".localized
-                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.tintColor = Colours.grayDark
                                         statusAlert.message = "This Status"
                                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                            statusAlert.show()
+                                            statusAlert.show(withOffset: CGFloat(0))
                                         }
                                     }
                                 }
@@ -4479,10 +4479,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                         let statusAlert = StatusAlert()
                                         statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Pinned".localized
-                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.tintColor = Colours.grayDark
                                         statusAlert.message = "This Status"
                                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                            statusAlert.show()
+                                            statusAlert.show(withOffset: CGFloat(0))
                                         }
                                     }
                                 }
@@ -4531,10 +4531,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Deleted".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Your Status"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                 }
                             }
@@ -4709,10 +4709,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Muted".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                                 let request = Accounts.mute(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
@@ -4725,10 +4725,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Unmuted".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                                 let request = Accounts.unmute(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
@@ -4747,10 +4747,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Blocked".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                                 let request = Accounts.block(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
@@ -4767,10 +4767,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Unblocked".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                                 let request = Accounts.unblock(id: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id)
@@ -4798,10 +4798,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Harassment"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Harassment")
@@ -4819,10 +4819,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "No Content Warning"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "No Content Warning")
@@ -4840,10 +4840,10 @@ class FirstViewController: UIViewController, SJFluidSegmentedControlDataSource, 
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Spam"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Spam")

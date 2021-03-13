@@ -3190,10 +3190,10 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
 //                        let statusAlert = StatusAlert()
 //                        statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
 //                        statusAlert.title = "Followed".localized
-//                        statusAlert.contentColor = Colours.grayDark
+//                        statusAlert.tintColor = Colours.grayDark
 //                        statusAlert.message = "Mastodon Developer"
 //                        if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {} else {
-//                        statusAlert.show()
+//                        statusAlert.show(withOffset: CGFloat(0))
 //                    }
 //
 //                        if (UserDefaults.standard.object(forKey: "notifToggle") == nil) || (UserDefaults.standard.object(forKey: "notifToggle") as! Int == 0) {

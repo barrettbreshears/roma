@@ -1356,10 +1356,10 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Muted".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                                 
@@ -1371,10 +1371,10 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Unmuted".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                                 
@@ -1392,10 +1392,10 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Blocked".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                             } else {
@@ -1406,10 +1406,10 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Unblocked".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                                 
@@ -1437,10 +1437,10 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Harassment"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                     
@@ -1456,10 +1456,10 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "No Content Warning"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                     
@@ -1476,10 +1476,10 @@ class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSo
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Spam"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                     

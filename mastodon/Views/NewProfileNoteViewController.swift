@@ -231,10 +231,10 @@ class NewProfileNoteViewController: UIViewController, UITextViewDelegate {
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Updated Note".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = self.textView.text
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                     }
                 }
