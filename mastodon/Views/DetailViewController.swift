@@ -14,6 +14,7 @@ import SAConfettiView
 import AVKit
 import AVFoundation
 import MobileCoreServices
+import SKPhotoBrowser
 
 class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, UITableViewDragDelegate {
     
@@ -2772,8 +2773,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             let originImage = sender.currentImage
             if originImage != nil {
                 let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                browser.displayToolbar = true
-                browser.displayAction = true
+                // TODO FIX THIS browser.displayToolbar = true
+                // TODO FIX THIS browser.displayAction = true
                 browser.delegate = self
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
@@ -3917,8 +3918,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -3957,8 +3958,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -4024,8 +4025,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -4065,8 +4066,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -4131,8 +4132,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -4195,8 +4196,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage2)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(1)
                     present(browser, animated: true, completion: nil)
@@ -4259,8 +4260,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage3)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(2)
                     present(browser, animated: true, completion: nil)
@@ -4324,8 +4325,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage4)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(3)
                     present(browser, animated: true, completion: nil)
@@ -4393,8 +4394,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -4455,8 +4456,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage2)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(1)
                     present(browser, animated: true, completion: nil)
@@ -4518,8 +4519,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage3)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(2)
                     present(browser, animated: true, completion: nil)
@@ -4582,8 +4583,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage4)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(3)
                     present(browser, animated: true, completion: nil)
@@ -4650,8 +4651,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -4712,8 +4713,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage2)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(1)
                     present(browser, animated: true, completion: nil)
@@ -4775,8 +4776,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage3)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(2)
                     present(browser, animated: true, completion: nil)
@@ -4839,8 +4840,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage4)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(3)
                     present(browser, animated: true, completion: nil)

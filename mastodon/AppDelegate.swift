@@ -12,6 +12,7 @@ import Firebase
 import FirebaseInstanceID
 import FirebaseMessaging
 import UserNotifications
+import SKPhotoBrowser
 
 
 @UIApplicationMain

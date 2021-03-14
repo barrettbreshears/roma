@@ -13,6 +13,7 @@ import SafariServices
 import StatusAlert
 import SAConfettiView
 import UserNotifications
+import SKPhotoBrowser
 
 class NotificationsSettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate, UIGestureRecognizerDelegate, UNUserNotificationCenterDelegate {
     

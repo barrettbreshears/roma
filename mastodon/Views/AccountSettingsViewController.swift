@@ -14,6 +14,7 @@ import StatusAlert
 import SAConfettiView
 import UserNotifications
 import MessageUI
+import SKPhotoBrowser
 
 class AccountSettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate, UIGestureRecognizerDelegate, UNUserNotificationCenterDelegate, MFMailComposeViewControllerDelegate {
     

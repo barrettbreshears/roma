@@ -18,6 +18,7 @@ import SJFluidSegmentedControl
 import MessageUI
 import CropViewController
 import MobileCoreServices
+import SKPhotoBrowser
 
 class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, CrownControlDelegate, MFMailComposeViewControllerDelegate, UIGestureRecognizerDelegate, CropViewControllerDelegate, UITableViewDragDelegate {
     
@@ -3554,8 +3555,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     let originImage = sender.currentImage
                     if originImage != nil {
                         let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.headerImageView)
-                        browser.displayToolbar = true
-                        browser.displayAction = true
+                        // TODO FIX THIS browser.displayToolbar = true
+                        // TODO FIX THIS browser.displayAction = true
                         browser.delegate = self
                         browser.initializePageIndex(0)
                         present(browser, animated: true, completion: nil)
@@ -3573,8 +3574,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let originImage = sender.currentImage
             if originImage != nil {
                 let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.headerImageView)
-                browser.displayToolbar = true
-                browser.displayAction = true
+                // TODO FIX THIS browser.displayToolbar = true
+                // TODO FIX THIS browser.displayAction = true
                 browser.delegate = self
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
@@ -3595,8 +3596,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.headerImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -3617,8 +3618,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.headerImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -3650,8 +3651,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let originImage = sender.currentImage
             if originImage != nil {
                 let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.profileImageView)
-                browser.displayToolbar = true
-                browser.displayAction = true
+                // TODO FIX THIS browser.displayToolbar = true
+                // TODO FIX THIS browser.displayAction = true
                 browser.delegate = self
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
@@ -3667,8 +3668,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let originImage = sender.currentImage
             if originImage != nil {
                 let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.profileImageView)
-                browser.displayToolbar = true
-                browser.displayAction = true
+                // TODO FIX THIS browser.displayToolbar = true
+                // TODO FIX THIS browser.displayAction = true
                 browser.delegate = self
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
@@ -3686,8 +3687,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.profileImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -3702,8 +3703,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     let originImage = sender.currentImage
                     if originImage != nil {
                         let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.profileImageView)
-                        browser.displayToolbar = true
-                        browser.displayAction = true
+                        // TODO FIX THIS browser.displayToolbar = true
+                        // TODO FIX THIS browser.displayAction = true
                         browser.delegate = self
                         browser.initializePageIndex(0)
                         present(browser, animated: true, completion: nil)
@@ -3722,8 +3723,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.profileImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -3738,8 +3739,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     let originImage = sender.currentImage
                     if originImage != nil {
                         let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.profileImageView)
-                        browser.displayToolbar = true
-                        browser.displayAction = true
+                        // TODO FIX THIS browser.displayToolbar = true
+                        // TODO FIX THIS browser.displayAction = true
                         browser.delegate = self
                         browser.initializePageIndex(0)
                         present(browser, animated: true, completion: nil)
@@ -3870,8 +3871,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let originImage = sender.currentImage
             if originImage != nil {
                 let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                browser.displayToolbar = true
-                browser.displayAction = true
+                // TODO FIX THIS browser.displayToolbar = true
+                // TODO FIX THIS browser.displayAction = true
                 browser.delegate = self
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
@@ -3938,8 +3939,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -4005,8 +4006,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage2)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(1)
                     present(browser, animated: true, completion: nil)
@@ -4073,8 +4074,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage3)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(2)
                     present(browser, animated: true, completion: nil)
@@ -4142,8 +4143,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage4)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(3)
                     present(browser, animated: true, completion: nil)

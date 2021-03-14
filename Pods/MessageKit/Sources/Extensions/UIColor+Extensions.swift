@@ -23,19 +23,35 @@
  */
 
 import Foundation
-
-// swiftlint:disable explicit_acl
+import UIKit
 
 internal extension UIColor {
 
-    static let incomingGray = UIColor(red: 230/255, green: 230/255, blue: 235/255, alpha: 1.0)
+    private static func colorFromAssetBundle(named: String) -> UIColor {
+        guard let color = UIColor(named: named, in: Bundle.messageKitAssetBundle, compatibleWith: nil) else {
+            fatalError(MessageKitError.couldNotFindColorAsset)
+        }
+        return color
+    }
+    
+    static var incomingMessageBackground: UIColor { colorFromAssetBundle(named: "incomingMessageBackground")  }
 
-    static let outgoingGreen = UIColor(red: 69/255, green: 214/255, blue: 93/255, alpha: 1.0)
+    static var outgoingMessageBackground: UIColor { colorFromAssetBundle(named: "outgoingMessageBackground") }
+    
+    static var incomingMessageLabel: UIColor { colorFromAssetBundle(named: "incomingMessageLabel") }
+    
+    static var outgoingMessageLabel: UIColor { colorFromAssetBundle(named: "outgoingMessageLabel") }
+    
+    static var incomingAudioMessageTint: UIColor { colorFromAssetBundle(named: "incomingAudioMessageTint") }
+    
+    static var outgoingAudioMessageTint: UIColor { colorFromAssetBundle(named: "outgoingAudioMessageTint") }
 
-    static let inputBarGray = UIColor(red: 247/255, green: 247/255, blue: 247/255, alpha: 1.0)
+    static var collectionViewBackground: UIColor { colorFromAssetBundle(named: "collectionViewBackground") }
 
-    static let playButtonLightGray = UIColor(red: 230/255, green: 230/255, blue: 230/255, alpha: 1.0)
-
-    static let sendButtonBlue = UIColor(red: 15/255, green: 135/255, blue: 255/255, alpha: 1.0)
+    static var typingIndicatorDot: UIColor { colorFromAssetBundle(named: "typingIndicatorDot") }
+    
+    static var label: UIColor { colorFromAssetBundle(named: "label") }
+    
+    static var avatarViewBackground: UIColor { colorFromAssetBundle(named: "avatarViewBackground") }
 
 }

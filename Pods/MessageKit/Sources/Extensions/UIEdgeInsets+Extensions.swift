@@ -23,8 +23,7 @@
  */
 
 import Foundation
-
-// swiftlint:disable explicit_acl
+import UIKit
 
 internal extension UIEdgeInsets {
 

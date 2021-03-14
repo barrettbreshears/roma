@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import PINRemoteImage
+import SKPhotoBrowser
 
 class AppIconsCells: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SKPhotoBrowserDelegate {
     

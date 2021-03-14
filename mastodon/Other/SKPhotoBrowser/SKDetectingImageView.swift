@@ -14,7 +14,7 @@ import UIKit
 }
 
 class SKDetectingImageView: UIImageView {
-    weak var delegate: SKDetectingImageViewDelegate?
+    /*weak*/ var delegate: SKDetectingImageViewDelegate?
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

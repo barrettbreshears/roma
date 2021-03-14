@@ -14,8 +14,14 @@ import AVFoundation
 import SafariServices
 import Photos
 import MobileCoreServices
+import DKImagePickerController
+import DKCamera
+import DKPhotoGallery
+import SKPhotoBrowser
+import InputBarAccessoryView
 
-class DMMessageViewController: MessagesViewController, MessagesDataSource, MessagesLayoutDelegate, MessagesDisplayDelegate, MessageCellDelegate, SKPhotoBrowserDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIGestureRecognizerDelegate {
+
+class DMMessageViewController: MessagesViewController, MessagesDataSource, MessagesLayoutDelegate, MessagesDisplayDelegate, MessageCellDelegate, SKPhotoBrowserDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var statusBarView = UIView()
     var messages: [MessageType] = []
@@ -101,7 +107,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         layout?.setMessageOutgoingAvatarSize(.zero)
         
         messagesCollectionView.backgroundColor = Colours.white
-        scrollsToBottomOnKeybordBeginsEditing = true
+        scrollsToLastItemOnKeyboardBeginsEditing = true
         
         messageInputBar.backgroundColor = Colours.white
         messageInputBar.separatorLine.isHidden = true
@@ -143,6 +149,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
                 $0.addTarget(self, action: #selector(self.didTouchOther), for: .touchUpInside)
             }
         allButton.image = UIImage(named: "toot")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21))
+        
         var camButton = InputBarButtonItem()
             .configure {
                 $0.contentHorizontalAlignment = .left
@@ -151,9 +158,9 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
             }.onTextViewDidChange { (item, textView) in
                 self.title = "\(500 - textView.text.count)"
                 let isOverLimit = textView.text.count > 500
-                item.messageInputBar?.shouldManageSendButtonEnabledState = !isOverLimit
+                item.inputBarAccessoryView?.shouldManageSendButtonEnabledState = !isOverLimit
                 if isOverLimit {
-                    item.messageInputBar?.sendButton.isEnabled = false
+                    item.inputBarAccessoryView?.sendButton.isEnabled = false
                 }
         }
         camButton.image = UIImage(named: "camera")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21))
@@ -362,8 +369,8 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
             
                 let ce = cell as! MediaMessageCell
                 let browser = SKPhotoBrowser(originImage: ce.imageView.image ?? UIImage(), photos: images, animatedFromView: ce.imageView)
-                browser.displayToolbar = true
-                browser.displayAction = true
+                // TODO FIX THIS browser.displayToolbar = true
+                // TODO FIX THIS browser.displayAction = true
                 browser.delegate = self
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
@@ -621,12 +628,16 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
             
             var imageDa = UIImage()
             
-            if assets[0].isVideo {
-                assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+            if assets[0].type == .video {
+                let options = PHImageRequestOptions()
+                options.isSynchronous = true
+                options.deliveryMode = .fastFormat
+                options.resizeMode = .none
+                assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                     imageDa = image ?? UIImage()
                 })
                 
-                assets[0].fetchAVAsset(nil, completeBlock: { (avAsset, info) in
+                assets[0].fetchAVAsset(options: nil, completeBlock: { (avAsset, info) in
                     if let avassetURL = avAsset as? AVURLAsset {
                         let _ = avassetURL.url
                         guard let yy = try? Data(contentsOf: avassetURL.url) else { return }
@@ -665,7 +676,11 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
             } else {
                 
                 if assets.count > 0 {
-                    assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                    let options = PHImageRequestOptions()
+                    options.isSynchronous = true
+                    options.deliveryMode = .fastFormat
+                    options.resizeMode = .none
+                    assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                         
                         let imageData = (image ?? UIImage()).jpegData(compressionQuality: compression)
                         let request = Media.upload(media: .jpeg(imageData))
@@ -731,7 +746,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
     
     func isNextMessageSameSender(at indexPath: IndexPath) -> Bool {
         guard indexPath.section + 1 < messages.count else { return false }
-        return messages[indexPath.section].sender == messages[indexPath.section + 1].sender
+        return (messages[indexPath.section].sender.senderId == messages[indexPath.section + 1].sender.senderId)
     }
     
     func configureAvatarView(_ avatarView: AvatarView, for message: MessageType, at indexPath: IndexPath, in messagesCollectionView: MessagesCollectionView) {
@@ -748,8 +763,13 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
         return isFromCurrentSender(message: message) ? Colours.tabSelected : Colours.gray
     }
     
-    func currentSender() -> Sender {
-        return Sender(id: "1", displayName: "\(StoreStruct.currentUser.acct)")
+    func currentSender() -> SenderType {
+        struct MySender: SenderType {
+            var senderId: String
+            var displayName: String
+        }
+        
+        return MySender(senderId: "1", displayName: "\(StoreStruct.currentUser.acct)")
     }
     
     func numberOfSections(in messagesCollectionView: MessagesCollectionView) -> Int {
@@ -769,7 +789,7 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
     
     func isPreviousMessageSameSender(at indexPath: IndexPath) -> Bool {
         guard indexPath.section - 1 >= 0 else { return false }
-        return messages[indexPath.section].sender == messages[indexPath.section - 1].sender
+        return messages[indexPath.section].sender.senderId == messages[indexPath.section - 1].sender.senderId
     }
     
     func messageTopLabelAttributedText(for message: MessageType, at indexPath: IndexPath) -> NSAttributedString? {
@@ -783,30 +803,30 @@ class DMMessageViewController: MessagesViewController, MessagesDataSource, Messa
 
 struct MockMessage: MessageType {
     var messageId: String
-    var sender: Sender
+    var sender: SenderType
     var sentDate: Date
     var kind: MessageKind
     
-    private init(kind: MessageKind, sender: Sender, messageId: String, date: Date) {
+    private init(kind: MessageKind, sender: SenderType, messageId: String, date: Date) {
         self.kind = kind
         self.sender = sender
         self.messageId = messageId
         self.sentDate = date
     }
     
-    init(custom: Any?, sender: Sender, messageId: String, date: Date) {
+    init(custom: Any?, sender: SenderType, messageId: String, date: Date) {
         self.init(kind: .custom(custom), sender: sender, messageId: messageId, date: date)
     }
     
-    init(text: String, sender: Sender, messageId: String, date: Date) {
+    init(text: String, sender: SenderType, messageId: String, date: Date) {
         self.init(kind: .text(text), sender: sender, messageId: messageId, date: date)
     }
     
-    init(attributedText: NSAttributedString, sender: Sender, messageId: String, date: Date) {
+    init(attributedText: NSAttributedString, sender: SenderType, messageId: String, date: Date) {
         self.init(kind: .attributedText(attributedText), sender: sender, messageId: messageId, date: date)
     }
     
-    init(image: UIImage, sender: Sender, messageId: String, date: Date) {
+    init(image: UIImage, sender: SenderType, messageId: String, date: Date) {
         let mediaItem = ImageMediaItem(image: image)
         self.init(kind: .photo(mediaItem), sender: sender, messageId: messageId, date: date)
     }

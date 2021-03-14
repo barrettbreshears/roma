@@ -11,6 +11,7 @@ import UIKit
 import SJFluidSegmentedControl
 import SafariServices
 import StatusAlert
+import SKPhotoBrowser
 
 class ListMembersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate {
     

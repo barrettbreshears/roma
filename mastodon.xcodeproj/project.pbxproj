@@ -192,39 +192,6 @@
 		531E0FAE216E2BA2003E8890 /* NVActivityIndicatorAnimationOrbit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531E0F88216E2BA1003E8890 /* NVActivityIndicatorAnimationOrbit.swift */; };
 		531FC04C223AEBD6000A0EC6 /* Youtube.swift in Sources */ = {isa = PBXBuildFile; fileRef = 531FC04B223AEBD6000A0EC6 /* Youtube.swift */; };
 		532057D8215CF4D500ED0C36 /* BlockedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057D7215CF4D500ED0C36 /* BlockedViewController.swift */; };
-		5320580C215D287700ED0C36 /* DKCameraResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057DF215D287600ED0C36 /* DKCameraResource.swift */; };
-		5320580D215D287700ED0C36 /* DKCameraResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 532057E0215D287600ED0C36 /* DKCameraResource.bundle */; };
-		5320580E215D287700ED0C36 /* DKCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057E1215D287600ED0C36 /* DKCamera.swift */; };
-		53205810215D287700ED0C36 /* DKImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057E4215D287600ED0C36 /* DKImageManager.swift */; };
-		53205811215D287700ED0C36 /* DKGroupDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057E6215D287600ED0C36 /* DKGroupDataManager.swift */; };
-		53205812215D287700ED0C36 /* DKAssetGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057E8215D287600ED0C36 /* DKAssetGroup.swift */; };
-		53205813215D287700ED0C36 /* DKAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057E9215D287600ED0C36 /* DKAsset.swift */; };
-		53205815215D287700ED0C36 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 532057EC215D287600ED0C36 /* LICENSE */; };
-		53205816215D287700ED0C36 /* FontAwesome.otf in Resources */ = {isa = PBXBuildFile; fileRef = 532057EE215D287600ED0C36 /* FontAwesome.otf */; };
-		53205817215D287700ED0C36 /* FontAwesomeBarButtonItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057EF215D287600ED0C36 /* FontAwesomeBarButtonItem.swift */; };
-		53205818215D287700ED0C36 /* FontAwesomeSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057F0215D287600ED0C36 /* FontAwesomeSegmentedControl.swift */; };
-		53205819215D287700ED0C36 /* FontAwesomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057F1215D287600ED0C36 /* FontAwesomeView.swift */; };
-		5320581A215D287700ED0C36 /* FontAwesomeTabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057F2215D287600ED0C36 /* FontAwesomeTabBarItem.swift */; };
-		5320581B215D287700ED0C36 /* FontAwesomeImageRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057F3215D287600ED0C36 /* FontAwesomeImageRepresentable.swift */; };
-		5320581C215D287700ED0C36 /* FontAwesomeImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057F4215D287600ED0C36 /* FontAwesomeImageView.swift */; };
-		5320581D215D287700ED0C36 /* FontAwesomeTextRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057F5215D287600ED0C36 /* FontAwesomeTextRepresentable.swift */; };
-		5320581E215D287700ED0C36 /* FontAwesome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057F6215D287600ED0C36 /* FontAwesome.swift */; };
-		5320581F215D287700ED0C36 /* FontAwesomeStateRequirement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057F7215D287600ED0C36 /* FontAwesomeStateRequirement.swift */; };
-		53205820215D287700ED0C36 /* Enum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057F8215D287600ED0C36 /* Enum.swift */; };
-		53205822215D287700ED0C36 /* DKImageResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057FC215D287600ED0C36 /* DKImageResource.swift */; };
-		53205823215D287700ED0C36 /* DKImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057FD215D287600ED0C36 /* DKImagePickerController.swift */; };
-		53205824215D287700ED0C36 /* DKImagePickerControllerDefaultUIDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 532057FE215D287600ED0C36 /* DKImagePickerControllerDefaultUIDelegate.swift */; };
-		53205825215D287700ED0C36 /* DKImagePickerController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 532057FF215D287600ED0C36 /* DKImagePickerController.bundle */; };
-		53205826215D287700ED0C36 /* DKPopoverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53205800215D287600ED0C36 /* DKPopoverViewController.swift */; };
-		53205827215D287700ED0C36 /* DKPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53205802215D287600ED0C36 /* DKPermissionView.swift */; };
-		53205828215D287700ED0C36 /* DKAssetGroupGridLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53205803215D287600ED0C36 /* DKAssetGroupGridLayout.swift */; };
-		53205829215D287700ED0C36 /* DKAssetGroupDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53205804215D287600ED0C36 /* DKAssetGroupDetailVC.swift */; };
-		5320582A215D287700ED0C36 /* DKAssetGroupDetailCameraCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53205806215D287600ED0C36 /* DKAssetGroupDetailCameraCell.swift */; };
-		5320582B215D287700ED0C36 /* DKAssetGroupDetailVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53205807215D287600ED0C36 /* DKAssetGroupDetailVideoCell.swift */; };
-		5320582C215D287700ED0C36 /* DKAssetGroupCellItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53205808215D287600ED0C36 /* DKAssetGroupCellItemProtocol.swift */; };
-		5320582D215D287700ED0C36 /* DKAssetGroupDetailBaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53205809215D287600ED0C36 /* DKAssetGroupDetailBaseCell.swift */; };
-		5320582E215D287700ED0C36 /* DKAssetGroupDetailImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320580A215D287600ED0C36 /* DKAssetGroupDetailImageCell.swift */; };
-		5320582F215D287700ED0C36 /* DKAssetGroupListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5320580B215D287600ED0C36 /* DKAssetGroupListVC.swift */; };
 		53205831215D317900ED0C36 /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53205830215D317800ED0C36 /* CameraViewController.swift */; };
 		5320C0CA228C2D3F007E501F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5373C9DE215173F000676F3D /* Assets.xcassets */; };
 		53271356225A167D000DB75D /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53271355225A167D000DB75D /* GameViewController.swift */; };
@@ -656,18 +623,6 @@
 		5373CB1A2152FCF300676F3D /* Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB122152FCF300676F3D /* Debug.swift */; };
 		5373CB1B2152FCF300676F3D /* InnerAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB132152FCF300676F3D /* InnerAlertController.swift */; };
 		5373CB1D21540F5E00676F3D /* MainFeedCellImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB1C21540F5D00676F3D /* MainFeedCellImage.swift */; };
-		5373CB2E21541A0300676F3D /* Dev+GIF.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB1F21541A0300676F3D /* Dev+GIF.swift */; };
-		5373CB2F21541A0300676F3D /* UIImage+Rotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB2121541A0300676F3D /* UIImage+Rotation.swift */; };
-		5373CB3021541A0300676F3D /* UIView+Radius.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB2221541A0300676F3D /* UIView+Radius.swift */; };
-		5373CB3121541A0300676F3D /* GifIt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB2321541A0300676F3D /* GifIt.swift */; };
-		5373CB3321541A0300676F3D /* SKCaptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB2521541A0300676F3D /* SKCaptionView.swift */; };
-		5373CB3421541A0300676F3D /* SKDetectingImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB2621541A0300676F3D /* SKDetectingImageView.swift */; };
-		5373CB3521541A0300676F3D /* SKDetectingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB2721541A0300676F3D /* SKDetectingView.swift */; };
-		5373CB3621541A0300676F3D /* SKIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB2821541A0300676F3D /* SKIndicatorView.swift */; };
-		5373CB3721541A0300676F3D /* SKPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB2921541A0300676F3D /* SKPhoto.swift */; };
-		5373CB3821541A0300676F3D /* SKPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5373CB2A21541A0300676F3D /* SKPhotoBrowser.bundle */; };
-		5373CB3921541A0300676F3D /* SKPhotoBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB2C21541A0300676F3D /* SKPhotoBrowser.swift */; };
-		5373CB3A21541A0300676F3D /* SKZoomingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB2D21541A0300676F3D /* SKZoomingScrollView.swift */; };
 		5373CB3C2154E93500676F3D /* NotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB3B2154E93500676F3D /* NotificationCell.swift */; };
 		5373CB3E2154E97500676F3D /* NotificationCellImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB3D2154E97500676F3D /* NotificationCellImage.swift */; };
 		5373CB402155049900676F3D /* ProfileHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5373CB3F2155049900676F3D /* ProfileHeaderCell.swift */; };
@@ -1106,41 +1061,6 @@
 		531E0F88216E2BA1003E8890 /* NVActivityIndicatorAnimationOrbit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NVActivityIndicatorAnimationOrbit.swift; sourceTree = "<group>"; };
 		531FC04B223AEBD6000A0EC6 /* Youtube.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Youtube.swift; sourceTree = "<group>"; };
 		532057D7215CF4D500ED0C36 /* BlockedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockedViewController.swift; sourceTree = "<group>"; };
-		532057DF215D287600ED0C36 /* DKCameraResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKCameraResource.swift; sourceTree = "<group>"; };
-		532057E0215D287600ED0C36 /* DKCameraResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DKCameraResource.bundle; sourceTree = "<group>"; };
-		532057E1215D287600ED0C36 /* DKCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKCamera.swift; sourceTree = "<group>"; };
-		532057E4215D287600ED0C36 /* DKImageManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageManager.swift; sourceTree = "<group>"; };
-		532057E6215D287600ED0C36 /* DKGroupDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKGroupDataManager.swift; sourceTree = "<group>"; };
-		532057E8215D287600ED0C36 /* DKAssetGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroup.swift; sourceTree = "<group>"; };
-		532057E9215D287600ED0C36 /* DKAsset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAsset.swift; sourceTree = "<group>"; };
-		532057EC215D287600ED0C36 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
-		532057EE215D287600ED0C36 /* FontAwesome.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = FontAwesome.otf; sourceTree = "<group>"; };
-		532057EF215D287600ED0C36 /* FontAwesomeBarButtonItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontAwesomeBarButtonItem.swift; sourceTree = "<group>"; };
-		532057F0215D287600ED0C36 /* FontAwesomeSegmentedControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontAwesomeSegmentedControl.swift; sourceTree = "<group>"; };
-		532057F1215D287600ED0C36 /* FontAwesomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontAwesomeView.swift; sourceTree = "<group>"; };
-		532057F2215D287600ED0C36 /* FontAwesomeTabBarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontAwesomeTabBarItem.swift; sourceTree = "<group>"; };
-		532057F3215D287600ED0C36 /* FontAwesomeImageRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontAwesomeImageRepresentable.swift; sourceTree = "<group>"; };
-		532057F4215D287600ED0C36 /* FontAwesomeImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontAwesomeImageView.swift; sourceTree = "<group>"; };
-		532057F5215D287600ED0C36 /* FontAwesomeTextRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontAwesomeTextRepresentable.swift; sourceTree = "<group>"; };
-		532057F6215D287600ED0C36 /* FontAwesome.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontAwesome.swift; sourceTree = "<group>"; };
-		532057F7215D287600ED0C36 /* FontAwesomeStateRequirement.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FontAwesomeStateRequirement.swift; sourceTree = "<group>"; };
-		532057F8215D287600ED0C36 /* Enum.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enum.swift; sourceTree = "<group>"; };
-		532057F9215D287600ED0C36 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		532057FB215D287600ED0C36 /* DKImagePickerController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DKImagePickerController.h; sourceTree = "<group>"; };
-		532057FC215D287600ED0C36 /* DKImageResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImageResource.swift; sourceTree = "<group>"; };
-		532057FD215D287600ED0C36 /* DKImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerController.swift; sourceTree = "<group>"; };
-		532057FE215D287600ED0C36 /* DKImagePickerControllerDefaultUIDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKImagePickerControllerDefaultUIDelegate.swift; sourceTree = "<group>"; };
-		532057FF215D287600ED0C36 /* DKImagePickerController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = DKImagePickerController.bundle; sourceTree = "<group>"; };
-		53205800215D287600ED0C36 /* DKPopoverViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKPopoverViewController.swift; sourceTree = "<group>"; };
-		53205802215D287600ED0C36 /* DKPermissionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKPermissionView.swift; sourceTree = "<group>"; };
-		53205803215D287600ED0C36 /* DKAssetGroupGridLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupGridLayout.swift; sourceTree = "<group>"; };
-		53205804215D287600ED0C36 /* DKAssetGroupDetailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailVC.swift; sourceTree = "<group>"; };
-		53205806215D287600ED0C36 /* DKAssetGroupDetailCameraCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailCameraCell.swift; sourceTree = "<group>"; };
-		53205807215D287600ED0C36 /* DKAssetGroupDetailVideoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailVideoCell.swift; sourceTree = "<group>"; };
-		53205808215D287600ED0C36 /* DKAssetGroupCellItemProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupCellItemProtocol.swift; sourceTree = "<group>"; };
-		53205809215D287600ED0C36 /* DKAssetGroupDetailBaseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailBaseCell.swift; sourceTree = "<group>"; };
-		5320580A215D287600ED0C36 /* DKAssetGroupDetailImageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupDetailImageCell.swift; sourceTree = "<group>"; };
-		5320580B215D287600ED0C36 /* DKAssetGroupListVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DKAssetGroupListVC.swift; sourceTree = "<group>"; };
 		53205830215D317800ED0C36 /* CameraViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		53271355225A167D000DB75D /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		5329F3832174B21F00C4A23C /* NewInstanceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewInstanceViewController.swift; sourceTree = "<group>"; };
@@ -1615,19 +1535,6 @@
 		5373CB122152FCF300676F3D /* Debug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Debug.swift; sourceTree = "<group>"; };
 		5373CB132152FCF300676F3D /* InnerAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InnerAlertController.swift; sourceTree = "<group>"; };
 		5373CB1C21540F5D00676F3D /* MainFeedCellImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainFeedCellImage.swift; sourceTree = "<group>"; };
-		5373CB1F21541A0300676F3D /* Dev+GIF.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Dev+GIF.swift"; sourceTree = "<group>"; };
-		5373CB2121541A0300676F3D /* UIImage+Rotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+Rotation.swift"; sourceTree = "<group>"; };
-		5373CB2221541A0300676F3D /* UIView+Radius.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Radius.swift"; sourceTree = "<group>"; };
-		5373CB2321541A0300676F3D /* GifIt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GifIt.swift; sourceTree = "<group>"; };
-		5373CB2521541A0300676F3D /* SKCaptionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKCaptionView.swift; sourceTree = "<group>"; };
-		5373CB2621541A0300676F3D /* SKDetectingImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKDetectingImageView.swift; sourceTree = "<group>"; };
-		5373CB2721541A0300676F3D /* SKDetectingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKDetectingView.swift; sourceTree = "<group>"; };
-		5373CB2821541A0300676F3D /* SKIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKIndicatorView.swift; sourceTree = "<group>"; };
-		5373CB2921541A0300676F3D /* SKPhoto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKPhoto.swift; sourceTree = "<group>"; };
-		5373CB2A21541A0300676F3D /* SKPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SKPhotoBrowser.bundle; sourceTree = "<group>"; };
-		5373CB2B21541A0300676F3D /* SKPhotoBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SKPhotoBrowser.h; sourceTree = "<group>"; };
-		5373CB2C21541A0300676F3D /* SKPhotoBrowser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKPhotoBrowser.swift; sourceTree = "<group>"; };
-		5373CB2D21541A0300676F3D /* SKZoomingScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKZoomingScrollView.swift; sourceTree = "<group>"; };
 		5373CB3B2154E93500676F3D /* NotificationCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCell.swift; sourceTree = "<group>"; };
 		5373CB3D2154E97500676F3D /* NotificationCellImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCellImage.swift; sourceTree = "<group>"; };
 		5373CB3F2155049900676F3D /* ProfileHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderCell.swift; sourceTree = "<group>"; };
@@ -2150,120 +2057,6 @@
 				531E0F88216E2BA1003E8890 /* NVActivityIndicatorAnimationOrbit.swift */,
 			);
 			path = Animations;
-			sourceTree = "<group>";
-		};
-		532057DD215D287600ED0C36 /* DKImagePickerController */ = {
-			isa = PBXGroup;
-			children = (
-				532057DE215D287600ED0C36 /* DKCamera */,
-				532057E3215D287600ED0C36 /* DKImageManager */,
-				532057EB215D287600ED0C36 /* FontAwesome.swift */,
-				532057FA215D287600ED0C36 /* DKImagePickerController */,
-			);
-			path = DKImagePickerController;
-			sourceTree = "<group>";
-		};
-		532057DE215D287600ED0C36 /* DKCamera */ = {
-			isa = PBXGroup;
-			children = (
-				532057DF215D287600ED0C36 /* DKCameraResource.swift */,
-				532057E0215D287600ED0C36 /* DKCameraResource.bundle */,
-				532057E1215D287600ED0C36 /* DKCamera.swift */,
-			);
-			path = DKCamera;
-			sourceTree = "<group>";
-		};
-		532057E3215D287600ED0C36 /* DKImageManager */ = {
-			isa = PBXGroup;
-			children = (
-				532057E4215D287600ED0C36 /* DKImageManager.swift */,
-				532057E5215D287600ED0C36 /* Data */,
-			);
-			path = DKImageManager;
-			sourceTree = "<group>";
-		};
-		532057E5215D287600ED0C36 /* Data */ = {
-			isa = PBXGroup;
-			children = (
-				532057E6215D287600ED0C36 /* DKGroupDataManager.swift */,
-				532057E7215D287600ED0C36 /* Model */,
-			);
-			path = Data;
-			sourceTree = "<group>";
-		};
-		532057E7215D287600ED0C36 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				532057E8215D287600ED0C36 /* DKAssetGroup.swift */,
-				532057E9215D287600ED0C36 /* DKAsset.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		532057EB215D287600ED0C36 /* FontAwesome.swift */ = {
-			isa = PBXGroup;
-			children = (
-				532057EC215D287600ED0C36 /* LICENSE */,
-				532057ED215D287600ED0C36 /* FontAwesome */,
-				532057F9215D287600ED0C36 /* README.md */,
-			);
-			path = FontAwesome.swift;
-			sourceTree = "<group>";
-		};
-		532057ED215D287600ED0C36 /* FontAwesome */ = {
-			isa = PBXGroup;
-			children = (
-				532057EE215D287600ED0C36 /* FontAwesome.otf */,
-				532057EF215D287600ED0C36 /* FontAwesomeBarButtonItem.swift */,
-				532057F0215D287600ED0C36 /* FontAwesomeSegmentedControl.swift */,
-				532057F1215D287600ED0C36 /* FontAwesomeView.swift */,
-				532057F2215D287600ED0C36 /* FontAwesomeTabBarItem.swift */,
-				532057F3215D287600ED0C36 /* FontAwesomeImageRepresentable.swift */,
-				532057F4215D287600ED0C36 /* FontAwesomeImageView.swift */,
-				532057F5215D287600ED0C36 /* FontAwesomeTextRepresentable.swift */,
-				532057F6215D287600ED0C36 /* FontAwesome.swift */,
-				532057F7215D287600ED0C36 /* FontAwesomeStateRequirement.swift */,
-				532057F8215D287600ED0C36 /* Enum.swift */,
-			);
-			path = FontAwesome;
-			sourceTree = "<group>";
-		};
-		532057FA215D287600ED0C36 /* DKImagePickerController */ = {
-			isa = PBXGroup;
-			children = (
-				532057FB215D287600ED0C36 /* DKImagePickerController.h */,
-				532057FC215D287600ED0C36 /* DKImageResource.swift */,
-				532057FD215D287600ED0C36 /* DKImagePickerController.swift */,
-				532057FE215D287600ED0C36 /* DKImagePickerControllerDefaultUIDelegate.swift */,
-				532057FF215D287600ED0C36 /* DKImagePickerController.bundle */,
-				53205800215D287600ED0C36 /* DKPopoverViewController.swift */,
-				53205801215D287600ED0C36 /* View */,
-			);
-			path = DKImagePickerController;
-			sourceTree = "<group>";
-		};
-		53205801215D287600ED0C36 /* View */ = {
-			isa = PBXGroup;
-			children = (
-				53205802215D287600ED0C36 /* DKPermissionView.swift */,
-				53205803215D287600ED0C36 /* DKAssetGroupGridLayout.swift */,
-				53205804215D287600ED0C36 /* DKAssetGroupDetailVC.swift */,
-				53205805215D287600ED0C36 /* Cell */,
-				5320580B215D287600ED0C36 /* DKAssetGroupListVC.swift */,
-			);
-			path = View;
-			sourceTree = "<group>";
-		};
-		53205805215D287600ED0C36 /* Cell */ = {
-			isa = PBXGroup;
-			children = (
-				53205806215D287600ED0C36 /* DKAssetGroupDetailCameraCell.swift */,
-				53205807215D287600ED0C36 /* DKAssetGroupDetailVideoCell.swift */,
-				53205808215D287600ED0C36 /* DKAssetGroupCellItemProtocol.swift */,
-				53205809215D287600ED0C36 /* DKAssetGroupDetailBaseCell.swift */,
-				5320580A215D287600ED0C36 /* DKAssetGroupDetailImageCell.swift */,
-			);
-			path = Cell;
 			sourceTree = "<group>";
 		};
 		5329F38D2174DBDF00C4A23C /* Starscream */ = {
@@ -2969,10 +2762,8 @@
 				536A4FA1216B73D600A3D483 /* BulletinBoard */,
 				5354BAA8216577FD0094C545 /* CRRefresh */,
 				5351D74D21617FC40012960F /* VolumeBar */,
-				532057DD215D287600ED0C36 /* DKImagePickerController */,
 				535B33BF215C31E3001A2A7F /* ActiveLabel */,
 				535B339C215C0EC6001A2A7F /* XPlayer */,
-				5373CB1E21541A0300676F3D /* SKPhotoBrowser */,
 				5373CB0B2152FCF300676F3D /* Alertift */,
 				5316C87D219D949F0003AB97 /* Gif */,
 				5373CADD2152EDB700676F3D /* Swipe */,
@@ -3241,34 +3032,6 @@
 				5373CB132152FCF300676F3D /* InnerAlertController.swift */,
 			);
 			path = Alertift;
-			sourceTree = "<group>";
-		};
-		5373CB1E21541A0300676F3D /* SKPhotoBrowser */ = {
-			isa = PBXGroup;
-			children = (
-				5373CB1F21541A0300676F3D /* Dev+GIF.swift */,
-				5373CB2021541A0300676F3D /* extensions */,
-				5373CB2321541A0300676F3D /* GifIt.swift */,
-				5373CB2521541A0300676F3D /* SKCaptionView.swift */,
-				5373CB2621541A0300676F3D /* SKDetectingImageView.swift */,
-				5373CB2721541A0300676F3D /* SKDetectingView.swift */,
-				5373CB2821541A0300676F3D /* SKIndicatorView.swift */,
-				5373CB2921541A0300676F3D /* SKPhoto.swift */,
-				5373CB2A21541A0300676F3D /* SKPhotoBrowser.bundle */,
-				5373CB2B21541A0300676F3D /* SKPhotoBrowser.h */,
-				5373CB2C21541A0300676F3D /* SKPhotoBrowser.swift */,
-				5373CB2D21541A0300676F3D /* SKZoomingScrollView.swift */,
-			);
-			path = SKPhotoBrowser;
-			sourceTree = "<group>";
-		};
-		5373CB2021541A0300676F3D /* extensions */ = {
-			isa = PBXGroup;
-			children = (
-				5373CB2121541A0300676F3D /* UIImage+Rotation.swift */,
-				5373CB2221541A0300676F3D /* UIView+Radius.swift */,
-			);
-			path = extensions;
 			sourceTree = "<group>";
 		};
 		53938597217393A3002444FC /* DLTagView */ = {
@@ -4028,8 +3791,6 @@
 				530976C02179D8D900640D84 /* icon18@2x.png in Resources */,
 				A992A67C225F9FCA0005AB1F /* SHCollectionViewCell.xib in Resources */,
 				5373C9DF215173F000676F3D /* Assets.xcassets in Resources */,
-				53205825215D287700ED0C36 /* DKImagePickerController.bundle in Resources */,
-				53205815215D287700ED0C36 /* LICENSE in Resources */,
 				5354BAD2216577FD0094C545 /* NormalHeader.bundle in Resources */,
 				530976BF2179D8D900640D84 /* icon14@2x.png in Resources */,
 				A9A85F9222FA38A800CDC2BC /* LoadingViewController.xib in Resources */,
@@ -4045,13 +3806,10 @@
 				5352D0B0215E679300901B60 /* icon7.png in Resources */,
 				5352D0B1215E679300901B60 /* icon8@3x.png in Resources */,
 				A992A67A225F9FCA0005AB1F /* SHViewController.xib in Resources */,
-				53205816215D287700ED0C36 /* FontAwesome.otf in Resources */,
-				5373CB3821541A0300676F3D /* SKPhotoBrowser.bundle in Resources */,
 				A992A67F225F9FCA0005AB1F /* ic_check_white_48pt_2x.png in Resources */,
 				5352D0A9215E679300901B60 /* icon7@2x.png in Resources */,
 				A992A680225F9FCA0005AB1F /* ic_check_white_48pt_3x.png in Resources */,
 				530976AB2179D8D900640D84 /* icon15@3x.png in Resources */,
-				5320580D215D287700ED0C36 /* DKCameraResource.bundle in Resources */,
 				5352D0AA215E679300901B60 /* icon4.png in Resources */,
 				530976C32179D8D900640D84 /* icon17@3x.png in Resources */,
 				A961A5BA22D67840000610E8 /* Messages.storyboard in Resources */,
@@ -4404,7 +4162,6 @@
 				531CCD6122073CCA00A56145 /* ChromaHandle.swift in Sources */,
 				5316C89D219D94A00003AB97 /* SwiftyGiphyViewController.swift in Sources */,
 				A992A6BA225FA0110005AB1F /* StyleView.swift in Sources */,
-				5373CB2E21541A0300676F3D /* Dev+GIF.swift in Sources */,
 				53EBE6B52220030A000D007E /* UIImageColors.swift in Sources */,
 				5365941F222EB73400BFF3CD /* CoreChartOrientation.swift in Sources */,
 				5373CAA42152C68000676F3D /* URLComponents.swift in Sources */,
@@ -4412,7 +4169,6 @@
 				A992A6B0225FA0110005AB1F /* CrownAttributes+Sizes.swift in Sources */,
 				5317C7B821DA334500746197 /* ScrollableGraphViewDrawingDelegate.swift in Sources */,
 				5389F21E22B2C42100065DC6 /* PadLoginViewController.swift in Sources */,
-				53205823215D287700ED0C36 /* DKImagePickerController.swift in Sources */,
 				5373CB4C2156686300676F3D /* ActionButtonCell.swift in Sources */,
 				53DE98872275C8BF00077D18 /* MainSettingsViewController.swift in Sources */,
 				5317C7BB21DA334500746197 /* LabelPool.swift in Sources */,
@@ -4444,7 +4200,6 @@
 				531BEEFB22747152003C5895 /* FeedMediaViewController.swift in Sources */,
 				5354BADB216577FD0094C545 /* CRRefreshFooterView.swift in Sources */,
 				531E0FAD216E2BA2003E8890 /* NVActivityIndicatorAnimationBallPulseRise.swift in Sources */,
-				5373CB3921541A0300676F3D /* SKPhotoBrowser.swift in Sources */,
 				5373CACF2152C68000676F3D /* Media.swift in Sources */,
 				5373C9F02151953C00676F3D /* SecondViewController.swift in Sources */,
 				531E0F91216E2BA2003E8890 /* NVActivityIndicatorAnimationBallClipRotateMultiple.swift in Sources */,
@@ -4467,7 +4222,6 @@
 				5373CAFC2152EDB800676F3D /* SwipeAnimator.swift in Sources */,
 				5329F3942174DBDF00C4A23C /* SSLSecurity.swift in Sources */,
 				531E0FA5216E2BA2003E8890 /* NVActivityIndicatorAnimationLineScale.swift in Sources */,
-				5320582C215D287700ED0C36 /* DKAssetGroupCellItemProtocol.swift in Sources */,
 				5373CAB82152C68000676F3D /* NotificationType.swift in Sources */,
 				5316C893219D94A00003AB97 /* SwiftyGiphyGridLayout.swift in Sources */,
 				5373CB032152EDB800676F3D /* SwipeExpansionStyle.swift in Sources */,
@@ -4495,7 +4249,6 @@
 				5316C898219D94A00003AB97 /* SwiftyGiphyCollectionViewCell.swift in Sources */,
 				5373CB5C2157FEDA00676F3D /* ListViewController.swift in Sources */,
 				531BD60421795D1F00C1509D /* SentimentAnalysisRequest.swift in Sources */,
-				53205820215D287700ED0C36 /* Enum.swift in Sources */,
 				53E1AE20221ADFEA00A6E1E6 /* SwiftLinkPreview.swift in Sources */,
 				5373CABA2152C68000676F3D /* Report.swift in Sources */,
 				A9D80EED21B8F27A00020ECE /* InstanceData.swift in Sources */,
@@ -4506,7 +4259,6 @@
 				536A4FB9216B73D600A3D483 /* UIView+SafeAnchors.swift in Sources */,
 				A992A6A9225FA0110005AB1F /* Array+MisterFusion.swift in Sources */,
 				5373CA9C2152C68000676F3D /* ClientError.swift in Sources */,
-				5373CB3A21541A0300676F3D /* SKZoomingScrollView.swift in Sources */,
 				531E0FAC216E2BA2003E8890 /* NVActivityIndicatorAnimationLineScalePulseOutRapid.swift in Sources */,
 				536A4FB7216B73D600A3D483 /* BulletinSwipeInteractionController.swift in Sources */,
 				5352D0C4215E6A3500901B60 /* CollectionAppCell.swift in Sources */,
@@ -4515,7 +4267,6 @@
 				5316C892219D94A00003AB97 /* GiphySimpleSingleGIFResponse.swift in Sources */,
 				5329F3932174DBDF00C4A23C /* Compression.swift in Sources */,
 				531E0FA7216E2BA2003E8890 /* NVActivityIndicatorAnimationPacman.swift in Sources */,
-				5320581E215D287700ED0C36 /* FontAwesome.swift in Sources */,
 				5351D75721617FC40012960F /* VolumeBarAnimation.swift in Sources */,
 				5317C7BA21DA334500746197 /* ReferenceLines.swift in Sources */,
 				531E0FA2216E2BA2003E8890 /* NVActivityIndicatorAnimationTriangleSkewSpin.swift in Sources */,
@@ -4530,18 +4281,15 @@
 				5351D75B21617FC40012960F /* VolumeBarAnimation+Presets.swift in Sources */,
 				5373CA9B2152C68000676F3D /* Client.swift in Sources */,
 				536A4FB4216B73D600A3D483 /* BulletinBackgroundViewStyle.swift in Sources */,
-				5320582D215D287700ED0C36 /* DKAssetGroupDetailBaseCell.swift in Sources */,
 				535932BB222DB47600086545 /* Poll.swift in Sources */,
 				5354BACC216577FD0094C545 /* WCLLoadingView.swift in Sources */,
 				535B33C9215C31E3001A2A7F /* StringTrimExtension.swift in Sources */,
 				5315728F21FCC2E300328053 /* SettingsBundleHelper.swift in Sources */,
-				53205812215D287700ED0C36 /* DKAssetGroup.swift in Sources */,
 				A992A6B7225FA0110005AB1F /* CrownAttributes+Accessors.swift in Sources */,
 				535932BD222EFB5A00086545 /* PollOptionCellToggle.swift in Sources */,
 				5354BAD9216577FD0094C545 /* CRRefreshProtocol.swift in Sources */,
 				5373CAAE2152C68000676F3D /* Card.swift in Sources */,
 				531E0FA6216E2BA2003E8890 /* NVActivityIndicatorAnimationBallScaleRippleMultiple.swift in Sources */,
-				53205818215D287700ED0C36 /* FontAwesomeSegmentedControl.swift in Sources */,
 				5317C7B621DA334500746197 /* FillDrawingLayer.swift in Sources */,
 				5373CAAB2152C68000676F3D /* Application.swift in Sources */,
 				5373CB072152EDB800676F3D /* SwipeTableViewCell+Display.swift in Sources */,
@@ -4549,7 +4297,6 @@
 				5373CB4A2156602900676F3D /* ComposeViewController.swift in Sources */,
 				530976D42179DBD700640D84 /* AuthenticationErrors.swift in Sources */,
 				530976D22179DBD700640D84 /* BiometricAuthenticationConstants.swift in Sources */,
-				5373CB3521541A0300676F3D /* SKDetectingView.swift in Sources */,
 				53271356225A167D000DB75D /* GameViewController.swift in Sources */,
 				5329F3882174D0B900C4A23C /* ColourCells.swift in Sources */,
 				7806850921CC222F00072C41 /* ProCells.swift in Sources */,
@@ -4573,10 +4320,8 @@
 				5373CAD12152C68000676F3D /* Notifications.swift in Sources */,
 				535B33B6215C0EC6001A2A7F /* WOMaintainer.swift in Sources */,
 				5316C89A219D94A00003AB97 /* GiphyPagination.swift in Sources */,
-				53205827215D287700ED0C36 /* DKPermissionView.swift in Sources */,
 				536A4FB6216B73D600A3D483 /* BulletinPresentationAnimationController.swift in Sources */,
 				5373CB4621550EC800676F3D /* CollectionProfileCell.swift in Sources */,
-				5320582A215D287700ED0C36 /* DKAssetGroupDetailCameraCell.swift in Sources */,
 				5354BAC9216577FD0094C545 /* RamotionWaveLayer.swift in Sources */,
 				5373CACB2152C68000676F3D /* FollowRequests.swift in Sources */,
 				53E826DD2236C32D00153721 /* ToppingBattery.swift in Sources */,
@@ -4588,7 +4333,6 @@
 				53E1AE22221ADFEA00A6E1E6 /* ResponseExtension.swift in Sources */,
 				A992A6B2225FA0110005AB1F /* CrownAttributes.swift in Sources */,
 				A992A6AE225FA0110005AB1F /* MisterFusion.swift in Sources */,
-				5320580E215D287700ED0C36 /* DKCamera.swift in Sources */,
 				535B33D0215CE9A9001A2A7F /* LikedViewController.swift in Sources */,
 				A992A650225F9E370005AB1F /* DecryptNotification.swift in Sources */,
 				5373CAF82152EDB700676F3D /* SwipeAction.swift in Sources */,
@@ -4604,7 +4348,6 @@
 				53BC45C2215AE4F10092223F /* SettingsCellToggle.swift in Sources */,
 				5316C88E219D94A00003AB97 /* GiphyImageSet.swift in Sources */,
 				A992A6C6225FA0110005AB1F /* CrownControlDelegate.swift in Sources */,
-				5320581D215D287700ED0C36 /* FontAwesomeTextRepresentable.swift in Sources */,
 				A992A6C1225FA0110005AB1F /* HapticFeedbackGenerator.swift in Sources */,
 				53EBE6BB22283FF9000D007E /* SearchViewController.swift in Sources */,
 				A992A6C3225FA0110005AB1F /* CrownControl.swift in Sources */,
@@ -4615,8 +4358,6 @@
 				A992A6BD225FA0110005AB1F /* UIScrollView+Utils.swift in Sources */,
 				531E0F98216E2BA2003E8890 /* NVActivityIndicatorAnimationBallBeat.swift in Sources */,
 				A992A6B8225FA0110005AB1F /* CrownAttributes+SpinDirection.swift in Sources */,
-				5373CB3321541A0300676F3D /* SKCaptionView.swift in Sources */,
-				53205811215D287700ED0C36 /* DKGroupDataManager.swift in Sources */,
 				536A4FBC216B73D600A3D483 /* HighlightButton.swift in Sources */,
 				5373CB4821565FFC00676F3D /* DetailViewController.swift in Sources */,
 				A992A64F225F9E370005AB1F /* SwiftGCM.swift in Sources */,
@@ -4624,14 +4365,11 @@
 				5373CABD2152C68000676F3D /* Status.swift in Sources */,
 				536A4FB2216B73D600A3D483 /* BulletinViewController.swift in Sources */,
 				5316C890219D94A00003AB97 /* GiphyMeta.swift in Sources */,
-				5320582E215D287700ED0C36 /* DKAssetGroupDetailImageCell.swift in Sources */,
 				536592F0222E997800BFF3CD /* PollCell.swift in Sources */,
 				5351D75821617FC40012960F /* VolumeBarStackView.swift in Sources */,
 				53C037B0220A2A6F0047EBC4 /* NewQRViewController.swift in Sources */,
 				53E826D92236C32D00153721 /* BiscuitView.swift in Sources */,
 				5373CAFA2152EDB700676F3D /* SwipeActionsView.swift in Sources */,
-				5373CB2F21541A0300676F3D /* UIImage+Rotation.swift in Sources */,
-				5320581A215D287700ED0C36 /* FontAwesomeTabBarItem.swift in Sources */,
 				53E6F2B1216CCA9400912B83 /* WatchSessionManager.swift in Sources */,
 				A992A6BB225FA0110005AB1F /* BackgroundView.swift in Sources */,
 				5373CB092152EDB800676F3D /* SwipeTableViewCellDelegate.swift in Sources */,
@@ -4667,13 +4405,11 @@
 				5354BAD0216577FD0094C545 /* FastCheckLayer.swift in Sources */,
 				5373CAB02152C68000676F3D /* Context.swift in Sources */,
 				A992A6B6225FA0110005AB1F /* CrownAttributes+UserInteraction.swift in Sources */,
-				5373CB3121541A0300676F3D /* GifIt.swift in Sources */,
 				5373CB402155049900676F3D /* ProfileHeaderCell.swift in Sources */,
 				53E826BB2236C10100153721 /* NetworkCheck.swift in Sources */,
 				A992A6AC225FA0110005AB1F /* MisterFusionConvertible.swift in Sources */,
 				5354BAC5216577FD0094C545 /* CRRefreshAnimator.swift in Sources */,
 				531CCD5D22073CCA00A56145 /* ChromaShadeSlider.swift in Sources */,
-				5373CB3621541A0300676F3D /* SKIndicatorView.swift in Sources */,
 				5373CB162152FCF300676F3D /* ActionSheet.swift in Sources */,
 				5318D3E8220CCC1D00E5C41A /* Pulsator.swift in Sources */,
 				53E826D52236C32D00153721 /* BiscuitAnimationController.swift in Sources */,
@@ -4683,7 +4419,6 @@
 				5393859E217393A4002444FC /* DLTagInfo.swift in Sources */,
 				53E826E72236C32D00153721 /* BiscuitViewController.swift in Sources */,
 				5373CB042152EDB800676F3D /* SwipeFeedback.swift in Sources */,
-				5373CB3421541A0300676F3D /* SKDetectingImageView.swift in Sources */,
 				5373CAA02152C68000676F3D /* DateFormatter.swift in Sources */,
 				531E0F9D216E2BA2003E8890 /* NVActivityIndicatorAnimationBallRotateChase.swift in Sources */,
 				5373CB082152EDB800676F3D /* SwipeTableViewCell.swift in Sources */,
@@ -4722,17 +4457,13 @@
 				53BC45BC215AC8EE0092223F /* SettingsCell.swift in Sources */,
 				53E1AE27221ADFEA00A6E1E6 /* PreviewError.swift in Sources */,
 				5329F38A2174D0CB00C4A23C /* CollectionColourCell.swift in Sources */,
-				5320580C215D287700ED0C36 /* DKCameraResource.swift in Sources */,
 				A9D80EE721B84B3900020ECE /* AddInstanceCell.swift in Sources */,
 				A9A85F9122FA38A800CDC2BC /* LoadingViewController.swift in Sources */,
 				5317C7BF21DA334500746197 /* Plot.swift in Sources */,
-				5320581B215D287700ED0C36 /* FontAwesomeImageRepresentable.swift in Sources */,
 				5365941D222EB73400BFF3CD /* HCoreBarChart.swift in Sources */,
 				5354BAD3216577FD0094C545 /* NormalHeaderAnimator.swift in Sources */,
-				53205813215D287700ED0C36 /* DKAsset.swift in Sources */,
 				5316C891219D94A00003AB97 /* GiphyItem.swift in Sources */,
 				5373CAA22152C68000676F3D /* HTTPURLResponse.swift in Sources */,
-				5320582B215D287700ED0C36 /* DKAssetGroupDetailVideoCell.swift in Sources */,
 				5373CAD62152C68000676F3D /* Result.swift in Sources */,
 				A992A6AD225FA0110005AB1F /* Deprecated.swift in Sources */,
 				5373CAD02152C68000676F3D /* Mutes.swift in Sources */,
@@ -4755,7 +4486,6 @@
 				A992A6AB225FA0110005AB1F /* MisterFusion.SafeArea.swift in Sources */,
 				531E0F8F216E2BA2003E8890 /* NVActivityIndicatorAnimationBallGridPulse.swift in Sources */,
 				531E0F9C216E2BA2003E8890 /* NVActivityIndicatorAnimationSquareSpin.swift in Sources */,
-				5373CB3021541A0300676F3D /* UIView+Radius.swift in Sources */,
 				5373CB192152FCF300676F3D /* AlertType.swift in Sources */,
 				5373C9F42151957200676F3D /* FourthViewController.swift in Sources */,
 				53E826E9223AA84000153721 /* CardType.swift in Sources */,
@@ -4764,21 +4494,15 @@
 				535B33CE215C3641001A2A7F /* HashtagViewController.swift in Sources */,
 				5373CA5A2152B76500676F3D /* Spring.swift in Sources */,
 				5352D0C2215E68C900901B60 /* AppIconsCells.swift in Sources */,
-				53205822215D287700ED0C36 /* DKImageResource.swift in Sources */,
 				5373CACD2152C68000676F3D /* Lists.swift in Sources */,
-				53205810215D287700ED0C36 /* DKImageManager.swift in Sources */,
 				53659421222EB73400BFF3CD /* Extensions2.swift in Sources */,
-				53205829215D287700ED0C36 /* DKAssetGroupDetailVC.swift in Sources */,
 				5373CAD22152C68000676F3D /* Reports.swift in Sources */,
 				5373CB172152FCF300676F3D /* Alert.swift in Sources */,
 				53659424222ED4CA00BFF3CD /* NewPollViewController.swift in Sources */,
-				53205826215D287700ED0C36 /* DKPopoverViewController.swift in Sources */,
 				5373CB5A2157F7C500676F3D /* ListCell.swift in Sources */,
-				53205824215D287700ED0C36 /* DKImagePickerControllerDefaultUIDelegate.swift in Sources */,
 				5373C9DA215173EE00676F3D /* ViewController.swift in Sources */,
 				5373CAA72152C68000676F3D /* HTTPMethod.swift in Sources */,
 				5315ECE621FE145600A3F1A9 /* StatusPara.swift in Sources */,
-				53205817215D287700ED0C36 /* FontAwesomeBarButtonItem.swift in Sources */,
 				A992A653225F9E370005AB1F /* PushNotificationDataObjects.swift in Sources */,
 				531BD5FD2178D68400C1509D /* FollowRequestsViewController.swift in Sources */,
 				5373CAAD2152C68000676F3D /* AttachmentType.swift in Sources */,
@@ -4786,7 +4510,6 @@
 				5317C7C121DA334500746197 /* DotPlot.swift in Sources */,
 				531E0F99216E2BA2003E8890 /* NVActivityIndicatorAnimationSemiCircleSpin.swift in Sources */,
 				5373CB1D21540F5E00676F3D /* MainFeedCellImage.swift in Sources */,
-				53205819215D287700ED0C36 /* FontAwesomeView.swift in Sources */,
 				531CCD5E22073CCA00A56145 /* UIColor+Utilities.swift in Sources */,
 				5351D75E21617FC40012960F /* VolumeBarStyle+Presets.swift in Sources */,
 				5317C7B321DA334500746197 /* DotDrawingLayer.swift in Sources */,
@@ -4825,11 +4548,9 @@
 				536A4FB8216B73D600A3D483 /* BulletinBackgroundView.swift in Sources */,
 				531E0FA0216E2BA2003E8890 /* NVActivityIndicatorAnimationCircleStrokeSpin.swift in Sources */,
 				5315ECE821FE1A0B00A3F1A9 /* ScheduledStatusesViewController.swift in Sources */,
-				5320582F215D287700ED0C36 /* DKAssetGroupListVC.swift in Sources */,
 				5315ECE221FDF4AB00A3F1A9 /* EndorsedViewController.swift in Sources */,
 				A992A6C0225FA0110005AB1F /* GradientView.swift in Sources */,
 				5373CAFF2152EDB800676F3D /* SwipeCollectionViewCell.swift in Sources */,
-				5373CB3721541A0300676F3D /* SKPhoto.swift in Sources */,
 				5373CB182152FCF300676F3D /* Alertift.swift in Sources */,
 				5393858E21738054002444FC /* HashType.swift in Sources */,
 				5373C9EC2151757300676F3D /* Colours.swift in Sources */,
@@ -4840,7 +4561,6 @@
 				5373CAAC2152C68000676F3D /* Attachment.swift in Sources */,
 				536A4FBD216B73D600A3D483 /* ContainerView.swift in Sources */,
 				5373CAB92152C68000676F3D /* Relationship.swift in Sources */,
-				53205828215D287700ED0C36 /* DKAssetGroupGridLayout.swift in Sources */,
 				5393859C217393A4002444FC /* DLTagView.swift in Sources */,
 				53E1AE23221ADFEA00A6E1E6 /* Response.swift in Sources */,
 				5373CAF52152EDB700676F3D /* Extensions.swift in Sources */,
@@ -4853,7 +4573,6 @@
 				53CF184A22B2494D000DC32B /* ScrollMainViewController.swift in Sources */,
 				5354BACD216577FD0094C545 /* FastAnimator.swift in Sources */,
 				5365941E222EB73400BFF3CD /* CoreChartEntry.swift in Sources */,
-				5320581C215D287700ED0C36 /* FontAwesomeImageView.swift in Sources */,
 				5373CA9F2152C68000676F3D /* Data.swift in Sources */,
 				531E0FAE216E2BA2003E8890 /* NVActivityIndicatorAnimationOrbit.swift in Sources */,
 				5317C7BC21DA334500746197 /* BarPlot.swift in Sources */,
@@ -4862,7 +4581,6 @@
 				5373CB022152EDB800676F3D /* SwipeExpanding.swift in Sources */,
 				5373CAB62152C68000676F3D /* Mention.swift in Sources */,
 				535B33AF215C0EC6001A2A7F /* XPlayerViewController.swift in Sources */,
-				5320581F215D287700ED0C36 /* FontAwesomeStateRequirement.swift in Sources */,
 				A992A679225F9FCA0005AB1F /* SHViewController.swift in Sources */,
 				53E5039B2207153100FD5CF2 /* NewHexViewController.swift in Sources */,
 				5351D75D21617FC40012960F /* VolumeBarStyle.swift in Sources */,
@@ -5369,7 +5087,7 @@
 				DEVELOPMENT_TEAM = 5877VK992M;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = mastodon/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5400,7 +5118,7 @@
 				DEVELOPMENT_TEAM = 5877VK992M;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = mastodon/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

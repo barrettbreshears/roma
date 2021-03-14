@@ -14,6 +14,7 @@ import StatusAlert
 import SAConfettiView
 import StoreKit
 import UserNotifications
+import SKPhotoBrowser
 
 class SettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate, UIGestureRecognizerDelegate, SKProductsRequestDelegate, SKPaymentTransactionObserver, UNUserNotificationCenterDelegate {
 

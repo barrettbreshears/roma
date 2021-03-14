@@ -17,6 +17,7 @@ import ReactiveSwift
 import AVKit
 import AVFoundation
 import UserNotifications
+import SKPhotoBrowser
 
 class DMViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate {
     

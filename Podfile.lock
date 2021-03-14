@@ -4,6 +4,55 @@ PODS:
     - Fabric (~> 1.9.0)
   - CropViewController (2.4.0)
   - Disk (0.4.0)
+  - DKCamera (1.6.7)
+  - DKImagePickerController (4.1.7):
+    - DKImagePickerController/Camera (= 4.1.7)
+    - DKImagePickerController/Core (= 4.1.7)
+    - DKImagePickerController/ImageDataManager (= 4.1.7)
+    - DKImagePickerController/InlineCamera (= 4.1.7)
+    - DKImagePickerController/PhotoEditor (= 4.1.7)
+    - DKImagePickerController/PhotoGallery (= 4.1.7)
+    - DKImagePickerController/Resource (= 4.1.7)
+  - DKImagePickerController/Camera (4.1.7):
+    - DKCamera
+    - DKImagePickerController/Core
+  - DKImagePickerController/Core (4.1.7):
+    - DKImagePickerController/ImageDataManager
+    - DKImagePickerController/Resource
+  - DKImagePickerController/ImageDataManager (4.1.7)
+  - DKImagePickerController/InlineCamera (4.1.7):
+    - DKCamera
+    - DKImagePickerController/Core
+  - DKImagePickerController/PhotoEditor (4.1.7):
+    - CropViewController (~> 2.4)
+    - DKImagePickerController/Core
+  - DKImagePickerController/PhotoGallery (4.1.7):
+    - DKImagePickerController/Core
+    - DKPhotoGallery
+  - DKImagePickerController/Resource (4.1.7)
+  - DKPhotoGallery (0.0.17):
+    - DKPhotoGallery/Core (= 0.0.17)
+    - DKPhotoGallery/Model (= 0.0.17)
+    - DKPhotoGallery/Preview (= 0.0.17)
+    - DKPhotoGallery/Resource (= 0.0.17)
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Core (0.0.17):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Preview
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Model (0.0.17):
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Preview (0.0.17):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Resource
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Resource (0.0.17):
+    - SDWebImage
+    - SwiftyGif
   - Fabric (1.9.0)
   - Firebase/Core (5.20.1):
     - Firebase/CoreOnly
@@ -64,9 +113,14 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (5.5.0):
     - GoogleUtilities/Logger
-  - InputBarAccessoryView (4.2.2)
-  - MessageKit (3.0.0):
-    - InputBarAccessoryView (~> 4.2.2)
+  - InputBarAccessoryView (5.3.0):
+    - InputBarAccessoryView/Core (= 5.3.0)
+  - InputBarAccessoryView/Core (5.3.0)
+  - MessageInputBar (0.4.1):
+    - MessageInputBar/Core (= 0.4.1)
+  - MessageInputBar/Core (0.4.1)
+  - MessageKit (3.5.1):
+    - InputBarAccessoryView (~> 5.3.0)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
@@ -93,15 +147,19 @@ PODS:
   - Regift (1.3.0)
   - Result (4.1.0)
   - SAConfettiView (0.1.8)
+  - SDWebImage (4.4.2):
+    - SDWebImage/Core (= 4.4.2)
   - SDWebImage/Core (4.4.2)
   - SDWebImage/GIF (4.4.2):
     - FLAnimatedImage (~> 1.0)
     - SDWebImage/Core
   - SJFluidSegmentedControl (1.1.2)
+  - SKPhotoBrowser (6.1.0)
   - StatusAlert (1.0.0)
   - SwiftMessages (6.0.2):
     - SwiftMessages/App (= 6.0.2)
   - SwiftMessages/App (6.0.2)
+  - SwiftyGif (5.4.0)
   - SwiftyGiphy (1.1.1):
     - FLAnimatedImage (~> 1.0)
     - NSTimer-Blocks
@@ -116,10 +174,12 @@ DEPENDENCIES:
   - Crashlytics
   - CropViewController
   - Disk
+  - DKImagePickerController
   - Fabric
   - Firebase/Core
   - Firebase/Messaging
-  - MessageKit (~> 3.0.0)
+  - MessageInputBar
+  - MessageKit (~> 3.5.0)
   - NextLevel
   - PINRemoteImage
   - QuickLayout
@@ -128,6 +188,7 @@ DEPENDENCIES:
   - Regift
   - SAConfettiView
   - SJFluidSegmentedControl
+  - SKPhotoBrowser (~> 6.1.0)
   - StatusAlert (~> 1.0.0)
   - SwiftMessages
   - SwiftyGiphy
@@ -141,6 +202,9 @@ SPEC REPOS:
     - Crashlytics
     - CropViewController
     - Disk
+    - DKCamera
+    - DKImagePickerController
+    - DKPhotoGallery
     - Fabric
     - Firebase
     - FirebaseAnalytics
@@ -153,6 +217,7 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleUtilities
     - InputBarAccessoryView
+    - MessageInputBar
     - MessageKit
     - nanopb
     - NextLevel
@@ -169,8 +234,10 @@ SPEC REPOS:
     - SAConfettiView
     - SDWebImage
     - SJFluidSegmentedControl
+    - SKPhotoBrowser
     - StatusAlert
     - SwiftMessages
+    - SwiftyGif
     - SwiftyGiphy
     - SwiftyJSON
     - TesseractOCRiOS
@@ -181,6 +248,9 @@ SPEC CHECKSUMS:
   Crashlytics: a33af323773f73904037dc2e684cd2f0d29f4fe2
   CropViewController: a090820b15fc3da68e694d7c192a4708c576828b
   Disk: ef2956657d5bb56034b38b29b352170165226440
+  DKCamera: a902b66921fca14b7a75266feb8c7568aa7caa71
+  DKImagePickerController: 6ffad961c212b0debf644f3d1aa72d0a2ee03d5f
+  DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   Fabric: 09ef2d9b99b104702bede1acaf469fb8f20a9146
   Firebase: 2f5235e62f141cb86181c3af0dfe4509706351ac
   FirebaseAnalytics: fd72a26bf8dac84cefba2f0864366f718555a5b0
@@ -192,8 +262,9 @@ SPEC CHECKSUMS:
   FootlessParser: 521916d592fa6cba06cfca6f4b5d4f5a2d49175a
   GoogleAppMeasurement: 1624046ab1bcc5e170061a56ef5679000b079c8e
   GoogleUtilities: 6481e6318c5fcabaaa8513ef8120f329055d7c10
-  InputBarAccessoryView: 2b937602598e2fab3149f37f51dd7ad795653812
-  MessageKit: e892a9ca49ebe6d82684d3a93ad84021fa23e2c6
+  InputBarAccessoryView: 1638fc3336698eaead9cd83ff2da6c6218fcb6bc
+  MessageInputBar: e81c7535347f1f7b923de7080409a535a004b6e4
+  MessageKit: 6a15a240a9a4767279de542a8fae861e83d8aedc
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   NextLevel: 6a40968816dc1ae737944559378343cf2057dece
   NSTimer-Blocks: 88faf9aef5f250ead087f3f67ae642517083bf36
@@ -209,13 +280,15 @@ SPEC CHECKSUMS:
   SAConfettiView: c87031a2280659261b730fce3669fb10e73636ee
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   SJFluidSegmentedControl: efd26ea5f0832c715e2750314a2dc0cc81e39ae5
+  SKPhotoBrowser: 343de95d89dc7913763c5dda243cc6e606e4a168
   StatusAlert: 329dc305de42c63811782729c3a38ca49662afc9
   SwiftMessages: 8b3cc68dba2f1c91aac1a74c90b10287aac35371
+  SwiftyGif: 5d4af95df24caf1c570dbbcb32a3b8a0763bc6d7
   SwiftyGiphy: 87930387b007b84c463bee2ec2a2d28d88b78b93
   SwiftyJSON: c4bcba26dd9ec7a027fc8eade48e2c911f229e96
   TesseractOCRiOS: 2c189465f86abb030d0c5141c90da9705b647854
   TinyConstraints: 4721a4b303c799328867078ade6560e152df54d1
 
-PODFILE CHECKSUM: 3528b5d577a635e3af069d8bf553a2f05e43143d
+PODFILE CHECKSUM: 07bc0350d313ade6984f0ff13be4685036650afe
 
 COCOAPODS: 1.10.1

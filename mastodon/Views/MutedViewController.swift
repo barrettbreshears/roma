@@ -11,6 +11,7 @@ import UIKit
 import SJFluidSegmentedControl
 import SafariServices
 import StatusAlert
+import SKPhotoBrowser
 
 class MutedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate {
     

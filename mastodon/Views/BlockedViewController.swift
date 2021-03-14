@@ -11,6 +11,7 @@ import UIKit
 import SJFluidSegmentedControl
 import SafariServices
 import StatusAlert
+import SKPhotoBrowser
 
 class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate {
     

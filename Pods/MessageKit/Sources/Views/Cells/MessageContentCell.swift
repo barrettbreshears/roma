@@ -22,6 +22,7 @@
  SOFTWARE.
  */
 
+import Foundation
 import UIKit
 
 /// A subclass of `MessageCollectionViewCell` used to display text, media, and location messages.
@@ -68,6 +69,9 @@ open class MessageContentCell: MessageCollectionViewCell {
         return label
     }()
 
+    /// The time label of the messageBubble.
+    open var messageTimestampLabel: InsetLabel = InsetLabel()
+
     // Should only add customized subviews - don't change accessoryView itself.
     open var accessoryView: UIView = UIView()
 
@@ -94,6 +98,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         contentView.addSubview(cellBottomLabel)
         contentView.addSubview(messageContainerView)
         contentView.addSubview(avatarView)
+        contentView.addSubview(messageTimestampLabel)
     }
 
     open override func prepareForReuse() {
@@ -102,6 +107,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         cellBottomLabel.text = nil
         messageTopLabel.text = nil
         messageBottomLabel.text = nil
+        messageTimestampLabel.attributedText = nil
     }
 
     // MARK: - Configuration
@@ -117,6 +123,7 @@ open class MessageContentCell: MessageCollectionViewCell {
         layoutMessageTopLabel(with: attributes)
         layoutAvatarView(with: attributes)
         layoutAccessoryView(with: attributes)
+        layoutTimeLabelView(with: attributes)
     }
 
     /// Used to configure the cell.
@@ -149,11 +156,13 @@ open class MessageContentCell: MessageCollectionViewCell {
         let bottomCellLabelText = dataSource.cellBottomLabelAttributedText(for: message, at: indexPath)
         let topMessageLabelText = dataSource.messageTopLabelAttributedText(for: message, at: indexPath)
         let bottomMessageLabelText = dataSource.messageBottomLabelAttributedText(for: message, at: indexPath)
-
+        let messageTimestampLabelText = dataSource.messageTimestampLabelAttributedText(for: message, at: indexPath)
         cellTopLabel.attributedText = topCellLabelText
         cellBottomLabel.attributedText = bottomCellLabelText
         messageTopLabel.attributedText = topMessageLabelText
         messageBottomLabel.attributedText = bottomMessageLabelText
+        messageTimestampLabel.attributedText = messageTimestampLabelText
+        messageTimestampLabel.isHidden = !messagesCollectionView.showMessageTimestampOnSwipeLeft
     }
 
     /// Handle tap gesture on contentView and its subviews.
@@ -267,6 +276,9 @@ open class MessageContentCell: MessageCollectionViewCell {
     /// Positions the cell's top label.
     /// - attributes: The `MessagesCollectionViewLayoutAttributes` for the cell.
     open func layoutCellTopLabel(with attributes: MessagesCollectionViewLayoutAttributes) {
+        cellTopLabel.textAlignment = attributes.cellTopLabelAlignment.textAlignment
+        cellTopLabel.textInsets = attributes.cellTopLabelAlignment.textInsets
+
         cellTopLabel.frame = CGRect(origin: .zero, size: attributes.cellTopLabelSize)
     }
     
@@ -339,5 +351,14 @@ open class MessageContentCell: MessageCollectionViewCell {
         }
 
         accessoryView.frame = CGRect(origin: origin, size: attributes.accessoryViewSize)
+    }
+
+    ///  Positions the message bubble's time label.
+    /// - attributes: The `MessagesCollectionViewLayoutAttributes` for the cell.
+    open func layoutTimeLabelView(with attributes: MessagesCollectionViewLayoutAttributes) {
+        let paddingLeft: CGFloat = 10
+        let origin = CGPoint(x: UIScreen.main.bounds.width + paddingLeft, y: contentView.frame.size.height * 0.5)
+        let size = CGSize(width: attributes.messageTimeLabelSize.width, height: attributes.messageTimeLabelSize.height)
+        messageTimestampLabel.frame = CGRect(origin: origin, size: size)
     }
 }

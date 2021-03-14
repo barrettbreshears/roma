@@ -19,6 +19,10 @@ import TesseractOCR
 import Speech
 import Disk
 import CropViewController
+import DKImagePickerController
+import DKCamera
+import DKPhotoGallery
+import SKPhotoBrowser
 
 class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, SwiftyGiphyViewControllerDelegate, DateTimePickerDelegate, SHViewControllerDelegate, SFSpeechRecognizerDelegate, SwipeTableViewCellDelegate, CropViewControllerDelegate, UIGestureRecognizerDelegate {
     
@@ -2065,14 +2069,18 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
             }
             
             //isvideocheck
-            if assets[0].isVideo {
+            if assets[0].type == .video {
                 //self.containsGifVid = true
                 self.selectedImage1.isUserInteractionEnabled = true
-                assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                let options = PHImageRequestOptions()
+                options.isSynchronous = true
+                options.deliveryMode = .fastFormat
+                options.resizeMode = .none
+                assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                     self.selectedImage1.image = image
                 })
                 
-                assets[0].fetchAVAsset(nil, completeBlock: { (avAsset, info) in
+                assets[0].fetchAVAsset(options: nil, completeBlock: { (avAsset, info) in
                     if let avassetURL = avAsset as? AVURLAsset {
                         //self.completeVidURL = avassetURL.url
                         self.isGifVid = true
@@ -2087,40 +2095,56 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 //self.containsGifVid = false
                 if self.selectedImage1.image == nil {
                     if assets.count > 0 {
-                        assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                        let options = PHImageRequestOptions()
+                        options.isSynchronous = true
+                        options.deliveryMode = .fastFormat
+                        options.resizeMode = .none
+                        assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage1.image = image
                         })
                     }
                     if assets.count > 1 {
-                        assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                        let options = PHImageRequestOptions()
+                        options.isSynchronous = true
+                        options.deliveryMode = .fastFormat
+                        options.resizeMode = .none
+                        assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage1.image = image
                         })
-                        assets[1].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[1].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage2.image = image
                         })
                     }
                     if assets.count > 2 {
-                        assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                        let options = PHImageRequestOptions()
+                        options.isSynchronous = true
+                        options.deliveryMode = .fastFormat
+                        options.resizeMode = .none
+                        assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage1.image = image
                         })
-                        assets[1].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[1].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage2.image = image
                         })
-                        assets[2].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[2].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage3.image = image
                         })
                     }
                     if assets.count > 3 {
-                        assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                        let options = PHImageRequestOptions()
+                        options.isSynchronous = true
+                        options.deliveryMode = .fastFormat
+                        options.resizeMode = .none
+                        assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage1.image = image
                         })
-                        assets[1].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[1].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage2.image = image
                         })
-                        assets[2].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[2].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage3.image = image
                         })
-                        assets[3].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[3].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage4.image = image
                         })
                     }
@@ -2129,27 +2153,31 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     self.selectedImage3.isUserInteractionEnabled = true
                     self.selectedImage4.isUserInteractionEnabled = true
                 } else if self.selectedImage2.image == nil {
+                    let options = PHImageRequestOptions()
+                    options.isSynchronous = true
+                    options.deliveryMode = .fastFormat
+                    options.resizeMode = .none
                     if assets.count > 0 {
-                        assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage2.image = image
                         })
                     }
                     if assets.count > 1 {
-                        assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage2.image = image
                         })
-                        assets[1].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[1].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage3.image = image
                         })
                     }
                     if assets.count > 2 {
-                        assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage2.image = image
                         })
-                        assets[1].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[1].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage3.image = image
                         })
-                        assets[2].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[2].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage4.image = image
                         })
                     }
@@ -2158,23 +2186,31 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     self.selectedImage3.isUserInteractionEnabled = true
                     self.selectedImage4.isUserInteractionEnabled = true
                 } else if self.selectedImage3.image == nil {
+                    let options = PHImageRequestOptions()
+                    options.isSynchronous = true
+                    options.deliveryMode = .fastFormat
+                    options.resizeMode = .none
                     if assets.count > 0 {
-                        assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage3.image = image
                         })
                     }
                     if assets.count > 1 {
-                        assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage3.image = image
                         })
-                        assets[1].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[1].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage4.image = image
                         })
                     }
                     self.selectedImage3.isUserInteractionEnabled = true
                 } else if self.selectedImage4.image == nil {
+                    let options = PHImageRequestOptions()
+                    options.isSynchronous = true
+                    options.deliveryMode = .fastFormat
+                    options.resizeMode = .none
                     if assets.count > 0 {
-                        assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                        assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                             self.selectedImage4.image = image
                         })
                     }
@@ -2226,7 +2262,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                 self.cameraCollectionView.reloadData()
             }
             }
-        case .denied, .restricted, .notDetermined:
+        case .denied, .restricted, .notDetermined, .limited:
             // ask for permissions
             PHPhotoLibrary.requestAuthorization() { (status) -> Void in
                 switch status {
@@ -2238,7 +2274,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate, UICollectionV
                     }
                     }
                 // as above
-                case .denied, .restricted:
+                case .denied, .restricted, .limited:
                     print("denied")
                     let alert = UIAlertController(title: "Oops!", message: "Couldn't show you your pictures. Allow access via Settings to see them.", preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "Dismiss", style: .default, handler: nil))

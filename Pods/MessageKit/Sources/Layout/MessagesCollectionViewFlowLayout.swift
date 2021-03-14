@@ -22,6 +22,7 @@
  SOFTWARE.
  */
 
+import Foundation
 import UIKit
 import AVFoundation
 
@@ -89,7 +90,7 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     }
     
     private func setupObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(MessagesCollectionViewFlowLayout.handleOrientationChange(_:)), name: UIDevice.orientationDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(MessagesCollectionViewFlowLayout.handleOrientationChange(_:)), name: UIApplication.didChangeStatusBarOrientationNotification, object: nil)
     }
 
     // MARK: - Typing Indicator API
@@ -169,6 +170,7 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
     lazy open var audioMessageSizeCalculator = AudioMessageSizeCalculator(layout: self)
     lazy open var contactMessageSizeCalculator = ContactMessageSizeCalculator(layout: self)
     lazy open var typingIndicatorSizeCalculator = TypingCellSizeCalculator(layout: self)
+    lazy open var linkPreviewMessageSizeCalculator = LinkPreviewMessageSizeCalculator(layout: self)
 
     /// Note:
     /// - If you override this method, remember to call MessageLayoutDelegate's
@@ -197,6 +199,8 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
             return audioMessageSizeCalculator
         case .contact:
             return contactMessageSizeCalculator
+        case .linkPreview:
+            return linkPreviewMessageSizeCalculator
         case .custom:
             return messagesLayoutDelegate.customCellSizeCalculator(for: message, at: indexPath, in: messagesCollectionView)
         }
@@ -321,7 +325,8 @@ open class MessagesCollectionViewFlowLayout: UICollectionViewFlowLayout {
                 videoMessageSizeCalculator,
                 locationMessageSizeCalculator,
                 audioMessageSizeCalculator,
-                contactMessageSizeCalculator
+                contactMessageSizeCalculator,
+                linkPreviewMessageSizeCalculator
         ]
     }
     

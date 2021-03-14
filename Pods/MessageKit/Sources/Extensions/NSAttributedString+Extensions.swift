@@ -23,10 +23,11 @@
  */
 
 import Foundation
+import UIKit
 
 internal extension NSAttributedString {
 
-    func width(considering height: CGFloat) -> CGFloat { // swiftlint:disable:this explicit_acl
+    func width(considering height: CGFloat) -> CGFloat {
 
         let constraintBox = CGSize(width: .greatestFiniteMagnitude, height: height)
         let rect = self.boundingRect(with: constraintBox, options: [.usesLineFragmentOrigin, .usesFontLeading], context: nil)
