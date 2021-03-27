@@ -244,35 +244,35 @@ class NotificationCellImage: SwipeTableViewCell {
             "more1" : more1,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-HorizontalType40Image40NameArtistMoreDate$", withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-12-|", options: [], metrics: nil, views: viewsDict))
 //        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[artist]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-109-[mainImage]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-117-[mainImageBG]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[type(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-HorizontalType40Image40Episodes$", withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-HorizontalMainImage$", withVisualFormat: "H:|-109-[mainImage]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-HorizontalMainImageBG$", withVisualFormat: "H:|-117-[mainImageBG]-20-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-VerticalMore16$", withVisualFormat: "V:|-18-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-VerticalDate$", withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-VerticalImage40$", withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-VerticalType40$", withVisualFormat: "V:|-18-[type(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
             
             
-            if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImageBG(160)]-23-|", options: [], metrics: nil, views: viewsDict))
-            } else {
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImageBG(160)]-23-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-[like1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-[boost1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-[more1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-109-[rep1(36)]-20-[like1(40)]-11-[boost1(34)]-24-[more1(20)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-            }
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-0-[episodes]-10-[mainImage(160)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-tootpl-VerticalNameEpisodesMainImage$", withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-tootpl-VerticalNameEpisodesMainImageBG$", withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImageBG(160)]-23-|", options: [], metrics: nil, views: viewsDict))
+        } else {
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-no-tootpl-VerticalNameEpisodesMainImageBG$", withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImageBG(160)]-23-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-no-tootpl-VerticalNameEpisodesMainImageRep1$", withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-no-tootpl-VerticalNameEpisodesMainImageLike1$", withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-[like1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-no-tootpl-VerticalNameEpisodesMainImageBoost1$", withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-[boost1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-no-tootpl-VerticalNameEpisodesMainImageMore1$", withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(160)]-23-[more1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-no-tootpl-HorizontalRep1Like1Boost1More1$", withVisualFormat: "H:|-109-[rep1(36)]-20-[like1(40)]-11-[boost1(34)]-24-[more1(20)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        }
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-VerticalArtistEpisodesMainImage$", withVisualFormat: "V:|-12-[artist]-0-[episodes]-10-[mainImage(160)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-HorizontalCountTag30$", withVisualFormat: "H:|-5-[countTag(30)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-VerticalCountTag22$", withVisualFormat: "V:|-5-[countTag(22)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-101-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-HorizontalWarning$", withVisualFormat: "H:|-101-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$NotificationCellImage-VerticalNameWarning$", withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
     }
 
     @objc func touchMore(button: UIButton) {

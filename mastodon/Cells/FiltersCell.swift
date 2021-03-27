@@ -41,9 +41,23 @@ class FiltersCell: SwipeTableViewCell {
             "episodes" : toot,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-15-[name]-(>=15)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-15-[episodes]-15-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
+        let constraintsName = NSLayoutConstraint.constraints(withVisualFormat: "H:|-15-[name]-(>=15)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsName {
+            constraint.identifier = "$FiltersCell-Name$"
+        }
+        contentView.addConstraints(constraintsName)
+        
+        let constraintsEpisodes = NSLayoutConstraint.constraints(withVisualFormat: "H:|-15-[episodes]-15-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsEpisodes {
+            constraint.identifier = "$FiltersCell-Episodes$"
+        }
+        contentView.addConstraints(constraintsEpisodes)
+        
+        let constraintsNameEpisodes = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsNameEpisodes {
+            constraint.identifier = "$FiltersCell-NameEpisodes$"
+        }
+        contentView.addConstraints(constraintsNameEpisodes)
     }
     
     required init?(coder aDecoder: NSCoder) {

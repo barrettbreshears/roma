@@ -90,14 +90,41 @@ class DetailCell: UITableViewCell {
             "from" : fromClient,
             "faves" : faves,
             ]
-        
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[name]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[from]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[faves]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+        let constraintsImage40Name = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[name]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsImage40Name {
+            constraint.identifier = "$DetailCell-Image40-Name$"
+        }
+        contentView.addConstraints(constraintsImage40Name)
+        let constraintsImage40Artist = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsImage40Artist {
+            constraint.identifier = "$DetailCell-Image40-Artist$"
+        }
+        contentView.addConstraints(constraintsImage40Artist)
+        let constraintsEpisodes = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[episodes]-12-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsEpisodes {
+            constraint.identifier = "$DetailCell-Episodes$"
+        }
+        contentView.addConstraints(constraintsEpisodes)
+        let constraintsFrom = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[from]-12-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsFrom {
+            constraint.identifier = "$DetailCell-From$"
+        }
+        contentView.addConstraints(constraintsFrom)
+        let constraintsFaves = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[faves]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsFaves {
+            constraint.identifier = "$DetailCell-Faves$"
+        }
+        contentView.addConstraints(constraintsFaves)
+        let constraintsImage4018 = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsImage4018 {
+            constraint.identifier = "$DetailCell-constraintsImage4018$"
+        }
+        contentView.addConstraints(constraintsImage4018)
+        let constraintsNameArtistEpisoesFavesFrom = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsImage4018 {
+            constraint.identifier = "$DetailCell-NameArtistEpisoesFavesFrom$"
+        }
+        contentView.addConstraints(constraintsNameArtistEpisoesFavesFrom)
         
     }
     

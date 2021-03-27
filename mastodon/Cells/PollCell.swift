@@ -174,15 +174,15 @@ class NotificationPollCell: SwipeTableViewCell, CoreChartViewDataSource {
             "episodes" : toot,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[name]-2-[artist]-(>=5)-[date]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[poll]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[count]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[type(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-13-[name]-2-[episodes]-2-[poll]-2-[count]-18-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-2-[episodes]-2-[poll]-2-[count]-18-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$PollCell-HorizontalType40Image40NameArtist$", withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[name]-2-[artist]-(>=5)-[date]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$PollCell-HorizontalType40Image40Episodes$", withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$PollCell-HorizontalType40Image40Poll$", withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[poll]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$PollCell-HorizontalType40Image40Count$", withVisualFormat: "H:|-12-[type(40)]-4-[image(40)]-13-[count]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$PollCell-VerticalDate$", withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$PollCell-VerticalType40$", withVisualFormat: "V:|-18-[type(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$PollCell-VerticalImage40$", withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$PollCell-VerticalNameEpisodesPollCount$", withVisualFormat: "V:|-13-[name]-2-[episodes]-2-[poll]-2-[count]-18-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$PollCell-VerticalArtistEpisodesPollCount$", withVisualFormat: "V:|-12-[artist]-2-[episodes]-2-[poll]-2-[count]-18-|", options: [], metrics: nil, views: viewsDict))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -235,6 +235,7 @@ class NotificationPollCell: SwipeTableViewCell, CoreChartViewDataSource {
         StoreStruct.pollHeight = (self.options.count*32) + (self.options.count*16) + 14
         
         let heightConstraint = NSLayoutConstraint(item: self.barChart, attribute: NSLayoutConstraint.Attribute.height, relatedBy: NSLayoutConstraint.Relation.equal, toItem: nil, attribute: NSLayoutConstraint.Attribute.notAnAttribute, multiplier: 1, constant: CGFloat(StoreStruct.pollHeight))
+        heightConstraint.identifier = "$PollCell-BarChart-Height$"
         self.barChart.addConstraint(heightConstraint)
         
         barChart.isUserInteractionEnabled = false

@@ -129,29 +129,94 @@ class DetailCellImage: UITableViewCell {
             ]
         
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[name]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[from]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[faves]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[mainImage]-0-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[mainImageBG]-0-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]", options: [], metrics: nil, views: viewsDict))
+        let constraintsImage40Name = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[name]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsImage40Name {
+            constraint.identifier = "$DetailCellImage-Image40-Name$"
+        }
+        contentView.addConstraints(constraintsImage40Name)
+        
+        let constraintsImage40Artist = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsImage40Artist {
+            constraint.identifier = "$DetailCellImage-Image40-Artist$"
+        }
+        contentView.addConstraints(constraintsImage40Artist)
+        
+        let constraintsEpisodes = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[episodes]-12-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsEpisodes {
+            constraint.identifier = "$DetailCellImage-Episodes$"
+        }
+        contentView.addConstraints(constraintsEpisodes)
+
+        let constraintsFrom = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[from]-12-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsFrom {
+            constraint.identifier = "$DetailCellImage-From$"
+        }
+        contentView.addConstraints(constraintsFrom)
+
+        let constraintsFaves = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[faves]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsFaves {
+            constraint.identifier = "$DetailCellImage-Faves$"
+        }
+        contentView.addConstraints(constraintsFaves)
+
+        let constraintsMainImage = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[mainImage]-0-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsFaves {
+            constraint.identifier = "$DetailCellImage-MainImage$"
+        }
+        contentView.addConstraints(constraintsMainImage)
+        
+        let constraintsMainImageBG = NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[mainImageBG]-0-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsFaves {
+            constraint.identifier = "$DetailCellImage-MainImageBG$"
+        }
+        contentView.addConstraints(constraintsMainImageBG)
+        
+        let constraintsImage4018 = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsImage4018 {
+            constraint.identifier = "$DetailCellImage-constraintsImage4018$"
+        }
+        contentView.addConstraints(constraintsImage4018)
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImage(275)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImageBG(275)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+            let constraintsPhoneNameArtistEpisodesMainImage275FavesFrom = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImage(275)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict)
+            for constraint in constraintsPhoneNameArtistEpisodesMainImage275FavesFrom {
+                constraint.identifier = "$DetailCellImage-PhoneNameArtistEpisodesMainImage275FavesFrom$"
+            }
+            contentView.addConstraints(constraintsPhoneNameArtistEpisodesMainImage275FavesFrom)
+            let constraintsPhoneNameArtistEpisodesMainImageBG275FavesFrom = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImageBG(275)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict)
+            for constraint in constraintsPhoneNameArtistEpisodesMainImageBG275FavesFrom {
+                constraint.identifier = "$DetailCellImage-PhoneNameArtistEpisodesMainImageBG275FavesFrom$"
+            }
+            contentView.addConstraints(constraintsPhoneNameArtistEpisodesMainImageBG275FavesFrom)
         case .pad:
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImage(500)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImageBG(500)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+            let constraintsPadNameArtistEpisodesMainImage500FavesFrom = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImage(500)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict)
+            for constraint in constraintsPadNameArtistEpisodesMainImage500FavesFrom {
+                constraint.identifier = "$DetailCellImage-PadNameArtistEpisodesMainImage500FavesFrom$"
+            }
+            contentView.addConstraints(constraintsPadNameArtistEpisodesMainImage500FavesFrom)
+            
+            let constraintsPadNameArtistEpisodesMainImageBG500FavesFrom = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImageBG(500)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict)
+            for constraint in constraintsPadNameArtistEpisodesMainImageBG500FavesFrom {
+                constraint.identifier = "$DetailCellImage-PadNameArtistEpisodesMainImageBG500FavesFrom$"
+            }
+            contentView.addConstraints(constraintsPadNameArtistEpisodesMainImageBG500FavesFrom)
         default:
             print("nothing")
         }
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        let constraintsCountTag30 = NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsCountTag30 {
+            constraint.identifier = "$DetailCellImage-CountTag30$"
+        }
+        contentView.addConstraints(constraintsCountTag30)
+        
+        let constraintsCountTag22 = NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsCountTag22 {
+            constraint.identifier = "$DetailCellImage-CountTag22$"
+        }
+        contentView.addConstraints(constraintsCountTag22)
     }
     
     required init?(coder aDecoder: NSCoder) {

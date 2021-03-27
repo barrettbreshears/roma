@@ -153,24 +153,24 @@ class ProfileHeaderCellOwn: SwipeTableViewCell {
             "follows" : follows,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[header]|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=10)-[settings(40)]-28-[image(100)]-28-[more(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[date]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[name]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[artist]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[follows]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-60-[more(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-60-[settings(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[image(100)]-50-[name]-4-[artist]-11-[episodes]-9-[follows]-4-[date]-10-[tagListView(60)]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-HorizontalHeader$", withVisualFormat: "H:|[header]|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-HorizontalSettings40Image100More$", withVisualFormat: "H:|-(>=10)-[settings(40)]-28-[image(100)]-28-[more(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-HorizontalEpisodes$", withVisualFormat: "H:|-12-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-HorizontalDate$", withVisualFormat: "H:|-12-[date]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-HorizontalName$", withVisualFormat: "H:|-12-[name]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-HorizontalArtist$", withVisualFormat: "H:|-12-[artist]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-HorizontalFollows$", withVisualFormat: "H:|-12-[follows]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-VerticalMore40$", withVisualFormat: "V:|-60-[more(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-VerticalSettings40$", withVisualFormat: "V:|-60-[settings(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-VerticalImage100NameArtistEpisodesFollowsDateTagListView$", withVisualFormat: "V:|-30-[image(100)]-50-[name]-4-[artist]-11-[episodes]-9-[follows]-4-[date]-10-[tagListView(60)]-12-|", options: [], metrics: nil, views: viewsDict))
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[header(160)]", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[bgDark]|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[image(100)]-30-[bgDark]-0-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-VerticalHeader160$", withVisualFormat: "V:|-0-[header(160)]", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-HorizontalBgDark$", withVisualFormat: "H:|[bgDark]|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-VerticalBgDark$", withVisualFormat: "V:|-30-[image(100)]-30-[bgDark]-0-|", options: [], metrics: nil, views: viewsDict))
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=10)-[settings(40)]-93-[settings2(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-95-[settings2(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[tagListView]-0-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-HorizontalSettingsSettings2$", withVisualFormat: "H:|-(>=10)-[settings(40)]-93-[settings2(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-VerticalSettings2$", withVisualFormat: "V:|-95-[settings2(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn-HorizontalTagListView$", withVisualFormat: "H:|-0-[tagListView]-0-|", options: [], metrics: nil, views: viewsDict))
         
         
         
@@ -520,24 +520,24 @@ class ProfileHeaderCellOwn2: SwipeTableViewCell {
             "follows" : follows,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[header]|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=10)-[settings(40)]-28-[image(100)]-28-[more(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[date]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[name]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[artist]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[follows]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-60-[more(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-60-[settings(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[image(100)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-210-[name]-4-[artist]-11-[episodes]-9-[follows]-4-[date]-14-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-HorizontalHeader$", withVisualFormat: "H:|[header]|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-HorizontalSettings40Image100More40$", withVisualFormat: "H:|-(>=10)-[settings(40)]-28-[image(100)]-28-[more(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-HorizontalEpisodes$", withVisualFormat: "H:|-12-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-HorizontalDate$", withVisualFormat: "H:|-12-[date]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-HorizontalName$", withVisualFormat: "H:|-12-[name]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-HorizontalArtist$", withVisualFormat: "H:|-12-[artist]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-HorizontalFollows$", withVisualFormat: "H:|-12-[follows]-12-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-VerticalMore40$", withVisualFormat: "V:|-60-[more(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-VerticalSettings40$", withVisualFormat: "V:|-60-[settings(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-VerticalImage100$", withVisualFormat: "V:|-30-[image(100)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-VerticalNameArtistEpisodesFollowsDate$", withVisualFormat: "V:|-210-[name]-4-[artist]-11-[episodes]-9-[follows]-4-[date]-14-|", options: [], metrics: nil, views: viewsDict))
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[header(160)]", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[bgDark]|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[image(100)]-30-[bgDark]-0-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-VerticalHeader160$", withVisualFormat: "V:|-0-[header(160)]", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-HorizontalBgDark$", withVisualFormat: "H:|[bgDark]|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-VerticalImage100BgDark$", withVisualFormat: "V:|-30-[image(100)]-30-[bgDark]-0-|", options: [], metrics: nil, views: viewsDict))
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-(>=10)-[settings(40)]-93-[settings2(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-95-[settings2(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-HorizontalSettings40Settings240$", withVisualFormat: "H:|-(>=10)-[settings(40)]-93-[settings2(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ProfileHeaderCellOwn2-VerticalSettings2$", withVisualFormat: "V:|-95-[settings2(40)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
         
         
         profileImageView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true

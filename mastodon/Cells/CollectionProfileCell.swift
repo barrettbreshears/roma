@@ -60,8 +60,16 @@ class CollectionProfileCell: UICollectionViewCell {
         let viewsDict = [
             "countTag" : imageCountTag,
         ]
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        let constraintsCountTag30 = NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsCountTag30 {
+            constraint.identifier = "$CollectionProfileCell-contentView-countTag30$"
+        }
+        contentView.addConstraints(constraintsCountTag30)
+        let constraintsCountTag22 = NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsCountTag22 {
+            constraint.identifier = "$CollectionProfileCell-contentView-countTag22$"
+        }
+        contentView.addConstraints(constraintsCountTag22)
     }
 }
 
