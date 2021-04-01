@@ -1482,10 +1482,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         cell.configure(StoreStruct.statusSearch[indexPath.row])
                         cell.warningB.backgroundColor = Colours.grayDark3
                         cell.moreImage.backgroundColor = Colours.grayDark3
-                        cell.rep1.backgroundColor = Colours.grayDark3
-                        cell.like1.backgroundColor = Colours.grayDark3
-                        cell.boost1.backgroundColor = Colours.grayDark3
-                        cell.more1.backgroundColor = Colours.grayDark3
+                        cell.replyBtn.backgroundColor = Colours.grayDark3
+                        cell.likeBtn.backgroundColor = Colours.grayDark3
+                        cell.boostBtn.backgroundColor = Colours.grayDark3
+                        cell.moreBtn.backgroundColor = Colours.grayDark3
                         cell.profileImageView.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)

@@ -720,12 +720,12 @@ class SearchViewController: UIViewController, UITextFieldDelegate, SJFluidSegmen
                 } else {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell002", for: indexPath) as! MainFeedCellImage
                     cell.configure(StoreStruct.statusSearch[indexPath.row])
-                    cell.rep1.tag = indexPath.row
-                    cell.like1.tag = indexPath.row
-                    cell.boost1.tag = indexPath.row
-                    cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
-                    cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
-                    cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                    cell.replyBtn.tag = indexPath.row
+                    cell.likeBtn.tag = indexPath.row
+                    cell.boostBtn.tag = indexPath.row
+                    cell.replyBtn.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                    cell.likeBtn.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                    cell.boostBtn.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
                     cell.profileImageView.tag = indexPath.row
                     cell.userTag.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)

@@ -531,12 +531,12 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
             cell.delegate = self
             cell.backgroundColor = Colours.white
             
-            cell.rep1.tag = indexPath.row
-            cell.like1.tag = indexPath.row
-            cell.boost1.tag = indexPath.row
-            cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
-            cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
-            cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+            cell.replyBtn.tag = indexPath.row
+            cell.likeBtn.tag = indexPath.row
+            cell.boostBtn.tag = indexPath.row
+            cell.replyBtn.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+            cell.likeBtn.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+            cell.boostBtn.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
             
             cell.configure(self.currentTags[indexPath.row])
             cell.profileImageView.tag = indexPath.row
@@ -1083,8 +1083,8 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         } else {
                             cell.moreImage.image = nil
                         }
-                        cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
-                        cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+                        cell.boostBtn.setTitle("\((Int(cell.boostBtn.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.boostBtn.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -1114,13 +1114,13 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+                            cell.boostBtn.setTitle("\((Int(cell.boostBtn.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.boostBtn.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
-                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
+                            cell.boostBtn.setTitle("\((Int(cell.boostBtn.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.boostBtn.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
                             cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         }
                         cell.hideSwipe(animated: true)
@@ -1164,8 +1164,8 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         } else {
                             cell.moreImage.image = nil
                         }
-                        cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
-                        cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+                        cell.likeBtn.setTitle("\((Int(cell.likeBtn.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.likeBtn.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -1194,13 +1194,13 @@ class LikedViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+                            cell.likeBtn.setTitle("\((Int(cell.likeBtn.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.likeBtn.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
-                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
+                            cell.likeBtn.setTitle("\((Int(cell.likeBtn.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.likeBtn.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
                             cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         }
                         cell.hideSwipe(animated: true)

@@ -210,7 +210,7 @@ class MainFeedCell: SwipeTableViewCell {
         contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-HorizontalWarning$", withVisualFormat: "H:|-63-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
         //contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-63-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
         
-        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-VerticalNameWarning$", withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-VerticalNameWarning$", withVisualFormat: "V:|-14-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
         //contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
     }
 
