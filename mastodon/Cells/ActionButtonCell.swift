@@ -54,9 +54,6 @@ class ActionButtonCell: UITableViewCell {
         containerView.addSubview(shareButton)
         containerView.addSubview(moreButton)
         
-        let horizontalSpacing = 20
-        let cornerMargin = 30
-        
         let viewsDict = [
             "container" : containerView,
             "reply" : replyButton,
@@ -67,9 +64,10 @@ class ActionButtonCell: UITableViewCell {
             ]
         
         let metrics = [
-            "horizontalSpacing": horizontalSpacing,
-            "cornerMargin": cornerMargin
-            ]
+            "horizontalSpacing": 20,
+            "cornerMargin": 30,
+            "actionBtnSize": 40,
+        ]
         
         let verticalCenter = NSLayoutConstraint(item: containerView, attribute: .centerY, relatedBy: .equal, toItem: contentView, attribute: .centerY, multiplier: 1.0, constant: 0)
         verticalCenter.identifier = "$ActionButtonCell-contentView-verticalCenter$"
@@ -80,95 +78,71 @@ class ActionButtonCell: UITableViewCell {
         contentView.addConstraint(horizontalCenter)
         
         
+        //TODO: Is there a better way to order this buttons?
+        var horizontalConstraints = "H:|-(==cornerMargin)-[reply(actionBtnSize)]-horizontalSpacing-[like(actionBtnSize)]-horizontalSpacing-[boost(actionBtnSize)]-horizontalSpacing-[share(actionBtnSize)]-horizontalSpacing-[more(actionBtnSize)]-(==cornerMargin)-|"
+        if (UserDefaults.standard.object(forKey: "sworder")) != nil {
+            let swOrder = (UserDefaults.standard.object(forKey: "sworder")) as! Int
+            switch(swOrder) {
+            case 0:
+                horizontalConstraints = "H:|-(==cornerMargin)-[reply(actionBtnSize)]-horizontalSpacing-[like(actionBtnSize)]-horizontalSpacing-[boost(actionBtnSize)]-horizontalSpacing-[share(actionBtnSize)]-horizontalSpacing-[more(actionBtnSize)]-(==cornerMargin)-|"
+            case 1:
+                horizontalConstraints = "H:|-(==cornerMargin)-[reply(actionBtnSize)]-horizontalSpacing-[boost(actionBtnSize)]-horizontalSpacing-[like(actionBtnSize)]-horizontalSpacing-[share(actionBtnSize)]-horizontalSpacing-[more(actionBtnSize)]-(==cornerMargin)-|"
+            case 2:
+                horizontalConstraints = "H:|-(==cornerMargin)-[boost(actionBtnSize)]-horizontalSpacing-[reply(actionBtnSize)]-horizontalSpacing-[like(actionBtnSize)]-horizontalSpacing-[share(actionBtnSize)]-horizontalSpacing-[more(actionBtnSize)]-(==cornerMargin)-|"
+            case 3:
+                horizontalConstraints = "H:|-(==cornerMargin)-[boost(actionBtnSize)]-horizontalSpacing-[like(actionBtnSize)]-horizontalSpacing-[reply(actionBtnSize)]-horizontalSpacing-[share(actionBtnSize)]-horizontalSpacing-[more(actionBtnSize)]-(==cornerMargin)-|"
+            case 4:
+                horizontalConstraints = "H:|-(==cornerMargin)-[like(actionBtnSize)]-horizontalSpacing-[reply(actionBtnSize)]-horizontalSpacing-[boost(actionBtnSize)]-horizontalSpacing-[share(actionBtnSize)]-horizontalSpacing-[more(actionBtnSize)]-(==cornerMargin)-|"
+            default:
+                horizontalConstraints = "H:|-(==cornerMargin)-[like(actionBtnSize)]-horizontalSpacing-[boost(actionBtnSize)]-horizontalSpacing-[reply(actionBtnSize)]-horizontalSpacing-[share(actionBtnSize)]-horizontalSpacing-[more(actionBtnSize)]-(==cornerMargin)-|"
+            }
+        }
         
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell-horizontalConstraint-sworder-ReplyBtn-LikeBtn-BoostBtn-ShareBtn-MoreBtn$", withVisualFormat: horizontalConstraints, options: .alignAllCenterY, metrics: metrics, views: viewsDict))
+        
+        /*
         if (UserDefaults.standard.object(forKey: "sworder") == nil) || (UserDefaults.standard.object(forKey: "sworder") as! Int == 0) {
-            let horizontalFormat = "H:|-(==cornerMargin)-[reply(40)]-horizontalSpacing-[like(40)]-horizontalSpacing-[boost(40)]-horizontalSpacing-[share(40)]-horizontalSpacing-[more(40)]-(==cornerMargin)-|"
-            let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-            for constraint in horizontalConstraints {
-                constraint.identifier = "$ActionButtonCell-horizontalConstraint-sworder-0$"
-            }
-            contentView.addConstraints(horizontalConstraints)
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell-horizontalConstraint-sworder-0-ReplyBtn-LikeBtn-BoostBtn-ShareBtn-MoreBtn$", withVisualFormat: "H:|-(==cornerMargin)-[reply(actionBtnSize)]-horizontalSpacing-[like(actionBtnSize)]-horizontalSpacing-[boost(actionBtnSize)]-horizontalSpacing-[share(actionBtnSize)]-horizontalSpacing-[more(actionBtnSize)]-(==cornerMargin)-|", options: .alignAllCenterY, metrics: metrics, views: viewsDict))
         } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 1) {
-            let horizontalFormat = "H:|-(==cornerMargin)-[reply(40)]-horizontalSpacing-[boost(40)]-horizontalSpacing-[like(40)]-horizontalSpacing-[share(40)]-horizontalSpacing-[more(40)]-(==cornerMargin)-|"
-            let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-            for constraint in horizontalConstraints {
-                constraint.identifier = "$ActionButtonCell-horizontalConstraint$-sworder-1$"
-            }
-            contentView.addConstraints(horizontalConstraints)
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell-horizontalConstraint$-sworder-1-ReplyBtn-BoostBtn-LikeBtn-ShareBtn-MoreBtn$", withVisualFormat: "H:|-(==cornerMargin)-[reply(actionBtnSize)]-horizontalSpacing-[boost(actionBtnSize)]-horizontalSpacing-[like(actionBtnSize)]-horizontalSpacing-[share(actionBtnSize)]-horizontalSpacing-[more(actionBtnSize)]-(==cornerMargin)-|", options: .alignAllCenterY, metrics: metrics, views: viewsDict))
         } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 2) {
             let horizontalFormat = "H:|-(==cornerMargin)-[boost(40)]-horizontalSpacing-[reply(40)]-horizontalSpacing-[like(40)]-horizontalSpacing-[share(40)]-horizontalSpacing-[more(40)]-(==cornerMargin)-|"
-            let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-            for constraint in horizontalConstraints {
-                constraint.identifier = "$ActionButtonCell-horizontalConstraint$-sworder-2$"
-            }
-            contentView.addConstraints(horizontalConstraints)
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell-horizontalConstraint$-sworder-2-BoostBtn-ReplyBtn-LikeBtn-ShareBtn-MoreBtn$", withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict))
         } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 3) {
             let horizontalFormat = "H:|-(==cornerMargin)-[boost(40)]-horizontalSpacing-[like(40)]-horizontalSpacing-[reply(40)]-horizontalSpacing-[share(40)]-horizontalSpacing-[more(40)]-(==cornerMargin)-|"
-            let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-            for constraint in horizontalConstraints {
-                constraint.identifier = "$ActionButtonCell-horizontalConstraint$-sworder-3$"
-            }
-            contentView.addConstraints(horizontalConstraints)
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell-horizontalConstraint$-sworder-3$", withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict))
         } else if (UserDefaults.standard.object(forKey: "sworder") as! Int == 4) {
             let horizontalFormat = "H:|-(==cornerMargin)-[like(40)]-horizontalSpacing-[reply(40)]-horizontalSpacing-[boost(40)]-horizontalSpacing-[share(40)]-horizontalSpacing-[more(40)]-(==cornerMargin)-|"
-            let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-            for constraint in horizontalConstraints {
-                constraint.identifier = "$ActionButtonCell-horizontalConstraint$-sworder-4$"
-            }
-            contentView.addConstraints(horizontalConstraints)
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell-horizontalConstraint$-sworder-4$", withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict))
         } else {
             let horizontalFormat = "H:|-(==cornerMargin)-[like(40)]-horizontalSpacing-[boost(40)]-horizontalSpacing-[reply(40)]-horizontalSpacing-[share(40)]-horizontalSpacing-[more(40)]-(==cornerMargin)-|"
-            let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-            for constraint in horizontalConstraints {
-                constraint.identifier = "$ActionButtonCell-horizontalConstraint$-sworder-others$"
-            }
-            contentView.addConstraints(horizontalConstraints)
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell-horizontalConstraint$-sworder-others$", withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict))
         }
+        */
         
+        let vMetrics = [
+            "actionBtnSize": 40,
+            "top": 10,
+            "bottom": 12
+        ]
         
+        let verticalFormat = "V:|-top@999-[reply(actionBtnSize)]-bottom@999-|"
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell-contentView-verticalReplyBtn$", withVisualFormat: verticalFormat, options: .alignAllCenterY, metrics: vMetrics, views: viewsDict))
         
+        let verticalFormat2 = "V:|-top@999-[like(actionBtnSize)]-bottom@999-|"
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell-contentView-verticalLike$", withVisualFormat: verticalFormat2, options: .alignAllCenterY, metrics: vMetrics, views: viewsDict))
         
-        let verticalFormat = "V:|-10-[reply(40)]-12-|"
-        let verticalConstraints = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-        for constraint in verticalConstraints {
-            constraint.identifier = "$ActionButtonCell-contentView-verticalConstraints$"
-        }
-        contentView.addConstraints(verticalConstraints)
+        let verticalFormat3 = "V:|-top@999-[boost(actionBtnSize)]-bottom@999-|"
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell-contentView-verticalBoost3$", withVisualFormat: verticalFormat3, options: .alignAllCenterY, metrics: vMetrics, views: viewsDict))
         
-        let verticalFormat2 = "V:|-10-[like(40)]-12-|"
-        let verticalConstraints2 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat2, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-        for constraint in verticalConstraints2 {
-            constraint.identifier = "$ActionButtonCell-contentView-verticalConstraints2$"
-        }
-        contentView.addConstraints(verticalConstraints2)
-        
-        let verticalFormat3 = "V:|-10-[boost(40)]-12-|"
-        let verticalConstraints3 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat3, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-        for constraint in verticalConstraints3 {
-            constraint.identifier = "$ActionButtonCell-contentView-verticalConstraints3$"
-        }
-        contentView.addConstraints(verticalConstraints3)
-        
-        let verticalFormat34 = "V:|-10-[share(40)]-12-|"
-        let verticalConstraints34 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat34, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-        for constraint in verticalConstraints34 {
-            constraint.identifier = "$ActionButtonCell-contentView-verticalConstraints34$"
-        }
-        contentView.addConstraints(verticalConstraints34)
-        
-        let verticalFormat4 = "V:|-10-[more(40)]-12-|"
-        let verticalConstraints4 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat4, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-        for constraint in verticalConstraints4 {
-            constraint.identifier = "$ActionButtonCell-contentView-verticalConstraints4$"
-        }
-        contentView.addConstraints(verticalConstraints4)
+        let verticalFormat34 = "V:|-top@999-[share(actionBtnSize)]-bottom@999-|"
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell-contentView-verticalShare$", withVisualFormat: verticalFormat34, options: .alignAllCenterY, metrics: vMetrics, views: viewsDict))
+
+        let verticalFormat4 = "V:|-top@999-[more(actionBtnSize)]-bottom@999-|"
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell-contentView-verticalMore$", withVisualFormat: verticalFormat4, options: .alignAllCenterY, metrics: vMetrics, views: viewsDict))
         
         let verticalFormat5 = "V:|-0-[container]-0-|"
-        let verticalConstraints5 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat5, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-        for constraint in verticalConstraints5 {
-            constraint.identifier = "$ActionButtonCell-contentView-verticalConstraints5$"
-        }
-        contentView.addConstraints(verticalConstraints5)
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell-contentView-verticalContainer$", withVisualFormat: verticalFormat5, options: .alignAllCenterY, metrics: vMetrics, views: viewsDict))
         
     }
     
@@ -235,9 +209,6 @@ class ActionButtonCell2: UITableViewCell {
         containerView.addSubview(shareButton)
         containerView.addSubview(moreButton)
         
-        let horizontalSpacing = 20
-        let cornerMargin = 30
-        
         let viewsDict = [
             "container" : containerView,
             "reply" : replyButton,
@@ -247,8 +218,11 @@ class ActionButtonCell2: UITableViewCell {
             ]
         
         let metrics = [
-            "horizontalSpacing": horizontalSpacing,
-            "cornerMargin": cornerMargin
+            "horizontalSpacing": 20,
+            "cornerMargin": 30,
+            "actionBtnSize": 40,
+            "top": 10,
+            "bottom": 12
         ]
         
         let verticalCenter = NSLayoutConstraint(item: containerView, attribute: .centerY, relatedBy: .equal, toItem: contentView, attribute: .centerY, multiplier: 1.0, constant: 0)
@@ -259,47 +233,23 @@ class ActionButtonCell2: UITableViewCell {
         contentView.addConstraint(horizontalCenter)
         
         
-        let horizontalFormat = "H:|-(==cornerMargin)-[reply(40)]-horizontalSpacing-[like(40)]-horizontalSpacing-[share(40)]-horizontalSpacing-[more(40)]-(==cornerMargin)-|"
-        let horizontalConstraints = NSLayoutConstraint.constraints(withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-        for constraint in horizontalConstraints {
-            constraint.identifier = "$ActionButtonCell2-contentView-horizontalConstraints$"
-        }
-        contentView.addConstraints(horizontalConstraints)
+        let horizontalFormat = "H:|-(==cornerMargin)-[reply(actionBtnSize)]-horizontalSpacing-[like(actionBtnSize)]-horizontalSpacing-[share(actionBtnSize)]-horizontalSpacing-[more(actionBtnSize)]-(==cornerMargin)-|"
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell2-contentView-horizontalReplyBtn-LikeBtn-ShareBtn-MoreBtn$", withVisualFormat: horizontalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict))
         
-        let verticalFormat = "V:|-10-[reply(40)]-12-|"
-        let verticalConstraints = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-        for constraint in verticalConstraints {
-            constraint.identifier = "$ActionButtonCell2-contentView-verticalConstraints$"
-        }
-        contentView.addConstraints(verticalConstraints)
+        let verticalFormat = "V:|-top@999-[reply(actionBtnSize)]-bottom@999-|"
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell2-contentView-verticalReplyBtn$", withVisualFormat: verticalFormat, options: .alignAllCenterY, metrics: metrics, views: viewsDict))
         
-        let verticalFormat2 = "V:|-10-[like(40)]-12-|"
-        let verticalConstraints2 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat2, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-        for constraint in verticalConstraints2 {
-            constraint.identifier = "$ActionButtonCell2-contentView-verticalConstraints2$"
-        }
-        contentView.addConstraints(verticalConstraints2)
+        let verticalFormat2 = "V:|-top@999-[like(actionBtnSize)]-bottom@999-|"
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell2-contentView-verticalLikeBtn$", withVisualFormat: verticalFormat2, options: .alignAllCenterY, metrics: metrics, views: viewsDict))
         
-        let verticalFormat34 = "V:|-10-[share(40)]-12-|"
-        let verticalConstraints34 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat34, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-        for constraint in verticalConstraints34 {
-            constraint.identifier = "$ActionButtonCell2-contentView-verticalConstraints34$"
-        }
-        contentView.addConstraints(verticalConstraints34)
+        let verticalFormat34 = "V:|-top@999-[share(actionBtnSize)]-bottom@999-|"
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell2-contentView-verticalShareBtn$", withVisualFormat: verticalFormat34, options: .alignAllCenterY, metrics: metrics, views: viewsDict))
         
-        let verticalFormat4 = "V:|-10-[more(40)]-12-|"
-        let verticalConstraints4 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat4, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-        for constraint in verticalConstraints4 {
-            constraint.identifier = "$ActionButtonCell2-contentView-verticalConstraints4$"
-        }
-        contentView.addConstraints(verticalConstraints4)
+        let verticalFormat4 = "V:|-top@999-[more(actionBtnSize)]-bottom@999-|"
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell2-contentView-verticalMoreBtn$", withVisualFormat: verticalFormat4, options: .alignAllCenterY, metrics: metrics, views: viewsDict))
         
         let verticalFormat5 = "V:|-0-[container]-0-|"
-        let verticalConstraints5 = NSLayoutConstraint.constraints(withVisualFormat: verticalFormat5, options: .alignAllCenterY, metrics: metrics, views: viewsDict)
-        for constraint in verticalConstraints5 {
-            constraint.identifier = "$ActionButtonCell2-contentView-verticalConstraints5$"
-        }
-        contentView.addConstraints(verticalConstraints5)
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$ActionButtonCell2-contentView-verticalContainer$", withVisualFormat: verticalFormat5, options: .alignAllCenterY, metrics: metrics, views: viewsDict))
         
     }
     
