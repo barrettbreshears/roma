@@ -5311,6 +5311,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //            switch (deviceIdiom) {
 //            case .phone :
                 let controller = DetailViewController()
+                //TODO: this blows up when you get some BOOSTS in your profile TL and they look empty. Index out of range
                 controller.mainStatus.append(zzz[indexPath.row])
                 self.navigationController?.pushViewController(controller, animated: true)
 //            case .pad:
