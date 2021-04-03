@@ -166,10 +166,10 @@ class RepliesCell: SwipeTableViewCell {
 //            contentView.removeConstraint($0)
 //        })
         
-        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$RepliesCell-HorizontalFirstIndi$", withVisualFormat: "H:|-first-[indi(2)]", options: [], metrics: metrics, views: viewsDict))
-        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$RepliesCell-HorizontalSecondImage40NameArtistMoreDate$", withVisualFormat: "H:|-second-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-12-|", options: [], metrics: metrics, views: viewsDict))
-        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$RepliesCell-HorizontalSecondImage40Episodes$", withVisualFormat: "H:|-second-[image(40)]-13-[episodes]-12-|", options: [], metrics: metrics, views: viewsDict))
-        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$RepliesCell-HorizontalThirdWarning$", withVisualFormat: "H:|-third-[warning]-9-|", options: [], metrics: metrics, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$RepliesCell-HorizontalFirstIndi$", withVisualFormat: "H:|-first@999-[indi(2)]", options: [], metrics: metrics, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$RepliesCell-HorizontalSecondImage40NameArtistMoreDate$", withVisualFormat: "H:|-second@999-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-12@999-|", options: [], metrics: metrics, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$RepliesCell-HorizontalSecondImage40Episodes$", withVisualFormat: "H:|-second@999-[image(40)]-13-[episodes]-12@999-|", options: [], metrics: metrics, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$RepliesCell-HorizontalThirdWarning$", withVisualFormat: "H:|-third@999-[warning]-9@999-|", options: [], metrics: metrics, views: viewsDict))
         
         contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$RepliesCell-VerticalIndi$", withVisualFormat: "V:|-64-[indi(>=0)]-16-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$RepliesCell-VerticalMore16$", withVisualFormat: "V:|-18-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
@@ -178,7 +178,6 @@ class RepliesCell: SwipeTableViewCell {
         contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$RepliesCell-VerticalImage40$", withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$RepliesCell-VerticalNameEpisodes$", withVisualFormat: "V:|-18-[name]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
         contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$RepliesCell-VerticalNameWarning$", withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
-        
 //        contentView.layoutSubviews()
     }
     
@@ -207,12 +206,6 @@ class RepliesCell: SwipeTableViewCell {
         
         if status.reblog?.content.stripHTML() != nil {
 //            toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.username) reposted"
-            
-            
-            
-            
-            
-       
             if status.reblog!.emojis.isEmpty {
                 toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.acct) reposted"
             } else {
@@ -225,16 +218,12 @@ class RepliesCell: SwipeTableViewCell {
                     while attributedString.mutableString.contains(":\($0.shortcode):") {
                         let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\($0.shortcode):")
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
-                        
                     }
                 })
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
             }
-            
-            
-            
             
             if status.reblog?.account.emojis.isEmpty ?? true {
                 userName.text = status.reblog?.account.displayName.stripHTML()
@@ -257,15 +246,8 @@ class RepliesCell: SwipeTableViewCell {
                 self.userName.attributedText = attributedString
                 self.reloadInputViews()
             }
-            
-            
-            
-            
-            
         } else {
 //            toot.text = status.content.stripHTML()
-            
-            
             if status.emojis.isEmpty {
                 toot.text = status.content.stripHTML()
             } else {
@@ -278,14 +260,12 @@ class RepliesCell: SwipeTableViewCell {
                     while attributedString.mutableString.contains(":\($0.shortcode):") {
                         let range: NSRange = (attributedString.mutableString as NSString).range(of: ":\($0.shortcode):")
                         attributedString.replaceCharacters(in: range, with: attrStringWithImage)
-                        
                     }
                 })
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
             }
-            
             
             if status.account.emojis.isEmpty {
                 userName.text = status.account.displayName.stripHTML()
@@ -308,8 +288,6 @@ class RepliesCell: SwipeTableViewCell {
                 self.userName.attributedText = attributedString
                 self.reloadInputViews()
             }
-            
-            
         }
         
         userName.font = UIFont.systemFont(ofSize: Colours.fontSize1, weight: .heavy)
@@ -378,12 +356,10 @@ class RepliesCell: SwipeTableViewCell {
                 warningB.backgroundColor = Colours.clear
                 warningB.alpha = 0
             }
-            
         } else {
             warningB.backgroundColor = Colours.clear
             warningB.alpha = 0
         }
-        
     }
     
     func configure0(_ status: Status) {
