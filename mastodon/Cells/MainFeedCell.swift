@@ -156,62 +156,38 @@ class MainFeedCell: SwipeTableViewCell {
             "more1" : more1,
             ]
         
-        let constraintsImage40NameArtistMoreDate = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-12-|", options: [], metrics: nil, views: viewsDict)
-        for constraint in constraintsImage40NameArtistMoreDate {
-            constraint.identifier = "$MainFeedCell-Image40NameArtistMoreDate$"
-        }
-        contentView.addConstraints(constraintsImage40NameArtistMoreDate)
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-Image40NameArtistMoreDate$", withVisualFormat: "H:|-12-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-12-|", options: [], metrics: nil, views: viewsDict))
         
-        let constraintsHorizontalImage226 = NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[image2(26)]", options: [], metrics: nil, views: viewsDict)
-        for constraint in constraintsHorizontalImage226 {
-            constraint.identifier = "$MainFeedCell-HorizontalImage226$"
-        }
-        contentView.addConstraints(constraintsHorizontalImage226)
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-HorizontalImage226$", withVisualFormat: "H:|-30-[image2(26)]", options: [], metrics: nil, views: viewsDict))
         
-        let constraintsHorizontalImage40Episodes = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[episodes]-12-|", options: [], metrics: nil, views: viewsDict)
-        for constraint in constraintsHorizontalImage40Episodes {
-            constraint.identifier = "$MainFeedCell-HorizontalImage40Episodes$"
-        }
-        contentView.addConstraints(constraintsHorizontalImage40Episodes)
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-HorizontalImage40Episodes$", withVisualFormat: "H:|-12-[image(40)]-13-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
         
-        let constraintsVerticalMore16 = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
-        for constraint in constraintsVerticalMore16 {
-            constraint.identifier = "$MainFeedCell-VerticalMore16$"
-        }
-        contentView.addConstraints(constraintsVerticalMore16)
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-VerticalMore16$", withVisualFormat: "V:|-18-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         
         contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-VerticalDate18$", withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        // contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         
         contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-VerticalImage40$", withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        //contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         
         contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-VerticalImage226$", withVisualFormat: "V:|-38-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        //contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-38-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
 
         if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
             contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-VerticalNameEpisodes$", withVisualFormat: "V:|-14-[name]-2-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
-            //contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
         } else {
             contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-VerticalNameEpisodesRep1$", withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-            //contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+
             contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-VerticalNameEpisodesLike1$", withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[like1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-            //contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[like1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+
             contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-VerticalNameEpisodesBoost1$", withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[boost1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-            //contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[boost1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+
             contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-VerticalNameEpisodesMore1$", withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[more1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-            //contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-15-[more1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
+
             contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-HorizontalRep1Like1Boost1More1$", withVisualFormat: "H:|-65-[rep1(36)]-20-[like1(40)]-11-[boost1(34)]-24-[more1(20)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-            //contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-65-[rep1(36)]-20-[like1(40)]-11-[boost1(34)]-24-[more1(20)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
         }
         contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-VerticalArtistEpisodes$", withVisualFormat: "V:|-12-[artist]-0-[episodes]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        //contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-0-[episodes]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
 
         contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-HorizontalWarning$", withVisualFormat: "H:|-63-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
-        //contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-63-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
         
         contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCell-VerticalNameWarning$", withVisualFormat: "V:|-14-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
-        //contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -359,8 +335,11 @@ class MainFeedCell: SwipeTableViewCell {
                 let completeText2 = NSMutableAttributedString(string: "")
                 completeText2.append(attachmentString2)
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
-                let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
-                completeText2.append(textAfterIcon2)
+                // This seems to be used for some kind of "Quote Tweet", but it's not very developed in Pleroma yet
+                // I'm removing the boost author name because it makes no sense as is now to add this.
+                // I'm also skipping  adding the text if there's nothing in the completeText2
+                // let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
+                // completeText2.append(textAfterIcon2)
                 attributedString.append(completeText2)
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
@@ -384,8 +363,11 @@ class MainFeedCell: SwipeTableViewCell {
                 let completeText2 = NSMutableAttributedString(string: "")
                 completeText2.append(attachmentString2)
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
-                let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
-                completeText2.append(textAfterIcon2)
+                // This seems to be used for some kind of "Quote Tweet", but it's not very developed in Pleroma yet
+                // I'm removing the boost author name because it makes no sense as is now to add this.
+                // I'm also skipping  adding the text if there's nothing in the completeText2
+                // let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
+                // completeText2.append(textAfterIcon2)
                 attributedString.append(completeText2)
                 
                 self.toot.attributedText = attributedString
