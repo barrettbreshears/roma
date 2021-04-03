@@ -3383,7 +3383,7 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.replyBtn.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
                     cell.likeBtn.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
                     cell.boostBtn.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
-                    
+                    //TODO Fix this that gets out of range
                     cell.configure(zzz[indexPath.row])
                     cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
                     cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)

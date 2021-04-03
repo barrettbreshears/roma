@@ -55,7 +55,13 @@ class SearchFeedCell: SwipeTableViewCell {
             profileImageView.layer.cornerRadius = 0
             profileImageView2.layer.cornerRadius = 0
         }
+        profileImageView.contentHorizontalAlignment = .fill
+        profileImageView.contentVerticalAlignment = .fill
+        profileImageView.imageView?.contentMode = .scaleAspectFill
         profileImageView.layer.masksToBounds = true
+        profileImageView2.contentHorizontalAlignment = .fill
+        profileImageView2.contentVerticalAlignment = .fill
+        profileImageView2.imageView?.contentMode = .scaleAspectFill
         profileImageView2.layer.masksToBounds = true
         
         warningB.titleEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)

@@ -45,6 +45,9 @@ class DetailCell: UITableViewCell {
         if (UserDefaults.standard.object(forKey: "proCorner") != nil && UserDefaults.standard.object(forKey: "proCorner") as! Int == 2) {
             profileImageView.layer.cornerRadius = 0
         }
+        profileImageView.contentHorizontalAlignment = .fill
+        profileImageView.contentVerticalAlignment = .fill
+        profileImageView.imageView?.contentMode = .scaleAspectFill
         profileImageView.layer.masksToBounds = true
         
         userName.numberOfLines = 0
