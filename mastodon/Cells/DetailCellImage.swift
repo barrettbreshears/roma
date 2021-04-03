@@ -15,7 +15,7 @@ class DetailCellImage: UITableViewCell {
     var profileImageView = UIButton()
     var userName = UILabel()
     var userTag = UIButton()
-    var toot = ActiveLabel()
+    var toot = ActiveLabel() // ActiveLabel does not support images in NSTextAttachment(). Maybe update the pod?
     var faves = UIButton()
     var fromClient = UILabel()
     var mainImageView = UIButton()
@@ -208,8 +208,11 @@ class DetailCellImage: UITableViewCell {
                 let completeText2 = NSMutableAttributedString(string: "")
                 completeText2.append(attachmentString2)
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
-                let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
-                completeText2.append(textAfterIcon2)
+                // This seems to be used for some kind of "Quote Tweet", but it's not very developed in Pleroma yet
+                // I'm removing the boost author name because it makes no sense as is now to add this.
+                // I'm also skipping  adding the text if there's nothing in the completeText2
+                // let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
+                // completeText2.append(textAfterIcon2)
                 attributedString.append(completeText2)
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
@@ -233,8 +236,11 @@ class DetailCellImage: UITableViewCell {
                 let completeText2 = NSMutableAttributedString(string: "")
                 completeText2.append(attachmentString2)
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
-                let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
-                completeText2.append(textAfterIcon2)
+                // This seems to be used for some kind of "Quote Tweet", but it's not very developed in Pleroma yet
+                // I'm removing the boost author name because it makes no sense as is now to add this.
+                // I'm also skipping  adding the text if there's nothing in the completeText2
+                // let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
+                //completeText2.append(textAfterIcon2)
                 attributedString.append(completeText2)
                 
                 self.toot.attributedText = attributedString

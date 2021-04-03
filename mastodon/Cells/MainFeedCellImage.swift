@@ -475,11 +475,9 @@ class MainFeedCellImage: SwipeTableViewCell {
                 // I'm also skipping  adding the text if there's nothing in the completeText2
                 // let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
                 // completeText2.append(textAfterIcon2)
-                if completeText2.length > 0 {
-                    //Avoid the extra spacing without nuking the functionality
-                    attributedString.append(completeText2)
-                    self.toot.attributedText = attributedString
-                }
+                attributedString.append(completeText2)
+                self.toot.attributedText = attributedString
+
                 self.reloadInputViews()
             }
             
