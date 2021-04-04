@@ -412,11 +412,6 @@
 		535B33BB215C0EC6001A2A7F /* minimize_24.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B33AC215C0EC6001A2A7F /* minimize_24.png */; };
 		535B33BC215C0EC6001A2A7F /* play_24.png in Resources */ = {isa = PBXBuildFile; fileRef = 535B33AD215C0EC6001A2A7F /* play_24.png */; };
 		535B33BE215C1A08001A2A7F /* VisualActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B33BD215C1A08001A2A7F /* VisualActivityViewController.swift */; };
-		535B33C7215C31E3001A2A7F /* ActiveLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B33C0215C31E3001A2A7F /* ActiveLabel.swift */; };
-		535B33C8215C31E3001A2A7F /* RegexParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B33C1215C31E3001A2A7F /* RegexParser.swift */; };
-		535B33C9215C31E3001A2A7F /* StringTrimExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B33C2215C31E3001A2A7F /* StringTrimExtension.swift */; };
-		535B33CA215C31E3001A2A7F /* ActiveBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B33C3215C31E3001A2A7F /* ActiveBuilder.swift */; };
-		535B33CB215C31E3001A2A7F /* ActiveType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B33C4215C31E3001A2A7F /* ActiveType.swift */; };
 		535B33CE215C3641001A2A7F /* HashtagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B33CD215C3641001A2A7F /* HashtagViewController.swift */; };
 		535B33D0215CE9A9001A2A7F /* LikedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B33CF215CE9A9001A2A7F /* LikedViewController.swift */; };
 		535B33D2215CF0AD001A2A7F /* MutedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 535B33D1215CF0AD001A2A7F /* MutedViewController.swift */; };
@@ -1288,12 +1283,6 @@
 		535B33AC215C0EC6001A2A7F /* minimize_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = minimize_24.png; sourceTree = "<group>"; };
 		535B33AD215C0EC6001A2A7F /* play_24.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_24.png; sourceTree = "<group>"; };
 		535B33BD215C1A08001A2A7F /* VisualActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualActivityViewController.swift; sourceTree = "<group>"; };
-		535B33C0215C31E3001A2A7F /* ActiveLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveLabel.swift; sourceTree = "<group>"; };
-		535B33C1215C31E3001A2A7F /* RegexParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegexParser.swift; sourceTree = "<group>"; };
-		535B33C2215C31E3001A2A7F /* StringTrimExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringTrimExtension.swift; sourceTree = "<group>"; };
-		535B33C3215C31E3001A2A7F /* ActiveBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveBuilder.swift; sourceTree = "<group>"; };
-		535B33C4215C31E3001A2A7F /* ActiveType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActiveType.swift; sourceTree = "<group>"; };
-		535B33C5215C31E3001A2A7F /* ActiveLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActiveLabel.h; sourceTree = "<group>"; };
 		535B33CD215C3641001A2A7F /* HashtagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HashtagViewController.swift; sourceTree = "<group>"; };
 		535B33CF215CE9A9001A2A7F /* LikedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LikedViewController.swift; sourceTree = "<group>"; };
 		535B33D1215CF0AD001A2A7F /* MutedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutedViewController.swift; sourceTree = "<group>"; };
@@ -2409,19 +2398,6 @@
 			path = Assets;
 			sourceTree = "<group>";
 		};
-		535B33BF215C31E3001A2A7F /* ActiveLabel */ = {
-			isa = PBXGroup;
-			children = (
-				535B33C0215C31E3001A2A7F /* ActiveLabel.swift */,
-				535B33C1215C31E3001A2A7F /* RegexParser.swift */,
-				535B33C2215C31E3001A2A7F /* StringTrimExtension.swift */,
-				535B33C3215C31E3001A2A7F /* ActiveBuilder.swift */,
-				535B33C4215C31E3001A2A7F /* ActiveType.swift */,
-				535B33C5215C31E3001A2A7F /* ActiveLabel.h */,
-			);
-			path = ActiveLabel;
-			sourceTree = "<group>";
-		};
 		53631C3B22136A1D000D5B40 /* MisterFusion */ = {
 			isa = PBXGroup;
 			children = (
@@ -2764,7 +2740,6 @@
 				536A4FA1216B73D600A3D483 /* BulletinBoard */,
 				5354BAA8216577FD0094C545 /* CRRefresh */,
 				5351D74D21617FC40012960F /* VolumeBar */,
-				535B33BF215C31E3001A2A7F /* ActiveLabel */,
 				535B339C215C0EC6001A2A7F /* XPlayer */,
 				5373CB0B2152FCF300676F3D /* Alertift */,
 				5316C87D219D949F0003AB97 /* Gif */,
@@ -4221,7 +4196,6 @@
 				5373CACC2152C68000676F3D /* Instances.swift in Sources */,
 				5317C7B121DA334500746197 /* BarDrawingLayer.swift in Sources */,
 				537E403C22784BF9009D080E /* SchemesSettingsViewController.swift in Sources */,
-				535B33CB215C31E3001A2A7F /* ActiveType.swift in Sources */,
 				5373CAAF2152C68000676F3D /* ClientApplication.swift in Sources */,
 				5373CAFC2152EDB800676F3D /* SwipeAnimator.swift in Sources */,
 				5329F3942174DBDF00C4A23C /* SSLSecurity.swift in Sources */,
@@ -4287,7 +4261,6 @@
 				536A4FB4216B73D600A3D483 /* BulletinBackgroundViewStyle.swift in Sources */,
 				535932BB222DB47600086545 /* Poll.swift in Sources */,
 				5354BACC216577FD0094C545 /* WCLLoadingView.swift in Sources */,
-				535B33C9215C31E3001A2A7F /* StringTrimExtension.swift in Sources */,
 				5315728F21FCC2E300328053 /* SettingsBundleHelper.swift in Sources */,
 				A992A6B7225FA0110005AB1F /* CrownAttributes+Accessors.swift in Sources */,
 				535932BD222EFB5A00086545 /* PollOptionCellToggle.swift in Sources */,
@@ -4456,7 +4429,6 @@
 				531154F322760C39005C5422 /* GeneralSettingsViewController.swift in Sources */,
 				A9F33C6722E2531800E87E43 /* TimelineAlerts.swift in Sources */,
 				531E0FA8216E2BA2003E8890 /* NVActivityIndicatorAnimationBallPulseSync.swift in Sources */,
-				535B33C7215C31E3001A2A7F /* ActiveLabel.swift in Sources */,
 				5373CB54215688D700676F3D /* RepliesCellImage.swift in Sources */,
 				53BC45BC215AC8EE0092223F /* SettingsCell.swift in Sources */,
 				53E1AE27221ADFEA00A6E1E6 /* PreviewError.swift in Sources */,
@@ -4471,7 +4443,6 @@
 				5373CAD62152C68000676F3D /* Result.swift in Sources */,
 				A992A6AD225FA0110005AB1F /* Deprecated.swift in Sources */,
 				5373CAD02152C68000676F3D /* Mutes.swift in Sources */,
-				535B33C8215C31E3001A2A7F /* RegexParser.swift in Sources */,
 				5354BAA721653C740094C545 /* PinnedViewController.swift in Sources */,
 				536A4FB3216B73D600A3D483 /* BulletinItem.swift in Sources */,
 				535B33B3215C0EC6001A2A7F /* XPlayerViewController+Action.swift in Sources */,
@@ -4528,7 +4499,6 @@
 				5373CB622159553600676F3D /* FollowersViewController.swift in Sources */,
 				53EBE6BD222E7C4D000D007E /* Polls.swift in Sources */,
 				5373CAD42152C68000676F3D /* Statuses.swift in Sources */,
-				535B33CA215C31E3001A2A7F /* ActiveBuilder.swift in Sources */,
 				5373C9D8215173EE00676F3D /* AppDelegate.swift in Sources */,
 				5392DBFB2275F5E500D17F5F /* LockSettingsViewController.swift in Sources */,
 				530F5B3621E267CA00A910B3 /* StepCollectionViewFlowLayout.swift in Sources */,

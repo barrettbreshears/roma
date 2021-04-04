@@ -1,4 +1,5 @@
 PODS:
+  - ActiveLabel (1.1.0)
   - Alamofire (4.7.3)
   - Crashlytics (3.12.0):
     - Fabric (~> 1.9.0)
@@ -170,6 +171,7 @@ PODS:
   - TinyConstraints (3.1.0)
 
 DEPENDENCIES:
+  - ActiveLabel
   - Alamofire
   - Crashlytics
   - CropViewController
@@ -198,6 +200,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - ActiveLabel
     - Alamofire
     - Crashlytics
     - CropViewController
@@ -244,6 +247,7 @@ SPEC REPOS:
     - TinyConstraints
 
 SPEC CHECKSUMS:
+  ActiveLabel: 5e3f4de79a1952d4604b845a0610d4776e4b82b3
   Alamofire: c7287b6e5d7da964a70935e5db17046b7fde6568
   Crashlytics: a33af323773f73904037dc2e684cd2f0d29f4fe2
   CropViewController: a090820b15fc3da68e694d7c192a4708c576828b
@@ -289,6 +293,6 @@ SPEC CHECKSUMS:
   TesseractOCRiOS: 2c189465f86abb030d0c5141c90da9705b647854
   TinyConstraints: 4721a4b303c799328867078ade6560e152df54d1
 
-PODFILE CHECKSUM: c988247a8396fae87a7c0457abc8cf20c600c8e7
+PODFILE CHECKSUM: 148f26c6f714976f32d115af59fe11fb85b77a2f
 
 COCOAPODS: 1.10.1

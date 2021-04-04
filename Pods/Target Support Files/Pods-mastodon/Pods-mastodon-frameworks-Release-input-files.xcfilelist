@@ -1,4 +1,5 @@
 ${PODS_ROOT}/Target Support Files/Pods-mastodon/Pods-mastodon-frameworks.sh
+${BUILT_PRODUCTS_DIR}/ActiveLabel/ActiveLabel.framework
 ${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework
 ${BUILT_PRODUCTS_DIR}/CropViewController/CropViewController.framework
 ${BUILT_PRODUCTS_DIR}/DKCamera/DKCamera.framework

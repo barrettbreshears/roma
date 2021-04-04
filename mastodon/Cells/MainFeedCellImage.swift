@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import PINRemoteImage
+import ActiveLabel
 
 class MainFeedCellImage: SwipeTableViewCell {
 

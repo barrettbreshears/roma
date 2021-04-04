@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import ActiveLabel
 
 class PollCell: UITableViewCell, CoreChartViewDataSource {
     

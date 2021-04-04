@@ -32,6 +32,7 @@ pod 'SwiftMessages'
 pod 'DKImagePickerController'
 pod 'MessageInputBar'
 pod 'SKPhotoBrowser', '~> 6.1.0'
+pod 'ActiveLabel'
 
 end
 # Update pods that have older deployment versions by default
