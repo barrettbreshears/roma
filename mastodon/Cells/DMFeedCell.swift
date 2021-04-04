@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import PINRemoteImage
+import ActiveLabel
 
 class DMFeedCell: SwipeTableViewCell {
     
@@ -57,7 +58,13 @@ class DMFeedCell: SwipeTableViewCell {
             profileImageView.layer.cornerRadius = 0
             profileImageView2.layer.cornerRadius = 0
         }
+        profileImageView.contentHorizontalAlignment = .fill
+        profileImageView.contentVerticalAlignment = .fill
+        profileImageView.imageView?.contentMode = .scaleAspectFill
         profileImageView.layer.masksToBounds = true
+        profileImageView2.contentHorizontalAlignment = .fill
+        profileImageView2.contentVerticalAlignment = .fill
+        profileImageView2.imageView?.contentMode = .scaleAspectFill
         profileImageView2.layer.masksToBounds = true
         
         warningB.titleEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
@@ -116,20 +123,71 @@ class DMFeedCell: SwipeTableViewCell {
             "readIndi" : readIndi,
         ]
         
+        let constraintsReadIndiImage40NameArtistDate = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[readIndi(8)]-5-[image(40)]-13-[name]-5-[artist]-(>=5)-[date]-12-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsReadIndiImage40NameArtistDate {
+            constraint.identifier = "$DMFeedCell-ReadIndiImage40NameArtistDate$"
+        }
+        contentView.addConstraints(constraintsReadIndiImage40NameArtistDate)
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[readIndi(8)]-5-[image(40)]-13-[name]-5-[artist]-(>=5)-[date]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-45-[image2(26)]-(>=20)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[readIndi(8)]-5-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-38-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-34-[readIndi(8)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        let constraintsImage226 = NSLayoutConstraint.constraints(withVisualFormat: "H:|-45-[image2(26)]-(>=20)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsImage226 {
+            constraint.identifier = "$DMFeedCell-Image226$"
+        }
+        contentView.addConstraints(constraintsImage226)
         
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
+        let constraintsReadIndiImage40Episodes = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[readIndi(8)]-5-[image(40)]-13-[episodes]-20-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsReadIndiImage40Episodes {
+            constraint.identifier = "$DMFeedCell-ReadIndiImage40Episodes$"
+        }
+        contentView.addConstraints(constraintsReadIndiImage40Episodes)
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-74-[warning]-17-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
+        let constraintsImage40 = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsImage40 {
+            constraint.identifier = "$DMFeedCell-Image40$"
+        }
+        contentView.addConstraints(constraintsImage40)
+        
+        let constraintsImage38226 = NSLayoutConstraint.constraints(withVisualFormat: "V:|-38-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsImage38226 {
+            constraint.identifier = "$DMFeedCell-Image38226$"
+        }
+        contentView.addConstraints(constraintsImage38226)
+        
+        let constraintsReadIndi8 = NSLayoutConstraint.constraints(withVisualFormat: "V:|-34-[readIndi(8)]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsReadIndi8 {
+            constraint.identifier = "$DMFeedCell-ReadIndi8$"
+        }
+        contentView.addConstraints(constraintsReadIndi8)
+        
+        let constraintsDate = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsDate {
+            constraint.identifier = "$DMFeedCell-Date$"
+        }
+        contentView.addConstraints(constraintsDate)
+        
+        let constraintsArtistEpisodes = NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsArtistEpisodes {
+            constraint.identifier = "$DMFeedCell-ArtistEpisodes$"
+        }
+        contentView.addConstraints(constraintsArtistEpisodes)
+        
+        let constraintsNameEpisodes = NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[name]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsNameEpisodes {
+            constraint.identifier = "$DMFeedCell-NameEpisodes$"
+        }
+        contentView.addConstraints(constraintsNameEpisodes)
+        
+        let constraintsWarning = NSLayoutConstraint.constraints(withVisualFormat: "H:|-74-[warning]-17-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsWarning {
+            constraint.identifier = "$DMFeedCell-Warning$"
+        }
+        contentView.addConstraints(constraintsWarning)
+        
+        let constraintsNameWarning = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsNameWarning {
+            constraint.identifier = "$DMFeedCell-NameWarning$"
+        }
+        contentView.addConstraints(constraintsNameWarning)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -222,7 +280,7 @@ class DMFeedCell: SwipeTableViewCell {
         }
         
         
-        
+        //TODO did I comment this out????
         //        let viewsDict = [
         //            "warning" : warningB,
         //            ]

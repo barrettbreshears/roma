@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2017-2018 MessageKit
+ Copyright (c) 2017-2019 MessageKit
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
  */
 
 import Foundation
+import UIKit
 
 open class TextMessageSizeCalculator: MessageSizeCalculator {
 
@@ -49,7 +50,8 @@ open class TextMessageSizeCalculator: MessageSizeCalculator {
         var messageContainerSize: CGSize
         let attributedText: NSAttributedString
 
-        switch message.kind {
+        let textMessageKind = message.kind.textMessageKind
+        switch textMessageKind {
         case .attributedText(let text):
             attributedText = text
         case .text(let text), .emoji(let text):

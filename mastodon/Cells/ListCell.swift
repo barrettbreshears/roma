@@ -36,8 +36,17 @@ class ListCell: SwipeTableViewCell {
             "name" : userName,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-15-[name]-15-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-16-[name]-16-|", options: [], metrics: nil, views: viewsDict))
+        let horizontalContstraintsName = NSLayoutConstraint.constraints(withVisualFormat: "H:|-15-[name]-15-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in horizontalContstraintsName {
+            constraint.identifier = "$ListCell-HorizontalName$"
+        }
+        contentView.addConstraints(horizontalContstraintsName)
+        
+        let verticalConstraintsName = NSLayoutConstraint.constraints(withVisualFormat: "V:|-16-[name]-16-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in horizontalContstraintsName {
+            constraint.identifier = "$ListCell-VerticalName$"
+        }
+        contentView.addConstraints(verticalConstraintsName)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -94,8 +103,17 @@ class ListCell2: SwipeTableViewCell {
             "name" : userName,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-15-[name]-15-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-16-[name]-16-|", options: [], metrics: nil, views: viewsDict))
+        let horizontalConstraintsName = NSLayoutConstraint.constraints(withVisualFormat: "H:|-15-[name]-15-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in horizontalConstraintsName {
+            constraint.identifier = "$ListCell2-HorizontalName$"
+        }
+        contentView.addConstraints(horizontalConstraintsName)
+        
+        let verticalConstraintsName = NSLayoutConstraint.constraints(withVisualFormat: "V:|-16-[name]-16-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in verticalConstraintsName {
+            constraint.identifier = "$ListCell2-VerticalName$"
+        }
+        contentView.addConstraints(verticalConstraintsName)
     }
     
     required init?(coder aDecoder: NSCoder) {

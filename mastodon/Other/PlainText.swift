@@ -16,6 +16,7 @@ extension String {
         z = z.replacingOccurrences(of: "<br/>", with: "\n", options: NSString.CompareOptions.regularExpression, range: nil)
         z = z.replacingOccurrences(of: "<[^>]+>", with: "", options: NSString.CompareOptions.regularExpression, range: nil)
         z = z.replacingOccurrences(of: "&apos;", with: "'", options: NSString.CompareOptions.regularExpression, range: nil)
+        z = z.replacingOccurrences(of: "&#39;", with: "'", options: NSString.CompareOptions.regularExpression, range: nil)
         z = z.replacingOccurrences(of: "&quot;", with: "\"", options: NSString.CompareOptions.regularExpression, range: nil)
         z = z.replacingOccurrences(of: "&amp;", with: "&", options: NSString.CompareOptions.regularExpression, range: nil)
         z = z.replacingOccurrences(of: "&lt;", with: "<", options: NSString.CompareOptions.regularExpression, range: nil)

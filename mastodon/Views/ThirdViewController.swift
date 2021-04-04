@@ -18,6 +18,7 @@ import SJFluidSegmentedControl
 import MessageUI
 import CropViewController
 import MobileCoreServices
+import SKPhotoBrowser
 
 class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, CrownControlDelegate, MFMailComposeViewControllerDelegate, UIGestureRecognizerDelegate, CropViewControllerDelegate, UITableViewDragDelegate {
     
@@ -802,10 +803,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Updated Display Picture".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = StoreStruct.currentUser.displayName
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                            statusAlert.show()
+                            statusAlert.show(withOffset: CGFloat(0))
                         }
                     }
                 }
@@ -827,10 +828,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Updated Header".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = StoreStruct.currentUser.displayName
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                            statusAlert.show()
+                            statusAlert.show(withOffset: CGFloat(0))
                         }
                     }
                 }
@@ -1224,15 +1225,18 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
         
         if let indexPath = tableView.indexPathForSelectedRow {
             self.tableView.deselectRow(at: indexPath, animated: true)
-            let request = Statuses.status(id: zzz[indexPath.row].reblog?.id ?? zzz[indexPath.row].id)
-            StoreStruct.client.run(request) {[weak self] (statuses) in
-                if let stat = (statuses.value) {
-                    DispatchQueue.main.async {
-                        if let cell = self?.tableView.cellForRow(at: indexPath) as? MainFeedCell {
-                            cell.configure0(stat)
-                        }
-                        if let cell2 = self?.tableView.cellForRow(at: indexPath) as? MainFeedCellImage {
-                            cell2.configure0(stat)
+            //TODO: Find a better check for this out of bounds
+            if (indexPath.row >= 0 && indexPath.row < zzz.count) {
+                let request = Statuses.status(id: zzz[indexPath.row].reblog?.id ?? zzz[indexPath.row].id)
+                StoreStruct.client.run(request) {[weak self] (statuses) in
+                    if let stat = (statuses.value) {
+                        DispatchQueue.main.async {
+                            if let cell = self?.tableView.cellForRow(at: indexPath) as? MainFeedCell {
+                                cell.configure0(stat)
+                            }
+                            if let cell2 = self?.tableView.cellForRow(at: indexPath) as? MainFeedCellImage {
+                                cell2.configure0(stat)
+                            }
                         }
                     }
                 }
@@ -1607,19 +1611,19 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let statusAlert = StatusAlert()
                 statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                 statusAlert.title = "Follow Request Sent".localized
-                statusAlert.contentColor = Colours.grayDark
+                statusAlert.tintColor = Colours.grayDark
                 statusAlert.message = self.chosenUser.displayName
                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                    statusAlert.show()
+                    statusAlert.show(withOffset: CGFloat(0))
                 }
             } else {
                 let statusAlert = StatusAlert()
                 statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                 statusAlert.title = "Followed".localized
-                statusAlert.contentColor = Colours.grayDark
+                statusAlert.tintColor = Colours.grayDark
                 statusAlert.message = self.chosenUser.displayName
                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                    statusAlert.show()
+                    statusAlert.show(withOffset: CGFloat(0))
                 }
             }
 
@@ -1640,10 +1644,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let statusAlert = StatusAlert()
             statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
             statusAlert.title = "Unfollowed".localized
-            statusAlert.contentColor = Colours.grayDark
+            statusAlert.tintColor = Colours.grayDark
             statusAlert.message = self.chosenUser.displayName
             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                statusAlert.show()
+                statusAlert.show(withOffset: CGFloat(0))
             }
 
             self.isFollowing = false
@@ -1762,19 +1766,19 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Follow Request Sent".localized
-                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.tintColor = Colours.grayDark
                             statusAlert.message = self.chosenUser.displayName
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                statusAlert.show()
+                                statusAlert.show(withOffset: CGFloat(0))
                             }
                         } else {
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Followed".localized
-                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.tintColor = Colours.grayDark
                             statusAlert.message = self.chosenUser.displayName
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                statusAlert.show()
+                                statusAlert.show(withOffset: CGFloat(0))
                             }
                         }
 
@@ -1795,10 +1799,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Unfollowed".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = self.chosenUser.displayName
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                            statusAlert.show()
+                            statusAlert.show(withOffset: CGFloat(0))
                         }
 
                         self.isFollowing = false
@@ -1826,10 +1830,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Removed Endorsement".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = self.chosenUser.displayName
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
 
                                     self.isEndorsed = false
@@ -1851,10 +1855,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Endorsed".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = self.chosenUser.displayName
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
 
                                     self.isEndorsed = true
@@ -1903,10 +1907,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Disabled Boosts".localized
-                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.tintColor = Colours.grayDark
                             statusAlert.message = self.chosenUser.displayName
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                statusAlert.show()
+                                statusAlert.show(withOffset: CGFloat(0))
                             }
                             let request = Accounts.follow(id: self.chosenUser.id, reblogs: false)
                             StoreStruct.client.run(request) {[weak self] (statuses) in
@@ -1922,10 +1926,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                             let statusAlert = StatusAlert()
                             statusAlert.image = UIImage(named: "boostlarge")?.maskWithColor(color: Colours.grayDark)
                             statusAlert.title = "Enabled Boosts".localized
-                            statusAlert.contentColor = Colours.grayDark
+                            statusAlert.tintColor = Colours.grayDark
                             statusAlert.message = self.chosenUser.displayName
                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                statusAlert.show()
+                                statusAlert.show(withOffset: CGFloat(0))
                             }
                             let request = Accounts.follow(id: self.chosenUser.id, reblogs: true)
                             StoreStruct.client.run(request) {[weak self] (statuses) in
@@ -1970,10 +1974,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "listbig")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Added".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = self.chosenUser.displayName
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
 
                                 }
@@ -2006,10 +2010,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Muted".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = self.chosenUser.displayName
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                            statusAlert.show()
+                            statusAlert.show(withOffset: CGFloat(0))
                         }
 
                         
@@ -2021,10 +2025,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Unmuted".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = self.chosenUser.displayName
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                            statusAlert.show()
+                            statusAlert.show(withOffset: CGFloat(0))
                         }
 
                        
@@ -2041,10 +2045,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Blocked".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = self.chosenUser.displayName
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                            statusAlert.show()
+                            statusAlert.show(withOffset: CGFloat(0))
                         }
 
                         
@@ -2056,10 +2060,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Unblocked".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = self.chosenUser.displayName
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                            statusAlert.show()
+                            statusAlert.show(withOffset: CGFloat(0))
                         }
 
                        
@@ -3076,11 +3080,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     //                    selection.selectionChanged()
                     
                     var newString = string
-                    zzz[indexPath.row].mentions.map({
-                        if $0.acct.contains(string) {
-                            newString = $0.id
-                        }
-                    })
+                    //TODO: Find a better check for this out of bounds
+                    if (indexPath.row >= 0 && indexPath.row < zzz.count) {
+                        zzz[indexPath.row].mentions.map({
+                            if $0.acct.contains(string) {
+                                newString = $0.id
+                            }
+                        })
+                    }
                     
                     let controller = ThirdViewController()
                     if string == StoreStruct.currentUser.username {} else {
@@ -3155,7 +3162,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     self.fetchMoreProfile()
                 }
                 
-                if indexPath.row <= zzz.count {
+                //TODO: figure out why this was indexPath.row <= zzz.count, as that could be out of bounds
+                if indexPath.row < zzz.count {
                 
                 if zzz[indexPath.row].reblog?.mediaAttachments.isEmpty ?? zzz[indexPath.row].mediaAttachments.isEmpty || (UserDefaults.standard.object(forKey: "sensitiveToggle") != nil) && (UserDefaults.standard.object(forKey: "sensitiveToggle") as? Int == 1) {
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell5", for: indexPath) as! MainFeedCell
@@ -3167,8 +3175,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
                     cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
                     cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
-
-                    cell.configure(zzz[indexPath.row])
+                    //TODO: Find a better check for this out of bounds
+                    if (indexPath.row >= 0 && indexPath.row < zzz.count) {
+                        cell.configure(zzz[indexPath.row])
+                    }
                     cell.profileImageView.tag = indexPath.row
                     cell.userTag.tag = indexPath.row
                     cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
@@ -3185,11 +3195,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
 
                         var newString = string
-                        zzz[indexPath.row].mentions.map({
-                            if $0.acct.contains(string) {
-                                newString = $0.id
-                            }
-                        })
+                        //TODO: Find a better check for this out of bounds
+                        if (indexPath.row >= 0 && indexPath.row < zzz.count) {
+                            zzz[indexPath.row].mentions.map({
+                                if $0.acct.contains(string) {
+                                    newString = $0.id
+                                }
+                            })
+                        }
                         
                         
                         let controller = ThirdViewController()
@@ -3262,14 +3275,16 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell6", for: indexPath) as! MainFeedCellImage
                     cell.delegate = self
 
-                    cell.rep1.tag = indexPath.row
-                    cell.like1.tag = indexPath.row
-                    cell.boost1.tag = indexPath.row
-                    cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
-                    cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
-                    cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
-
-                    cell.configure(zzz[indexPath.row])
+                    cell.replyBtn.tag = indexPath.row
+                    cell.likeBtn.tag = indexPath.row
+                    cell.boostBtn.tag = indexPath.row
+                    cell.replyBtn.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                    cell.likeBtn.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                    cell.boostBtn.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                    //TODO: Find a better check for this out of bounds
+                    if (indexPath.row >= 0 && indexPath.row < zzz.count) {
+                        cell.configure(zzz[indexPath.row])
+                    }
                     cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
                     cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
                     cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
@@ -3298,11 +3313,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
 
                         var newString = string
-                        zzz[indexPath.row].mentions.map({
-                            if $0.acct.contains(string) {
-                                newString = $0.id
-                            }
-                        })
+                        //TODO: Find a better check for this out of bounds
+                        if (indexPath.row >= 0 && indexPath.row < zzz.count) {
+                            zzz[indexPath.row].mentions.map({
+                                if $0.acct.contains(string) {
+                                    newString = $0.id
+                                }
+                            })
+                        }
                         
                         
                         let controller = ThirdViewController()
@@ -3376,14 +3394,16 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     let cell = tableView.dequeueReusableCell(withIdentifier: "cell6", for: indexPath) as! MainFeedCellImage
                     cell.delegate = self
                     
-                    cell.rep1.tag = indexPath.row
-                    cell.like1.tag = indexPath.row
-                    cell.boost1.tag = indexPath.row
-                    cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
-                    cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
-                    cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
-                    
-                    cell.configure(zzz[indexPath.row])
+                    cell.replyBtn.tag = indexPath.row
+                    cell.likeBtn.tag = indexPath.row
+                    cell.boostBtn.tag = indexPath.row
+                    cell.replyBtn.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                    cell.likeBtn.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                    cell.boostBtn.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                    //TODO: Find a better check for this out of bounds
+                    if (indexPath.row >= 0 && indexPath.row < zzz.count) {
+                        cell.configure(zzz[indexPath.row])
+                    }
                     cell.mainImageView.addTarget(self, action: #selector(self.tappedImage(_:)), for: .touchUpInside)
                     cell.smallImage1.addTarget(self, action: #selector(self.tappedImageS1(_:)), for: .touchUpInside)
                     cell.smallImage2.addTarget(self, action: #selector(self.tappedImageS2(_:)), for: .touchUpInside)
@@ -3412,11 +3432,14 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         }
                         
                         var newString = string
-                        zzz[indexPath.row].mentions.map({
-                            if $0.acct.contains(string) {
-                                newString = $0.id
-                            }
-                        })
+                        //TODO: Find a better check for this out of bounds
+                        if (indexPath.row >= 0 && indexPath.row < zzz.count) {
+                            zzz[indexPath.row].mentions.map({
+                                if $0.acct.contains(string) {
+                                    newString = $0.id
+                                }
+                            })
+                        }
                         
                         
                         let controller = ThirdViewController()
@@ -3554,8 +3577,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     let originImage = sender.currentImage
                     if originImage != nil {
                         let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.headerImageView)
-                        browser.displayToolbar = true
-                        browser.displayAction = true
+                        // TODO FIX THIS browser.displayToolbar = true
+                        // TODO FIX THIS browser.displayAction = true
                         browser.delegate = self
                         browser.initializePageIndex(0)
                         present(browser, animated: true, completion: nil)
@@ -3573,8 +3596,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let originImage = sender.currentImage
             if originImage != nil {
                 let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.headerImageView)
-                browser.displayToolbar = true
-                browser.displayAction = true
+                // TODO FIX THIS browser.displayToolbar = true
+                // TODO FIX THIS browser.displayAction = true
                 browser.delegate = self
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
@@ -3595,8 +3618,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.headerImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -3617,8 +3640,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.headerImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -3650,8 +3673,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let originImage = sender.currentImage
             if originImage != nil {
                 let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.profileImageView)
-                browser.displayToolbar = true
-                browser.displayAction = true
+                // TODO FIX THIS browser.displayToolbar = true
+                // TODO FIX THIS browser.displayAction = true
                 browser.delegate = self
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
@@ -3667,8 +3690,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let originImage = sender.currentImage
             if originImage != nil {
                 let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.profileImageView)
-                browser.displayToolbar = true
-                browser.displayAction = true
+                // TODO FIX THIS browser.displayToolbar = true
+                // TODO FIX THIS browser.displayAction = true
                 browser.delegate = self
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
@@ -3686,8 +3709,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.profileImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -3702,8 +3725,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     let originImage = sender.currentImage
                     if originImage != nil {
                         let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.profileImageView)
-                        browser.displayToolbar = true
-                        browser.displayAction = true
+                        // TODO FIX THIS browser.displayToolbar = true
+                        // TODO FIX THIS browser.displayAction = true
                         browser.delegate = self
                         browser.initializePageIndex(0)
                         present(browser, animated: true, completion: nil)
@@ -3722,8 +3745,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.profileImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -3738,8 +3761,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     let originImage = sender.currentImage
                     if originImage != nil {
                         let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.profileImageView)
-                        browser.displayToolbar = true
-                        browser.displayAction = true
+                        // TODO FIX THIS browser.displayToolbar = true
+                        // TODO FIX THIS browser.displayAction = true
                         browser.delegate = self
                         browser.initializePageIndex(0)
                         present(browser, animated: true, completion: nil)
@@ -3870,8 +3893,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
             let originImage = sender.currentImage
             if originImage != nil {
                 let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                browser.displayToolbar = true
-                browser.displayAction = true
+                // TODO FIX THIS browser.displayToolbar = true
+                // TODO FIX THIS browser.displayAction = true
                 browser.delegate = self
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
@@ -3938,8 +3961,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -4005,8 +4028,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage2)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(1)
                     present(browser, animated: true, completion: nil)
@@ -4073,8 +4096,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage3)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(2)
                     present(browser, animated: true, completion: nil)
@@ -4142,8 +4165,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage4)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(3)
                     present(browser, animated: true, completion: nil)
@@ -4201,8 +4224,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         } else {
                             cell.moreImage.image = nil
                         }
-                        cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
-                        cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+                        cell.boostBtn.setTitle("\((Int(cell.boostBtn.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.boostBtn.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -4235,13 +4258,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 2)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+                            cell.boostBtn.setTitle("\((Int(cell.boostBtn.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.boostBtn.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
-                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
+                            cell.boostBtn.setTitle("\((Int(cell.boostBtn.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.boostBtn.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
                             cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         }
                         cell.hideSwipe(animated: true)
@@ -4293,8 +4316,8 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                         } else {
                             cell.moreImage.image = nil
                         }
-                        cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
-                        cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+                        cell.likeBtn.setTitle("\((Int(cell.likeBtn.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.likeBtn.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -4324,13 +4347,13 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 2)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+                            cell.likeBtn.setTitle("\((Int(cell.likeBtn.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.likeBtn.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
-                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
+                            cell.likeBtn.setTitle("\((Int(cell.likeBtn.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.likeBtn.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
                             cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         }
                         cell.hideSwipe(animated: true)
@@ -4700,10 +4723,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                             let statusAlert = StatusAlert()
                                             statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                             statusAlert.title = "Unpinned".localized
-                                            statusAlert.contentColor = Colours.grayDark
+                                            statusAlert.tintColor = Colours.grayDark
                                             statusAlert.message = "This Toot"
                                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                                statusAlert.show()
+                                                statusAlert.show(withOffset: CGFloat(0))
                                             }
                                         }
                                     }
@@ -4719,10 +4742,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                             let statusAlert = StatusAlert()
                                             statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                             statusAlert.title = "Pinned".localized
-                                            statusAlert.contentColor = Colours.grayDark
+                                            statusAlert.tintColor = Colours.grayDark
                                             statusAlert.message = "This Toot"
                                             if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                                statusAlert.show()
+                                                statusAlert.show(withOffset: CGFloat(0))
                                             }
                                         }
                                     }
@@ -4769,10 +4792,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         let statusAlert = StatusAlert()
                                         statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Deleted".localized
-                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.tintColor = Colours.grayDark
                                         statusAlert.message = "Your Toot"
                                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                            statusAlert.show()
+                                            statusAlert.show(withOffset: CGFloat(0))
                                         }
                                         //sto.remove(at: indexPath.row)
                                         //self.tableView.reloadData()
@@ -4967,10 +4990,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Muted".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
 
                                    
@@ -4982,10 +5005,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Unmuted".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
 
                                    
@@ -5003,10 +5026,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Blocked".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
 
                                     
@@ -5018,10 +5041,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Unblocked".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = sto[indexPath.row].reblog?.account.displayName ?? sto[indexPath.row].account.displayName
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
 
                                     
@@ -5048,10 +5071,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         let statusAlert = StatusAlert()
                                         statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Reported".localized
-                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.tintColor = Colours.grayDark
                                         statusAlert.message = "Harassment"
                                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                            statusAlert.show()
+                                            statusAlert.show(withOffset: CGFloat(0))
                                         }
 
                                         
@@ -5068,10 +5091,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         let statusAlert = StatusAlert()
                                         statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Reported".localized
-                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.tintColor = Colours.grayDark
                                         statusAlert.message = "No Content Warning"
                                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                            statusAlert.show()
+                                            statusAlert.show(withOffset: CGFloat(0))
                                         }
 
                                         
@@ -5088,10 +5111,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
                                         let statusAlert = StatusAlert()
                                         statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Reported".localized
-                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.tintColor = Colours.grayDark
                                         statusAlert.message = "Spam"
                                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                            statusAlert.show()
+                                            statusAlert.show(withOffset: CGFloat(0))
                                         }
 
                                         
@@ -5310,7 +5333,10 @@ class ThirdViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //            switch (deviceIdiom) {
 //            case .phone :
                 let controller = DetailViewController()
-                controller.mainStatus.append(zzz[indexPath.row])
+                //TODO: Find a better check for this out of bounds
+                if (indexPath.row >= 0 && indexPath.row < zzz.count) {
+                    controller.mainStatus.append(zzz[indexPath.row])
+                }
                 self.navigationController?.pushViewController(controller, animated: true)
 //            case .pad:
 //                let controller = DetailViewController()

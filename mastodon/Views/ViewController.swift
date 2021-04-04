@@ -1482,10 +1482,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         cell.configure(StoreStruct.statusSearch[indexPath.row])
                         cell.warningB.backgroundColor = Colours.grayDark3
                         cell.moreImage.backgroundColor = Colours.grayDark3
-                        cell.rep1.backgroundColor = Colours.grayDark3
-                        cell.like1.backgroundColor = Colours.grayDark3
-                        cell.boost1.backgroundColor = Colours.grayDark3
-                        cell.more1.backgroundColor = Colours.grayDark3
+                        cell.replyBtn.backgroundColor = Colours.grayDark3
+                        cell.likeBtn.backgroundColor = Colours.grayDark3
+                        cell.boostBtn.backgroundColor = Colours.grayDark3
+                        cell.moreBtn.backgroundColor = Colours.grayDark3
                         cell.profileImageView.tag = indexPath.row
                         cell.profileImageView.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
                         cell.userTag.addTarget(self, action: #selector(self.didTouchProfile), for: .touchUpInside)
@@ -1663,10 +1663,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                     let statusAlert = StatusAlert()
                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                     statusAlert.title = "Deleted".localized
-                    statusAlert.contentColor = Colours.grayDark
+                    statusAlert.tintColor = Colours.grayDark
                     statusAlert.message = StoreStruct.allLists[indexPath.row].title
                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
 
                     let request = Lists.delete(id: StoreStruct.allLists[indexPath.row].id)
@@ -1722,10 +1722,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Removed".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = StoreStruct.allLists[indexPath.row].title
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                            statusAlert.show()
+                            statusAlert.show(withOffset: CGFloat(0))
                         }
 
                         let request = Lists.delete(id: StoreStruct.allLists[indexPath.row].id)
@@ -1783,10 +1783,10 @@ class ViewController: UITabBarController, UITabBarControllerDelegate, UITextFiel
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Removed".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = StoreStruct.instanceLocalToAdd[indexPath.row]
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
 
                         StoreStruct.instanceLocalToAdd.remove(at: indexPath.row)

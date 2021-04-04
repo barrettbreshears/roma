@@ -12,6 +12,7 @@ import SJFluidSegmentedControl
 import StatusAlert
 import AVKit
 import AVFoundation
+import SKPhotoBrowser
 
 class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate, SwipeTableViewCellDelegate, UIGestureRecognizerDelegate {
     
@@ -332,8 +333,8 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
                     let originImage = sender.currentImage
                     if originImage != nil {
                         let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                        browser.displayToolbar = true
-                        browser.displayAction = true
+                        // TODO FIX THIS browser.displayToolbar = true
+                        // TODO FIX THIS browser.displayAction = true
                         browser.delegate = self
                         browser.initializePageIndex(0)
                         present(browser, animated: true, completion: nil)
@@ -381,10 +382,10 @@ class ScheduledStatusesViewController: UIViewController, UITableViewDelegate, UI
                         let statusAlert = StatusAlert()
                         statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                         statusAlert.title = "Deleted".localized
-                        statusAlert.contentColor = Colours.grayDark
+                        statusAlert.tintColor = Colours.grayDark
                         statusAlert.message = "Not scheduled anymore"
                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                            statusAlert.show()
+                            statusAlert.show(withOffset: CGFloat(0))
                         }
                         
                         let request0 = Statuses.allScheduled()

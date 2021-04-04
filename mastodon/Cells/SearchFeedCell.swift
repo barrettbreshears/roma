@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import PINRemoteImage
+import ActiveLabel
 
 class SearchFeedCell: SwipeTableViewCell {
     
@@ -55,7 +56,13 @@ class SearchFeedCell: SwipeTableViewCell {
             profileImageView.layer.cornerRadius = 0
             profileImageView2.layer.cornerRadius = 0
         }
+        profileImageView.contentHorizontalAlignment = .fill
+        profileImageView.contentVerticalAlignment = .fill
+        profileImageView.imageView?.contentMode = .scaleAspectFill
         profileImageView.layer.masksToBounds = true
+        profileImageView2.contentHorizontalAlignment = .fill
+        profileImageView2.contentVerticalAlignment = .fill
+        profileImageView2.imageView?.contentMode = .scaleAspectFill
         profileImageView2.layer.masksToBounds = true
         
         warningB.titleEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
@@ -117,19 +124,19 @@ class SearchFeedCell: SwipeTableViewCell {
             ]
         
         
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-12-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$SearchFeedCell-HorizontalImageNameArtistMoreDate$", withVisualFormat: "H:|-12-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-12-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$SearchFeedCell-HorizontalImage2$", withVisualFormat: "H:|-30-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
 //            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[image(40)]-13-[artist]-(>=5)-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-38-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$SearchFeedCell-HorizontalImage40Episodes$", withVisualFormat: "H:|-12-[image(40)]-13-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$SearchFeedCell-VerticalMore16$", withVisualFormat: "V:|-18-[more(16)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$SearchFeedCell-VerticalDate$", withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$SearchFeedCell-VerticalArtist$", withVisualFormat: "V:|-12-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$SearchFeedCell-VerticalImage40$", withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$SearchFeedCell-VerticalImage2$", withVisualFormat: "V:|-38-[image2(26)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$SearchFeedCell-VerticalNameEpisodes$", withVisualFormat: "V:|-18-[name]-1-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
             
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-63-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-54-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$SearchFeedCell-HorizontalWarning$", withVisualFormat: "H:|-63-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$SearchFeedCell-VerticalWarning$", withVisualFormat: "V:|-54-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
         
     }
     

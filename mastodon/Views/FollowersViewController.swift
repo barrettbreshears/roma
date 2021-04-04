@@ -557,10 +557,10 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Unfollowed".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = sto[indexPath.row].displayName
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                     let request = Accounts.unfollow(id: sto[indexPath.row].id)
@@ -579,19 +579,19 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                                         let statusAlert = StatusAlert()
                                         statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Follow Request Sent".localized
-                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.tintColor = Colours.grayDark
                                         statusAlert.message = sto[indexPath.row].displayName
                                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                            statusAlert.show()
+                                            statusAlert.show(withOffset: CGFloat(0))
                                         }
                                     } else {
                                         let statusAlert = StatusAlert()
                                         statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Followed".localized
-                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.tintColor = Colours.grayDark
                                         statusAlert.message = sto[indexPath.row].displayName
                                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                            statusAlert.show()
+                                            statusAlert.show(withOffset: CGFloat(0))
                                         }
                                     }
                                     
@@ -631,10 +631,10 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                                                 let statusAlert = StatusAlert()
                                                 statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                                                 statusAlert.title = "Endorsed".localized
-                                                statusAlert.contentColor = Colours.grayDark
+                                                statusAlert.tintColor = Colours.grayDark
                                                 statusAlert.message = sto[indexPath.row].displayName
                                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                                    statusAlert.show()
+                                                    statusAlert.show(withOffset: CGFloat(0))
                                                 }
                                             }
                                         }
@@ -651,10 +651,10 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                                                 let statusAlert = StatusAlert()
                                                 statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                                                 statusAlert.title = "Removed Endorsement".localized
-                                                statusAlert.contentColor = Colours.grayDark
+                                                statusAlert.tintColor = Colours.grayDark
                                                 statusAlert.message = sto[indexPath.row].displayName
                                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                                    statusAlert.show()
+                                                    statusAlert.show(withOffset: CGFloat(0))
                                                 }
                                             }
                                         }
@@ -699,10 +699,10 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                                                     let statusAlert = StatusAlert()
                                                     statusAlert.image = UIImage(named: "listbig")?.maskWithColor(color: Colours.grayDark)
                                                     statusAlert.title = "Added".localized
-                                                    statusAlert.contentColor = Colours.grayDark
+                                                    statusAlert.tintColor = Colours.grayDark
                                                     statusAlert.message = sto[indexPath.row].displayName
                                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                                        statusAlert.show()
+                                                        statusAlert.show(withOffset: CGFloat(0))
                                                     }
                                                     
                                                 }
@@ -739,10 +739,10 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Muted".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = sto[indexPath.row].displayName
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                     let request = Accounts.mute(id: sto[indexPath.row].id)
@@ -760,10 +760,10 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Unmuted".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = sto[indexPath.row].displayName
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                     let request = Accounts.unmute(id: sto[indexPath.row].id)
@@ -792,10 +792,10 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Blocked".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = sto[indexPath.row].displayName
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                     let request = Accounts.block(id: sto[indexPath.row].id)
@@ -813,10 +813,10 @@ class FollowersViewController: UIViewController, SJFluidSegmentedControlDataSour
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Unblocked".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = sto[indexPath.row].displayName
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                     let request = Accounts.unblock(id: sto[indexPath.row].id)

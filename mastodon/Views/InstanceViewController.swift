@@ -15,6 +15,7 @@ import SAConfettiView
 import AVKit
 import AVFoundation
 import MobileCoreServices
+import SKPhotoBrowser
 
 class InstanceViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate, UIGestureRecognizerDelegate, UITableViewDragDelegate {
     
@@ -537,12 +538,12 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                 cell.delegate = self
                 cell.backgroundColor = Colours.white
                 
-                cell.rep1.tag = indexPath.row
-                cell.like1.tag = indexPath.row
-                cell.boost1.tag = indexPath.row
-                cell.rep1.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
-                cell.like1.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
-                cell.boost1.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
+                cell.replyBtn.tag = indexPath.row
+                cell.likeBtn.tag = indexPath.row
+                cell.boostBtn.tag = indexPath.row
+                cell.replyBtn.addTarget(self, action: #selector(self.didTouchReply), for: .touchUpInside)
+                cell.likeBtn.addTarget(self, action: #selector(self.didTouchLike), for: .touchUpInside)
+                cell.boostBtn.addTarget(self, action: #selector(self.didTouchBoost), for: .touchUpInside)
                 
                 cell.configure(StoreStruct.newInstanceTags[indexPath.row])
                 cell.profileImageView.tag = indexPath.row
@@ -781,8 +782,8 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
             let originImage = sender.currentImage
             if originImage != nil {
                 let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                browser.displayToolbar = true
-                browser.displayAction = true
+                // TODO FIX THIS browser.displayToolbar = true
+                // TODO FIX THIS browser.displayAction = true
                 browser.delegate = self
                 browser.initializePageIndex(0)
                 present(browser, animated: true, completion: nil)
@@ -841,8 +842,8 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -900,8 +901,8 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage2)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(1)
                     present(browser, animated: true, completion: nil)
@@ -960,8 +961,8 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage3)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(2)
                     present(browser, animated: true, completion: nil)
@@ -1021,8 +1022,8 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage4)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(3)
                     present(browser, animated: true, completion: nil)
@@ -1074,8 +1075,8 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                         } else {
                             cell.moreImage.image = nil
                         }
-                        cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
-                        cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+                        cell.boostBtn.setTitle("\((Int(cell.boostBtn.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.boostBtn.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -1105,13 +1106,13 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.favourited ?? sto[sender.tag].favourited ?? false || StoreStruct.allLikes.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+                            cell.boostBtn.setTitle("\((Int(cell.boostBtn.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.boostBtn.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
-                            cell.boost1.setTitle("\((Int(cell.boost1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
+                            cell.boostBtn.setTitle("\((Int(cell.boostBtn.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.boostBtn.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
                             cell.moreImage.image = UIImage(named: "boost0")?.maskWithColor(color: Colours.green)
                         }
                         cell.hideSwipe(animated: true)
@@ -1155,8 +1156,8 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                         } else {
                             cell.moreImage.image = nil
                         }
-                        cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
-                        cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+                        cell.likeBtn.setTitle("\((Int(cell.likeBtn.titleLabel?.text ?? "0") ?? 1) - 1)", for: .normal)
+                        cell.likeBtn.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                         cell.hideSwipe(animated: true)
                     }
                 }
@@ -1185,13 +1186,13 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                     } else {
                         let cell = theTable.cellForRow(at: IndexPath(row: sender.tag, section: 0)) as! MainFeedCellImage
                         if sto[sender.tag].reblog?.reblogged ?? sto[sender.tag].reblogged ?? false || StoreStruct.allBoosts.contains(sto[sender.tag].reblog?.id ?? sto[sender.tag].id) {
-                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+                            cell.likeBtn.setTitle("\((Int(cell.likeBtn.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.likeBtn.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
                             cell.moreImage.image = nil
                             cell.moreImage.image = UIImage(named: "fifty")?.maskWithColor(color: Colours.lightBlue)
                         } else {
-                            cell.like1.setTitle("\((Int(cell.like1.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
-                            cell.like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
+                            cell.likeBtn.setTitle("\((Int(cell.likeBtn.titleLabel?.text ?? "0") ?? 1) + 1)", for: .normal)
+                            cell.likeBtn.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
                             cell.moreImage.image = UIImage(named: "like0")?.maskWithColor(color: Colours.orange)
                         }
                         cell.hideSwipe(animated: true)
@@ -1388,10 +1389,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                         let statusAlert = StatusAlert()
                                         statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Unpinned".localized
-                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.tintColor = Colours.grayDark
                                         statusAlert.message = "This Status"
                                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                     }
                                 }
@@ -1407,10 +1408,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                         let statusAlert = StatusAlert()
                                         statusAlert.image = UIImage(named: "pinnedlarge")?.maskWithColor(color: Colours.grayDark)
                                         statusAlert.title = "Pinned".localized
-                                        statusAlert.contentColor = Colours.grayDark
+                                        statusAlert.tintColor = Colours.grayDark
                                         statusAlert.message = "This Status"
                                         if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                     }
                                 }
@@ -1452,10 +1453,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Deleted".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Your Status"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                     //sto.remove(at: indexPath.row)
                                     //self.tableView.reloadData()
@@ -1647,10 +1648,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Muted".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                 
                                 let request = Accounts.mute(id: sto[indexPath.row].account.id)
@@ -1668,10 +1669,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Unmuted".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                 
                                 let request = Accounts.unmute(id: sto[indexPath.row].account.id)
@@ -1695,10 +1696,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Blocked".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                 
                                 let request = Accounts.block(id: sto[indexPath.row].account.id)
@@ -1716,10 +1717,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Unblocked".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                 
                                 let request = Accounts.unblock(id: sto[indexPath.row].account.id)
@@ -1753,10 +1754,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Harassment"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Harassment")
@@ -1779,10 +1780,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "No Content Warning"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "No Content Warning")
@@ -1805,10 +1806,10 @@ class InstanceViewController: UIViewController, UITableViewDelegate, UITableView
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Spam"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].reblog?.account.id ?? sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].reblog?.id ?? sto[indexPath.row].id], reason: "Spam")

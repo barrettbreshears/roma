@@ -11,6 +11,7 @@ import UIKit
 import SJFluidSegmentedControl
 import SafariServices
 import StatusAlert
+import SKPhotoBrowser
 
 class FollowRequestsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate {
     
@@ -265,10 +266,10 @@ class FollowRequestsViewController: UIViewController, UITableViewDelegate, UITab
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Accepted".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = self.currentTags[indexPath.row].displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                 
                                 self.currentTags.remove(at: indexPath.row)
@@ -292,10 +293,10 @@ class FollowRequestsViewController: UIViewController, UITableViewDelegate, UITab
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "profilelarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Rejected".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = self.currentTags[indexPath.row].displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                                 
                                 self.currentTags.remove(at: indexPath.row)

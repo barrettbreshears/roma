@@ -40,6 +40,9 @@ class FollowersCell: SwipeTableViewCell {
         if (UserDefaults.standard.object(forKey: "proCorner") != nil && UserDefaults.standard.object(forKey: "proCorner") as! Int == 2) {
             profileImageView.layer.cornerRadius = 0
         }
+        profileImageView.contentHorizontalAlignment = .fill
+        profileImageView.contentVerticalAlignment = .fill
+        profileImageView.imageView?.contentMode = .scaleAspectFill
         profileImageView.layer.masksToBounds = true
         
         userName.numberOfLines = 0
@@ -68,11 +71,35 @@ class FollowersCell: SwipeTableViewCell {
             "episodes" : toot,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[name]-2-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-4-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[artist]-4-[episodes]-18-|", options: [], metrics: nil, views: viewsDict))
+        let constraintsImage40NameArtist = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[name]-2-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsImage40NameArtist {
+            constraint.identifier = "$FollowersCell-Image40NameArtist$"
+        }
+        contentView.addConstraints(constraintsImage40NameArtist)
+        
+        let constraintsImage40Episodes = NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[episodes]-12-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsImage40Episodes {
+            constraint.identifier = "$FollowersCell-Image40Episodes$"
+        }
+        contentView.addConstraints(constraintsImage40Episodes)
+        
+        let constraintsImage40 = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]-(>=12)-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsImage40 {
+            constraint.identifier = "$FollowersCell-Image40$"
+        }
+        contentView.addConstraints(constraintsImage40)
+        
+        let constraintsNameEpisodes = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-4-[episodes]-18-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsNameEpisodes {
+            constraint.identifier = "$FollowersCell-NameEpisodes$"
+        }
+        contentView.addConstraints(constraintsNameEpisodes)
+        
+        let constraintsArtistEpisodes = NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[artist]-4-[episodes]-18-|", options: [], metrics: nil, views: viewsDict)
+        for constraint in constraintsArtistEpisodes {
+            constraint.identifier = "$FollowersCell-ArtistEpisodes$"
+        }
+        contentView.addConstraints(constraintsArtistEpisodes)
     }
     
     required init?(coder aDecoder: NSCoder) {

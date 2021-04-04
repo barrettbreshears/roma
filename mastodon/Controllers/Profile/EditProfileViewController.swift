@@ -8,6 +8,10 @@
 
 import UIKit
 import CropViewController
+import DKImagePickerController
+import DKCamera
+import DKPhotoGallery
+import Photos
 
 class EditProfileViewController: UITableViewController {
 
@@ -126,7 +130,11 @@ class EditProfileViewController: UITableViewController {
                 return
             }
             if assets.count > 0 {
-                assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                let options = PHImageRequestOptions()
+                options.isSynchronous = true
+                options.deliveryMode = .fastFormat
+                options.resizeMode = .none
+                assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                     self.cropViewController = CropViewController(image: image ?? UIImage())
                     self.cropViewController.delegate = self
                     self.cropViewController.aspectRatioPreset = .presetSquare
@@ -157,7 +165,11 @@ class EditProfileViewController: UITableViewController {
                 return
             }
             if assets.count > 0 {
-                assets[0].fetchOriginalImage(true, completeBlock: { image, info in
+                let options = PHImageRequestOptions()
+                options.isSynchronous = true
+                options.deliveryMode = .fastFormat
+                options.resizeMode = .none
+                assets[0].fetchOriginalImage(options: options, completeBlock: { image, info in
                     self.cropViewController = CropViewController(image: image ?? UIImage())
                     self.cropViewController.delegate = self
                     self.cropViewController.aspectRatioPreset = .preset3x1

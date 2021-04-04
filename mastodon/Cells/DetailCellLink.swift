@@ -71,10 +71,18 @@ class DetailCellLink: UITableViewCell {
         
         let viewsDict = [
             "containerView" : containerView,
-            ]
+        ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[containerView]-20-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[containerView(90)]-12-|", options: [], metrics: nil, views: viewsDict))
+        let metrics = [
+            "horizontalMargin": 20,
+            "top": 10,
+            "bottom": 12,
+            "containerHeight": 90
+        ]
+        
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellLink-ContainerView$", withVisualFormat: "H:|-horizontalMargin@999-[containerView]-horizontalMargin@999-|", options: [], metrics: metrics, views: viewsDict))
+        
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellLink-ContainerView90$", withVisualFormat: "V:|-top@999-[containerView(containerHeight)]-bottom@999-|", options: [], metrics: metrics, views: viewsDict))
     }
     
     required init?(coder aDecoder: NSCoder) {

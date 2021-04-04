@@ -11,6 +11,7 @@ import UIKit
 import PINRemoteImage
 import AVKit
 import AVFoundation
+import SKPhotoBrowser
 
 class AllMediaViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, UIGestureRecognizerDelegate {
     
@@ -309,8 +310,8 @@ class AllMediaViewController: UIViewController, UICollectionViewDelegate, UIColl
                 let originImage = cell.image.image
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.image)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)

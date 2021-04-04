@@ -15,6 +15,7 @@ import SAConfettiView
 import UserNotifications
 import Disk
 import PINRemoteImage
+import SKPhotoBrowser
 
 class GeneralSettingsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate, UIGestureRecognizerDelegate, UNUserNotificationCenterDelegate {
     

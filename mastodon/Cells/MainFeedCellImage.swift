@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import PINRemoteImage
+import ActiveLabel
 
 class MainFeedCellImage: SwipeTableViewCell {
 
@@ -24,10 +25,10 @@ class MainFeedCellImage: SwipeTableViewCell {
     var moreImage = UIImageView()
     var imageCountTag = UIButton()
 
-    var rep1 = UIButton()
-    var like1 = UIButton()
-    var boost1 = UIButton()
-    var more1 = UIButton()
+    var replyBtn = UIButton()
+    var likeBtn = UIButton()
+    var boostBtn = UIButton()
+    var moreBtn = UIButton()
 
     var smallImage1 = UIButton()
     var smallImage2 = UIButton()
@@ -65,7 +66,13 @@ class MainFeedCellImage: SwipeTableViewCell {
             profileImageView.layer.cornerRadius = 0
             profileImageView2.layer.cornerRadius = 0
         }
+        profileImageView.contentHorizontalAlignment = .fill
+        profileImageView.contentVerticalAlignment = .fill
+        profileImageView.imageView?.contentMode = .scaleAspectFill
         profileImageView.layer.masksToBounds = true
+        profileImageView2.contentHorizontalAlignment = .fill
+        profileImageView2.contentVerticalAlignment = .fill
+        profileImageView2.imageView?.contentMode = .scaleAspectFill
         profileImageView2.layer.masksToBounds = true
 
         warningB.titleEdgeInsets = UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
@@ -159,47 +166,47 @@ class MainFeedCellImage: SwipeTableViewCell {
         contentView.addSubview(imageCountTag)
 
 
-        rep1.translatesAutoresizingMaskIntoConstraints = false
-        rep1.setImage(UIImage(named: "reply3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
-        rep1.backgroundColor = Colours.clear
-        rep1.layer.masksToBounds = true
+        replyBtn.translatesAutoresizingMaskIntoConstraints = false
+        replyBtn.setImage(UIImage(named: "reply3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+        replyBtn.backgroundColor = Colours.clear
+        replyBtn.layer.masksToBounds = true
         if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
-            self.rep1.alpha = 0
+            self.replyBtn.alpha = 0
         } else {
-            self.rep1.alpha = 1
+            self.replyBtn.alpha = 1
         }
-        like1.translatesAutoresizingMaskIntoConstraints = false
-        like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
-        like1.backgroundColor = Colours.clear
-        like1.layer.masksToBounds = true
+        likeBtn.translatesAutoresizingMaskIntoConstraints = false
+        likeBtn.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+        likeBtn.backgroundColor = Colours.clear
+        likeBtn.layer.masksToBounds = true
         if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
-            self.like1.alpha = 0
+            self.likeBtn.alpha = 0
         } else {
-            self.like1.alpha = 1
+            self.likeBtn.alpha = 1
         }
-        boost1.translatesAutoresizingMaskIntoConstraints = false
-        boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
-        boost1.backgroundColor = Colours.clear
-        boost1.layer.masksToBounds = true
+        boostBtn.translatesAutoresizingMaskIntoConstraints = false
+        boostBtn.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+        boostBtn.backgroundColor = Colours.clear
+        boostBtn.layer.masksToBounds = true
         if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
-            self.boost1.alpha = 0
+            self.boostBtn.alpha = 0
         } else {
-            self.boost1.alpha = 1
+            self.boostBtn.alpha = 1
         }
-        more1.translatesAutoresizingMaskIntoConstraints = false
-        more1.setImage(UIImage(named: "more")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
-        more1.backgroundColor = Colours.clear
-        more1.layer.masksToBounds = true
+        moreBtn.translatesAutoresizingMaskIntoConstraints = false
+        moreBtn.setImage(UIImage(named: "more")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+        moreBtn.backgroundColor = Colours.clear
+        moreBtn.layer.masksToBounds = true
         if (UserDefaults.standard.object(forKey: "tootpl") as? Int == 0) {
-            self.more1.alpha = 0
+            self.moreBtn.alpha = 0
         } else {
-            self.more1.alpha = 0
+            self.moreBtn.alpha = 1
         }
 
-        contentView.addSubview(rep1)
-        contentView.addSubview(like1)
-        contentView.addSubview(boost1)
-        contentView.addSubview(more1)
+        contentView.addSubview(replyBtn)
+        contentView.addSubview(likeBtn)
+        contentView.addSubview(boostBtn)
+        contentView.addSubview(moreBtn)
 
 
         contentView.addSubview(warningB)
@@ -227,40 +234,60 @@ class MainFeedCellImage: SwipeTableViewCell {
             "episodes" : toot,
             "more" : moreImage,
             "countTag" : imageCountTag,
-            "rep1" : rep1,
-            "like1" : like1,
-            "boost1" : boost1,
-            "more1" : more1,
+            "replyBtn" : replyBtn,
+            "likeBtn" : likeBtn,
+            "boostBtn" : boostBtn,
+            "moreBtn" : moreBtn,
             ]
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[image2(26)]", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-65-[mainImage]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-73-[mainImageBG]-20-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-HorizontalImage40NameArtistMoreDate$", withVisualFormat: "H:|-12-[image(40)]-13-[name]-2-[artist]-(>=5)-[more(16)]-4-[date]-12-|", options: [], metrics: nil, views: viewsDict))
+       
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[more(16)]", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-38-[image2(26)]", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-HorizontalImage226$", withVisualFormat: "H:|-30-[image2(26)]", options: [], metrics: nil, views: viewsDict))
+        
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-HorizontalImage40Episodes$", withVisualFormat: "H:|-12-[image(40)]-13-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
+        
+        
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-HorizontalMainImage$", withVisualFormat: "H:|-65-[mainImage]-12-|", options: [], metrics: nil, views: viewsDict))
+        
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-HorizontalMainImageBG$", withVisualFormat: "H:|-73-[mainImageBG]-20-|", options: [], metrics: nil, views: viewsDict))
+        
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-VerticalMore$", withVisualFormat: "V:|-18-[more(16)]", options: [], metrics: nil, views: viewsDict))
+        
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-VerticalDate$", withVisualFormat: "V:|-18-[date]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-VerticalImage40$", withVisualFormat: "V:|-18-[image(40)]", options: [], metrics: nil, views: viewsDict))
+        
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-VerticalImage226$", withVisualFormat: "V:|-38-[image2(26)]", options: [], metrics: nil, views: viewsDict))
 
-            if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(200)]-23-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImageBG(200)]-23-|", options: [], metrics: nil, views: viewsDict))
-            } else {
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImageBG(200)]-25-[rep1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(200)]-25-[like1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(200)]-25-[boost1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(200)]-25-[more1(20)]-18-|", options: [], metrics: nil, views: viewsDict))
-                contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-65-[rep1(36)]-20-[like1(40)]-11-[boost1(34)]-24-[more1(20)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-            }
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-12-[artist]-0-[episodes]-10-[mainImage(200)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
+            
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-tootpl-VerticalNameEpisodesMainImage$", withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImage(200)]-23-|", options: [], metrics: nil, views: viewsDict))
+            
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-tootpl-VerticalNameEpisodesMainImageBG$", withVisualFormat: "V:|-14-[name]-2-[episodes]-10-[mainImageBG(200)]-23-|", options: [], metrics: nil, views: viewsDict))
+        } else {
+            let vMetrics = [
+                "actionButtonHeight": 20,
+                "mainImageHeight": 200,
+                "spacingTop": 14,
+                "nameEpsSpacing": 2,
+                "epsMainImageSpacing": 10,
+                "mainImageActionsSpacing": 25,
+                "spacingBottom": 18
+            ]
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-no-tootpl-VerticalNameEpisodesMainImageReplyBtn$", withVisualFormat: "V:|-spacingTop-[name]-nameEpsSpacing-[episodes]-epsMainImageSpacing-[mainImage(mainImageHeight)]-mainImageActionsSpacing@999-[replyBtn(actionButtonHeight)]-spacingBottom-|", options: [], metrics: vMetrics, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-no-tootpl-VerticalNameEpisodesMainImageLikeBtn$", withVisualFormat: "V:|-spacingTop-[name]-nameEpsSpacing-[episodes]-epsMainImageSpacing-[mainImage(mainImageHeight)]-mainImageActionsSpacing@999-[likeBtn(actionButtonHeight)]-spacingBottom-|", options: [], metrics: vMetrics, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-no-tootpl-VerticalNameEpisodesMainImageBoostBtn$", withVisualFormat: "V:|-spacingTop-[name]-nameEpsSpacing-[episodes]-epsMainImageSpacing-[mainImage(mainImageHeight)]-mainImageActionsSpacing@999-[boostBtn(actionButtonHeight)]-spacingBottom-|", options: [], metrics: vMetrics, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-no-tootpl-VerticalNameEpisodesMainImageMoreBtn$", withVisualFormat: "V:|-spacingTop-[name]-nameEpsSpacing-[episodes]-epsMainImageSpacing-[mainImage(mainImageHeight)]-mainImageActionsSpacing@999-[moreBtn(actionButtonHeight)]-spacingBottom-|", options: [], metrics: vMetrics, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-no-tootpl-HorizontalReplyBtnLikeBtnBoostBtnMoreBtn$", withVisualFormat: "H:|-65-[replyBtn(36)]-20-[likeBtn(40)]-11-[boostBtn(34)]-24-[moreBtn(20)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        }
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-VerticalArtistEpisodesMainImage$", withVisualFormat: "V:|-14-[artist]-2-[episodes]", options: [], metrics: nil, views: viewsDict))
 
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-HorizontalCountTag30$", withVisualFormat: "H:|-5-[countTag(30)]", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-VerticalCountTag22$", withVisualFormat: "V:|-5-[countTag(22)]", options: [], metrics: nil, views: viewsDict))
 
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-63-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-HorizontalWarning$", withVisualFormat: "H:|-63-[warning]-9-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$MainFeedCellImage-VerticalNameWarning$", withVisualFormat: "V:|-14-[name]-1-[warning]-16-|", options: [], metrics: nil, views: viewsDict))
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -286,33 +313,35 @@ class MainFeedCellImage: SwipeTableViewCell {
         profileImageView2.backgroundColor = Colours.clear
         warningB.backgroundColor = Colours.clear
         moreImage.backgroundColor = Colours.clear
-        rep1.backgroundColor = Colours.clear
-        like1.backgroundColor = Colours.clear
-        boost1.backgroundColor = Colours.clear
-        more1.backgroundColor = Colours.clear
+        replyBtn.backgroundColor = Colours.clear
+        likeBtn.backgroundColor = Colours.clear
+        boostBtn.backgroundColor = Colours.clear
+        moreBtn.backgroundColor = Colours.clear
         toot.textColor = Colours.black
         
         if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {
-            self.rep1.alpha = 0
-            self.like1.alpha = 0
-            self.boost1.alpha = 0
+            self.replyBtn.alpha = 0
+            self.likeBtn.alpha = 0
+            self.boostBtn.alpha = 0
+            self.moreBtn.alpha = 0
         } else {
-            self.rep1.alpha = 1
-            self.like1.alpha = 1
-            self.boost1.alpha = 1
+            self.replyBtn.alpha = 1
+            self.likeBtn.alpha = 1
+            self.boostBtn.alpha = 1
+            self.moreBtn.alpha =  1
         }
         
-        rep1.setImage(UIImage(named: "reply3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
-        more1.setImage(UIImage(named: "more")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+        replyBtn.setImage(UIImage(named: "reply3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+        moreBtn.setImage(UIImage(named: "more")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
         if StoreStruct.allBoosts.contains(status.reblog?.id ?? status.id) || status.reblog?.reblogged ?? status.reblogged ?? false {
-            boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
+            boostBtn.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.green), for: .normal)
         } else {
-            boost1.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+            boostBtn.setImage(UIImage(named: "boost3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
         }
         if StoreStruct.allLikes.contains(status.reblog?.id ?? status.id) || status.reblog?.favourited ?? status.favourited ?? false {
-            like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
+            likeBtn.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.orange), for: .normal)
         } else {
-            like1.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
+            likeBtn.setImage(UIImage(named: "like3")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.21)), for: .normal)
         }
 
         if (UserDefaults.standard.object(forKey: "tootpl") == nil) || (UserDefaults.standard.object(forKey: "tootpl") as! Int == 0) {} else {
@@ -328,21 +357,21 @@ class MainFeedCellImage: SwipeTableViewCell {
             if boostc1 == "0" {
                 boostc1 = ""
             }
-            rep1.setTitle(repc1, for: .normal)
-            rep1.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
-            rep1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            rep1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
-            rep1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
-            like1.setTitle(likec1, for: .normal)
-            like1.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
-            like1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            like1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
-            like1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
-            boost1.setTitle(boostc1, for: .normal)
-            boost1.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
-            boost1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            boost1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
-            boost1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+            replyBtn.setTitle(repc1, for: .normal)
+            replyBtn.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
+            replyBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            replyBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+            replyBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+            likeBtn.setTitle(likec1, for: .normal)
+            likeBtn.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
+            likeBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            likeBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+            likeBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+            boostBtn.setTitle(boostc1, for: .normal)
+            boostBtn.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
+            boostBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            boostBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+            boostBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
         }
 
         if (UserDefaults.standard.object(forKey: "dmTog") == nil) || (UserDefaults.standard.object(forKey: "dmTog") as! Int == 0) {
@@ -387,7 +416,7 @@ class MainFeedCellImage: SwipeTableViewCell {
         }
         
         
-        
+        //TODO: did I remove these? Add them back on after figuring out why they don't work
 //        let viewsDict = [
 //            "warning" : warningB,
 //            ]
@@ -400,7 +429,6 @@ class MainFeedCellImage: SwipeTableViewCell {
         
         
         if status.reblog?.content.stripHTML() != nil {
-            
             var theUsernameTag = status.account.displayName
             if (UserDefaults.standard.object(forKey: "boostusern") == nil) || (UserDefaults.standard.object(forKey: "boostusern") as! Int == 0) {
                 
@@ -410,6 +438,8 @@ class MainFeedCellImage: SwipeTableViewCell {
             
             if status.reblog!.emojis.isEmpty {
                 let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n")
+                //Somehow I have to remove the \n\n above when there is no reblog content, or there will be extra spaces between
+                //the user+text and the image
                 let imageAttachment = NSTextAttachment()
                 imageAttachment.image = UIImage(named:"boost2")?.maskWithColor(color: Colours.grayDark.withAlphaComponent(0.38))
                 imageAttachment.bounds = CGRect(x: 0, y: -2, width: Int(self.toot.font.lineHeight - 5), height: Int(self.toot.font.lineHeight))
@@ -417,10 +447,14 @@ class MainFeedCellImage: SwipeTableViewCell {
                 let completeText2 = NSMutableAttributedString(string: "")
                 completeText2.append(attachmentString2)
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
-                let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
-                completeText2.append(textAfterIcon2)
+                // This seems to be used for some kind of "Quote Tweet", but it's not very developed in Pleroma yet
+                // I'm removing the boost author name because it makes no sense as is now to add this.
+                // I'm also skipping  adding the text if there's nothing in the completeText2
+                // let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
+                // completeText2.append(textAfterIcon2)
                 attributedString.append(completeText2)
                 self.toot.attributedText = attributedString
+                
                 self.reloadInputViews()
             } else {
                 let attributedString = NSMutableAttributedString(string: "\(status.reblog?.content.stripHTML() ?? "")\n\n", attributes: [NSAttributedString.Key.foregroundColor: Colours.black])
@@ -442,11 +476,15 @@ class MainFeedCellImage: SwipeTableViewCell {
                 let completeText2 = NSMutableAttributedString(string: "")
                 completeText2.append(attachmentString2)
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
-                let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
-                completeText2.append(textAfterIcon2)
-                attributedString.append(completeText2)
                 
+                // This seems to be used for some kind of "Quote Tweet", but it's not very developed in Pleroma yet
+                // I'm removing the boost author name because it makes no sense as is now to add this.
+                // I'm also skipping  adding the text if there's nothing in the completeText2
+                // let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
+                // completeText2.append(textAfterIcon2)
+                attributedString.append(completeText2)
                 self.toot.attributedText = attributedString
+
                 self.reloadInputViews()
             }
             
@@ -898,21 +936,21 @@ class MainFeedCellImage: SwipeTableViewCell {
             if boostc1 == "0" {
                 boostc1 = ""
             }
-            rep1.setTitle(repc1, for: .normal)
-            rep1.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
-            rep1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            rep1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
-            rep1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
-            like1.setTitle(likec1, for: .normal)
-            like1.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
-            like1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            like1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
-            like1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
-            boost1.setTitle(boostc1, for: .normal)
-            boost1.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
-            boost1.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-            boost1.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
-            boost1.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+            replyBtn.setTitle(repc1, for: .normal)
+            replyBtn.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
+            replyBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            replyBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+            replyBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+            likeBtn.setTitle(likec1, for: .normal)
+            likeBtn.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
+            likeBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            likeBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+            likeBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
+            boostBtn.setTitle(boostc1, for: .normal)
+            boostBtn.setTitleColor(Colours.grayDark.withAlphaComponent(0.21), for: .normal)
+            boostBtn.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+            boostBtn.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 20)
+            boostBtn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 12)
         }
     }
     

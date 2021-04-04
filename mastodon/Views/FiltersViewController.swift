@@ -11,6 +11,7 @@ import UIKit
 import SJFluidSegmentedControl
 import SafariServices
 import StatusAlert
+import SKPhotoBrowser
 
 class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SKPhotoBrowserDelegate {
     
@@ -295,10 +296,10 @@ class FiltersViewController: UIViewController, UITableViewDelegate, UITableViewD
                 let statusAlert = StatusAlert()
                 statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                 statusAlert.title = "Removed Filter".localized
-                statusAlert.contentColor = Colours.grayDark
+                statusAlert.tintColor = Colours.grayDark
                 statusAlert.message = self.currentTags[indexPath.row].phrase
                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                 
                 DispatchQueue.main.async {

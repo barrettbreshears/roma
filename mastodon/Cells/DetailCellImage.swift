@@ -9,13 +9,14 @@
 import Foundation
 import UIKit
 import PINRemoteImage
+import ActiveLabel
 
 class DetailCellImage: UITableViewCell {
     
     var profileImageView = UIButton()
     var userName = UILabel()
     var userTag = UIButton()
-    var toot = ActiveLabel()
+    var toot = ActiveLabel() // ActiveLabel does not support images in NSTextAttachment(). Maybe update the pod?
     var faves = UIButton()
     var fromClient = UILabel()
     var mainImageView = UIButton()
@@ -57,6 +58,9 @@ class DetailCellImage: UITableViewCell {
         if (UserDefaults.standard.object(forKey: "proCorner") != nil && UserDefaults.standard.object(forKey: "proCorner") as! Int == 2) {
             profileImageView.layer.cornerRadius = 0
         }
+        profileImageView.contentHorizontalAlignment = .fill
+        profileImageView.contentVerticalAlignment = .fill
+        profileImageView.imageView?.contentMode = .scaleAspectFill
         profileImageView.layer.masksToBounds = true
         mainImageView.layer.masksToBounds = true
         
@@ -129,29 +133,50 @@ class DetailCellImage: UITableViewCell {
             ]
         
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[name]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[from]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[faves]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[mainImage]-0-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[mainImageBG]-0-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellImage-Image40-Name$", withVisualFormat: "H:|-12-[image(40)]-13-[name]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellImage-Image40-Artist$", withVisualFormat: "H:|-12-[image(40)]-13-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        
+       contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellImage-Episodes$", withVisualFormat: "H:|-12-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
+                                  
+       contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellImage-From$", withVisualFormat: "H:|-12-[from]-12-|", options: [], metrics: nil, views: viewsDict))
+
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellImage-Faves$", withVisualFormat: "H:|-12-[faves]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellImage-MainImage$", withVisualFormat: "H:|-0-[mainImage]-0-|", options: [], metrics: nil, views: viewsDict))
+        
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellImage-MainImageBG$", withVisualFormat: "H:|-0-[mainImageBG]-0-|", options: [], metrics: nil, views: viewsDict))
+        
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellImage-constraintsImage4018$", withVisualFormat: "V:|-18-[image(40)]", options: [], metrics: nil, views: viewsDict))
+        
+        let deviceMetrics = [
+            "top": 10,
+            "bottom": 18,
+            "nameArtistSpacing": 1,
+            "artistEpisodesSpacing": 3,
+            "episodesMainImageSpacing": 15,
+            "phoneImageHeight": 275,
+            "padImageHeight": 500,
+            "mainImageFavesSpacing": 10,
+            "favesFromSpacing": 6
+        ]
         
         let deviceIdiom = UIScreen.main.traitCollection.userInterfaceIdiom
         switch (deviceIdiom) {
         case .phone:
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImage(275)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImageBG(275)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellImage-PhoneNameArtistEpisodesMainImage275FavesFrom$", withVisualFormat: "V:|-top-[name]-nameArtistSpacing-[artist]-artistEpisodesSpacing-[episodes]-episodesMainImageSpacing@999-[mainImage(phoneImageHeight)]-mainImageFavesSpacing-[faves]-favesFromSpacing-[from]-bottom-|", options: [], metrics: deviceMetrics, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellImage-PhoneNameArtistEpisodesMainImageBG275FavesFrom$", withVisualFormat: "V:|-top-[name]-nameArtistSpacing-[artist]-artistEpisodesSpacing-[episodes]-episodesMainImageSpacing@999-[mainImageBG(phoneImageHeight)]-mainImageFavesSpacing-[faves]-favesFromSpacing-[from]-bottom-|", options: [], metrics: deviceMetrics, views: viewsDict))
         case .pad:
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImage(500)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
-            contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-15-[mainImageBG(500)]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellImage-PadNameArtistEpisodesMainImage500FavesFrom$", withVisualFormat: "V:|-top-[name]-nameArtistSpacing-[artist]-artistEpisodesSpacing-[episodes]-episodesMainImageSpacing@999-[mainImage(padImageHeigh)]-mainImageFavesSpacing-[faves]-favesFromSpacing-[from]-bottom-|", options: [], metrics: deviceMetrics, views: viewsDict))
+            
+            contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellImage-PadNameArtistEpisodesMainImageBG500FavesFrom$", withVisualFormat: "V:|-top-[name]-nameArtistSpacing-[artist]-artistEpisodesSpacing-[episodes]-episodesMainImageSpacing@999-[mainImageBG(padImageHeigh)]-mainImageFavesSpacing-[faves]-favesFromSpacing-[from]-bottom-|", options: [], metrics: deviceMetrics, views: viewsDict))
         default:
             print("nothing")
         }
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[countTag(30)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[countTag(22)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellImage-CountTag30$", withVisualFormat: "H:|-5-[countTag(30)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+        
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCellImage-CountTag22$", withVisualFormat: "V:|-5-[countTag(22)]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -187,8 +212,11 @@ class DetailCellImage: UITableViewCell {
                 let completeText2 = NSMutableAttributedString(string: "")
                 completeText2.append(attachmentString2)
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
-                let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
-                completeText2.append(textAfterIcon2)
+                // This seems to be used for some kind of "Quote Tweet", but it's not very developed in Pleroma yet
+                // I'm removing the boost author name because it makes no sense as is now to add this.
+                // I'm also skipping  adding the text if there's nothing in the completeText2
+                // let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
+                // completeText2.append(textAfterIcon2)
                 attributedString.append(completeText2)
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
@@ -212,8 +240,11 @@ class DetailCellImage: UITableViewCell {
                 let completeText2 = NSMutableAttributedString(string: "")
                 completeText2.append(attachmentString2)
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
-                let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
-                completeText2.append(textAfterIcon2)
+                // This seems to be used for some kind of "Quote Tweet", but it's not very developed in Pleroma yet
+                // I'm removing the boost author name because it makes no sense as is now to add this.
+                // I'm also skipping  adding the text if there's nothing in the completeText2
+                // let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
+                //completeText2.append(textAfterIcon2)
                 attributedString.append(completeText2)
                 
                 self.toot.attributedText = attributedString

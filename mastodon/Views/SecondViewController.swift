@@ -19,6 +19,7 @@ import AVFoundation
 import Disk
 import UserNotifications
 import MobileCoreServices
+import SKPhotoBrowser
 
 class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource, SJFluidSegmentedControlDelegate, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate, UIViewControllerPreviewingDelegate, CrownControlDelegate, UIGestureRecognizerDelegate, UITableViewDragDelegate {
     
@@ -2940,8 +2941,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -2981,8 +2982,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     let originImage = sender.currentImage
                     if originImage != nil {
                         let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                        browser.displayToolbar = true
-                        browser.displayAction = true
+                        // TODO FIX THIS browser.displayToolbar = true
+                        // TODO FIX THIS browser.displayAction = true
                         browser.delegate = self
                         browser.initializePageIndex(0)
                         present(browser, animated: true, completion: nil)
@@ -3020,8 +3021,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                     let originImage = sender.currentImage
                     if originImage != nil {
                         let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.mainImageView)
-                        browser.displayToolbar = true
-                        browser.displayAction = true
+                        // TODO FIX THIS browser.displayToolbar = true
+                        // TODO FIX THIS browser.displayAction = true
                         browser.delegate = self
                         browser.initializePageIndex(0)
                         present(browser, animated: true, completion: nil)
@@ -3099,8 +3100,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage1)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(0)
                     present(browser, animated: true, completion: nil)
@@ -3174,8 +3175,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage2)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(1)
                     present(browser, animated: true, completion: nil)
@@ -3250,8 +3251,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage3)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(2)
                     present(browser, animated: true, completion: nil)
@@ -3327,8 +3328,8 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                 let originImage = sender.currentImage
                 if originImage != nil {
                     let browser = SKPhotoBrowser(originImage: originImage ?? UIImage(), photos: images, animatedFromView: cell.smallImage4)
-                    browser.displayToolbar = true
-                    browser.displayAction = true
+                    // TODO FIX THIS browser.displayToolbar = true
+                    // TODO FIX THIS browser.displayAction = true
                     browser.delegate = self
                     browser.initializePageIndex(3)
                     present(browser, animated: true, completion: nil)
@@ -3800,10 +3801,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Muted".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                                 let request = Accounts.mute(id: sto[indexPath.row].account.id)
@@ -3816,10 +3817,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Unmuted".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                                 let request = Accounts.unmute(id: sto[indexPath.row].account.id)
@@ -3837,10 +3838,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Blocked".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                                 
@@ -3852,10 +3853,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Unblocked".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                             }
@@ -3880,10 +3881,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Harassment"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                   
@@ -3899,10 +3900,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "No Content Warning"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                    
@@ -3919,10 +3920,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Spam"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                    
@@ -4027,10 +4028,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Deleted".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Notification"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                 }
                             }
@@ -4421,10 +4422,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Muted".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                                 
@@ -4436,10 +4437,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Unmuted".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                                
@@ -4457,10 +4458,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Blocked".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                                 
@@ -4472,10 +4473,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                 let statusAlert = StatusAlert()
                                 statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                                 statusAlert.title = "Unblocked".localized
-                                statusAlert.contentColor = Colours.grayDark
+                                statusAlert.tintColor = Colours.grayDark
                                 statusAlert.message = sto[indexPath.row].account.displayName
                                 if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                    statusAlert.show()
+                                    statusAlert.show(withOffset: CGFloat(0))
                                 }
                                 
                                 
@@ -4503,10 +4504,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Harassment"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                    
@@ -4523,10 +4524,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "No Content Warning"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                     let request = Reports.report(accountID: sto[indexPath.row].account.id, statusIDs: [sto[indexPath.row].status?.id ?? ""], reason: "No Content Warning")
@@ -4549,10 +4550,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "reportlarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Reported".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Spam"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                     
                                    
@@ -4657,10 +4658,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Deleted".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Notification"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                 }
                             }
@@ -4802,10 +4803,10 @@ class SecondViewController: UIViewController, SJFluidSegmentedControlDataSource,
                                     let statusAlert = StatusAlert()
                                     statusAlert.image = UIImage(named: "blocklarge")?.maskWithColor(color: Colours.grayDark)
                                     statusAlert.title = "Deleted".localized
-                                    statusAlert.contentColor = Colours.grayDark
+                                    statusAlert.tintColor = Colours.grayDark
                                     statusAlert.message = "Notification"
                                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                                        statusAlert.show()
+                                        statusAlert.show(withOffset: CGFloat(0))
                                     }
                                 }
                             }

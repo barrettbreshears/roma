@@ -1,3 +1,4 @@
+import Foundation
 import ReactiveSwift
 
 final class SessionDataPipe: NSObject, URLSessionDataDelegate {

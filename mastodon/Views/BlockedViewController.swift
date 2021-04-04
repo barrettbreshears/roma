@@ -11,6 +11,7 @@ import UIKit
 import SJFluidSegmentedControl
 import SafariServices
 import StatusAlert
+import SKPhotoBrowser
 
 class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, SwipeTableViewCellDelegate, SKPhotoBrowserDelegate {
     
@@ -276,10 +277,10 @@ class BlockedViewController: UIViewController, UITableViewDelegate, UITableViewD
                     let statusAlert = StatusAlert()
                     statusAlert.image = UIImage(named: "block2large")?.maskWithColor(color: Colours.grayDark)
                     statusAlert.title = "Unblocked".localized
-                    statusAlert.contentColor = Colours.grayDark
+                    statusAlert.tintColor = Colours.grayDark
                     statusAlert.message = sto[indexPath.row].displayName
                     if (UserDefaults.standard.object(forKey: "popupset") == nil) || (UserDefaults.standard.object(forKey: "popupset") as! Int == 0) {
-                        statusAlert.show()
+                        statusAlert.show(withOffset: CGFloat(0))
                     }
                     
                     let request = Accounts.unblock(id: sto[indexPath.row].id)

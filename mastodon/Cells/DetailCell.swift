@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import PINRemoteImage
+import ActiveLabel
 
 class DetailCell: UITableViewCell {
     
@@ -45,6 +46,9 @@ class DetailCell: UITableViewCell {
         if (UserDefaults.standard.object(forKey: "proCorner") != nil && UserDefaults.standard.object(forKey: "proCorner") as! Int == 2) {
             profileImageView.layer.cornerRadius = 0
         }
+        profileImageView.contentHorizontalAlignment = .fill
+        profileImageView.contentVerticalAlignment = .fill
+        profileImageView.imageView?.contentMode = .scaleAspectFill
         profileImageView.layer.masksToBounds = true
         
         userName.numberOfLines = 0
@@ -90,15 +94,19 @@ class DetailCell: UITableViewCell {
             "from" : fromClient,
             "faves" : faves,
             ]
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCell-Image40-Name$", withVisualFormat: "H:|-12-[image(40)]-13-[name]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCell-Image40-Artist$", withVisualFormat: "H:|-12-[image(40)]-13-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCell-Episodes$", withVisualFormat: "H:|-12-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
         
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[name]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[image(40)]-13-[artist]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[episodes]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[from]-12-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-12-[faves]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[image(40)]", options: [], metrics: nil, views: viewsDict))
-        contentView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
-        
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCell-From$", withVisualFormat: "H:|-12-[from]-12-|", options: [], metrics: nil, views: viewsDict))
+
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCell-Faves$", withVisualFormat: "H:|-12-[faves]-(>=12)-|", options: [], metrics: nil, views: viewsDict))
+
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCell-constraintsImage4018$", withVisualFormat: "V:|-18-[image(40)]", options: [], metrics: nil, views: viewsDict))
+
+        contentView.addConstraints(ConstraintsHelper.constraintsWithIdentifier(identifier: "$DetailCell-NameArtistEpisoesFavesFrom$", withVisualFormat: "V:|-18-[name]-1-[artist]-3-[episodes]-10-[faves]-6-[from]-18-|", options: [], metrics: nil, views: viewsDict))
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -121,11 +129,6 @@ class DetailCell: UITableViewCell {
         
         if status.reblog?.content.stripHTML() != nil {
 //            toot.text = "\(status.reblog?.content.stripHTML() ?? "")\n\n\u{21bb} @\(status.account.username) reposted"
-            
-            
-            
-            
-            
             var theUsernameTag = status.account.displayName
             if (UserDefaults.standard.object(forKey: "boostusern") == nil) || (UserDefaults.standard.object(forKey: "boostusern") as! Int == 0) {
                 
@@ -142,8 +145,11 @@ class DetailCell: UITableViewCell {
                 let completeText2 = NSMutableAttributedString(string: "")
                 completeText2.append(attachmentString2)
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
-                let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
-                completeText2.append(textAfterIcon2)
+                // This seems to be used for some kind of "Quote Tweet", but it's not very developed in Pleroma yet
+                // I'm removing the boost author name because it makes no sense as is now to add this.
+                // I'm also skipping  adding the text if there's nothing in the completeText2
+                // let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
+                // completeText2.append(textAfterIcon2)
                 attributedString.append(completeText2)
                 self.toot.attributedText = attributedString
                 self.reloadInputViews()
@@ -167,8 +173,11 @@ class DetailCell: UITableViewCell {
                 let completeText2 = NSMutableAttributedString(string: "")
                 completeText2.append(attachmentString2)
                 attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: Colours.black, range: NSMakeRange(0, attributedString.length))
-                let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
-                completeText2.append(textAfterIcon2)
+                // This seems to be used for some kind of "Quote Tweet", but it's not very developed in Pleroma yet
+                // I'm removing the boost author name because it makes no sense as is now to add this.
+                // I'm also skipping  adding the text if there's nothing in the completeText2
+                // let textAfterIcon2 = NSMutableAttributedString(string: " \(theUsernameTag)", attributes: [NSAttributedString.Key.foregroundColor: Colours.grayDark.withAlphaComponent(0.38)])
+                // completeText2.append(textAfterIcon2)
                 attributedString.append(completeText2)
                 
                 self.toot.attributedText = attributedString
@@ -193,10 +202,6 @@ class DetailCell: UITableViewCell {
                 self.userName.attributedText = attributedString
                 self.reloadInputViews()
             }
-            
-            
-            
-            
         } else {
             
             if status.emojis.isEmpty {
@@ -219,8 +224,6 @@ class DetailCell: UITableViewCell {
                 self.reloadInputViews()
             }
             
-            
-           
             if status.account.emojis.isEmpty {
                 userName.text = status.account.displayName.stripHTML()
             } else {
@@ -239,8 +242,6 @@ class DetailCell: UITableViewCell {
                 self.userName.attributedText = attributedString
                 self.reloadInputViews()
             }
-            
-            
             
         }
         

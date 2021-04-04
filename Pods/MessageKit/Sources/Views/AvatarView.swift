@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2017-2018 MessageKit
+ Copyright (c) 2017-2019 MessageKit
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,6 +23,7 @@
  */
 
 import Foundation
+import UIKit
 
 open class AvatarView: UIImageView {
 
@@ -74,9 +75,15 @@ open class AvatarView: UIImageView {
         super.init(frame: frame)
         prepareView()
     }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        prepareView()
+    }
 
     convenience public init() {
         self.init(frame: .zero)
+        prepareView()
     }
     
     private func setImageFrom(initials: String?) {
@@ -90,7 +97,7 @@ open class AvatarView: UIImageView {
         if width == 0 || height == 0 {return UIImage()}
         var font = placeholderFont
 
-        _ = UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, UIScreen.main.scale)
+        UIGraphicsBeginImageContextWithOptions(CGSize(width: width, height: height), false, UIScreen.main.scale)
         defer { UIGraphicsEndImageContext() }
         let context = UIGraphicsGetCurrentContext()!
 
@@ -152,14 +159,10 @@ open class AvatarView: UIImageView {
         return CGRect(startX+2, startY, w-4, h)
     }
 
-    required public init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     // MARK: - Internal methods
 
     internal func prepareView() {
-        backgroundColor = .gray
+        backgroundColor = .avatarViewBackground
         contentMode = .scaleAspectFill
         layer.masksToBounds = true
         clipsToBounds = true

@@ -1,7 +1,7 @@
 /*
  MIT License
 
- Copyright (c) 2017-2018 MessageKit
+ Copyright (c) 2017-2020 MessageKit
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,20 +24,17 @@
 
 import Foundation
 
-extension Bundle {
-
-    internal static func messageKitAssetBundle() -> Bundle {
-        let podBundle = Bundle(for: MessagesViewController.self)
-        
-        guard let resourceBundleUrl = podBundle.url(forResource: "MessageKitAssets", withExtension: "bundle") else {
-            fatalError(MessageKitError.couldNotCreateAssetsPath)
-        }
-        
-        guard let resourceBundle = Bundle(url: resourceBundleUrl) else {
+internal extension Bundle {
+    #if IS_SPM
+    static var messageKitAssetBundle: Bundle = Bundle.module
+    #else
+    static var messageKitAssetBundle: Bundle {
+        guard let url = Bundle(for: MessagesViewController.self).url(forResource: "MessageKit", withExtension: "bundle"),
+              let resourcesBundle = Bundle(url: url)
+        else {
             fatalError(MessageKitError.couldNotLoadAssetsBundle)
         }
-        
-        return resourceBundle
+        return resourcesBundle
     }
-
+    #endif
 }
