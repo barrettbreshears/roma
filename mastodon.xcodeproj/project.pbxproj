@@ -5061,7 +5061,7 @@
 				DEVELOPMENT_TEAM = 5877VK992M;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = mastodon/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -5092,7 +5092,7 @@
 				DEVELOPMENT_TEAM = 5877VK992M;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = mastodon/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
