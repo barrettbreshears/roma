@@ -34,3 +34,16 @@ pod 'MessageInputBar'
 pod 'SKPhotoBrowser', '~> 6.1.0'
 
 end
+# Update pods that have older deployment versions by default
+post_install do |installer|
+  # Targets:
+  myTargets = ['DKImagePickerController']
+  installer.pods_project.targets.each do |target|
+    if myTargets.include? target.name
+      target.build_configurations.each do |config|
+        config.build_settings['SWIFT_VERSION'] = '5.0'
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '9.0'
+      end
+    end
+  end
+end
